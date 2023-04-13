@@ -2,6 +2,9 @@ import React from "react";
 import { TextInput, Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+
 function SearchBox(props) {
   //props-> label, keyboard, icon name, icon/enter action
   // const { label, icon, action } = props;

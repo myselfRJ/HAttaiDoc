@@ -1,6 +1,9 @@
 import { View, StyleSheet, Text, Image } from "react-native";
-import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles"
+import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import { Language } from "../settings/customlanguage";
 const AppointmentCard = () => {
+
   return (
     <>
       <View style={styles.maincontainer}>
@@ -23,19 +26,19 @@ const AppointmentCard = () => {
         <View style={styles.hseperator}></View>
         <View style={styles.patientinfo}>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Type:</Text>
+            <Text style={styles.contact}>{Language[language]["type"]}:</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Time:</Text>
+            <Text style={styles.contact}>{Language[language]["time"]}:</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Status:</Text>
+            <Text style={styles.contact}>{Language[language]["status"]}:</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Bill:</Text>
+            <Text style={styles.contact}>{Language[language]["bill"]}:</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
         </View>

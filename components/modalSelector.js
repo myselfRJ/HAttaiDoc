@@ -2,6 +2,9 @@ import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+
 function ModalSelector(props) {
   //props-> value, icon name, icon action
   // const { value, icon, action } = props;

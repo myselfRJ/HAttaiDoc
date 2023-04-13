@@ -1,10 +1,13 @@
 import { View, StyleSheet, TextInput, Text } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
-const InputText = () => {
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+const InputText = (props) => {
+  //props-> label, placeholder , action
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={styles.labeltext}>Add Me</Text>
+        <Text style={styles.labeltext}>{Language[language][props.label]}</Text>
         <TextInput
           style={styles.textinput}
           underlineColorAndroid="transparent"

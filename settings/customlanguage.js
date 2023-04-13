@@ -9,10 +9,10 @@ const Language = {
     my_appointments: "My Appointments",
     age: "Age",
     years: "years",
-    type: "type",
-    time: "time",
-    status: "status",
-    bill: "bill",
+    type: "Type",
+    time: "Time",
+    status: "Status",
+    bill: "Bill",
     view_more: "view more",
     weekly: "weekly",
     monthly: "monthly",
@@ -28,7 +28,9 @@ const Language = {
     new: "New",
     follow_up: "Follow up",
     report_review: "Report Review",
-    routine: "Routine"
+    routine: "Routine",
+    contact:"Contact",
+    add_me: "Add me"
   },
   hi: {
     welcome: "स्वागत",
@@ -93,4 +95,5 @@ const Language = {
     routine: "ரூடின்"
   }
 };
-export default Language;
+
+export {Language};

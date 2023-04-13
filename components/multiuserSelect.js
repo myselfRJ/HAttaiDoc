@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+
 function MultiUserSelect(props) {
   //props-> label, multiple selection user list, keyboard, icon name, icon/enter action
   // const { label, userList, icon, action } = props;

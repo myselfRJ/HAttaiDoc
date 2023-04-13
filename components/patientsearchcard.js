@@ -1,5 +1,7 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
 const PatientSearchCard = () => {
   return (
     <>
@@ -14,7 +16,7 @@ const PatientSearchCard = () => {
         <View style={styles.patientinfo}>
           <Text style={styles.name}>Malumalayi</Text>
           <Text style={styles.age}>Malumalayi</Text>
-          <Text style={styles.contact}>Contact: 989787654</Text>
+          <Text style={styles.contact}>{Language[language]["contact"]}: 989787654</Text>
         </View>
         <View style={styles.icon}></View>
       </View>

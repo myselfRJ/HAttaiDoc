@@ -1,11 +1,13 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
 const InfoTicket = () => {
   return (
     <>
       <Pressable style={styles.infocontainer}>
         <Text style={styles.numtext}>25</Text>
-        <Text style={styles.text}>total</Text>
+        <Text style={styles.text}>{Language[language]["total"]}</Text>
       </Pressable>
     </>
   );

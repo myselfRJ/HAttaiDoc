@@ -2,11 +2,11 @@ import {Text} from 'react-native';
 import { CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
-const UserCreate=()=>{
+const SlotBook=()=>{
 
     return (
-        <Text>UserCreate</Text>
+        <Text>SlotBook</Text>
     )
 }
 
-export default UserCreate
+export default SlotBook

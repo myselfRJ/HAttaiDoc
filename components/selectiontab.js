@@ -1,10 +1,12 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { CUSTOMFONTSIZE, CUSTOMCOLOR } from "../settings/styles";
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
 const SelectionTab = () => {
   return (
     <>
       <Pressable style={styles.tabcontainer}>
-        <Text style={styles.tabtext}>Add Me</Text>
+        <Text style={styles.tabtext}>{Language[language]["add_me"]}</Text>
       </Pressable>
     </>
   );

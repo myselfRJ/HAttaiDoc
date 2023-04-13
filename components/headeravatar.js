@@ -1,6 +1,9 @@
 import { View, Image, StyleSheet, Text } from "react-native";
 import { CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from "../settings/styles";
-const HeaderAvatar = () => {
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+const HeaderAvatar = (props) => {
+  //props->name, speciality, img url
   return (
     <>
       <View style={styles.avatarmain}>

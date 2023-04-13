@@ -1,11 +1,14 @@
 import { Pressable, View, StyleSheet, Text } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
-const HButton = () => {
+import { language } from "../settings/userpreferences";
+import {Language} from "../settings/customlanguage";
+const HButton = (props) => {
+  //props -> label, action
   return (
     <>
       <Pressable style={styles.btncontainer}>
         <View style={styles.icon}></View>
-        <Text style={styles.btntext}>Add Me</Text>
+        <Text style={styles.btntext}>{Language[language][props.label]}</Text>
       </Pressable>
     </>
   );
