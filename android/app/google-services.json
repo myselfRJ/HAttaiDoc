@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "891618944873",
+    "project_id": "hattaidoc",
+    "storage_bucket": "hattaidoc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891618944873:android:34e45f3c957e10965abff8",
+        "android_client_info": {
+          "package_name": "com.hattaidoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891618944873-8vviijebbpjaq71ii54sfacn7nq47567.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUa8m3q0RWabn-RsNKuImry7O5cbel87M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891618944873-8vviijebbpjaq71ii54sfacn7nq47567.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
