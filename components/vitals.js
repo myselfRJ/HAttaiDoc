@@ -1,48 +1,37 @@
 import { View, StyleSheet, TextInput, Text } from "react-native";
+import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
-const InputText = (props) => {
+const Vitals = (props) => {
   //props-> label, placeholder , action
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={styles.labeltext}>{Language[language][props.label]}</Text>
-        <TextInput
-          style={styles.textinput}
-          underlineColorAndroid="transparent"
-          placeholder="Hello hattai"
-        />
+        
+        <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16}/>
+        <Text style={styles.text}>lorem epsum | lorem epsum | lorem epsum</Text>
       </View>
     </>
   );
 };
 const styles = StyleSheet.create({
   inpcontainer: {
+    flexDirection:'row',
+    width:'100%',
     paddingHorizontal: 8,
     paddingVertical: 8,
-    width:'100%',
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: "700",
     gap: 4,
-    // backgroundColor: CUSTOMCOLOR.white,
     borderRadius: 4
   },
-  labeltext: {
-    fontWeight: 50,
+  text: {
+    fontWeight: 500,
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black
   },
-  textinput: {
-    backgroundColor: CUSTOMCOLOR.white,
-
-    paddingHorizontal: 8,
-    paddingVertical: 12,
-    fontWeight: "400",
-    fontSize: CUSTOMFONTSIZE.h3,
-    outlineStyle: "none",
-    borderRadius: 4
-  }
+ 
 });
 
-export default InputText;
+export default Vitals;

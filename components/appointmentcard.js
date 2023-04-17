@@ -1,4 +1,5 @@
 import { View, StyleSheet, Text, Image } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import { Language } from "../settings/customlanguage";
@@ -14,7 +15,7 @@ const AppointmentCard = () => {
               "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
           }}
         />
-        <View>
+        <View style={styles.child}>
           <Text style={styles.name}>Malumalayi</Text>
           <Text style={styles.age}>Malumalayi</Text>
           <View style={styles.seperator}></View>
@@ -22,6 +23,7 @@ const AppointmentCard = () => {
             Lorem ipsum dolor sit amet consectetur. Nec porttitor tincidunt
             ultricies nisl.
           </Text>
+         
         </View>
         <View style={styles.hseperator}></View>
         <View style={styles.patientinfo}>
@@ -40,9 +42,13 @@ const AppointmentCard = () => {
           <View style={styles.statusinfo}>
             <Text style={styles.contact}>{Language[language]["bill"]}:</Text>
             <Text style={styles.statustext}>Follow Up</Text>
+      
+            
           </View>
         </View>
-        <View style={styles.icon}></View>
+        
+        <Icon  style={styles.icon} name='dots-horizontal' color={CUSTOMCOLOR.primary} size={24}/> 
+       
       </View>
     </>
   );
@@ -57,6 +63,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: 4,
     gap: 8
+  },
+  child:{
+    width:'40%'
   },
   name: {
     fontWeight: 600,
@@ -75,8 +84,8 @@ const styles = StyleSheet.create({
   symptom: {
     flexWrap: "wrap",
     fontWeight: 600,
-    fontSize: 10,
-    lineHeight: 12.5,
+    fontSize:CUSTOMFONTSIZE.h5,
+    lineHeight: 1.5*CUSTOMFONTSIZE.h5,
     padding: 0,
     color: CUSTOMCOLOR.black
   },
@@ -92,10 +101,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 8,
     top: 8,
-    width: 24,
-    height: 24,
-    borderRadius: 24 / 2,
-    backgroundColor: CUSTOMCOLOR.primary
   },
   seperator: {
     height: 0.5,
