@@ -1,4 +1,5 @@
 import { View, StyleSheet, Text, Image } from "react-native";
+import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
@@ -18,7 +19,7 @@ const PatientSearchCard = () => {
           <Text style={styles.age}>Malumalayi</Text>
           <Text style={styles.contact}>{Language[language]["contact"]}: 989787654</Text>
         </View>
-        <View style={styles.icon}></View>
+        <Icon  style={styles.icon} name='dots-horizontal' color={CUSTOMCOLOR.primary} size={24}/> 
       </View>
     </>
   );
@@ -65,10 +66,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 8,
     top: 8,
-    width: 24,
-    height: 24,
-    borderRadius: 24 / 2,
-    backgroundColor: CUSTOMCOLOR.primary
   }
 });
 
