@@ -16,6 +16,7 @@ import Vitals from './components/vitals';
 import MedicineList from './components/medicinelist';
 import VisitOpen from './components/visitopen';
 import CombinedRoute from './navigation/combinednavigator';
+import store from './redux/stores/store';
 function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',gap:16,padding:24 }}>
@@ -44,6 +45,7 @@ function App() {
   // const routeNameRef = React.useRef();
   // const navigationRef = React.useRef();
   return (
+    <Provider store={store}>
     <NavigationContainer
       // ref={navigationRef}
       // onReady={() => {
@@ -66,6 +68,7 @@ function App() {
        <CombinedRoute/>
 
     </NavigationContainer>
+    </Provider>
   );
 }
 
