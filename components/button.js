@@ -7,7 +7,7 @@ const HButton = (props) => {
   //props -> label, action
   return (
     <>
-      <Pressable style={styles.btncontainer}>
+      <Pressable style={styles.btncontainer} onPress={props.onPress}>
       {props.icon &&<Icon  style={styles.icon} name={props.icon} color={CUSTOMCOLOR.white} size={24}/> }
         <Text style={styles.btntext}>{Language[language][props.label]}</Text>
       </Pressable>
@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: 4,
+    alignItems:'center',
+    justifyContent:'center',
     gap: 8
   },
   btntext: {

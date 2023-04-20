@@ -2,10 +2,8 @@
 
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import {PermissionsAndroid} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/FontAwesome'
 import AppointmentCard from './components/appointmentcard';
 import PatientSearchCard from './components/patientsearchcard';
 import InputText from './components/inputext';
@@ -17,7 +15,7 @@ import InfoTicket from './components/infoticket';
 import Vitals from './components/vitals';
 import MedicineList from './components/medicinelist';
 import VisitOpen from './components/visitopen';
-import BottomTab from './navigation/tabnavigator';
+import CombinedRoute from './navigation/combinednavigator';
 function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',gap:16,padding:24 }}>
@@ -38,36 +36,35 @@ function HomeScreen() {
   );
 }
 
-const Stack = createNativeStackNavigator();
+const Stack=createNativeStackNavigator()
 
 function App() {
   
-  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);//for notification permisiion
-  const routeNameRef = React.useRef();
-  const navigationRef = React.useRef();
+  // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);//for notification permisiion
+  // const routeNameRef = React.useRef();
+  // const navigationRef = React.useRef();
   return (
     <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-      }}
-      onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+      // ref={navigationRef}
+      // onReady={() => {
+      //   routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      // }}
+      // onStateChange={async () => {
+      //   const previousRouteName = routeNameRef.current;
+      //   const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
-        if (previousRouteName !== currentRouteName) {
-          await analytics().logScreenView({
-            screen_name: currentRouteName,
-            screen_class: currentRouteName,
-          });
-        }
-        routeNameRef.current = currentRouteName;
-      }}
+      //   if (previousRouteName !== currentRouteName) {
+      //     await analytics().logScreenView({
+      //       screen_name: currentRouteName,
+      //       screen_class: currentRouteName,
+      //     });
+      //   }
+      //   routeNameRef.current = currentRouteName;
+      // }}
     >
-      <BottomTab/> 
-      {/* <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator> */}
+  
+       <CombinedRoute/>
+
     </NavigationContainer>
   );
 }

@@ -1,12 +1,26 @@
-import {Text} from 'react-native';
-import { CUSTOMFONTSIZE } from "../settings/styles";
+import {View,Text,StyleSheet} from 'react-native';
+import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
+import {commonstyles} from '../styles/commonstyle';
 import {Language} from "../settings/customlanguage";
-const Otp=()=>{
+import InputText from '../components/inputext';
+import HButton from '../components/button';
+const Otp=({navigation})=>{
 
     return (
-        <Text>Otp</Text>
+        <View style={commonstyles.main}>
+            <View style={commonstyles.img}>
+
+            </View>
+            <View style={commonstyles.content}>
+            <InputText label='otp' placeholder='4 digit OTP'/>
+            <HButton label='submit'/>
+            </View>
+            
+        </View>
     )
 }
+
+
 
 export default Otp
