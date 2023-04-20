@@ -30,7 +30,12 @@ const Language = {
     report_review: "Report Review",
     routine: "Routine",
     contact:"Contact",
-    add_me: "Add me"
+    add_me: "Add me",
+    phone_number:'Phone Number',
+    login:'Login',
+    signup:'Signup',
+    otp:'OTP',
+    submit:'Submit'
   },
   hi: {
     welcome: "स्वागत",
@@ -61,7 +66,9 @@ const Language = {
     new: "नया",
     follow_up: "फ़ॉलो अप",
     report_review: "रिपोर्ट समीक्षा",
-    routine: "रूटीन"
+    routine: "रूटीन",
+    phone_number:'Phone Number'
+   
   },
   ta: {
     welcome: "வருகை வாழ்த்துக்கள்",

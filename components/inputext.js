@@ -10,8 +10,8 @@ const InputText = (props) => {
         <Text style={styles.labeltext}>{Language[language][props.label]}</Text>
         <TextInput
           style={styles.textinput}
-          underlineColorAndroid="transparent"
-          placeholder="Hello hattai"
+          // underlineColorAndroid="transparent"
+          placeholder={props.placeholder}
         />
       </View>
     </>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderRadius: 4
   },
   labeltext: {
-    fontWeight: 50,
+    fontWeight: '500',
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black
   },
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontWeight: "400",
     fontSize: CUSTOMFONTSIZE.h3,
-    outlineStyle: "none",
+    // outlinedStyle: "none",
     borderRadius: 4
   }
 });
