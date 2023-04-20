@@ -5,7 +5,7 @@ export const commonstyles=StyleSheet.create({
     main:{
        
         // justifyContent:'center',
-        alignItems:'center',
+        // alignItems:'center',
         gap:16
     },
     img:{
