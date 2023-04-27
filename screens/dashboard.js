@@ -5,7 +5,7 @@ import {Language} from "../settings/customlanguage";
 import store from '../redux/stores/store';
 import { authenticateActions } from '../redux/features/authenticate/authenticateSlice';
 const Dashboard=()=>{
-
+console.log(store.getState())
     return (
         <Text>Dashboard</Text>
     )

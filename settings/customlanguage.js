@@ -35,7 +35,8 @@ const Language = {
     login:'Login',
     signup:'Signup',
     otp:'OTP',
-    submit:'Submit'
+    submit:'Submit',
+    password:'Password'
   },
   hi: {
     welcome: "स्वागत",

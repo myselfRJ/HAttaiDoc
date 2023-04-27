@@ -15,10 +15,10 @@ export const commonstyles=StyleSheet.create({
     },
     content:{
         paddingHorizontal:64,
-        paddingVertical:48,
+        paddingVertical:24,
         width:'100%',
         alignItems:'center',
-        gap:24,
+        gap:8,
     }
 
 })
