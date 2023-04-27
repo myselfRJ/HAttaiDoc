@@ -17,6 +17,7 @@ import MedicineList from './components/medicinelist';
 import VisitOpen from './components/visitopen';
 import CombinedRoute from './navigation/combinednavigator';
 import store from './redux/stores/store';
+import { Provider } from 'react-redux';
 function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',gap:16,padding:24 }}>
