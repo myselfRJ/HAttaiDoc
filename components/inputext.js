@@ -2,8 +2,10 @@ import { View, StyleSheet, TextInput, Text } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
+import React from "react";
 const InputText = (props) => {
-  //props-> label, placeholder , action
+  //props-> label, placeholder , action, secure
+  const [visible,setVisible] = React.useState(props.secure||false)
   return (
     <>
       <View style={styles.inpcontainer}>
@@ -12,6 +14,7 @@ const InputText = (props) => {
           style={styles.textinput}
           // underlineColorAndroid="transparent"
           placeholder={props.placeholder}
+          secureTextEntry={visible}
         />
       </View>
     </>
