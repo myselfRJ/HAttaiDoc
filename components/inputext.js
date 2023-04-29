@@ -5,8 +5,8 @@ import {Language} from "../settings/customlanguage";
 import React from "react";
 import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = (props) => {
-  //props-> label, placeholder , action, secure
-  const [visible,setVisible] = React.useState(props.secure||false)
+  //props-> label, placeholder , action, secure, padtype
+  const [visible,setVisible] = React.useState(props.secure||true)
   const toggleVisible =()=>{
     setVisible(!visible)
   }
@@ -20,9 +20,11 @@ const InputText = (props) => {
           style={styles.textinput}
           // underlineColorAndroid="transparent"
           placeholder={props.placeholder}
-          secureTextEntry={visible}
+          secureTextEntry={props.secure?visible:false}
+          inputMode={props.keypad??"default"}
+          maxLength={props.maxLength??20}
         />
-        {props.secure!==undefined?visible?(<TouchableOpacity style={{...styles.eye}} onPress={toggleVisible}><Icon  name={"eye"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):(<TouchableOpacity style={styles.eye} onPress={toggleVisible}><Icon  name={"calendar"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):<></>}
+        {props.secure!==undefined?visible?(<TouchableOpacity style={{...styles.eye}} onPress={toggleVisible}><Icon  name={"eye-off"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):(<TouchableOpacity style={styles.eye} onPress={toggleVisible}><Icon  name={"eye"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):<></>}
         </View>
       </View>
     </>

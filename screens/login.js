@@ -1,5 +1,7 @@
 import {View} from 'react-native';
 import {commonstyles} from '../styles/commonstyle';
+import { Language } from '../settings/customlanguage';
+
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import NoAccount from '../components/noaccount';
@@ -7,7 +9,7 @@ import store from '../redux/stores/store';
 import { authenticateActions } from '../redux/features/authenticate/authenticateSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import KeyboardAvoidContainer from '../components/keyboardhidecontainer';
-
+import { language } from '../settings/userpreferences';
 
 
 const Login=({navigation})=>{
@@ -25,14 +27,15 @@ const Login=({navigation})=>{
    
 return (
     <KeyboardAvoidContainer>
+
         <View style={commonstyles.main}>
             <View style={commonstyles.img}>
             </View>
             <View style={commonstyles.content}>
-            <InputText label='phone_number'  placeholder='Phone Number'/>
-            <InputText label='password'  placeholder='Password' secure={true} />
+            <InputText label='phone_number'  placeholder={Language[language]["phone_number"]} keypad="numeric" maxLength={10} />
+            <InputText label='password'  placeholder={Language[language]["password"]} secure={true}  />
             <HButton label='login' onPress={()=>navigation.navigate('protected',{screen:'profilecreate'})}/>
-            <NoAccount text='Signup' msg="Don't have an account?"/>
+            <NoAccount action={"signup"} navigation={navigation} text={Language[language]["signup"]} msg={Language[language]["no_account"]}/>
             </View>
         </View>
         </KeyboardAvoidContainer>

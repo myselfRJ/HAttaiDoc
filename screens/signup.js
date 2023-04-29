@@ -5,6 +5,7 @@ import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
 import InputText from '../components/inputext';
 import HButton from '../components/button';
+import NoAccount from '../components/noaccount';
 const Signup=({navigation})=>{
 
     return (
@@ -13,8 +14,9 @@ const Signup=({navigation})=>{
 
             </View>
             <View style={commonstyles.content}>
-            <InputText label='phone_number' placeholder='Phone Number'/>
+            <InputText label='phone_number' placeholder={Language[language]["password"]}/>
             <HButton label='signup' onPress={()=>navigation.navigate('otp')}/>
+            <NoAccount action={"login"} navigation={navigation} text={Language[language]["login"]} msg={Language[language]["yes_account"]}/>
             </View>
             
         </View>
