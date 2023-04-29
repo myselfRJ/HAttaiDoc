@@ -31,7 +31,7 @@ return (
             <View style={commonstyles.content}>
             <InputText label='phone_number'  placeholder='Phone Number'/>
             <InputText label='password'  placeholder='Password' secure={true} />
-            <HButton label='login' onPress={()=>navigation.navigate('otp')}/>
+            <HButton label='login' onPress={()=>navigation.navigate('protected',{screen:'profilecreate'})}/>
             <NoAccount text='Signup' msg="Don't have an account?"/>
             </View>
         </View>
