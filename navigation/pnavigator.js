@@ -1,6 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTab from "./tabnavigator";
 import { useSelector } from "react-redux";
+import ProfileCreate from "../screens/profilecreate";
+import ClinicCreate from "../screens/cliniccreate";
+import UserCreate from "../screens/usercreate";
 
 const Stack=createNativeStackNavigator();
 
@@ -10,7 +13,9 @@ const ProtectedRoute=()=>{
 
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
-        
+            <Stack.Screen name='profilecreate' component={ProfileCreate}/>
+            <Stack.Screen name='cliniccreate' component={ClinicCreate}/>
+            <Stack.Screen name='usercreate' component={UserCreate}/>
             <Stack.Screen name='tab' component={BottomTab}/>
            
         </Stack.Navigator>
