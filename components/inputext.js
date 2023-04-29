@@ -1,21 +1,29 @@
-import { View, StyleSheet, TextInput, Text } from "react-native";
+import { View, StyleSheet, TextInput, Text, TouchableOpacity } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
 import React from "react";
+import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = (props) => {
   //props-> label, placeholder , action, secure
   const [visible,setVisible] = React.useState(props.secure||false)
+  const toggleVisible =()=>{
+    setVisible(!visible)
+  }
+  console.log(props.secure,visible)
   return (
     <>
       <View style={styles.inpcontainer}>
         <Text style={styles.labeltext}>{Language[language][props.label]}</Text>
+        <View>
         <TextInput
           style={styles.textinput}
           // underlineColorAndroid="transparent"
           placeholder={props.placeholder}
           secureTextEntry={visible}
         />
+        {props.secure!==undefined?visible?(<TouchableOpacity style={{...styles.eye}} onPress={toggleVisible}><Icon  name={"eye"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):(<TouchableOpacity style={styles.eye} onPress={toggleVisible}><Icon  name={"calendar"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):<></>}
+        </View>
       </View>
     </>
   );
@@ -45,6 +53,12 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",
     borderRadius: 4
+  },
+  eye:{
+    position:"absolute",
+    top:19,//12+fontsize.h3/2
+    right:10,
+
   }
 });
 
