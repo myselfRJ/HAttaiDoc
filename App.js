@@ -18,6 +18,8 @@ import MedicineList from './components/medicinelist';
 import VisitOpen from './components/visitopen';
 import CombinedRoute from './navigation/combinednavigator';
 import store from './redux/stores/store';
+import axios from 'axios';
+import { urlActions } from './redux/features/url/urlSlice';
 function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',gap:16,padding:24 }}>
@@ -41,7 +43,17 @@ function HomeScreen() {
 const Stack=createNativeStackNavigator()
 
 function App() {
-  
+  axios.get("https://raw.githack.com/myselfRJ/mcqdata/main/ip.json") .then(function (response) {
+    // handle success
+    store.dispatch(urlActions.urlupdate(
+      response.data["ip"]+"/api/v1/"
+      ))
+    global.globalurl=response.data["ip"]+"/api/v1/"
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
   // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);//for notification permisiion
   // const routeNameRef = React.useRef();
   // const navigationRef = React.useRef();

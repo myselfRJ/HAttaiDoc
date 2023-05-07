@@ -2,7 +2,8 @@ let CUSTOMCOLOR = {
   primary: "blue",
   background: "grey",
   black: "black",
-  white: "white"
+  white: "white",
+  error: "red",
 };
 const DARKCOLOR = {
   primary: "red",
@@ -18,5 +19,5 @@ const CUSTOMFONTSIZE = {
   h4: 12,
   h5: 10
 };
-CUSTOMCOLOR=DARKCOLOR;
+// CUSTOMCOLOR=DARKCOLOR;
 export { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE };

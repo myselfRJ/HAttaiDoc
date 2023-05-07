@@ -1,28 +1,39 @@
 import { View, StyleSheet, TextInput, Text, TouchableOpacity } from "react-native";
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
-import {Language} from "../settings/customlanguage";
+
 import React from "react";
 import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = (props) => {
-  //props-> label, placeholder , action, secure, padtype
+  //props-> check, label, placeholder , action, secure, padtype
   const [visible,setVisible] = React.useState(props.secure||true)
+  const [errorStyles,setErrorStyle] = React.useState({})
   const toggleVisible =()=>{
     setVisible(!visible)
   }
-  console.log(props.secure,visible)
+
+  const passtoParent=(e)=>{
+
+    props.setValue(e)
+    if(props.doubleCheck[0]){!props.check(e)?setErrorStyle({borderColor:CUSTOMCOLOR.error,borderWidth:1}):setErrorStyle({})}
+    if(props.doubleCheck[1]){!props.check2[0](props.check2[1],e)?setErrorStyle({borderColor:CUSTOMCOLOR.error,borderWidth:1}):setErrorStyle({})}
+  }
+
+  
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={styles.labeltext}>{Language[language][props.label]}</Text>
+        <Text style={styles.labeltext}>{props.label}</Text>
         <View>
         <TextInput
-          style={styles.textinput}
+          style={[styles.textinput,errorStyles]}
           // underlineColorAndroid="transparent"
           placeholder={props.placeholder}
           secureTextEntry={props.secure?visible:false}
           inputMode={props.keypad??"default"}
           maxLength={props.maxLength??20}
+          onChangeText={passtoParent}
+          value={props.value}
         />
         {props.secure!==undefined?visible?(<TouchableOpacity style={{...styles.eye}} onPress={toggleVisible}><Icon  name={"eye-off"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):(<TouchableOpacity style={styles.eye} onPress={toggleVisible}><Icon  name={"eye"} color={CUSTOMCOLOR.primary} size={16}/></TouchableOpacity>):<></>}
         </View>
