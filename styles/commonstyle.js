@@ -10,7 +10,7 @@ export const commonstyles=StyleSheet.create({
     },
     img:{
         width:'100%',
-        height:250,
+        height:450,
         backgroundColor:CUSTOMCOLOR.primary
     },
     content:{
