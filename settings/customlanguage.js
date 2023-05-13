@@ -36,7 +36,14 @@ const Language = {
     signup:'Signup',
     otp:'OTP',
     submit:'Submit',
-    password:'Password'
+    password:'Password',
+    no_account:"Don't have an account?",
+    yes_account:"Already registered?",
+    password_2:"Password 2",
+    otp_placeholder:"4 digit OTP",
+    resend_otp:"Resend OTP",
+    forgot_password:"Forgot your password?",
+    forgot_placeholder:"Reset Password",
   },
   hi: {
     welcome: "स्वागत",
@@ -68,8 +75,19 @@ const Language = {
     follow_up: "फ़ॉलो अप",
     report_review: "रिपोर्ट समीक्षा",
     routine: "रूटीन",
-    phone_number:'Phone Number'
-   
+    phone_number:'फ़ोन नंबर',
+    login:'लॉग इन करें',
+    signup:'साइन अप करें',
+    otp:'ओ.टी.पी',
+    submit:'जमा करना',
+    password:'पासवर्ड',
+    no_account:"खाता नहीं है?",
+    yes_account:"पहले से ही पंजीकृत?",
+    password_2:'पासवर्ड २',
+    otp_placeholder:"४ अंकों का ओ.टी.पी",
+    resend_otp:'ओ.टी.पी पुनः भेजें',
+    forgot_password:"अपना पासवर्ड भूल गए?",
+    forgot_placeholder:"पासवर्ड बनाएं",
   },
   ta: {
     welcome: "வருகை வாழ்த்துக்கள்",
@@ -100,7 +118,15 @@ const Language = {
     new: "புதியது",
     follow_up: "பின்னூட்டம்",
     report_review: "அறிக்கை மதிப்பாய்வு",
-    routine: "ரூடின்"
+    routine: "ரூடின்",
+    phone_number:'தொலைபேசி எண்',
+    login:'உள்நுழைய',
+    signup:'பதிவு',
+    otp:'OTP',
+    submit:'சமர்ப்பிக்கவும்',
+    password:'கடவுச்சொல்',
+    no_account:"கணக்கு இல்லையா?",
+    yes_account:"ஏற்கனவே பதிவு செய்யப்பட்டது?",
   }
 };
 

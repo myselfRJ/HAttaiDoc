@@ -1,4 +1,4 @@
-import { Pressable, View, StyleSheet, Text } from "react-native";
+import { Pressable, ActivityIndicator, StyleSheet, Text } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
@@ -7,9 +7,9 @@ const HButton = (props) => {
   //props -> label, action
   return (
     <>
-      <Pressable style={styles.btncontainer} onPress={props.onPress}>
+      <Pressable style={styles.btncontainer} onPress={props.loading?null:props.onPress}>
       {props.icon &&<Icon  style={styles.icon} name={props.icon} color={CUSTOMCOLOR.white} size={24}/> }
-        <Text style={styles.btntext}>{Language[language][props.label]}</Text>
+        {props.loading?<ActivityIndicator size="small" color={CUSTOMCOLOR.white} />:<Text style={styles.btntext}>{props.label}</Text>}
       </Pressable>
     </>
   );
