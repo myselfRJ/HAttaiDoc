@@ -31,11 +31,11 @@ const Login = ({navigation}) => {
     };
     const loginbtn = () => {
         data = {
-          phone: phone,
+          phone_number: phone,
           password: password,
         };
         setLoading(!loading);
-        PostApi('signup/token', data, false)
+        PostApi('signup/token/', data, false)
           .then(function (response) {
             console.log(response.data);
             if (response.status === 201) {
@@ -47,9 +47,9 @@ const Login = ({navigation}) => {
             }
           })
           .catch(function (error) {
-            showToast('Error', 'Signup failed.');
+            showToast('Login failed : ', `${error.response.data.detail}`);
             requestFailed();
-            console.log(error, 'l');
+            console.log(error.response.data, 'l');
           });
       };
     const onPress = () => {
@@ -62,7 +62,7 @@ const Login = ({navigation}) => {
         } else {
           showToast(
             'Warning',
-            'Phone number must be valid.\n\nPassword must contain Uppercase, lowercase, number and 6-20 length.',
+            'Phone number must be valid.\n\nPassword must contain Uppercase, lowercase, number, contain special character and 6-20 length.',
           );
         }
       };

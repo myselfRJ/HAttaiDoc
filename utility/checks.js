@@ -12,10 +12,10 @@ function checkPassword(inputtxt)
     if(inputtxt===undefined||null){
         return false
     }
-    //6-20 Upper lower number
-var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+    //6-20 Upper lower number special character
+var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$&+,:;=?@#|'<>.^*()%!-]).{8,20}$/;
 if(inputtxt.match(passw)) 
-{ 
+{
 return true;
 }
 else
