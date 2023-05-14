@@ -26,7 +26,8 @@ const InputText = (props) => {
         <Text style={styles.labeltext}>{props.label}</Text>
         <View>
         <TextInput
-          style={[styles.textinput,errorStyles]}
+          style={[styles.textinput,errorStyles,props.textStyle]}
+          textAlign={props.textAlign??"left"}
           // underlineColorAndroid="transparent"
           placeholder={props.placeholder}
           secureTextEntry={props.secure?visible:false}

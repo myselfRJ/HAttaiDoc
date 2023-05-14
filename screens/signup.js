@@ -43,12 +43,14 @@ const Signup = ({navigation}) => {
         } else {
           showToast('Warning', response.data.message);
           requestFailed();
+          navigation.navigate('otp');//remove
         }
       })
       .catch(function (error) {
         showToast('Error', 'Signup failed.');
         requestFailed();
         console.log(error, 'l');
+        navigation.navigate('otp');//r5emove
       });
   };
 

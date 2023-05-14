@@ -50,7 +50,7 @@ const Otp = ({navigation}) => {
                 navigation.navigate('protected',{screen:'profilecreate'})
               } else {
                 showToast("Warning",response.data.message);
-                
+                navigation.navigate('protected',{screen:'authloading'})
               }
             })
             .catch(function (error) {
@@ -88,6 +88,8 @@ const Otp = ({navigation}) => {
           setValue={setOtp}
           keypad="numeric"
           maxLength={4}
+          textAlign="center"
+          textStyle={{fontSize:20,lineHeight:26}}
         />
 
         <View style={{flexDirection: 'row'}}>

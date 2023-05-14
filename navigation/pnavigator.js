@@ -5,6 +5,7 @@ import ProfileCreate from "../screens/profilecreate";
 import ClinicCreate from "../screens/cliniccreate";
 import UserCreate from "../screens/usercreate";
 import SlotCreate from "../screens/slotcreate";
+import AfterAuthLoadingScreen from "../screens/afterauthloadingscreen";
 
 const Stack=createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ const ProtectedRoute=()=>{
             <Stack.Screen name='createslot' component={SlotCreate}/>
             
             <Stack.Screen name='tab' component={BottomTab}/>
-           
+            <Stack.Screen name='authloading' component={AfterAuthLoadingScreen}/>
         </Stack.Navigator>
     )
 }

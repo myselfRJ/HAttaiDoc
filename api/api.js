@@ -4,7 +4,7 @@ import store from '../redux/stores/store';
 const globalurl=store.getState().url.url
 const PostApi = async (url,req_data,secure) => {
   // const globalurl = useSelector((state) => state.url.url
-  console.log(globalurl,"gl")
+  console.log(globalurl,url,"gl",req_data)
     const headers = {
         'Content-Type': 'application/json',
       };
