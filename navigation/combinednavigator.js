@@ -7,9 +7,9 @@ const Stack=createNativeStackNavigator();
 const CombinedRoute=()=>{
 
     return(
-        <Stack.Navigator initialScreen='protected' screenOptions={{headerShown:false}}>
+        <Stack.Navigator initialScreen='unprotected' screenOptions={{headerShown:false}}>
         
-            <Stack.Screen name='unprotected' component={UnProtectedRoute}/>
+            {/* <Stack.Screen name='unprotected' component={UnProtectedRoute}/> */}
             <Stack.Screen name='protected' component={ProtectedRoute}/>
            
         </Stack.Navigator>

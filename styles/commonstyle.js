@@ -14,11 +14,19 @@ export const commonstyles=StyleSheet.create({
         backgroundColor:CUSTOMCOLOR.primary
     },
     content:{
+        flex:1,
         paddingHorizontal:64,
         paddingVertical:24,
         width:'100%',
         alignItems:'center',
         gap:8,
+    },
+    h1:{
+        fontSize:32,
+        color:CUSTOMCOLOR.black,
+        fontWeight:'500',
+        lineHeight:96
+    
     }
 
 })

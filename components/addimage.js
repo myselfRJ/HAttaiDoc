@@ -28,8 +28,8 @@ const styles=StyleSheet.create({
         alignItems:'center'
     },
     image:{
-        height:60,
-        width:60, borderRadius:4,
+        height:96,
+        width:96, borderRadius:96/2,
     }
 })
 export default AddImage;

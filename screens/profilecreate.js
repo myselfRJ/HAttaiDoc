@@ -10,7 +10,7 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-const ProfileCreate=()=>{
+const ProfileCreate=({navigation})=>{
     const [selected,setSelected]=useState('male');
     
 
@@ -24,11 +24,16 @@ const ProfileCreate=()=>{
     return (
         <Keyboardhidecontainer>
             <View style={commonstyles.content}>
-                <Text>Fill Profile</Text>
+                <View style={styles.alignchild}>
+
+                
+                <Text style={commonstyles.h1}>Fill Profile</Text>
                 <AddImage url='https://www.kauveryhospital.com/doctorimage/recent/Dr.-Kandasamy2022-09-12-06:30:01am.jpg'/>
+                </View>
                 <InputText label='name' placeholder='Full Name'/>
                 
-                <View >
+                
+                <View  style={styles.alignchild}>
                 <Text>Gender</Text>
                 <View style={styles.radiogroup}>
                 <Option label='male' value="male" selected={selected==='male'} onPress={()=>handleOptions('male')}/>
@@ -43,7 +48,7 @@ const ProfileCreate=()=>{
                 <InputText label='name' placeholder='Full Name'/>
                 <InputText label='name' placeholder='Full Name'/>
                 <InputText label='name' placeholder='Full Name'/>
-                <HButton label='login'/>
+                <HButton label='login' onPress={()=>navigation.navigate('cliniccreate')}/>
             </View>
         </Keyboardhidecontainer>
     )
@@ -51,14 +56,20 @@ const ProfileCreate=()=>{
 
 const styles=StyleSheet.create({
     radiogroup:{
-        width:'100%',
         padding:16,
         flexDirection:'row',
-        gap:24,
-        alignItems:'center',
+        gap:48,
+      
         justifyContent:'flex-start'
 
-    }
+    },
+    alignchild:{
+    justifyContent:'center',
+    alignItems:'flex-start',
+    width:'100%',
+    paddingHorizontal:8,
+},
+
 })
 
 export default ProfileCreate
