@@ -5,7 +5,7 @@ import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from "../settings/style
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
 
-function SearchBox(props) {
+const SearchBox=(props) =>{
   //props-> label, keyboard, icon name, icon/enter action
   // const { label, icon, action } = props;
   const [text, setText] = React.useState("");
@@ -13,7 +13,7 @@ function SearchBox(props) {
     setText("");
   };
   return (
-    <>
+    
       <View style={styles.container}>
         <TextInput
           style={styles.leftItem}
@@ -28,17 +28,21 @@ function SearchBox(props) {
             <Pressable
               style={styles.rightItem}
               onPress={onClearText}
-            ></Pressable>
+            >
+              <Icon name='magnify' size={24} color={CUSTOMCOLOR.primary}/>
+            </Pressable>
           ) : (
             <></>
           )}
           <Pressable
             style={styles.rightItem}
             onPress={props.action}
-          ></Pressable>
+          >
+             <Icon name='cross' size={24} color={CUSTOMCOLOR.primary}/>
+          </Pressable>
         </View>
       </View>
-    </>
+   
   );
 }
 
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     alignItems: "center",
     color: "#343434",
-    outlineStyle: "none"
+    // outlinedStyle: "none"
   },
   rightItem: {
     width: 24,

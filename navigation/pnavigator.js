@@ -6,6 +6,9 @@ import ClinicCreate from "../screens/cliniccreate";
 import UserCreate from "../screens/usercreate";
 import SlotCreate from "../screens/slotcreate";
 import AfterAuthLoadingScreen from "../screens/afterauthloadingscreen";
+import Visit from "../screens/visit";
+import Patientlookup from "../screens/patientlookup";
+import PatientCreate from "../screens/patientcreate";
 
 const Stack=createNativeStackNavigator();
 
@@ -15,12 +18,16 @@ const ProtectedRoute=()=>{
 
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
+               <Stack.Screen name='tab' component={BottomTab}/>
             <Stack.Screen name='profilecreate' component={ProfileCreate}/>
             <Stack.Screen name='cliniccreate' component={ClinicCreate}/>
             <Stack.Screen name='usercreate' component={UserCreate}/>
             <Stack.Screen name='createslot' component={SlotCreate}/>
-            
-            <Stack.Screen name='tab' component={BottomTab}/>
+            <Stack.Screen name='visit' component={Visit}/>
+            <Stack.Screen name='patientlookup' component={Patientlookup}/>
+            <Stack.Screen name='patientcreate' component={PatientCreate}/>
+
+         
             <Stack.Screen name='authloading' component={AfterAuthLoadingScreen}/>
         </Stack.Navigator>
     )

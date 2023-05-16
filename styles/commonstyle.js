@@ -14,8 +14,7 @@ export const commonstyles=StyleSheet.create({
         backgroundColor:CUSTOMCOLOR.primary
     },
     content:{
-        flex:1,
-        paddingHorizontal:64,
+        paddingHorizontal:24,
         paddingVertical:24,
         width:'100%',
         alignItems:'center',

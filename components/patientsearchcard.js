@@ -3,10 +3,10 @@ import Icon from'react-native-vector-icons/MaterialCommunityIcons';
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from "../settings/styles";
 import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
-const PatientSearchCard = () => {
+const PatientSearchCard = (props) => {
   return (
     <>
-      <View style={styles.maincontainer}>
+      <View style={styles.main}>
         <Image
           style={styles.img}
           source={{
@@ -19,13 +19,13 @@ const PatientSearchCard = () => {
           <Text style={styles.age}>Malumalayi</Text>
           <Text style={styles.contact}>{Language[language]["contact"]}: 989787654</Text>
         </View>
-        <Icon  style={styles.icon} name='dots-horizontal' color={CUSTOMCOLOR.primary} size={24}/> 
+        <Icon  style={styles.icon} name='dots-horizontal' color={CUSTOMCOLOR.primary} size={24} onPress={props.onPress}/> 
       </View>
     </>
   );
 };
 const styles = StyleSheet.create({
-  maincontainer: {
+  main: {
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: 600,
     fontSize: 14,
-    lineHeight: 19,
+    lineHeight: 20,
     padding: 0,
     color: CUSTOMCOLOR.black
   },
   age: {
     fontWeight: 400,
     fontSize: 10,
-    lineHeight: 19,
+    lineHeight: 20,
     padding: 0,
     color: CUSTOMCOLOR.black
   },

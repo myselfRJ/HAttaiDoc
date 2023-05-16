@@ -19,6 +19,7 @@ const styles=StyleSheet.create({
         backgroundColor:CUSTOMCOLOR.primary,
         padding:8,
         borderRadius:40,
+        elevation:8,
         shadowColor: CUSTOMCOLOR.primary,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,

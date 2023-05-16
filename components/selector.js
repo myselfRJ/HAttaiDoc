@@ -6,7 +6,7 @@ const SelectorBtn=(props)=>{
 
     return(
         <View>
-            <Text style={styles.h3}>{props.label}</Text>
+            {props.label&&<Text style={styles.h3}>{props.label}</Text>}
         <Pressable style={styles.select}>
             <Text style={styles.h3}>
                 Hello
