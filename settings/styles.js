@@ -1,5 +1,5 @@
 let CUSTOMCOLOR = {
-  primary: "blue",
+  primary: "#4BA5FA",
   background: "grey",
   black: "black",
   white: "white",

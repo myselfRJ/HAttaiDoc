@@ -4,11 +4,13 @@ import { language } from "../settings/userpreferences";
 import {Language} from "../settings/customlanguage";
 const SelectionTab = (props) => {
   return (
-    <>
-      <Pressable style={styles.tabcontainer}>
-        <Text style={styles.tabtext}>{Language[language][props.label]}</Text>
+   
+   
+      <Pressable style={{...styles.tabcontainer,backgroundColor:props.selected?CUSTOMCOLOR.primary:CUSTOMCOLOR.white}}>
+        <Text style={{...styles.tabtext,color:props.selected?CUSTOMCOLOR.white:CUSTOMCOLOR.black}}>{props.label}</Text>
       </Pressable>
-    </>
+   
+   
   );
 };
 const styles = StyleSheet.create({

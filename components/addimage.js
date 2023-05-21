@@ -5,7 +5,7 @@ const AddImage=(props)=>{
     return(
         props.url?<Pressable style={styles.url}>
 
-        <Image style={styles.image} source={{uri:props.url}} resizeMode='center'/>
+        <Image style={styles.image} source={{uri:props.url}} resizeMode='cover'/>
         
         </Pressable>:
         <Pressable style={styles.main}>
@@ -25,11 +25,19 @@ const styles=StyleSheet.create({
     },
     url:{
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        // borderWidth:2,
+        borderRadius:8,
+        // borderColor:CUSTOMCOLOR.primary
     },
     image:{
-        height:60,
-        width:60, borderRadius:4,
+        height:80,
+        width:80, 
+        borderColor:CUSTOMCOLOR.primary,
+        borderWidth:1,
+        borderRadius:8,
+        
+        
     }
 })
 export default AddImage;

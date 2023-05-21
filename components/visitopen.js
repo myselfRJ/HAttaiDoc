@@ -8,7 +8,7 @@ const VisitOpen = (props) => {
   return (
     <>
       <View style={styles.inpcontainer}>
-      <Text style={styles.text}>Vitals</Text>
+      <Text style={styles.text}>{props.label}</Text>
         
         <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16}/>
        
@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: "700",
     gap: 4,
-    borderRadius: 4
+    borderRadius: 4,
+    borderBottomWidth:0.4,
+    borderBottomColor:CUSTOMCOLOR.primary
   },
   text: {
     
