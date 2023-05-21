@@ -45,6 +45,7 @@ const Language = {
     forgot_password: 'Forgot your password?',
     forgot_placeholder: 'Reset Password',
     appointments: 'Appointments',
+    dr: ' Dr. ',
   },
   hi: {
     welcome: 'स्वागत',
@@ -90,6 +91,7 @@ const Language = {
     forgot_password: 'अपना पासवर्ड भूल गए?',
     forgot_placeholder: 'पासवर्ड बनाएं',
     appointments: 'नियुक्ति',
+    dr: ' डॉ. ',
   },
   ta: {
     welcome: 'வருகை வாழ்த்துக்கள்',

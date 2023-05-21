@@ -37,7 +37,9 @@ const Dashboard = ({navigation}) => {
         }}>
         <View>
           <SvgXml xml={hattailogo} />
-          <Text style={styles.title}>Welcome,Dr.RamaMurthi</Text>
+          <Text style={styles.title}>
+            {Language[language]['welcome']},{Language[language]['dr']}RamaMurthi
+          </Text>
         </View>
         <HeaderAvatar />
       </View>
