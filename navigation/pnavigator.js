@@ -9,6 +9,7 @@ import AfterAuthLoadingScreen from "../screens/afterauthloadingscreen";
 import Visit from "../screens/visit";
 import Patientlookup from "../screens/patientlookup";
 import PatientCreate from "../screens/patientcreate";
+import SlotBook from "../screens/slotbook";
 
 const Stack=createNativeStackNavigator();
 
@@ -26,8 +27,7 @@ const ProtectedRoute=()=>{
             <Stack.Screen name='visit' component={Visit}/>
             <Stack.Screen name='patientlookup' component={Patientlookup}/>
             <Stack.Screen name='patientcreate' component={PatientCreate}/>
-
-         
+            <Stack.Screen name='bookslot' component={SlotBook}/>
             <Stack.Screen name='authloading' component={AfterAuthLoadingScreen}/>
         </Stack.Navigator>
     )
