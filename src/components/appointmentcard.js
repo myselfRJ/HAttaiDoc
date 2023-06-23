@@ -63,28 +63,62 @@ const AppointmentCard = () => {
               size={24}
             />
           </View>
-          <Pressable />
           {visible && (
             <View style={[styles.option, {width: 150}]}>
-              <View>
+              {/* <View>
                 <TouchableOpacity>
-                  <Text style={styles.contact}>
+                  <Text style={styles.contact1}>
                     {Language[language]['start_visit']}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                  <Text style={styles.contact}>
+                  <Text style={styles.contact1}>
                     {Language[language]['reschedule']}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     setVisible(false);
+                    Alert.alert('Modal has been closed.');
                   }}>
-                  <Text style={styles.contact}>
+                  <Text style={styles.contact1}>
                     {Language[language]['cancel']}
                   </Text>
                 </TouchableOpacity>
+              </View> */}
+              <View>
+                <Modal
+                  transparent={true}
+                  visible={true}
+                  onRequestClose={() => {
+                    setVisible(false);
+                  }}
+                  animationType="slide">
+                  <View style={styles.modal}>
+                    <View style={styles.modalContainer}>
+                      <View>
+                        <TouchableOpacity>
+                          <Text style={styles.contact1}>
+                            {Language[language]['start_visit']}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Text style={styles.contact1}>
+                            {Language[language]['reschedule']}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setVisible(false);
+                          }}>
+                          <Text style={styles.contact1}>
+                            {Language[language]['cancel']}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
               </View>
             </View>
           )}
@@ -141,6 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 8,
     top: 8,
+    padding: 10,
   },
   option: {
     position: 'absolute',
@@ -171,6 +206,20 @@ const styles = StyleSheet.create({
   contact: {
     height: 25,
     width: 150,
+  },
+  contact1: {
+    height: 25,
+    width: 150,
+  },
+  modal: {
+    backgroundColor: '#000000aa',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalContainer: {
+    backgroundColor: '#fff',
+    padding: 40,
+    borderRadius: 10,
   },
 });
 
