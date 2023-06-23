@@ -1,9 +1,19 @@
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image,Pressable,TouchableOpacity} from 'react-native';
+import {useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 const PatientSearchCard = props => {
+  const [visible, setVisible] = useState(false);
+  const pressed=()=>{
+    setVisible((prevstate)=> !prevstate)
+  }
+  const close=()=>{
+    setVisible(visible)
+  }
+
+
   return (
     <>
       <View style={styles.main}>
@@ -20,13 +30,43 @@ const PatientSearchCard = props => {
             {Language[language]['contact']}: 989787654
           </Text>
         </View>
+        <Pressable
+        style={styles.icon}
+        onPress={() => {
+            setVisible(!visible);
+        }}>
+          <View>
         <Icon
           style={styles.icon}
           name="dots-horizontal"
           color={CUSTOMCOLOR.primary}
           size={24}
-          onPress={props.onPress}
         />
+        </View>
+        </Pressable>
+        {visible && (
+          <View
+          style={[styles.option, {width: 100}]}
+          onPress={() => console.log('en')}>
+            <View>
+          <TouchableOpacity>
+            <Text>{Language[language]['update']}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>{Language[language]['delete']}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            setVisible(false);
+          }}>
+                  <Text>
+                    {Language[language]['cancel']}
+                  </Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+        )}
+        
+       
       </View>
     </>
   );
@@ -73,6 +113,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 8,
     top: 8,
+  },
+  option: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
 });
 

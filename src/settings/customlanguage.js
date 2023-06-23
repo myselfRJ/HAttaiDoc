@@ -46,6 +46,9 @@ const Language = {
     forgot_placeholder: 'Reset Password',
     appointments: 'Appointments',
     dr: ' Dr. ',
+    update:'update',
+    delete:'delete',
+    cancel:'cancel'
   },
   hi: {
     welcome: 'स्वागत',
