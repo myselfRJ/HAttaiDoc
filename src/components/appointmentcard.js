@@ -56,20 +56,36 @@ const AppointmentCard = () => {
           onPress={() => {
             setVisible(!visible);
           }}>
-          <Icon name="dots-horizontal" color={CUSTOMCOLOR.primary} size={24} />
+          <View>
+            <Icon
+              name="dots-horizontal"
+              color={CUSTOMCOLOR.primary}
+              size={24}
+            />
+          </View>
+          <Pressable />
           {visible && (
-            <View
-              style={[styles.option, {width: 100}]}
-              onPress={() => console.log('hi')}>
-              <TouchableOpacity>
-                <Text>Start visit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text>Reschedule</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
+            <View style={[styles.option, {width: 150}]}>
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.contact}>
+                    {Language[language]['start_visit']}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.contact}>
+                    {Language[language]['reschedule']}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setVisible(false);
+                  }}>
+                  <Text style={styles.contact}>
+                    {Language[language]['cancel']}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </Pressable>
@@ -151,6 +167,10 @@ const styles = StyleSheet.create({
   statustext: {
     textAlign: 'right',
     fontWeight: '600',
+  },
+  contact: {
+    height: 25,
+    width: 150,
   },
 });
 
