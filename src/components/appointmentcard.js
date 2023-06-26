@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,13 +8,14 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
-import {useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const AppointmentCard = () => {
+const AppointmentCard = ({appointment}) => {
   const [visible, setVisible] = useState(false);
+  console.log(appointment);
+
   return (
     <>
       <View style={styles.maincontainer}>
@@ -24,30 +26,37 @@ const AppointmentCard = () => {
           }}
         />
         <View style={styles.child}>
-          <Text style={styles.name}>Malumalayi</Text>
-          <Text style={styles.age}>Malumalayi</Text>
-          <View style={styles.seperator}></View>
-          <Text style={styles.symptom}>
-            Lorem ipsum dolor sit amet consectetur. Nec porttitor tincidunt
-            ultricies nisl.
+          <Text style={styles.name}>{appointment.patient.name}</Text>
+          <Text style={styles.age}>
+            {appointment.patient.age} | {appointment.patient.gender}
           </Text>
+          <View style={styles.seperator}></View>
+          <Text style={styles.symptom}>{appointment.complaint}</Text>
         </View>
         <View style={styles.hseperator}></View>
         <View style={styles.patientinfo}>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['type']}:</Text>
+            <Text style={styles.contact}>
+              {Language[language]['type']}:{appointment['appointment-type']}
+            </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['time']}:</Text>
+            <Text style={styles.contact}>
+              {Language[language]['time']}:{appointment.time}
+            </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['status']}:</Text>
+            <Text style={styles.contact}>
+              {Language[language]['status']}:{appointment.status}
+            </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['bill']}:</Text>
+            <Text style={styles.contact}>
+              {Language[language]['bill']}:{appointment.bill}
+            </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
         </View>
@@ -65,7 +74,7 @@ const AppointmentCard = () => {
           </View>
           {visible && (
             <View style={[styles.option, {width: 150}]}>
-              {/* <View>
+              <View>
                 <TouchableOpacity>
                   <Text style={styles.contact1}>
                     {Language[language]['start_visit']}
@@ -85,40 +94,6 @@ const AppointmentCard = () => {
                     {Language[language]['cancel']}
                   </Text>
                 </TouchableOpacity>
-              </View> */}
-              <View>
-                <Modal
-                  transparent={true}
-                  visible={true}
-                  onRequestClose={() => {
-                    setVisible(false);
-                  }}
-                  animationType="slide">
-                  <View style={styles.modal}>
-                    <View style={styles.modalContainer}>
-                      <View>
-                        <TouchableOpacity>
-                          <Text style={styles.contact1}>
-                            {Language[language]['start_visit']}
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                          <Text style={styles.contact1}>
-                            {Language[language]['reschedule']}
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setVisible(false);
-                          }}>
-                          <Text style={styles.contact1}>
-                            {Language[language]['cancel']}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </Modal>
               </View>
             </View>
           )}
@@ -178,7 +153,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   option: {
-    position: 'absolute',
+    position: 'relative',
     right: 0,
     top: 0,
   },

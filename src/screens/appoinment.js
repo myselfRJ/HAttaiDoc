@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -6,13 +7,28 @@ import {
 } from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import {
-  SelectorBtn,
-  SelectionTab,
-  AppointmentCard,
-  PlusButton,
-} from '../components';
+import PlusButton from '../components/plusbtn';
+import SelectionTab from '../components/selectiontab';
+import SelectorBtn from '../components/selector';
+import {AppointmentCard} from '../components';
+
 const Appointment = ({navigation}) => {
+  const [data, setData] = useState([]);
+  console.warn('.....', data);
+
+  const fetchData = async () => {
+    const response = await fetch(
+      'https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D',
+    );
+    const jsonData = await response.json();
+    setData(jsonData);
+    console.log(data);
+  };
+  useEffect(() => {
+    {
+      fetchData();
+    }
+  }, [data.length]);
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -29,14 +45,11 @@ const Appointment = ({navigation}) => {
       </View>
       <View style={styles.appointment}>
         <Text style={styles.h2}>Appointments</Text>
-
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+        {data
+          ? data.map((value, index) => {
+              return <AppointmentCard key={index} appointment={value} />;
+            })
+          : null}
       </View>
 
       <PlusButton

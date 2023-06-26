@@ -63,9 +63,9 @@ const Dashboard = ({navigation}) => {
       <View style={styles.appointment}>
         <Text style={styles.h2}>{Language[language]['appointments']}</Text>
 
+        {/* <AppointmentCard />
         <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+        <AppointmentCard /> */}
       </View>
       <View
         style={{

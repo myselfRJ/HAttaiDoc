@@ -47,9 +47,6 @@ const Language = {
     appointments: 'Appointments',
     dr: ' Dr. ',
     doctor: ' Doctor. ',
-    start_visit: 'Start Visit',
-    reschedule: 'Reschedule',
-    cancel: 'Cancel',
   },
   hi: {
     welcome: 'स्वागत',
@@ -96,9 +93,6 @@ const Language = {
     forgot_placeholder: 'पासवर्ड बनाएं',
     appointments: 'नियुक्ति',
     dr: ' डॉ. ',
-    start_visit: 'दौरा शुरू करें',
-    reschedule: 'पुनर्निर्धारित',
-    cancel: 'रद्द करना ',
   },
   ta: {
     welcome: 'வருகை வாழ்த்துக்கள்',
@@ -138,9 +132,6 @@ const Language = {
     password: 'கடவுச்சொல்',
     no_account: 'கணக்கு இல்லையா?',
     yes_account: 'ஏற்கனவே பதிவு செய்யப்பட்டது?',
-    start_visit: 'வருகை தொடங்க',
-    reschedule: 'மறு அட்டவணை',
-    cancel: 'ரத்து செய்',
   },
 };
 
