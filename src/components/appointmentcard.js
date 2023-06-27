@@ -73,7 +73,7 @@ const AppointmentCard = ({appointment}) => {
             />
           </View>
           {visible && (
-            <View style={[styles.option, {width: 150}]}>
+            <View style={[styles.option, {width: 100}]}>
               <View>
                 <TouchableOpacity>
                   <Text style={styles.contact1}>
@@ -88,7 +88,6 @@ const AppointmentCard = ({appointment}) => {
                 <TouchableOpacity
                   onPress={() => {
                     setVisible(false);
-                    Alert.alert('Modal has been closed.');
                   }}>
                   <Text style={styles.contact1}>
                     {Language[language]['cancel']}
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   option: {
-    position: 'relative',
+    position: 'absolute',
     right: 0,
     top: 0,
   },

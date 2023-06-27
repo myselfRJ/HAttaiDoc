@@ -14,7 +14,7 @@ import {AppointmentCard} from '../components';
 
 const Appointment = ({navigation}) => {
   const [data, setData] = useState([]);
-  console.warn('.....', data);
+  console.warn(data);
 
   const fetchData = async () => {
     const response = await fetch(

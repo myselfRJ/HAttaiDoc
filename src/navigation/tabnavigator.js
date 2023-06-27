@@ -5,6 +5,7 @@ import Appointment from '../screens/appoinment';
 import PatientSearch from '../screens/patientsearch';
 import Titbit from '../screens/titbit';
 import Account from '../screens/account';
+import Symptoms from '../screens/symptoms';
 import {CUSTOMCOLOR} from '../settings/styles';
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +37,7 @@ const BottomTab = () => {
         },
       })}>
       <Tab.Screen name="dashboard" component={Dashboard} />
+      <Tab.Screen name="symptoms" component={Symptoms} />
       <Tab.Screen name="myappointment" component={Appointment} />
       <Tab.Screen name="mypatient" component={PatientSearch} />
       <Tab.Screen name="titbits" component={Titbit} />
