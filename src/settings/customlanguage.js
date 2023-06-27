@@ -47,6 +47,9 @@ const Language = {
     appointments: 'Appointments',
     dr: ' Dr. ',
     doctor: ' Doctor. ',
+    symptoms: 'symptoms',
+    days: 'Days',
+    severity: 'Severity',
   },
   hi: {
     welcome: 'स्वागत',
@@ -93,6 +96,9 @@ const Language = {
     forgot_placeholder: 'पासवर्ड बनाएं',
     appointments: 'नियुक्ति',
     dr: ' डॉ. ',
+    symptoms: 'लक्षण',
+    days: 'दिन',
+    severity: 'तीव्रता',
   },
   ta: {
     welcome: 'வருகை வாழ்த்துக்கள்',
@@ -132,6 +138,9 @@ const Language = {
     password: 'கடவுச்சொல்',
     no_account: 'கணக்கு இல்லையா?',
     yes_account: 'ஏற்கனவே பதிவு செய்யப்பட்டது?',
+    symptoms: 'அறிகுறிகள்',
+    days: 'நாட்களில்',
+    severity: 'தீவிரம்',
   },
 };
 

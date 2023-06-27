@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Option from '../components/option';
-import InputText from '../components/inputext';
-import PlusButton from '../components/plusbtn';
+import Option from './option';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
 
 const Symptoms = () => {
   const [symptomsData, setSymptomsData] = useState([
@@ -48,7 +48,7 @@ const Symptoms = () => {
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={{margin: 10}}>
-          <Text style={styles.mainHead}>Symptoms</Text>
+          <Text style={styles.mainHead}>{Language[language]['symptoms']}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <View style={{flexDirection: 'column'}}>
@@ -56,7 +56,7 @@ const Symptoms = () => {
               <View key={index} style={{flexDirection: 'row', padding: 10}}>
                 <View style={styles.symptomInput}>
                   <Text style={{padding: 10, fontWeight: 'bold'}}>
-                    Symptoms:
+                    {Language[language]['symptoms']}:
                   </Text>
                   <View
                     style={{
@@ -72,7 +72,9 @@ const Symptoms = () => {
                   </View>
                 </View>
                 <View style={styles.DateInput}>
-                  <Text style={{padding: 10, fontWeight: 'bold'}}>Days</Text>
+                  <Text style={{padding: 10, fontWeight: 'bold'}}>
+                    {Language[language]['days']}:
+                  </Text>
                   <View
                     style={{
                       height: 40,
@@ -88,7 +90,7 @@ const Symptoms = () => {
                 </View>
                 <View style={styles.radiogroup}>
                   <Text style={{padding: 10, fontWeight: 'bold'}}>
-                    Severity:{' '}
+                    {Language[language]['severity']}:
                   </Text>
                   <View style={{flexDirection: 'row'}}>
                     <Option

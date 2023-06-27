@@ -5,7 +5,7 @@ import Appointment from '../screens/appoinment';
 import PatientSearch from '../screens/patientsearch';
 import Titbit from '../screens/titbit';
 import Account from '../screens/account';
-import Symptoms from '../screens/symptoms';
+import Symptoms from '../components/symptoms';
 import {CUSTOMCOLOR} from '../settings/styles';
 const Tab = createBottomTabNavigator();
 
