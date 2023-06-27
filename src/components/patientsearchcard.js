@@ -6,7 +6,6 @@ import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 const PatientSearchCard = props => {
   const [visible, setVisible] = useState(false);
-  //const [modalVisible, setModalVisible] = useState(false)
 
   return (
     <>

@@ -48,7 +48,12 @@ const Language = {
     dr: ' Dr. ',
     update:'update',
     delete:'delete',
-    cancel:'cancel'
+    cancel:'cancel',
+    consultation:'Consultation',
+    cheif_complaints:'Cheif Complaints',
+    suggestions:"Suggestions"
+
+
   },
   hi: {
     welcome: 'स्वागत',

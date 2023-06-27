@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
+import {useState,useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
 import {
@@ -62,10 +62,9 @@ const Dashboard = ({navigation}) => {
       </View>
       <View style={styles.appointment}>
         <Text style={styles.h2}>{Language[language]['appointments']}</Text>
-
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+        
+        
+       
       </View>
       <View
         style={{
@@ -74,7 +73,7 @@ const Dashboard = ({navigation}) => {
           paddingHorizontal: 8,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('myappointment')}
+          onPress={() => navigation.navigate('complaints')}
           style={{
             borderWidth: 0.5,
             borderRadius: 4,

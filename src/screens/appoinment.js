@@ -1,4 +1,5 @@
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {useState,useEffect} from 'react';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -13,6 +14,17 @@ import {
   PlusButton,
 } from '../components';
 const Appointment = ({navigation}) => {
+  const [data,setData] = useState(null)
+  const fetchData=async ()=>{
+    const response = await fetch('https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D')
+    const jsonData = await response.json();
+    setData(jsonData);
+  }
+  useEffect(()=>{
+    {
+      fetchData();
+    }
+  },[]);
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -30,13 +42,12 @@ const Appointment = ({navigation}) => {
       <View style={styles.appointment}>
         <Text style={styles.h2}>Appointments</Text>
 
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+       {data ?
+       data.map((value,index)=>{
+        return <AppointmentCard key={index} appointment={value}/>
+       })
+       :null}
+        
       </View>
 
       <PlusButton
