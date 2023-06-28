@@ -10,6 +10,7 @@ import Visit from '../screens/visit';
 import Patientlookup from '../screens/patientlookup';
 import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
+import Prescribe from '../components/prescribe';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="patientcreate" component={PatientCreate} />
       <Stack.Screen name="bookslot" component={SlotBook} />
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
+      <Stack.Screen name="prescribe" component={Prescribe} />
     </Stack.Navigator>
   );
 };

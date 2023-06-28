@@ -74,7 +74,7 @@ const Dashboard = ({navigation}) => {
           paddingHorizontal: 8,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('symptoms')}
+          onPress={() => navigation.navigate('prescribe')}
           style={{
             borderWidth: 0.5,
             borderRadius: 4,
