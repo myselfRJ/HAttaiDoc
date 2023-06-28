@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from './option';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
@@ -15,10 +16,17 @@ const Symptoms = () => {
   const [symptomsData, setSymptomsData] = useState([
     {symptom: '', days: '', severity: ''},
   ]);
+  const [visible, setVisible] = useState(false);
 
   const handleAddSymptoms = () => {
     const newData = [...symptomsData];
     newData.push({symptom: '', days: '', severity: ''});
+    setSymptomsData(newData);
+    setVisible(true);
+  };
+  const handleDeleteSymptom = index => {
+    const newData = [...symptomsData];
+    newData.splice(index, 1);
     setSymptomsData(newData);
   };
 
@@ -50,14 +58,17 @@ const Symptoms = () => {
         <View style={{margin: 10}}>
           <Text style={styles.mainHead}>{Language[language]['symptoms']}</Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap'}}>
           <View style={{flexDirection: 'column'}}>
             {symptomsData.map((data, index) => (
-              <View key={index} style={{flexDirection: 'row', padding: 10}}>
+              <View
+                key={index}
+                style={{flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                 <View style={styles.symptomInput}>
                   <Text style={{padding: 10, fontWeight: 'bold'}}>
                     {Language[language]['symptoms']}:
                   </Text>
+
                   <View
                     style={{
                       height: 40,
@@ -121,9 +132,15 @@ const Symptoms = () => {
               <Text style={styles.PlusText}>+</Text>
             </View>
           </TouchableOpacity>
+          {visible && symptomsData?.length !== 1 && (
+            <TouchableOpacity onPress={handleDeleteSymptom}>
+              <View style={styles.PlusButton}>
+                <Text style={styles.PlusText}>-</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-      <View style={styles.line}></View>
     </ScrollView>
   );
 };
@@ -141,25 +158,23 @@ const styles = StyleSheet.create({
   symptomInput: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    width: 200,
-    marginRight: 20,
+    padding: 8,
   },
   DateInput: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    width: 190,
-    marginRight: 20,
+    padding: 8,
   },
   radiogroup: {
     flexDirection: 'row',
-    width: 300,
+    padding: 8,
+    gap: 8,
   },
   PlusText: {
     fontSize: 40,
     color: '#fff',
   },
   PlusButton: {
-    position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
@@ -170,10 +185,32 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   line: {
-    marginTop: 10,
-    height: 2,
+    margin: 8,
+    height: 0.5,
     width: '100%',
     backgroundColor: 'blue',
+  },
+  dummy: {
+    flexDirection: 'row',
+    padding: 16,
+    backgroundColor: '#555443',
+    gap: 16,
+  },
+  dum2: {
+    backgroundColor: '#5518a5',
+    padding: 8,
+  },
+  dum3: {
+    flexDirection: 'row',
+    backgroundColor: '#5518a5',
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    paddingVertical: 16,
+    gap: 24,
+    borderRadius: 8,
+  },
+  textsize: {
+    fontSize: 24,
   },
 });
 

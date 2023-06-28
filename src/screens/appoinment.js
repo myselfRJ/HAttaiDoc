@@ -14,7 +14,6 @@ import {AppointmentCard} from '../components';
 
 const Appointment = ({navigation}) => {
   const [data, setData] = useState([]);
-  console.warn(data);
 
   const fetchData = async () => {
     const response = await fetch(
@@ -22,7 +21,6 @@ const Appointment = ({navigation}) => {
     );
     const jsonData = await response.json();
     setData(jsonData);
-    console.log(data);
   };
   useEffect(() => {
     {

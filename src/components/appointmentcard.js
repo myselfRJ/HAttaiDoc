@@ -14,7 +14,6 @@ import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 const AppointmentCard = ({appointment}) => {
   const [visible, setVisible] = useState(false);
-  console.log(appointment);
 
   return (
     <>
