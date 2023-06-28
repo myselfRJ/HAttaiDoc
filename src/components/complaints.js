@@ -14,10 +14,11 @@ import { CUSTOMCOLOR, CUSTOMFONTSIZE, CUSTOMFONTFAMILY } from '../settings/style
 import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 const ComplaintsCard = (props) => {
-    const [selectIndex,setSelectIndex] = useState(null);
+    const [selectIndex,setSelectIndex] = useState();
     const [text, setText] = useState('');
     
     const handlePress = (suggestion) => {
+      setText("")
       setText(suggestion);
     };
   
@@ -35,18 +36,20 @@ const ComplaintsCard = (props) => {
             style={styles.input}
             placeholder='write complaints'
             multiline={true}
-            onChangeText={(sug)=> setText(sug)}
             value={text}
+            onChangeText={(text)=>{setText(''); setText(text)}}
           />
         <View>
           <Text style={styles.h3}>{Language[language]['suggestions']}</Text>
           <View style={styles.sugg}>
-            {complaints.map((value, index) => (
+            {complaints.map((value,index) => (
               <Pressable
+                style={styles.sugbtn}
                 key={index}
                 onPress={() => {handlePress(value),setSelected(index)}}
               >
-                <Text style={styles.sugText}>{value}</Text>
+                <View>
+                <Text style={styles.sugText}>{value}</Text></View>
               </Pressable>
             ))}
           </View>
@@ -82,10 +85,15 @@ const styles = StyleSheet.create({
     },
     sugg:{
         flexDirection:"row",
-        justifyContent:"space-around"
+        justifyContent:"space-around",
     },
     sugText:{
         color:CUSTOMCOLOR.primary
+    },
+    sugbtn:{
+      borderWidth:2,
+      borderRadius:5,
+      padding:5
     }
 })
 export default ComplaintsCard;

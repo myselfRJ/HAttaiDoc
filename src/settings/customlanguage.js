@@ -51,8 +51,18 @@ const Language = {
     cancel:'cancel',
     consultation:'Consultation',
     cheif_complaints:'Cheif Complaints',
-    suggestions:"Suggestions"
-
+    suggestions:"Suggestions",
+    vitals:"Vitals",
+    pulse_rate:"Pulse rate",
+    weight:"Weight",
+    height:"Height",
+    temp:"Temp",
+    rate:"Res.Rate",
+    bmi:"BMI",
+    diastolic_bp:"Diastolic BP",
+    systolic_bp:"Systolic BP",
+    lmp_edd:"LMP EDD",
+    us_edd:"US EDD"
 
   },
   hi: {
