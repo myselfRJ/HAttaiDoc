@@ -24,7 +24,6 @@ const Patientlookup=({navigation})=>{
         <Text style={styles.h2}>
             Search Results
         </Text>
-     
         <PatientSearchCard onPress={()=>navigation.navigate('visit')}/>
         <PatientSearchCard onPress={()=>navigation.navigate('visit')}/>
         <PatientSearchCard onPress={()=>navigation.navigate('visit')}/>
