@@ -40,6 +40,7 @@ export default function Prescribe() {
     'Evening',
     'Night',
   ]);
+  const [quantity, setQuantity] = useState('100');
   const [duration, setDuration] = useState('');
   const setMode = index => {
     setSelectedMode(index);
@@ -67,11 +68,11 @@ export default function Prescribe() {
   return (
     <ScrollView>
       <View style={styles.mainHead}>
-        <Text style={styles.mainText}>Prescribe</Text>
+        <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
       </View>
       <View style={styles.prescribeConatiner}>
         <View style={styles.ModeContainer}>
-          <Text style={styles.ModeText}>Mode</Text>
+          <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes.map((value, index) => (
               <TouchableOpacity key={index} onPress={() => setMode(index)}>
@@ -91,7 +92,9 @@ export default function Prescribe() {
         </View>
         <View style={styles.MedicineContainer}>
           <View style={styles.MedicineHead}>
-            <Text style={styles.Medicinetext}>Medicine</Text>
+            <Text style={styles.Medicinetext}>
+              {Language[language]['medicine']}
+            </Text>
             <TextInput
               style={styles.MedicineInput}
               placeholder="enter Medicine"
@@ -100,7 +103,9 @@ export default function Prescribe() {
               onChangeText={val => setMedicine(val)}
             />
             <Icon name="magnify" size={24} style={styles.search} />
-            <Text style={styles.RecommdationText}>Recommedations</Text>
+            <Text style={styles.RecommdationText}>
+              {Language[language]['reccomedations']}
+            </Text>
             <View style={styles.Modes}>
               {recommdations.map((value, index) => (
                 <TouchableOpacity
@@ -133,10 +138,10 @@ export default function Prescribe() {
               fontWeight: 400,
               lineHeight: 19,
             }}>
-            Dose
+            {Language[language]['dose']}
           </Text>
           <View style={styles.TabInput}>
-            <Text style={styles.TextDose}>Number:</Text>
+            <Text style={styles.TextDose}>{Language[language]['number']}:</Text>
             <TextInput
               style={styles.tab}
               value={tab}
@@ -161,7 +166,7 @@ export default function Prescribe() {
           </View>
         </View>
         <View style={{width: 635, gap: 8}}>
-          <Text style={styles.textTime}>Timimg</Text>
+          <Text style={styles.textTime}>{Language[language]['timing']}</Text>
           <View style={styles.Modes}>
             {timing.map((value, index) => (
               <TouchableOpacity key={index} onPress={() => setTime(index)}>
@@ -180,7 +185,9 @@ export default function Prescribe() {
           </View>
         </View>
         <View style={styles.frequency}>
-          <Text style={styles.frequencyText}>Frequency</Text>
+          <Text style={styles.frequencyText}>
+            {Language[language]['frequency']}
+          </Text>
           <View style={styles.Modes}>
             {frequency.map((value, index) => (
               <TouchableOpacity
@@ -202,7 +209,9 @@ export default function Prescribe() {
           </View>
         </View>
         <View style={styles.DurationContainer}>
-          <Text style={styles.DurationText}>Duration</Text>
+          <Text style={styles.DurationText}>
+            {Language[language]['duration']}
+          </Text>
           <TextInput
             style={styles.durationInput}
             value={duration}
@@ -210,16 +219,16 @@ export default function Prescribe() {
           />
         </View>
         <View style={styles.QuantityContainer}>
-          <Text style={styles.quantityText}>Quantity</Text>
+          <Text style={styles.quantityText}>
+            {Language[language]['quantity']}
+          </Text>
           <View style={{height: 40, width: 100}}>
-            <Text style={styles.numText}>100</Text>
+            <Text style={styles.numText}>{quantity}</Text>
           </View>
         </View>
         <View style={styles.line}></View>
         <TouchableOpacity>
-          <View style={styles.PlusButton}>
-            <Text style={styles.plusText}>+</Text>
-          </View>
+          <Icon name="plus" size={32} style={styles.PlusButton} />
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -385,7 +394,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: 10,
     lineHeight: 13,
-    color: 'blue',
+    color: '#4ba5fa',
     gap: 10,
     backgroundColor: '#fff',
   },
@@ -397,16 +406,10 @@ const styles = StyleSheet.create({
   },
   PlusButton: {
     backgroundColor: '#4ba5fa',
-    height: 50,
-    width: 50,
-    borderRadius: 100,
+    padding: 16,
+    borderRadius: 32,
     justifyContent: 'center',
     alignSelf: 'center',
-  },
-  plusText: {
-    color: '#fff',
-    fontSize: 40,
-    paddingLeft: 15,
   },
   frequencyText: {
     paddingLeft: 4,

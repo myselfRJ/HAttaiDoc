@@ -74,7 +74,7 @@ const Dashboard = ({navigation}) => {
           paddingHorizontal: 8,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('prescribe')}
+          onPress={() => navigation.navigate('date')}
           style={{
             borderWidth: 0.5,
             borderRadius: 4,
