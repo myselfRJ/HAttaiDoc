@@ -12,6 +12,9 @@ import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
 import CheifComplaints from '../screens/cheif_complaint';
 import { Vitals } from '../components';
+import Notes from '../components/notes';
+import Refer_Doctor from '../components/refertodoctor';
+
 
 
 
@@ -35,6 +38,9 @@ const ProtectedRoute = () => {
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
       <Stack.Screen name="complaints" component={CheifComplaints}/>
       <Stack.Screen name="vitals" component={Vitals}/>
+      <Stack.Screen name="notes" component={Notes}/>
+      <Stack.Screen name='refertodoctor' component={Refer_Doctor}/>
+
     
     </Stack.Navigator>
   );

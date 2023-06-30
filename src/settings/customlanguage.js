@@ -62,7 +62,10 @@ const Language = {
     diastolic_bp:"Diastolic BP",
     systolic_bp:"Systolic BP",
     lmp_edd:"LMP EDD",
-    us_edd:"US EDD"
+    us_edd:"US EDD",
+    notes:"Notes",
+    recommendation:"Recommendation",
+  
 
   },
   hi: {

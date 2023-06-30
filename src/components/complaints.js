@@ -43,14 +43,14 @@ const ComplaintsCard = (props) => {
           <Text style={styles.h3}>{Language[language]['suggestions']}</Text>
           <View style={styles.sugg}>
             {complaints.map((value,index) => (
-              <Pressable
-                style={styles.sugbtn}
+              <TouchableOpacity
+                style={[styles.sugbtn,{ borderColor: text === value ? 'green' : CUSTOMCOLOR.primary }]}
                 key={index}
                 onPress={() => {handlePress(value),setSelected(index)}}
               >
                 <View>
                 <Text style={styles.sugText}>{value}</Text></View>
-              </Pressable>
+              </TouchableOpacity>
             ))}
           </View>
         </View>

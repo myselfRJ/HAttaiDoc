@@ -12,7 +12,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const AppointmentCard = ({appointment}) => {
+import Visit from '../screens/visit';
+const AppointmentCard = ({appointment,openVisit}) => {
   const [visible, setVisible] = useState(false);
   return (
     <>
@@ -56,23 +57,24 @@ const AppointmentCard = ({appointment}) => {
           onPress={() => {
             setVisible(!visible);
           }}>
+            
           <Icon name="dots-horizontal" color={CUSTOMCOLOR.primary} size={24} />
           {visible && (
             <View
               style={[styles.option, {width: 100}]}
               onPress={() => console.log('hi')}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={openVisit }>
                 <Text>Start visit</Text>
               </TouchableOpacity>
               <TouchableOpacity>
                 <Text>Reschedule</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>setVisible(false)}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
             </View>
           )}
-        </Pressable>
+         </Pressable>
       </View>
     </>
   );

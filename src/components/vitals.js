@@ -71,68 +71,89 @@ const Vitals = props => {
 
             <View key={index} style={styles.vitalmain}>
               <View style={styles.basiccontainer}>
-              <Text style={styles.basic}>Basic</Text>
-              <View style={styles.basicFields}>
-                <View style={styles.pulsecontainer}>
-                  <Text style={styles.pulse}>{Language[language]['pulse_rate']}:</Text>
-                  <TextInput value={data.pulse_rate} onChangeText={text => PulseChange(text, index)}
-                    style={styles.pulsetext} />
-                </View>
-                <View style={styles.weightcontainer}>
-                  <Text style={styles.weight}>{Language[language]['weight']}:</Text>
+                <Text style={styles.basic}>Basic</Text>
+                <View style={styles.basicFields}>
+                  <View style={styles.pulsecontainer}>
+                    <Text style={styles.pulse}>{Language[language]['pulse_rate']}:</Text>
 
-                  <TextInput value={data.weight} onChangeText={text => weightChange(text, index)}
-                    style={styles.weighttext} />
+                    <TextInput value={data.pulse_rate} onChangeText={text => PulseChange(text, index)}
+                      style={styles.pulsetext} keyboardType='numeric'/>
+
+
+                  </View>
+                  <View style={styles.weightcontainer}>
+                    <Text style={styles.weight}>{Language[language]['weight']}</Text>
+                    <View style={styles.hardText}>
+                      <TextInput value={data.weight} onChangeText={text => weightChange(text, index)}
+                        style={styles.weighttext} keyboardType='numeric'/>
+                      <Text style={styles.weighttext}>kg</Text>
+                    </View>
+                  </View>
+                  <View style={styles.heightcontainer}>
+                    <Text style={styles.height}>{Language[language]['height']}</Text>
+                    <View style={styles.hardText}>
+                      <TextInput value={data.height} onChangeText={text => heightChange(text, index)}
+                        style={styles.heighttext} keyboardType='numeric' />
+                      <Text style={styles.text}>cm</Text>
+                    </View>
+                  </View>
+                  <View style={styles.tempcontainer}>
+                    <Text style={styles.temp}>{Language[language]['temp']}</Text>
+                    <View style={styles.hardText}>
+                      <TextInput value={data.temp} onChangeText={text => tempChange(text, index)}
+                        style={styles.temptext} keyboardType='numeric'/>
+                      <Text style={styles.text}>°C</Text>
+                    </View>
+                  </View>
+                  <View style={styles.ratecontainer}>
+                    <Text style={styles.rate}>{Language[language]['rate']}</Text>
+                    <TextInput value={data.rate} onChangeText={text => rateChange(text, index)}
+                      style={styles.ratetext} />
+                  </View>
+                  <View style={styles.bmicontainer}>
+                    <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
+                    <TextInput value={data.bmi} onChangeText={text => bmiChange(text, index)}
+                      style={styles.bmitext} />
+                  </View>
                 </View>
-                <View style={styles.heightcontainer}>
-                  <Text style={styles.height}>{Language[language]['height']}:</Text>
-                  <TextInput value={data.height} onChangeText={text => heightChange(text, index)}
-                    style={styles.heighttext} />
-                </View>
-                <View style={styles.tempcontainer}>
-                  <Text style={styles.temp}>{Language[language]['temp']}:</Text>
-                  <TextInput value={data.temp} onChangeText={text => tempChange(text, index)}
-                    style={styles.temptext} />
-                </View>
-                <View style={styles.ratecontainer}>
-                  <Text style={styles.rate}>{Language[language]['rate']}:</Text>
-                  <TextInput value={data.rate} onChangeText={text => rateChange(text, index)}
-                    style={styles.ratetext} />
-                </View>
-                <View style={styles.bmicontainer}>
-                  <Text style={styles.bmi}>{Language[language]['bmi']}:</Text>
-                  <TextInput value={data.bmi} onChangeText={text => bmiChange(text, index)}
-                    style={styles.bmitext} />
-                </View>
-              </View>
               </View>
               <Text style={styles.bloodPres}>Blood Pressure</Text>
               <View style={styles.bloodPressureContainer}>
                 <View style={styles.diascontainer}>
                   <Text style={styles.diastolic}>{Language[language]['diastolic_bp']}:</Text>
-                  <TextInput value={data.diastolic_bp} onChangeText={text => diastolicChange(text, index)}
-                    style={styles.diatext} />
+                  <View style={styles.hardText}>
+                    <TextInput value={data.diastolic_bp} onChangeText={text => diastolicChange(text, index)}
+                      style={styles.diatext} keyboardType='numeric'/>
+                    <Text style={styles.text}>mmHg</Text>
+                  </View>
                 </View>
-                <View style={styles.syscontainer}>
-                  <Text style={styles.systolic}>{Language[language]['systolic_bp']}:</Text>
+              
+              <View style={styles.syscontainer}>
+                <Text style={styles.systolic}>{Language[language]['systolic_bp']}:</Text>
+                <View style={styles.hardText}>
                   <TextInput value={data.systolic_bp} onChangeText={text => systolicChange(text, index)}
-                    style={styles.systext} />
+                    style={styles.systext} keyboardType='numeric'/>
+                  <Text style={styles.text}>mmHg</Text>
                 </View>
               </View>
-
+            </View>
               <Text style={styles.basic}>Pregnancy</Text>
               <View style={styles.pregnancyFields}>
                 <View style={styles.lmpcontainer}>
                   <Text style={styles.lmp}>{Language[language]['lmp_edd']}:</Text>
-                  <TextInput value={data.lmp_edd} onChangeText={text => lmpChange(text, index)}
-                    style={styles.lmptext} />
+                  <View style={styles.hardText}>
+                    <TextInput value={data.lmp_edd} onChangeText={text => lmpChange(text, index)}
+                      style={styles.lmptext} keyboardType='numeric'/>
+                      <Text style={styles.text}>week</Text>
+                  </View>
                 </View>
                 <View style={styles.uscontainer}>
                   <Text style={styles.us}>{Language[language]['us_edd']}:</Text>
-
+                  <View style={styles.hardText}>
                   <TextInput value={data.us_edd} onChangeText={text => usChange(text, index)}
-                    style={styles.ustext} />
-
+                    style={styles.ustext} keyboardType='numeric'/>
+                    <Text style={styles.text}>week</Text>
+                  </View>
                 </View>
               </View>
             </View>
@@ -177,14 +198,16 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     padding: 10
   },
-  vitalmain:{
-    width:651,
-    height:309,
-    gap:4
+  vitalmain: {
+    width: 651,
+    height: 309,
+    gap: 4,
+    padding: 8,
+    gap: 16
   },
-  basiccontainer:{
-    width:443,
-    height:87
+  basiccontainer: {
+    width: 443,
+    height: 87
 
   },
   basic: {
@@ -192,8 +215,6 @@ const styles = StyleSheet.create({
     padding: 4,
     color: CUSTOMCOLOR.black,
     gap: 10,
-    width: 90,
-    height: 27
   },
   basicFields: {
     margin: 10,
@@ -201,9 +222,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     //justifyContent: 'space-between',
     alignItems: 'center',
-    width: 443,
+    width: 700,
     height: 60,
-    gap: 8
+    gap: 32,
+    //borderWidth:1
 
 
   },
@@ -214,16 +236,13 @@ const styles = StyleSheet.create({
     gap: 4
   },
   pulse: {
-    width: 65,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   pulsetext: {
-    width: 54,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   weightcontainer: {
     width: 62,
@@ -232,27 +251,35 @@ const styles = StyleSheet.create({
     gap: 4
   },
   weight: {
-    width: 50,
-    height: 16,
     fontSize: 12,
-    color: CUSTOMCOLOR.black
+    color: CUSTOMCOLOR.black,
+    //flexDirection: "row"
+  },
+  hardText: {
+    flexDirection: "row"
+  },
+  text: {
+    fontSize: 12,
+    color: CUSTOMCOLOR.black,
+    backgroundColor: CUSTOMCOLOR.white,
+    alignSelf:"center"
   },
   weighttext: {
-    width: 46,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
+
   },
-  changetext: {
-    borderWidth: 1,
-    height: 30,
-    width: 70,
-    borderRadius: 5,
-    padding: 5,
-    marginLeft: 5,
-    margin: 5,
-    borderColor: CUSTOMCOLOR.primary
-  },
+  // changetext: {
+  //   borderWidth: 1,
+  //   height: 30,
+  //   width: 70,
+  //   borderRadius: 5,
+  //   padding: 5,
+  //   marginLeft: 5,
+  //   margin: 5,
+  //   borderColor: CUSTOMCOLOR.primary
+  // },
   heightcontainer: {
     width: 70,
     height: 60,
@@ -260,16 +287,13 @@ const styles = StyleSheet.create({
     gap: 4
   },
   height: {
-    width: 36,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   heighttext: {
-    width: 54,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   tempcontainer: {
     width: 59,
@@ -278,16 +302,13 @@ const styles = StyleSheet.create({
     gap: 4
   },
   temp: {
-    width: 31,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   temptext: {
-    width: 43,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   ratecontainer: {
     width: 88,
@@ -296,17 +317,14 @@ const styles = StyleSheet.create({
     gap: 4
   },
   rate: {
-    width: 50,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black
 
   },
   ratetext: {
-    width: 72,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   bmicontainer: {
     width: 54,
@@ -315,10 +333,14 @@ const styles = StyleSheet.create({
     gap: 4
   },
   bmi: {
-    width: 21,
-    height: 16,
     fontSize: 12,
-    color: CUSTOMCOLOR.black
+    color: CUSTOMCOLOR.black,
+    backgroundColor: CUSTOMCOLOR.white
+  },
+  bmitext: {
+    padding: 8,
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   bloodPressureContainer: {
     width: 185,
@@ -326,8 +348,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bloodPres: {
-    width: 118,
-    height: 35,
     padding: 8,
     gap: 10,
     color: CUSTOMCOLOR.black
@@ -339,17 +359,15 @@ const styles = StyleSheet.create({
     gap: 4
   },
   diastolic: {
-    width: 64,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black,
-    lineHeight: 16.34
+    lineHeight: 16.34,
+    
   },
   diatext: {
-    width: 78,
-    height: 32,
     padding: 8,
-    gap: 4
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
   syscontainer: {
     width: 87,
@@ -358,58 +376,50 @@ const styles = StyleSheet.create({
     gap: 4
   },
   systolic: {
-    width: 58,
-    height: 16,
     fontSize: 12,
     color: CUSTOMCOLOR.black,
 
   },
   systext: {
-    width: 71,
-    height: 32,
+    padding: 8,
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
+  },
+  pregnancyFields: {
+    width: 152,
+    height: 87,
+    flexDirection: 'row',
+    gap:16
+  },
+  lmpcontainer: {
+    width: 72,
+    height: 60,
     padding: 8,
     gap: 4
   },
-  pregnancyFields:{
-    width:152,
-    height:87,
-    flexDirection: 'row',
-  },
-  lmpcontainer:{
-    width:72,
-    height:60,
-    padding:8,
-    gap:4
-  },
-  lmp:{
-    width:51,
-    height:16,
+  lmp: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
   },
-  lmptext:{
-    width:56,
-    height:32,
-    padding:8,
-    gap:4
+  lmptext: {
+    padding: 8,
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   },
-  uscontainer:{
-    width:72,
-    height:60,
-    padding:8,
-    gap:4
+  uscontainer: {
+    width: 72,
+    height: 60,
+    padding: 8,
+    gap: 4
   },
-  us:{
-    width:42,
-    height:16,
-    fontSize:12,
-    color:CUSTOMCOLOR.black
+  us: {
+    fontSize: 12,
+    color: CUSTOMCOLOR.black
   },
-  ustext:{
-    width:56,
-    height:32,
-    padding:8,
-    gap:4
+  ustext: {
+    padding: 8,
+    gap: 4,
+    backgroundColor: CUSTOMCOLOR.white
   }
 
 });
