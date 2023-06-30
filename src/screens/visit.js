@@ -14,7 +14,13 @@ import PlusButton from '../components/plusbtn';
 import PatientSearchCard from '../components/patientsearchcard';
 import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
+import CSinfo from '../components/CSinfo';
 const Visit = ({navigation}) => {
+  const dataobject = [
+    {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
+    {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
+    {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
+  ];
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -24,18 +30,17 @@ const Visit = ({navigation}) => {
 
       <View style={styles.appointment}>
         <Text style={styles.h2}>Consultation</Text>
-
-        <VisitOpen label="Vitals" icon="chevron-down" />
-        <VisitOpen label="Chief Complaints" icon="chevron-down" />
-        <VisitOpen label="Symptoms" icon="chevron-down" />
-        <VisitOpen label="Prescribe" icon="chevron-down" />
-        <VisitOpen label="Lab Reports" icon="chevron-down" />
-        <VisitOpen label="Examination Findings" icon="chevron-down" />
-        <VisitOpen label="Notes" icon="chevron-down" />
-        <VisitOpen label="Refer to Doctor" icon="chevron-down" />
-        <VisitOpen label="Medical History" icon="chevron-down" />
-        {/* <VisitOpen label='Vitals' icon='chevron-down'/>
-        <VisitOpen label='Vitals' icon='chevron-down'/> */}
+        {dataobject.map((value, index) => {
+          return (
+            <>
+              <VisitOpen
+                label={value.label}
+                icon={value.icon}
+                navigate={() => navigation.navigate(value.navigate)}
+              />
+            </>
+          );
+        })}
       </View>
 
       <PlusButton

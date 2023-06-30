@@ -45,7 +45,13 @@ const Appointment = ({navigation}) => {
         <Text style={styles.h2}>Appointments</Text>
         {data
           ? data.map((value, index) => {
-              return <AppointmentCard key={index} appointment={value} />;
+              return (
+                <AppointmentCard
+                  key={index}
+                  appointment={value}
+                  openVisit={() => navigation.navigate('visit')}
+                />
+              );
             })
           : null}
       </View>

@@ -12,6 +12,7 @@ import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
 import Prescribe from '../components/prescribe';
 import Date from '../components/Follow-up';
+import Symptoms from '../components/symptoms';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +33,8 @@ const ProtectedRoute = () => {
       <Stack.Screen name="bookslot" component={SlotBook} />
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
       <Stack.Screen name="prescribe" component={Prescribe} />
-      <Stack.Screen name="date" component={Date} />
+      <Stack.Screen name="FollowUp" component={Date} />
+      <Stack.Screen name="symptoms" component={Symptoms} />
     </Stack.Navigator>
   );
 };

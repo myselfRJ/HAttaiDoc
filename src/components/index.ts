@@ -31,7 +31,7 @@ import SelectorBtn from './selector';
 import SlotChip from './slotchip';
 import SuggestionTab from './suggestiontab';
 import VisitOpen from './visitopen';
-import Vitals from './vitals';
+import CSinfo from './CSinfo';
 import HButton from './button';
 import ChartCard from './chart';
 export {
@@ -65,7 +65,7 @@ export {
   SlotChip,
   SuggestionTab,
   VisitOpen,
-  Vitals,
+  CSinfo,
   InputText,
   HButton,
   ChartCard,

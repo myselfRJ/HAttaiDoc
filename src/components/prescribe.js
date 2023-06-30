@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import SelectorBtn from './selector';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from './option';
 import {language} from '../settings/userpreferences';
@@ -66,7 +67,7 @@ export default function Prescribe() {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView style={{padding: 8}}>
       <View style={styles.mainHead}>
         <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
       </View>

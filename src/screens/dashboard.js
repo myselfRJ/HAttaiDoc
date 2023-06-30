@@ -1,5 +1,11 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
 import {
@@ -12,6 +18,7 @@ import store from '../redux/stores/store';
 import {Language} from '../settings/customlanguage';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
+import DatePicker from 'react-native-date-picker';
 const Dashboard = ({navigation}) => {
   console.log(store.getState());
   const data = {
@@ -22,72 +29,111 @@ const Dashboard = ({navigation}) => {
       },
     ],
   };
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const handleDate = () => {
+    setOpen(!open);
+  };
+
+  const formattedDate = date.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZone: 'Asia/Kolkata',
+  });
+  const [Appdata, setData] = useState([]);
+
+  const fetchData = async () => {
+    const response = await fetch(
+      'https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D',
+    );
+    const jsonData = await response.json();
+    setData(jsonData);
+  };
+  useEffect(() => {
+    {
+      fetchData();
+    }
+  }, [data.length]);
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginBottom: 24,
-          paddingHorizontal: 8,
-        }}>
-        <View>
-          <SvgXml xml={hattailogo} />
-          <Text style={styles.title}>
-            {Language[language]['welcome']},{Language[language]['dr']}RamaMurthi
-          </Text>
-        </View>
-        <HeaderAvatar />
-      </View>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 8,
-          paddingHorizontal: 8,
-          paddingBottom: 8,
-        }}>
-        <ChartCard data={data} title={Language[language]['total_patient']} />
-        <ChartCard
-          data={data}
-          title={Language[language]['earnings']}
-          label="₹ "
-        />
-      </View>
-      <View style={styles.select}>
-        <SelectorBtn name="chevron-down" />
-        <SelectorBtn name="calendar" />
-        {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
-      </View>
-      <View style={styles.appointment}>
-        <Text style={styles.h2}>{Language[language]['appointments']}</Text>
-
-        {/* <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard /> */}
-      </View>
-      <View
-        style={{
-          alignItems: 'flex-end',
-          justifyContent: 'center',
-          paddingHorizontal: 8,
-        }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('date')}
+    <ScrollView>
+      <View style={styles.container}>
+        <View
           style={{
-            borderWidth: 0.5,
-            borderRadius: 4,
-            borderColor: CUSTOMCOLOR.primary,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 24,
+            paddingHorizontal: 8,
           }}>
-          <Text style={{color: CUSTOMCOLOR.primary}}>
-            {Language[language]['view_more']}
-          </Text>
-        </TouchableOpacity>
+          <View>
+            <SvgXml xml={hattailogo} />
+            <Text style={styles.title}>
+              {Language[language]['welcome']},{Language[language]['dr']}
+              RamaMurthi
+            </Text>
+          </View>
+          <HeaderAvatar />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            gap: 8,
+            paddingHorizontal: 8,
+            paddingBottom: 8,
+          }}>
+          <ChartCard data={data} title={Language[language]['total_patient']} />
+          <ChartCard
+            data={data}
+            title={Language[language]['earnings']}
+            label="₹ "
+          />
+        </View>
+        <View style={styles.select}>
+          <SelectorBtn name="calendar" />
+          <SelectorBtn name="chevron-down" />
+          {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
+        </View>
+        <View style={styles.appointment}>
+          <Text style={styles.h2}>{Language[language]['appointments']}</Text>
+          {Appdata
+            ? Appdata.map((value, index) => {
+                return (
+                  <AppointmentCard
+                    key={index}
+                    appointment={value}
+                    openVisit={() => navigation.navigate('visit')}
+                  />
+                );
+              })
+            : null}
+        </View>
+        <View
+          style={{
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            paddingHorizontal: 8,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('myappointment')}
+            style={{
+              borderWidth: 0.5,
+              borderRadius: 4,
+              borderColor: CUSTOMCOLOR.primary,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+            }}>
+            <Text style={{color: CUSTOMCOLOR.primary}}>
+              {Language[language]['view_more']}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

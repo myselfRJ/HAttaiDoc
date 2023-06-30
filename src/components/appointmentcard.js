@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const AppointmentCard = ({appointment}) => {
+const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -74,7 +74,7 @@ const AppointmentCard = ({appointment}) => {
           {visible && (
             <View style={[styles.option, {width: 100}]}>
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={openVisit}>
                   <Text style={styles.contact1}>
                     {Language[language]['start_visit']}
                   </Text>

@@ -21,7 +21,6 @@ export default function DateTime() {
     minute: 'numeric',
     timeZone: 'Asia/Kolkata',
   });
-  console.log(formattedDate);
 
   return (
     <View style={styles.MainContainer}>

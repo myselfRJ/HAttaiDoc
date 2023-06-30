@@ -11,12 +11,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from './option';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import PlusButton from './plusbtn';
+import Button from './Button';
 
 const Symptoms = () => {
   const [symptomsData, setSymptomsData] = useState([
     {symptom: '', days: '', severity: ''},
   ]);
   const [visible, setVisible] = useState(false);
+
+  const handleSubmit = () => setSubmitteData(symptomsData);
 
   const handleAddSymptoms = () => {
     const newData = [...symptomsData];
@@ -46,10 +50,6 @@ const Symptoms = () => {
     const newData = [...symptomsData];
     newData[index].severity = value;
     setSymptomsData(newData);
-  };
-
-  const handlePrintData = () => {
-    console.log(symptomsData);
   };
 
   return (
@@ -128,15 +128,11 @@ const Symptoms = () => {
             ))}
           </View>
           <TouchableOpacity onPress={handleAddSymptoms}>
-            <View style={styles.PlusButton}>
-              <Text style={styles.PlusText}>+</Text>
-            </View>
+            <Icon name="plus" style={[styles.PlusText, styles.PlusButton]} />
           </TouchableOpacity>
           {visible && symptomsData?.length !== 1 && (
             <TouchableOpacity onPress={handleDeleteSymptom}>
-              <View style={styles.PlusButton}>
-                <Text style={styles.PlusText}>-</Text>
-              </View>
+              <Icon name="minus" style={[styles.PlusText, styles.PlusButton]} />
             </TouchableOpacity>
           )}
         </View>
@@ -179,38 +175,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 50,
     width: 50,
-    backgroundColor: '#0E86D4',
+    backgroundColor: '#4ba5fa',
     borderColor: '#fff',
     borderWidth: 2,
     borderRadius: 100,
+    padding: 4,
   },
   line: {
     margin: 8,
     height: 0.5,
     width: '100%',
     backgroundColor: 'blue',
-  },
-  dummy: {
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: '#555443',
-    gap: 16,
-  },
-  dum2: {
-    backgroundColor: '#5518a5',
-    padding: 8,
-  },
-  dum3: {
-    flexDirection: 'row',
-    backgroundColor: '#5518a5',
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    paddingVertical: 16,
-    gap: 24,
-    borderRadius: 8,
-  },
-  textsize: {
-    fontSize: 24,
   },
 });
 
