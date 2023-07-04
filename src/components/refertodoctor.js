@@ -52,7 +52,7 @@ const ReferDoctorForm = (props) => {
               key={index}
               onPress={() => handlePress(doctor)}
             >
-              <Text style={styles.fields}>{doctor.name}</Text>
+              <Text style={styles.fields}>{doctor?.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     lineHeight: 16.34
   },
   fields: {
-    width: 52,
     height: 14,
     fontFamily: CUSTOMFONTFAMILY.opensans,
     fontSize: 10,
@@ -161,7 +160,8 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white
   },
   suggestion: {
-    width: 100,
+    flex:1,
+    paddingHorizontal:16,
     height: 30,
     gap: 8,
     borderWidth: 1,

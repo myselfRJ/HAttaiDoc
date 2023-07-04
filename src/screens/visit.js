@@ -45,25 +45,25 @@ const Visit = ({ navigation }) => {
                   <View style={{ flexDirection: "row" ,flexWrap:'wrap'}}>
                     <Icon name='thermometer' color={CUSTOMCOLOR.primary} size={16} />
                         <View key={index} style={{ flexDirection: "row",gap:8,padding:2 }}>
-                          <Text style={styles.pulse}>{Language[language]['pulse_rate']}:{vitalsData.pulse_rate}</Text>
-                          <Text style={styles.pulse}>{Language[language]['weight']}:{vitalsData.weight}kg</Text>
-                          <Text style={styles.pulse}>{Language[language]['height']}:{vitalsData.height}cm</Text>
-                          <Text style={styles.pulse}>{Language[language]['temp']}:{vitalsData.temp}F</Text>
-                          <Text style={styles.pulse}>{Language[language]['rate']}:{vitalsData.rate}F</Text>
+                    {vitalsData?.pulse_rate&&<Text style={styles.pulse}>{Language[language]['pulse_rate']}:{vitalsData.pulse_rate}</Text>}
+                        {vitalsData?.weight&&<Text style={styles.pulse}>{Language[language]['weight']}:{vitalsData.weight}kg</Text>}
+                          {vitalsData?.height&&<Text style={styles.pulse}>{Language[language]['height']}:{vitalsData.height}cm</Text>}
+                          {vitalsData?.temp&&<Text style={styles.pulse}>{Language[language]['temp']}:{vitalsData.temp}F</Text>}
+                          {vitalsData?.rate&&<Text style={styles.pulse}>{Language[language]['rate']}:{vitalsData.rate}F</Text>}
                         </View>
                      </View>
                     <View style={{ flexDirection: "row",flexWrap:'wrap' }}>
                     <Icon name='water-check' color={CUSTOMCOLOR.primary} size={16} />
                         <View key={index} style={{ flexDirection: "row",gap:8 ,padding:2}}>
-                          <Text style={styles.pulse}>{Language[language]['systolic_bp']}:{vitalsData.systolic_bp}mmHg</Text>
-                          <Text style={styles.pulse}>{Language[language]['diastolic_bp']}:{vitalsData.diastolic_bp}mmHg</Text>
+                          {vitalsData?.systolic_bp&&<Text style={styles.pulse}>{Language[language]['systolic_bp']}:{vitalsData.systolic_bp}mmHg</Text>}
+                          {vitalsData?.diastolic_bp&&<Text style={styles.pulse}>{Language[language]['diastolic_bp']}:{vitalsData.diastolic_bp}mmHg</Text>}
                         </View>
                   </View>
                   <View style={{ flexDirection: "row",flexWrap:'wrap' }}>
                     <Icon name='calendar-range' color={CUSTOMCOLOR.primary} size={16} />
                         <View key={index} style={{ flexDirection: "row",gap:8 ,padding:2}}>
-                          <Text style={styles.pulse}>{Language[language]['lmp_edd']}:{vitalsData.lmp_edd}week</Text>
-                          <Text style={styles.pulse}>{Language[language]['us_edd']}:{vitalsData.us_edd}week</Text>
+                          {vitalsData?.lmp_edd&&<Text style={styles.pulse}>{Language[language]['lmp_edd']}:{vitalsData.lmp_edd}week</Text>}
+                          {vitalsData?.us_edd&&<Text style={styles.pulse}>{Language[language]['us_edd']}:{vitalsData.us_edd}week</Text>}
                         </View>
                      
                   </View>  
@@ -88,7 +88,7 @@ const Visit = ({ navigation }) => {
                  <Icon name='doctor' color={CUSTOMCOLOR.primary} size={16} />
                  
                  
-                  <Text style={styles.pulse}>Refer to {selectedDoctor.name} </Text>
+                  {selectedDoctor?.name&&<Text style={styles.pulse}>Refer to {selectedDoctor.name} </Text>}
                  
                 </View>
 
