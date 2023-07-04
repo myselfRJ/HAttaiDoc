@@ -1,46 +1,106 @@
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
-import {
-  CUSTOMCOLOR,
-  CUSTOMFONTFAMILY,
-  CUSTOMFONTSIZE,
-} from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import SelectorBtn from '../components/selector';
-import SearchBox from '../components/searchBox';
-import SelectionTab from '../components/selectiontab';
-import AppointmentCard from '../components/appointmentcard';
-import PlusButton from '../components/plusbtn';
-import PatientSearchCard from '../components/patientsearchcard';
+import React, {useState} from 'react';
+import {Text, View, StyleSheet} from 'react-native';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
-import CSinfo from '../components/CSinfo';
+import PlusButton from '../components/plusbtn';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Language} from '../settings/customlanguage';
+import {language} from '../settings/userpreferences';
+import {useSelector} from 'react-redux';
+import {getDate} from '../redux/features/prescription/Followupslice';
+
 const Visit = ({navigation}) => {
-  const dataobject = [
+  const date = useSelector(getDate);
+
+  const dataObject = [
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
   ];
+  const Symptom = useSelector(state => state.symptoms);
+  const Prescribe = useSelector(state => state.prescribe);
+
   return (
     <View style={styles.main}>
       <View style={styles.select}>
         <HeaderAvatar />
-        {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
       </View>
 
       <View style={styles.appointment}>
         <Text style={styles.h2}>Consultation</Text>
-        {dataobject.map((value, index) => {
-          return (
-            <>
+        {dataObject.map((value, index) => (
+          <View key={index}>
+            <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={value.label}
                 icon={value.icon}
                 navigate={() => navigation.navigate(value.navigate)}
               />
-            </>
-          );
-        })}
+              {value.label === 'Symptoms' && (
+                <View style={styles.basiccontainer}>
+                  <View style={{flexWrap: 'wrap'}}>
+                    {Symptom.map((item, index) => {
+                      return (
+                        <View
+                          key={index}
+                          style={{flexDirection: 'row', gap: 10, padding: 8}}>
+                          <Icon
+                            name="emoticon-sick"
+                            size={16}
+                            color={CUSTOMCOLOR.primary}
+                          />
+                          <View>
+                            <Text>
+                              {item.symptom}|{item.days}|{item.severity}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
+              )}
+              {value.label === 'Prescribe' && (
+                <View style={styles.basiccontainer}>
+                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                    <View
+                      style={{
+                        gap: 8,
+                        left: 8,
+                        flexDirection: 'row',
+                        padding: 8,
+                      }}>
+                      <Icon
+                        name="prescription"
+                        size={16}
+                        color={CUSTOMCOLOR.primary}
+                      />
+                      <View>
+                        <Text>
+                          {Prescribe.selectedMode}|{Prescribe.medicine}|
+                          {Prescribe.selectedMg}|{Prescribe.selectedTime}|
+                          {Prescribe.selectedFrequency}|{Prescribe.tab}|
+                          {Prescribe.quantity}|{Prescribe.duration}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              )}
+              {value.label === 'Follow-Up' && (
+                <View style={styles.complaintcontainer}>
+                  <Icon
+                    name="file-document-edit"
+                    color={CUSTOMCOLOR.primary}
+                    size={16}
+                  />
+                  <Text style={styles.pulse}>{date.toString()}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        ))}
       </View>
 
       <PlusButton
@@ -76,5 +136,32 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
+  visitOpenItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    borderBottomWidth: 0.4,
+    borderBottomColor: CUSTOMCOLOR.primary,
+  },
+  basiccontainer: {
+    width: 635,
+    padding: 8,
+  },
+  pulse: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight: 400,
+    fontSize: 12,
+    lineHeight: 15.04,
+    color: CUSTOMCOLOR.black,
+  },
+  complaintcontainer: {
+    width: 635,
+    borderRadius: 4,
+    padding: 8,
+    gap: 4,
+    flexDirection: 'row',
+  },
 });
+
 export default Visit;

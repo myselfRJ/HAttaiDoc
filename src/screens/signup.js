@@ -3,7 +3,7 @@ import {Alert, ScrollView, View} from 'react-native';
 import {Language} from '../settings/customlanguage';
 import {language} from '../settings/userpreferences';
 import {commonstyles} from '../styles/commonstyle';
-import {InputText} from '../components';
+import {InputText, HButton, NoAccount} from '../components';
 import {PostApi} from '../api/api';
 import {checkNumber, checkPassword, samePassword} from '../utility/checks';
 const Signup = ({navigation}) => {

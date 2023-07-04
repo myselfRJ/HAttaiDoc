@@ -7,64 +7,43 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import SelectorBtn from './selector';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Option from './option';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setMode,
+  setMedicine,
+  setSelectedMedicine,
+  setSelectedMg,
+  setSelectedTime,
+  toggleFrequency,
+  setTab,
+  setDuration,
+} from '../redux/features/prescription/prescribeslice';
 
 export default function Prescribe() {
-  const [modes, setModes] = useState([
-    'Injection',
-    'Capsule',
-    'Syrup',
-    'Tablet',
-  ]);
-  const [medicine, setMedicine] = useState('');
-  const [selectedMode, setSelectedMode] = useState();
-  const [selectedMedicine, setSelectedMedicine] = useState();
-  const [selectedMg, setSelectedMg] = useState();
-  const [selectedTime, setSelectedTime] = useState();
-  const [selectedFrequency, setSelectedFrequency] = useState([]);
-  const [tab, setTab] = useState('');
-  const [recommdations, setRecommdations] = useState([
-    'Avil',
-    'Paracetmol',
-    'Dolo650',
-    'Citrizen',
-  ]);
-  const [mg, setMg] = useState(['500mg', '700mg', '800mg', '1000mg']);
-  const [timing, setTiming] = useState(['AF', 'BF']);
-  const [frequency, setFrequency] = useState([
-    'Morning',
-    'Nooon',
-    'Evening',
-    'Night',
-  ]);
-  const [quantity, setQuantity] = useState('100');
-  const [duration, setDuration] = useState('');
-  const setMode = index => {
-    setSelectedMode(index);
+  const dispatch = useDispatch();
+  const prescribe = useSelector(state => state.prescribe);
+  console.log(prescribe);
+
+  const setSelectMode = index => {
+    dispatch(setMode(index));
   };
   const Medicine = index => {
-    setSelectedMedicine(index);
+    dispatch(setSelectedMedicine(index));
   };
   const handleRecommdationPress = suggestion => {
-    setMedicine(suggestion);
+    dispatch(setMedicine(suggestion));
   };
   const setMG = index => {
-    setSelectedMg(index);
+    dispatch(setSelectedMg(index));
   };
   const setTime = index => {
-    setSelectedTime(index);
+    dispatch(setSelectedTime(index));
   };
-  const FrequencySelection = index => {
-    const isSelected = selectedFrequency.includes(index);
-    if (isSelected) {
-      setSelectedFrequency(selectedFrequency.filter(i => i !== index));
-    } else {
-      setSelectedFrequency([...selectedFrequency, index]);
-    }
+  const FrequencySelection = value => {
+    dispatch(toggleFrequency(value));
   };
   return (
     <ScrollView style={{padding: 8}}>
@@ -75,14 +54,16 @@ export default function Prescribe() {
         <View style={styles.ModeContainer}>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
-            {modes.map((value, index) => (
-              <TouchableOpacity key={index} onPress={() => setMode(index)}>
+            {prescribe.modes.map((value, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectMode(value)}>
                 <View
                   style={[
                     styles.ModesContainer,
                     {
                       backgroundColor:
-                        selectedMode === index ? '#000000aa' : '#fff',
+                        prescribe.selectedMode === value ? '#000000aa' : '#fff',
                     },
                   ]}>
                   <Text style={{color: '#4ba5fa'}}>{value}</Text>
@@ -100,19 +81,19 @@ export default function Prescribe() {
               style={styles.MedicineInput}
               placeholder="enter Medicine"
               multiline={true}
-              value={medicine}
-              onChangeText={val => setMedicine(val)}
+              value={prescribe.medicine}
+              onChangeText={val => dispatch(setMedicine(val))}
             />
-            <Icon name="magnify" size={24} style={styles.search} />
+            {/* <Icon name="magnify" size={24} style={styles.search} /> */}
             <Text style={styles.RecommdationText}>
               {Language[language]['reccomedations']}
             </Text>
             <View style={styles.Modes}>
-              {recommdations.map((value, index) => (
+              {prescribe.recommdations.map((value, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    Medicine(index);
+                    Medicine(value);
                     handleRecommdationPress(value);
                   }}>
                   <View
@@ -120,7 +101,9 @@ export default function Prescribe() {
                       styles.ModesContainer,
                       {
                         backgroundColor:
-                          selectedMedicine === index ? '#000000aa' : '#fff',
+                          prescribe.selectedMedicine === value
+                            ? '#000000aa'
+                            : '#fff',
                       },
                     ]}>
                     <Text style={{color: '#4ba5fa'}}>{value}</Text>
@@ -145,19 +128,19 @@ export default function Prescribe() {
             <Text style={styles.TextDose}>{Language[language]['number']}:</Text>
             <TextInput
               style={styles.tab}
-              value={tab}
-              onChangeText={val => setTab(val)}
+              value={prescribe.tab}
+              onChangeText={val => dispatch(setTab(val))}
             />
           </View>
           <View style={styles.Modes}>
-            {mg.map((value, index) => (
-              <TouchableOpacity key={index} onPress={() => setMG(index)}>
+            {prescribe.mg.map((value, index) => (
+              <TouchableOpacity key={index} onPress={() => setMG(value)}>
                 <View
                   style={[
                     styles.ModesContainer,
                     {
                       backgroundColor:
-                        selectedMg === index ? '#000000aa' : '#fff',
+                        prescribe.selectedMg === value ? '#000000aa' : '#fff',
                     },
                   ]}>
                   <Text style={{color: '#4ba5fa'}}>{value}</Text>
@@ -169,14 +152,14 @@ export default function Prescribe() {
         <View style={{width: 635, gap: 8}}>
           <Text style={styles.textTime}>{Language[language]['timing']}</Text>
           <View style={styles.Modes}>
-            {timing.map((value, index) => (
-              <TouchableOpacity key={index} onPress={() => setTime(index)}>
+            {prescribe.timing.map((value, index) => (
+              <TouchableOpacity key={index} onPress={() => setTime(value)}>
                 <View
                   style={[
                     styles.ModesContainer,
                     {
                       backgroundColor:
-                        selectedTime === index ? '#000000aa' : '#fff',
+                        prescribe.selectedTime === value ? '#000000aa' : '#fff',
                     },
                   ]}>
                   <Text style={{color: '#4ba5fa'}}>{value}</Text>
@@ -190,15 +173,17 @@ export default function Prescribe() {
             {Language[language]['frequency']}
           </Text>
           <View style={styles.Modes}>
-            {frequency.map((value, index) => (
+            {prescribe.frequency.map((value, index) => (
               <TouchableOpacity
                 key={index}
-                onPress={() => FrequencySelection(index)}>
+                onPress={() => FrequencySelection(value)}>
                 <View
                   style={[
                     styles.ModesContainer,
                     {
-                      backgroundColor: selectedFrequency.includes(index)
+                      backgroundColor: prescribe.selectedFrequency.includes(
+                        value,
+                      )
                         ? '#000000aa'
                         : '#fff',
                     },
@@ -215,8 +200,8 @@ export default function Prescribe() {
           </Text>
           <TextInput
             style={styles.durationInput}
-            value={duration}
-            onChangeText={val => setDuration(val)}
+            value={prescribe.duration}
+            onChangeText={val => dispatch(setDuration(val))}
           />
         </View>
         <View style={styles.QuantityContainer}>
@@ -224,7 +209,7 @@ export default function Prescribe() {
             {Language[language]['quantity']}
           </Text>
           <View style={{height: 40, width: 100}}>
-            <Text style={styles.numText}>{quantity}</Text>
+            <Text style={styles.numText}>{prescribe.quantity}</Text>
           </View>
         </View>
         <View style={styles.line}></View>

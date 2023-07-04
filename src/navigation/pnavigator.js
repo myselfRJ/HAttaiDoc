@@ -10,9 +10,9 @@ import Visit from '../screens/visit';
 import Patientlookup from '../screens/patientlookup';
 import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
-import Prescribe from '../components/prescribe';
-import Date from '../components/Follow-up';
-import Symptoms from '../components/symptoms';
+import Prescribe from '../screens/prescribe';
+import Date from '../screens/Follow-up';
+import Symptoms from '../screens/symptoms';
 
 const Stack = createNativeStackNavigator();
 
