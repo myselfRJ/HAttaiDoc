@@ -1,20 +1,23 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const initialState = [{symptom: '', days: '', severity: ''}];
+const initialState = {
+  symptom: [{symptom: '', days: '', severity: '', uuid: '0001'}],
+};
 
 const symptomsSlice = createSlice({
   name: 'symptoms',
   initialState,
   reducers: {
     addSymptom: (state, action) => {
-      state.push({symptom: '', days: '', severity: ''});
+      console.log(action.payload, '===redux');
+      state.symptom = action.payload;
     },
-    deleteSymptom: (state, action) => {
-      state.splice(action.payload, 1);
+    deleteSymptom: state => {
+      state.symptom.splice(state.symptom.length - 1, 1);
     },
     updateSymptom: (state, action) => {
       const {index, field, value} = action.payload;
-      state[index][field] = value;
+      state.symptom[index][field] = value;
     },
   },
 });

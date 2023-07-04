@@ -76,7 +76,7 @@
 //                     }}>
 //                     <TextInput
 //                       placeholder="enter Symptom"
-//                       value={data.symptom}
+//                       value={data?.symptom}
 //                       onChangeText={text => SymptomChange(text, index)}
 //                     />
 //                   </View>
@@ -93,7 +93,7 @@
 //                     }}>
 //                     <TextInput
 //                       placeholder="enter Days"
-//                       value={data.days}
+//                       value={symptomInput?.days}
 //                       onChangeText={text => DaysChange(text, index)}
 //                     />
 //                   </View>
@@ -106,19 +106,19 @@
 //                     <Option
 //                       label="Low"
 //                       value="low"
-//                       selected={data.severity === 'low'}
+//                       selected={symptomInput?.severity === 'low'}
 //                       onPress={() => SeverityChange('low', index)}
 //                     />
 //                     <Option
 //                       label="Medium"
 //                       value="medium"
-//                       selected={data.severity === 'medium'}
+//                       selected={symptomInput?.severity === 'medium'}
 //                       onPress={() => SeverityChange('medium', index)}
 //                     />
 //                     <Option
 //                       label="High"
 //                       value="high"
-//                       selected={data.severity === 'high'}
+//                       selected={symptomInput?.severity === 'high'}
 //                       onPress={() => SeverityChange('high', index)}
 //                     />
 //                   </View>
@@ -190,7 +190,7 @@
 
 // export default Symptoms;
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -213,30 +213,49 @@ import {
 } from '../redux/features/prescription/symptomslice';
 
 const Symptoms = () => {
-  const symptomsData = useSelector(state => state.symptoms);
-  const dispatch = useDispatch();
+  const symptomsData = useSelector(state => state.symptoms.symptom);
 
+  const dispatch = useDispatch();
+  const [symptomInput, setSymptomInput] = useState(symptomsData);
+  console.log(symptomInput, '=====', symptomsData);
+  useEffect(() => {
+    console.log(symptomInput.length);
+  }, [symptomInput.length, symptomsData.length]);
   const handleAddSymptoms = () => {
-    dispatch(addSymptom());
+    const uuid = Math.random() + 'tt';
+    let symptomCopy = symptomInput;
+    dispatch(addSymptom(symptomInput));
+
+    console.log(uuid);
+    setSymptomInput(state => [
+      ...state,
+      {symptom: '', days: '', severity: '', uuid: uuid},
+    ]);
   };
 
   const handleDeleteSymptom = index => {
-    dispatch(deleteSymptom(index));
+    //dispatch(deleteSymptom());
+    let symptomCopy = symptomInput;
+    console.log(symptomCopy);
+    symptomCopy.pop();
+    dispatch(addSymptom(symptomCopy));
+    setSymptomInput(symptomCopy);
   };
 
-  const handleSymptomChange = (text, index) => {
-    dispatch(updateSymptom({index, field: 'symptom', value: text}));
+  const handleSymptomChange = (text, index, field) => {
+    let symptomCopy = symptomInput;
+    symptomCopy[index][field] = text;
+    setSymptomInput(symptomCopy);
+    //dispatch(updateSymptom({index, field: 'symptom', value: text}));
   };
 
-  const handleDaysChange = (text, index) => {
-    dispatch(updateSymptom({index, field: 'days', value: text}));
-  };
+  // const handleDaysChange = (text, index) => {
+  //   dispatch(updateSymptom({index, field: 'days', value: text}));
+  // };
 
-  const handleSeverityChange = (value, index) => {
-    dispatch(updateSymptom({index, field: 'severity', value}));
-  };
-
-  console.log(symptomsData);
+  // const handleSeverityChange = (value, index) => {
+  //   dispatch(updateSymptom({index, field: 'severity', value}));
+  // };
 
   return (
     <ScrollView>
@@ -246,9 +265,9 @@ const Symptoms = () => {
         </View>
         <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap'}}>
           <View style={{flexDirection: 'column'}}>
-            {symptomsData.map((data, index) => (
+            {symptomInput?.map((data, index) => (
               <View
-                key={index}
+                key={data.uuid}
                 style={{flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                 <View style={styles.symptomInput}>
                   <Text style={{padding: 10, fontWeight: 'bold'}}>
@@ -262,8 +281,10 @@ const Symptoms = () => {
                     }}>
                     <TextInput
                       placeholder="enter Symptom"
-                      value={data.symptom}
-                      onChangeText={text => handleSymptomChange(text, index)}
+                      value={data?.symptom}
+                      onChangeText={text =>
+                        handleSymptomChange(text, index, 'symptom')
+                      }
                     />
                   </View>
                 </View>
@@ -279,8 +300,10 @@ const Symptoms = () => {
                     }}>
                     <TextInput
                       placeholder="enter Days"
-                      value={data.days}
-                      onChangeText={text => handleDaysChange(text, index)}
+                      value={data?.days}
+                      onChangeText={text =>
+                        handleSymptomChange(text, index, 'days')
+                      }
                     />
                   </View>
                 </View>
@@ -292,20 +315,26 @@ const Symptoms = () => {
                     <Option
                       label="Low"
                       value="low"
-                      selected={data.severity === 'low'}
-                      onPress={() => handleSeverityChange('low', index)}
+                      selected={data?.severity === 'low'}
+                      onPress={() =>
+                        handleSymptomChange('low', index, 'severity')
+                      }
                     />
                     <Option
                       label="Medium"
                       value="medium"
-                      selected={data.severity === 'medium'}
-                      onPress={() => handleSeverityChange('medium', index)}
+                      selected={data?.severity === 'medium'}
+                      onPress={() =>
+                        handleSymptomChange('medium', index, 'severity')
+                      }
                     />
                     <Option
                       label="High"
                       value="high"
-                      selected={data.severity === 'high'}
-                      onPress={() => handleSeverityChange('high', index)}
+                      selected={data?.severity === 'high'}
+                      onPress={() =>
+                        handleSymptomChange('high', index, 'severity')
+                      }
                     />
                   </View>
                 </View>
@@ -315,9 +344,9 @@ const Symptoms = () => {
           <TouchableOpacity onPress={handleAddSymptoms}>
             <Icon name="plus" style={[styles.PlusText, styles.PlusButton]} />
           </TouchableOpacity>
-          {symptomsData.length > 1 && (
+          {symptomInput.length > 1 && (
             <TouchableOpacity
-              onPress={() => handleDeleteSymptom(symptomsData.length - 1)}>
+              onPress={() => handleDeleteSymptom(symptomInput.length)}>
               <Icon name="minus" style={[styles.PlusText, styles.PlusButton]} />
             </TouchableOpacity>
           )}

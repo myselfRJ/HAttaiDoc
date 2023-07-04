@@ -18,7 +18,7 @@ const Visit = ({navigation}) => {
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
   ];
-  const Symptom = useSelector(state => state.symptoms);
+  const Symptom = useSelector(state => state.symptoms.symptom);
   const Prescribe = useSelector(state => state.prescribe);
 
   return (
@@ -40,7 +40,7 @@ const Visit = ({navigation}) => {
               {value.label === 'Symptoms' && (
                 <View style={styles.basiccontainer}>
                   <View style={{flexWrap: 'wrap'}}>
-                    {Symptom.map((item, index) => {
+                    {Symptom?.map((item, index) => {
                       return (
                         <View
                           key={index}
