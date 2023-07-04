@@ -1,50 +1,37 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
-import { CUSTOMCOLOR,CUSTOMFONTFAMILY,CUSTOMFONTSIZE } from '../settings/styles';
+import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { addDoctorRefer } from '../redux/features/prescription/prescriptionSlice';
+import { useNavigation } from '@react-navigation/native';
 
-const Refer_Doctor = () => {
-  const [data, setData] = useState([
-    {
-      name: 'Dr.Raju',
-      speciality: 'Cardiologists',
-      phone: '9878965678'
-    },
-    {
-      name: 'Dr.Muthu',
-      speciality: 'Cardiologists',
-      phone: '9878965678'
-    },
-    {
-      name: 'Dr.Chitti',
-      speciality: 'Cardiologists',
-      phone: '9878965678'
-    }
-  ]);
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
+const ReferDoctorForm = (props) => {
+  const nav=useNavigation();
+  const doctors = useSelector((state) => state.prescription.doctors);
+  const selectedDoctor = useSelector((state) => state.prescription.selectedDoctor);
+  const dispatch = useDispatch();
+
+  const onPress = () => {
+    console.log(selectedDoctor);
+    nav.goBack();
+  };
 
   const handlePress = (doctor) => {
-    setSelectedDoctor(doctor);
+    dispatch(addDoctorRefer(doctor));
   };
 
   const handleNameChange = (value) => {
-    setSelectedDoctor((prevDoctor) => ({
-      ...prevDoctor,
-      name: value
-    }));
+    dispatch(addDoctorRefer({ ...selectedDoctor, name: value }));
   };
 
   const handleSpecialityChange = (value) => {
-    setSelectedDoctor((prevDoctor) => ({
-      ...prevDoctor,
-      speciality: value
-    }));
+    dispatch(addDoctorRefer({ ...selectedDoctor, speciality: value }));
   };
 
   const handlePhoneChange = (value) => {
-    setSelectedDoctor((prevDoctor) => ({
-      ...prevDoctor,
-      phone: value
-    }));
+    dispatch(addDoctorRefer({ ...selectedDoctor, phone: value }));
   };
 
   return (
@@ -56,9 +43,12 @@ const Refer_Doctor = () => {
       <View style={styles.container}>
         <Text style={styles.head}>Recommendation</Text>
         <View style={{ width: 323, height: 30, padding: 8, gap: 16, flexDirection: 'row' }}>
-          {data.map((doctor, index) => (
+          {doctors.map((doctor, index) => (
             <TouchableOpacity
-              style={[styles.suggestion, { borderColor: selectedDoctor === doctor ? 'green' : CUSTOMCOLOR.primary }]}
+              style={[
+                styles.suggestion,
+                { borderColor: selectedDoctor === doctor ? 'green' : CUSTOMCOLOR.primary },
+              ]}
               key={index}
               onPress={() => handlePress(doctor)}
             >
@@ -99,92 +89,107 @@ const Refer_Doctor = () => {
           )}
         </View>
       </View>
+      <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
+        <Text style={{ color: CUSTOMCOLOR.primary }}>{Language[language]['submit']}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
-
-  const styles = StyleSheet.create({
-    h2: {
-        fontSize: 20,
-        fontWeight: 700,
-        fontFamily: CUSTOMFONTFAMILY.opensans,
-        lineHeight: 20 * 2,
-        color: CUSTOMCOLOR.black,
-        padding: 10
-    },
-    main: {
-        width: 651,
-        height: 35,
-        justifyContent: "space-between",
-        padding: 8
-    },
-    title: {
-        width: 104,
-        height: 19,
-        fontFamily: CUSTOMFONTFAMILY.opensans,
-        fontSize: 14,
-        fontWeight: 600,
-        lineHeight: 19.07,
-        color: CUSTOMCOLOR.black
-    },
-    container: {
-        width: 651,
-        height: 62,
-        padding: 8,
-        gap: 8
-    },
-    head: {
-        width: 125,
-        height: 35,
-        padding: 8,
-        gap: 10,
-        color: CUSTOMCOLOR.black,
-        fontSize: 12,
-        fontWeight: 600,
-        lineHeight: 16.34
-    },
-    fields: {
-        width: 52,
-        height: 14,
-        fontFamily: CUSTOMFONTFAMILY.opensans,
-        fontSize: 10,
-        fontWeight: 400,
-        lineHeight: 13.62,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 8,
-        alignSelf: "center",
-        color: CUSTOMCOLOR.primary,
-    },
-    input: {
-        width: 150,
-        height: 45,
-        borderRadius: 4,
-        padding: 16,
-        gap: 8,
-        //borderWidth: 0.5,
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 12,
-        backgroundColor:CUSTOMCOLOR.white
-    },
-    suggestion: {
-        width: 100,
-        height: 30,
-        gap: 8,
-        borderWidth: 1,
-        borderRadius: 4,
-        alignItems: "center",
-        justifyContent: "center",
-        //borderColor: CUSTOMCOLOR.primary
-    },
-    inputfields: {
-        width: 34,
-        height: 16,
-        fontFamily: CUSTOMFONTFAMILY.opensans,
-        fontSize: 12,
-        fontWeight: 400,
-        lineHeight: 16.34
-    }
+const styles = StyleSheet.create({
+  h2: {
+    fontSize: 20,
+    fontWeight: 700,
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    lineHeight: 20 * 2,
+    color: CUSTOMCOLOR.black,
+    padding: 10
+  },
+  main: {
+    width: 651,
+    height: 35,
+    justifyContent: "space-between",
+    padding: 8
+  },
+  title: {
+    width: 104,
+    height: 19,
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontSize: 14,
+    fontWeight: 600,
+    lineHeight: 19.07,
+    color: CUSTOMCOLOR.black
+  },
+  container: {
+    width: 651,
+    height: 62,
+    padding: 8,
+    gap: 8
+  },
+  head: {
+    width: 125,
+    height: 35,
+    padding: 8,
+    gap: 10,
+    color: CUSTOMCOLOR.black,
+    fontSize: 12,
+    fontWeight: 600,
+    lineHeight: 16.34
+  },
+  fields: {
+    width: 52,
+    height: 14,
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontSize: 10,
+    fontWeight: 400,
+    lineHeight: 13.62,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    alignSelf: "center",
+    color: CUSTOMCOLOR.primary,
+  },
+  input: {
+    width: 150,
+    height: 45,
+    borderRadius: 4,
+    padding: 16,
+    gap: 8,
+    //borderWidth: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 12,
+    backgroundColor: CUSTOMCOLOR.white
+  },
+  suggestion: {
+    width: 100,
+    height: 30,
+    gap: 8,
+    borderWidth: 1,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    //borderColor: CUSTOMCOLOR.primary
+  },
+  inputfields: {
+    width: 34,
+    height: 16,
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontSize: 12,
+    fontWeight: 400,
+    lineHeight: 16.34
+  },
+  submitbtn: {
+    //  alignItems: 'flex-start',
+    //  justifyContent: 'flex-start',
+    // paddingHorizontal: 8,
+    // alignSelf:"center",
+    margin: 100,
+    marginLeft: 20,
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.primary,
+    borderRadius: 4,
+    width: 60,
+    padding: 3
+  }
 })
-export default Refer_Doctor;
+export default ReferDoctorForm;

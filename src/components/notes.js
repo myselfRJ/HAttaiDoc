@@ -5,52 +5,26 @@ import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import { useState, useEffect } from 'react';
 
-const Notes = () => {
-    const [notes, setNotes] = useState('')
-    const ChangeNotes = (value) => {
-        setNotes(value)
-    }
-    const handlePress=()=>{
-        console.log(notes)
-    }
-    return (
-        <View>
-            <Text style={styles.h2}>{Language[language]['consultation']}</Text>
-            <View style={styles.main}>
-                <Text style={styles.notesText}>{Language[language]['notes']}</Text>
-            </View>
-            <View style={styles.inputbox}>
-                <TextInput
-                    placeholder="write  your notes"
-                    multiline={true}
-                    style={styles.notes}
-                    value={notes}
-                    onChangeText={ChangeNotes}
-                />
-            </View>
-            <View style={styles.submitbtn}>
-                <TouchableOpacity
-                    onPress={handlePress}
-                    style={{
-                        borderWidth: 1,
-                        borderRadius: 4,
-                        borderColor: CUSTOMCOLOR.primary,
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
-                        width: 100,
-                        alignItems:"center"
-                    }}>
-                    <Text style={{ color: CUSTOMCOLOR.primary }}>
+const Notes = ({note,onChangeText,onPress}) => {
+    return(
+        <>
+        <View style={styles.inputbox}>
+        <TextInput
+        style={styles.notes}
+        multiline={true}
+        placeholder='write your notes'
+        value={note}
+        onChangeText={onChangeText}
+       /></View>
+       <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
+       <Text style={{ color: CUSTOMCOLOR.primary }}>
                         {Language[language]['submit']}
                     </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-
-    );
-
-
+       </TouchableOpacity>
+        </>
+    )
 }
+   
 const styles = StyleSheet.create({
     main: {
         width: 651,
@@ -84,20 +58,22 @@ const styles = StyleSheet.create({
 
     },
     notes: {
-        width: 700,
-        height: 44,
-        borderRadius: 4,
-        padding: 8,
-        gap: 10,
-        borderWidth: 0.5,
-        borderColor: CUSTOMCOLOR.primary,
+        width:635,
+        height:44,
+        borderRadius:4,
+        padding:8,
+        gap:10,
+        backgroundColor:CUSTOMCOLOR.white
     },
     submitbtn: {
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 8,
         alignSelf:"center",
-        margin:40
+        margin:40,
+        borderWidth:1,
+        borderColor:CUSTOMCOLOR.primary,
+        borderRadius:4
     }
 
 });

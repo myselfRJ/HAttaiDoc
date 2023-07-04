@@ -65,6 +65,7 @@ const Language = {
     us_edd:"US EDD",
     notes:"Notes",
     recommendation:"Recommendation",
+    consultation:'Consultation',
   
 
   },
