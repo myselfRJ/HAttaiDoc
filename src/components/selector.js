@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -8,10 +9,10 @@ import {
 
 const SelectorBtn = props => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       {props.label && <Text style={styles.h3}>{props.label}</Text>}
-      <Pressable style={styles.select}>
-        <Text style={styles.h3}>Hello</Text>
+      <Pressable style={styles.select} onPress={props.onPress}>
+        <Text style={styles.h3}>{props.input}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
     </View>
@@ -37,3 +38,42 @@ const styles = StyleSheet.create({
 });
 
 export default SelectorBtn;
+
+// const handleDate = () => {
+//   setOpen(!open);
+// };
+
+// const formattedDate = date.toLocaleDateString('en-US', {
+//   day: 'numeric',
+//   month: 'long',
+//   year: 'numeric',
+//   hour: 'numeric',
+//   minute: 'numeric',
+//   timeZone: 'Asia/Kolkata',
+// });
+
+// return (
+//   <View style={styles.MainContainer}>
+//     <Text style={styles.FUP}>{Language[language]['follow_up']}</Text>
+//     <View style={styles.DateContainer}>
+//       <Text style={styles.DateText}>{formattedDate}</Text>
+//       <TouchableOpacity onPress={handleDate}>
+//         <Icon name="calendar" size={24} color={'#4ba5fa'} />
+//       </TouchableOpacity>
+//       <DatePicker
+//         modal
+//         open={open}
+//         date={date}
+//         theme="auto"
+//         mode="datetime"
+//         onConfirm={date => {
+//           setOpen(open);
+//           setDate(date);
+//         }}
+//         onCancel={() => {
+//           setOpen(open);
+//         }}
+//       />
+//     </View>
+//   </View>
+// );
