@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     gap: 4,
     borderRadius: 4,
-    borderBottomWidth: 0.4,
-    borderBottomColor: CUSTOMCOLOR.primary,
+    //borderBottomWidth: 0.4,
+    // borderBottomColor: CUSTOMCOLOR.primary,
   },
   text: {
     fontWeight: 600,

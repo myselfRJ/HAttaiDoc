@@ -20,6 +20,17 @@ import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
 const Dashboard = ({navigation}) => {
+  const [Data,setData] = useState(null)
+  const fetchData=async ()=>{
+    const response = await fetch('https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D')
+    const jsonData = await response.json();
+    setData(jsonData);
+  }
+  useEffect(()=>{
+    {
+      fetchData();
+    }
+  },[]);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -153,9 +164,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   appointment: {
-    gap: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    gap: 2,
+    paddingHorizontal: 4,
+    paddingVertical: 4,
   },
   h2: {
     fontSize: 24,

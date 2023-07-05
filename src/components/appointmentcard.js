@@ -95,7 +95,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
               </View>
             </View>
           )}
-        </Pressable>
+         </Pressable>
       </View>
     </>
   );
@@ -122,6 +122,13 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   age: {
+    fontWeight: 400,
+    fontSize: 10,
+    lineHeight: 19,
+    padding: 0,
+    color: CUSTOMCOLOR.black,
+  },
+  gender: {
     fontWeight: 400,
     fontSize: 10,
     lineHeight: 19,
