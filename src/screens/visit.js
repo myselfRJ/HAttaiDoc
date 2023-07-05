@@ -1,46 +1,106 @@
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
-import {
-  CUSTOMCOLOR,
-  CUSTOMFONTFAMILY,
-  CUSTOMFONTSIZE,
-} from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import SelectorBtn from '../components/selector';
-import SearchBox from '../components/searchBox';
-import SelectionTab from '../components/selectiontab';
-import AppointmentCard from '../components/appointmentcard';
-import PlusButton from '../components/plusbtn';
-import PatientSearchCard from '../components/patientsearchcard';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { CUSTOMCOLOR, CUSTOMFONTFAMILY } from '../settings/styles';
 import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
-const Visit = ({navigation}) => {
+import PlusButton from '../components/plusbtn';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Language } from '../settings/customlanguage';
+import { language } from '../settings/userpreferences';
+import { useSelector } from 'react-redux';
+
+const Visit = ({ navigation }) => {
+  const vitalsData=useSelector(state => state.prescription.vitalsData)
+  const note=useSelector(state=> state.prescription.note)
+  const selectedComplaint = useSelector(state=> state.prescription.selectedComplaint)
+  const selectedDoctor=useSelector(state=> state.prescription.selectedDoctor)
+  const dataObject = [
+    { label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen' },
+    { label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints' },
+    { label: 'Notes', icon: 'chevron-right', navigate: 'notescreen' },
+    { label: 'Refer to Doctor', icon: 'chevron-right', navigate: 'referdoctorscreen' },
+  ];
+  const doctor=['Refer to Dr.Balu Rangnathan']
+
   return (
     <View style={styles.main}>
       <View style={styles.select}>
         <HeaderAvatar />
-        {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
       </View>
 
       <View style={styles.appointment}>
-        <Text style={styles.h2}>Consultation</Text>
+        <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+        {dataObject.map((value, index) => (
+          <View key={index}>
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={value.label}
+                icon={value.icon}
+                navigate={() => navigation.navigate(value.navigate)}
+              />
+              {value.label === 'Vitals' && (
+                
+                <View style={styles.basiccontainer}>
+        
+                  <View style={{ flexDirection: "row" ,flexWrap:'wrap'}}>
+                    <Icon name='thermometer' color={CUSTOMCOLOR.primary} size={16} />
+                        <View key={index} style={{ flexDirection: "row",gap:8,padding:2 }}>
+                    {vitalsData?.pulse_rate&&<Text style={styles.pulse}>{Language[language]['pulse_rate']}:{vitalsData.pulse_rate}</Text>}
+                        {vitalsData?.weight&&<Text style={styles.pulse}>{Language[language]['weight']}:{vitalsData.weight}kg</Text>}
+                          {vitalsData?.height&&<Text style={styles.pulse}>{Language[language]['height']}:{vitalsData.height}cm</Text>}
+                          {vitalsData?.temp&&<Text style={styles.pulse}>{Language[language]['temp']}:{vitalsData.temp}F</Text>}
+                          {vitalsData?.rate&&<Text style={styles.pulse}>{Language[language]['rate']}:{vitalsData.rate}F</Text>}
+                        </View>
+                     </View>
+                    <View style={{ flexDirection: "row",flexWrap:'wrap' }}>
+                    <Icon name='water-check' color={CUSTOMCOLOR.primary} size={16} />
+                        <View key={index} style={{ flexDirection: "row",gap:8 ,padding:2}}>
+                          {vitalsData?.systolic_bp&&<Text style={styles.pulse}>{Language[language]['systolic_bp']}:{vitalsData.systolic_bp}mmHg</Text>}
+                          {vitalsData?.diastolic_bp&&<Text style={styles.pulse}>{Language[language]['diastolic_bp']}:{vitalsData.diastolic_bp}mmHg</Text>}
+                        </View>
+                  </View>
+                  <View style={{ flexDirection: "row",flexWrap:'wrap' }}>
+                    <Icon name='calendar-range' color={CUSTOMCOLOR.primary} size={16} />
+                        <View key={index} style={{ flexDirection: "row",gap:8 ,padding:2}}>
+                          {vitalsData?.lmp_edd&&<Text style={styles.pulse}>{Language[language]['lmp_edd']}:{vitalsData.lmp_edd}week</Text>}
+                          {vitalsData?.us_edd&&<Text style={styles.pulse}>{Language[language]['us_edd']}:{vitalsData.us_edd}week</Text>}
+                        </View>
+                     
+                  </View>  
+                </View>
+              )}
+              {value.label==='Chief Complaints' &&(
+                <View style={styles.complaintcontainer}>
+                 <Icon name='file-document-edit' color={CUSTOMCOLOR.primary} size={16} />
+                 <Text style={styles.pulse}>{selectedComplaint}</Text>
+                </View>
 
-        <VisitOpen label="Vitals" icon="chevron-down" />
-        <VisitOpen label="Chief Complaints" icon="chevron-down" />
-        <VisitOpen label="Symptoms" icon="chevron-down" />
-        <VisitOpen label="Prescribe" icon="chevron-down" />
-        <VisitOpen label="Lab Reports" icon="chevron-down" />
-        <VisitOpen label="Examination Findings" icon="chevron-down" />
-        <VisitOpen label="Notes" icon="chevron-down" />
-        <VisitOpen label="Refer to Doctor" icon="chevron-down" />
-        <VisitOpen label="Medical History" icon="chevron-down" />
-        {/* <VisitOpen label='Vitals' icon='chevron-down'/>
-        <VisitOpen label='Vitals' icon='chevron-down'/> */}
+              )}
+              {value.label==='Notes' &&(
+                <View style={styles.complaintcontainer}>
+                 <Icon name='file-document-edit' color={CUSTOMCOLOR.primary} size={16} />
+                 <Text style={styles.pulse}>{note}</Text>
+                </View>
+
+              )}
+              {value.label==='Refer to Doctor' &&(
+                <View style={styles.complaintcontainer}>
+                 <Icon name='doctor' color={CUSTOMCOLOR.primary} size={16} />
+                 
+                 
+                  {selectedDoctor?.name&&<Text style={styles.pulse}>Refer to {selectedDoctor.name} </Text>}
+                 
+                </View>
+
+              )}
+            </View>
+          </View>
+        ))}
       </View>
 
       <PlusButton
         icon="close"
-        style={{position: 'absolute', left: 0, bottom: 0}}
+        style={{ position: 'absolute', left: 0, bottom: 0 }}
         onPress={() => navigation.goBack()}
       />
     </View>
@@ -71,5 +131,39 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
+  visitOpenItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: "wrap",
+    borderBottomWidth: 0.4,
+    borderBottomColor: CUSTOMCOLOR.primary,
+    // height:100
+  },
+  basiccontainer: {
+    width: 635,
+    height: 100,
+    borderRadius: 4,
+    padding: 8,
+    gap: 16,
+   
+  },
+  pulse: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight: 400,
+    fontSize: 12,
+    lineHeight: 15.04,
+    color: CUSTOMCOLOR.black,
+  },
+  complaintcontainer:{
+    width: 635,
+    height: 32,
+    borderRadius: 4,
+    padding: 4,
+    gap: 4,
+    flexDirection:"row"
+  },
+  
 });
+
 export default Visit;

@@ -1,5 +1,5 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
+import {StyleSheet, Text, TouchableOpacity, View,ScrollView} from 'react-native';
+import {useState,useEffect} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
 import {
@@ -13,6 +13,17 @@ import {Language} from '../settings/customlanguage';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 const Dashboard = ({navigation}) => {
+  const [Data,setData] = useState(null)
+  const fetchData=async ()=>{
+    const response = await fetch('https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D')
+    const jsonData = await response.json();
+    setData(jsonData);
+  }
+  useEffect(()=>{
+    {
+      fetchData();
+    }
+  },[]);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -23,7 +34,8 @@ const Dashboard = ({navigation}) => {
     ],
   };
   return (
-    <View style={styles.container}>
+    <ScrollView>
+    
       <View
         style={{
           flexDirection: 'row',
@@ -62,10 +74,17 @@ const Dashboard = ({navigation}) => {
       </View>
       <View style={styles.appointment}>
         <Text style={styles.h2}>{Language[language]['appointments']}</Text>
+     
 
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+       {Data ?
+       Data.map((value,index)=>{
+        return <AppointmentCard key={index} appointment={value}/>
+       })
+       :null}
+        
+  
+        
+       
       </View>
       <View
         style={{
@@ -87,7 +106,8 @@ const Dashboard = ({navigation}) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -107,9 +127,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   appointment: {
-    gap: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    gap: 2,
+    paddingHorizontal: 4,
+    paddingVertical: 4,
   },
   h2: {
     fontSize: 24,

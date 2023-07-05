@@ -12,7 +12,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const AppointmentCard = () => {
+import Visit from '../screens/visit';
+const AppointmentCard = ({appointment,openVisit}) => {
   const [visible, setVisible] = useState(false);
   return (
     <>
@@ -24,30 +25,30 @@ const AppointmentCard = () => {
           }}
         />
         <View style={styles.child}>
-          <Text style={styles.name}>Malumalayi</Text>
-          <Text style={styles.age}>Malumalayi</Text>
+          <Text style={styles.name}>{appointment.patient.name}</Text>
+          <Text style={styles.age}>{appointment.patient.age}</Text>
+          <Text style={styles.gender}>{appointment.patient.gender}</Text>
           <View style={styles.seperator}></View>
           <Text style={styles.symptom}>
-            Lorem ipsum dolor sit amet consectetur. Nec porttitor tincidunt
-            ultricies nisl.
+            {appointment.complaint}
           </Text>
         </View>
         <View style={styles.hseperator}></View>
         <View style={styles.patientinfo}>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['type']}:</Text>
+            <Text style={styles.contact}>{Language[language]['type']}:{appointment['appointment-type']}</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['time']}:</Text>
+            <Text style={styles.contact}>{Language[language]['time']}:{appointment.time}</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['status']}:</Text>
+            <Text style={styles.contact}>{Language[language]['status']}:{appointment.status}</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>{Language[language]['bill']}:</Text>
+            <Text style={styles.contact}>{Language[language]['bill']}:{appointment.bill}</Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
         </View>
@@ -56,23 +57,24 @@ const AppointmentCard = () => {
           onPress={() => {
             setVisible(!visible);
           }}>
+            
           <Icon name="dots-horizontal" color={CUSTOMCOLOR.primary} size={24} />
           {visible && (
             <View
               style={[styles.option, {width: 100}]}
               onPress={() => console.log('hi')}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={openVisit }>
                 <Text>Start visit</Text>
               </TouchableOpacity>
               <TouchableOpacity>
                 <Text>Reschedule</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>setVisible(false)}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
             </View>
           )}
-        </Pressable>
+         </Pressable>
       </View>
     </>
   );
@@ -99,6 +101,13 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   age: {
+    fontWeight: 400,
+    fontSize: 10,
+    lineHeight: 19,
+    padding: 0,
+    color: CUSTOMCOLOR.black,
+  },
+  gender: {
     fontWeight: 400,
     fontSize: 10,
     lineHeight: 19,
