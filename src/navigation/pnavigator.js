@@ -10,6 +10,9 @@ import Visit from '../screens/visit';
 import Patientlookup from '../screens/patientlookup';
 import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
+import Prescribe from '../screens/prescribe';
+import Date from '../screens/Follow-up';
+import Symptoms from '../screens/symptoms';
 import CheifComplaints from '../screens/cheif_complaint';
 import { Vitals } from '../components';
 import NoteScreen from '../screens/notescreen';
@@ -37,6 +40,9 @@ const ProtectedRoute = () => {
       <Stack.Screen name="patientcreate" component={PatientCreate} />
       <Stack.Screen name="bookslot" component={SlotBook} />
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
+      <Stack.Screen name="prescribe" component={Prescribe} />
+      <Stack.Screen name="FollowUp" component={Date} />
+      <Stack.Screen name="symptoms" component={Symptoms} />
       <Stack.Screen name="complaints" component={CheifComplaints}/>
       <Stack.Screen name="vitalscreen" component={VitalScreen}/>
       <Stack.Screen name="notescreen" component={NoteScreen}/>

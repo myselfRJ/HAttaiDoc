@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import {useState,useEffect} from 'react';
 import {
@@ -7,12 +8,11 @@ import {
 } from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import {
-  SelectorBtn,
-  SelectionTab,
-  AppointmentCard,
-  PlusButton,
-} from '../components';
+import PlusButton from '../components/plusbtn';
+import SelectionTab from '../components/selectiontab';
+import SelectorBtn from '../components/selector';
+import {AppointmentCard} from '../components';
+
 const Appointment = ({navigation}) => {
   const [data,setData] = useState(null)
   const fetchData=async ()=>{

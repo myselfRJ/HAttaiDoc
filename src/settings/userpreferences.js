@@ -1,3 +1,3 @@
-const language = "en"
+const language = 'en';
 
 export {language};

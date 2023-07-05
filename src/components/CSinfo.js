@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const Vitals = props => {
+const CSinfo = props => {
   //props-> label, placeholder , action
   return (
     <>
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Vitals;
+export default CSinfo;

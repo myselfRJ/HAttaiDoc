@@ -32,7 +32,7 @@ const Login = ({navigation}) => {
     ]);
   };
   const loginbtn = () => {
-    data = {
+    let data = {
       phone_number: phone,
       password: password,
     };

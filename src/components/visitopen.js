@@ -1,4 +1,10 @@
-import {View, StyleSheet, TextInput, Text,TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
@@ -7,7 +13,7 @@ const VisitOpen = props => {
   //props-> label, placeholder , action
   return (
     <>
-      <TouchableOpacity style={styles.inpcontainer} onPress={props.navigate}>
+      <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
         <Text style={styles.text}>{props.label}</Text>
 
         <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16} />
