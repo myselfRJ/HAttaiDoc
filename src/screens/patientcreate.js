@@ -166,8 +166,8 @@ const PatientCreate = ({navigation}) => {
             setValue={setBirth_date}
           />
           <InputText
-            label="Wife/Husband Name"
-            placeholder="Enter wife/husband Name"
+            label="Father/Husband Name"
+            placeholder="Enter Father/husband Name"
             value={spouse_name}
             setValue={setSpouse_nmae}
           />
