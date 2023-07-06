@@ -37,7 +37,7 @@ const Dashboard = ({navigation}) => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
+        data: [90, 45, 28, 80, 99, 43],
       },
     ],
   };

@@ -18,10 +18,11 @@ import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
 import style from '../components/Searchbar/style';
+import {CONSTANTS} from '../utility/constant';
 const PatientCreate = ({navigation}) => {
   const [selected, setSelected] = useState('');
-  const [selectedAbha, setSelectedAbha] = useState('');
-  const Abha = ["Don't Have ABHA_ID", 'Have ABHA_ID'];
+  const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
+
   const handleOptions = value => {
     setSelected(value);
   };
@@ -68,7 +69,7 @@ const PatientCreate = ({navigation}) => {
             <AddImage url="https://www.kauveryhospital.com/doctorimage/recent/Dr.-Kandasamy2022-09-12-06:30:01am.jpg" />
           </View>
           <View style={styles.CnfAbhaView}>
-            {Abha.map((val, ind) => (
+            {CONSTANTS.abhaOption.map((val, ind) => (
               <TouchableOpacity
                 key={ind}
                 style={[
@@ -201,7 +202,7 @@ const PatientCreate = ({navigation}) => {
             }}
           />
 
-          {selectedAbha === Abha[1] ? (
+          {selectedAbha === CONSTANTS.abhaOption[1] ? (
             <View style={styles.alignchild}>
               <InputText
                 label="ABHA-Id"
@@ -217,7 +218,7 @@ const PatientCreate = ({navigation}) => {
               </View>
             </View>
           ) : null}
-          {selectedAbha === Abha[0] ? (
+          {selectedAbha === CONSTANTS.abhaOption[0] ? (
             <HButton
               label="Create ABHA ID"
               onPress={() => navigation.navigate('bookslot')}
