@@ -22,7 +22,16 @@ const SlotCreate = ({navigation}) => {
 
   const [selectedConsultValue, setConsultValue] = useState('');
   const [selectedDurationValue, setDurationValue] = useState('');
-  const [slots, setSlots] = useState([]);
+  const [slots, setSlots] = useState({
+    M: [],
+    T: [],
+    W: [],
+    TH: [],
+    F: [],
+    Sa: [],
+    Su: [],
+  });
+  const [selectedDay, setSelectedDay] = useState('M');
 
   const handleConfirm = time => {
     if (open === 'from') {
@@ -81,8 +90,10 @@ const SlotCreate = ({navigation}) => {
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
       };
-
-      setSlots(prevSlots => [...prevSlots, newSlot]);
+      setSlots(prevSlots => ({
+        ...prevSlots,
+        [selectedDay]: [...prevSlots[selectedDay], newSlot],
+      }));
       setFromTime(new Date());
       setToTime(new Date());
       setConsultValue('');
@@ -91,25 +102,60 @@ const SlotCreate = ({navigation}) => {
   };
 
   const handleDelete = index => {
-    setSlots(prevSlots => prevSlots.filter(slot => slot.index !== index));
+    setSlots(prevSlots => ({
+      ...prevSlots,
+      [selectedDay]: prevSlots[selectedDay].filter(
+        slot => slot.index !== index,
+      ),
+    }));
   };
-
+  onDaySelectionChange = value => {
+    setSelectedDay(value);
+  };
   return (
     <View style={styles.main}>
       <View style={styles.alignchild}>
         <Text style={commonstyles.h1}>Add Schedule</Text>
       </View>
       <View style={styles.dayselector}>
-        <SelectionTab label="M" selected={true} />
-        <SelectionTab label="T" selected={false} />
-        <SelectionTab label="W" selected={false} />
-        <SelectionTab label="TH" selected={false} />
-        <SelectionTab label="F" selected={false} />
-        <SelectionTab label="Sa" selected={false} />
-        <SelectionTab label="Su" selected={false} />
+        <SelectionTab
+          label="M"
+          selected={selectedDay === 'M'}
+          onPress={() => onDaySelectionChange('M')}
+        />
+        <SelectionTab
+          label="T"
+          selected={selectedDay === 'T'}
+          onPress={() => onDaySelectionChange('T')}
+        />
+        <SelectionTab
+          label="W"
+          selected={selectedDay === 'W'}
+          onPress={() => onDaySelectionChange('W')}
+        />
+        <SelectionTab
+          label="TH"
+          selected={selectedDay === 'TH'}
+          onPress={() => onDaySelectionChange('TH')}
+        />
+        <SelectionTab
+          label="F"
+          selected={selectedDay === 'F'}
+          onPress={() => onDaySelectionChange('F')}
+        />
+        <SelectionTab
+          label="Sa"
+          selected={selectedDay === 'Sa'}
+          onPress={() => onDaySelectionChange('Sa')}
+        />
+        <SelectionTab
+          label="Su"
+          selected={selectedDay === 'Su'}
+          onPress={() => onDaySelectionChange('Su')}
+        />
       </View>
       <View style={styles.ShowSchedule}>
-        {slots.map(slot => (
+        {slots[selectedDay]?.map(slot => (
           <SlotChip
             key={slot.index}
             index={slot.index}
