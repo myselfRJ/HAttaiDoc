@@ -2,7 +2,8 @@ import {Pressable, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
 const AddImage = props => {
-  return props.url ? (
+  console.log("urel====>",props.url)
+  return props?.url ? (
     <Pressable style={styles.url}>
       <Image
         style={styles.image}
@@ -11,7 +12,7 @@ const AddImage = props => {
       />
     </Pressable>
   ) : (
-    <Pressable style={styles.main}>
+    <Pressable onPress={props.onPress} style={styles.main}>
       <Icon name="account-plus" size={24} color={CUSTOMCOLOR.primary} />
     </Pressable>
   );

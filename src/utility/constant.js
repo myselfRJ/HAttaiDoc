@@ -4,4 +4,5 @@ export const CONSTANTS = {
   dose: ['500mg', '700mg', '800mg', '1000mg'],
   timing: ['AF', 'BF'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
+  speciality:['Cardiologists',  'dentists',  'gynecologists','psychiatrists']
 };

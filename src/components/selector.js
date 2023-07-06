@@ -10,8 +10,8 @@ const SelectorBtn = props => {
   return (
     <View>
       {props.label && <Text style={styles.h3}>{props.label}</Text>}
-      <Pressable style={styles.select}>
-        <Text style={styles.h3}>Hello</Text>
+      <Pressable onPress={props.onPress} style={styles.select}>
+        <Text style={styles.h3}>{props.text}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
     </View>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     minWidth: 160,
   },
   h3: {
-    fontSize: CUSTOMFONTSIZE.h3,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.opensan,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,

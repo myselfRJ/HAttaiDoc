@@ -41,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
   let buttonBackgroundColor = backgroundColor ;
   let buttonBorderColor = borderColor ;
   let buttonBorderWidth = 1;
-  let padding = 15;
+  let padding =20 ;
   let width = 'auto';
   let align:
     | 'flex-start'
