@@ -147,7 +147,7 @@ const AadharVerify = ({navigation}) => {
                   onPress={() => console.log('Aadhar')}
                 />
               </View>
-              <View style={{paddingHorizontal: '30%', gap: 24}}>
+              <View style={{paddingHorizontal: '30%', gap: 24, top: 16}}>
                 <CodeField
                   ref={ref}
                   {...props}
