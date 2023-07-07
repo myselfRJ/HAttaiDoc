@@ -78,7 +78,7 @@ const AbhaCreate = ({navigation}) => {
       }
     });
   };
-  const patientDetails = [
+  const UserDetails = [
     {
       name: name,
       gender: gender,
@@ -114,10 +114,6 @@ const AbhaCreate = ({navigation}) => {
   //       console.error('Error occurred:', error);
   //     }
   //   };
-
-  console.log('====================================');
-  console.log(patientDetails);
-  console.log('====================================');
 
   return (
     <ScrollView>
