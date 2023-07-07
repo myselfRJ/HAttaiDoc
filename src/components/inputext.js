@@ -20,12 +20,12 @@ const InputText = props => {
 
   const passtoParent = e => {
     props.setValue(e);
-    if (props.doubleCheck[0]) {
+    if (props?.doubleCheck?.[0]) {
       !props.check(e)
         ? setErrorStyle({borderColor: CUSTOMCOLOR.error, borderWidth: 1})
         : setErrorStyle({});
     }
-    if (props.doubleCheck[1]) {
+    if (props?.doubleCheck?.[1]) {
       !props.check2[0](props.check2[1], e)
         ? setErrorStyle({borderColor: CUSTOMCOLOR.error, borderWidth: 1})
         : setErrorStyle({});
@@ -44,7 +44,7 @@ const InputText = props => {
             placeholder={props.placeholder}
             secureTextEntry={props.secure ? visible : false}
             inputMode={props.keypad ?? 'none'}
-            maxLength={props.maxLength ?? 20}
+            maxLength={props.maxLength ?? 1000}
             onChangeText={passtoParent}
             value={props.value}
           />
