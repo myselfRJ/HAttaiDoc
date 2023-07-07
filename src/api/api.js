@@ -7,11 +7,12 @@ const PostApi = async (url, req_data, secure) => {
   console.log(globalurl, url, 'gl', req_data);
   const headers = {
     'Content-Type': 'application/json',
+    'trace-id':"12345"
   };
   if (secure) {
     headers['Authorization'] = 'Bearer ' + global.user_session;
   }
-  const result = await axios.post(globalurl + url, JSON.stringify(req_data), {
+  const result = await axios.post(url, JSON.stringify(req_data), {
     headers,
   });
   console.log(result.status, headers);

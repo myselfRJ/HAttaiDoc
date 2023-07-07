@@ -21,12 +21,12 @@ const InputText = props => {
   const passtoParent = e => {
     props.setValue(e);
     if (props?.doubleCheck?.[0]) {
-      !props.check(e)
+      !props?.check(e)
         ? setErrorStyle({borderColor: CUSTOMCOLOR.error, borderWidth: 1})
         : setErrorStyle({});
     }
     if (props?.doubleCheck?.[1]) {
-      !props.check2[0](props.check2[1], e)
+      !props?.check2?.[0](props?.check2[1], e)
         ? setErrorStyle({borderColor: CUSTOMCOLOR.error, borderWidth: 1})
         : setErrorStyle({});
     }
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   labeltext: {
-    fontWeight: '500',
+    fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },

@@ -26,7 +26,7 @@ const ProtectedRoute = () => {
   console.log('isAuth.....', isAuth);
 
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator initialRouteName='profilecreate' screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
       <Stack.Screen name="profilecreate" component={ProfileCreate} />
       <Stack.Screen name="cliniccreate" component={ClinicCreate} />

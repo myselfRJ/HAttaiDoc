@@ -80,7 +80,14 @@ const Language = {
     notes:"Notes",
     recommendation:"Recommendation",
     consultation:'Consultation',
-  
+    getotp:'Get Otp',
+    name:"Name",
+    gender:"Gender",
+    dob:"Date of Birth",
+    medical_number:"Medical Number",
+    specialization:'Specialization',
+    experience:"Experience" ,
+    save:'Save',
 
   },
   hi: {

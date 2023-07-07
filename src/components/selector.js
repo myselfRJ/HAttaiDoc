@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     minWidth: 160,
   },
   h3: {
-    fontSize: CUSTOMFONTSIZE.h3,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.opensan,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
