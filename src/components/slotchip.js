@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
 
@@ -8,7 +8,12 @@ const SlotChip = props => {
       <Text>{props.time}</Text>
       <Text>{props.type}</Text>
       <Text>{props.duration}</Text>
-      <Icon name="delete" size={24} color={CUSTOMCOLOR.white} />
+      <TouchableOpacity
+        onPress={() => {
+          props.onPress(props.index);
+        }}>
+        <Icon name="delete" size={24} color={CUSTOMCOLOR.white} />
+      </TouchableOpacity>
     </View>
   );
 };

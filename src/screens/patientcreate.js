@@ -10,7 +10,7 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-const PatientCreate = () => {
+const PatientCreate = ({navigation}) => {
   const [selected, setSelected] = useState('male');
 
   //handle selected state
@@ -61,7 +61,7 @@ const PatientCreate = () => {
             <InputText label='name' placeholder='Full Name'/> */}
         <HButton
           label="Create ABHA ID"
-          onPress={() => navigation.navigate('cliniccreate')}
+          onPress={() => navigation.navigate('bookslot')}
         />
       </View>
     </Keyboardhidecontainer>

@@ -5,6 +5,7 @@ import {Language} from '../settings/customlanguage';
 const SelectionTab = props => {
   return (
     <Pressable
+      onPress={props?.onPress}
       style={{
         ...styles.tabcontainer,
         backgroundColor: props.selected
