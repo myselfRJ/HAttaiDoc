@@ -18,6 +18,8 @@ import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
 
 const MobileVerify = ({navigation}) => {
   const CELL_COUNT = 6;
