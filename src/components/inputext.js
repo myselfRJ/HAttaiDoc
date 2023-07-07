@@ -44,7 +44,7 @@ const InputText = props => {
             placeholder={props.placeholder}
             secureTextEntry={props.secure ? visible : false}
             inputMode={props.keypad ?? 'none'}
-            maxLength={props.maxLength ?? 20}
+            maxLength={props.maxLength ?? 1000}
             onChangeText={passtoParent}
             value={props.value}
           />

@@ -19,11 +19,11 @@ import {Language} from '../settings/customlanguage';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
+import SlotCreate from './slotcreate';
+import {URL} from '../utility/urls';
 const Dashboard = ({navigation}) => {
   const fetchData = async () => {
-    const response = await fetch(
-      'https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D',
-    );
+    const response = await fetch(URL.get_all_appointments_of_clinic);
     const jsonData = await response.json();
     setData(jsonData);
   };
@@ -37,25 +37,11 @@ const Dashboard = ({navigation}) => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
+        data: [90, 45, 28, 80, 99, 43],
       },
     ],
   };
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
 
-  const handleDate = () => {
-    setOpen(!open);
-  };
-
-  const formattedDate = date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    timeZone: 'Asia/Kolkata',
-  });
   const [Appdata, setData] = useState([]);
 
   useEffect(() => {
@@ -124,7 +110,7 @@ const Dashboard = ({navigation}) => {
             paddingHorizontal: 8,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('myappointment')}
+            onPress={() => navigation.navigate('createslot')}
             style={{
               borderWidth: 0.5,
               borderRadius: 4,

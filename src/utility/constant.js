@@ -4,5 +4,8 @@ export const CONSTANTS = {
   dose: ['500mg', '700mg', '800mg', '1000mg'],
   timing: ['AF', 'BF'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
-  speciality:['Cardiologists',  'dentists',  'gynecologists','psychiatrists']
+  speciality: ['Cardiologists', 'dentists', 'gynecologists', 'psychiatrists'],
+  consultTypes: ['Physical', 'Telephonic', 'Online'],
+  duration: ['10 Mins', '15 Mins', '20 Mins', '25 Mins', '30 Mins'],
+  abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
 };

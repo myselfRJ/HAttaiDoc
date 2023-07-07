@@ -11,15 +11,14 @@ import PlusButton from '../components/plusbtn';
 import SelectionTab from '../components/selectiontab';
 import SelectorBtn from '../components/selector';
 import {AppointmentCard} from '../components';
+import {URL} from '../utility/urls';
 
 const Appointment = ({navigation}) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const fetchData = async () => {
-    const response = await fetch(
-      'https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bdate%7D',
-    );
+    const response = await fetch(URL.get_all_appointments_of_clinic);
     const jsonData = await response.json();
-    setData(jsonData);
+    jsonData && setData(jsonData);
   };
   useEffect(() => {
     {
@@ -43,8 +42,8 @@ const Appointment = ({navigation}) => {
       <View style={styles.appointment}>
         <Text style={styles.h2}>Appointments</Text>
 
-        {data
-          ? data.map((value, index) => {
+        {data.length > 0
+          ? data?.map((value, index) => {
               return (
                 <AppointmentCard
                   key={index}
