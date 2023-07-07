@@ -18,6 +18,10 @@ import {Vitals} from '../components';
 import NoteScreen from '../screens/notescreen';
 import ReferDoctorScreen from '../screens/referdoctorscreen';
 import VitalScreen from '../screens/vitalscreen';
+import AadharVerify from '../screens/aadharVerify';
+import MobileVerify from '../screens/mobVerify';
+import AbhaCreate from '../screens/abhaCreate';
+import Success from '../screens/success';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +30,9 @@ const ProtectedRoute = () => {
   console.log('isAuth.....', isAuth);
 
   return (
-    <Stack.Navigator initialRouteName='profilecreate' screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      initialRouteName="tab"
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
       <Stack.Screen name="profilecreate" component={ProfileCreate} />
       <Stack.Screen name="cliniccreate" component={ClinicCreate} />
@@ -44,6 +50,10 @@ const ProtectedRoute = () => {
       <Stack.Screen name="vitalscreen" component={VitalScreen} />
       <Stack.Screen name="notescreen" component={NoteScreen} />
       <Stack.Screen name="referdoctorscreen" component={ReferDoctorScreen} />
+      <Stack.Screen name="aadharverify" component={AadharVerify} />
+      <Stack.Screen name="mobileverify" component={MobileVerify} />
+      <Stack.Screen name="abhacreate" component={AbhaCreate} />
+      <Stack.Screen name="success" component={Success} />
     </Stack.Navigator>
   );
 };
