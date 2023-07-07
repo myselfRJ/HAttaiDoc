@@ -41,6 +41,8 @@ const ProfileCreate = ({navigation}) => {
       if (response.status === HttpStatusCode.Created) {
         const jsonData = await response.json();
         console.log(jsonData);
+        navigation.navigate('addclinic');
+        
       } else {
         console.error('API call failed:', response.status);
       }
@@ -100,7 +102,7 @@ const ProfileCreate = ({navigation}) => {
   };
   const handleDateChange = date => {
     setSelectedDate(date);
-    const formattedDate = date.toDateString(); // Format the date as per your requirement
+    const formattedDate = date.toDateString();
     setValues(prevValues => ({
       ...prevValues,
       dob: formattedDate,
@@ -153,6 +155,7 @@ const ProfileCreate = ({navigation}) => {
             alignSelf: 'flex-start',
             width: '100%',
             paddingHorizontal: 8,
+            height:80
           }}>
           <SelectorBtn
             label={Language[language]['dob']}
@@ -181,6 +184,7 @@ const ProfileCreate = ({navigation}) => {
             alignSelf: 'flex-start',
             width: '100%',
             paddingHorizontal: 8,
+            height:80,
           }}>
           <SelectorBtn
             label={Language[language]['specialization']}

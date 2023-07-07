@@ -88,6 +88,12 @@ const Language = {
     specialization:'Specialization',
     experience:"Experience" ,
     save:'Save',
+    clinic:'Clinic',
+    fees:'Consultation Fees',
+    address:'Address',
+    buildingno:"Building No.",
+    street:'Street',
+    role:'Role'
 
   },
   hi: {

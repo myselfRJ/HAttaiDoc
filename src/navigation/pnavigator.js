@@ -18,6 +18,8 @@ import {Vitals} from '../components';
 import NoteScreen from '../screens/notescreen';
 import ReferDoctorScreen from '../screens/referdoctorscreen';
 import VitalScreen from '../screens/vitalscreen';
+import AddClinic from '../screens/addclinic';
+import AddUser from '../screens/adduser';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +46,8 @@ const ProtectedRoute = () => {
       <Stack.Screen name="vitalscreen" component={VitalScreen} />
       <Stack.Screen name="notescreen" component={NoteScreen} />
       <Stack.Screen name="referdoctorscreen" component={ReferDoctorScreen} />
+      <Stack.Screen name="addclinic" component={AddClinic}/>
+      <Stack.Screen name="adduser" component={AddUser}/>
     </Stack.Navigator>
   );
 };
