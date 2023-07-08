@@ -123,6 +123,27 @@ const Dashboard = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <View
+          style={{
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            paddingHorizontal: 8,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('aadharverify')}
+            style={{
+              borderWidth: 0.5,
+              borderRadius: 4,
+              borderColor: CUSTOMCOLOR.primary,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+            }}>
+            <Text style={{color: CUSTOMCOLOR.primary}}>
+              {/* {Language[language]['view_more']} */}
+              AbhaVerify
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
