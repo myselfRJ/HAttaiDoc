@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet} from 'react-native';
 import {
     CUSTOMCOLOR,
     CUSTOMFONTFAMILY,
@@ -9,7 +9,7 @@ import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
-
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ClinicAddress = (props) => {
     
@@ -26,6 +26,7 @@ const ClinicAddress = (props) => {
 
     return (
         <View style={styles.container}>
+            <ScrollView>
             <View style={styles.top}></View>
             <View style={styles.bottom}>
                 <View style={styles.addressContainer}>
@@ -47,29 +48,33 @@ const ClinicAddress = (props) => {
                 </View>
                 
             </View>
+            </ScrollView>
         </View>
     )
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        //borderWidth:1,
+        height:"100%",
+        flex: 1,
+        backgroundColor: CUSTOMCOLOR.white,
     },
     top: {
-        height: 500,
+        height: 700,
         width: "100%",
-        top: 43,
+        top: 30,
         backgroundColor: CUSTOMCOLOR.primary
     },
     bottom: {
-        backgroundColor: CUSTOMCOLOR.white
+        backgroundColor: CUSTOMCOLOR.white,
+        height:300
+
     },
     addressContainer: {
         width: 635,
-        height: 250,
-        top: 100,
+         height: 174,
+        top: 50,
         alignSelf: 'center',
-        // gap:24,
-        //borderWidth:1,
         borderRadius: 5
     }
 })
