@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
+import React, { useState,useRef } from 'react';
+import { Text, View, StyleSheet, Modal, Pressable } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -7,21 +7,23 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import {commonstyles} from '../styles/commonstyle';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { commonstyles } from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import {SelectorBtn} from '../components';
-import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {URL} from '../utility/urls';
-import {HttpStatusCode} from 'axios';
+import { SelectorBtn } from '../components';
+import { CONSTANTS } from '../utility/constant';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { URL } from '../utility/urls';
+import { HttpStatusCode } from 'axios';
+import BottomSheetView from '../components/bottomSheet';
 
-const ProfileCreate = ({navigation}) => {
+const ProfileCreate = ({ navigation }) => {
+  const appointmentCardRef = useRef(null);
   const fetchData = async () => {
     try {
       const response = await fetch(URL.profileUrl, {
@@ -42,7 +44,7 @@ const ProfileCreate = ({navigation}) => {
         const jsonData = await response.json();
         console.log(jsonData);
         navigation.navigate('addclinic');
-        
+
       } else {
         console.error('API call failed:', response.status);
       }
@@ -94,9 +96,10 @@ const ProfileCreate = ({navigation}) => {
   const handleSpecialitySelection = speciality => {
     setSelectedSpeciality(speciality);
     handleChangeValue('speciality', speciality);
-    toggleModal();
+    appointmentCardRef?.current?.snapToIndex(0);
+    console.log(speciality);
   };
-
+  
   const handleOptions = value => {
     handleChangeValue('gender', value);
   };
@@ -155,7 +158,7 @@ const ProfileCreate = ({navigation}) => {
             alignSelf: 'flex-start',
             width: '100%',
             paddingHorizontal: 8,
-            height:80
+            height: 80
           }}>
           <SelectorBtn
             label={Language[language]['dob']}
@@ -170,7 +173,7 @@ const ProfileCreate = ({navigation}) => {
             mode="date"
             onDateChange={handleDateChange}
             minimumDate={new Date(1900, 0, 1)}
-            maximumDate={new Date()} // Set the maximum date to the current date
+            maximumDate={new Date()} 
           />
         )}
         <InputText
@@ -184,33 +187,17 @@ const ProfileCreate = ({navigation}) => {
             alignSelf: 'flex-start',
             width: '100%',
             paddingHorizontal: 8,
-            height:80,
+            height: 80,
           }}>
           <SelectorBtn
             label={Language[language]['specialization']}
             name="chevron-down"
-            onPress={toggleModal}
+            // onPress={toggleModal}
+            onPress={() => {
+              appointmentCardRef?.current?.snapToIndex(1);
+            }}
             input={selectedSpeciality}
           />
-          <Modal visible={showModal} animationType="slide" transparent={true}>
-            <View style={styles.modalContainer}>
-              <Text
-                style={{
-                  fontFamily: CUSTOMFONTFAMILY.heading,
-                  fontSize: 18,
-                  color: CUSTOMCOLOR.black,
-                }}>
-                Select Speciality
-              </Text>
-              {CONSTANTS.speciality.map((speciality, index) => (
-                <Pressable
-                  key={index}
-                  onPress={() => handleSpecialitySelection(speciality)}>
-                  <Text style={styles.modalfields}>{speciality}</Text>
-                </Pressable>
-              ))}
-            </View>
-          </Modal>
         </View>
         <InputText
           label={Language[language]['experience']}
@@ -227,11 +214,36 @@ const ProfileCreate = ({navigation}) => {
           }}>
           Medical Document
         </Text>
-        <View style={{alignSelf: 'flex-start'}}>
+        <View style={{ alignSelf: 'flex-start' }}>
           <HButton label="Upload Document" />
         </View>
         <HButton label={Language[language]['save']} onPress={fetchData} />
+        <BottomSheetView
+        bottomSheetRef={appointmentCardRef}
+        snapPoints={'50%'}>
+          <View style={styles.modalContainer}>
+          <Text
+            style={{
+              fontFamily: CUSTOMFONTFAMILY.heading,
+              fontSize: 18,
+              color: CUSTOMCOLOR.black,
+            }}>
+            Select Speciality
+          </Text>
+          {CONSTANTS.speciality.map((speciality, index) => (
+            <Pressable
+              key={index}
+              onPress={() => handleSpecialitySelection(speciality)}
+              style={{height:30}}
+              >
+              <Text style={styles.modalfields}>{speciality}</Text>
+            </Pressable>
+          ))}
+        </View>
+        </BottomSheetView>
       </View>
+   
+
     </Keyboardhidecontainer>
   );
 };
@@ -258,7 +270,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
-    margin: 630,
     borderRadius: 10,
     padding: 10,
   },

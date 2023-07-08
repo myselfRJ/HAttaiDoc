@@ -33,7 +33,7 @@ const ProtectedRoute = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="tab"
+      initialRouteName="profilecreate"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
       <Stack.Screen name="profilecreate" component={ProfileCreate} />
