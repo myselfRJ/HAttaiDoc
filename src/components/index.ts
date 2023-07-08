@@ -34,6 +34,7 @@ import VisitOpen from './visitopen';
 import CSinfo from './CSinfo';
 import HButton from './button';
 import ChartCard from './chart';
+import BottomSheetView from './bottomSheet';
 export {
   Text,
   TextField,
@@ -69,4 +70,5 @@ export {
   InputText,
   HButton,
   ChartCard,
+  BottomSheetView,
 };

@@ -9,7 +9,7 @@ import CombinedRoute from './src/navigation/combinednavigator';
 import store from './src/redux/stores/store';
 import axios from 'axios';
 import {urlActions} from './src/redux/features/url/urlSlice';
-
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -29,26 +29,28 @@ function App() {
   // const navigationRef = React.useRef();
   return (
     <Provider store={store}>
-      <NavigationContainer
-      // ref={navigationRef}
-      // onReady={() => {
-      //   routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-      // }}
-      // onStateChange={async () => {
-      //   const previousRouteName = routeNameRef.current;
-      //   const currentRouteName = navigationRef.current.getCurrentRoute().name;
+      <GestureHandlerRootView style={{flex: 1}}>
+        <NavigationContainer
+        // ref={navigationRef}
+        // onReady={() => {
+        //   routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        // }}
+        // onStateChange={async () => {
+        //   const previousRouteName = routeNameRef.current;
+        //   const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
-      //   if (previousRouteName !== currentRouteName) {
-      //     await analytics().logScreenView({
-      //       screen_name: currentRouteName,
-      //       screen_class: currentRouteName,
-      //     });
-      //   }
-      //   routeNameRef.current = currentRouteName;
-      // }}
-      >
-        <CombinedRoute />
-      </NavigationContainer>
+        //   if (previousRouteName !== currentRouteName) {
+        //     await analytics().logScreenView({
+        //       screen_name: currentRouteName,
+        //       screen_class: currentRouteName,
+        //     });
+        //   }
+        //   routeNameRef.current = currentRouteName;
+        // }}
+        >
+          <CombinedRoute />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </Provider>
   );
 }

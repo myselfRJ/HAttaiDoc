@@ -1,11 +1,5 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
 import {
@@ -13,6 +7,7 @@ import {
   AppointmentCard,
   HeaderAvatar,
   SelectorBtn,
+  BottomSheetView,
 } from '../components';
 import store from '../redux/stores/store';
 import {Language} from '../settings/customlanguage';
@@ -21,17 +16,13 @@ import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
 import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
 const Dashboard = ({navigation}) => {
   const fetchData = async () => {
     const response = await fetch(URL.get_all_appointments_of_clinic);
     const jsonData = await response.json();
     setData(jsonData);
   };
-  useEffect(() => {
-    {
-      fetchData();
-    }
-  }, []);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -50,102 +41,107 @@ const Dashboard = ({navigation}) => {
     }
   }, [data.length]);
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            paddingHorizontal: 8,
-          }}>
-          <View>
-            <SvgXml xml={hattailogo} />
-            <Text style={styles.title}>
-              {Language[language]['welcome']},{Language[language]['dr']}
-              RamaMurthi
-            </Text>
+    <View>
+      <ScrollView>
+        <View style={styles.container}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 24,
+              paddingHorizontal: 8,
+            }}>
+            <View>
+              <SvgXml xml={hattailogo} />
+              <Text style={styles.title}>
+                {Language[language]['welcome']},{Language[language]['dr']}
+                RamaMurthi
+              </Text>
+            </View>
+            <HeaderAvatar />
           </View>
-          <HeaderAvatar />
-        </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            gap: 8,
-            paddingHorizontal: 8,
-            paddingBottom: 8,
-          }}>
-          <ChartCard data={data} title={Language[language]['total_patient']} />
-          <ChartCard
-            data={data}
-            title={Language[language]['earnings']}
-            label="₹ "
-          />
-        </View>
-        <View style={styles.select}>
-          <SelectorBtn name="calendar" />
-          <SelectorBtn name="chevron-down" />
-          {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
-        </View>
-        <View style={styles.appointment}>
-          <Text style={styles.h2}>{Language[language]['appointments']}</Text>
-          {Appdata
-            ? Appdata.map((value, index) => {
-                return (
-                  <AppointmentCard
-                    key={index}
-                    appointment={value}
-                    openVisit={() => navigation.navigate('visit')}
-                  />
-                );
-              })
-            : null}
-        </View>
-        <View
-          style={{
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            paddingHorizontal: 8,
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('createslot')}
+          <View
             style={{
-              borderWidth: 0.5,
-              borderRadius: 4,
-              borderColor: CUSTOMCOLOR.primary,
-              paddingHorizontal: 16,
-              paddingVertical: 8,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              gap: 8,
+              paddingHorizontal: 8,
+              paddingBottom: 8,
             }}>
-            <Text style={{color: CUSTOMCOLOR.primary}}>
-              {Language[language]['view_more']}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            paddingHorizontal: 8,
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('aadharverify')}
+            <ChartCard
+              data={data}
+              title={Language[language]['total_patient']}
+            />
+            <ChartCard
+              data={data}
+              title={Language[language]['earnings']}
+              label="₹ "
+            />
+          </View>
+          <View style={styles.select}>
+            <SelectorBtn name="calendar" />
+            <SelectorBtn name="chevron-down" />
+            {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
+          </View>
+          <View style={styles.appointment}>
+            <Text style={styles.h2}>{Language[language]['appointments']}</Text>
+            {Appdata
+              ? Appdata.map((value, index) => {
+                  return (
+                    <AppointmentCard
+                      key={index}
+                      appointment={value}
+                      openVisit={() => navigation.navigate('visit')}
+                    />
+                  );
+                })
+              : null}
+          </View>
+          <View
             style={{
-              borderWidth: 0.5,
-              borderRadius: 4,
-              borderColor: CUSTOMCOLOR.primary,
-              paddingHorizontal: 16,
-              paddingVertical: 8,
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              paddingHorizontal: 8,
             }}>
-            <Text style={{color: CUSTOMCOLOR.primary}}>
-              {/* {Language[language]['view_more']} */}
-              AbhaVerify
-            </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('createslot')}
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 4,
+                borderColor: CUSTOMCOLOR.primary,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+              }}>
+              <Text style={{color: CUSTOMCOLOR.primary}}>
+                {Language[language]['view_more']}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              paddingHorizontal: 8,
+            }}>
+            <TouchableOpacity
+              onPress={() => bottomRef?.current?.snapToIndex(0)}
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 4,
+                borderColor: CUSTOMCOLOR.primary,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+              }}>
+              <Text style={{color: CUSTOMCOLOR.primary}}>
+                {/* {Language[language]['view_more']} */}
+                AbhaVerify
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
