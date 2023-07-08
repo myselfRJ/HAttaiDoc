@@ -35,6 +35,7 @@ import CSinfo from './CSinfo';
 import HButton from './button';
 import ChartCard from './chart';
 import BottomSheetView from './bottomSheet';
+import StatusMessage from './statusMessage';
 export {
   Text,
   TextField,
@@ -71,4 +72,5 @@ export {
   HButton,
   ChartCard,
   BottomSheetView,
+  StatusMessage,
 };

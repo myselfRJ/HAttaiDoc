@@ -1,11 +1,21 @@
-import { View, StyleSheet, Text, Image, Pressable, TouchableOpacity, Modal } from 'react-native';
-import { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
+import BottomSheetView from './bottomSheet';
+import {useState, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CUSTOMCOLOR, CUSTOMFONTSIZE } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
 const PatientSearchCard = props => {
   const [visible, setVisible] = useState(false);
+  const patientSearchRef = useRef(null);
 
   return (
     <>
@@ -26,7 +36,7 @@ const PatientSearchCard = props => {
         <Pressable
           style={styles.icon}
           onPress={() => {
-            setVisible(true)
+            patientSearchRef?.current?.snapToIndex(1);
           }}>
           <View>
             <Icon
@@ -37,57 +47,23 @@ const PatientSearchCard = props => {
             />
           </View>
         </Pressable>
-        {visible && (
-          <View
-            style={[styles.option, { width: 100 }]}
-            onPress={() => console.log('en')}>
-            {/*<View>
-              <TouchableOpacity>
-                <Text>{Language[language]['update']}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text>{Language[language]['delete']}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {
-                setVisible(false);
+        <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
+          <View style={styles.bottomView}>
+            <TouchableOpacity>
+              <Text style={styles.content}>{Language[language]['update']}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.content}>{Language[language]['delete']}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                patientSearchRef?.current?.snapToIndex(0);
               }}>
-                <Text>
-                  {Language[language]['cancel']}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            </View>*/}
-
-            <Modal
-              animationType='slide'
-              transparent={true}
-              visible={visible}
-              onRequestClose={() => {
-                setVisible(!visible)
-              }}>
-              <View style={styles.bottomView}>
-                <View style={styles.modalView}>
-                  <TouchableOpacity>
-                    <Text style={styles.content}>{Language[language]['update']}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text style={styles.content}>{Language[language]['delete']}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {
-                    setVisible(false);
-                  }}>
-                    <Text style={styles.content}>
-                      {Language[language]['cancel']}
-                    </Text>
-                  </TouchableOpacity>
-
-                </View>
-              </View>
-            </Modal>
+              <Text style={styles.content}>{Language[language]['cancel']}</Text>
+            </TouchableOpacity>
           </View>
-        )}   
+        </BottomSheetView>
       </View>
-
     </>
   );
 };
@@ -140,16 +116,17 @@ const styles = StyleSheet.create({
     top: 0,
   },
   bottomView: {
-    width: "100%",
+    width: '100%',
     height: 500,
-    marginTop: 900,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   modalView: {
     height: 250,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: "#00BFFF",
+    borderColor: '#00BFFF',
     shadowColor: '#ffff',
     shadowOffset: {
       width: 0,
@@ -161,12 +138,9 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    fontSize: 20,
-    color: "black",
-    padding: 8,
-    marginTop: 5
-
-  }
+    fontSize: 15,
+    color: 'black',
+  },
 });
 
 export default PatientSearchCard;

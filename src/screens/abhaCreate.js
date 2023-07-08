@@ -262,21 +262,9 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 8,
   },
-  CnfAbhaView: {
-    flexDirection: 'row',
-    width: '100%',
-    height: 30,
-    justifyContent: 'space-around',
-  },
-  CnfAbha: {
-    width: '50%',
-    height: 30,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    justifyContent: 'center',
-  },
   DOBselect: {
     width: '100%',
+    paddingHorizontal: 8,
   },
 });
 

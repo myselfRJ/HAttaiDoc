@@ -125,7 +125,7 @@ const Dashboard = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <TouchableOpacity
-              onPress={() => bottomRef?.current?.snapToIndex(0)}
+              onPress={() => navigation.navigate('aadharverify')}
               style={{
                 borderWidth: 0.5,
                 borderRadius: 4,

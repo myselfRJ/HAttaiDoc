@@ -5,6 +5,7 @@ let CUSTOMCOLOR = {
   white: 'white',
   error: 'red',
   graph: '#98CDFF',
+  warn: '#ffb732',
 };
 const DARKCOLOR = {
   primary: 'red',
