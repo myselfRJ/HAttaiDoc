@@ -9,11 +9,14 @@ import SelectionTab from '../components/selectiontab';
 import SelectorBtn from '../components/selector';
 import SlotChip from '../components/slotchip';
 import DatePicker from 'react-native-date-picker';
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import {CONSTANTS} from '../utility/constant';
-import SlotModal from '../components/SlotModal';
-
+import {BottomSheetView} from '../components';
+import {ScrollView} from 'react-native-gesture-handler';
+import moment from 'moment';
 const SlotCreate = ({navigation}) => {
+  const slotTypeRef = useRef(null);
+  const slotDurationRef = useRef(null);
   const [fromTime, setFromTime] = useState(new Date());
   const [toTime, setToTime] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -45,40 +48,16 @@ const SlotCreate = ({navigation}) => {
   const handleCancel = () => {
     setOpen(false);
   };
-  const ToformattedTime = toTime.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-  const FromformattedTime = fromTime.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalDurationVisible, setModalDurationVisible] = useState(false);
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  const closeDurationModal = () => {
-    setModalDurationVisible(false);
-  };
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  const openDurationModal = () => {
-    setModalDurationVisible(true);
-  };
-
+  const ToformattedTime = moment(toTime).utcOffset(330).format('HH:mm');
+  const FromformattedTime = moment(fromTime).utcOffset(330).format('HH:mm');
   const handleTypeSelect = value => {
     setConsultValue(value);
-    closeModal();
+    slotTypeRef?.current?.snapToIndex(0);
   };
 
   const handleDurationSelect = value => {
     setDurationValue(value);
-    closeDurationModal();
+    slotDurationRef?.current?.snapToIndex(0);
   };
 
   const handleAddSlot = () => {
@@ -160,7 +139,7 @@ const SlotCreate = ({navigation}) => {
             key={slot.index}
             index={slot.index}
             onPress={handleDelete}
-            time={FromformattedTime + '-' + ToformattedTime}
+            time={slot.fromTime + '-' + slot.toTime}
             type={<Text>Type: {slot.consultType}</Text>}
             duration={<Text>Duration: {slot.duration}</Text>}
           />
@@ -190,35 +169,22 @@ const SlotCreate = ({navigation}) => {
           onCancel={handleCancel}
         />
       </View>
-      <View>
-        <SlotModal
-          visible={modalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={closeModal}
-          data={consultType}
-          onValueSelect={handleTypeSelect}
-        />
-        <SlotModal
-          visible={modalDurationVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={closeDurationModal}
-          data={durationMins}
-          onValueSelect={handleDurationSelect}
-        />
-      </View>
+
       <View style={styles.selector}>
         <SelectorBtn
           label="Type"
           name="alpha-t-box"
-          onPress={openModal}
+          onPress={() => {
+            slotTypeRef?.current?.snapToIndex(1);
+          }}
           input={selectedConsultValue}
         />
         <SelectorBtn
           label="Duration"
           name="timer-sand-full"
-          onPress={openDurationModal}
+          onPress={() => {
+            slotDurationRef?.current?.snapToIndex(1);
+          }}
           input={selectedDurationValue}
         />
       </View>
@@ -229,6 +195,36 @@ const SlotCreate = ({navigation}) => {
         style={{position: 'absolute', left: 0, bottom: 0}}
         onPress={() => navigation.goBack()}
       />
+      <BottomSheetView bottomSheetRef={slotTypeRef} snapPoints={'40%'}>
+        <ScrollView>
+          <View style={styles.bottomSheet}>
+            {consultType.map((consTypes, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleTypeSelect(consTypes)}>
+                <View>
+                  <Text>{consTypes}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </BottomSheetView>
+      <BottomSheetView bottomSheetRef={slotDurationRef} snapPoints={'40%'}>
+        <ScrollView>
+          <View style={styles.bottomSheet}>
+            {durationMins.map((mins, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleDurationSelect(mins)}>
+                <View>
+                  <Text>{mins}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </BottomSheetView>
     </View>
   );
 };
@@ -263,6 +259,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 8,
   },
+  bottomSheet: {flex: 1, alignItems: 'center', gap: 16},
 });
 
 export default SlotCreate;

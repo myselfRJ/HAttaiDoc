@@ -102,27 +102,25 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}>
-          <View style={[styles.option, {width: 100}]}>
-            <View>
-              <TouchableOpacity onPress={openVisit}>
-                <Text style={styles.contact1}>
-                  {Language[language]['start_visit']}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.contact1}>
-                  {Language[language]['reschedule']}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  appointmentCardRef?.current?.snapToIndex(0);
-                }}>
-                <Text style={styles.contact1}>
-                  {Language[language]['cancel']}
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={[styles.option]}>
+            <TouchableOpacity onPress={openVisit}>
+              <Text style={styles.contact1}>
+                {Language[language]['start_visit']}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.contact1}>
+                {Language[language]['reschedule']}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                appointmentCardRef?.current?.snapToIndex(0);
+              }}>
+              <Text style={styles.contact1}>
+                {Language[language]['cancel']}
+              </Text>
+            </TouchableOpacity>
           </View>
         </BottomSheetView>
       </View>
@@ -187,9 +185,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   option: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   seperator: {
     height: 0.5,

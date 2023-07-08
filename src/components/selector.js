@@ -9,7 +9,7 @@ import {
 
 const SelectorBtn = props => {
   return (
-    <View style={{flex: 1}}>
+    <View style={[{flex: 1}, props?.style]}>
       {props.label && <Text style={styles.h3}>{props.label}</Text>}
       <Pressable style={styles.select} onPress={props.onPress}>
         <Text style={styles.h3}>{props.input}</Text>
