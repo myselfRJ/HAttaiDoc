@@ -15,19 +15,12 @@ export default function DateTime() {
   const handleDate = () => {
     dispatch(setOpen(!open));
   };
-
-  const formattedDate = date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    timeZone: 'Asia/Kolkata',
-  });
+  console.log(date, 'date');
+  const formattedDate = date.toString();
 
   const handleConfirm = selectedDate => {
     dispatch(setOpen(false));
-    dispatch(setDate(selectedDate));
+    dispatch(setDate(selectedDate.toString()));
   };
 
   const handleCancel = () => {
@@ -47,9 +40,9 @@ export default function DateTime() {
           <DatePicker
             modal
             open={open}
-            date={date}
+            date={new Date(date)}
             theme="auto"
-            mode="datetime"
+            mode="date"
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />

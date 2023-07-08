@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,8 +12,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import BottomSheetView from './bottomSheet';
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
+  const appointmentCardRef = useRef(null);
 
   return (
     <>
@@ -62,7 +64,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <Pressable
           style={styles.icon}
           onPress={() => {
-            setVisible(!visible);
+            // setVisible(!visible);
+            appointmentCardRef?.current?.snapToIndex(1);
           }}>
           <View>
             <Icon
@@ -71,7 +74,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
               size={24}
             />
           </View>
-          {visible && (
+          {/* {visible && (
             <View style={[styles.option, {width: 100}]}>
               <View>
                 <TouchableOpacity onPress={openVisit}>
@@ -94,8 +97,34 @@ const AppointmentCard = ({appointment, openVisit}) => {
                 </TouchableOpacity>
               </View>
             </View>
-          )}
-         </Pressable>
+          )} */}
+        </Pressable>
+        <BottomSheetView
+          bottomSheetRef={appointmentCardRef}
+          snapPoints={'100%'}>
+          <View style={[styles.option, {width: 100}]}>
+            <View>
+              <TouchableOpacity onPress={openVisit}>
+                <Text style={styles.contact1}>
+                  {Language[language]['start_visit']}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.contact1}>
+                  {Language[language]['reschedule']}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  appointmentCardRef?.current?.snapToIndex(0);
+                }}>
+                <Text style={styles.contact1}>
+                  {Language[language]['cancel']}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </BottomSheetView>
       </View>
     </>
   );
