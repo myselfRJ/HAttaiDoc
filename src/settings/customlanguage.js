@@ -51,7 +51,7 @@ const Language = {
     days: 'Days',
     severity: 'Severity',
     prescribe: 'Prescribe',
-    mode: 'Mde',
+    mode: 'Mode',
     medicine: 'Medicine',
     reccomedations: 'Recommedations',
     number: 'Number',
