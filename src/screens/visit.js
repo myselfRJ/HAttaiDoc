@@ -23,11 +23,11 @@ const Visit = ({navigation}) => {
   const Symptom = useSelector(state => state.symptoms.symptom);
   const Prescribe = useSelector(state => state.prescribe);
   const dataObject = [
+    {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
+    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
-    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
-    {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
     {label: 'Notes', icon: 'chevron-right', navigate: 'notescreen'},
     {
       label: 'Refer to Doctor',

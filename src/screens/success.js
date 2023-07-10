@@ -2,9 +2,9 @@ import {Text, View} from 'react-native';
 import {CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import {HButton, Icon} from '../components';
+
 import {useRef, useEffect} from 'react';
-import {BottomSheetView, StatusMessage} from '../components';
+import {BottomSheetView, StatusMessage, HButton, Icon} from '../components';
 
 const Success = ({navigation}) => {
   const SuccesRef = useRef(null);
@@ -33,10 +33,7 @@ const Success = ({navigation}) => {
         />
       </View>
       <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
-        <StatusMessage
-          status={'warning'}
-          message="Sucessfully Created Abha ID"
-        />
+        <StatusMessage status={'error'} message="Sucessfully Created Abha ID" />
       </BottomSheetView>
     </View>
   );

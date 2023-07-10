@@ -14,4 +14,5 @@ export const CONSTANTS = {
   error: 'error',
   warning: 'warning',
   selections: ['New', 'Follow Up', 'Report Review', 'Routine'],
+  prescription: ['Prescription', 'Blood Report', 'Scan'],
 };
