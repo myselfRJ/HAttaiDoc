@@ -6,11 +6,12 @@ export const CONSTANTS = {
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
   speciality: ['Cardiologists', 'dentists', 'gynecologists', 'psychiatrists'],
   consultTypes: ['Physical', 'Telephonic', 'Online'],
-  duration: ['10 Mins', '15 Mins', '20 Mins', '25 Mins', '30 Mins'],
+  duration: [10, 15, 20, 25, 30],
   abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
   role: ['Practitioner', 'Administator', 'patient'],
   clinic: ['Rasi Clinic', 'Magizh Clinic', 'Kamatchi Clinic'],
   success: 'success',
   error: 'error',
   warning: 'warning',
+  selections: ['New', 'Follow Up', 'Report Review', 'Routine'],
 };
