@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
-import {PatientSearchCard} from '../components';
+import {HButton, PatientSearchCard} from '../components';
 import DatePicker from 'react-native-date-picker';
 import {SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
@@ -17,23 +17,20 @@ import {CONSTANTS} from '../utility/constant';
 export default function MedicalRecordPatient() {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
-  const [chiefComplaints, setChiefComplaints] = useState(
-    'Headache and sever stomach pain',
-  );
-  const [medication, setMedication] = useState('Dolo650,Paracetmol');
-  const [diagnosis, setDiagnosis] = useState('eadache and sever stomach pain');
-  //   const [vitals, setVitals] = useState({
-  //     pulse_rate: '',
-  //     weight: '',
-  //     height: '',
-  //     temp: '',
-  //     rate: '',
-  //     bmi: '',
-  //     diastolic_bp: '',
-  //     systolic_bp: '',
-  //     lmp_edd: '',
-  //     us_edd: '',
-  //   });
+
+  const [vitals, setVitals] = useState({
+    chiefComplaints: 'Headache and sever stomach pain',
+    medication: 'Headache and sever stomach pain',
+    diagnosis: 'Headcha and sever fever',
+    vital: {
+      BP: 'Bp',
+      PR: 'Pr',
+      SPO2: 'SPO2',
+      TEMP: 'TEMP',
+      LMP: 'LMP',
+      EDD: 'EDD',
+    },
+  });
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
@@ -107,7 +104,7 @@ export default function MedicalRecordPatient() {
           }}>
           {Views?.map((val, ind) => (
             <View style={{width: 160}}>
-              <TouchableOpacity onPress={() => handlePress(val)}>
+              <TouchableOpacity key={ind} onPress={() => handlePress(val)}>
                 <Text
                   style={{
                     fontSize: CUSTOMFONTSIZE.h2,
@@ -120,28 +117,64 @@ export default function MedicalRecordPatient() {
             </View>
           ))}
         </View>
+        {selectedView === Views[0] ? (
+          <View
+            style={{
+              paddingHorizontal: 32,
+              top: 16,
+              gap: 16,
+            }}>
+            <View>
+              <Text style={styles.contentHead}>Chief Complaints</Text>
+              <Text>{vitals.chiefComplaints}</Text>
+            </View>
+            <View>
+              <Text style={styles.contentHead}>Diagnosis</Text>
+              <Text>{vitals.diagnosis}</Text>
+            </View>
+            <View>
+              <Text style={styles.contentHead}>Medication</Text>
+              <Text>{vitals.medication}</Text>
+            </View>
+            <View>
+              <Text style={styles.contentHead}>Vitals</Text>
+              <View style={{flexDirection: 'row', gap: 40}}>
+                <Text>BP</Text>
+                <Text>PR</Text>
+                <Text>SPO2</Text>
+                <Text>TEMP</Text>
+                <Text>LMP</Text>
+                <Text>EDD</Text>
+              </View>
+              <View style={{flexDirection: 'row', gap: 40, top: 8}}>
+                <Text>{vitals.vital.BP}</Text>
+                <Text>{vitals.vital.PR}</Text>
+                <Text>{vitals.vital.SPO2}</Text>
+                <Text>{vitals.vital.TEMP}</Text>
+                <Text>{vitals.vital.LMP}</Text>
+                <Text>{vitals.vital.EDD}</Text>
+              </View>
+            </View>
+          </View>
+        ) : null}
         <View
           style={{
-            paddingHorizontal: 32,
-            top: 16,
-            gap: 16,
+            top: 24,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            left: '40%',
           }}>
-          <View>
-            <Text style={styles.contentHead}>Chief Complaints</Text>
-            <Text>{chiefComplaints}</Text>
-          </View>
-          <View>
-            <Text style={styles.contentHead}>Diagnosis</Text>
-            <Text>{diagnosis}</Text>
-          </View>
-          <View>
-            <Text style={styles.contentHead}>Medication</Text>
-            <Text>{medication}</Text>
-          </View>
-          <View>
-            <Text style={styles.contentHead}>Vitals</Text>
-            {/* <Text>{vitals}</Text> */}
-          </View>
+          <HButton label={'Download'} />
+        </View>
+        <View
+          style={{
+            top: 30,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <HButton label={'BookAppointment'} />
         </View>
       </View>
     </View>

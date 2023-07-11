@@ -47,7 +47,7 @@ const Language = {
     appointments: 'Appointments',
     dr: ' Dr. ',
     doctor: ' Doctor. ',
-    symptoms: 'symptoms',
+    symptoms: 'Symptoms',
     days: 'Days',
     severity: 'Severity',
     prescribe: 'Prescribe',

@@ -21,6 +21,11 @@ import {
   setTab,
   setDuration,
 } from '../redux/features/prescription/prescribeslice';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 
 export default function Prescribe() {
   const dispatch = useDispatch();
@@ -46,176 +51,225 @@ export default function Prescribe() {
     dispatch(toggleFrequency(value));
   };
   return (
-    <ScrollView style={{padding: 8}}>
-      <View style={styles.mainHead}>
-        <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
-      </View>
-      <View style={styles.prescribeConatiner}>
-        <View style={styles.ModeContainer}>
-          <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
-          <View style={styles.Modes}>
-            {prescribe.modes.map((value, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => setSelectMode(value)}>
-                <View
-                  style={[
-                    styles.ModesContainer,
-                    {
-                      backgroundColor:
-                        prescribe.selectedMode === value ? '#000000aa' : '#fff',
-                    },
-                  ]}>
-                  <Text style={{color: '#4ba5fa'}}>{value}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+    <ScrollView>
+      <View style={{padding: 24, gap: 24}}>
+        <View style={styles.mainHead}>
+          <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
         </View>
-        <View style={styles.MedicineContainer}>
-          <View style={styles.MedicineHead}>
-            <Text style={styles.Medicinetext}>
-              {Language[language]['medicine']}
-            </Text>
-            <TextInput
-              style={styles.MedicineInput}
-              placeholder="enter Medicine"
-              multiline={true}
-              value={prescribe.medicine}
-              onChangeText={val => dispatch(setMedicine(val))}
-            />
-            {/* <Icon name="magnify" size={24} style={styles.search} /> */}
-            <Text style={styles.RecommdationText}>
-              {Language[language]['reccomedations']}
-            </Text>
+        <View style={styles.prescribeConatiner}>
+          <View style={styles.ModeContainer}>
+            <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
             <View style={styles.Modes}>
-              {prescribe.recommdations.map((value, index) => (
+              {prescribe.modes.map((value, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => {
-                    Medicine(value);
-                    handleRecommdationPress(value);
-                  }}>
+                  onPress={() => setSelectMode(value)}>
                   <View
                     style={[
                       styles.ModesContainer,
                       {
                         backgroundColor:
-                          prescribe.selectedMedicine === value
-                            ? '#000000aa'
-                            : '#fff',
+                          prescribe.selectedMode === value
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.white,
                       },
                     ]}>
-                    <Text style={{color: '#4ba5fa'}}>{value}</Text>
+                    <Text
+                      style={{
+                        color:
+                          prescribe.selectedMode === value
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.primary,
+                      }}>
+                      {value}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               ))}
             </View>
           </View>
-        </View>
-        <View style={styles.DoseContainer}>
-          <Text
-            style={{
-              padding: 8,
-              color: 'black',
-              fontSize: 14,
-              fontWeight: 400,
-              lineHeight: 19,
-            }}>
-            {Language[language]['dose']}
-          </Text>
-          <View style={styles.TabInput}>
-            <Text style={styles.TextDose}>{Language[language]['number']}:</Text>
+          <View style={styles.MedicineContainer}>
+            <View style={styles.MedicineHead}>
+              <Text style={styles.ModeText}>
+                {Language[language]['medicine']}
+              </Text>
+              <TextInput
+                style={styles.MedicineInput}
+                placeholder="enter Medicine"
+                multiline={true}
+                value={prescribe.medicine}
+                onChangeText={val => dispatch(setMedicine(val))}
+              />
+              {/* <Icon name="magnify" size={24} style={styles.search} /> */}
+              <Text style={styles.RecommdationText}>
+                {Language[language]['reccomedations']}
+              </Text>
+              <View style={styles.Modes}>
+                {prescribe.recommdations.map((value, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      Medicine(value);
+                      handleRecommdationPress(value);
+                    }}>
+                    <View
+                      style={[
+                        styles.ModesContainer,
+                        {
+                          backgroundColor:
+                            prescribe.selectedMedicine === value
+                              ? CUSTOMCOLOR.primary
+                              : CUSTOMCOLOR.white,
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          color:
+                            prescribe.selectedMedicine === value
+                              ? CUSTOMCOLOR.white
+                              : CUSTOMCOLOR.primary,
+                        }}>
+                        {value}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </View>
+          <View style={styles.ModeContainer}>
+            <Text style={styles.ModeText}>{Language[language]['dose']}</Text>
+            <View style={styles.TabInput}>
+              <Text style={styles.TextDose}>
+                {Language[language]['number']}:
+              </Text>
+              <TextInput
+                style={styles.tab}
+                value={prescribe.tab}
+                onChangeText={val => dispatch(setTab(val))}
+              />
+            </View>
+            <View style={styles.Modes}>
+              {prescribe.mg.map((value, index) => (
+                <TouchableOpacity key={index} onPress={() => setMG(value)}>
+                  <View
+                    style={[
+                      styles.ModesContainer,
+                      {
+                        backgroundColor:
+                          prescribe.selectedMg === value
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.white,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color:
+                          prescribe.selectedMg === value
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.primary,
+                      }}>
+                      {value}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={{padding: 16, top: 8}}>
+            <Text style={styles.ModeText}>{Language[language]['timing']}</Text>
+            <View style={styles.Modes}>
+              {prescribe.timing.map((value, index) => (
+                <TouchableOpacity key={index} onPress={() => setTime(value)}>
+                  <View
+                    style={[
+                      styles.ModesContainer,
+                      {
+                        backgroundColor:
+                          prescribe.selectedTime === value
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.white,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color:
+                          prescribe.selectedTime === value
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.primary,
+                      }}>
+                      {value}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={{padding: 16, top: 8}}>
+            <Text style={styles.ModeText}>
+              {Language[language]['frequency']}
+            </Text>
+            <View style={styles.Modes}>
+              {prescribe.frequency.map((value, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => FrequencySelection(value)}>
+                  <View
+                    style={[
+                      styles.ModesContainer,
+                      {
+                        backgroundColor: prescribe.selectedFrequency.includes(
+                          value,
+                        )
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color: prescribe.selectedFrequency.includes(value)
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
+                      }}>
+                      {value}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={styles.ModeContainer}>
+            <Text style={styles.ModeText}>
+              {Language[language]['duration']}
+            </Text>
             <TextInput
-              style={styles.tab}
-              value={prescribe.tab}
-              onChangeText={val => dispatch(setTab(val))}
+              style={styles.durationInput}
+              value={prescribe.duration}
+              placeholder="Enter Duration"
+              onChangeText={val => dispatch(setDuration(val))}
             />
           </View>
-          <View style={styles.Modes}>
-            {prescribe.mg.map((value, index) => (
-              <TouchableOpacity key={index} onPress={() => setMG(value)}>
-                <View
-                  style={[
-                    styles.ModesContainer,
-                    {
-                      backgroundColor:
-                        prescribe.selectedMg === value ? '#000000aa' : '#fff',
-                    },
-                  ]}>
-                  <Text style={{color: '#4ba5fa'}}>{value}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.ModeContainer}>
+            <Text style={styles.ModeText}>
+              {Language[language]['quantity']}
+            </Text>
+            <View
+              style={{
+                height: 40,
+                width: '15%',
+                borderWidth: 1,
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.numText}>{prescribe.quantity}</Text>
+            </View>
           </View>
+          <View style={styles.line}></View>
+          <TouchableOpacity>
+            <Icon name="plus" size={32} style={styles.PlusButton} />
+          </TouchableOpacity>
         </View>
-        <View style={{width: 635, gap: 8}}>
-          <Text style={styles.textTime}>{Language[language]['timing']}</Text>
-          <View style={styles.Modes}>
-            {prescribe.timing.map((value, index) => (
-              <TouchableOpacity key={index} onPress={() => setTime(value)}>
-                <View
-                  style={[
-                    styles.ModesContainer,
-                    {
-                      backgroundColor:
-                        prescribe.selectedTime === value ? '#000000aa' : '#fff',
-                    },
-                  ]}>
-                  <Text style={{color: '#4ba5fa'}}>{value}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-        <View style={styles.frequency}>
-          <Text style={styles.frequencyText}>
-            {Language[language]['frequency']}
-          </Text>
-          <View style={styles.Modes}>
-            {prescribe.frequency.map((value, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => FrequencySelection(value)}>
-                <View
-                  style={[
-                    styles.ModesContainer,
-                    {
-                      backgroundColor: prescribe.selectedFrequency.includes(
-                        value,
-                      )
-                        ? '#000000aa'
-                        : '#fff',
-                    },
-                  ]}>
-                  <Text style={{color: '#4ba5fa'}}>{value}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-        <View style={styles.DurationContainer}>
-          <Text style={styles.DurationText}>
-            {Language[language]['duration']}
-          </Text>
-          <TextInput
-            style={styles.durationInput}
-            value={prescribe.duration}
-            onChangeText={val => dispatch(setDuration(val))}
-          />
-        </View>
-        <View style={styles.QuantityContainer}>
-          <Text style={styles.quantityText}>
-            {Language[language]['quantity']}
-          </Text>
-          <View style={{height: 40, width: 100}}>
-            <Text style={styles.numText}>{prescribe.quantity}</Text>
-          </View>
-        </View>
-        <View style={styles.line}></View>
-        <TouchableOpacity>
-          <Icon name="plus" size={32} style={styles.PlusButton} />
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -228,41 +282,47 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   mainText: {
-    fontFamily: 'Open Sans',
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 19,
-    color: 'black',
+    color: CUSTOMCOLOR.black,
   },
   prescribeConatiner: {
-    width: 651,
+    width: '100%',
     gap: 4,
   },
   ModeContainer: {
     width: 635,
     gap: 8,
-    paddingLeft: 12,
+    paddingLeft: 16,
+    top: 8,
   },
   ModeText: {
     fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 19,
-    color: 'black',
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
+    lineHeight: 19.07,
+    color: CUSTOMCOLOR.black,
   },
   ModesContainer: {
     gap: 8,
     padding: 12,
-    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 8,
   },
   Modes: {
     flexDirection: 'row',
     gap: 16,
     paddingLeft: 8,
     paddingRight: 8,
+    top: 8,
   },
   MedicineContainer: {
     width: 635,
     gap: 12,
+    top: 8,
   },
   MedicineHead: {
     paddingTop: 4,
@@ -271,17 +331,13 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     gap: 10,
   },
-  Medicinetext: {
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 19,
-    color: 'black',
-  },
   MedicineInput: {
-    width: 635,
+    width: '100%',
     paddingTop: 8,
     paddingBottom: 8,
-    backgroundColor: '#fff',
+    backgroundColor: CUSTOMCOLOR.white,
+    borderWidth: 1,
+    borderRadius: 8,
   },
   RecommdationText: {
     paddingLeft: 4,
@@ -289,9 +345,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     fontWeight: 600,
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     lineHeight: 16,
-    color: 'black',
+    color: CUSTOMCOLOR.black,
   },
   Dose: {
     padding: 8,
@@ -302,9 +358,9 @@ const styles = StyleSheet.create({
   },
   TextDose: {
     fontWeight: 400,
-    fontSize: 10,
+    fontSize: CUSTOMFONTSIZE.h4,
     lineHeight: 13.62,
-    color: 'black',
+    color: CUSTOMCOLOR.black,
     paddingTop: 12,
   },
   TabInput: {
@@ -319,17 +375,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    backgroundColor: '#fff',
-  },
-  textTime: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 19,
-    color: 'black',
+    backgroundColor: CUSTOMCOLOR.white,
   },
   frequency: {
     width: 635,
@@ -339,50 +385,28 @@ const styles = StyleSheet.create({
     width: 635,
     gap: 8,
   },
-  DurationText: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 4,
-    paddingRight: 4,
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 19.07,
-    color: 'black',
-  },
   durationInput: {
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 24,
     paddingRight: 24,
-    backgroundColor: '#FFF',
-    width: 120,
+    backgroundColor: CUSTOMCOLOR.white,
+    width: '25%',
+    borderWidth: 1,
+    borderRadius: 8,
   },
   QuantityContainer: {
-    width: 635,
+    width: '100%',
     gap: 8,
   },
-  quantityText: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
-    fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 19,
-    color: 'black',
-    gap: 10,
-  },
   numText: {
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 8,
-    paddingBottom: 8,
+    padding: 8,
     fontWeight: 400,
-    fontSize: 10,
-    lineHeight: 13,
-    color: '#4ba5fa',
+    fontSize: CUSTOMFONTSIZE.h4,
+    lineHeight: 19.07,
+    color: CUSTOMCOLOR.primary,
     gap: 10,
-    backgroundColor: '#fff',
+    backgroundColor: CUSTOMCOLOR.white,
   },
   line: {
     margin: 8,
@@ -391,26 +415,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
   PlusButton: {
-    backgroundColor: '#4ba5fa',
+    backgroundColor: CUSTOMCOLOR.primary,
     padding: 16,
     borderRadius: 32,
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  frequencyText: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
-    gap: 10,
-    fontSize: 14,
-    lineHeight: 19.07,
-    color: 'black',
-    fontWeight: '400',
-  },
   search: {
     position: 'absolute',
-    color: '#4ba5fa',
+    color: CUSTOMCOLOR.primary,
     padding: 40,
     paddingLeft: 560,
   },
