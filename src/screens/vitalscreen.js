@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addVitals } from '../redux/features/prescription/prescriptionSlice';
 import { useNavigation } from '@react-navigation/native';
+import { HButton } from '../components';
 const VitalScreen = props => {
   const nav=useNavigation()
   const dispatch = useDispatch();
@@ -156,7 +157,7 @@ nav.goBack()
                   </View>
                 </View>
               </View>
-              <Text style={styles.basic}>Pregnancy</Text>
+              <Text style={styles.pregText}>Pregnancy</Text>
               <View style={styles.pregnancyFields}>
                 <View style={styles.lmpcontainer}>
                   <Text style={styles.lmp}>{Language[language]['lmp_edd']}:</Text>
@@ -176,11 +177,7 @@ nav.goBack()
                 </View>
               </View>
             </View>
-            <TouchableOpacity style={styles.submitbtn} onPress={handlePress}>
-       <Text style={{ color: CUSTOMCOLOR.primary }}>
-                        {Language[language]['submit']}
-                    </Text>
-       </TouchableOpacity>
+            <View style={{top:100,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={handlePress}/></View>
          
 
 
@@ -230,7 +227,8 @@ const styles = StyleSheet.create({
   },
   basiccontainer: {
     width: 443,
-    height: 87
+    height: 87,
+    gap:4
 
   },
   basic: {
@@ -253,7 +251,7 @@ const styles = StyleSheet.create({
 
   },
   pulsecontainer: {
-    width: 70,
+    width: 80,
     height: 60,
     padding: 4,
     gap: 4
@@ -265,10 +263,12 @@ const styles = StyleSheet.create({
   pulsetext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:1,
+    borderRadius:5
   },
   weightcontainer: {
-    width: 62,
+    width: 80,
     height: 62,
     padding: 8,
     gap: 4
@@ -279,7 +279,10 @@ const styles = StyleSheet.create({
     //flexDirection: "row"
   },
   hardText: {
-    flexDirection: "row"
+    flexDirection: "row",
+    borderWidth:1,
+    borderRadius:5,
+    width:80
   },
   text: {
     fontSize: 12,
@@ -290,7 +293,9 @@ const styles = StyleSheet.create({
   weighttext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
+    
 
   },
   // changetext: {
@@ -316,7 +321,8 @@ const styles = StyleSheet.create({
   heighttext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
   },
   tempcontainer: {
     width: 59,
@@ -331,10 +337,13 @@ const styles = StyleSheet.create({
   temptext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
+    
+
   },
   ratecontainer: {
-    width: 88,
+    width: 90,
     height: 60,
     padding: 8,
     gap: 4
@@ -347,10 +356,12 @@ const styles = StyleSheet.create({
   ratetext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:1,
+    borderRadius:5
   },
   bmicontainer: {
-    width: 54,
+    width: 70,
     height: 60,
     padding: 8,
     gap: 4
@@ -358,22 +369,25 @@ const styles = StyleSheet.create({
   bmi: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
-    backgroundColor: CUSTOMCOLOR.white
   },
   bmitext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:1,
+    borderRadius:5
   },
   bloodPressureContainer: {
     width: 185,
     height: 87,
     flexDirection: 'row',
+    gap:4
   },
   bloodPres: {
     padding: 8,
     gap: 10,
-    color: CUSTOMCOLOR.black
+    color: CUSTOMCOLOR.black,
+    top:16
   },
   diascontainer: {
     width: 94,
@@ -390,7 +404,8 @@ const styles = StyleSheet.create({
   diatext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
   },
   syscontainer: {
     width: 87,
@@ -406,13 +421,20 @@ const styles = StyleSheet.create({
   systext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
+  },
+  pregText: {
+    padding: 8,
+    gap: 10,
+    color: CUSTOMCOLOR.black,
+    top:16
   },
   pregnancyFields: {
     width: 152,
     height: 87,
     flexDirection: 'row',
-    gap: 16
+    gap: 32
   },
   lmpcontainer: {
     width: 72,
@@ -427,7 +449,8 @@ const styles = StyleSheet.create({
   lmptext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
   },
   uscontainer: {
     width: 72,
@@ -442,7 +465,8 @@ const styles = StyleSheet.create({
   ustext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius:5
   },
   submitbtn: {
     alignItems: 'center',

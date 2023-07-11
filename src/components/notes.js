@@ -4,6 +4,7 @@ import { CUSTOMCOLOR, CUSTOMFONTSIZE, CUSTOMFONTFAMILY } from '../settings/style
 import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import { useState, useEffect } from 'react';
+import HButton from '../components/button';
 
 const Notes = ({note,onChangeText,onPress}) => {
     return(
@@ -16,11 +17,12 @@ const Notes = ({note,onChangeText,onPress}) => {
         value={note}
         onChangeText={onChangeText}
        /></View>
-       <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
-       <Text style={{ color: CUSTOMCOLOR.primary }}>
-                        {Language[language]['submit']}
-                    </Text>
-       </TouchableOpacity>
+       <View style={{alignItems:'center',padding:16}}>
+      <HButton
+              label={Language[language]['save']}
+              onPress={onPress}
+            />
+          </View>
         </>
     )
 }

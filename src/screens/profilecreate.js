@@ -115,6 +115,7 @@ const ProfileCreate = ({ navigation }) => {
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
+  console.log(selectedDate);
   return (
     <Keyboardhidecontainer>
       <View style={commonstyles.content}>

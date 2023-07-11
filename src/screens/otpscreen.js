@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import { checkNumber, checkPassword } from '../utility/checks';
+import { checkNumber, checkOtp, checkPassword } from '../utility/checks';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -12,13 +12,28 @@ import { HButton } from '../components';
 import {InputText} from '../components';
 import { URL } from '../utility/urls';
 import { useNavigation } from '@react-navigation/native';
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from 'react-native-confirmation-code-field';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
 
 
 const OtpScreen=({route})=>{
+  const CELL_COUNT = 6;
+  const [value, setValue] = useState('');
+  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
     const [otp,setOtp]=useState('');
-    const changeText=(e)=>{
-        setOtp(e);
-    }
+    const handleOptions = value => {
+      setSelected(value);
+    };
     const {phone,token} = route.params;
     const nav=useNavigation()
     const fetchData = async () => {
@@ -44,24 +59,50 @@ const OtpScreen=({route})=>{
         }
       };
     return(
+      <SafeAreaView>
      <View style={styles.container}>
         <View style={styles.Top}></View>
         <View style={styles.bottom}>
          <Text style={styles.text}>OTP Verification</Text>
          <View style={{alignItems:'center'}}>
-          <InputText
+          {/* <InputText
               doubleCheck={[true, false]}
-              check={checkNumber}
+              check={checkOtp}
               placeholder=' _ _ _ _ _ _'
               keypad="numeric"
               maxLength={6}
               value={otp}
               setValue={changeText}
-            /></View>
-        <View style={{margin:70,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={fetchData}/></View>
+            /> */}
+            <View style={{paddingHorizontal: 8, gap: 24, top: 16}}>
+            <CodeField
+                  ref={ref}
+                  {...props}
+                  value={value}
+                  onChangeText={setValue}
+                  cellCount={CELL_COUNT}
+                  rootStyle={styles.codeFiledRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  renderCell={({index, symbol, isFocused}) => (
+                    <View
+                      onLayout={getCellOnLayoutHandler(index)}
+                      key={index}
+                      style={[styles.cellRoot, isFocused && styles.focusCell]}>
+                      <Text style={styles.cellText}>
+                        {symbol || (isFocused ? <Cursor /> : null)}
+                      </Text>
+                    </View>
+                  )}
+                />
+                </View>
+           
+            </View>
+        <View style={{top:50,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={fetchData}/></View>
         </View>
 
      </View>
+     </SafeAreaView>
     );
 }
 const styles=StyleSheet.create({
@@ -82,12 +123,28 @@ const styles=StyleSheet.create({
     text:{
        width:593,
        height:120,
-       top:100,
+       top:50,
        left:10,
        fontFamily:CUSTOMFONTFAMILY.heading,
        fontSize:32,
        fontWeight:400,
         
+    },
+    cellRoot: {
+      width: 70,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderColor: '#000',
+      borderBottomWidth: 1,
+    },
+    cellText: {
+      color: '#000',
+      fontSize: 24,
+      textAlign: 'center',
+    },
+    focusCell: {
+      borderBottomColor: '#007AFF',
+      borderBottomWidth: 1,
     },
    
 })

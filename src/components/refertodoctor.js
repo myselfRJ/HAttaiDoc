@@ -6,6 +6,7 @@ import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import { addDoctorRefer } from '../redux/features/prescription/prescriptionSlice';
 import { useNavigation } from '@react-navigation/native';
+import { HButton } from '../components';
 
 const ReferDoctorForm = (props) => {
   const nav=useNavigation();
@@ -89,9 +90,7 @@ const ReferDoctorForm = (props) => {
           )}
         </View>
       </View>
-      <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
-        <Text style={{ color: CUSTOMCOLOR.primary }}>{Language[language]['submit']}</Text>
-      </TouchableOpacity>
+      <View style={{top:150,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={onPress}/></View>
     </View>
   );
 };
