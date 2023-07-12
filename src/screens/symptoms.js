@@ -218,6 +218,7 @@ const Symptoms = () => {
   const dispatch = useDispatch();
   const [symptomInput, setSymptomInput] = useState(symptomsData);
   console.log(symptomInput, '=====', symptomsData);
+
   useEffect(() => {
     console.log(symptomInput.length);
   }, [symptomInput.length, symptomsData.length]);

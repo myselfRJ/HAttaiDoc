@@ -21,7 +21,7 @@ const Visit = ({navigation}) => {
     state => state.prescription.selectedDoctor,
   );
   const Symptom = useSelector(state => state.symptoms.symptom);
-  const Prescribe = useSelector(state => state.prescribe);
+  const Prescribe = useSelector(state => state.prescribe.prescribeItems[0]);
   const dataObject = [
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
@@ -35,7 +35,6 @@ const Visit = ({navigation}) => {
       navigate: 'referdoctorscreen',
     },
   ];
-
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -92,12 +91,16 @@ const Visit = ({navigation}) => {
                         color={CUSTOMCOLOR.primary}
                       />
                       <View>
-                        <Text>
-                          {Prescribe.selectedMode}|{Prescribe.medicine}|
-                          {Prescribe.selectedMg}|{Prescribe.selectedTime}|
-                          {Prescribe.selectedFrequency}|{Prescribe.tab}|
-                          {Prescribe.quantity}|{Prescribe.duration}
-                        </Text>
+                        {Prescribe?.map((item, ind) => (
+                          <View>
+                            <Text>
+                              {item.selectedMode}|{item.medicine}|
+                              {item.selectedMg}|{item.selectedTime}|
+                              {item.selectedFrequency}|{item.tab}|
+                              {item.quantity}|{item.duration}
+                            </Text>
+                          </View>
+                        ))}
                       </View>
                     </View>
                   </View>
