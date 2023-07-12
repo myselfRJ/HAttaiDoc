@@ -11,4 +11,8 @@ export const URL = {
     'https://stoplight.io/mocks/destratum/hattai/53373690/appointment',
   SlotsAvailable:
     'https://stoplight.io/mocks/destratum/hattai/197145559/clinic/%7Bclinic-id%7D/slot',
+  addclinic:
+    'https://stoplight.io/mocks/destratum/hattai/197145559/clinic',
+  adduser:
+  'https://stoplight.io/mocks/destratum/hattai/1755950/user'
 };

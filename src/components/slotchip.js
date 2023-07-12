@@ -4,7 +4,7 @@ import {CUSTOMCOLOR} from '../settings/styles';
 
 const SlotChip = props => {
   return (
-    <View style={styles.main}>
+    <View style={[styles.main,props.style]}>
       <Text>{props.time}</Text>
       <Text>{props.type}</Text>
       <Text>{props.duration}</Text>
