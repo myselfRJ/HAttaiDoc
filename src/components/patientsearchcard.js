@@ -13,10 +13,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-const PatientSearchCard = props => {
+
+import {useNavigation} from '@react-navigation/native';
+
+const PatientSearchCard = () => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
-
+  const navigation = useNavigation();
   return (
     <>
       <View style={styles.main}>
@@ -54,6 +57,12 @@ const PatientSearchCard = props => {
             </TouchableOpacity>
             <TouchableOpacity>
               <Text style={styles.content}>{Language[language]['delete']}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('patientrecord')}>
+              <Text style={styles.content}>
+                {Language[language]['view_more']}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
