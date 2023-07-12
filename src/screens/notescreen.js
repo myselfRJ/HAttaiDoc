@@ -29,10 +29,10 @@ const NoteScreen = () => {
 };
 const styles = StyleSheet.create({
     main: {
-        width: 651,
-        height: 35,
         justifyContent: "space-around",
-        padding: 8
+        padding: 8,
+        gap:8,
+        justifyContent:'space-around'
     },
     h2: {
         fontSize: 20,
@@ -40,16 +40,14 @@ const styles = StyleSheet.create({
         fontFamily: CUSTOMFONTFAMILY.opensans,
         lineHeight: 20 * 2,
         color: CUSTOMCOLOR.black,
-        padding: 10
+        padding: 16
     },
     notesText: {
-        width: 40,
-        height: 19,
         fontFamily: CUSTOMFONTFAMILY.heading,
-        //fontWeight:600,
+        fontWeight:600,
         fontSize: 14,
         lineHeight: 19.07,
-        color: CUSTOMCOLOR.black
+        color: CUSTOMCOLOR.black,
 
     },
 });

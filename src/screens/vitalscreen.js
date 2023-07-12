@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addVitals } from '../redux/features/prescription/prescriptionSlice';
 import { useNavigation } from '@react-navigation/native';
+import { HButton } from '../components';
 const VitalScreen = props => {
   const nav=useNavigation()
   const dispatch = useDispatch();
@@ -113,7 +114,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.height} onChangeText={text => heightChange(text, props.index)}
                         style={styles.heighttext} keyboardType='numeric' />
-                      <Text style={styles.text}>cm</Text>
+                      <Text style={styles.heighttext}>cm</Text>
                     </View>
                   </View>
                   <View style={styles.tempcontainer}>
@@ -121,7 +122,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.temp} onChangeText={text => tempChange(text, props.index)}
                         style={styles.temptext} keyboardType='numeric' />
-                      <Text style={styles.text}>°C</Text>
+                      <Text style={styles.temptext}>°C</Text>
                     </View>
                   </View>
                   <View style={styles.ratecontainer}>
@@ -143,7 +144,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.diastolic_bp} onChangeText={text => diastolicChange(text, props.index)}
                       style={styles.diatext} keyboardType='numeric' />
-                    <Text style={styles.text}>mmHg</Text>
+                    <Text style={styles.diatext}>mmHg</Text>
                   </View>
                 </View>
 
@@ -152,18 +153,18 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.systolic_bp} onChangeText={text => systolicChange(text, props.index)}
                       style={styles.systext} keyboardType='numeric' />
-                    <Text style={styles.text}>mmHg</Text>
+                    <Text style={styles.systext}>mmHg</Text>
                   </View>
                 </View>
               </View>
-              <Text style={styles.basic}>Pregnancy</Text>
+              <Text style={styles.pregText}>Pregnancy</Text>
               <View style={styles.pregnancyFields}>
                 <View style={styles.lmpcontainer}>
                   <Text style={styles.lmp}>{Language[language]['lmp_edd']}:</Text>
                   <View style={styles.hardText}>
                     <TextInput value={vitals.lmp_edd} onChangeText={text => lmpChange(text,props.index)}
                       style={styles.lmptext} keyboardType='numeric' />
-                    <Text style={styles.text}>week</Text>
+                    <Text style={styles.lmptext}>week</Text>
                   </View>
                 </View>
                 <View style={styles.uscontainer}>
@@ -171,16 +172,12 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.us_edd} onChangeText={text => usChange(text, props.index)}
                       style={styles.ustext} keyboardType='numeric' />
-                    <Text style={styles.text}>week</Text>
+                    <Text style={styles.ustext}>week</Text>
                   </View>
                 </View>
               </View>
             </View>
-            <TouchableOpacity style={styles.submitbtn} onPress={handlePress}>
-       <Text style={{ color: CUSTOMCOLOR.primary }}>
-                        {Language[language]['submit']}
-                    </Text>
-       </TouchableOpacity>
+            <View style={{top:100,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={handlePress}/></View>
          
 
 
@@ -230,12 +227,13 @@ const styles = StyleSheet.create({
   },
   basiccontainer: {
     width: 443,
-    height: 87
+    height: 87,
+    gap:4
 
   },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    padding: 4,
+    padding: 8,
     color: CUSTOMCOLOR.black,
     gap: 10,
   },
@@ -253,7 +251,7 @@ const styles = StyleSheet.create({
 
   },
   pulsecontainer: {
-    width: 70,
+    width: 80,
     height: 60,
     padding: 4,
     gap: 4
@@ -265,10 +263,10 @@ const styles = StyleSheet.create({
   pulsetext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   weightcontainer: {
-    width: 62,
+    width: 80,
     height: 62,
     padding: 8,
     gap: 4
@@ -279,7 +277,9 @@ const styles = StyleSheet.create({
     //flexDirection: "row"
   },
   hardText: {
-    flexDirection: "row"
+    flexDirection: "row",
+    width:80,
+    alignItems:'center'
   },
   text: {
     fontSize: 12,
@@ -290,8 +290,7 @@ const styles = StyleSheet.create({
   weighttext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
-
+    backgroundColor: CUSTOMCOLOR.white,
   },
   // changetext: {
   //   borderWidth: 1,
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
   heighttext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   tempcontainer: {
     width: 59,
@@ -331,10 +330,12 @@ const styles = StyleSheet.create({
   temptext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+    
+
   },
   ratecontainer: {
-    width: 88,
+    width: 90,
     height: 60,
     padding: 8,
     gap: 4
@@ -347,10 +348,10 @@ const styles = StyleSheet.create({
   ratetext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-    width: 54,
+    width: 70,
     height: 60,
     padding: 8,
     gap: 4
@@ -358,22 +359,25 @@ const styles = StyleSheet.create({
   bmi: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
-    backgroundColor: CUSTOMCOLOR.white
   },
   bmitext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+
   },
   bloodPressureContainer: {
     width: 185,
     height: 87,
     flexDirection: 'row',
+    gap:4,
+    top:32
   },
   bloodPres: {
     padding: 8,
     gap: 10,
-    color: CUSTOMCOLOR.black
+    color: CUSTOMCOLOR.black,
+    top:32
   },
   diascontainer: {
     width: 94,
@@ -390,7 +394,7 @@ const styles = StyleSheet.create({
   diatext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   syscontainer: {
     width: 87,
@@ -406,13 +410,19 @@ const styles = StyleSheet.create({
   systext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
+  },
+  pregText: {
+    padding: 8,
+    gap: 10,
+    color: CUSTOMCOLOR.black,
+    top:8
   },
   pregnancyFields: {
     width: 152,
     height: 87,
     flexDirection: 'row',
-    gap: 16
+    gap: 32
   },
   lmpcontainer: {
     width: 72,
@@ -427,7 +437,7 @@ const styles = StyleSheet.create({
   lmptext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   uscontainer: {
     width: 72,
@@ -442,7 +452,7 @@ const styles = StyleSheet.create({
   ustext: {
     padding: 8,
     gap: 4,
-    backgroundColor: CUSTOMCOLOR.white
+    backgroundColor: CUSTOMCOLOR.white,
   },
   submitbtn: {
     alignItems: 'center',

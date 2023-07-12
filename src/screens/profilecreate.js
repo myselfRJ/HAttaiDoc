@@ -21,6 +21,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { URL } from '../utility/urls';
 import { HttpStatusCode } from 'axios';
 import BottomSheetView from '../components/bottomSheet';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const ProfileCreate = ({ navigation }) => {
   const appointmentCardRef = useRef(null);
@@ -35,7 +36,7 @@ const ProfileCreate = ({ navigation }) => {
         },
         body: JSON.stringify({
           values,
-          date_of_birth: selectedDate.toISOString(),
+          date_of_birth: DOB.toISOString(),
           specialization: selectedSpeciality,
           img_url: selectedImage,
         }),
@@ -60,11 +61,22 @@ const ProfileCreate = ({ navigation }) => {
     experience: '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [selectedSpeciality, setSelectedSpeciality] = useState('');
+  const [DOB, setDOB] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const formattedDate = DOB.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const handleConfirm = date => {
+    setDOB(date);
+    setOpen(false);
+  };
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const handleCancel = () => {
+    setOpen(false);
+  };
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
@@ -89,9 +101,6 @@ const ProfileCreate = ({ navigation }) => {
       [field]: value,
     }));
   };
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
 
   const handleSpecialitySelection = speciality => {
     setSelectedSpeciality(speciality);
@@ -103,19 +112,15 @@ const ProfileCreate = ({ navigation }) => {
   const handleOptions = value => {
     handleChangeValue('gender', value);
   };
-  const handleDateChange = date => {
-    setSelectedDate(date);
-    const formattedDate = date.toDateString();
-    setValues(prevValues => ({
-      ...prevValues,
-      dob: formattedDate,
-    }));
-  };
+
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
+
   return (
+    <View style={{flex:1}}>
+      <ScrollView>
     <Keyboardhidecontainer>
       <View style={commonstyles.content}>
         <View style={styles.alignchild}>
@@ -163,19 +168,20 @@ const ProfileCreate = ({ navigation }) => {
           <SelectorBtn
             label={Language[language]['dob']}
             name="calendar"
-            onPress={toggleDatePicker}
-            input={values.dob}
+            onPress={() => setOpen('to')}
+              input={formattedDate}
+              style={styles.DOBselect}
           />
         </View>
-        {showDatePicker && (
-          <DatePicker
-            date={selectedDate}
-            mode="date"
-            onDateChange={handleDateChange}
-            minimumDate={new Date(1900, 0, 1)}
-            maximumDate={new Date()} 
-          />
-        )}
+        <DatePicker
+              modal
+              open={open !== false}
+              date={DOB}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
         <InputText
           label={Language[language]['medical_number']}
           placeholder="Medical number"
@@ -218,7 +224,10 @@ const ProfileCreate = ({ navigation }) => {
           <HButton label="Upload Document" />
         </View>
         <HButton label={Language[language]['save']} onPress={fetchData} />
-        <BottomSheetView
+      </View>
+    </Keyboardhidecontainer>
+    </ScrollView>
+    <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}>
           <View style={styles.modalContainer}>
@@ -241,10 +250,7 @@ const ProfileCreate = ({ navigation }) => {
           ))}
         </View>
         </BottomSheetView>
-      </View>
-   
-
-    </Keyboardhidecontainer>
+    </View>
   );
 };
 
@@ -279,6 +285,10 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     padding: 4,
+  },
+  DOBselect: {
+    width: '100%',
+    paddingHorizontal: 8,
   },
 });
 

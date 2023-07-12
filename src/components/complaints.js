@@ -6,6 +6,7 @@ import { CUSTOMCOLOR, CUSTOMFONTFAMILY } from '../settings/styles';
 import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import { useNavigation } from '@react-navigation/native';
+import HButton from '../components/button';
 
 const ComplaintsCard = (props) => {
   const selectedComplaint = useSelector(state => state.prescription.selectedComplaint);
@@ -35,22 +36,23 @@ const ComplaintsCard = (props) => {
         <View style={styles.sugg}>
           {props.cheifcomplaints.map((value, index) => (
             <TouchableOpacity
-              style={[styles.sugbtn, { borderColor: selectedComplaint === value ? 'green' : CUSTOMCOLOR.primary }]}
+              style={[styles.sugbtn, { backgroundColor: selectedComplaint === value ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white }]}
               key={index}
               onPress={() => handlePress(value)}
             >
               <View>
-                <Text style={styles.sugText}>{value}</Text>
+                <Text style={[styles.sugText,{color: selectedComplaint === value ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary}]}>{value}</Text>
               </View>
             </TouchableOpacity>
           ))}
         </View>
       </View>
-      <TouchableOpacity style={styles.submitbtn} onPress={onPress}>
-       <Text style={{ color: CUSTOMCOLOR.primary }}>
-                        {Language[language]['submit']}
-                    </Text>
-       </TouchableOpacity>
+      <View style={{alignItems:'center',padding:16}}>
+      <HButton
+              label={Language[language]['save']}
+              onPress={onPress}
+            />
+          </View>
     </View>
   );
 };
@@ -69,17 +71,21 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   h3: {
-    fontSize: 20,
+    fontSize: 14,
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
-    padding: 5,
+    padding: 8,
   },
   input: {
     width: '100%',
-    margin: 10,
-    padding: 5,
+    height:60,
+    borderRadius:4,
+    gap:10,
+    padding: 10,
+    fontSize:12,
+    backgroundColor:CUSTOMCOLOR.white
   },
   sugg: {
     flexDirection: 'row',
@@ -87,22 +93,17 @@ const styles = StyleSheet.create({
   },
   sugText: {
     color: CUSTOMCOLOR.primary,
+    fontSize:12,
+    fontWeight:400,
+    alignItems:'center'
   },
   sugbtn: {
-    borderWidth: 2,
-    borderRadius: 5,
+    borderRadius: 24,
     padding: 5,
+    height:30,
+    gap:4
+
   },
-  submitbtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 8,
-    alignSelf:"center",
-    margin:100,
-    borderWidth:1,
-    borderColor:CUSTOMCOLOR.primary,
-    borderRadius:4
-}
 });
 
 export default ComplaintsCard;
