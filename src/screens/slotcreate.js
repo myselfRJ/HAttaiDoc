@@ -185,7 +185,7 @@ const SlotCreate = ({navigation}) => {
           onPress={() => {
             slotDurationRef?.current?.snapToIndex(1);
           }}
-          input={selectedDurationValue}
+          input={<Text>{selectedDurationValue} Mins</Text>}
         />
       </View>
       <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} />
@@ -202,7 +202,13 @@ const SlotCreate = ({navigation}) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => handleTypeSelect(consTypes)}>
-                <View>
+                <View
+                  style={{
+                    width: 80,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <Text>{consTypes}</Text>
                 </View>
               </TouchableOpacity>
@@ -217,7 +223,13 @@ const SlotCreate = ({navigation}) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => handleDurationSelect(mins)}>
-                <View>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <Text>{mins}</Text>
                 </View>
               </TouchableOpacity>

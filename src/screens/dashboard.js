@@ -137,7 +137,7 @@ const Dashboard = ({navigation}) => {
           <View style={styles.appointment}>
             <Text style={styles.h2}>{Language[language]['appointments']}</Text>
             {Appdata
-              ? Appdata.map((value, index) => {
+              ? Appdata?.map((value, index) => {
                   return (
                     <AppointmentCard
                       key={index}
