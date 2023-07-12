@@ -18,6 +18,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 
@@ -30,10 +31,6 @@ const OtpScreen=({route})=>{
     value,
     setValue,
   });
-    const [otp,setOtp]=useState('');
-    const handleOptions = value => {
-      setSelected(value);
-    };
     const {phone,token} = route.params;
     const nav=useNavigation()
     const fetchData = async () => {
@@ -44,7 +41,7 @@ const OtpScreen=({route})=>{
                 'trace-id': '12345',
                 'Content-Type':'application/json',
               },
-              body: JSON.stringify({ phone: phone,otp:otp,token_id:token }), 
+              body: JSON.stringify({ phone: phone,otp:value,token_id:token }), 
           });
           if (response.ok) {
             const jsonData = await response.json();
@@ -60,6 +57,7 @@ const OtpScreen=({route})=>{
       };
     return(
       <SafeAreaView>
+        <ScrollView>
      <View style={styles.container}>
         <View style={styles.Top}></View>
         <View style={styles.bottom}>
@@ -84,7 +82,7 @@ const OtpScreen=({route})=>{
                   rootStyle={styles.codeFiledRoot}
                   keyboardType="number-pad"
                   textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
+                  renderCell={({ index, symbol, isFocused }) => (
                     <View
                       onLayout={getCellOnLayoutHandler(index)}
                       key={index}
@@ -95,6 +93,7 @@ const OtpScreen=({route})=>{
                     </View>
                   )}
                 />
+
                 </View>
            
             </View>
@@ -102,6 +101,7 @@ const OtpScreen=({route})=>{
         </View>
 
      </View>
+     </ScrollView>
      </SafeAreaView>
     );
 }
@@ -130,22 +130,23 @@ const styles=StyleSheet.create({
        fontWeight:400,
         
     },
-    cellRoot: {
-      width: 70,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderColor: '#000',
-      borderBottomWidth: 1,
-    },
-    cellText: {
-      color: '#000',
-      fontSize: 24,
-      textAlign: 'center',
-    },
-    focusCell: {
-      borderBottomColor: '#007AFF',
-      borderBottomWidth: 1,
-    },
+     cellRoot: {
+    width: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomColor: '#000',
+    borderBottomWidth: 1,
+    marginLeft:5
+  },
+  cellText: {
+    color: '#000',
+    fontSize: 24,
+    textAlign: 'center',
+  },
+  focusCell: {
+    borderBottomColor: '#007AFF',
+    borderBottomWidth: 2,
+  },
    
 })
 export default OtpScreen;

@@ -114,7 +114,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.height} onChangeText={text => heightChange(text, props.index)}
                         style={styles.heighttext} keyboardType='numeric' />
-                      <Text style={styles.text}>cm</Text>
+                      <Text style={styles.heighttext}>cm</Text>
                     </View>
                   </View>
                   <View style={styles.tempcontainer}>
@@ -122,7 +122,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.temp} onChangeText={text => tempChange(text, props.index)}
                         style={styles.temptext} keyboardType='numeric' />
-                      <Text style={styles.text}>°C</Text>
+                      <Text style={styles.temptext}>°C</Text>
                     </View>
                   </View>
                   <View style={styles.ratecontainer}>
@@ -144,7 +144,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.diastolic_bp} onChangeText={text => diastolicChange(text, props.index)}
                       style={styles.diatext} keyboardType='numeric' />
-                    <Text style={styles.text}>mmHg</Text>
+                    <Text style={styles.diatext}>mmHg</Text>
                   </View>
                 </View>
 
@@ -153,7 +153,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.systolic_bp} onChangeText={text => systolicChange(text, props.index)}
                       style={styles.systext} keyboardType='numeric' />
-                    <Text style={styles.text}>mmHg</Text>
+                    <Text style={styles.systext}>mmHg</Text>
                   </View>
                 </View>
               </View>
@@ -164,7 +164,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.lmp_edd} onChangeText={text => lmpChange(text,props.index)}
                       style={styles.lmptext} keyboardType='numeric' />
-                    <Text style={styles.text}>week</Text>
+                    <Text style={styles.lmptext}>week</Text>
                   </View>
                 </View>
                 <View style={styles.uscontainer}>
@@ -172,7 +172,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.us_edd} onChangeText={text => usChange(text, props.index)}
                       style={styles.ustext} keyboardType='numeric' />
-                    <Text style={styles.text}>week</Text>
+                    <Text style={styles.ustext}>week</Text>
                   </View>
                 </View>
               </View>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    padding: 4,
+    padding: 8,
     color: CUSTOMCOLOR.black,
     gap: 10,
   },
@@ -264,8 +264,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:1,
-    borderRadius:5
   },
   weightcontainer: {
     width: 80,
@@ -280,9 +278,8 @@ const styles = StyleSheet.create({
   },
   hardText: {
     flexDirection: "row",
-    borderWidth:1,
-    borderRadius:5,
-    width:80
+    width:80,
+    alignItems:'center'
   },
   text: {
     fontSize: 12,
@@ -294,9 +291,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
-    
-
   },
   // changetext: {
   //   borderWidth: 1,
@@ -322,7 +316,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
   },
   tempcontainer: {
     width: 59,
@@ -338,7 +331,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
     
 
   },
@@ -357,8 +349,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:1,
-    borderRadius:5
   },
   bmicontainer: {
     width: 70,
@@ -374,20 +364,20 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:1,
-    borderRadius:5
+
   },
   bloodPressureContainer: {
     width: 185,
     height: 87,
     flexDirection: 'row',
-    gap:4
+    gap:4,
+    top:32
   },
   bloodPres: {
     padding: 8,
     gap: 10,
     color: CUSTOMCOLOR.black,
-    top:16
+    top:32
   },
   diascontainer: {
     width: 94,
@@ -405,7 +395,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
   },
   syscontainer: {
     width: 87,
@@ -422,13 +411,12 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
   },
   pregText: {
     padding: 8,
     gap: 10,
     color: CUSTOMCOLOR.black,
-    top:16
+    top:8
   },
   pregnancyFields: {
     width: 152,
@@ -450,7 +438,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
   },
   uscontainer: {
     width: 72,
@@ -466,7 +453,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:5
   },
   submitbtn: {
     alignItems: 'center',

@@ -53,15 +53,13 @@ const styles = StyleSheet.create({
 
     },
     inputbox: {
-        width: 651,
+        width: "100%",
         height: 60,
         padding: 8,
         gap: 4,
 
     },
     notes: {
-        width:635,
-        height:44,
         borderRadius:4,
         padding:8,
         gap:10,

@@ -76,13 +76,16 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
-    padding: 5,
+    padding: 8,
   },
   input: {
     width: '100%',
-    margin: 10,
-    padding: 5,
-    fontSize:12
+    height:60,
+    borderRadius:4,
+    gap:10,
+    padding: 10,
+    fontSize:12,
+    backgroundColor:CUSTOMCOLOR.white
   },
   sugg: {
     flexDirection: 'row',
@@ -95,10 +98,11 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   sugbtn: {
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 24,
     padding: 5,
-    borderColor:CUSTOMCOLOR.black
+    height:30,
+    gap:4
+
   },
 });
 
