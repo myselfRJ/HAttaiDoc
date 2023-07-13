@@ -363,7 +363,7 @@ const Symptoms = ({navigation}) => {
             <HButton
               label={'submit'}
               onPress={() => {
-                handleSymptomSubmit;
+                handleSymptomSubmit();
                 navigation.goBack();
               }}
             />
