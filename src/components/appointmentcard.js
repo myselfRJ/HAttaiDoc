@@ -13,6 +13,7 @@ import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import BottomSheetView from './bottomSheet';
+import SelectionTab from '../components/selectiontab';
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
   const appointmentCardRef = useRef(null);
@@ -102,7 +103,14 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}>
-          <View style={[styles.option]}>
+             <View style={styles.tab}>
+        <SelectionTab label={Language[language]['start_visit']} selected={true} onPress={openVisit} />
+        <SelectionTab label={Language[language]['reschedule']} />
+        <SelectionTab label={Language[language]['cancel']}  onPress={() => {
+                appointmentCardRef?.current?.snapToIndex(0);
+              }} />
+        </View>
+          {/* <View style={[styles.option]}>
             <TouchableOpacity onPress={openVisit}>
               <Text style={styles.contact1}>
                 {Language[language]['start_visit']}
@@ -121,7 +129,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
                 {Language[language]['cancel']}
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </BottomSheetView>
       </View>
     </>
@@ -228,6 +236,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 40,
     borderRadius: 10,
+  },
+  tab: {
+    flexDirection: 'row',
+    gap: 16,
+    paddingHorizontal: 8,
+    padding:20,
+    alignSelf:'center'
   },
 });
 
