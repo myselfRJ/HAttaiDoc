@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Text,
   View,
@@ -23,7 +23,7 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import {SelectorBtn} from '../components';
+import {SelectorBtn, BottomSheetView, StatusMessage} from '../components';
 import {CONSTANTS} from '../utility/constant';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
@@ -31,6 +31,11 @@ import {HttpStatusCode} from 'axios';
 
 const AbhaCreate = ({navigation}) => {
   const [selected, setSelected] = useState('');
+
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
 
   const handleOptions = value => {
     setSelected(value);
@@ -117,109 +122,110 @@ const AbhaCreate = ({navigation}) => {
 
   return (
     <ScrollView>
-      <Keyboardhidecontainer>
-        <View>
-          <View style={styles.topBar}></View>
-          <View style={styles.mainhead}>
-            <Text style={styles.mainText}>Create ABHA Account</Text>
-            <Icon
-              name="bell"
-              size={24}
-              color={'#fff'}
-              style={styles.bellIcon}
-            />
-          </View>
-          <View
-            style={{
-              paddingHorizontal: 24,
-              paddingVertical: 24,
-              width: '100%',
-              alignItems: 'center',
-            }}>
-            <View style={styles.alignchild}>
-              <Text style={commonstyles.h1}>Add Patient</Text>
-              <AddImage onPress={onImagePress} url={selectedImage} />
-            </View>
-            <InputText
-              label={Language[language]['name']}
-              placeholder={Language[language]['name']}
-              value={name}
-              setValue={setName}
-              doubleCheck={[true, false]}
-              check={e => {
-                var format =
-                  /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~11234567890]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
-            />
-            <InputText
-              label={Language[language]['phone_number']}
-              placeholder={Language[language]['phone_number']}
-              value={phone_number}
-              setValue={setPhone_number}
-              keypad={'numeric'}
-              maxLength={10}
-              doubleCheck={[true, false]}
-              check={e => {
-                var format = /[(A-Z)(a-z)]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
-            />
-            <SelectorBtn
-              label={Language[language]['dob']}
-              name="calendar"
-              onPress={() => setOpen('to')}
-              input={formattedDate}
-              style={styles.DOBselect}
-            />
-            <DatePicker
-              modal
-              open={open !== false}
-              date={DOB}
-              theme="auto"
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-            />
-            <View style={styles.alignchild}>
-              <Text> {Language[language]['gender']}</Text>
-              <View style={styles.radiogroup}>
-                <Option
-                  label="male"
-                  value="male"
-                  selected={selected === 'male'}
-                  onPress={() => handleOptions('male')}
-                />
-                <Option
-                  label="female"
-                  value="female"
-                  selected={selected === 'female'}
-                  onPress={() => handleOptions('female')}
-                />
-                <Option
-                  label="others"
-                  value="others"
-                  selected={selected === 'others'}
-                  onPress={() => handleOptions('others')}
-                />
-              </View>
-            </View>
-
-            <HButton
-              label={Language[language]['save']}
-              onPress={() => navigation.navigate('success')}
-            />
-          </View>
+      <View style={{height: '100%'}}>
+        <View style={styles.topBar}></View>
+        <View style={styles.mainhead}>
+          <Text style={styles.mainText}>Create ABHA Account</Text>
+          <Icon name="bell" size={24} color={'#fff'} style={styles.bellIcon} />
         </View>
-      </Keyboardhidecontainer>
+        <View
+          style={{
+            paddingHorizontal: 24,
+            paddingVertical: 24,
+            width: '100%',
+            alignItems: 'center',
+          }}>
+          <View style={styles.alignchild}>
+            <Text style={commonstyles.h1}>Add Patient</Text>
+            <AddImage onPress={onImagePress} url={selectedImage} />
+          </View>
+          <InputText
+            label={Language[language]['name']}
+            placeholder={Language[language]['name']}
+            value={name}
+            setValue={setName}
+            doubleCheck={[true, false]}
+            check={e => {
+              var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~11234567890]/;
+              if (format.test(e)) {
+                return false;
+              } else {
+                return true;
+              }
+            }}
+          />
+          <InputText
+            label={Language[language]['phone_number']}
+            placeholder={Language[language]['phone_number']}
+            value={phone_number}
+            setValue={setPhone_number}
+            keypad={'numeric'}
+            maxLength={10}
+            doubleCheck={[true, false]}
+            check={e => {
+              var format = /[(A-Z)(a-z)]/;
+              if (format.test(e)) {
+                return false;
+              } else {
+                return true;
+              }
+            }}
+          />
+          <SelectorBtn
+            label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
+          <DatePicker
+            modal
+            open={open !== false}
+            date={DOB}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+          <View style={styles.alignchild}>
+            <Text> {Language[language]['gender']}</Text>
+            <View style={styles.radiogroup}>
+              <Option
+                label="male"
+                value="male"
+                selected={selected === 'male'}
+                onPress={() => handleOptions('male')}
+              />
+              <Option
+                label="female"
+                value="female"
+                selected={selected === 'female'}
+                onPress={() => handleOptions('female')}
+              />
+              <Option
+                label="others"
+                value="others"
+                selected={selected === 'others'}
+                onPress={() => handleOptions('others')}
+              />
+            </View>
+          </View>
+
+          <HButton
+            label={Language[language]['save']}
+            onPress={() => {
+              navigation.navigate('success');
+              SuccesRef?.current?.snapToIndex(1);
+            }}
+          />
+        </View>
+        <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+          <StatusMessage
+            status={'success'}
+            message="Sucessfully Created Abha ID"
+          />
+        </BottomSheetView>
+      </View>
     </ScrollView>
   );
 };

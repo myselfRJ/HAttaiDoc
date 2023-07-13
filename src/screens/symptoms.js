@@ -266,7 +266,7 @@ const Symptoms = ({navigation}) => {
           <View style={{flexDirection: 'column'}}>
             {symptomInput?.map((data, index) => (
               <View
-                key={data.uuid}
+                key={index}
                 style={{flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                 <View style={styles.symptomInput}>
                   <Text style={{padding: 10, fontWeight: 'bold'}}>

@@ -1,30 +1,31 @@
-import React, { useState, useRef } from 'react';
-import { Text, View, StyleSheet, Modal, Pressable } from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { commonstyles } from '../styles/commonstyle';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {commonstyles} from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import { PlusButton, SelectorBtn, SlotChip } from '../components';
-import { CONSTANTS } from '../utility/constant';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { URL } from '../utility/urls';
-import { HttpStatusCode } from 'axios';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ClinicAddress from '../components/clinic_address';
-import BottomSheetView from '../components/bottomSheet';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  PlusButton,
+  SelectorBtn,
+  SlotChip,
+  StatusMessage,
+  BottomSheetView,
+} from '../components';
+import {CONSTANTS} from '../utility/constant';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {URL} from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
 
-
-const AddUser = ({ navigation }) => {
+const AddUser = ({navigation}) => {
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
@@ -40,28 +41,51 @@ const AddUser = ({ navigation }) => {
     clinic: '',
     slots: [],
   });
-  const fetchData=async()=>{
+  const [apiStatus, setApiStatus] = useState({});
+
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
+
+  const fetchData = async () => {
     try {
-      const response = await fetch(URL.adduser,{
-          method:'POST',
-          headers:{
-            Prefer: '',
-            'Content-Type': 'application/json',
-            Accept: 'application/json, application/xml'
-          },
-          body: JSON.stringify({name:values.name,phone:values.phone,gender:values.gender,role:selectedRole,"clinic-id":selectedClinic}), 
+      const response = await fetch(URL.adduser, {
+        method: 'POST',
+        headers: {
+          Prefer: '',
+          'Content-Type': 'application/json',
+          Accept: 'application/json, application/xml',
+        },
+        body: JSON.stringify({
+          name: values.name,
+          phone: values.phone,
+          gender: values.gender,
+          role: selectedRole,
+          'clinic-id': selectedClinic,
+        }),
       });
       if (response.ok) {
         const jsonData = await response.json();
-        navigation.navigate('tab')
+        // navigation.navigate('tab');
         console.log(jsonData);
+        setApiStatus({status: 'success', message: 'Successfully created'});
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('tab');
+        }, 1000);
       } else {
-        console.error('API call failed:', response.status,response);
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        SuccesRef?.current?.snapToIndex(1);
+        console.error('API call failed:', response.status, response);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('Error occurred:', error);
     }
-  }
+  };
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
@@ -81,7 +105,6 @@ const AddUser = ({ navigation }) => {
     }
   };
 
-
   const handleDeleteSlotChip = index => {
     setValues(prevValues => ({
       ...prevValues,
@@ -99,7 +122,6 @@ const AddUser = ({ navigation }) => {
   const handleOptions = value => {
     handleChangeValue('gender', value);
   };
-
 
   const handleRoleSelection = role => {
     setSelectedRole(role);
@@ -132,7 +154,7 @@ const AddUser = ({ navigation }) => {
   };
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
@@ -207,80 +229,89 @@ const AddUser = ({ navigation }) => {
                 input={selectedClinic}
               />
             </View>
-            <View style={{ alignSelf: 'flex-end', bottom: 0, paddingVertical: 8 }}>
+            <View
+              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8}}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
             <View style={styles.users}>
-              <View >
-              {values?.slots?.length>0&&<Text
-                style={{
-                  fontFamily: CUSTOMFONTFAMILY.heading,
-                  fontSize: CUSTOMFONTSIZE.h2,
-                  color: CUSTOMCOLOR.black,
-                  paddingVertical: 4,
-                }}>
-                Users
-              </Text>}
-              {showSlotChip &&
-                values?.slots?.map((slot, index) => (
-                  <View style={{margin:5}} key={index}>
-                   
-                    <SlotChip
-                      style={{justifyContent:'space-between',gap:4}}
-                      type={<Text style={{gap:8}}>Name:{slot.name},Role:{slot.role},Clinic:{slot.clinic}</Text>}
-                      onPress={() => handleDeleteSlotChip(index)}
-                    />
-                  </View>
-                ))}
-                </View>
-            </View>
-            <HButton label="Done" onPress={fetchData}/>
-       
-
-          </View>
-
-        </Keyboardhidecontainer>
-      </ScrollView>
-      <BottomSheetView
-              bottomSheetRef={RoleRef}
-              snapPoints={'50%'}>
-              <View style={styles.modalContainer}>
-                <Text
-                  style={{
-                    fontFamily: CUSTOMFONTFAMILY.heading,
-                    fontSize: 18,
-                    color: CUSTOMCOLOR.black,
-                  }}>
-                  Role
-                </Text>
-                {CONSTANTS.role.map((role, index) => (
-                  <Pressable key={index} onPress={() => handleRoleSelection(role)}>
-                    <Text style={styles.modalfields}>{role}</Text>
-                  </Pressable>
-                ))}
-              </View>
-
-            </BottomSheetView>
-            <BottomSheetView
-              bottomSheetRef={ClinicRef}
-              snapPoints={'50%'}>
-                 <View style={styles.modalContainer}>
+              <View>
+                {values?.slots?.length > 0 && (
                   <Text
                     style={{
                       fontFamily: CUSTOMFONTFAMILY.heading,
-                      fontSize: 18,
+                      fontSize: CUSTOMFONTSIZE.h2,
                       color: CUSTOMCOLOR.black,
+                      paddingVertical: 4,
                     }}>
-                    {Language[language]['clinic']}
+                    Users
                   </Text>
-                  {CONSTANTS.clinic.map((clinic, index) => (
-                    <Pressable key={index} onPress={() => handleClinicSelection(clinic)}>
-                      <Text style={styles.modalfields}>{clinic}</Text>
-                    </Pressable>
+                )}
+                {showSlotChip &&
+                  values?.slots?.map((slot, index) => (
+                    <View style={{margin: 5}} key={index}>
+                      <SlotChip
+                        style={{justifyContent: 'space-between', gap: 4}}
+                        type={
+                          <Text style={{gap: 8}}>
+                            Name:{slot.name},Role:{slot.role},Clinic:
+                            {slot.clinic}
+                          </Text>
+                        }
+                        onPress={() => handleDeleteSlotChip(index)}
+                      />
+                    </View>
                   ))}
-                </View>
-
-              </BottomSheetView>
+              </View>
+            </View>
+            <HButton
+              label="Done"
+              onPress={() => {
+                fetchData();
+                SuccesRef?.current?.snapToIndex(1);
+              }}
+            />
+          </View>
+        </Keyboardhidecontainer>
+      </ScrollView>
+      <BottomSheetView bottomSheetRef={RoleRef} snapPoints={'50%'}>
+        <View style={styles.modalContainer}>
+          <Text
+            style={{
+              fontFamily: CUSTOMFONTFAMILY.heading,
+              fontSize: 18,
+              color: CUSTOMCOLOR.black,
+            }}>
+            Role
+          </Text>
+          {CONSTANTS.role.map((role, index) => (
+            <Pressable key={index} onPress={() => handleRoleSelection(role)}>
+              <Text style={styles.modalfields}>{role}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </BottomSheetView>
+      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+        <View style={styles.modalContainer}>
+          <Text
+            style={{
+              fontFamily: CUSTOMFONTFAMILY.heading,
+              fontSize: 18,
+              color: CUSTOMCOLOR.black,
+            }}>
+            {Language[language]['clinic']}
+          </Text>
+          {CONSTANTS.clinic.map((clinic, index) => (
+            <Pressable
+              key={index}
+              onPress={() => handleClinicSelection(clinic)}>
+              <Text style={styles.modalfields}>{clinic}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </BottomSheetView>
+      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
     </View>
   );
 };
@@ -301,7 +332,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 8,
   },
- modalContainer: {
+  modalContainer: {
     height: 400,
     width: '100%',
     //justifyContent: 'center',
@@ -322,5 +353,5 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingVertical: 16,
   },
-})
+});
 export default AddUser;
