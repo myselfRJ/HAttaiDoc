@@ -12,15 +12,12 @@ import { checkNumber, checkPassword } from '../utility/checks';
 import { HButton } from '../components';
 import { PostApi } from '../api/api';
 import { URL } from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Entry = ({ navigation }) => {
     const [phone, setPhone] = useState('');
     const token="d0f7aa46-58ce-45f7-892a-af80296fe24d"
-      
-      
-  
     const fetchData = async () => {
-      // const url='https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp'
       try {
         const response = await fetch(URL.generateOtp,{
             method:'POST',
@@ -43,10 +40,11 @@ const Entry = ({ navigation }) => {
     };
   
     return (
+      <ScrollView>
       <View style={styles.container}>
         <View style={styles.Top}></View>
         <View style={styles.bottom}>
-          <View style={{ margin: 130 }}>
+          <View style={{ margin: 130,backgroundColor:CUSTOMCOLOR.white }}>
             <InputText
               doubleCheck={[true, false]}
               check={checkNumber}
@@ -63,6 +61,7 @@ const Entry = ({ navigation }) => {
           </View>
         </View>
       </View>
+      </ScrollView>
     );
   };
   

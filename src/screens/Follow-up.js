@@ -6,6 +6,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setDate, setOpen} from '../redux/features/prescription/Followupslice';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 
 export default function DateTime() {
   const date = useSelector(state => state.dateTime.date);
@@ -34,7 +39,7 @@ export default function DateTime() {
       <View style={styles.DateContainer}>
         <Text style={styles.DateText}>{formattedDate}</Text>
         <TouchableOpacity onPress={handleDate}>
-          <Icon name="calendar" size={24} color={'#4ba5fa'} />
+          <Icon name="calendar" size={24} color={CUSTOMCOLOR.primary} />
         </TouchableOpacity>
         {open && (
           <DatePicker
@@ -54,30 +59,30 @@ export default function DateTime() {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    width: 651,
-    padding: 8,
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+    padding: 32,
+    gap: 8,
   },
   FUP: {
-    fontFamily: 'Open Sans',
-    fontSize: 14,
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
     fontWeight: '600',
     lineHeight: 19.07,
-    color: '#000000',
+    color: CUSTOMCOLOR.black,
   },
   DateContainer: {
-    width: 635,
+    width: '100%',
     borderRadius: 4,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: CUSTOMCOLOR.white,
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
   DateText: {
-    fontFamily: 'Open Sans',
+    fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: 400,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h4,
     lineHeight: 19.07,
   },
 });
