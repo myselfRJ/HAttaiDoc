@@ -7,11 +7,11 @@ import {useRef, useEffect} from 'react';
 import {BottomSheetView, StatusMessage, HButton, Icon} from '../components';
 
 const Success = ({navigation}) => {
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
-  //
+  // const SuccesRef = useRef(null);
+  // useEffect(() => {
+  //   SuccesRef?.current?.snapToIndex(1);
+  // }, []);
+
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       {/* <Icon name="check-circle" size={40} color={'#32BF40'} />
@@ -32,9 +32,12 @@ const Success = ({navigation}) => {
           onPress={() => navigation.navigate('bookslot')}
         />
       </View>
-      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
-        <StatusMessage status={'error'} message="Sucessfully Created Abha ID" />
-      </BottomSheetView>
+      {/* <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+        <StatusMessage
+          status={'warning'}
+          message="Sucessfully Created Abha ID"
+        />
+      </BottomSheetView> */}
     </View>
   );
 };
