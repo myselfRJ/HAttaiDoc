@@ -71,6 +71,10 @@ const OtpScreen=({route})=>{
               maxLength={6}
               value={otp}
               setValue={changeText}
+            /></View>
+        <View style={{margin:70,alignItems:'center'}}>
+          <HButton label={Language[language]['submit']} onPress={fetchData}/>
+          </View>
             /> */}
             <View style={{paddingHorizontal: 8, gap: 24, top: 16}}>
             <CodeField

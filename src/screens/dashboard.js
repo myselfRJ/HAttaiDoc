@@ -155,7 +155,7 @@ const Dashboard = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('createslot')}
+              onPress={() => navigation.navigate('myappointment')}
               style={{
                 borderWidth: 0.5,
                 borderRadius: 4,
@@ -174,20 +174,7 @@ const Dashboard = ({navigation}) => {
               justifyContent: 'center',
               paddingHorizontal: 8,
             }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('aadharverify')}
-              style={{
-                borderWidth: 0.5,
-                borderRadius: 4,
-                borderColor: CUSTOMCOLOR.primary,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-              }}>
-              <Text style={{color: CUSTOMCOLOR.primary}}>
-                {/* {Language[language]['view_more']} */}
-                AbhaVerify
-              </Text>
-            </TouchableOpacity>
+            
           </View>
         </View>
       </ScrollView>
