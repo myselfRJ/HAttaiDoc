@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
@@ -21,7 +21,20 @@ const Visit = ({navigation}) => {
     state => state.prescription.selectedDoctor,
   );
   const Symptom = useSelector(state => state.symptoms.symptom);
-  const Prescribe = useSelector(state => state.prescribe.prescribeItems[0]);
+  const Prescribe = useSelector(state => state.prescribe.prescribeItems);
+  let prescribeCopy = Prescribe;
+  const [prescribe, setPrescribe] = useState(prescribeCopy);
+
+  // const handleDelete = index => {
+  //   const updatedPrescribe = prescribe?.filter((item, ind) => ind !== index);
+  //   console.log(updatedPrescribe);
+  //   setPrescribe(updatedPrescribe);
+  // };
+
+  useEffect(() => {
+    setPrescribe(Prescribe);
+  }, [Prescribe]);
+
   const dataObject = [
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
@@ -35,6 +48,10 @@ const Visit = ({navigation}) => {
       navigate: 'referdoctorscreen',
     },
   ];
+  // console.log('====================================');
+  // console.log(prescribe);
+  // console.log('====================================');
+
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -85,20 +102,36 @@ const Visit = ({navigation}) => {
                         flexDirection: 'row',
                         padding: 8,
                       }}>
-                      <Icon
-                        name="prescription"
-                        size={16}
-                        color={CUSTOMCOLOR.primary}
-                      />
                       <View>
-                        {Prescribe?.map((item, ind) => (
-                          <View>
-                            <Text>
-                              {item.selectedMode}|{item.medicine}|
-                              {item.selectedMg}|{item.selectedTime}|
-                              {item.selectedFrequency}|{item.tab}|
-                              {item.quantity}|{item.duration}
-                            </Text>
+                        {prescribe?.map((item, ind) => (
+                          <View
+                            key={ind}
+                            style={{
+                              flexDirection: 'row',
+                              marginBottom: 5,
+                            }}>
+                            <Icon
+                              name="prescription"
+                              size={16}
+                              color={CUSTOMCOLOR.primary}
+                            />
+                            <View>
+                              <Text>
+                                {item.selectedMode}|{item.medicine}|
+                                {item.selectedMg}|{item.selectedTime}|
+                                {item.selectedFrequency}|{item.tab}|
+                                {item.quantity}|{item.duration}
+                              </Text>
+                            </View>
+                            {/* <TouchableOpacity
+                              onPress={() => handleDelete(ind)}
+                              style={{left: '500%'}}>
+                              <Icon
+                                name="delete"
+                                size={24}
+                                color={CUSTOMCOLOR.primary}
+                              />
+                            </TouchableOpacity> */}
                           </View>
                         ))}
                       </View>

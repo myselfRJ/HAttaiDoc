@@ -28,6 +28,7 @@ const prescribeSlice = createSlice({
   initialState,
   reducers: {
     addPrescribe: (state, action) => {
+      // state.prescribeItems.push(action.payload);
       state.prescribeItems = action.payload;
     },
     deletePrescribe: state => {

@@ -34,51 +34,46 @@ import {
 export default function Prescribe() {
   const prescribe = useSelector(state => state.prescribe.prescribeItems[0]);
   const dispatch = useDispatch();
-  const [prescribeInput, setPrescribeInput] = useState([]);
+  const [prescribeInput, setPrescribeInput] = useState([prescribe]);
+  const [prescribeList, setPrescribeList] = useState([]);
 
   useEffect(() => {
     console.log(prescribeInput.length);
   }, [prescribeInput]);
 
-  useEffect(() => {
-    if (prescribe) {
-      setPrescribeInput([prescribe]);
-    }
-  }, [prescribe]);
+  // useEffect(() => {
+  //   if (prescribe) {
+  //     setPrescribeInput([prescribe]);
+  //   }
+  // }, [prescribe]);
 
   const handleAddPrescribe = () => {
-    const uuid = Math.random() + 'tt';
-    const newPrescribe = {
-      modes: CONSTANTS.modes,
-      medicine: null,
-      selectedMode: null,
-      selectedMedicine: null,
-      selectedMg: null,
-      selectedTime: null,
-      selectedFrequency: [],
-      tab: '',
-      recommdations: CONSTANTS.medicine_recomendation,
-      mg: CONSTANTS.dose,
-      timing: CONSTANTS.timing,
-      frequency: CONSTANTS.frequency,
-      quantity: '100',
-      duration: '',
-      uuid: uuid,
-    };
+    // const uuid = Math.random() + 'tt';
+    // const newPrescribe = {
+    //   modes: CONSTANTS.modes,
+    //   medicine: null,
+    //   selectedMode: null,
+    //   selectedMedicine: null,
+    //   selectedMg: null,
+    //   selectedTime: null,
+    //   selectedFrequency: [],
+    //   tab: '',
+    //   recommdations: CONSTANTS.medicine_recomendation,
+    //   mg: CONSTANTS.dose,
+    //   timing: CONSTANTS.timing,
+    //   frequency: CONSTANTS.frequency,
+    //   quantity: '100',
+    //   duration: '',
+    //   uuid: uuid,
+    // };
 
-    const filteredPrescribeInput = prescribeInput.filter(
-      item => item.uuid !== prescribe.uuid,
-    );
+    // const filteredPrescribeInput = prescribeInput.filter(
+    //   item => item.uuid !== prescribe.uuid,
+    // );
 
-    setPrescribeInput([newPrescribe, ...filteredPrescribeInput]);
-    dispatch(addPrescribe([newPrescribe, ...filteredPrescribeInput]));
-  };
-
-  const handleDeletePrescribe = () => {
-    const prescribeCopy = [...prescribeInput];
-    prescribeCopy.pop();
-    setPrescribeInput(prescribeCopy);
-    dispatch(addPrescribe(prescribeCopy));
+    const newPrescribe = {...prescribeInput[0]};
+    setPrescribeList(prevState => [...prevState, newPrescribe]);
+    dispatch(addPrescribe([...prescribeList, newPrescribe]));
   };
 
   const handlePrescribeChange = (text, index, field) => {
@@ -88,6 +83,14 @@ export default function Prescribe() {
       return prescribeCopy;
     });
     dispatch(updatePrescribe({index, field, value: text}));
+  };
+
+  const handleDelete = index => {
+    const updatedPrescribe = prescribeList?.filter(
+      (item, ind) => ind !== index,
+    );
+    console.log(updatedPrescribe);
+    setPrescribeList(updatedPrescribe);
   };
 
   const setSelectMode = (index, value) => {
@@ -115,9 +118,9 @@ export default function Prescribe() {
     handlePrescribeChange(updatedFrequency, index, 'selectedFrequency');
   };
 
-  console.log('====================================');
-  console.log(prescribeInput);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(prescribeList);
+  // console.log('====================================');
 
   return (
     <ScrollView>
@@ -125,8 +128,32 @@ export default function Prescribe() {
         <View style={styles.mainHead}>
           <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
         </View>
+        <View>
+          {prescribeList?.map((item, ind) => (
+            <View
+              key={ind}
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                width: '100%',
+                marginBottom: 5,
+              }}>
+              <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
+              <View style={{width: '90%'}}>
+                <Text>
+                  {item.selectedMode}|{item.medicine}|{item.selectedMg}|
+                  {item.selectedTime}|{item.selectedFrequency}|{item.tab}|
+                  {item.quantity}|{item.duration}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => handleDelete(ind)}>
+                <Icon name="delete" size={24} color={CUSTOMCOLOR.primary} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
         <View style={styles.prescribeConatiner}>
-          {prescribeInput.map((item, index) => (
+          {prescribeInput?.map((item, index) => (
             <View key={index}>
               <View key={item.uuid} style={styles.prescribeItemContainer}>
                 <View style={styles.ModeContainer}>
@@ -340,11 +367,11 @@ export default function Prescribe() {
                   <View
                     style={{
                       height: 40,
-                      width: '15%',
-                      borderWidth: 1,
+                      width: '25%',
                       borderRadius: 8,
                       justifyContent: 'center',
                       alignItems: 'center',
+                      backgroundColor: CUSTOMCOLOR.white,
                     }}>
                     <Text style={styles.numText}>{item.quantity}</Text>
                   </View>
@@ -355,9 +382,6 @@ export default function Prescribe() {
           ))}
           <TouchableOpacity onPress={handleAddPrescribe}>
             <Icon name="plus" size={32} style={styles.PlusButton} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDeletePrescribe}>
-            <Icon name="minus" size={32} style={styles.PlusButton} />
           </TouchableOpacity>
         </View>
       </View>
@@ -522,11 +546,10 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     fontWeight: 400,
-    fontSize: 10,
+    fontSize: 20,
     lineHeight: 13,
     color: '#4ba5fa',
     gap: 10,
-    backgroundColor: '#fff',
   },
   line: {
     margin: 8,
