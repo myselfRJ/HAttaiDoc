@@ -36,11 +36,11 @@ const Visit = ({navigation}) => {
   }, [Prescribe]);
 
   const dataObject = [
+    {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
+    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'prescribe'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
-    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
-    {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
     {label: 'Notes', icon: 'chevron-right', navigate: 'notescreen'},
     {
       label: 'Refer to Doctor',
@@ -314,8 +314,7 @@ const styles = StyleSheet.create({
     // height:100
   },
   basiccontainer: {
-    width: 635,
-    height: 100,
+    width: '100%',
     borderRadius: 4,
     padding: 8,
     gap: 16,

@@ -24,6 +24,7 @@ import AadharVerify from '../screens/aadharVerify';
 import MobileVerify from '../screens/mobVerify';
 import AbhaCreate from '../screens/abhaCreate';
 import Success from '../screens/success';
+import MedicalRecordPatient from '../screens/medicalRecordPatients';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="mobileverify" component={MobileVerify} />
       <Stack.Screen name="abhacreate" component={AbhaCreate} />
       <Stack.Screen name="success" component={Success} />
+      <Stack.Screen name="patientrecord" component={MedicalRecordPatient} />
     </Stack.Navigator>
   );
 };

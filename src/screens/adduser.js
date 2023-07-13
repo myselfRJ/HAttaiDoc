@@ -76,9 +76,6 @@ const AddUser = ({ navigation }) => {
             clinic: prevValues.clinic,
           },
         ],
-        name: '',
-        phone: '',
-        gender: '',
       }));
       setShowSlotChip(true);
     }

@@ -11,33 +11,191 @@ import Option from '../components/option';
 import SelectionTab from '../components/selectiontab';
 import SuggestionTab from '../components/suggestiontab';
 import HButton from '../components/button';
+import {useState, useEffect} from 'react';
+import moment, {min} from 'moment';
+import DatePicker from 'react-native-date-picker';
+import {CONSTANTS} from '../utility/constant';
+import {URL} from '../utility/urls';
+
 const SlotBook = ({navigation}) => {
-  const data = [1, 2, 4, 5, 5, 6, 6, 6, 6, 10, 12, 13];
-  const renderItems = ({value, index}) => {
+  const [slotDetails, setSlotDetails] = useState({});
+  const [selectedSlot, setSelectedSlot] = useState();
+  const selections = CONSTANTS.selections;
+  const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
+    selections[0],
+  );
+  const [selectedMode, setSelectedMode] = useState('offline');
+
+  const handleOptions = value => {
+    setSelectedMode(value);
+  };
+
+  const handleSelectSlot = value => {
+    setSelectedSlot(value);
+  };
+
+  const handleSelectType = value => {
+    setSelectedTypeAppointment(value);
+  };
+
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const formattedDate = date.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const handleConfirm = date => {
+    setDOB(date);
+    setOpen(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const SlotsAvailable = async () => {
+    const response = await fetch(URL.SlotsAvailable);
+    const jsonData = await response.json();
+    setSlotDetails(jsonData);
+  };
+
+  useEffect(() => {
+    {
+      SlotsAvailable();
+    }
+  }, []);
+  useEffect(() => {}, [selectedSlot]);
+
+  const getMinute = time => {
+    value = time.split(':');
+    hour = parseInt(value[0]);
+    minute = parseInt(value[1]);
+    totalMin = parseInt(hour * 60 + minute);
+    return totalMin;
+  };
+
+  const getTime = time => {
+    let hour = parseInt((time / 60).toString().split('.')[0]);
+    let min = time % 60;
+    let totalHour = hour.toString().padStart(2, '0');
+    let totalMinutes = min.toString().padStart(2, '0');
+    return totalHour + ':' + totalMinutes;
+  };
+
+  const getTimeList = data => {
+    let timeList = [];
+    data?.forEach(item => {
+      const initialTime = getMinute(item.fromTime);
+      const endTime = getMinute(item.toTime);
+      const duration = parseInt(item.duration);
+      const loopLength = (endTime - initialTime) / duration;
+      for (let i = 0; i < loopLength; i++) {
+        const startTime = getTime(initialTime + duration * i);
+        const endTime = getTime(initialTime + duration * (i + 1));
+        timeList.push({
+          slot: startTime + '-' + endTime,
+          duration: item.duration,
+        });
+      }
+    });
+    return timeList;
+  };
+
+  let list = getTimeList(slotDetails?.slot?.M);
+
+  const renderItems = ({item}) => {
     return (
       <View style={styles.item}>
-        <SelectionTab key={index} label="9:30am-10:00am" />
+        <SelectionTab
+          label={item?.slot}
+          onPress={() => handleSelectSlot(item)}
+          selected={selectedSlot?.slot === item?.slot}
+        />
       </View>
     );
   };
+
+  const Appointment_Booking = async () => {
+    try {
+      const response = await fetch(URL.Appointment_Booking, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          start: formattedDate + 'T' + selectedSlot?.slot.split('-')[0],
+          minutes_duration: selectedSlot?.duration,
+          appointment_type: selectedTypeAppointment,
+          mode_of_consultation: selectedMode,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        navigation.navigate('bookslot');
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+
+  console.log('====================================');
+  console.log(selectedSlot?.duration);
+  console.log('====================================');
+
   return (
     <View style={styles.main}>
-      <SelectorBtn name="calendar" />
+      <View style={{width: '100%', height: 40, bottom: 8}}>
+        <SelectorBtn
+          label="Date"
+          name="calendar"
+          onPress={() => setOpen('to')}
+          input={formattedDate}
+        />
+        <DatePicker
+          modal
+          open={open !== false}
+          date={date}
+          theme="auto"
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      </View>
       <View style={styles.child}>
         <View style={styles.type}>
-          <Option label="Offline" selected={true} />
-          <Option label="Teleconsultation" selected={false} />
+          <Option
+            label="Offline"
+            value="Offline"
+            selected={selectedMode === 'offline'}
+            onPress={() => handleOptions('offline')}
+          />
+          <Option
+            label="TelePhonic"
+            value="TelePhonic"
+            selected={selectedMode === 'TelePhonic'}
+            onPress={() => handleOptions('TelePhonic')}
+          />
         </View>
         <View style={styles.selection}>
-          <SelectionTab label="New" selected={true} />
-          <SelectionTab label="Follow up" selected={false} />
-          <SelectionTab label="Report review" selected={false} />
-          <SelectionTab label="Routine" selected={false} />
+          {selections?.map((val, ind) => (
+            <View key={ind}>
+              <SelectionTab
+                label={val}
+                onPress={() => handleSelectType(val)}
+                selected={selectedTypeAppointment === val}
+              />
+            </View>
+          ))}
         </View>
 
         <View>
           <Text style={styles.h2}>Available Slots</Text>
-          <FlatList data={data} renderItem={renderItems} numColumns={3} />
+          <FlatList data={list} renderItem={renderItems} numColumns={3} />
         </View>
         <View style={styles.btn}>
           <HButton label="Book Slot" />

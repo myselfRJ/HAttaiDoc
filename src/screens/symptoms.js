@@ -203,16 +203,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from '../components/option';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import PlusButton from '../components/plusbtn';
-import Button from '../components/Button';
+import {HButton, PlusButton} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  addSymptom,
-  deleteSymptom,
-  updateSymptom,
-} from '../redux/features/prescription/symptomslice';
+import {addSymptom} from '../redux/features/prescription/symptomslice';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 
-const Symptoms = () => {
+const Symptoms = ({navigation}) => {
   const symptomsData = useSelector(state => state.symptoms.symptom);
 
   const dispatch = useDispatch();
@@ -225,18 +221,18 @@ const Symptoms = () => {
   const handleAddSymptoms = () => {
     const uuid = Math.random() + 'tt';
     let symptomCopy = symptomInput;
-    dispatch(addSymptom(symptomInput));
+    dispatch(addSymptom(symptomCopy));
+    setSymptomInput(state => [...state, {symptom: '', days: '', severity: ''}]);
 
     console.log(uuid);
-    setSymptomInput(state => [
-      ...state,
-      {symptom: '', days: '', severity: '', uuid: uuid},
-    ]);
   };
 
-  const handleDeleteSymptom = index => {
-    //dispatch(deleteSymptom());
-    let symptomCopy = symptomInput;
+  const handleSymptomSubmit = () => {
+    setSymptomInput(state => [...state, {symptom: '', days: '', severity: ''}]);
+  };
+
+  const handleDeleteSymptom = () => {
+    let symptomCopy = [...symptomInput];
     console.log(symptomCopy);
     symptomCopy.pop();
     dispatch(addSymptom(symptomCopy));
@@ -244,11 +240,13 @@ const Symptoms = () => {
   };
 
   const handleSymptomChange = (text, index, field) => {
-    let symptomCopy = symptomInput;
-    symptomCopy[index][field] = text;
-    setSymptomInput(symptomCopy);
-    //dispatch(updateSymptom({index, field: 'symptom', value: text}));
+    setSymptomInput(prevState => {
+      const symptomCopy = [...prevState];
+      symptomCopy[index][field] = text;
+      return symptomCopy;
+    });
   };
+  //dispatch(updateSymptom({index, field: 'symptom', value: text}));
 
   // const handleDaysChange = (text, index) => {
   //   dispatch(updateSymptom({index, field: 'days', value: text}));
@@ -342,15 +340,34 @@ const Symptoms = () => {
               </View>
             ))}
           </View>
-          <TouchableOpacity onPress={handleAddSymptoms}>
-            <Icon name="plus" style={[styles.PlusText, styles.PlusButton]} />
-          </TouchableOpacity>
-          {symptomInput.length > 1 && (
-            <TouchableOpacity
-              onPress={() => handleDeleteSymptom(symptomInput.length)}>
-              <Icon name="minus" style={[styles.PlusText, styles.PlusButton]} />
+          <View>
+            <TouchableOpacity onPress={handleAddSymptoms}>
+              <Icon name="plus" style={[styles.PlusText, styles.PlusButton]} />
             </TouchableOpacity>
-          )}
+            {symptomInput.length > 1 && (
+              <TouchableOpacity
+                onPress={() => handleDeleteSymptom(symptomInput.length)}>
+                <Icon
+                  name="minus"
+                  style={[styles.PlusText, styles.PlusButton]}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View
+            style={{
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <HButton
+              label={'submit'}
+              onPress={() => {
+                handleSymptomSubmit;
+                navigation.goBack();
+              }}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -360,20 +377,21 @@ const Symptoms = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    padding: 8,
   },
   mainHead: {
-    color: 'black',
-    fontSize: 20,
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h1,
     fontWeight: 'bold',
     padding: 10,
   },
   symptomInput: {
-    backgroundColor: '#fff',
+    backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
     padding: 8,
   },
   DateInput: {
-    backgroundColor: '#fff',
+    backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
     padding: 8,
   },
@@ -384,14 +402,14 @@ const styles = StyleSheet.create({
   },
   PlusText: {
     fontSize: 40,
-    color: '#fff',
+    color: CUSTOMCOLOR.white,
   },
   PlusButton: {
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
     width: 50,
-    backgroundColor: '#4ba5fa',
+    backgroundColor: CUSTOMCOLOR.primary,
     borderColor: '#fff',
     borderWidth: 2,
     borderRadius: 100,
