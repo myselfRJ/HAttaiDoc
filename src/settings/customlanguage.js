@@ -97,6 +97,7 @@ const Language = {
     verify: 'Verify',
     aadhar: 'Aadhar No',
     abha: 'ABHA ID',
+    search_result: 'Search Results',
   },
   hi: {
     welcome: 'स्वागत',

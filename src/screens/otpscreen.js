@@ -58,7 +58,9 @@ const OtpScreen=({route})=>{
               value={otp}
               setValue={changeText}
             /></View>
-        <View style={{margin:70,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={fetchData}/></View>
+        <View style={{margin:70,alignItems:'center'}}>
+          <HButton label={Language[language]['submit']} onPress={fetchData}/>
+          </View>
         </View>
 
      </View>

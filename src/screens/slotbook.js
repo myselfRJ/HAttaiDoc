@@ -40,7 +40,7 @@ const SlotBook = ({navigation}) => {
           <FlatList data={data} renderItem={renderItems} numColumns={3} />
         </View>
         <View style={styles.btn}>
-          <HButton label="Book Slot" />
+          <HButton label="Book Slot" onPress={()=> navigation.navigate('dashboard')}/>
         </View>
       </View>
     </View>
