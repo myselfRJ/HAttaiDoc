@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-
+import SelectionTab from '../components/selectiontab';
 import {useNavigation} from '@react-navigation/native';
 
 const PatientSearchCard = () => {
@@ -51,7 +51,15 @@ const PatientSearchCard = () => {
           </View>
         </Pressable>
         <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
-          <View style={styles.bottomView}>
+        <View style={styles.tab}>
+        <SelectionTab label={Language[language]['update']} selected={true} />
+        <SelectionTab label={Language[language]['delete']} />
+        <SelectionTab label={Language[language]['view_more']}  onPress={() => navigation.navigate('patientrecord')} />
+        <SelectionTab label={Language[language]['cancel']}  onPress={() => {
+                patientSearchRef?.current?.snapToIndex(0);
+              }} />
+        </View>
+          {/* <View style={styles.bottomView}>
             <TouchableOpacity>
               <Text style={styles.content}>{Language[language]['update']}</Text>
             </TouchableOpacity>
@@ -70,7 +78,7 @@ const PatientSearchCard = () => {
               }}>
               <Text style={styles.content}>{Language[language]['cancel']}</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </BottomSheetView>
       </View>
     </>
@@ -149,6 +157,12 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 15,
     color: 'black',
+  },
+  tab: {
+    flexDirection: 'row',
+    gap: 16,
+    paddingHorizontal: 8,
+    alignSelf:'center'
   },
 });
 

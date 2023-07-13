@@ -98,6 +98,7 @@ const Language = {
     aadhar: 'Aadhar No',
     abha: 'ABHA ID',
     search_result: 'Search Results',
+    wait:'Wait We are setting Up...',
   },
   hi: {
     welcome: 'स्वागत',
