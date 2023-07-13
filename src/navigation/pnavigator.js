@@ -62,8 +62,8 @@ const ProtectedRoute = () => {
       <Stack.Screen name="mobileverify" component={MobileVerify} />
       <Stack.Screen name="abhacreate" component={AbhaCreate} />
       <Stack.Screen name="success" component={Success} />
-      <Stack.Screen name="addnew" component={SearchAddnew}/>
-      <Stack.Screen name="initscreen" component={InitScreen}/>
+      <Stack.Screen name="addnew" component={SearchAddnew} />
+      <Stack.Screen name="initscreen" component={InitScreen} />
       <Stack.Screen name="patientrecord" component={MedicalRecordPatient} />
     </Stack.Navigator>
   );

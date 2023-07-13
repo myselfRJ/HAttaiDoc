@@ -1,5 +1,5 @@
-import React, { useState,useRef } from 'react';
-import { Text, View, StyleSheet, Modal, Pressable } from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -7,24 +7,30 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { commonstyles } from '../styles/commonstyle';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {commonstyles} from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import { SelectorBtn } from '../components';
-import { CONSTANTS } from '../utility/constant';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { URL } from '../utility/urls';
-import { HttpStatusCode } from 'axios';
+import {SelectorBtn} from '../components';
+import {CONSTANTS} from '../utility/constant';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {URL} from '../utility/urls';
+import {HttpStatusCode} from 'axios';
 import BottomSheetView from '../components/bottomSheet';
 import {ScrollView} from 'react-native-gesture-handler';
+import StatusMessage from '../components/statusMessage';
 
-const ProfileCreate = ({ navigation }) => {
+const ProfileCreate = ({navigation}) => {
+  const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
   const fetchData = async () => {
     try {
       const response = await fetch(URL.profileUrl, {
@@ -44,12 +50,19 @@ const ProfileCreate = ({ navigation }) => {
       if (response.status === HttpStatusCode.Created) {
         const jsonData = await response.json();
         console.log(jsonData);
-        navigation.navigate('addclinic');
-
+        setApiStatus({status: 'success', message: 'Successfully created'});
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('addclinic');
+        }, 1000);
       } else {
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status);
       }
     } catch (error) {
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
       console.error('Error occurred:', error);
     }
   };
@@ -108,72 +121,71 @@ const ProfileCreate = ({ navigation }) => {
     appointmentCardRef?.current?.snapToIndex(0);
     console.log(speciality);
   };
-  
+
   const handleOptions = value => {
     handleChangeValue('gender', value);
   };
-
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       <ScrollView>
-    <Keyboardhidecontainer>
-      <View style={commonstyles.content}>
-        <View style={styles.alignchild}>
-          <Text style={commonstyles.h1}>Fill Profile</Text>
-          <AddImage onPress={onImagePress} url={selectedImage} />
-        </View>
-        <InputText
-          label={Language[language]['name']}
-          placeholder="Full Name"
-          value={values.name}
-          setValue={value => handleChangeValue('name', value)}
-        />
+        <Keyboardhidecontainer>
+          <View style={commonstyles.content}>
+            <View style={styles.alignchild}>
+              <Text style={commonstyles.h1}>Fill Profile</Text>
+              <AddImage onPress={onImagePress} url={selectedImage} />
+            </View>
+            <InputText
+              label={Language[language]['name']}
+              placeholder="Full Name"
+              value={values.name}
+              setValue={value => handleChangeValue('name', value)}
+            />
 
-        <View style={styles.alignchild}>
-          <Text>{Language[language]['gender']}</Text>
-          <View style={styles.radiogroup}>
-            <Option
-              label="male"
-              value="male"
-              selected={values.gender === 'male'}
-              onPress={() => handleOptions('male')}
-            />
-            <Option
-              label="female"
-              value="female"
-              selected={values.gender === 'female'}
-              onPress={() => handleOptions('female')}
-            />
-            <Option
-              label="others"
-              value="others"
-              selected={values.gender === 'others'}
-              onPress={() => handleOptions('others')}
-            />
-          </View>
-        </View>
+            <View style={styles.alignchild}>
+              <Text>{Language[language]['gender']}</Text>
+              <View style={styles.radiogroup}>
+                <Option
+                  label="male"
+                  value="male"
+                  selected={values.gender === 'male'}
+                  onPress={() => handleOptions('male')}
+                />
+                <Option
+                  label="female"
+                  value="female"
+                  selected={values.gender === 'female'}
+                  onPress={() => handleOptions('female')}
+                />
+                <Option
+                  label="others"
+                  value="others"
+                  selected={values.gender === 'others'}
+                  onPress={() => handleOptions('others')}
+                />
+              </View>
+            </View>
 
-        <View
-          style={{
-            alignSelf: 'flex-start',
-            width: '100%',
-            paddingHorizontal: 8,
-            height: 80
-          }}>
-          <SelectorBtn
-            label={Language[language]['dob']}
-            name="calendar"
-            onPress={() => setOpen('to')}
-              input={formattedDate}
-              style={styles.DOBselect}
-          />
-        </View>
-        <DatePicker
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                width: '100%',
+                paddingHorizontal: 8,
+                height: 80,
+              }}>
+              <SelectorBtn
+                label={Language[language]['dob']}
+                name="calendar"
+                onPress={() => setOpen('to')}
+                input={formattedDate}
+                style={styles.DOBselect}
+              />
+            </View>
+            <DatePicker
               modal
               open={open !== false}
               date={DOB}
@@ -182,55 +194,58 @@ const ProfileCreate = ({ navigation }) => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             />
-        <InputText
-          label={Language[language]['medical_number']}
-          placeholder="Medical number"
-          value={values.medical_no}
-          setValue={value => handleChangeValue('medical_no', value)}
-        />
-        <View
-          style={{
-            alignSelf: 'flex-start',
-            width: '100%',
-            paddingHorizontal: 8,
-            height: 80,
-          }}>
-          <SelectorBtn
-            label={Language[language]['specialization']}
-            name="chevron-down"
-            // onPress={toggleModal}
-            onPress={() => {
-              appointmentCardRef?.current?.snapToIndex(1);
-            }}
-            input={selectedSpeciality}
-          />
-        </View>
-        <InputText
-          label={Language[language]['experience']}
-          placeholder="experience in years"
-          value={values.experience}
-          setValue={value => handleChangeValue('experience', value)}
-        />
-        <Text
-          style={{
-            fontFamily: CUSTOMFONTFAMILY.h4,
-            fontSize: 12,
-            color: CUSTOMCOLOR.black,
-            alignSelf: 'flex-start',
-          }}>
-          Medical Document
-        </Text>
-        <View style={{ alignSelf: 'flex-start' }}>
-          <HButton label="Upload Document" />
-        </View>
-        <HButton label={Language[language]['save']} onPress={fetchData} />
-      </View>
-    </Keyboardhidecontainer>
-    </ScrollView>
-    <BottomSheetView
-        bottomSheetRef={appointmentCardRef}
-        snapPoints={'50%'}>
-          <View style={styles.modalContainer}>
+            <InputText
+              label={Language[language]['medical_number']}
+              placeholder="Medical number"
+              value={values.medical_no}
+              setValue={value => handleChangeValue('medical_no', value)}
+            />
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                width: '100%',
+                paddingHorizontal: 8,
+                height: 80,
+              }}>
+              <SelectorBtn
+                label={Language[language]['specialization']}
+                name="chevron-down"
+                // onPress={toggleModal}
+                onPress={() => {
+                  appointmentCardRef?.current?.snapToIndex(1);
+                }}
+                input={selectedSpeciality}
+              />
+            </View>
+            <InputText
+              label={Language[language]['experience']}
+              placeholder="experience in years"
+              value={values.experience}
+              setValue={value => handleChangeValue('experience', value)}
+            />
+            <Text
+              style={{
+                fontFamily: CUSTOMFONTFAMILY.h4,
+                fontSize: 12,
+                color: CUSTOMCOLOR.black,
+                alignSelf: 'flex-start',
+              }}>
+              Medical Document
+            </Text>
+            <View style={{alignSelf: 'flex-start'}}>
+              <HButton label="Upload Document" />
+            </View>
+            <HButton
+              label={Language[language]['save']}
+              onPress={() => {
+                fetchData();
+              }}
+            />
+          </View>
+        </Keyboardhidecontainer>
+      </ScrollView>
+      <BottomSheetView bottomSheetRef={appointmentCardRef} snapPoints={'50%'}>
+        <View style={styles.modalContainer}>
           <Text
             style={{
               fontFamily: CUSTOMFONTFAMILY.heading,
@@ -243,13 +258,15 @@ const ProfileCreate = ({ navigation }) => {
             <Pressable
               key={index}
               onPress={() => handleSpecialitySelection(speciality)}
-              style={{height:30}}
-              >
+              style={{height: 30}}>
               <Text style={styles.modalfields}>{speciality}</Text>
             </Pressable>
           ))}
         </View>
-        </BottomSheetView>
+      </BottomSheetView>
+      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
     </View>
   );
 };

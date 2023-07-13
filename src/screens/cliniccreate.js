@@ -5,6 +5,7 @@ import {
   InputText,
   Keyboardhidecontainer,
   PlusButton,
+  BottomSheetView,
 } from '../components';
 import {
   CUSTOMCOLOR,
@@ -12,6 +13,9 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import {commonstyles} from '../styles/commonstyle';
+import {useState, useRef, useEffect} from 'react';
+import StatusMessage from '../components/statusMessage';
+
 const ClinicCreate = ({navigation}) => {
   return (
     <Keyboardhidecontainer>
@@ -34,7 +38,9 @@ const ClinicCreate = ({navigation}) => {
           <InputText label="Speciality" placeholder="Speciliality" />
           <HButton
             label="login"
-            onPress={() => navigation.navigate('usercreate')}
+            onPress={() => {
+              navigation.navigate('usercreate');
+            }}
           />
         </View>
         <View style={styles.rightchild}>
