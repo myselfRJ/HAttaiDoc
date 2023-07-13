@@ -24,12 +24,9 @@ import AadharVerify from '../screens/aadharVerify';
 import MobileVerify from '../screens/mobVerify';
 import AbhaCreate from '../screens/abhaCreate';
 import Success from '../screens/success';
-<<<<<<< HEAD
 import SearchAddnew from '../screens/searchAddnew';
 import InitScreen from '../screens/init_screen';
-=======
 import MedicalRecordPatient from '../screens/medicalRecordPatients';
->>>>>>> develop
 
 const Stack = createNativeStackNavigator();
 
@@ -39,11 +36,8 @@ const ProtectedRoute = () => {
 
   return (
     <Stack.Navigator
-<<<<<<< HEAD
       initialRouteName="initscreen"
-=======
-      initialRouteName="tab"
->>>>>>> develop
+      //initialRouteName="tab"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
       <Stack.Screen name="profilecreate" component={ProfileCreate} />
