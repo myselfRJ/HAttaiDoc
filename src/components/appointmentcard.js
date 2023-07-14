@@ -14,10 +14,10 @@ import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import BottomSheetView from './bottomSheet';
 import SelectionTab from '../components/selectiontab';
+import moment from 'moment';
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
   const appointmentCardRef = useRef(null);
-
   return (
     <>
       <View style={styles.maincontainer}>
@@ -45,7 +45,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
           </View>
           <View style={styles.statusinfo}>
             <Text style={styles.contact}>
-              {Language[language]['time']}:{appointment.time}
+              {Language[language]['time']}:
+              {moment(appointment.time).format('HH:mm')}
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
@@ -108,8 +109,9 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <SelectionTab label={Language[language]['reschedule']} selected={true} />
         <SelectionTab label={Language[language]['cancel']} selected={true} onPress={() => {
                 appointmentCardRef?.current?.snapToIndex(0);
-              }} />
-        </View>
+              }}
+            />
+          </View>
           {/* <View style={[styles.option]}>
             <TouchableOpacity onPress={openVisit}>
               <Text style={styles.contact1}>
@@ -241,8 +243,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
     paddingHorizontal: 8,
-    padding:20,
-    alignSelf:'center'
+    padding: 20,
+    alignSelf: 'center',
   },
 });
 

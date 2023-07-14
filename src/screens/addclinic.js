@@ -126,7 +126,10 @@ const AddClinic = ({navigation}) => {
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
-              <AddImage onPress={onImagePress} url={selectedImage} />
+              <View style={styles.alignchild}>
+                <Text style={commonstyles.h1}>Add Clinic</Text>
+                <AddImage onPress={onImagePress} url={selectedImage} />
+              </View>
             </View>
             <InputText
               label={Language[language]['clinic']}

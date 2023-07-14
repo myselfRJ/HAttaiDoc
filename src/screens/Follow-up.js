@@ -47,7 +47,7 @@ export default function DateTime() {
             open={open}
             date={new Date(date)}
             theme="auto"
-            mode="date"
+            mode="datetime"
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />

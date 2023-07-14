@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Account = () => {
   return (
     <View>
-      <View style={styles.MainHeadContainer}>
+      {/* <View style={styles.MainHeadContainer}>
         <Text style={styles.MainText}>Account and Settings</Text>
         <Icon
           name="bell"
@@ -20,7 +20,7 @@ const Account = () => {
           color={'#fff'}
           style={{top: 43, right: 37}}
         />
-      </View>
+      </View> */}
       <View style={{top: 40, left: 49}}>
         <Text style={styles.PersonalInf}>Personal Information</Text>
         <View style={styles.pI}>

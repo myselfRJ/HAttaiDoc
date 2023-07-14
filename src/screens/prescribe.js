@@ -140,7 +140,7 @@ export default function Prescribe() {
               }}>
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
-                <Text>
+                <Text style={{color: CUSTOMCOLOR.black}}>
                   {item.selectedMode}|{item.medicine}|{item.selectedMg}|
                   {item.selectedTime}|{item.selectedFrequency}|{item.tab}|
                   {item.quantity}|{item.duration}
@@ -418,6 +418,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
     lineHeight: 19.07,
+    top: 8,
     color: CUSTOMCOLOR.black,
   },
   ModesContainer: {
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: 20,
     lineHeight: 13,
-    color: '#4ba5fa',
+    color: CUSTOMCOLOR.primary,
     gap: 10,
   },
   line: {
