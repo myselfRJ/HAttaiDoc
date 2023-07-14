@@ -30,8 +30,11 @@ const AddUser = ({navigation}) => {
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
   const [ShowClinicModal, setClinicModal] = useState(false);
+
+  const clinics = CONSTANTS.clinic;
+
   const [selectedRole, setSelectedRole] = useState('');
-  const [selectedClinic, setSelectedClinic] = useState('');
+  const [selectedClinic, setSelectedClinic] = useState(clinics[0]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [values, setValues] = useState({
     name: '',
@@ -303,7 +306,7 @@ const AddUser = ({navigation}) => {
             }}>
             {Language[language]['clinic']}
           </Text>
-          {CONSTANTS.clinic.map((clinic, index) => (
+          {clinics?.map((clinic, index) => (
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
