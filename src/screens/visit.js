@@ -82,7 +82,7 @@ const Visit = ({navigation}) => {
                             color={CUSTOMCOLOR.primary}
                           />
                           <View>
-                            <Text>
+                            <Text style={{color: CUSTOMCOLOR.black}}>
                               {item.symptom}|{item.days}|{item.severity}
                             </Text>
                           </View>
@@ -116,7 +116,7 @@ const Visit = ({navigation}) => {
                               color={CUSTOMCOLOR.primary}
                             />
                             <View>
-                              <Text>
+                              <Text style={{color: CUSTOMCOLOR.black}}>
                                 {item.selectedMode}|{item.medicine}|
                                 {item.selectedMg}|{item.selectedTime}|
                                 {item.selectedFrequency}|{item.tab}|

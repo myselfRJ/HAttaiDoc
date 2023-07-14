@@ -1,8 +1,15 @@
-import {StyleSheet, Text, TouchableOpacity, View,Image,Pressable} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  Pressable,
+} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
-import { CONSTANTS } from '../utility/constant';
+import {CONSTANTS} from '../utility/constant';
 import {
   ChartCard,
   AppointmentCard,
@@ -20,20 +27,23 @@ import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 const Dashboard = ({navigation}) => {
   const ClinicRef = useRef(null);
-  const [selectedClinic, setSelectedClinic] = useState('');
-  const [clinic,setClinic]=useState('')
-  const handleChangeValue=(e)=>{
-    setClinic(e)
-  }
-  const [DOB, setDOB] = useState(new Date());
+
+  const clinics = CONSTANTS.clinic;
+
+  const [selectedClinic, setSelectedClinic] = useState(clinics[0]);
+  const [clinic, setClinic] = useState('');
+  const handleChangeValue = e => {
+    setClinic(e);
+  };
+  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const formattedDate = DOB.toLocaleDateString('en-US', {
+  const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
   const handleConfirm = date => {
-    setDOB(date);
+    setDate(date);
     setOpen(false);
   };
 
@@ -79,10 +89,10 @@ const Dashboard = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <View>
-            <Image 
-            style={{width:35,height:32}}
-            source={require('../assets/images/logo.jpeg')}
-            />
+              <Image
+                style={{width: 35, height: 32}}
+                source={require('../assets/images/logo.jpeg')}
+              />
               <Text style={styles.title}>
                 {Language[language]['welcome']},{Language[language]['dr']}
                 RamaMurthi
@@ -110,31 +120,31 @@ const Dashboard = ({navigation}) => {
             />
           </View>
           <View style={styles.select}>
-          <SelectorBtn
-                //label={Language[language]['clinic']}
-                name="chevron-down"
-                onPress={() => {
-                  ClinicRef?.current?.snapToIndex(1);
-                }}
-                input={selectedClinic}
-              />
-          <SelectorBtn
-            //label={Language[language]['dob']}
-            name="calendar"
-            onPress={() => setOpen('to')}
+            <SelectorBtn
+              //label={Language[language]['clinic']}
+              name="chevron-down"
+              onPress={() => {
+                ClinicRef?.current?.snapToIndex(1);
+              }}
+              input={selectedClinic}
+            />
+            <SelectorBtn
+              //label={Language[language]['dob']}
+              name="calendar"
+              onPress={() => setOpen('to')}
               input={formattedDate}
               style={styles.DOBselect}
-          />
-        <DatePicker
+            />
+            <DatePicker
               modal
               open={open !== false}
-              date={DOB}
+              date={date}
               theme="auto"
               mode="date"
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             />
-            
+
             {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
           </View>
           <View style={styles.appointment}>
@@ -176,31 +186,28 @@ const Dashboard = ({navigation}) => {
               alignItems: 'flex-end',
               justifyContent: 'center',
               paddingHorizontal: 8,
-            }}>
-            
-          </View>
+            }}></View>
         </View>
       </ScrollView>
-      <BottomSheetView
-              bottomSheetRef={ClinicRef}
-              snapPoints={'50%'}>
-                 <View style={styles.modalContainer}>
-                  <Text
-                    style={{
-                      fontFamily: CUSTOMFONTFAMILY.heading,
-                      fontSize: 18,
-                      color: CUSTOMCOLOR.black,
-                    }}>
-                    {Language[language]['clinic']}
-                  </Text>
-                  {CONSTANTS.clinic.map((clinic, index) => (
-                    <Pressable key={index} onPress={() => handleClinicSelection(clinic)}>
-                      <Text style={styles.modalfields}>{clinic}</Text>
-                    </Pressable>
-                  ))}
-                </View>
-
-              </BottomSheetView>
+      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+        <View style={styles.modalContainer}>
+          <Text
+            style={{
+              fontFamily: CUSTOMFONTFAMILY.heading,
+              fontSize: 18,
+              color: CUSTOMCOLOR.black,
+            }}>
+            {Language[language]['clinic']}
+          </Text>
+          {CONSTANTS.clinic.map((clinic, index) => (
+            <Pressable
+              key={index}
+              onPress={() => handleClinicSelection(clinic)}>
+              <Text style={styles.modalfields}>{clinic}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </BottomSheetView>
     </View>
   );
 };
@@ -250,7 +257,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   DOBselect: {
-    width:"100%",
+    width: '100%',
     gap: 8,
     //paddingHorizontal: 2,
   },

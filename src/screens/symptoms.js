@@ -269,7 +269,12 @@ const Symptoms = ({navigation}) => {
                 key={index}
                 style={{flexDirection: 'row', padding: 10, flexWrap: 'wrap'}}>
                 <View style={styles.symptomInput}>
-                  <Text style={{padding: 10, fontWeight: 'bold'}}>
+                  <Text
+                    style={{
+                      padding: 10,
+                      fontWeight: 'bold',
+                      color: CUSTOMCOLOR.black,
+                    }}>
                     {Language[language]['symptoms']}:
                   </Text>
                   <View
@@ -288,7 +293,12 @@ const Symptoms = ({navigation}) => {
                   </View>
                 </View>
                 <View style={styles.DateInput}>
-                  <Text style={{padding: 10, fontWeight: 'bold'}}>
+                  <Text
+                    style={{
+                      padding: 10,
+                      fontWeight: 'bold',
+                      color: CUSTOMCOLOR.black,
+                    }}>
                     {Language[language]['days']}:
                   </Text>
                   <View
