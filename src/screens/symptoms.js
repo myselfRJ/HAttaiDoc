@@ -312,7 +312,7 @@ const Symptoms = ({navigation}) => {
                   </Text>
                   <View style={{flexDirection: 'row'}}>
                     <Option
-                      label="Low"
+                      label={Language[language]['low']}
                       value="low"
                       selected={data?.severity === 'low'}
                       onPress={() =>
@@ -320,7 +320,7 @@ const Symptoms = ({navigation}) => {
                       }
                     />
                     <Option
-                      label="Medium"
+                      label={Language[language]['medium']}
                       value="medium"
                       selected={data?.severity === 'medium'}
                       onPress={() =>
@@ -328,7 +328,7 @@ const Symptoms = ({navigation}) => {
                       }
                     />
                     <Option
-                      label="High"
+                      label={Language[language]['high']}
                       value="high"
                       selected={data?.severity === 'high'}
                       onPress={() =>
@@ -363,7 +363,7 @@ const Symptoms = ({navigation}) => {
             <HButton
               label={'submit'}
               onPress={() => {
-                handleSymptomSubmit();
+                handleSymptomSubmit;
                 navigation.goBack();
               }}
             />
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     backgroundColor: CUSTOMCOLOR.primary,
-    borderColor: '#fff',
+    borderColor: CUSTOMCOLOR.white,
     borderWidth: 2,
     borderRadius: 100,
     padding: 4,

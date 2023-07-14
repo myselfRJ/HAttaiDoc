@@ -16,6 +16,7 @@ import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {CONSTANTS} from '../utility/constant';
 import {URL} from '../utility/urls';
+import {Icon} from '../components';
 
 const SlotBook = ({navigation}) => {
   const [slotDetails, setSlotDetails] = useState({});
@@ -47,7 +48,7 @@ const SlotBook = ({navigation}) => {
     year: 'numeric',
   });
   const handleConfirm = date => {
-    setDOB(date);
+    setDate(date);
     setOpen(false);
   };
 
@@ -149,56 +150,70 @@ const SlotBook = ({navigation}) => {
 
   return (
     <View style={styles.main}>
-      <View style={{width: '100%', height: 40, bottom: 8}}>
-        <SelectorBtn
-          label="Date"
-          name="calendar"
-          onPress={() => setOpen('to')}
-          input={formattedDate}
-        />
-        <DatePicker
-          modal
-          open={open !== false}
-          date={date}
-          theme="auto"
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+      <View style={styles.MainHeadContainer}>
+        <Text style={styles.MainText}>Slot Booking</Text>
+        <Icon
+          name="bell"
+          size={24}
+          color={CUSTOMCOLOR.white}
+          style={{top: 43, right: 37}}
         />
       </View>
       <View style={styles.child}>
-        <View style={styles.type}>
-          <Option
-            label="Offline"
-            value="Offline"
-            selected={selectedMode === 'offline'}
-            onPress={() => handleOptions('offline')}
+        <View style={{width: '100%', height: 40, bottom: 8}}>
+          <SelectorBtn
+            label="Date"
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
           />
-          <Option
-            label="TelePhonic"
-            value="TelePhonic"
-            selected={selectedMode === 'TelePhonic'}
-            onPress={() => handleOptions('TelePhonic')}
+          <DatePicker
+            modal
+            open={open !== false}
+            date={date}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
           />
         </View>
-        <View style={styles.selection}>
-          {selections?.map((val, ind) => (
-            <View key={ind}>
-              <SelectionTab
-                label={val}
-                onPress={() => handleSelectType(val)}
-                selected={selectedTypeAppointment === val}
-              />
-            </View>
-          ))}
-        </View>
+        <View style={styles.child}>
+          <View style={styles.type}>
+            <Option
+              label="Offline"
+              value="Offline"
+              selected={selectedMode === 'offline'}
+              onPress={() => handleOptions('offline')}
+            />
+            <Option
+              label="TelePhonic"
+              value="TelePhonic"
+              selected={selectedMode === 'TelePhonic'}
+              onPress={() => handleOptions('TelePhonic')}
+            />
+          </View>
+          <View style={styles.selection}>
+            {selections?.map((val, ind) => (
+              <View key={ind}>
+                <SelectionTab
+                  label={val}
+                  onPress={() => handleSelectType(val)}
+                  selected={selectedTypeAppointment === val}
+                />
+              </View>
+            ))}
+          </View>
 
-        <View>
-          <Text style={styles.h2}>Available Slots</Text>
-          <FlatList data={list} renderItem={renderItems} numColumns={3} />
-        </View>
-        <View style={styles.btn}>
-          <HButton label="Book Slot" onPress={()=> navigation.navigate('dashboard')}/>
+          <View>
+            <Text style={styles.h2}>Available Slots</Text>
+            <FlatList data={list} renderItem={renderItems} numColumns={3} />
+          </View>
+          <View style={styles.btn}>
+            <HButton
+              label="Book Slot"
+              onPress={() => navigation.navigate('dashboard')}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -207,22 +222,37 @@ const SlotBook = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    padding: 24,
-    gap: 16,
+    gap: 32,
   },
   type: {
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
   },
-
+  MainHeadContainer: {
+    height: '10%',
+    backgroundColor: CUSTOMCOLOR.primary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  MainText: {
+    color: CUSTOMCOLOR.white,
+    top: 43,
+    left: 37,
+    gap: 33,
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 21.79,
+  },
   selection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   child: {
     padding: 24,
-    gap: 24,
+    gap: 32,
   },
   h2: {
     fontSize: 24,
