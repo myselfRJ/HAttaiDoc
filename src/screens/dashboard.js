@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View,Pressable} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View,Image,Pressable} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
@@ -79,7 +79,10 @@ const Dashboard = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <View>
-              <SvgXml xml={hattailogo} />
+            <Image 
+            style={{width:35,height:32}}
+            source={require('../assets/images/logo.jpeg')}
+            />
               <Text style={styles.title}>
                 {Language[language]['welcome']},{Language[language]['dr']}
                 RamaMurthi

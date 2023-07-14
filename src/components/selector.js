@@ -22,7 +22,7 @@ const SelectorBtn = props => {
 const styles = StyleSheet.create({
   select: {
     flexDirection: 'row',
-    paddingVertical: 8,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'space-between',
