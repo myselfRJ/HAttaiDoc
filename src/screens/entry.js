@@ -44,7 +44,7 @@ const Entry = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.Top}></View>
         <View style={styles.bottom}>
-          <View style={{ margin: 130,backgroundColor:CUSTOMCOLOR.white }}>
+          <View style={styles.input}>
             <InputText
               doubleCheck={[true, false]}
               check={checkNumber}
@@ -75,8 +75,11 @@ const Entry = ({ navigation }) => {
     },
     bottom: {
       height: 680,
-      backgroundColor: CUSTOMCOLOR.white,
     },
+    input:{
+      margin:100
+    }
+    
   });
   
   export default Entry;

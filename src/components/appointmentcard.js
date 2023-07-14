@@ -104,16 +104,10 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}>
-          <View style={styles.tab}>
-            <SelectionTab
-              label={Language[language]['start_visit']}
-              selected={true}
-              onPress={openVisit}
-            />
-            <SelectionTab label={Language[language]['reschedule']} />
-            <SelectionTab
-              label={Language[language]['cancel']}
-              onPress={() => {
+             <View style={styles.tab}>
+        <SelectionTab label={Language[language]['start_visit']} selected={true} onPress={openVisit} />
+        <SelectionTab label={Language[language]['reschedule']} selected={true} />
+        <SelectionTab label={Language[language]['cancel']} selected={true} onPress={() => {
                 appointmentCardRef?.current?.snapToIndex(0);
               }}
             />

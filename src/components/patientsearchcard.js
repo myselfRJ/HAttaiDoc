@@ -53,9 +53,9 @@ const PatientSearchCard = () => {
         <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
         <View style={styles.tab}>
         <SelectionTab label={Language[language]['update']} selected={true} />
-        <SelectionTab label={Language[language]['delete']} />
-        <SelectionTab label={Language[language]['view_more']}  onPress={() => navigation.navigate('patientrecord')} />
-        <SelectionTab label={Language[language]['cancel']}  onPress={() => {
+        <SelectionTab label={Language[language]['delete']} selected={true} />
+        <SelectionTab label={Language[language]['view_more']}  selected={true}  onPress={() => navigation.navigate('patientrecord')} />
+        <SelectionTab label={Language[language]['cancel']} selected={true}  onPress={() => {
                 patientSearchRef?.current?.snapToIndex(0);
               }} />
         </View>

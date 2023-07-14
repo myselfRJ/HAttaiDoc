@@ -106,7 +106,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.weight} onChangeText={text => weightChange(text, props.index)}
                         style={styles.weighttext} keyboardType='numeric' />
-                      <Text style={styles.weighttext}>kg</Text>
+                      <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>kg</Text>
                     </View>
                   </View>
                   <View style={styles.heightcontainer}>
@@ -114,7 +114,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.height} onChangeText={text => heightChange(text, props.index)}
                         style={styles.heighttext} keyboardType='numeric' />
-                      <Text style={styles.heighttext}>cm</Text>
+                      <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>cm</Text>
                     </View>
                   </View>
                   <View style={styles.tempcontainer}>
@@ -122,7 +122,7 @@ nav.goBack()
                     <View style={styles.hardText}>
                       <TextInput value={vitals.temp} onChangeText={text => tempChange(text, props.index)}
                         style={styles.temptext} keyboardType='numeric' />
-                      <Text style={styles.temptext}>°C</Text>
+                      <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>°C</Text>
                     </View>
                   </View>
                   <View style={styles.ratecontainer}>
@@ -144,7 +144,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.diastolic_bp} onChangeText={text => diastolicChange(text, props.index)}
                       style={styles.diatext} keyboardType='numeric' />
-                    <Text style={styles.diatext}>mmHg</Text>
+                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
                   </View>
                 </View>
 
@@ -153,7 +153,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.systolic_bp} onChangeText={text => systolicChange(text, props.index)}
                       style={styles.systext} keyboardType='numeric' />
-                    <Text style={styles.systext}>mmHg</Text>
+                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
                   </View>
                 </View>
               </View>
@@ -164,7 +164,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.lmp_edd} onChangeText={text => lmpChange(text,props.index)}
                       style={styles.lmptext} keyboardType='numeric' />
-                    <Text style={styles.lmptext}>week</Text>
+                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
                   </View>
                 </View>
                 <View style={styles.uscontainer}>
@@ -172,7 +172,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.us_edd} onChangeText={text => usChange(text, props.index)}
                       style={styles.ustext} keyboardType='numeric' />
-                    <Text style={styles.ustext}>week</Text>
+                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
                   </View>
                 </View>
               </View>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   inpcontainer: {
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: 8,
+    //paddingHorizontal: 4,
     paddingVertical: 8,
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '700',
@@ -223,14 +223,12 @@ const styles = StyleSheet.create({
     height: 309,
     gap: 4,
     padding: 8,
-    gap: 16
   },
-  basiccontainer: {
-    width: 443,
-    height: 87,
-    gap:4
+  // basiccontainer: {
+  //   width: '70%',
+  //   height: 87,
 
-  },
+  // },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
     padding: 8,
@@ -251,25 +249,23 @@ const styles = StyleSheet.create({
 
   },
   pulsecontainer: {
-    width: 80,
     height: 60,
-    padding: 4,
-    gap: 4
+    //paddingHorizontal: 4,
+    //gap: 4
   },
   pulse: {
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   pulsetext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
   weightcontainer: {
-    width: 80,
-    height: 62,
-    padding: 8,
-    gap: 4
+    height: 60,
+   //// paddingHorizontal: 4,
+    //gap: 4
   },
   weight: {
     fontSize: 12,
@@ -278,19 +274,20 @@ const styles = StyleSheet.create({
   },
   hardText: {
     flexDirection: "row",
-    width:80,
-    alignItems:'center'
+    alignItems:'center',
   },
   text: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: "center"
+    alignItems:'center',
+    justifyContent:'center'
   },
   weighttext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
+
   },
   // changetext: {
   //   borderWidth: 1,
@@ -303,42 +300,39 @@ const styles = StyleSheet.create({
   //   borderColor: CUSTOMCOLOR.primary
   // },
   heightcontainer: {
-    width: 70,
     height: 60,
-    padding: 8,
-    gap: 4
+   //// paddingHorizontal: 4,
+    //gap: 4
   },
   height: {
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   heighttext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
   tempcontainer: {
-    width: 59,
     height: 60,
-    padding: 8,
-    gap: 4
+  ///  paddingHorizontal: 4,
+    //gap: 4
   },
   temp: {
     fontSize: 12,
     color: CUSTOMCOLOR.black
   },
   temptext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
     
 
   },
   ratecontainer: {
-    width: 90,
     height: 60,
-    padding: 8,
-    gap: 4
+   // paddingHorizontal: 4,
+    //gap: 4
   },
   rate: {
     fontSize: 12,
@@ -346,22 +340,22 @@ const styles = StyleSheet.create({
 
   },
   ratetext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-    width: 70,
     height: 60,
-    padding: 8,
-    gap: 4
+    width:40
+   //paddingHorizontal: 4,
+    //gap: 4
   },
   bmi: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
   },
   bmitext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
 
@@ -371,7 +365,7 @@ const styles = StyleSheet.create({
     height: 87,
     flexDirection: 'row',
     gap:4,
-    top:32
+    top:24
   },
   bloodPres: {
     padding: 8,
@@ -380,10 +374,10 @@ const styles = StyleSheet.create({
     top:32
   },
   diascontainer: {
-    width: 94,
-    height: 60,
+    paddingHorizontal:8,
+
     padding: 8,
-    gap: 4
+
   },
   diastolic: {
     fontSize: 12,
@@ -392,15 +386,14 @@ const styles = StyleSheet.create({
 
   },
   diatext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
+    
     backgroundColor: CUSTOMCOLOR.white,
   },
   syscontainer: {
-    width: 87,
-    height: 60,
+    paddingHorizontal:8,
     padding: 8,
-    gap: 4
   },
   systolic: {
     fontSize: 12,
@@ -408,7 +401,7 @@ const styles = StyleSheet.create({
 
   },
   systext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
@@ -425,8 +418,7 @@ const styles = StyleSheet.create({
     gap: 32
   },
   lmpcontainer: {
-    width: 72,
-    height: 60,
+    paddingHorizontal:8,
     padding: 8,
     gap: 4
   },
@@ -435,13 +427,12 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   lmptext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
   uscontainer: {
-    width: 72,
-    height: 60,
+    paddingHorizontal:8,
     padding: 8,
     gap: 4
   },
@@ -450,7 +441,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black
   },
   ustext: {
-    padding: 8,
+    paddingVertical: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
