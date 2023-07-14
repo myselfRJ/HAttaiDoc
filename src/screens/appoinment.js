@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, {useEffect, useState,useRef} from 'react';
+import {Text, View, StyleSheet,Pressable,Image} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -14,9 +14,44 @@ import {AppointmentCard} from '../components';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import { Icon, InputText } from '../components';
+import DatePicker from 'react-native-date-picker';
+import BottomSheetView from '../components/bottomSheet';
+import { CONSTANTS } from '../utility/constant';
+import { CONSTANT } from '../utility/const';
+import {
+  ChartCard,
+  HeaderAvatar,
+} from '../components';
+
 
 const Appointment = ({navigation}) => {
   const [name,setName]=useState('')
+  const ClinicRef = useRef(null);
+  const [selectedClinic, setSelectedClinic] = useState(CONSTANTS.clinic[0]);
+  const [clinic,setClinic]=useState('')
+  const handleChangeValue=(e)=>{
+    setClinic(e)
+  }
+  const [DOB, setDOB] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const formattedDate = DOB.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const handleConfirm = date => {
+    setDOB(date);
+    setOpen(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+  const handleClinicSelection = clinic => {
+    setSelectedClinic(clinic);
+    handleChangeValue('clinic', clinic);
+    ClinicRef?.current?.snapToIndex(0);
+  };
   const ChangeNameValue=(e)=>{
     setName(e);
   }
@@ -34,9 +69,51 @@ const Appointment = ({navigation}) => {
   return (
     <View style={styles.main}>
       <ScrollView>
+
+      <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 24,
+              paddingHorizontal: 8,
+            }}>
+            <View>
+            <Image 
+            style={{width:35,height:32}}
+            source={require('../assets/images/logo.jpeg')}
+            />
+              <Text style={styles.title}>
+                {Language[language]['welcome']},{Language[language]['dr']}
+                RamaMurthi
+              </Text>
+            </View>
+            <HeaderAvatar />
+          </View>
       <View style={styles.select}>
-        <SelectorBtn name="chevron-down" />
-        <SelectorBtn name="calendar" />
+      <SelectorBtn
+                //label={Language[language]['clinic']}
+                name="chevron-down"
+                onPress={() => {
+                  ClinicRef?.current?.snapToIndex(1);
+                }}
+                input={selectedClinic}
+              />
+          <SelectorBtn
+            //label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+              input={formattedDate}
+              style={styles.DOBselect}
+          />
+        <DatePicker
+              modal
+              open={open !== false}
+              date={DOB}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
         {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
         <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',bottom:24,width:'103%'}}>
             <InputText 
@@ -78,14 +155,40 @@ const Appointment = ({navigation}) => {
         onPress={() => navigation.navigate('addnew')}
       />
       </ScrollView>
+      <BottomSheetView
+              bottomSheetRef={ClinicRef}
+              snapPoints={'50%'}>
+                 <View style={styles.modalContainer}>
+                  <Text
+                    style={{
+                      fontFamily: CUSTOMFONTFAMILY.heading,
+                      fontSize: 18,
+                      color: CUSTOMCOLOR.black,
+                    }}>
+                    {Language[language]['clinic']}
+                  </Text>
+                  {CONSTANTS.clinic.map((clinic, index) => (
+                    <Pressable key={index} onPress={() => handleClinicSelection(clinic)}>
+                      <Text style={styles.modalfields}>{clinic}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+
+              </BottomSheetView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
-    padding: 24,
+    paddingHorizontal:24,
+    paddingVertical:24
+  },
+  title: {
+    color: CUSTOMCOLOR.black,
+    fontSize: 18,
+    lineHeight: 26,
+    fontWeight: '600',
   },
   select: {
     gap: 8,
@@ -120,6 +223,28 @@ searchIcon:{
     height:51,
     right:24,
     padding:16,
+},
+DOBselect: {
+  width:"100%",
+  gap: 8,
+  //paddingHorizontal: 2,
+},
+modalContainer: {
+  height: 400,
+  width: '100%',
+  //justifyContent: 'center',
+  alignItems: 'flex-start',
+  backgroundColor: CUSTOMCOLOR.white,
+  alignSelf: 'center',
+  borderRadius: 10,
+  padding: 16,
+},
+modalfields: {
+  color: CUSTOMCOLOR.primary,
+  fontSize: 14,
+  fontWeight: 400,
+  fontFamily: CUSTOMFONTFAMILY.body,
+  padding: 4,
 },
 });
 export default Appointment;

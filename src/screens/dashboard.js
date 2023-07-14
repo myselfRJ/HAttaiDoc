@@ -19,7 +19,7 @@ import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 const Dashboard = ({navigation}) => {
-  const ClinicRef = useState(null);
+  const ClinicRef = useRef(null);
   const [selectedClinic, setSelectedClinic] = useState('');
   const [clinic,setClinic]=useState('')
   const handleChangeValue=(e)=>{
