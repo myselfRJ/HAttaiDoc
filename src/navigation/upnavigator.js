@@ -6,6 +6,7 @@ import AfterAuthLoadingScreen from '../screens/afterauthloadingscreen';
 import Intro from '../screens/intro';
 import Entry from '../screens/entry';
 import OtpScreen from '../screens/otpscreen';
+import Introduction from '../screens/introduction';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const UnProtectedRoute = () => {
       {/* <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="signup" component={Signup} />
       <Stack.Screen name="otp" component={Otp} /> */}
+      <Stack.Screen name="introduction" component={Introduction}/>
       <Stack.Screen name="intro" component={Intro}/>
       <Stack.Screen name="entry" component={Entry}/>
       <Stack.Screen name='otpscreen' component={OtpScreen}/>

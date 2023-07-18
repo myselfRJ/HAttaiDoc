@@ -35,7 +35,7 @@ const InputText = props => {
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={styles.labeltext}>{props.label}</Text>
+        <Text style={[styles.labeltext,props.lbltext]}>{props.label}</Text>
         <View>
           <TextInput
             style={[styles.textinput, errorStyles, props.textStyle]}

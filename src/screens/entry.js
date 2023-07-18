@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet,Image } from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -42,7 +42,12 @@ const Entry = ({ navigation }) => {
     return (
       <ScrollView>
       <View style={styles.container}>
-        <View style={styles.Top}></View>
+        <View style={styles.Top}>
+        <Image
+            style={{width: 352, height: 298}}
+            source={require('../assets/images/entry.jpeg')}
+              />
+        </View>
         <View style={styles.bottom}>
           <View style={styles.input}>
             <InputText
@@ -70,6 +75,8 @@ const Entry = ({ navigation }) => {
       flex: 1,
     },
     Top: {
+      alignItems:'center',
+      justifyContent:'center',
       height: 503,
       backgroundColor: CUSTOMCOLOR.primary,
     },
