@@ -25,8 +25,9 @@ const ClinicAddress = (props) => {
     };
 
     return (
-        <View style={styles.container}>
+        
             <ScrollView>
+                <View style={styles.container}>
             <View style={styles.top}></View>
             <View style={styles.bottom}>
                 <View style={styles.addressContainer}>
@@ -48,8 +49,8 @@ const ClinicAddress = (props) => {
                 </View>
                 
             </View>
+            </View>
             </ScrollView>
-        </View>
     )
 }
 const styles = StyleSheet.create({

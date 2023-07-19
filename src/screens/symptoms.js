@@ -387,7 +387,8 @@ const Symptoms = ({navigation}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    padding: 8,
+    paddingHorizontal:8,
+    paddingVertical:16,
   },
   mainHead: {
     color: CUSTOMCOLOR.black,

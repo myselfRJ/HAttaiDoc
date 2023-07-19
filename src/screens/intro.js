@@ -15,7 +15,7 @@ const Intro=({navigation})=>{
      <View style={styles.container}>
         <View style={styles.Top}>
         <Image
-            style={{width: 272, height: 317}}
+            style={{width: 272, height: 500}}
             source={require('../assets/images/intro.jpeg')}
               />
         </View>

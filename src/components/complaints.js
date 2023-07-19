@@ -22,7 +22,6 @@ const ComplaintsCard = (props) => {
   }
   return (
     <View style={styles.main}>
-      <Text style={styles.h2}>{Language[language]['consultation']}</Text>
       <Text style={styles.h3}>{Language[language]['cheif_complaints']}</Text>
       <TextInput
         style={styles.input}
@@ -59,16 +58,8 @@ const ComplaintsCard = (props) => {
 
 const styles = StyleSheet.create({
   main: {
-    padding: 24,
-    gap: 16,
-  },
-  h2: {
-    fontSize: 24,
-    fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    lineHeight: 20 * 2,
-    color: CUSTOMCOLOR.black,
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
   },
   h3: {
     fontSize: 14,
@@ -76,14 +67,11 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
-    padding: 8,
+    paddingHorizontal:8
   },
   input: {
-    width: '100%',
-    height:60,
+    paddingHorizontal:8,
     borderRadius:4,
-    gap:10,
-    padding: 10,
     fontSize:12,
     backgroundColor:CUSTOMCOLOR.white
   },
@@ -98,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   sugbtn: {
-    borderRadius: 24,
+    borderRadius: 8,
     padding: 5,
     height:30,
     gap:4

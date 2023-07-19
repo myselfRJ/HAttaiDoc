@@ -103,6 +103,9 @@ const AddUser = ({navigation}) => {
             clinic: prevValues.clinic,
           },
         ],
+        name:'',
+        phone:'',
+        gender:''
       }));
       setShowSlotChip(true);
     }
@@ -208,7 +211,6 @@ const AddUser = ({navigation}) => {
                 alignSelf: 'flex-start',
                 width: '100%',
                 paddingHorizontal: 8,
-                height: 80,
               }}>
               <SelectorBtn
                 label={Language[language]['role']}
@@ -224,7 +226,6 @@ const AddUser = ({navigation}) => {
                 alignSelf: 'flex-start',
                 width: '100%',
                 paddingHorizontal: 8,
-                height: 80,
               }}>
               <SelectorBtn
                 label={Language[language]['clinic']}
@@ -236,7 +237,7 @@ const AddUser = ({navigation}) => {
               />
             </View>
             <View
-              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8}}>
+              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8,paddingHorizontal:8}}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
             <View style={styles.users}>
@@ -248,6 +249,7 @@ const AddUser = ({navigation}) => {
                       fontSize: CUSTOMFONTSIZE.h2,
                       color: CUSTOMCOLOR.black,
                       paddingVertical: 4,
+                      paddingHorizontal:8
                     }}>
                     Users
                   </Text>
@@ -357,7 +359,8 @@ const styles = StyleSheet.create({
   },
   users: {
     alignSelf: 'flex-start',
-    paddingVertical: 16,
+    paddingVertical: 8,
+    paddingHorizontal:8
   },
 });
 export default AddUser;

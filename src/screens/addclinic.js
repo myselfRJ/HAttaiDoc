@@ -82,7 +82,8 @@ const AddClinic = ({navigation}) => {
       setValue(prevValues => ({
         ...prevValues,
         slots: [...prevValues.slots, value.clinic],
-        //clinic: '',
+        clinic: '',
+        fees:''
       }));
     }
     setShowSlotChip(true);
@@ -143,7 +144,6 @@ const AddClinic = ({navigation}) => {
                 alignSelf: 'flex-start',
                 width: '100%',
                 paddingHorizontal: 8,
-                height: 100,
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
@@ -159,11 +159,11 @@ const AddClinic = ({navigation}) => {
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
             />
-            <View style={{alignSelf: 'flex-start'}}>
+            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
               <HButton label="Add Slots" onPress={handlePlusIconClick} />
             </View>
             <View
-              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8}}>
+              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8,paddingHorizontal:8}}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
 

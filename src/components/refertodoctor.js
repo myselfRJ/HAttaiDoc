@@ -38,8 +38,8 @@ const ReferDoctorForm = props => {
   };
 
   return (
-    <View>
-      <Text style={styles.h2}>Consultation</Text>
+    <View style={{ paddingHorizontal: 24,
+      paddingVertical: 24,}}>
       <View style={styles.main}>
         <Text style={styles.title}>Refer to Doctor</Text>
       </View>

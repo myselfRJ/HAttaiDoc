@@ -23,7 +23,8 @@ const styles= StyleSheet.create({
         flex:1,
         alignItems:"center",
         justifyContent:'center',
-        backgroundColor:CUSTOMCOLOR.white
+        backgroundColor:CUSTOMCOLOR.white,
+        padding:8
     },
     text:{
         fontFamily:CUSTOMFONTFAMILY.opansans,

@@ -77,7 +77,7 @@ export default function MedicalRecordPatient() {
         <View style={{height: 100}}>
           <PatientSearchCard />
         </View>
-        <View style={{height: 40}}>
+        <View style={{height: 60}}>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -164,6 +164,7 @@ export default function MedicalRecordPatient() {
             justifyContent: 'center',
             alignItems: 'center',
             left: '40%',
+            paddingHorizontal:8
           }}>
           <HButton label={'Download'} />
         </View>
