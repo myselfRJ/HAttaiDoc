@@ -44,7 +44,7 @@ const Entry = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.Top}>
         <Image
-            style={{width: 352, height: 298}}
+            style={{width: 352, height: 496}}
             source={require('../assets/images/entry.jpeg')}
               />
         </View>
@@ -84,7 +84,9 @@ const Entry = ({ navigation }) => {
       height: 680,
     },
     input:{
-      margin:100
+      paddingHorizontal:64,
+      paddingVertical:64,
+      //margin:100
     }
     
   });

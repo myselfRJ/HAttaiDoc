@@ -18,8 +18,8 @@ const NoteScreen = () => {
         dispatch(addNote(newNote));
     };
     return (
-        <View>
-            <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+        <View style={{ paddingHorizontal: 24,
+            paddingVertical: 24,}}>
             <View style={styles.main}>
                 <Text style={styles.notesText}>{Language[language]['notes']}</Text>
             </View>

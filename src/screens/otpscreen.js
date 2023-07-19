@@ -63,7 +63,7 @@ const OtpScreen=({route})=>{
         <Image
               style={{
                 width: 230,
-                height: 298,
+                height: 496,
               }}
             source={require('../assets/images/otp.jpeg')}
               />
@@ -84,7 +84,7 @@ const OtpScreen=({route})=>{
           <HButton label={Language[language]['submit']} onPress={fetchData}/>
           </View>
             /> */}
-            <View style={{paddingHorizontal: 8, gap: 24, top: 16}}>
+            <View style={{paddingHorizontal: 8}}>
             <CodeField
                   ref={ref}
                   {...props}
@@ -153,7 +153,7 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: '#000',
     borderBottomWidth: 1,
-    marginLeft:5
+    marginLeft:10
   },
   cellText: {
     color: '#000',

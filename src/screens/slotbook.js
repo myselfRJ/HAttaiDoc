@@ -160,7 +160,7 @@ const SlotBook = ({navigation}) => {
         />
       </View>
       <View style={styles.child}>
-        <View style={{width: '100%', height: 40, bottom: 8}}>
+        <View style={{width: '100%', height: 60, bottom: 8}}>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -251,7 +251,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   child: {
-    padding: 24,
+    paddingHorizontal:24,
+    paddingVertical:24,
     gap: 32,
   },
   h2: {

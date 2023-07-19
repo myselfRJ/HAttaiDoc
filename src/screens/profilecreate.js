@@ -174,8 +174,6 @@ const ProfileCreate = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 8,
-                height: 80,
               }}>
               <SelectorBtn
                 label={Language[language]['dob']}
@@ -204,8 +202,7 @@ const ProfileCreate = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 8,
-                height: 80,
+                paddingHorizontal:8
               }}>
               <SelectorBtn
                 label={Language[language]['specialization']}
@@ -228,11 +225,13 @@ const ProfileCreate = ({navigation}) => {
                 fontFamily: CUSTOMFONTFAMILY.h4,
                 fontSize: 12,
                 color: CUSTOMCOLOR.black,
-                alignSelf: 'flex-start',
+                paddingHorizontal:8,
+                paddingVertical:8,
+                alignSelf:'flex-start'
               }}>
               Medical Document
             </Text>
-            <View style={{alignSelf: 'flex-start'}}>
+            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
               <HButton label="Upload Document" />
             </View>
             <HButton

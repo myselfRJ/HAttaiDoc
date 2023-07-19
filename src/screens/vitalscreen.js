@@ -83,9 +83,8 @@ nav.goBack()
 
   return (
     <>
-      <View>
-        <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16} />
-        <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+      <View style={{ paddingHorizontal: 24,
+    paddingVertical: 24,}}>
         <Text style={styles.h3}>{Language[language]['vitals']}</Text>
         <View>
 
@@ -144,7 +143,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.diastolic_bp} onChangeText={text => diastolicChange(text, props.index)}
                       style={styles.diatext} keyboardType='numeric' />
-                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
+                    <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
                   </View>
                 </View>
 
@@ -153,7 +152,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.systolic_bp} onChangeText={text => systolicChange(text, props.index)}
                       style={styles.systext} keyboardType='numeric' />
-                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
+                    <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>mmHg</Text>
                   </View>
                 </View>
               </View>
@@ -164,7 +163,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.lmp_edd} onChangeText={text => lmpChange(text,props.index)}
                       style={styles.lmptext} keyboardType='numeric' />
-                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
+                    <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
                   </View>
                 </View>
                 <View style={styles.uscontainer}>
@@ -172,7 +171,7 @@ nav.goBack()
                   <View style={styles.hardText}>
                     <TextInput value={vitals.us_edd} onChangeText={text => usChange(text, props.index)}
                       style={styles.ustext} keyboardType='numeric' />
-                    <Text style={{padding:15,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
+                    <Text style={{padding:21,backgroundColor:CUSTOMCOLOR.white}}>week</Text>
                   </View>
                 </View>
               </View>
@@ -196,6 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     gap: 4,
     borderRadius: 4,
+    paddingHorizontal:8
   },
   text: {
     fontWeight: 500,
@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   vitalmain: {
-    width: 651,
-    height: 309,
+    width: '100%',
+   // height: 309,
     gap: 4,
     padding: 8,
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   // },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    padding: 8,
+    paddingHorizontal: 8,
     color: CUSTOMCOLOR.black,
     gap: 10,
   },
@@ -239,19 +239,16 @@ const styles = StyleSheet.create({
     margin: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    //justifyContent: 'space-between',
     alignItems: 'center',
     width: 700,
-    height: 60,
     gap: 32,
-    //borderWidth:1
-
+    paddingHorizontal:8,
+    paddingVertical:4
 
   },
   pulsecontainer: {
-    height: 60,
-    //paddingHorizontal: 4,
-    //gap: 4
+    paddingHorizontal:8,
+    paddingVertical:4
   },
   pulse: {
     fontSize: 12,
@@ -263,14 +260,12 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   weightcontainer: {
-    height: 60,
-   //// paddingHorizontal: 4,
-    //gap: 4
+    paddingHorizontal:8,
+    paddingVertical:4
   },
   weight: {
     fontSize: 12,
     color: CUSTOMCOLOR.black,
-    //flexDirection: "row"
   },
   hardText: {
     flexDirection: "row",
@@ -289,20 +284,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
 
   },
-  // changetext: {
-  //   borderWidth: 1,
-  //   height: 30,
-  //   width: 70,
-  //   borderRadius: 5,
-  //   padding: 5,
-  //   marginLeft: 5,
-  //   margin: 5,
-  //   borderColor: CUSTOMCOLOR.primary
-  // },
   heightcontainer: {
-    height: 60,
-   //// paddingHorizontal: 4,
-    //gap: 4
+    paddingHorizontal:8,
+    paddingVertical:4
   },
   height: {
     fontSize: 12,
@@ -314,10 +298,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   tempcontainer: {
-    height: 60,
-  ///  paddingHorizontal: 4,
-    //gap: 4
-  },
+    paddingHorizontal:8,
+    paddingVertical:4
+    },
   temp: {
     fontSize: 12,
     color: CUSTOMCOLOR.black
@@ -330,9 +313,8 @@ const styles = StyleSheet.create({
 
   },
   ratecontainer: {
-    height: 60,
-   // paddingHorizontal: 4,
-    //gap: 4
+    paddingHorizontal:8,
+    paddingVertical:4
   },
   rate: {
     fontSize: 12,
@@ -345,10 +327,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-    height: 60,
-    width:40
-   //paddingHorizontal: 4,
-    //gap: 4
+    paddingHorizontal:8,
+    paddingVertical:4,
+    width:70
   },
   bmi: {
     fontSize: 12,
@@ -361,22 +342,22 @@ const styles = StyleSheet.create({
 
   },
   bloodPressureContainer: {
-    width: 185,
-    height: 87,
+    paddingHorizontal:8,
+    paddingVertical:4,
     flexDirection: 'row',
     gap:4,
-    top:24
+    top:16
   },
   bloodPres: {
-    padding: 8,
+    paddingHorizontal:8,
+    paddingVertical:4,
     gap: 10,
     color: CUSTOMCOLOR.black,
-    top:32
+    top:16
   },
   diascontainer: {
     paddingHorizontal:8,
-
-    padding: 8,
+    paddingVertical:4,
 
   },
   diastolic: {
@@ -393,7 +374,7 @@ const styles = StyleSheet.create({
   },
   syscontainer: {
     paddingHorizontal:8,
-    padding: 8,
+    paddingVertical:4,
   },
   systolic: {
     fontSize: 12,
@@ -406,20 +387,22 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   pregText: {
-    padding: 8,
+    paddingHorizontal:8,
+    paddingVertical:4,
     gap: 10,
     color: CUSTOMCOLOR.black,
-    top:8
+    top:16
   },
   pregnancyFields: {
-    width: 152,
-    height: 87,
+    paddingHorizontal:8,
+    paddingVertical:4,
     flexDirection: 'row',
-    gap: 32
+    //gap: 32,
+    top:16
   },
   lmpcontainer: {
     paddingHorizontal:8,
-    padding: 8,
+    paddingVertical:4,
     gap: 4
   },
   lmp: {
@@ -433,7 +416,7 @@ const styles = StyleSheet.create({
   },
   uscontainer: {
     paddingHorizontal:8,
-    padding: 8,
+    paddingVertical:4,
     gap: 4
   },
   us: {

@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    padding: 32,
-    gap: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
   },
   FUP: {
     fontFamily: CUSTOMFONTFAMILY.heading,

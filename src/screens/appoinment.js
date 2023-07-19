@@ -182,7 +182,7 @@ const Appointment = ({navigation}) => {
 const styles = StyleSheet.create({
   main: {
     paddingHorizontal:24,
-    paddingVertical:24
+    paddingVertical:24,
   },
   title: {
     color: CUSTOMCOLOR.black,

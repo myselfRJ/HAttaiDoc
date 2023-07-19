@@ -22,12 +22,13 @@ const SelectorBtn = props => {
 const styles = StyleSheet.create({
   select: {
     flexDirection: 'row',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: CUSTOMCOLOR.white,
     minWidth: 160,
+    borderRadius:4
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h4,
