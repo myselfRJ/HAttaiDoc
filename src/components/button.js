@@ -8,7 +8,7 @@ const HButton = props => {
   return (
     <>
       <Pressable
-        style={styles.btncontainer}
+        style={[styles.btncontainer,props.btnstyles]}
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon

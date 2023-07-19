@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import { checkNumber, checkOtp, checkPassword } from '../utility/checks';
+import {Text, View, StyleSheet,Image} from 'react-native';
+import { checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -59,7 +59,15 @@ const OtpScreen=({route})=>{
       <SafeAreaView>
         <ScrollView>
      <View style={styles.container}>
-        <View style={styles.Top}></View>
+        <View style={styles.Top}>
+        <Image
+              style={{
+                width: 230,
+                height: 298,
+              }}
+            source={require('../assets/images/otp.jpeg')}
+              />
+        </View>
         <View style={styles.bottom}>
          <Text style={styles.text}>OTP Verification</Text>
          <View style={{alignItems:'center'}}>
@@ -116,26 +124,31 @@ const styles=StyleSheet.create({
     },
     Top:{
         height:503,
-        backgroundColor:CUSTOMCOLOR.primary
+        backgroundColor:CUSTOMCOLOR.primary,
+        alignItems:'center',
+        justifyContent:'center'
     },
     bottom:{
         height:680,
         backgroundColor:CUSTOMCOLOR.white,
-        alignItems:'center'
+        //alignItems:'center'
         
     },
     text:{
-       width:593,
-       height:120,
-       top:50,
-       left:10,
+      //  width:593,
+      //  height:120,
+      //  top:50,
+      //  left:10,
+      paddingHorizontal:64,
+      paddingVertical:64,
        fontFamily:CUSTOMFONTFAMILY.heading,
        fontSize:32,
-       fontWeight:400,
+       fontWeight:600,
+       color:CUSTOMCOLOR.black
         
     },
      cellRoot: {
-    width: 20,
+    paddingHorizontal:16,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: '#000',

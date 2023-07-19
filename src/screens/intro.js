@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet,Image} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -13,10 +13,21 @@ import { HButton } from '../components';
 const Intro=({navigation})=>{
     return(
      <View style={styles.container}>
-        <View style={styles.Top}></View>
+        <View style={styles.Top}>
+        <Image
+            style={{width: 272, height: 317}}
+            source={require('../assets/images/intro.jpeg')}
+              />
+        </View>
         <View style={styles.bottom}>
-         <Text style={styles.text}>Lorem ipsum dolor sit amet consectetur. Phasellus velit nunc id rhoncus consectetur.</Text>
-        <View style={{margin:200,alignItems:'center'}}><HButton label='Get Start' onPress={() => navigation.navigate('entry')}/></View>
+            <View style={styles.textcontainer}>
+         <Text style={styles.text}>Touch & Handwriting Prescriptions,</Text> 
+         <Text style={styles.text}>Instant Digitization, Limitless </Text>
+         <Text style={styles.text}>Possibilities</Text>
+         </View>
+        <View style={{margin:200,alignItems:'center'}}>
+            <HButton label='Get Start' onPress={() => navigation.navigate('entry')} btnstyles={styles.btn}/>
+            </View>
         </View>
 
      </View>
@@ -29,23 +40,35 @@ const styles=StyleSheet.create({
     },
     Top:{
         height:503,
-        backgroundColor:CUSTOMCOLOR.primary
+        backgroundColor:CUSTOMCOLOR.primary,
+        alignItems:'center',
+        justifyContent:'center'
     },
     bottom:{
-        height:680,
-        backgroundColor:CUSTOMCOLOR.white,
+        // height:680,
+        // backgroundColor:CUSTOMCOLOR.white,
+        alignItems:'center'
         
     },
+    textcontainer:{
+        width:600,
+        height:164,
+        top:100,
+        alignItems:'center',
+        //left:61,
+        padding:8,
+        gap:8
+    },
     text:{
-       width:593,
-       height:120,
-       top:100,
-       left:80,
        fontFamily:CUSTOMFONTFAMILY.heading,
        fontSize:32,
        fontWeight:400,
+       color:CUSTOMCOLOR.black
         
     },
+    btn:{
+        bottom:50
+    }
    
 })
 export default Intro;
