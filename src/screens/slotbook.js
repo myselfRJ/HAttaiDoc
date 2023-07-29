@@ -104,8 +104,17 @@ const SlotBook = ({navigation}) => {
     return timeList;
   };
 
-  let list = getTimeList(slotDetails?.slot?.M);
-
+  const weekDys = {
+    0: 'Su',
+    1: 'M',
+    2: 'T',
+    3: 'W',
+    4: 'TH',
+    5: 'F',
+    6: 'Sa',
+  };
+  let list = getTimeList(slotDetails?.slot?.[weekDys?.[moment().day()]]);
+  console.log(weekDys?.[moment().day()]);
   const renderItems = ({item}) => {
     return (
       <View style={styles.item}>
@@ -160,7 +169,7 @@ const SlotBook = ({navigation}) => {
         />
       </View>
       <View style={styles.child}>
-        <View style={{width: '100%', height: 60, bottom: 8}}>
+        <View style={{width: '100%', height: 40, bottom: 8}}>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -251,8 +260,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   child: {
-    paddingHorizontal:24,
-    paddingVertical:24,
+    padding: 24,
     gap: 32,
   },
   h2: {
