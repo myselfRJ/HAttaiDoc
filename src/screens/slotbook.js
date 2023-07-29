@@ -17,6 +17,7 @@ import DatePicker from 'react-native-date-picker';
 import {CONSTANTS} from '../utility/constant';
 import {URL} from '../utility/urls';
 import {Icon} from '../components';
+import {fetchApi} from '../api/fetchApi';
 
 const SlotBook = ({navigation}) => {
   const [slotDetails, setSlotDetails] = useState({});
@@ -129,7 +130,7 @@ const SlotBook = ({navigation}) => {
 
   const Appointment_Booking = async () => {
     try {
-      const response = await fetch(URL.Appointment_Booking, {
+      const response = await fetchApi(URL.Appointment_Booking, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

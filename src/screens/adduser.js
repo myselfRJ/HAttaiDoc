@@ -53,7 +53,7 @@ const AddUser = ({navigation}) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(URL.adduser, {
+      const response = await fetchApi(URL.adduser, {
         method: 'POST',
         headers: {
           Prefer: '',
@@ -103,9 +103,9 @@ const AddUser = ({navigation}) => {
             clinic: prevValues.clinic,
           },
         ],
-        name:'',
-        phone:'',
-        gender:''
+        name: '',
+        phone: '',
+        gender: '',
       }));
       setShowSlotChip(true);
     }
@@ -237,7 +237,12 @@ const AddUser = ({navigation}) => {
               />
             </View>
             <View
-              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8,paddingHorizontal:8}}>
+              style={{
+                alignSelf: 'flex-end',
+                bottom: 0,
+                paddingVertical: 8,
+                paddingHorizontal: 8,
+              }}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
             <View style={styles.users}>
@@ -249,7 +254,7 @@ const AddUser = ({navigation}) => {
                       fontSize: CUSTOMFONTSIZE.h2,
                       color: CUSTOMCOLOR.black,
                       paddingVertical: 4,
-                      paddingHorizontal:8
+                      paddingHorizontal: 8,
                     }}>
                     Users
                   </Text>
@@ -360,7 +365,7 @@ const styles = StyleSheet.create({
   users: {
     alignSelf: 'flex-start',
     paddingVertical: 8,
-    paddingHorizontal:8
+    paddingHorizontal: 8,
   },
 });
 export default AddUser;

@@ -23,6 +23,7 @@ import ClinicAddress from '../components/clinic_address';
 import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
+import {fetchApi} from '../api/fetchApi';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -41,7 +42,7 @@ const AddClinic = ({navigation}) => {
   });
   const fetchData = async () => {
     try {
-      const response = await fetch(URL.addclinic, {
+      const response = await fetchApi(URL.addclinic, {
         method: 'POST',
         headers: {
           authorization: 'ghghg',
@@ -83,7 +84,7 @@ const AddClinic = ({navigation}) => {
         ...prevValues,
         slots: [...prevValues.slots, value.clinic],
         clinic: '',
-        fees:''
+        fees: '',
       }));
     }
     setShowSlotChip(true);
@@ -159,11 +160,21 @@ const AddClinic = ({navigation}) => {
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
             />
-            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+              }}>
               <HButton label="Add Slots" onPress={handlePlusIconClick} />
             </View>
             <View
-              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8,paddingHorizontal:8}}>
+              style={{
+                alignSelf: 'flex-end',
+                bottom: 0,
+                paddingVertical: 8,
+                paddingHorizontal: 8,
+              }}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
 

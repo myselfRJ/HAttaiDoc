@@ -23,6 +23,7 @@ import {HttpStatusCode} from 'axios';
 import BottomSheetView from '../components/bottomSheet';
 import {ScrollView} from 'react-native-gesture-handler';
 import StatusMessage from '../components/statusMessage';
+import {fetchApi} from '../api/fetchApi';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -33,7 +34,7 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   const fetchData = async () => {
     try {
-      const response = await fetch(URL.profileUrl, {
+      const response = await fetchApi(URL.profileUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +203,7 @@ const ProfileCreate = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal:8
+                paddingHorizontal: 8,
               }}>
               <SelectorBtn
                 label={Language[language]['specialization']}
@@ -225,13 +226,18 @@ const ProfileCreate = ({navigation}) => {
                 fontFamily: CUSTOMFONTFAMILY.h4,
                 fontSize: 12,
                 color: CUSTOMCOLOR.black,
-                paddingHorizontal:8,
-                paddingVertical:8,
-                alignSelf:'flex-start'
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+                alignSelf: 'flex-start',
               }}>
               Medical Document
             </Text>
-            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+              }}>
               <HButton label="Upload Document" />
             </View>
             <HButton

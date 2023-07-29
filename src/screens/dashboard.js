@@ -25,6 +25,7 @@ import DatePicker from 'react-native-date-picker';
 import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
+import {fetchApi} from '../api/fetchApi';
 const Dashboard = ({navigation}) => {
   const ClinicRef = useRef(null);
 
@@ -51,7 +52,7 @@ const Dashboard = ({navigation}) => {
     setOpen(false);
   };
   const fetchData = async () => {
-    const response = await fetch(URL.get_all_appointments_of_clinic);
+    const response = await fetchApi(URL.get_all_appointments_of_clinic);
     const jsonData = await response.json();
     setData(jsonData);
   };
