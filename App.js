@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   axios
-    .get('https://raw.githack.com/myselfRJ/mcqdata/main/ip.json')
+    .get('http://10.9.78.38:8000')
     .then(function (response) {
       // handle success
       store.dispatch(urlActions.urlupdate(response.data['ip'] + '/api/v1/'));

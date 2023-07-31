@@ -14,6 +14,9 @@ import {CONSTANTS} from '../utility/constant';
 import {BottomSheetView} from '../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import moment from 'moment';
+import {UseSelector, useDispatch} from 'react-redux';
+import {addSlots} from '../redux/features/slots/slotData';
+
 const SlotCreate = ({navigation}) => {
   const slotTypeRef = useRef(null);
   const slotDurationRef = useRef(null);
@@ -35,6 +38,12 @@ const SlotCreate = ({navigation}) => {
     Su: [],
   });
   const [selectedDay, setSelectedDay] = useState('M');
+  const dispatch = useDispatch();
+
+  const handleSaveSlotData = () => {
+    dispatch(addSlots.addslots(slots));
+    navigation.goBack();
+  };
 
   const handleConfirm = time => {
     if (open === 'from') {
@@ -193,7 +202,7 @@ const SlotCreate = ({navigation}) => {
       <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}
-        onPress={() =>{ navigation.goBack(),{slots}}}
+        onPress={handleSaveSlotData}
       />
       <BottomSheetView bottomSheetRef={slotTypeRef} snapPoints={'40%'}>
         <ScrollView>

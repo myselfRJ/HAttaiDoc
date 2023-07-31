@@ -27,13 +27,17 @@ import Success from '../screens/success';
 import SearchAddnew from '../screens/searchAddnew';
 import InitScreen from '../screens/init_screen';
 import MedicalRecordPatient from '../screens/medicalRecordPatients';
+import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
 
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
-  const isAuth = useSelector(state => state.authenticate.accesstoken);
+  console.log(getAccessToken(state => state));
+  const isAuth = useSelector(state => state.authenticate.auth.access);
+  const access = useSelector(state => state.getAccessToken);
   console.log('isAuth.....', isAuth);
 
+  console.log('isAccess.....', access);
   return (
     <Stack.Navigator
       //initialRouteName="addclinic"
