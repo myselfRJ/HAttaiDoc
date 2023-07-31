@@ -24,15 +24,22 @@ import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
+import {UseSelector, useSelector} from 'react-redux';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
+  const token = useSelector(state => state.authenticate.auth.access);
+  const slotData = useSelector(state => state?.slotsData);
 
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
+
+  console.log('====================================');
+  console.log(slotData?.slots?.M);
+  console.log('====================================');
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [value, setValue] = useState({
@@ -45,16 +52,19 @@ const AddClinic = ({navigation}) => {
       const response = await fetchApi(URL.addclinic, {
         method: 'POST',
         headers: {
-          authorization: 'ghghg',
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({
-          'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
-          'clinic-name': value.clinic,
-          clinic_address: '',
-          fees: value.fees,
-        }),
+        body: JSON.stringify([
+          {
+            'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
+            clinic_name: value.clinic,
+            clinic_address: 'Chennai',
+            fees: parseInt(value.fees),
+            slot: slotData.slots.toString(),
+          },
+        ]),
       });
       if (response.ok) {
         const jsonData = await response.json();
@@ -166,7 +176,11 @@ const AddClinic = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Add Slots" onPress={handlePlusIconClick} />
+              <Text>{slotData.slot}</Text>
+              <HButton
+                label="Add Slots"
+                onPress={() => navigation.navigate('createslot')}
+              />
             </View>
             <View
               style={{

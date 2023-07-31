@@ -24,56 +24,26 @@ import BottomSheetView from '../components/bottomSheet';
 import {ScrollView} from 'react-native-gesture-handler';
 import StatusMessage from '../components/statusMessage';
 import {fetchApi} from '../api/fetchApi';
+import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
+import {useSelector} from 'react-redux';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
   const SuccesRef = useRef(null);
+  const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-  const fetchData = async () => {
-    try {
-      const response = await fetchApi(URL.profileUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept:
-            'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
-        },
-        body: JSON.stringify({
-          values,
-          date_of_birth: DOB.toISOString(),
-          specialization: selectedSpeciality,
-          img_url: selectedImage,
-        }),
-      });
-      if (response.status === HttpStatusCode.Created) {
-        const jsonData = await response.json();
-        console.log(jsonData);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        setTimeout(() => {
-          navigation.navigate('addclinic');
-        }, 1000);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      console.error('Error occurred:', error);
-    }
-  };
 
   const [values, setValues] = useState({
-    name: '',
+    doctor_name: '',
     gender: 'male',
-    medical_no: '',
+    medical_number: '',
     experience: '',
   });
+
+  console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState('');
   const [DOB, setDOB] = useState(new Date());
@@ -131,6 +101,51 @@ const ProfileCreate = ({navigation}) => {
     setShowDatePicker(!showDatePicker);
   };
 
+  console.log(token);
+  const fetchData = async () => {
+    try {
+      const response = await fetchApi(URL.profileUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept:
+            'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
+        },
+        body: JSON.stringify({
+          doctor_name: values.doctor_name,
+          experience: values.experience,
+          gender: values.gender,
+          DOB: DOB.toString(),
+          specialization: selectedSpeciality,
+          medical_number: values.medical_number,
+          profile_pic_url: selectedImage,
+          medical_doc_url: 'jsdjsbgjkd',
+        }),
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setApiStatus({
+          status: 'success',
+          message: 'Successfully created',
+        });
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('addclinic');
+        }, 1000);
+      } else {
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        SuccesRef?.current?.snapToIndex(1);
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('Error occurred:', error);
+    }
+  };
+  console.log(values.formattedDate);
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -143,8 +158,8 @@ const ProfileCreate = ({navigation}) => {
             <InputText
               label={Language[language]['name']}
               placeholder="Full Name"
-              value={values.name}
-              setValue={value => handleChangeValue('name', value)}
+              value={values.doctor_name}
+              setValue={value => handleChangeValue('doctor_name', value)}
             />
 
             <View style={styles.alignchild}>
@@ -196,8 +211,8 @@ const ProfileCreate = ({navigation}) => {
             <InputText
               label={Language[language]['medical_number']}
               placeholder="Medical number"
-              value={values.medical_no}
-              setValue={value => handleChangeValue('medical_no', value)}
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
             />
             <View
               style={{
