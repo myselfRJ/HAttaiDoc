@@ -24,12 +24,15 @@ import {CONSTANTS} from '../utility/constant';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
+import { fetchApi } from '../api/fetchApi';
+import { useSelector } from 'react-redux';
 
 const AddUser = ({navigation}) => {
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
   const [ShowClinicModal, setClinicModal] = useState(false);
+  const token = useSelector(state =>state.authenticate.auth.access)
 
   const clinics = CONSTANTS.clinic;
 
@@ -44,6 +47,7 @@ const AddUser = ({navigation}) => {
     clinic: '',
     slots: [],
   });
+  console.log('phone', values.phone)
   const [apiStatus, setApiStatus] = useState({});
 
   const SuccesRef = useRef(null);
@@ -58,24 +62,28 @@ const AddUser = ({navigation}) => {
         headers: {
           Prefer: '',
           'Content-Type': 'application/json',
+          Authorization:`Bearer ${token}`,
           Accept: 'application/json, application/xml',
         },
-        body: JSON.stringify({
-          name: values.name,
-          phone: values.phone,
+        body: JSON.stringify([{
+          clinic_user_name: values.name,
+          user_phone_number: values.phone,
           gender: values.gender,
           role: selectedRole,
-          'clinic-id': selectedClinic,
-        }),
+          clinic_id: selectedClinic,
+          user_profile_pic_url:selectedImage
+
+        }]),
       });
       if (response.ok) {
         const jsonData = await response.json();
         // navigation.navigate('tab');
+        console.log('1')
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
         setTimeout(() => {
-          navigation.navigate('tab');
+          //navigation.navigate('tab');
         }, 1000);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});

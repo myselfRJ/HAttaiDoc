@@ -193,7 +193,7 @@ const SlotCreate = ({navigation}) => {
       <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}
-        onPress={() => navigation.goBack()}
+        onPress={() =>{ navigation.goBack(),{slots}}}
       />
       <BottomSheetView bottomSheetRef={slotTypeRef} snapPoints={'40%'}>
         <ScrollView>

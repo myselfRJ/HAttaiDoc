@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import { act } from 'react-test-renderer';
 
 let initialState = {
   auth: {
@@ -28,8 +29,8 @@ const authenticateSlice = createSlice({
     },
     updateauthenticate: (state, action) => {
       console.log('payload', action.payload);
-
-      state = action.payload;
+      state.auth.access = action.payload.access_token;
+      state.auth.refresh = action.payload.access_refresh;
       console.log('state', state);
     },
   },

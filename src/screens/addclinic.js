@@ -24,16 +24,17 @@ import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-
-const AddClinic = ({navigation}) => {
+import { useSelector } from 'react-redux';
+const AddClinic = ({navigation,route}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
+  //const {slots} = route.params
 
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-
+  const token = useSelector(state =>state.authenticate.auth.access)
   const [selectedImage, setSelectedImage] = useState(null);
   const [value, setValue] = useState({
     clinic: '',
@@ -45,16 +46,17 @@ const AddClinic = ({navigation}) => {
       const response = await fetchApi(URL.addclinic, {
         method: 'POST',
         headers: {
-          authorization: 'ghghg',
           'Content-Type': 'application/json',
+          Authorization:`Bearer ${token}`,
           Accept: 'application/json',
         },
-        body: JSON.stringify({
-          'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
-          'clinic-name': value.clinic,
-          clinic_address: '',
+        body: JSON.stringify([{
+          clinic_name: value.clinic,
+          clinic_Address: '',
           fees: value.fees,
-        }),
+          clinic_photo_url:selectedImage,
+          slot:slots
+        }]),
       });
       if (response.ok) {
         const jsonData = await response.json();
@@ -67,7 +69,7 @@ const AddClinic = ({navigation}) => {
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
-        navigation.navigate('adduser');
+        //navigation.navigate('adduser');
         console.error('API call failed:', response.status, response);
       }
     } catch (error) {
@@ -83,8 +85,8 @@ const AddClinic = ({navigation}) => {
       setValue(prevValues => ({
         ...prevValues,
         slots: [...prevValues.slots, value.clinic],
-        clinic: '',
-        fees: '',
+        // clinic: '',
+        // fees: '',
       }));
     }
     setShowSlotChip(true);
@@ -166,7 +168,7 @@ const AddClinic = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Add Slots" onPress={handlePlusIconClick} />
+              <HButton label="Add Slots" onPress={()=> navigation.navigate("createslot")} />
             </View>
             <View
               style={{

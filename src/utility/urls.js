@@ -2,7 +2,7 @@ const baseUrl = 'http://10.9.78.38:8000/api/v1/';
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
-  profileUrl: `${baseUrl}practioner/practitioner-save`,
+  profileUrl: `${baseUrl}practioner/practitoner-save`,
   get_all_appointments_of_clinic: `${baseUrl}customappointment/get/appointment/`,
   Appointment_Booking: `${baseUrl}customappointment/book-appointment/`,
   SlotsAvailable: clinicId => `${baseUrl}clinic/get-slot/${clinicId}/`,

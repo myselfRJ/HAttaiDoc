@@ -26,13 +26,15 @@ import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-const Dashboard = ({navigation}) => {
+import { useSelector } from 'react-redux';
+const Dashboard = ({navigation,route}) => {
   const ClinicRef = useRef(null);
-
-  const clinics = CONSTANTS.clinic;
-
-  const [selectedClinic, setSelectedClinic] = useState(clinics[0]);
+  //const token = useSelector(state =>state.authenticate.auth.access)
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4" 
+  // const clinics = CONSTANTS.clinic;
+  const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
   const [clinic, setClinic] = useState('');
+  const [clinics,setDataClinic]=useState()
   const handleChangeValue = e => {
     setClinic(e);
   };
@@ -51,11 +53,33 @@ const Dashboard = ({navigation}) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  
   const fetchData = async () => {
-    const response = await fetchApi(URL.get_all_appointments_of_clinic);
+    // const response = await fetchApi(URL.get_all_appointments_of_clinic);
+    // const jsonData = await response.json();
+    // setData(jsonData);
+    const response = await fetchApi(URL.getClinic('9177468511'),{
+      method: 'GET',
+      headers: {
+        Authorization:`Bearer ${token}`,
+      },
+      // params :{
+      //   doctor_phone_number :'9003092186' 
+      // }
+    });
+    if (response.ok){
     const jsonData = await response.json();
-    setData(jsonData);
+    console.log(jsonData)
+    setDataClinic(jsonData.data);
+    }
+    else{
+      console.error('API call failed:', response.status, response);
+    }
+    
   };
+  useEffect(()=>{
+    fetchData()
+  },[])
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -74,8 +98,8 @@ const Dashboard = ({navigation}) => {
     }
   }, [data.length]);
   const handleClinicSelection = clinic => {
-    setSelectedClinic(clinic);
-    handleChangeValue('clinic', clinic);
+    setSelectedClinic(clinic.clinic_name);
+    handleChangeValue('clinic', clinic.clinic_name);
     ClinicRef?.current?.snapToIndex(0);
   };
   return (
@@ -150,8 +174,8 @@ const Dashboard = ({navigation}) => {
           </View>
           <View style={styles.appointment}>
             <Text style={styles.h2}>{Language[language]['appointments']}</Text>
-            {Appdata
-              ? Appdata?.map((value, index) => {
+            {Appdata.length >0 &&
+               Appdata?.map((value, index) => {
                   return (
                     <AppointmentCard
                       key={index}
@@ -160,7 +184,7 @@ const Dashboard = ({navigation}) => {
                     />
                   );
                 })
-              : null}
+              }
           </View>
           <View
             style={{
@@ -200,11 +224,11 @@ const Dashboard = ({navigation}) => {
             }}>
             {Language[language]['clinic']}
           </Text>
-          {CONSTANTS.clinic.map((clinic, index) => (
+          {clinics&&clinics?.map((clinic, index) => (
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic}</Text>
+              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
             </Pressable>
           ))}
         </View>
