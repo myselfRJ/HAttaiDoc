@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
@@ -22,7 +22,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
+import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
+// import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
 
 const OtpScreen = ({route}) => {
   const CELL_COUNT = 6;
@@ -33,22 +34,24 @@ const OtpScreen = ({route}) => {
     value,
     setValue,
   });
-  const {phone, token} = route.params;
+
+  const {phone, Trace_id} = route.params;
+  console.log('route.params:', route.params);
   const nav = useNavigation();
   const fetchData = async () => {
     try {
       const response = await fetchApi(URL.validateOtp, {
         method: 'POST',
         headers: {
-          'trace-id': '12345',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phone: phone, otp: value, token_id: token}),
+        body: JSON.stringify({phone: phone, otp: value, trace_id: Trace_id}),
       });
+      console.log(Trace_id);
       if (response.ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        dispatch(updateauthenticate(jsonData));
+        dispatch(authenticateActions.updateauthenticate(jsonData));
         nav.navigate('protected');
       } else {
         console.error('API call failed:', response.status);
@@ -57,6 +60,7 @@ const OtpScreen = ({route}) => {
       console.error('Error occurred:', error);
     }
   };
+
   return (
     <SafeAreaView>
       <ScrollView>

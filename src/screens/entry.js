@@ -17,7 +17,19 @@ import {fetchApi} from '../api/fetchApi';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
-  const token = 'd0f7aa46-58ce-45f7-892a-af80296fe24d';
+  const [Trace_id, setTrace_id] = useState();
+
+  // const fetchtrace = async () => {
+  //   const response = await fetchApi(URL.validateOtp);
+  //   const jsonData = await response.json();
+  //   jsonData && setTrace_id(.trace_id);
+  // };
+  // useEffect(() => {
+  //   {
+  //     fetchtrace();
+  //   }
+  // }, []);
+
   const fetchData = async () => {
     try {
       const response = await fetchApi(URL.generateOtp, {
@@ -30,8 +42,12 @@ const Entry = ({navigation}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
-        navigation.navigate('otpscreen', {phone, token});
+        console.log('generateResponse', jsonData);
+
+        setTrace_id(jsonData.data.trace_id);
+        {
+          Trace_id && navigation.navigate('otpscreen', {phone, Trace_id});
+        }
       } else {
         console.error('API call failed:', response?.status);
       }
@@ -39,6 +55,11 @@ const Entry = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
+  useEffect(() => {
+    if (Trace_id) {
+      navigation.navigate('otpscreen', {phone, Trace_id});
+    }
+  }, [Trace_id]);
 
   return (
     <ScrollView>

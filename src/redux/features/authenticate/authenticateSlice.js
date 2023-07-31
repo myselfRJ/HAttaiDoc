@@ -27,7 +27,10 @@ const authenticateSlice = createSlice({
       state = initialState;
     },
     updateauthenticate: (state, action) => {
+      console.log('payload', action.payload);
+
       state = action.payload;
+      console.log('state', state);
     },
   },
 });
