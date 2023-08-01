@@ -24,27 +24,19 @@ import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-<<<<<<< HEAD
-import { useSelector } from 'react-redux';
-const AddClinic = ({navigation,route}) => {
-  const addressRef = useRef(null);
-  const [apiStatus, setApiStatus] = useState({});
-  //const {slots} = route.params
-=======
 import {UseSelector, useSelector} from 'react-redux';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
-  const token = useSelector(state => state.authenticate.auth.access);
+  // const token = useSelector(state => state.authenticate.auth.access);
   const slotData = useSelector(state => state?.slotsData);
->>>>>>> 3eb96fb66384d2ac88362e5a4382335daae12637
 
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-  const token = useSelector(state =>state.authenticate.auth.access)
+  const token = useSelector(state => state.authenticate.auth.access);
 
   console.log('====================================');
   console.log(slotData?.slots?.M);
@@ -63,16 +55,18 @@ const AddClinic = ({navigation}) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           Accept: 'application/json',
         },
-        body: JSON.stringify([{
-          clinic_name: value.clinic,
-          clinic_Address: '',
-          fees: value.fees,
-          clinic_photo_url:selectedImage,
-          slot:slots
-        }]),
+        body: JSON.stringify([
+          {
+            clinic_name: value.clinic,
+            clinic_Address: '',
+            fees: value.fees,
+            clinic_photo_url: selectedImage,
+            slot: slots,
+          },
+        ]),
         body: JSON.stringify([
           {
             'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
@@ -193,7 +187,10 @@ const AddClinic = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Add Slots" onPress={()=> navigation.navigate("createslot")} />
+              <HButton
+                label="Add Slots"
+                onPress={() => navigation.navigate('createslot')}
+              />
               <Text>{slotData.slot}</Text>
               <HButton
                 label="Add Slots"

@@ -26,15 +26,16 @@ import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-import { useSelector } from 'react-redux';
-const Dashboard = ({navigation,route}) => {
+import {useSelector} from 'react-redux';
+const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   //const token = useSelector(state =>state.authenticate.auth.access)
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4" 
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
   // const clinics = CONSTANTS.clinic;
   const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
   const [clinic, setClinic] = useState('');
-  const [clinics,setDataClinic]=useState()
+  const [clinics, setDataClinic] = useState();
   const handleChangeValue = e => {
     setClinic(e);
   };
@@ -53,33 +54,31 @@ const Dashboard = ({navigation,route}) => {
   const handleCancel = () => {
     setOpen(false);
   };
-  
+
   const fetchData = async () => {
     // const response = await fetchApi(URL.get_all_appointments_of_clinic);
     // const jsonData = await response.json();
     // setData(jsonData);
-    const response = await fetchApi(URL.getClinic('9177468511'),{
+    const response = await fetchApi(URL.getClinic('9177468511'), {
       method: 'GET',
       headers: {
-        Authorization:`Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       // params :{
-      //   doctor_phone_number :'9003092186' 
+      //   doctor_phone_number :'9003092186'
       // }
     });
-    if (response.ok){
-    const jsonData = await response.json();
-    console.log(jsonData)
-    setDataClinic(jsonData.data);
-    }
-    else{
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setDataClinic(jsonData.data);
+    } else {
       console.error('API call failed:', response.status, response);
     }
-    
   };
-  useEffect(()=>{
-    fetchData()
-  },[])
+  useEffect(() => {
+    fetchData();
+  }, []);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -103,79 +102,82 @@ const Dashboard = ({navigation,route}) => {
     ClinicRef?.current?.snapToIndex(0);
   };
   return (
-    <View>
-      <ScrollView>
-        <View style={styles.container}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 24,
-              paddingHorizontal: 8,
-            }}>
-            <View>
-              <Image
-                style={{width: 35, height: 32}}
-                source={require('../assets/images/logo.jpeg')}
-              />
-              <Text style={styles.title}>
-                {Language[language]['welcome']},{Language[language]['dr']}
-                RamaMurthi
-              </Text>
+    <View style={{flex: 1}}>
+      <View>
+        <ScrollView>
+          <View style={styles.container}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 24,
+                paddingHorizontal: 8,
+              }}>
+              <View>
+                <Image
+                  style={{width: 35, height: 32}}
+                  source={require('../assets/images/logo.jpeg')}
+                />
+                <Text style={styles.title}>
+                  {Language[language]['welcome']},{Language[language]['dr']}
+                  RamaMurthi
+                </Text>
+              </View>
+              <HeaderAvatar />
             </View>
-            <HeaderAvatar />
-          </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              gap: 8,
-              paddingHorizontal: 8,
-              paddingBottom: 8,
-            }}>
-            <ChartCard
-              data={data}
-              title={Language[language]['total_patient']}
-            />
-            <ChartCard
-              data={data}
-              title={Language[language]['earnings']}
-              label="₹ "
-            />
-          </View>
-          <View style={styles.select}>
-            <SelectorBtn
-              //label={Language[language]['clinic']}
-              name="chevron-down"
-              onPress={() => {
-                ClinicRef?.current?.snapToIndex(1);
-              }}
-              input={selectedClinic}
-            />
-            <SelectorBtn
-              //label={Language[language]['dob']}
-              name="calendar"
-              onPress={() => setOpen('to')}
-              input={formattedDate}
-              style={styles.DOBselect}
-            />
-            <DatePicker
-              modal
-              open={open !== false}
-              date={date}
-              theme="auto"
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: 8,
+                paddingHorizontal: 8,
+                paddingBottom: 8,
+              }}>
+              <ChartCard
+                data={data}
+                title={Language[language]['total_patient']}
+              />
+              <ChartCard
+                data={data}
+                title={Language[language]['earnings']}
+                label="₹ "
+              />
+            </View>
+            <View style={styles.select}>
+              <SelectorBtn
+                //label={Language[language]['clinic']}
+                name="chevron-down"
+                onPress={() => {
+                  ClinicRef?.current?.snapToIndex(1);
+                }}
+                input={selectedClinic}
+              />
+              <SelectorBtn
+                //label={Language[language]['dob']}
+                name="calendar"
+                onPress={() => setOpen('to')}
+                input={formattedDate}
+                style={styles.DOBselect}
+              />
+              <DatePicker
+                modal
+                open={open !== false}
+                date={date}
+                theme="auto"
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+              />
 
-            {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
-          </View>
-          <View style={styles.appointment}>
-            <Text style={styles.h2}>{Language[language]['appointments']}</Text>
-            {Appdata.length >0 &&
-               Appdata?.map((value, index) => {
+              {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
+            </View>
+            <View style={styles.appointment}>
+              <Text style={styles.h2}>
+                {Language[language]['appointments']}
+              </Text>
+              {Appdata.length > 0 &&
+                Appdata?.map((value, index) => {
                   return (
                     <AppointmentCard
                       key={index}
@@ -183,37 +185,37 @@ const Dashboard = ({navigation,route}) => {
                       openVisit={() => navigation.navigate('visit')}
                     />
                   );
-                })
-              }
-          </View>
-          <View
-            style={{
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingHorizontal: 8,
-            }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('myappointment')}
+                })}
+            </View>
+            <View
               style={{
-                borderWidth: 0.5,
-                borderRadius: 4,
-                borderColor: CUSTOMCOLOR.primary,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                paddingHorizontal: 8,
               }}>
-              <Text style={{color: CUSTOMCOLOR.primary}}>
-                {Language[language]['view_more']}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('myappointment')}
+                style={{
+                  borderWidth: 0.5,
+                  borderRadius: 4,
+                  borderColor: CUSTOMCOLOR.primary,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                }}>
+                <Text style={{color: CUSTOMCOLOR.primary}}>
+                  {Language[language]['view_more']}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                paddingHorizontal: 8,
+              }}></View>
           </View>
-          <View
-            style={{
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingHorizontal: 8,
-            }}></View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
@@ -224,13 +226,14 @@ const Dashboard = ({navigation,route}) => {
             }}>
             {Language[language]['clinic']}
           </Text>
-          {clinics&&clinics?.map((clinic, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
-            </Pressable>
-          ))}
+          {clinics &&
+            clinics?.map((clinic, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleClinicSelection(clinic)}>
+                <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
+              </Pressable>
+            ))}
         </View>
       </BottomSheetView>
     </View>
