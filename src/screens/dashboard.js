@@ -6,6 +6,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
+import moment, {min} from 'moment';
 import React, {useState, useEffect, useRef} from 'react';
 import {SvgXml} from 'react-native-svg';
 import {hattailogo} from '../assets/svgs/svg';
@@ -31,16 +32,22 @@ const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   //const token = useSelector(state =>state.authenticate.auth.access)
   const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwOTcyNjE0LCJpYXQiOjE2OTA4ODYyMTQsImp0aSI6ImVjYzFkZWEwM2NhYzQ2NTRiYmJlNjY5YzAwMzJjODk1IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.cLeIlyzBj9EI0jYnx5DfeATt7AEs-AcCwaKWO2WmUrw';
   // const clinics = CONSTANTS.clinic;
   const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
+  console.log("clini name...",selectedClinic)
   const [clinic, setClinic] = useState('');
   const [clinics, setDataClinic] = useState();
+  const [clinicid,setClinicId]=useState('')
+  console.log('clinic id ..',clinicid)
+  const [appointment,setDataAppointment] = useState()
   const handleChangeValue = e => {
     setClinic(e);
   };
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const formatDate = moment(date).format('YYYY-MM-DD');
+  console.log('date',formatDate)
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -99,7 +106,29 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchClinic();
   }, []);
+  
+  const fetchAppointment = async () => {
+    const appointment_date= "2023-09-01"
+    const clinic_id= "1"
+    const apiUrl = `${URL.get_all_appointments_of_clinic}?appointment_date=${encodeURIComponent(appointment_date)}&clinic_id=${encodeURIComponent(clinic_id)}`;
 
+    const response = await fetchApi(apiUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setDataAppointment(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(()=>{
+    fetchAppointment()
+  },[]);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -120,6 +149,7 @@ const Dashboard = ({navigation, route}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     handleChangeValue('clinic', clinic.clinic_name);
+    setClinicId(clinic.id)
     ClinicRef?.current?.snapToIndex(0);
   };
   return (
@@ -178,7 +208,7 @@ const Dashboard = ({navigation, route}) => {
                 //label={Language[language]['dob']}
                 name="calendar"
                 onPress={() => setOpen('to')}
-                input={formattedDate}
+                input={formatDate}
                 style={styles.DOBselect}
               />
               <DatePicker

@@ -104,7 +104,6 @@ const AddClinic = ({ navigation }) => {
         const response = await fetchApi(URL.addclinic, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',

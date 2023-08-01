@@ -18,10 +18,13 @@ import {CONSTANTS} from '../utility/constant';
 import {URL} from '../utility/urls';
 import {Icon} from '../components';
 import {fetchApi} from '../api/fetchApi';
+import {HttpStatusCode} from 'axios';
+import { forceTouchGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 
 const SlotBook = ({navigation}) => {
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
+  console.log("slots....", selectedSlot?.slot.split('-')[0] +"T"+selectedSlot?.slot.split('-')[1])
   const selections = CONSTANTS.selections;
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
@@ -44,11 +47,14 @@ const SlotBook = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
+  const formatDate = moment(date).format('YYYY-MM-DD');
+  console.log(formatDate)
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
-    month: 'long',
+    month: 'numeric',
     year: 'numeric',
   });
+  console.log("date....",formattedDate)
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
@@ -140,7 +146,7 @@ const SlotBook = ({navigation}) => {
     return timeList;
   };
   const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwOTcyNjE0LCJpYXQiOjE2OTA4ODYyMTQsImp0aSI6ImVjYzFkZWEwM2NhYzQ2NTRiYmJlNjY5YzAwMzJjODk1IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.cLeIlyzBj9EI0jYnx5DfeATt7AEs-AcCwaKWO2WmUrw';
 
   let list = getTimeList(slotDetails[0]?.[Day]);
 
@@ -155,25 +161,36 @@ const SlotBook = ({navigation}) => {
       </View>
     );
   };
-
   const Appointment_Booking = async () => {
     try {
       const response = await fetchApi(URL.Appointment_Booking, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          start: formattedDate + 'T' + selectedSlot?.slot.split('-')[0],
-          minutes_duration: selectedSlot?.duration,
-          appointment_type: selectedTypeAppointment,
+          appointment_date: formatDate,
           mode_of_consultation: selectedMode,
+          appointment_type: selectedTypeAppointment,
+          appointment_slot: selectedSlot?.slot,
+          meta_data:{
+                complaint:"headache",
+                patient_reference:"ggvvf",
+                practitioner_reference:"hgihfohg",
+                start: selectedSlot?.slot.split('-')[0],
+                end: selectedSlot?.slot.split('-')[1],
+                speciality:"cardialogist",
+                type:"followup"
+
+          }
         }),
+
       });
-      if (response.ok) {
+      if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        // console.log(jsonData);
-        navigation.navigate('bookslot');
+         console.log(jsonData);
+        navigation.navigate('dashboard');
       } else {
         console.error('API call failed:', response.status);
       }
@@ -181,6 +198,9 @@ const SlotBook = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
+  useEffect(()=>{
+    Appointment_Booking()
+  },[]);
 
   // console.log('====================================');
   // console.log(selectedSlot?.duration);
@@ -203,7 +223,7 @@ const SlotBook = ({navigation}) => {
             label="Date"
             name="calendar"
             onPress={() => setOpen('to')}
-            input={formattedDate}
+            input={formatDate}
           />
           <DatePicker
             modal
@@ -249,7 +269,8 @@ const SlotBook = ({navigation}) => {
           <View style={styles.btn}>
             <HButton
               label="Book Slot"
-              onPress={() => navigation.navigate('dashboard')}
+              //onPress={() => navigation.navigate('dashboard')}
+              onPress={Appointment_Booking}
             />
           </View>
         </View>
