@@ -24,17 +24,78 @@ import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { fetchApi } from '../api/fetchApi';
-import { useSelector } from 'react-redux';
-const AddClinic = ({ navigation, route }) => {
-    const addressRef = useRef(null);
-    const [apiStatus, setApiStatus] = useState({});
-    const token = useSelector(state => state.authenticate.auth.access);
-    const slotData = useSelector(state => state?.slotsData);
+import { UseSelector, useSelector } from 'react-redux';
 
-    const SuccesRef = useRef(null);
-    useEffect(() => {
+const AddClinic = ({ navigation }) => {
+  const addressRef = useRef(null);
+  const [apiStatus, setApiStatus] = useState({});
+  // const token = useSelector(state => state.authenticate.auth.access);
+  const slotData = useSelector(state => state?.slotsData);
+
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
+  const token = useSelector(state => state.authenticate.auth.access);
+
+  console.log('====================================');
+  console.log(slotData?.slots?.M);
+  console.log('====================================');
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [value, setValue] = useState({
+    clinic: '',
+    fees: '',
+    slots: [],
+  });
+  const fetchData = async () => {
+    try {
+      const response = await fetchApi(URL.addclinic, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+        body: JSON.stringify([
+          {
+            clinic_name: value.clinic,
+            clinic_Address: '',
+            fees: value.fees,
+            clinic_photo_url: selectedImage,
+            slot: slots,
+          },
+        ]),
+        body: JSON.stringify([
+          {
+            'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
+            clinic_name: value.clinic,
+            clinic_address: 'Chennai',
+            fees: parseInt(value.fees),
+            slot: slotData.slots.toString(),
+          },
+        ]),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setApiStatus({ status: 'success', message: 'Successfully created' });
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('adduser');
+        }, 1000);
+      } else {
+        setApiStatus({ status: 'warning', message: 'Enter all Values' });
+        SuccesRef?.current?.snapToIndex(1);
+        //navigation.navigate('adduser');
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({ status: 'error', message: 'Please try again' });
       SuccesRef?.current?.snapToIndex(1);
-    }, []);
+    }
 
     console.log('====================================');
     console.log(slotData?.slots?.M);
@@ -244,6 +305,86 @@ const AddClinic = ({ navigation, route }) => {
                 addressRef?.current?.snapToIndex(0);
               }}
             />
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                width: '100%',
+                paddingHorizontal: 8,
+              }}>
+              <SelectorBtn
+                label={Language[language]['address']}
+                name="map-marker"
+                onPress={() => {
+                  addressRef?.current?.snapToIndex(1);
+                }}
+              />
+            </View>
+            <InputText
+              label={Language[language]['fees']}
+              placeholder="Consultation Fees"
+              value={value.fees}
+              setValue={value => handleChangeValue('fees', value)}
+            />
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+              }}>
+              <HButton
+                label="Add Slots"
+                onPress={() => navigation.navigate('createslot')}
+              />
+              <Text>{slotData.slot}</Text>
+              <HButton
+                label="Add Slots"
+                onPress={() => navigation.navigate('createslot')}
+              />
+            </View>
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                bottom: 0,
+                paddingVertical: 8,
+                paddingHorizontal: 8,
+              }}>
+              <PlusButton icon="plus" onPress={handlePlusIconClick} />
+            </View>
+
+            <View style={styles.clinic}>
+              {value?.slots?.length > 0 && (
+                <Text
+                  style={{
+                    fontFamily: CUSTOMFONTFAMILY.heading,
+                    fontSize: CUSTOMFONTSIZE.h2,
+                    color: CUSTOMCOLOR.black,
+                    paddingVertical: 4,
+                  }}>
+                  Clinics
+                </Text>
+              )}
+
+              {showSlotChip &&
+                value.slots.map((slot, index) => (
+                  <View style={{ margin: 5 }}>
+                    <SlotChip
+                      style={{ justifyContent: 'space-between' }}
+                      key={index}
+                      type={<Text>{slot}</Text>}
+                      onPress={() => handleDeleteSlotChip(index)}
+                    />
+                  </View>
+                ))}
+            </View>
+            <View>
+              <HButton
+                label="Next"
+                onPress={() => {
+                  fetchData();
+                  SuccesRef?.current?.snapToIndex(1);
+                }}
+              />
+            </View>
           </View>
         </BottomSheetView>
         <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
@@ -281,6 +422,6 @@ const AddClinic = ({ navigation, route }) => {
       height: '100%',
       borderRadius: 10,
     },
-  });
+  })};
 
   export default AddClinic;

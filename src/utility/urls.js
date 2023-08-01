@@ -17,4 +17,5 @@ export const URL = {
   getPractitionerByNumber: phoneId => `${baseUrl}practioner/${phoneId}`,
   savePrescription: `${baseUrl}consult/savePrescription`,
   getUserByNumber: phoneId => `${baseUrl}customuser/${phoneId}`,
+  getInitScreen: `${baseUrl}practioner/init`,
 };
