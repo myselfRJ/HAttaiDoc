@@ -34,7 +34,10 @@ const OtpScreen = ({route}) => {
     value,
     setValue,
   });
-
+  const phone_number = useSelector(state => state?.phone?.phone);
+  console.log('====================================');
+  console.log(phone_number);
+  console.log('====================================');
   const {phone, Trace_id} = route.params;
   console.log('route.params:', route.params);
   const nav = useNavigation();

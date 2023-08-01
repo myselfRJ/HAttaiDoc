@@ -19,9 +19,6 @@ const InitScreen = ({navigation}) => {
     });
 
     const jsonData = await response.json();
-    console.log('====================================');
-    console.log(jsonData);
-    console.log('====================================');
     if (jsonData) {
       navigation.navigate(jsonData.data.lastscreen);
     }
@@ -31,9 +28,6 @@ const InitScreen = ({navigation}) => {
       fetchData();
     }
   }, []);
-  // useEffect(()=>{
-  //     setTimeout(()=>{navigation.navigate('profilecreate')},2000)
-  // },[])
   return (
     <View style={styles.main}>
       <Image

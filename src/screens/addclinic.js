@@ -36,8 +36,9 @@ const AddClinic = ({navigation}) => {
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-  const token = useSelector(state => state.authenticate.auth.access);
-
+  // const token = useSelector(state => state.authenticate.auth.access);
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
   console.log('====================================');
   console.log(slotData?.slots?.M);
   console.log('====================================');
@@ -60,20 +61,11 @@ const AddClinic = ({navigation}) => {
         },
         body: JSON.stringify([
           {
-            clinic_name: value.clinic,
-            clinic_Address: '',
-            fees: value.fees,
-            clinic_photo_url: selectedImage,
-            slot: slots,
-          },
-        ]),
-        body: JSON.stringify([
-          {
             'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
             clinic_name: value.clinic,
             clinic_address: 'Chennai',
             fees: parseInt(value.fees),
-            slot: slotData.slots.toString(),
+            slot: JSON.stringify(slotData.slots),
           },
         ]),
       });

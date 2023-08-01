@@ -14,10 +14,13 @@ import {PostApi} from '../api/api';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
+import {useDispatch} from 'react-redux';
+import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [Trace_id, setTrace_id] = useState();
+  const dispatch = useDispatch();
 
   // const fetchtrace = async () => {
   //   const response = await fetchApi(URL.validateOtp);
@@ -61,6 +64,10 @@ const Entry = ({navigation}) => {
     }
   }, [Trace_id]);
 
+  const handlePhone = () => {
+    dispatch(addPhone(phone));
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -85,7 +92,9 @@ const Entry = ({navigation}) => {
             <View style={{margin: 30, alignItems: 'center'}}>
               <HButton
                 label={Language[language]['getotp']}
-                onPress={() => (phone ? fetchData() : null)}
+                onPress={() => {
+                  phone ? fetchData() : null, handlePhone;
+                }}
               />
             </View>
           </View>

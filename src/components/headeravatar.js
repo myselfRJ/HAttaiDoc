@@ -2,20 +2,59 @@ import {View, Image, StyleSheet, Text} from 'react-native';
 import {CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {useEffect, useState} from 'react';
 const HeaderAvatar = props => {
   //props->name, speciality, img url
+  const [data, setData] = useState();
+
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
+
+  const fetchClinic = async () => {
+    // const response = await fetchApi(URL.get_all_appointments_of_clinic);
+    // const jsonData = await response.json();
+    // setData(jsonData);
+    const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      // params :{
+      //   doctor_phone_number :'9003092186'
+      // }
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setData(jsonData.data);
+      // console.log('====================================');
+      // console.log(clinics);
+      // console.log('====================================');
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchClinic();
+  }, []);
+
+  console.log('====================================');
+  console.log(data?.profile_pic_url);
+  console.log('====================================');
   return (
     <>
       <View style={styles.avatarmain}>
         <Image
           style={styles.img}
           source={{
-            uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+            uri: data?.profile_pic_url,
           }}
         />
         <View>
-          <Text style={styles.name}>Dr.RamaMurthi</Text>
-          <Text style={styles.speciality}>Cardiologist</Text>
+          <Text style={styles.name}>{data?.doctor_name}</Text>
+          <Text style={styles.speciality}>{data?.specialization}</Text>
         </View>
       </View>
     </>

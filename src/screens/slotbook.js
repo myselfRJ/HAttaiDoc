@@ -26,6 +26,7 @@ const SlotBook = ({navigation}) => {
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
   );
+  const [slotData, setSlotData] = useState();
   const [selectedMode, setSelectedMode] = useState('offline');
 
   const handleOptions = value => {
@@ -57,18 +58,52 @@ const SlotBook = ({navigation}) => {
     setOpen(false);
   };
 
-  const SlotsAvailable = async () => {
-    const response = await fetch(URL.SlotsAvailable);
-    const jsonData = await response.json();
-    setSlotDetails(jsonData);
-  };
+  // const SlotsAvailable = async () => {
+  //   const response = await fetch(URL.SlotsAvailable);
+  //   const jsonData = await response.json();
+  //   setSlotDetails(jsonData);
+  // };
 
-  useEffect(() => {
-    {
-      SlotsAvailable();
+  // useEffect(() => {
+  //   {
+  //     SlotsAvailable();
+  //   }
+  // }, []);
+
+  const weekDys = {
+    0: 'Su',
+    1: 'M',
+    2: 'T',
+    3: 'W',
+    4: 'TH',
+    5: 'F',
+    6: 'Sa',
+  };
+  const Day = weekDys?.[moment().day()];
+  const fetchslots = async () => {
+    const response = await fetchApi(URL.SlotsAvailable('8'), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // let list = getTimeList(slotDetails?.slot?.[weekDys?.[moment().day()]]);
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('======================', jsonData);
+      setSlotDetails(jsonData.data?.map(val => JSON.parse(val?.slot)));
+    } else {
+      console.error('API call failed:', response.status, response);
     }
+  };
+  useEffect(() => {
+    fetchslots();
   }, []);
+
   useEffect(() => {}, [selectedSlot]);
+  console.log('====================================');
+  console.log(slotDetails[0]);
+  console.log('====================================');
 
   const getMinute = time => {
     value = time.split(':');
@@ -85,11 +120,11 @@ const SlotBook = ({navigation}) => {
     let totalMinutes = min.toString().padStart(2, '0');
     return totalHour + ':' + totalMinutes;
   };
-
   const getTimeList = data => {
     let timeList = [];
     data?.forEach(item => {
       const initialTime = getMinute(item.fromTime);
+
       const endTime = getMinute(item.toTime);
       const duration = parseInt(item.duration);
       const loopLength = (endTime - initialTime) / duration;
@@ -104,18 +139,11 @@ const SlotBook = ({navigation}) => {
     });
     return timeList;
   };
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
 
-  const weekDys = {
-    0: 'Su',
-    1: 'M',
-    2: 'T',
-    3: 'W',
-    4: 'TH',
-    5: 'F',
-    6: 'Sa',
-  };
-  let list = getTimeList(slotDetails?.slot?.[weekDys?.[moment().day()]]);
-  console.log(weekDys?.[moment().day()]);
+  let list = getTimeList(slotDetails[0]?.[Day]);
+
   const renderItems = ({item}) => {
     return (
       <View style={styles.item}>
@@ -144,7 +172,7 @@ const SlotBook = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         navigation.navigate('bookslot');
       } else {
         console.error('API call failed:', response.status);
@@ -154,9 +182,9 @@ const SlotBook = ({navigation}) => {
     }
   };
 
-  console.log('====================================');
-  console.log(selectedSlot?.duration);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(selectedSlot?.duration);
+  // console.log('====================================');
 
   return (
     <View style={styles.main}>
@@ -216,7 +244,7 @@ const SlotBook = ({navigation}) => {
 
           <View>
             <Text style={styles.h2}>Available Slots</Text>
-            <FlatList data={list} renderItem={renderItems} numColumns={3} />
+            <FlatList data={list} renderItem={renderItems} numColumns={5} />
           </View>
           <View style={styles.btn}>
             <HButton

@@ -79,6 +79,27 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchData();
   }, []);
+  const [doc_name, setDoc_name] = useState();
+
+  const fetchClinic = async () => {
+    const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setDoc_name(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchClinic();
+  }, []);
+
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -120,7 +141,7 @@ const Dashboard = ({navigation, route}) => {
                 />
                 <Text style={styles.title}>
                   {Language[language]['welcome']},{Language[language]['dr']}
-                  RamaMurthi
+                  {doc_name?.doctor_name}
                 </Text>
               </View>
               <HeaderAvatar />
