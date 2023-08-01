@@ -6,17 +6,17 @@ const initialState = {
     {
       modes: CONSTANTS.modes,
       medicine: null,
-      selectedMode: null,
+      mode: null,
       selectedMedicine: null,
-      selectedMg: null,
-      selectedTime: null,
-      selectedFrequency: [],
-      tab: '',
+      dose_quantity: null,
+      timing: null,
+      frequency: '',
+      dose_number: '',
       recommdations: CONSTANTS.medicine_recomendation,
       mg: CONSTANTS.dose,
-      timing: CONSTANTS.timing,
-      frequency: CONSTANTS.frequency,
-      quantity: '100',
+      timings: CONSTANTS.timing,
+      frequencys: CONSTANTS.frequency,
+      total_quantity: '100',
       duration: '',
       index: '',
     },
@@ -39,32 +39,30 @@ const prescribeSlice = createSlice({
       state.prescribeItems[index][field] = value;
     },
     setMode: (state, action) => {
-      state.prescribeItems[0].selectedMode = action.payload;
+      state.prescribeItems[0].mode = action.payload;
     },
     setMedicine: (state, action) => {
       state.prescribeItems[0].medicine = action.payload;
     },
     setSelectedMedicine: (state, action) => {
-      state.prescribeItems[0].medicine = action.payload;
+      state.prescribeItems[0].selectedMedicine = action.payload;
     },
     setSelectedMg: (state, action) => {
-      state.prescribeItems[0].selectedMg = action.payload;
+      state.prescribeItems[0].dose_quantity = action.payload;
     },
     setSelectedTime: (state, action) => {
-      state.prescribeItems[0].selectedTime = action.payload;
+      state.prescribeItems[0].timing = action.payload;
     },
     toggleFrequency: (state, action) => {
-      const index = state.prescribeItems[0].selectedFrequency.indexOf(
-        action.payload,
-      );
+      const index = state.prescribeItems[0].frequency.indexOf(action.payload);
       if (index !== -1) {
-        state.prescribeItems[0].selectedFrequency.splice(index, 1);
+        state.prescribeItems[0].frequency.splice(index, 1);
       } else {
-        state.prescribeItems[0].selectedFrequency.push(action.payload);
+        state.prescribeItems[0].frequency.push(action.payload);
       }
     },
     setTab: (state, action) => {
-      state.prescribeItems[0].tab = action.payload;
+      state.prescribeItems[0].dose_number = action.payload;
     },
     setDuration: (state, action) => {
       state.prescribeItems[0].duration = action.payload;
@@ -86,16 +84,16 @@ export const {
   setDuration,
 } = prescribeSlice.actions;
 
-export const selectedMode = state =>
-  state.prescribe.prescribeItems[0].selectedMode;
+export const mode = state => state.prescribe.prescribeItems[0].mode;
 export const medicine = state => state.prescribe.prescribeItems[0].medicine;
-export const tab = state => state.prescribe.prescribeItems[0].tab;
-export const selectedMg = state => state.prescribe.prescribeItems[0].selectedMg;
-export const selectedTime = state =>
-  state.prescribe.prescribeItems[0].selectedTime;
-export const selectedFrequency = state =>
-  state.prescribe.prescribeItems[0].selectedFrequency;
+export const dose_number = state =>
+  state.prescribe.prescribeItems[0].dose_number;
+export const dose_quantity = state =>
+  state.prescribe.prescribeItems[0].dose_quantity;
+export const timing = state => state.prescribe.prescribeItems[0].timing;
+export const frequency = state => state.prescribe.prescribeItems[0].frequency;
 export const duration = state => state.prescribe.prescribeItems[0].duration;
-export const quantity = state => state.prescribe.prescribeItems[0].quantity;
+export const total_quantity = state =>
+  state.prescribe.prescribeItems[0].total_quantity;
 
 export default prescribeSlice.reducer;

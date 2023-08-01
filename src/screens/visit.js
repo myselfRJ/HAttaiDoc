@@ -9,6 +9,9 @@ import {Language} from '../settings/customlanguage';
 import {language} from '../settings/userpreferences';
 import {useSelector} from 'react-redux';
 import {getDate} from '../redux/features/prescription/Followupslice';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+import {HButton} from '../components';
 
 const Visit = ({navigation}) => {
   const date = useSelector(getDate);
@@ -24,16 +27,102 @@ const Visit = ({navigation}) => {
   const Prescribe = useSelector(state => state.prescribe.prescribeItems);
   let prescribeCopy = Prescribe;
   const [prescribe, setPrescribe] = useState(prescribeCopy);
+  // console.log('....symptom.....', Symptom);
+  // console.log('....prescribe.....', Prescribe);
+  // console.log('....chief complsint.....', selectedComplaint);
+  // console.log('....vitals.....', vitalsData, date, selectedDoctor, note);
 
   // const handleDelete = index => {
   //   const updatedPrescribe = prescribe?.filter((item, ind) => ind !== index);
   //   console.log(updatedPrescribe);
   //   setPrescribe(updatedPrescribe);
+
+  // prescribe = data.pop('prescribe')
+  //   print(prescribe)
+  //   symptom = data.pop('symptoms')
+  //   cheif_complaint = data.pop('chief_complaint')
+  //   vitals = data.pop('vitals')
+  //   note = data.pop('note')
+  //   refer_to_doctor = data.pop('refer_to_doctor')
+  //   follow_up = data.pop('follow_up')
+  //   meta_data = data.pop('meta_data')
   // };
+
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwOTcyNjE0LCJpYXQiOjE2OTA4ODYyMTQsImp0aSI6ImVjYzFkZWEwM2NhYzQ2NTRiYmJlNjY5YzAwMzJjODk1IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.cLeIlyzBj9EI0jYnx5DfeATt7AEs-AcCwaKWO2WmUrw';
+  const doctor_name = selectedDoctor.name;
+
+  console.log('====================================');
+  console.log(selectedDoctor);
+  console.log('====================================');
+  const [apiStatus, setApiStatus] = useState({});
+
+  const updateFreq = () => {
+    let newPrescribe = Prescribe;
+    console.log('prescribe', Prescribe);
+    console.log('newprescribe', newPrescribe);
+    newPrescribe.forEach(element => {
+      let fre = element.frequency;
+      element.frequency = JSON.stringify(fre);
+    });
+    return newPrescribe;
+  };
 
   useEffect(() => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
+
+  const fetchData = async () => {
+    const newPres = updateFreq();
+    console.log(newPres);
+    const consultationData = {
+      prescribe: newPres,
+
+      symptoms: Symptom,
+
+      chief_complaint: selectedComplaint,
+      vitals: vitalsData,
+      refer_to_doctor: selectedDoctor,
+      follow_up: date,
+      note: note,
+
+      meta_data: {
+        patient_phone_number: '9177468511',
+        doctor_phone_number: '9490421037',
+        clinic_id: '7',
+        appointment_id: '2',
+      },
+    };
+    try {
+      const response = await fetchApi(URL.savePrescription, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(consultationData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setApiStatus({status: 'success', message: 'Successfully created'});
+        setTimeout(() => {
+          navigation.navigate('adduser');
+        }, 1000);
+      } else {
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const dataObject = [
     {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
@@ -117,10 +206,10 @@ const Visit = ({navigation}) => {
                             />
                             <View>
                               <Text style={{color: CUSTOMCOLOR.black}}>
-                                {item.selectedMode}|{item.medicine}|
-                                {item.selectedMg}|{item.selectedTime}|
-                                {item.selectedFrequency}|{item.tab}|
-                                {item.quantity}|{item.duration}
+                                {item.mode}|{item.medicine}|{item.dose_quantity}
+                                |{item.timing}|{item.frequency}|
+                                {item.dose_number}|{item.total_quantity}|
+                                {item.duration}
                               </Text>
                             </View>
                             {/* <TouchableOpacity
@@ -270,12 +359,14 @@ const Visit = ({navigation}) => {
           </View>
         ))}
       </View>
-
-      <PlusButton
-        icon="close"
-        style={{position: 'absolute', left: 0, bottom: 0}}
-        onPress={() => navigation.goBack()}
-      />
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <PlusButton
+          icon="close"
+          style={{left: 0, bottom: 0}}
+          onPress={() => navigation.goBack()}
+        />
+        <HButton label="save" onPress={() => fetchData()} />
+      </View>
     </View>
   );
 };

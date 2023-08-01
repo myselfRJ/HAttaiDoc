@@ -41,36 +41,7 @@ export default function Prescribe() {
     console.log(prescribeInput.length);
   }, [prescribeInput]);
 
-  // useEffect(() => {
-  //   if (prescribe) {
-  //     setPrescribeInput([prescribe]);
-  //   }
-  // }, [prescribe]);
-
   const handleAddPrescribe = () => {
-    // const uuid = Math.random() + 'tt';
-    // const newPrescribe = {
-    //   modes: CONSTANTS.modes,
-    //   medicine: null,
-    //   selectedMode: null,
-    //   selectedMedicine: null,
-    //   selectedMg: null,
-    //   selectedTime: null,
-    //   selectedFrequency: [],
-    //   tab: '',
-    //   recommdations: CONSTANTS.medicine_recomendation,
-    //   mg: CONSTANTS.dose,
-    //   timing: CONSTANTS.timing,
-    //   frequency: CONSTANTS.frequency,
-    //   quantity: '100',
-    //   duration: '',
-    //   uuid: uuid,
-    // };
-
-    // const filteredPrescribeInput = prescribeInput.filter(
-    //   item => item.uuid !== prescribe.uuid,
-    // );
-
     const newPrescribe = {...prescribeInput[0]};
     setPrescribeList(prevState => [...prevState, newPrescribe]);
     dispatch(addPrescribe([...prescribeList, newPrescribe]));
@@ -94,7 +65,7 @@ export default function Prescribe() {
   };
 
   const setSelectMode = (index, value) => {
-    handlePrescribeChange(value, index, 'selectedMode');
+    handlePrescribeChange(value, index, 'mode');
   };
 
   const setMedicineValue = (index, value) => {
@@ -103,24 +74,23 @@ export default function Prescribe() {
   };
 
   const setMG = (index, value) => {
-    handlePrescribeChange(value, index, 'selectedMg');
+    handlePrescribeChange(value, index, 'dose_quantity');
   };
 
   const setTime = (index, value) => {
-    handlePrescribeChange(value, index, 'selectedTime');
+    handlePrescribeChange(value, index, 'timing');
   };
 
   const toggleFrequencyValue = (index, value) => {
-    const selectedFrequency = prescribeInput[index].selectedFrequency;
-    const updatedFrequency = selectedFrequency.includes(value)
-      ? selectedFrequency.filter(item => item !== value)
-      : [...selectedFrequency, value];
-    handlePrescribeChange(updatedFrequency, index, 'selectedFrequency');
+    const frequency = prescribeInput[index].frequency;
+    console.log('====================================');
+    console.log(typeof frequency);
+    console.log('====================================');
+    const updatedFrequency = frequency.includes(value)
+      ? frequency.filter(item => item !== value)
+      : [...frequency, value];
+    handlePrescribeChange(updatedFrequency, index, 'frequency');
   };
-
-  // console.log('====================================');
-  // console.log(prescribeList);
-  // console.log('====================================');
 
   return (
     <ScrollView>
@@ -141,9 +111,9 @@ export default function Prescribe() {
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
                 <Text style={{color: CUSTOMCOLOR.black}}>
-                  {item.selectedMode}|{item.medicine}|{item.selectedMg}|
-                  {item.selectedTime}|{item.selectedFrequency}|{item.tab}|
-                  {item.quantity}|{item.duration}
+                  {item.mode}|{item.medicine}|{item.dose_quantity}|{item.timing}
+                  |{item.frequency}|{item.dose_number}|{item.total_quantity}|
+                  {item.duration}
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleDelete(ind)}>
@@ -170,17 +140,12 @@ export default function Prescribe() {
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                item.selectedMode === value
-                                  ? '#4ba5fa'
-                                  : '#fff',
+                                item.mode === value ? '#4ba5fa' : '#fff',
                             },
                           ]}>
                           <Text
                             style={{
-                              color:
-                                item.selectedMode === value
-                                  ? '#fff'
-                                  : '#4ba5fa',
+                              color: item.mode === value ? '#fff' : '#4ba5fa',
                             }}>
                             {value}
                           </Text>
@@ -248,7 +213,7 @@ export default function Prescribe() {
                       style={styles.tab}
                       value={item.tab}
                       onChangeText={value =>
-                        handlePrescribeChange(value, index, 'tab')
+                        handlePrescribeChange(value, index, 'dose_number')
                       }
                     />
                   </View>
@@ -262,7 +227,7 @@ export default function Prescribe() {
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                item.selectedMg === value
+                                item.dose_quantity === value
                                   ? CUSTOMCOLOR.primary
                                   : CUSTOMCOLOR.white,
                             },
@@ -270,7 +235,7 @@ export default function Prescribe() {
                           <Text
                             style={{
                               color:
-                                item.selectedMg === value
+                                item.dose_quantity === value
                                   ? CUSTOMCOLOR.white
                                   : CUSTOMCOLOR.primary,
                             }}>
@@ -286,7 +251,7 @@ export default function Prescribe() {
                     {Language[language]['timing']}
                   </Text>
                   <View style={styles.Modes}>
-                    {item?.timing?.map((value, timeIndex) => (
+                    {item?.timings?.map((value, timeIndex) => (
                       <TouchableOpacity
                         key={timeIndex}
                         onPress={() => setTime(index, value)}>
@@ -295,7 +260,7 @@ export default function Prescribe() {
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                item.selectedTime === value
+                                item.timing === value
                                   ? CUSTOMCOLOR.primary
                                   : CUSTOMCOLOR.white,
                             },
@@ -303,7 +268,7 @@ export default function Prescribe() {
                           <Text
                             style={{
                               color:
-                                item.selectedTime === value
+                                item.timing === value
                                   ? CUSTOMCOLOR.white
                                   : CUSTOMCOLOR.primary,
                             }}>
@@ -319,7 +284,7 @@ export default function Prescribe() {
                     {Language[language]['frequency']}
                   </Text>
                   <View style={styles.Modes}>
-                    {item?.frequency?.map((value, frequencyIndex) => (
+                    {item?.frequencys?.map((value, frequencyIndex) => (
                       <TouchableOpacity
                         key={frequencyIndex}
                         onPress={() => toggleFrequencyValue(index, value)}>
@@ -327,16 +292,14 @@ export default function Prescribe() {
                           style={[
                             styles.ModesContainer,
                             {
-                              backgroundColor: item.selectedFrequency.includes(
-                                value,
-                              )
+                              backgroundColor: item.frequency.includes(value)
                                 ? CUSTOMCOLOR.primary
                                 : CUSTOMCOLOR.white,
                             },
                           ]}>
                           <Text
                             style={{
-                              color: item.selectedFrequency.includes(value)
+                              color: item.frequency.includes(value)
                                 ? CUSTOMCOLOR.white
                                 : CUSTOMCOLOR.primary,
                             }}>
@@ -373,7 +336,7 @@ export default function Prescribe() {
                       alignItems: 'center',
                       backgroundColor: CUSTOMCOLOR.white,
                     }}>
-                    <Text style={styles.numText}>{item.quantity}</Text>
+                    <Text style={styles.numText}>{item.total_quantity}</Text>
                   </View>
                 </View>
                 <View style={styles.line}></View>
