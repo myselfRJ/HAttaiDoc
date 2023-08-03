@@ -1,32 +1,37 @@
-import {Text, View, StyleSheet, FlatList} from 'react-native';
+import { Text, View, StyleSheet, FlatList } from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
 import SelectorBtn from '../components/selector';
 import Option from '../components/option';
 import SelectionTab from '../components/selectiontab';
 import SuggestionTab from '../components/suggestiontab';
 import HButton from '../components/button';
-import {useState, useEffect} from 'react';
-import moment, {min} from 'moment';
+import { useState, useEffect } from 'react';
+import moment, { min } from 'moment';
 import DatePicker from 'react-native-date-picker';
-import {CONSTANTS} from '../utility/constant';
-import {URL} from '../utility/urls';
-import {Icon} from '../components';
-import {fetchApi} from '../api/fetchApi';
-import {HttpStatusCode} from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
-import {addPatient} from '../redux/features/patient/patientslice';
-import {addPhone} from '../redux/features/authenticate/PhoneNumber';
-import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
-
-const SlotBook = ({navigation}) => {
+import { CONSTANTS } from '../utility/constant';
+import { URL } from '../utility/urls';
+import { Icon } from '../components';
+import { fetchApi } from '../api/fetchApi';
+import { HttpStatusCode } from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { ScrollView } from 'react-native-gesture-handler';
+import { addPatient } from '../redux/features/patient/patientslice';
+import { addPhone } from '../redux/features/authenticate/PhoneNumber';
+import { forceTouchGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
+import InputText from '../components/inputext';
+const SlotBook = ({ navigation }) => {
+  const [complaint, setComplaint] = useState('')
+  const changeComplaint = (e) => {
+    setComplaint(e)
+  }
   const patientPhoneNumber = useSelector(state => state.patient);
-  console.log('phone----', patientPhoneNumber.patient.phone_number);
+  //console.log('phone----', patientPhoneNumber.patient.phone_number);
   const dispatch = useDispatch();
   const doctorphoneNumber = useSelector(state => state.phone);
   console.log('doctor phone=====', doctorphoneNumber);
@@ -117,7 +122,7 @@ const SlotBook = ({navigation}) => {
     fetchslots();
   }, []);
 
-  useEffect(() => {}, [selectedSlot]);
+  useEffect(() => { }, [selectedSlot]);
   console.log('====================================');
   console.log(slotDetails[0]);
   console.log('====================================');
@@ -160,7 +165,7 @@ const SlotBook = ({navigation}) => {
 
   let list = getTimeList(slotDetails[0]?.T);
 
-  const renderItems = ({item}) => {
+  const renderItems = ({ item }) => {
     return (
       <View style={styles.item}>
         <SelectionTab
@@ -185,7 +190,9 @@ const SlotBook = ({navigation}) => {
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
           clinic_id: '1',
-          patient_phone_number: patientPhoneNumber.patient.phone_number,
+          complaint:complaint,
+          //patient_phone_number: patientPhoneNumber.patient.phone_number,
+          patient_phone_number:'9003092186',
           meta_data: {
             complaint: 'headache',
             patient_reference: 'ggvvf',
@@ -217,18 +224,20 @@ const SlotBook = ({navigation}) => {
   // console.log('====================================');
 
   return (
+    
     <View style={styles.main}>
+      <ScrollView>
       <View style={styles.MainHeadContainer}>
         <Text style={styles.MainText}>Slot Booking</Text>
         <Icon
           name="bell"
           size={24}
           color={CUSTOMCOLOR.white}
-          style={{top: 43, right: 37}}
+          style={{ top: 43, right: 37 }}
         />
       </View>
       <View style={styles.child}>
-        <View style={{width: '100%', height: 40, bottom: 8}}>
+        <View style={{ gap: 8, paddingHorizontal: 12, paddingVertical: 8, height: 70 }}>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -245,6 +254,14 @@ const SlotBook = ({navigation}) => {
             onCancel={handleCancel}
           />
         </View>
+        <InputText
+            label={Language[language]['complaint']}
+            placeholder="enter your complaints"
+            value={complaint}
+            setValue={setComplaint}
+            multiline={true}
+
+          />
         <View style={styles.child}>
           <View style={styles.type}>
             <Option
@@ -271,6 +288,7 @@ const SlotBook = ({navigation}) => {
               </View>
             ))}
           </View>
+          
 
           <View>
             <Text style={styles.h2}>Available Slots</Text>
@@ -288,13 +306,19 @@ const SlotBook = ({navigation}) => {
           </View>
         </View>
       </View>
+      </ScrollView>
     </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     gap: 32,
+    flex:1,
+    //backgroundColor:CUSTOMCOLOR.primary,
+    // paddingHorizontal:24,
+    // paddingVertical:24
   },
   type: {
     flexDirection: 'row',
@@ -323,8 +347,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   child: {
-    padding: 24,
-    gap: 32,
+    padding: 16,
+    gap: 16,
   },
   h2: {
     fontSize: 24,
@@ -333,8 +357,9 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
-  item: {margin: 8},
+  item: { margin: 8 },
   btn: {
+    height:100,
     alignItems: 'center',
   },
 });
