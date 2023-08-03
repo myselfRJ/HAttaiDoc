@@ -33,7 +33,7 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
 
-const AbhaCreate = ({navigation}) => {
+const Abha = ({navigation}) => {
   const dispatch = useDispatch();
   const patientData = useSelector(state => state.patient.patient);
   console.log('redux data---', patientData);
@@ -330,4 +330,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AbhaCreate;
+export default Abha;
