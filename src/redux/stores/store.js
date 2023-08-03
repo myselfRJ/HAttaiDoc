@@ -7,7 +7,13 @@ import symptomsReducer from '../features/prescription/symptomslice';
 import prescriptionReducer from '../features/prescription/prescriptionSlice';
 import {slotDataReducer} from '../features/slots/slotData';
 import {phoneReducer} from '../features/authenticate/PhoneNumber';
-import { patientDataReducer } from '../features/patient/patientslice';
+import {patientDataReducer} from '../features/patient/patientslice';
+import {doctor_profileReducer} from '../features/profiles/doctorprofile';
+import {prescribeReducer1} from '../features/prescription/prescr';
+import {addclinic_data} from '../features/profiles/clinicData';
+import {Login_phone_Reducer} from '../features/phoneNumber/LoginPhoneNumber';
+import {AbhaReducer} from '../features/Abha/AbhaAccesToken';
+
 const store = configureStore({
   reducer: {
     authenticate: authenticateReducer,
@@ -17,8 +23,12 @@ const store = configureStore({
     symptoms: symptomsReducer,
     prescribe: prescribeReducer,
     slotsData: slotDataReducer,
-    phone: phoneReducer,
-    patient:patientDataReducer
+    patient: patientDataReducer,
+    doctor_profile: doctor_profileReducer,
+    pres: prescribeReducer1,
+    clinic: addclinic_data,
+    phone: Login_phone_Reducer,
+    abha: AbhaReducer,
   },
 });
 

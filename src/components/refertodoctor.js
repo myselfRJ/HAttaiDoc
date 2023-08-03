@@ -105,7 +105,7 @@ const ReferDoctorForm = props => {
               <TextInput
                 placeholder="Name"
                 style={styles.input}
-                value={selectedDoctor.name}
+                value={selectedDoctor.doctor_name}
                 onChangeText={handleNameChange}
               />
               <TextInput

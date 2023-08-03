@@ -9,6 +9,10 @@ import {useSelector} from 'react-redux';
 import {State} from 'react-native-gesture-handler';
 const InitScreen = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
+
+  console.log('====================================');
+  console.log('token', token);
+  console.log('====================================');
   const [data, setData] = useState();
   const fetchData = async () => {
     const response = await fetch(URL.getInitScreen, {

@@ -28,10 +28,17 @@ const Appointment = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
   const [clinic, setClinic] = useState('');
   const [clinics, setDataClinic] = useState();
+
+  const phone_number = useSelector(state => state?.phone?.phone);
+  console.log('====================================');
+  console.log(
+    phone_number,
+    'phonenumber=++++++++++++++++++++===========================',
+  );
   const handleChangeValue = e => {
     setClinic(e);
   };
-  const [setAppointment,setDataAppointment] = useState()
+  const [setAppointment, setDataAppointment] = useState();
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formatDate = moment(DOB).format('YYYY-MM-DD');
@@ -68,9 +75,7 @@ const Appointment = ({navigation}) => {
     }
   }, []);
 
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
-  console.log('====================================');
+  const token = useSelector(state => state.authenticate.auth.access);
   console.log(token);
   console.log('====================================');
   const fetchClinic = async () => {
@@ -102,9 +107,13 @@ const Appointment = ({navigation}) => {
   }, []);
 
   const fetchAppointment = async () => {
-    const appointment_date= formatDate
-    const clinic_id= "1"
-    const apiUrl = `${URL.get_all_appointments_of_clinic}?appointment_date=${encodeURIComponent(appointment_date)}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const appointment_date = formatDate;
+    const clinic_id = '1';
+    const apiUrl = `${
+      URL.get_all_appointments_of_clinic
+    }?appointment_date=${encodeURIComponent(
+      appointment_date,
+    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -126,7 +135,7 @@ const Appointment = ({navigation}) => {
   const [doc_name, setDoc_name] = useState();
 
   const fetchname = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone_number), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -164,7 +173,7 @@ const Appointment = ({navigation}) => {
                 {doc_name?.doctor_name}
               </Text>
             </View>
-            <HeaderAvatar data={doc_name}/>
+            <HeaderAvatar data={doc_name} />
           </View>
           <View style={styles.select}>
             <SelectorBtn
@@ -218,18 +227,15 @@ const Appointment = ({navigation}) => {
           </View>
           <View style={styles.appointment}>
             <Text style={styles.h2}>Appointments</Text>
-
-            {setAppointment.length > 0
-              ? setAppointment?.map((value, index) => {
-                  return (
-                    <AppointmentCard
-                      key={index}
-                      appointment={value}
-                      openVisit={() => navigation.navigate('visit')}
-                    />
-                  );
-                })
-              : null}
+            {setAppointment?.map((value, index) => {
+              return (
+                <AppointmentCard
+                  key={index}
+                  appointment={value}
+                  openVisit={() => navigation.navigate('visit')}
+                />
+              );
+            })}
           </View>
 
           <PlusButton

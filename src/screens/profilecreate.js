@@ -25,7 +25,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import StatusMessage from '../components/statusMessage';
 import {fetchApi} from '../api/fetchApi';
 import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -36,6 +37,7 @@ const ProfileCreate = ({navigation}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
     doctor_name: '',
     gender: 'male',
@@ -97,8 +99,23 @@ const ProfileCreate = ({navigation}) => {
     handleChangeValue('gender', value);
   };
 
-  const toggleDatePicker = () => {
-    setShowDatePicker(!showDatePicker);
+  // const toggleDatePicker = () => {
+  //   setShowDatePicker(!showDatePicker);
+  // };
+
+  const handleAddData = () => {
+    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
+  };
+
+  const doctor_profile_data = {
+    doctor_name: values.doctor_name,
+    experience: values.experience,
+    gender: values.gender,
+    DOB: DOB.toString(),
+    specialization: selectedSpeciality,
+    medical_number: values.medical_number,
+    profile_pic_url: selectedImage,
+    medical_doc_url: 'jsdjsbgjkd',
   };
 
   console.log(token);
@@ -112,16 +129,7 @@ const ProfileCreate = ({navigation}) => {
           Accept:
             'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
         },
-        body: JSON.stringify({
-          doctor_name: values.doctor_name,
-          experience: values.experience,
-          gender: values.gender,
-          DOB: DOB.toString(),
-          specialization: selectedSpeciality,
-          medical_number: values.medical_number,
-          profile_pic_url: selectedImage,
-          medical_doc_url: 'jsdjsbgjkd',
-        }),
+        body: JSON.stringify(doctor_profile_data),
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
@@ -258,7 +266,7 @@ const ProfileCreate = ({navigation}) => {
             <HButton
               label={Language[language]['save']}
               onPress={() => {
-                fetchData();
+                fetchData(), handleAddData();
               }}
             />
           </View>

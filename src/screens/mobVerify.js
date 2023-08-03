@@ -20,6 +20,9 @@ import HButton from '../components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+import {useSelector} from 'react-redux';
 
 const MobileVerify = ({navigation}) => {
   const CELL_COUNT = 6;
@@ -31,57 +34,57 @@ const MobileVerify = ({navigation}) => {
     setValue,
   });
 
-  //   const getOtp = async () => {
-  //     // const url='https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp'
-  //     try {
-  //       const response = await fetch(URL.generateOtp, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           phone: phoneNumber,
-  //           country: 'india',
-  //           code: '+91',
-  //         }),
-  //       });
-  //       if (response.ok) {
-  //         const jsonData = await response.json();
-  //         console.log(jsonData);
-  //         navigation.navigate('bookslot', {phoneNumber});
-  //       } else {
-  //         console.error('API call failed:', response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //     }
-  //   };
-  //   const VerifyOtp = async () => {
-  //     // const url='https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp'
-  //     try {
-  //       const response = await fetch(URL.generateOtp, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           phone: phoneNumber,
-  //           country: 'india',
-  //           code: '+91',
-  //           otp:value
-  //         }),
-  //       });
-  //       if (response.ok) {
-  //         const jsonData = await response.json();
-  //         console.log(jsonData);
-  //         navigation.navigate('bookslot', {phoneNumber});
-  //       } else {
-  //         console.error('API call failed:', response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //     }
-  //   };
+  const AbhaAccessToken = useSelector(state => state.abha.auth.access);
+  const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
+
+  const postPhone = async () => {
+    try {
+      const response = await fetchApi(URL.AbhaGenerateMobileOtp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+        },
+        body: JSON.stringify({
+          mobile: phoneNumber,
+          txnId: AbhaTxnId,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('======,AAdharMOBILE', jsonData);
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+
+  const postOtp = async () => {
+    try {
+      const response = await fetchApi(URL.AbhaMobileVerifyOtp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+        },
+        body: JSON.stringify({
+          otp: value,
+          txnId: AbhaTxnId,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('======,AAdharOtp', jsonData);
+        navigation.navigate('abhacreate');
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -126,7 +129,7 @@ const MobileVerify = ({navigation}) => {
             />
             <HButton
               label={Language[language]['getotp']}
-              onPress={() => console.log('Aadhar')}
+              onPress={() => postPhone()}
             />
           </View>
           <View style={{paddingHorizontal: '30%', gap: 24}}>
@@ -154,7 +157,7 @@ const MobileVerify = ({navigation}) => {
             <View style={{alignItems: 'center'}}>
               <HButton
                 label={Language[language]['verify']}
-                onPress={() => navigation.navigate('abhacreate')}
+                onPress={() => postOtp()}
               />
             </View>
           </View>

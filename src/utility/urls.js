@@ -18,4 +18,15 @@ export const URL = {
   savePrescription: `${baseUrl}consult/savePrescription`,
   getUserByNumber: phoneId => `${baseUrl}customuser/${phoneId}`,
   getInitScreen: `${baseUrl}practioner/init`,
+  AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
+  AbhaAadhargenerateOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',
+  AbhaVerifyAadharOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyOTP',
+  AbhaGenerateMobileOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateMobileOTP',
+  AbhaMobileVerifyOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyMobileOTP',
+  CreateAbhaAccount:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/createHealthIdWithPreVerified',
 };

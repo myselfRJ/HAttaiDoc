@@ -10,7 +10,7 @@ const initialState = {
       selectedMedicine: null,
       dose_quantity: null,
       timing: null,
-      frequency: '',
+      frequency: null,
       dose_number: '',
       recommdations: CONSTANTS.medicine_recomendation,
       mg: CONSTANTS.dose,
@@ -18,7 +18,6 @@ const initialState = {
       frequencys: CONSTANTS.frequency,
       total_quantity: '100',
       duration: '',
-      index: '',
     },
   ],
 };
@@ -60,6 +59,8 @@ const prescribeSlice = createSlice({
       } else {
         state.prescribeItems[0].frequency.push(action.payload);
       }
+      state.prescribeItems[0].frequency =
+        state.prescribeItems[0].frequency.join(',');
     },
     setTab: (state, action) => {
       state.prescribeItems[0].dose_number = action.payload;

@@ -30,23 +30,27 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector} from 'react-redux';
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
-  //const token = useSelector(state =>state.authenticate.auth.access)
-  const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
-  // const clinics = CONSTANTS.clinic;
+  const token = useSelector(state => state.authenticate.auth.access);
   const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
-  console.log("clini name...",selectedClinic)
+  console.log('clini name...', selectedClinic);
   const [clinic, setClinic] = useState('');
-  const [item,setItem] = useState()
+  const [item, setItem] = useState();
   const [clinics, setDataClinic] = useState();
-  const [clinicid,setClinicId]=useState('')
-  console.log('clinic id ..',clinicid)
+  const [clinicid, setClinicId] = useState('');
+  console.log('clinic id ..', clinicid);
 
-  const [setAppointment,setDataAppointment] = useState()
- console.log('apoointment===',setAppointment)
+  const [setAppointment, setDataAppointment] = useState();
+  console.log('apoointment===', setAppointment);
+
+  const phone_number = useSelector(state => state?.phone?.phone);
+  console.log('====================================');
+  console.log(
+    phone_number,
+    'phonenumber=++++++++++++++++++++===========================',
+  );
   const handleChangeValue = e => {
     setClinic(e);
   };
-
 
   // const mergedData = setAppointment.map(appointment =>{
   //   const patient = item.find(patient => patient.clinic_id === appointment.clinic_id);
@@ -54,11 +58,10 @@ const Dashboard = ({navigation, route}) => {
   // });
   // console.log('merge code ====>',mergedData)
 
-  
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formatDate = moment(date).format('YYYY-MM-DD');
-  console.log('date',formatDate)
+  console.log('date', formatDate);
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -74,7 +77,7 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getClinic('9177468511'), {
+    const response = await fetchApi(URL.getClinic(phone_number), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -90,18 +93,18 @@ const Dashboard = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchData();
-  },[]);
+  }, []);
   const [doc_name, setDoc_name] = useState();
-  console.log('doc name===>',doc_name)
+  console.log('doc name===>', doc_name);
 
   const fetchClinic = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone_number), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("practitioner response====",response)
+    console.log('practitioner response====', response);
     if (response.ok) {
       const jsonData = await response.json();
       console.log(jsonData);
@@ -113,12 +116,15 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchClinic();
   }, []);
-  
 
   const fetchAppointment = async () => {
-    const appointment_date= formatDate
-    const clinic_id= "1"
-    const apiUrl = `${URL.get_all_appointments_of_clinic}?appointment_date=${encodeURIComponent(appointment_date)}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const appointment_date = formatDate;
+    const clinic_id = '1';
+    const apiUrl = `${
+      URL.get_all_appointments_of_clinic
+    }?appointment_date=${encodeURIComponent(
+      appointment_date,
+    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -177,7 +183,7 @@ const Dashboard = ({navigation, route}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     handleChangeValue('clinic', clinic.clinic_name);
-    setClinicId(clinic.id)
+    setClinicId(clinic.id);
     ClinicRef?.current?.snapToIndex(0);
   };
   return (
@@ -202,7 +208,7 @@ const Dashboard = ({navigation, route}) => {
                   {doc_name?.doctor_name}
                 </Text>
               </View>
-              <HeaderAvatar data={doc_name}/>
+              <HeaderAvatar data={doc_name} />
             </View>
 
             <View
@@ -255,15 +261,15 @@ const Dashboard = ({navigation, route}) => {
               <Text style={styles.h2}>
                 {Language[language]['appointments']}
               </Text>
-                {setAppointment?.map((value, index) => {
-                  return (
-                    <AppointmentCard
-                      key={index}
-                      appointment={value}
-                      openVisit={() => navigation.navigate('visit')}
-                    />
-                  );
-                })}
+              {setAppointment?.map((value, index) => {
+                return (
+                  <AppointmentCard
+                    key={index}
+                    appointment={value}
+                    openVisit={() => navigation.navigate('visit')}
+                  />
+                );
+              })}
             </View>
             <View
               style={{

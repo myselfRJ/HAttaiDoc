@@ -1,5 +1,5 @@
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -14,31 +14,80 @@ import AppointmentCard from '../components/appointmentcard';
 import PlusButton from '../components/plusbtn';
 import PatientSearchCard from '../components/patientsearchcard';
 import HButton from '../components/button';
-import { Icon, InputText } from '../components';
+import {Icon, InputText} from '../components';
+import {fetchApi} from '../api/fetchApi';
+import {useSelector} from 'react-redux';
+import {URL} from '../utility/urls';
 
-const SearchAddnew=({navigation})=>{
-    const [phone,setPhone]=useState('')
-    const ChangePhoneValue=(e)=>{
-      setPhone(e);
+const SearchAddnew = ({navigation}) => {
+  const token = useSelector(state => state.authenticate.auth.access);
+  const [data, setData] = useState();
+  const [filteredData, setFilteredData] = useState();
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getPatientByClinic(1), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setData(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
     }
-        return(
-        <View style={styles.main}>
-            <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
-            <InputText 
-            placeholder='phone number'
-            value={phone}
-            setValue={ChangePhoneValue}
-            textStyle={styles.input}
-            keypad="numeric"
-            />
-            <Icon name='search' size={20} style={styles.searchIcon}/>
-            </View>
-            <View style={styles.appointment}>
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (phoneNumber) {
+      const filtered = data?.filter(
+        item =>
+          item?.patient_phone_number &&
+          item?.patient_phone_number.startsWith(phoneNumber),
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
+    }
+  }, [data, phoneNumber]);
+
+  const ChangePhoneValue = e => {
+    setPhoneNumber(e);
+  };
+
+  return (
+    <View style={styles.main}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        }}>
+        <InputText
+          placeholder="phone number"
+          value={phoneNumber}
+          setValue={ChangePhoneValue}
+          textStyle={styles.input}
+          keypad="numeric"
+        />
+        <Icon name="search" size={20} style={styles.searchIcon} />
+      </View>
+      <View style={styles.appointment}>
         <Text style={styles.h2}>Search Results</Text>
 
-        <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-        <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-        <PatientSearchCard onPress={() => navigation.navigate('visit')} />
+        {filteredData?.map((val, ind) => (
+          <PatientSearchCard
+            key={ind}
+            patient_data={val}
+            onPress={() => navigation.navigate('visit')}
+          />
+        ))}
       </View>
       <View style={styles.btn}>
         <HButton
@@ -47,49 +96,46 @@ const SearchAddnew=({navigation})=>{
           onPress={() => navigation.navigate('aadharverify')}
         />
       </View>
-
-        </View>
-
-    );
+    </View>
+  );
 };
-const styles=StyleSheet.create({
-    main:{
-       flex:1,
-       padding: 24,
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    padding: 24,
     gap: 16,
-    },
-    input:{
-        width:"100%",
-        height:51,
-        top:30,
-        left:20,
-        padding:16,
-
-    },
-    searchIcon:{
-        height:51,
-        top:40,
-        right:10,
-        padding:16,
-    },
-    appointment: {
-        gap: 8,
+  },
+  input: {
+    width: '100%',
+    height: 51,
+    top: 30,
+    left: 20,
+    padding: 16,
+  },
+  searchIcon: {
+    height: 51,
+    top: 40,
+    right: 10,
+    padding: 16,
+  },
+  appointment: {
+    gap: 8,
     paddingHorizontal: 8,
-    paddingVertical:8
-      },
-      h2: {
-        fontSize: 24,
-        fontWeight: '700',
-        fontFamily: CUSTOMFONTFAMILY.opensans,
-        lineHeight: 20 * 2,
-        color: CUSTOMCOLOR.primary,
-        top:16,
-        paddingVertical:16
-      },
-    btn: {
-      gap: 8,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-})
+    paddingVertical: 8,
+  },
+  h2: {
+    fontSize: 24,
+    fontWeight: '700',
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    lineHeight: 20 * 2,
+    color: CUSTOMCOLOR.primary,
+    top: 16,
+    paddingVertical: 16,
+  },
+  btn: {
+    gap: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default SearchAddnew;

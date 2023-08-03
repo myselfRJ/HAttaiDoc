@@ -9,7 +9,7 @@ const CombinedRoute = () => {
     <Stack.Navigator
       initialScreen="unprotected"
       screenOptions={{headerShown: false}}>
-      {/* <Stack.Screen name="unprotected" component={UnProtectedRoute} /> */}
+      <Stack.Screen name="unprotected" component={UnProtectedRoute} />
       <Stack.Screen name="protected" component={ProtectedRoute} />
     </Stack.Navigator>
   );

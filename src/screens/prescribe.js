@@ -32,7 +32,22 @@ import {
 } from '../settings/styles';
 
 export default function Prescribe() {
-  const prescribe = useSelector(state => state.prescribe.prescribeItems[0]);
+  // const prescribe = useSelector(state => state.prescribe.prescribeItems[0]);
+
+  const modes = CONSTANTS.modes;
+  const [medicne, setMedicine] = useState('');
+  const [mode, setMode] = useState('');
+  const [setmedicine, selectedMedicine] = useState('');
+  const [dose_quantity, setDose_quantity] = useState('');
+  const [timing, setTiming] = useState('');
+  const [frequenct, setFrequency] = useState('');
+  const [dose_number, setDose_number] = useState('');
+  const [duration, setDuration] = useState('');
+  const recommdations = CONSTANTS.medicine_recomendation;
+  const mg = CONSTANTS.dose;
+  const timings = CONSTANTS.timing;
+  const frequencys = CONSTANTS.frequency;
+  const total_quantity = '100';
   const dispatch = useDispatch();
   const [prescribeInput, setPrescribeInput] = useState([prescribe]);
   const [prescribeList, setPrescribeList] = useState([]);
@@ -83,13 +98,23 @@ export default function Prescribe() {
 
   const toggleFrequencyValue = (index, value) => {
     const frequency = prescribeInput[index].frequency;
-    console.log('====================================');
-    console.log(typeof frequency);
-    console.log('====================================');
+    console.log('frequency', frequency);
     const updatedFrequency = frequency.includes(value)
       ? frequency.filter(item => item !== value)
-      : [...frequency, value];
+      : JSON.stringify([...frequency, value]);
     handlePrescribeChange(updatedFrequency, index, 'frequency');
+    console.log('upadtefrequency', updatedFrequency);
+    // if (frequency === 'null') {
+    //   const updatedFrequency = [value];
+    //   handlePrescribeChange(updatedFrequency, index, 'frequency');
+    //   console.log('=============', updatedFrequency);
+    // } else {
+    //   const updatedFrequency = frequency.includes(value)
+    //     ? frequency.filter(item => item !== value)
+    //     : [...frequency, value];
+    //   handlePrescribeChange(updatedFrequency, index, 'frequency');
+    //   console.log('update', JSON.stringify(updatedFrequency));
+    // }
   };
 
   return (

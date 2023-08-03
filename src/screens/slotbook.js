@@ -19,20 +19,23 @@ import {URL} from '../utility/urls';
 import {Icon} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {HttpStatusCode} from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { addPatient } from '../redux/features/patient/patientslice';
-import { addPhone } from '../redux/features/authenticate/PhoneNumber';
-import { forceTouchGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
+import {useDispatch, useSelector} from 'react-redux';
+import {addPatient} from '../redux/features/patient/patientslice';
+import {addPhone} from '../redux/features/authenticate/PhoneNumber';
+import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 
 const SlotBook = ({navigation}) => {
   const patientPhoneNumber = useSelector(state => state.patient);
-  console.log('phone----',patientPhoneNumber.patient.phone_number)
+  console.log('phone----', patientPhoneNumber.patient.phone_number);
   const dispatch = useDispatch();
-  const doctorphoneNumber = useSelector(state => state.phone)
-  console.log('doctor phone=====',doctorphoneNumber)
+  const doctorphoneNumber = useSelector(state => state.phone);
+  console.log('doctor phone=====', doctorphoneNumber);
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
-  console.log("slots....", selectedSlot?.slot.split('-')[0] +"T"+selectedSlot?.slot.split('-')[1])
+  console.log(
+    'slots....',
+    selectedSlot?.slot.split('-')[0] + 'T' + selectedSlot?.slot.split('-')[1],
+  );
   const selections = CONSTANTS.selections;
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
@@ -56,13 +59,13 @@ const SlotBook = ({navigation}) => {
   const [open, setOpen] = useState(false);
 
   const formatDate = moment(date).format('YYYY-MM-DD');
-  console.log(formatDate)
+  console.log(formatDate);
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'numeric',
     year: 'numeric',
   });
-  console.log("date....",formattedDate)
+  console.log('date....', formattedDate);
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
@@ -153,7 +156,7 @@ const SlotBook = ({navigation}) => {
     });
     return timeList;
   };
-  const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
+  const token = useSelector(state => state.authenticate.auth.access);
 
   let list = getTimeList(slotDetails[0]?.T);
 
@@ -181,23 +184,22 @@ const SlotBook = ({navigation}) => {
           mode_of_consultation: selectedMode,
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
-          clinic_id:'1',
-          patient_phone_number:patientPhoneNumber.patient.phone_number,
-          meta_data:{
-                complaint:"headache",
-                patient_reference:"ggvvf",
-                practitioner_reference:"hgihfohg",
-                start: selectedSlot?.slot.split('-')[0],
-                end: selectedSlot?.slot.split('-')[1],
-                speciality:"cardialogist",
-                type:"followup"
-          }
+          clinic_id: '1',
+          patient_phone_number: patientPhoneNumber.patient.phone_number,
+          meta_data: {
+            complaint: 'headache',
+            patient_reference: 'ggvvf',
+            practitioner_reference: 'hgihfohg',
+            start: selectedSlot?.slot.split('-')[0],
+            end: selectedSlot?.slot.split('-')[1],
+            speciality: 'cardialogist',
+            type: 'followup',
+          },
         }),
-
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-         console.log(jsonData);
+        console.log(jsonData);
         navigation.navigate('dashboard');
       } else {
         console.error('API call failed:', response.status);
@@ -206,9 +208,9 @@ const SlotBook = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  useEffect(()=>{
-    Appointment_Booking()
-  },[]);
+  useEffect(() => {
+    Appointment_Booking();
+  }, []);
 
   // console.log('====================================');
   // console.log(selectedSlot?.duration);
