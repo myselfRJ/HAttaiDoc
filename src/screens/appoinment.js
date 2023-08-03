@@ -241,7 +241,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('abhacreate')}
           />
         </ScrollView>
       </View>

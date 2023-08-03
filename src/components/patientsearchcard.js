@@ -22,6 +22,9 @@ const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
+  console.log('====================================');
+  console.log(patient_data?.patient_data?.patient_name);
+  console.log('====================================');
   return (
     <>
       <View style={styles.main}>
@@ -33,12 +36,14 @@ const PatientSearchCard = patient_data => {
         />
         <View style={styles.patientinfo}>
           <Text style={styles.name}>
-            {patient_data.patient_data.patient_name}
+            {patient_data?.patient_data?.patient_name}
           </Text>
-          <Text style={styles.age}>{patient_data.patient_data.birth_date}</Text>
-          <Text style={styles.contact}>
+          <Text style={styles.age}>
+            {patient_data?.patient_data?.birth_date}
+          </Text>
+          <Text style={styles?.contact}>
             {Language[language]['contact']}:{' '}
-            {patient_data.patient_data.patient_phone_number}
+            {patient_data?.patient_data?.patient_phone_number}
           </Text>
         </View>
         <Pressable

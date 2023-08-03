@@ -32,6 +32,12 @@ const Visit = ({navigation}) => {
   console.log('=======================', prescribe);
 
   const token = useSelector(state => state.authenticate.auth.access);
+  const phone_number = useSelector(state => state?.phone?.phone);
+  console.log('====================================');
+  console.log(
+    phone_number,
+    'phonenumber=++++++++++++++++++++===========================',
+  );
 
   console.log('====================================');
   console.log(selectedDoctor);
@@ -56,7 +62,7 @@ const Visit = ({navigation}) => {
 
       meta_data: {
         patient_phone_number: '9177468511',
-        doctor_phone_number: '9490421037',
+        doctor_phone_number: phone_number,
         clinic_id: '7',
         appointment_id: '2',
       },
