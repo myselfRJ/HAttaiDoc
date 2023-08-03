@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  phone_number: {},
+  phone_number: '',
 };
 
 const phoneSlice = createSlice({

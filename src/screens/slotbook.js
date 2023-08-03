@@ -19,9 +19,17 @@ import {URL} from '../utility/urls';
 import {Icon} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {HttpStatusCode} from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPatient } from '../redux/features/patient/patientslice';
+import { addPhone } from '../redux/features/authenticate/PhoneNumber';
 import { forceTouchGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 
 const SlotBook = ({navigation}) => {
+  const patientPhoneNumber = useSelector(state => state.patient);
+  console.log('phone----',patientPhoneNumber.patient.phone_number)
+  const dispatch = useDispatch();
+  const doctorphoneNumber = useSelector(state => state.phone)
+  console.log('doctor phone=====',doctorphoneNumber)
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
   console.log("slots....", selectedSlot?.slot.split('-')[0] +"T"+selectedSlot?.slot.split('-')[1])
@@ -145,10 +153,9 @@ const SlotBook = ({navigation}) => {
     });
     return timeList;
   };
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwOTcyNjE0LCJpYXQiOjE2OTA4ODYyMTQsImp0aSI6ImVjYzFkZWEwM2NhYzQ2NTRiYmJlNjY5YzAwMzJjODk1IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.cLeIlyzBj9EI0jYnx5DfeATt7AEs-AcCwaKWO2WmUrw';
+  const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
 
-  let list = getTimeList(slotDetails[0]?.[Day]);
+  let list = getTimeList(slotDetails[0]?.T);
 
   const renderItems = ({item}) => {
     return (
@@ -174,6 +181,8 @@ const SlotBook = ({navigation}) => {
           mode_of_consultation: selectedMode,
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
+          clinic_id:'1',
+          patient_phone_number:patientPhoneNumber.patient.phone_number,
           meta_data:{
                 complaint:"headache",
                 patient_reference:"ggvvf",
@@ -182,7 +191,6 @@ const SlotBook = ({navigation}) => {
                 end: selectedSlot?.slot.split('-')[1],
                 speciality:"cardialogist",
                 type:"followup"
-
           }
         }),
 
@@ -270,7 +278,10 @@ const SlotBook = ({navigation}) => {
             <HButton
               label="Book Slot"
               //onPress={() => navigation.navigate('dashboard')}
-              onPress={Appointment_Booking}
+              onPress={() => {
+                //dispatch(addPatient());
+                Appointment_Booking();
+              }}
             />
           </View>
         </View>

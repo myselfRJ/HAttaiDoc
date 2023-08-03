@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -28,10 +29,17 @@ import { CONSTANTS } from '../utility/constant';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { URL } from '../utility/urls';
 import { HttpStatusCode } from 'axios';
+import { fetchApi } from '../api/fetchApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { addPatient } from '../redux/features/patient/patientslice';
 
 const AbhaCreate = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const patientData = useSelector((state) => state.patient.patient);
+  console.log('redux data---',patientData); 
+  const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
   const [selected, setSelected] = useState('');
-
+  const formatDate = moment(DOB).format('YYYY-MM-DD');
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -54,6 +62,15 @@ const AbhaCreate = ({ navigation }) => {
   const gender = selected;
   const [phone_number, setPhone_number] = useState('');
   const birth_date = formattedDate;
+  const handleSaveData = () => {
+    dispatch(addPatient.addPatient({
+      name,
+      phone_number,
+      birth_date,
+      gender,
+      'image':selectedImage
+    }));
+  };
 
   const handleConfirm = date => {
     setDOB(date);
@@ -119,6 +136,42 @@ const AbhaCreate = ({ navigation }) => {
   //       console.error('Error occurred:', error);
   //     }
   //   };
+  const fetchData = async () => {
+    try {
+      const response = await fetchApi(URL.addPatient, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          patient_pic_url:selectedImage,
+          patient_name:name,
+          patient_phone_number:phone_number,
+          birth_date:formatDate,
+          gender:selected,
+          aadhar_no:'999999',
+          abha_no:'8888',
+          spouse_name:'bbsv',
+          bloodgroup:'A'
+
+          }),
+
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+         console.log(jsonData);
+         //navigation.navigate('success');
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+  useEffect(()=>{
+    fetchData()
+  },[]);
 
   return (
     <ScrollView>
@@ -214,7 +267,9 @@ const AbhaCreate = ({ navigation }) => {
             <HButton
               label={Language[language]['save']}
               onPress={() => {
-                navigation.navigate('success');
+                handleSaveData();
+                fetchData();
+                navigation.navigate('success')
                 SuccesRef?.current?.snapToIndex(1);
               }}
             />

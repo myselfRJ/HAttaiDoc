@@ -5,6 +5,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+import moment, {min} from 'moment';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import PlusButton from '../components/plusbtn';
@@ -30,8 +31,10 @@ const Appointment = ({navigation}) => {
   const handleChangeValue = e => {
     setClinic(e);
   };
+  const [setAppointment,setDataAppointment] = useState()
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const formatDate = moment(DOB).format('YYYY-MM-DD');
   const formattedDate = DOB.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -66,7 +69,7 @@ const Appointment = ({navigation}) => {
   }, []);
 
   const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
   console.log('====================================');
   console.log(token);
   console.log('====================================');
@@ -97,6 +100,28 @@ const Appointment = ({navigation}) => {
   useEffect(() => {
     fetchClinic();
   }, []);
+
+  const fetchAppointment = async () => {
+    const appointment_date= formatDate
+    const clinic_id= "1"
+    const apiUrl = `${URL.get_all_appointments_of_clinic}?appointment_date=${encodeURIComponent(appointment_date)}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const response = await fetchApi(apiUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData.data);
+      setDataAppointment(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchAppointment();
+  }, [formatDate]);
 
   const [doc_name, setDoc_name] = useState();
 
@@ -139,7 +164,7 @@ const Appointment = ({navigation}) => {
                 {doc_name?.doctor_name}
               </Text>
             </View>
-            <HeaderAvatar />
+            <HeaderAvatar data={doc_name}/>
           </View>
           <View style={styles.select}>
             <SelectorBtn
@@ -180,7 +205,6 @@ const Appointment = ({navigation}) => {
                 value={name}
                 setValue={ChangeNameValue}
                 textStyle={styles.input}
-                keypad="numeric"
               />
               <Icon name="search" size={20} style={styles.searchIcon} />
             </View>
@@ -195,8 +219,8 @@ const Appointment = ({navigation}) => {
           <View style={styles.appointment}>
             <Text style={styles.h2}>Appointments</Text>
 
-            {data.length > 0
-              ? data?.map((value, index) => {
+            {setAppointment.length > 0
+              ? setAppointment?.map((value, index) => {
                   return (
                     <AppointmentCard
                       key={index}
@@ -211,7 +235,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('visit')}
+            onPress={() => navigation.navigate('addnew')}
           />
         </ScrollView>
       </View>

@@ -24,14 +24,15 @@ import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { fetchApi } from '../api/fetchApi';
-import { UseSelector, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const AddClinic = ({ navigation }) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   // const token = useSelector(state => state.authenticate.auth.access);
   const slotData = useSelector(state => state?.slotsData);
-
+  const dispatch = useDispatch();
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -46,6 +47,7 @@ const AddClinic = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [value, setValue] = useState({
     clinic: '',
+    address:'',
     fees: '',
     slots: [],
   });
@@ -371,6 +373,7 @@ const AddClinic = ({ navigation }) => {
               <HButton
                 label="Next"
                 onPress={() => {
+                  dispatch(addclinic());
                   fetchData();
                   SuccesRef?.current?.snapToIndex(1);
                 }}

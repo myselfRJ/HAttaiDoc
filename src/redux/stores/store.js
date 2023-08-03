@@ -7,6 +7,7 @@ import symptomsReducer from '../features/prescription/symptomslice';
 import prescriptionReducer from '../features/prescription/prescriptionSlice';
 import {slotDataReducer} from '../features/slots/slotData';
 import {phoneReducer} from '../features/authenticate/PhoneNumber';
+import { patientDataReducer } from '../features/patient/patientslice';
 const store = configureStore({
   reducer: {
     authenticate: authenticateReducer,
@@ -17,6 +18,7 @@ const store = configureStore({
     prescribe: prescribeReducer,
     slotsData: slotDataReducer,
     phone: phoneReducer,
+    patient:patientDataReducer
   },
 });
 

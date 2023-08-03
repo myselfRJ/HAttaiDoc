@@ -5,43 +5,33 @@ import {Language} from '../settings/customlanguage';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {useEffect, useState} from 'react';
-const HeaderAvatar = props => {
+const HeaderAvatar =({data}) => {
   //props->name, speciality, img url
-  const [data, setData] = useState();
+  //const [data, setData] = useState();
 
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkwODg1NDgwLCJpYXQiOjE2OTA3OTkwODAsImp0aSI6Ijc4OTZhZmMyYTBhODQ4NTM5MjdjMzhmYmNmODcyMDE3IiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.Gr0WOtTxVqay8QmfxeT7T1wQFTcs2AIUyeQc19DxJC4';
+  // const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
 
-  const fetchClinic = async () => {
-    // const response = await fetchApi(URL.get_all_appointments_of_clinic);
-    // const jsonData = await response.json();
-    // setData(jsonData);
-    const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      // params :{
-      //   doctor_phone_number :'9003092186'
-      // }
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      console.log(jsonData);
-      setData(jsonData.data);
-      // console.log('====================================');
-      // console.log(clinics);
-      // console.log('====================================');
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  useEffect(() => {
-    fetchClinic();
-  }, []);
-
+  // const fetchClinic = async () => {
+  //   const response = await fetchApi(URL.getPractitionerByNumber('9177468511'), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     console.log(jsonData);
+  //     setData(jsonData.data);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchClinic();
+  // }, []);
+  const imgurl =data?.profile_pic_url
   console.log('====================================');
-  console.log(data?.profile_pic_url);
+  console.log('profile pic',imgurl);
   console.log('====================================');
   return (
     <>
@@ -49,7 +39,8 @@ const HeaderAvatar = props => {
         <Image
           style={styles.img}
           source={{
-            uri: data?.profile_pic_url,
+          //uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+            uri: imgurl
           }}
         />
         <View>
