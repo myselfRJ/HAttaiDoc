@@ -39,6 +39,7 @@ const Appointment = ({navigation}) => {
     setClinic(e);
   };
   const [setAppointment, setDataAppointment] = useState();
+  console.log('==>setappointmnet',setAppointment)
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formatDate = moment(DOB).format('YYYY-MM-DD');
@@ -131,6 +132,23 @@ const Appointment = ({navigation}) => {
   useEffect(() => {
     fetchAppointment();
   }, [formatDate]);
+  const [filteredData, setFilteredData] = useState([]);
+  
+  useEffect(() => {
+    try {
+      if (name) {
+        const filtered = setAppointment?.filter(
+          item => item?.patient_data?.patient_name && item?.patient_data?.patient_name.startsWith(name),
+        );
+        setFilteredData(filtered);
+      } else {
+        setFilteredData(setAppointment);
+      }
+    } catch (error) {
+      console.error('Error in useEffect:', error);
+    }
+  }, [setAppointment, name]);
+  
 
   const [doc_name, setDoc_name] = useState();
 
@@ -227,7 +245,7 @@ const Appointment = ({navigation}) => {
           </View>
           <View style={styles.appointment}>
             <Text style={styles.h2}>Appointments</Text>
-            {setAppointment?.map((value, index) => {
+            {filteredData?.map((value, index) => {
               return (
                 <AppointmentCard
                   key={index}
@@ -241,7 +259,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('bookslot')}
           />
         </ScrollView>
       </View>

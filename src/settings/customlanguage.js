@@ -102,6 +102,7 @@ const Language = {
     medium: 'Medium',
     low: 'Low',
     high: 'High',
+    complaint:'Complaint'
   },
   hi: {
     welcome: 'स्वागत',

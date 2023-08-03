@@ -47,6 +47,7 @@ const InputText = props => {
             maxLength={props.maxLength ?? 1000}
             onChangeText={passtoParent}
             value={props.value}
+            multiline={props.multiline}
           />
           {props.secure !== undefined ? (
             visible ? (
