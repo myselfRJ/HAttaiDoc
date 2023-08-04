@@ -23,56 +23,29 @@ import {HttpStatusCode} from 'axios';
 import BottomSheetView from '../components/bottomSheet';
 import {ScrollView} from 'react-native-gesture-handler';
 import StatusMessage from '../components/statusMessage';
+import {fetchApi} from '../api/fetchApi';
+import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
   const SuccesRef = useRef(null);
+  const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-  const fetchData = async () => {
-    try {
-      const response = await fetch(URL.profileUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept:
-            'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
-        },
-        body: JSON.stringify({
-          values,
-          date_of_birth: DOB.toISOString(),
-          specialization: selectedSpeciality,
-          img_url: selectedImage,
-        }),
-      });
-      if (response.status === HttpStatusCode.Created) {
-        const jsonData = await response.json();
-        console.log(jsonData);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        setTimeout(() => {
-          navigation.navigate('addclinic');
-        }, 1000);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      console.error('Error occurred:', error);
-    }
-  };
 
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
-    name: '',
+    doctor_name: '',
     gender: 'male',
-    medical_no: '',
+    medical_number: '',
     experience: '',
   });
+
+  console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState('');
   const [DOB, setDOB] = useState(new Date());
@@ -126,10 +99,61 @@ const ProfileCreate = ({navigation}) => {
     handleChangeValue('gender', value);
   };
 
-  const toggleDatePicker = () => {
-    setShowDatePicker(!showDatePicker);
+  // const toggleDatePicker = () => {
+  //   setShowDatePicker(!showDatePicker);
+  // };
+
+  const handleAddData = () => {
+    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
   };
 
+  const doctor_profile_data = {
+    doctor_name: values.doctor_name,
+    experience: values.experience,
+    gender: values.gender,
+    DOB: DOB.toString(),
+    specialization: selectedSpeciality,
+    medical_number: values.medical_number,
+    profile_pic_url: selectedImage,
+    medical_doc_url: 'jsdjsbgjkd',
+  };
+
+  console.log(token);
+  const fetchData = async () => {
+    try {
+      const response = await fetchApi(URL.profileUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept:
+            'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
+        },
+        body: JSON.stringify(doctor_profile_data),
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setApiStatus({
+          status: 'success',
+          message: 'Successfully created',
+        });
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('addclinic');
+        }, 1000);
+      } else {
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        SuccesRef?.current?.snapToIndex(1);
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('Error occurred:', error);
+    }
+  };
+  console.log(values.formattedDate);
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -142,8 +166,8 @@ const ProfileCreate = ({navigation}) => {
             <InputText
               label={Language[language]['name']}
               placeholder="Full Name"
-              value={values.name}
-              setValue={value => handleChangeValue('name', value)}
+              value={values.doctor_name}
+              setValue={value => handleChangeValue('doctor_name', value)}
             />
 
             <View style={styles.alignchild}>
@@ -195,14 +219,14 @@ const ProfileCreate = ({navigation}) => {
             <InputText
               label={Language[language]['medical_number']}
               placeholder="Medical number"
-              value={values.medical_no}
-              setValue={value => handleChangeValue('medical_no', value)}
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
             />
             <View
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal:8
+                paddingHorizontal: 8,
               }}>
               <SelectorBtn
                 label={Language[language]['specialization']}
@@ -225,19 +249,24 @@ const ProfileCreate = ({navigation}) => {
                 fontFamily: CUSTOMFONTFAMILY.h4,
                 fontSize: 12,
                 color: CUSTOMCOLOR.black,
-                paddingHorizontal:8,
-                paddingVertical:8,
-                alignSelf:'flex-start'
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+                alignSelf: 'flex-start',
               }}>
               Medical Document
             </Text>
-            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+              }}>
               <HButton label="Upload Document" />
             </View>
             <HButton
               label={Language[language]['save']}
               onPress={() => {
-                fetchData();
+                fetchData(), handleAddData();
               }}
             />
           </View>

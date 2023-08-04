@@ -6,7 +6,6 @@ import PatientSearch from '../screens/patientsearch';
 import Titbit from '../screens/titbit';
 import Account from '../screens/account';
 import {CUSTOMCOLOR} from '../settings/styles';
-import style from '../components/Searchbar/style';
 
 const Tab = createBottomTabNavigator();
 

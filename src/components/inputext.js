@@ -35,7 +35,7 @@ const InputText = props => {
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={[styles.labeltext,props.lbltext]}>{props.label}</Text>
+        <Text style={[styles.labeltext, props.lbltext]}>{props.label}</Text>
         <View>
           <TextInput
             style={[styles.textinput, errorStyles, props.textStyle]}
@@ -47,6 +47,7 @@ const InputText = props => {
             maxLength={props.maxLength ?? 1000}
             onChangeText={passtoParent}
             value={props.value}
+            multiline={props.multiline}
           />
           {props.secure !== undefined ? (
             visible ? (

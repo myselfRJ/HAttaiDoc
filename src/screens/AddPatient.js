@@ -32,9 +32,8 @@ import {HttpStatusCode} from 'axios';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
-import {Alert} from 'react-native';
 
-const AbhaCreate = ({navigation}) => {
+const Abha = ({navigation}) => {
   const dispatch = useDispatch();
   const patientData = useSelector(state => state.patient.patient);
   console.log('redux data---', patientData);
@@ -43,7 +42,6 @@ const AbhaCreate = ({navigation}) => {
   const [selected, setSelected] = useState('');
   const formatDate = moment(DOB).format('YYYY-MM-DD');
   const SuccesRef = useRef(null);
-
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
@@ -61,41 +59,30 @@ const AbhaCreate = ({navigation}) => {
     year: 'numeric',
   });
 
-  const [firstName, setFirstname] = useState('');
-  const [lastName, setLastname] = useState('');
-  const [middleName, setMiddlename] = useState('');
-  const [email, setEmail] = useState('');
-  const [healthID, setHealthID] = useState('');
-  const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [name, setName] = useState('');
+  const gender = selected;
+  const [phone_number, setPhone_number] = useState('');
+  const birth_date = formattedDate;
+  const handleSaveData = () => {
+    dispatch(
+      addPatient.addPatient({
+        name,
+        phone_number,
+        birth_date,
+        gender,
+        image: selectedImage,
+      }),
+    );
+  };
 
-  // const gender = selected;
-  // const [phone_number, setPhone_number] = useState('');
+  const handleConfirm = date => {
+    setDOB(date);
+    setOpen(false);
+  };
 
-  const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
-  const AbhaAccessToken = useSelector(state => state.abha.auth.access);
-
-  // const birth_date = formattedDate;
-  // const handleSaveData = () => {
-  //   dispatch(
-  //     addPatient.addPatient({
-  //       // name,
-  //       phone_number,
-  //       birth_date,
-  //       gender,
-  //       image: selectedImage,
-  //     }),
-  //   );
-  // };
-
-  // const handleConfirm = date => {
-  //   setDOB(date);
-  //   setOpen(false);
-  // };
-
-  // const handleCancel = () => {
-  //   setOpen(false);
-  // };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -116,38 +103,66 @@ const AbhaCreate = ({navigation}) => {
       }
     });
   };
-  // const UserDetails = [
-  //   {
-  //     // name: name,
-  //     gender: gender,
-  //     phone_number: phone_number,
-  //     birth_date: birth_date,
-  //     image: selectedImage,
-  //   },
-  // ];
-
+  const UserDetails = [
+    {
+      name: name,
+      gender: gender,
+      phone_number: phone_number,
+      birth_date: birth_date,
+      image: selectedImage,
+    },
+  ];
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(URL.profileUrl, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Accept:
+  //             'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
+  //         },
+  //         body: JSON.stringify({
+  //           name: name,
+  //           gender: gender,
+  //           phone_number: phone_number,
+  //           birth_date: birth_date,
+  //           image: selectedImage,
+  //         }),
+  //       });
+  //       if (response.status === HttpStatusCode.Created) {
+  //         const jsonData = await response.json();
+  //         console.log(jsonData);
+  //       } else {
+  //         console.error('API call failed:', response.status);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error occurred:', error);
+  //     }
+  //   };
   const fetchData = async () => {
     try {
-      const response = await fetchApi(URL.CreateAbhaAccount, {
+      const response = await fetchApi(URL.addPatient, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${AbhaAccessToken}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          middleName: middleName,
-          healthId: healthID,
-          profilePhoto: selectedImage,
-          password: password,
-          txnId: AbhaTxnId,
+          patient_pic_url: selectedImage,
+          patient_name: name,
+          patient_phone_number: phone_number,
+          birth_date: formatDate,
+          gender: selected,
+          aadhar_no: '999999',
+          abha_no: '8888',
+          spouse_name: 'bbsv',
+          bloodgroup: 'A',
         }),
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
+        //navigation.navigate('success');
       } else {
         console.error('API call failed:', response.status);
       }
@@ -158,36 +173,6 @@ const AbhaCreate = ({navigation}) => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const checkPassword = () => {
-    var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    const isPasswordValid = format.test(password);
-    const isPasswordLengthValid = password.length >= 8;
-    const passwordsMatch = password === password2;
-
-    if (!isPasswordValid || !isPasswordLengthValid) {
-      Alert.alert(
-        'Password must contain at least one special character and be 8 characters long.',
-      );
-    } else if (!passwordsMatch) {
-      Alert.alert('Passwords do not match. Please check again.');
-    } else {
-      Alert.alert('Password is valid and matches!');
-    }
-    return isPasswordValid && isPasswordLengthValid && passwordsMatch;
-  };
-
-  console.log('====================================');
-  console.log(
-    {email: email},
-    {firstName: firstName},
-    {lastName: lastName},
-    {middleName: middleName},
-    {healthId: healthID},
-    {profilePhoto: selectedImage},
-    {txnId: AbhaTxnId},
-  );
-  console.log('====================================');
 
   return (
     <ScrollView>
@@ -209,60 +194,84 @@ const AbhaCreate = ({navigation}) => {
             <AddImage onPress={onImagePress} url={selectedImage} />
           </View>
           <InputText
-            label={'Enter HealthId'}
-            placeholder={'eg : xxxxxxx'}
-            value={healthID}
-            setValue={setHealthID}
-          />
-          <InputText
-            label={'First Name'}
-            placeholder={'First Name'}
-            value={firstName}
-            setValue={setFirstname}
-          />
-          <InputText
-            label={'Middle Name'}
-            placeholder={'Middle Name'}
-            value={middleName}
-            setValue={setMiddlename}
-          />
-          <InputText
-            label={'Last Name'}
-            placeholder={'Last Name'}
-            value={lastName}
-            setValue={setLastname}
-          />
-          <InputText
-            label={'E-mail'}
-            placeholder={'eg:xxxxxxxxxx@xxxx.xxx'}
-            value={email}
-            setValue={setEmail}
-          />
-          <InputText
-            label={'Password'}
-            placeholder={'Password'}
-            value={password}
-            setValue={setPassword}
-            secure={true}
-          />
-          <InputText
-            label={'Confirm Password'}
-            placeholder={'Confirm Password'}
-            value={password2}
-            setValue={setPassword2}
-            secure={true}
-          />
-          <HButton
-            label="Save"
-            onPress={() => {
-              const isPasswordValid = checkPassword();
-              handleSaveData();
-              if (isPasswordValid) {
-                navigation.navigate('success');
-                SuccesRef?.current?.snapToIndex(1);
+            label={Language[language]['name']}
+            placeholder={Language[language]['name']}
+            value={name}
+            setValue={setName}
+            doubleCheck={[true, false]}
+            check={e => {
+              var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~11234567890]/;
+              if (format.test(e)) {
+                return false;
               } else {
-                console.log('Invalid password, cannot proceed.');
+                return true;
               }
+            }}
+          />
+          <InputText
+            label={Language[language]['phone_number']}
+            placeholder={Language[language]['phone_number']}
+            value={phone_number}
+            setValue={setPhone_number}
+            keypad={'numeric'}
+            maxLength={10}
+            doubleCheck={[true, false]}
+            check={e => {
+              var format = /[(A-Z)(a-z)]/;
+              if (format.test(e)) {
+                return false;
+              } else {
+                return true;
+              }
+            }}
+          />
+          <SelectorBtn
+            label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
+          <DatePicker
+            modal
+            open={open !== false}
+            date={DOB}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+          <View style={styles.alignchild}>
+            <Text> {Language[language]['gender']}</Text>
+            <View style={styles.radiogroup}>
+              <Option
+                label="male"
+                value="male"
+                selected={selected === 'male'}
+                onPress={() => handleOptions('male')}
+              />
+              <Option
+                label="female"
+                value="female"
+                selected={selected === 'female'}
+                onPress={() => handleOptions('female')}
+              />
+              <Option
+                label="others"
+                value="others"
+                selected={selected === 'others'}
+                onPress={() => handleOptions('others')}
+              />
+            </View>
+          </View>
+
+          <HButton
+            label={Language[language]['save']}
+            onPress={() => {
+              handleSaveData();
+              fetchData();
+              navigation.navigate('success');
+              SuccesRef?.current?.snapToIndex(1);
             }}
           />
         </View>
@@ -321,4 +330,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AbhaCreate;
+export default Abha;

@@ -8,32 +8,42 @@ import {
   Modal,
 } from 'react-native';
 import BottomSheetView from './bottomSheet';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import SelectionTab from '../components/selectiontab';
 import {useNavigation} from '@react-navigation/native';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
 
-const PatientSearchCard = () => {
+const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
+  console.log('====================================');
+  console.log(patient_data?.patient_data?.patient_name);
+  console.log('====================================');
   return (
     <>
       <View style={styles.main}>
         <Image
           style={styles.img}
           source={{
-            uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+            uri: patient_data.patient_pic_url,
           }}
         />
         <View style={styles.patientinfo}>
-          <Text style={styles.name}>Malumalayi</Text>
-          <Text style={styles.age}>Malumalayi</Text>
-          <Text style={styles.contact}>
-            {Language[language]['contact']}: 989787654
+          <Text style={styles.name}>
+            {patient_data?.patient_data?.patient_name}
+          </Text>
+          <Text style={styles.age}>
+            {patient_data?.patient_data?.birth_date}
+          </Text>
+          <Text style={styles?.contact}>
+            {Language[language]['contact']}:{' '}
+            {patient_data?.patient_data?.patient_phone_number}
           </Text>
         </View>
         <Pressable
@@ -51,14 +61,28 @@ const PatientSearchCard = () => {
           </View>
         </Pressable>
         <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
-        <View style={styles.tab}>
-        <SelectionTab label={Language[language]['update']} selected={true} />
-        <SelectionTab label={Language[language]['delete']} selected={true} />
-        <SelectionTab label={Language[language]['view_more']}  selected={true}  onPress={() => navigation.navigate('patientrecord')} />
-        <SelectionTab label={Language[language]['cancel']} selected={true}  onPress={() => {
+          <View style={styles.tab}>
+            <SelectionTab
+              label={Language[language]['update']}
+              selected={true}
+            />
+            <SelectionTab
+              label={Language[language]['delete']}
+              selected={true}
+            />
+            <SelectionTab
+              label={Language[language]['view_more']}
+              selected={true}
+              onPress={() => navigation.navigate('patientrecord')}
+            />
+            <SelectionTab
+              label={Language[language]['cancel']}
+              selected={true}
+              onPress={() => {
                 patientSearchRef?.current?.snapToIndex(0);
-              }} />
-        </View>
+              }}
+            />
+          </View>
           {/* <View style={styles.bottomView}>
             <TouchableOpacity>
               <Text style={styles.content}>{Language[language]['update']}</Text>
@@ -162,7 +186,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
     paddingHorizontal: 8,
-    alignSelf:'center'
+    alignSelf: 'center',
   },
 });
 

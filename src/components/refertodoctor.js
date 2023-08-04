@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
-import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
-import { useSelector, useDispatch } from 'react-redux';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { addDoctorRefer } from '../redux/features/prescription/prescriptionSlice';
-import { useNavigation } from '@react-navigation/native';
-import { HButton } from '../components';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
+import {useSelector, useDispatch} from 'react-redux';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {addDoctorRefer} from '../redux/features/prescription/prescriptionSlice';
+import {useNavigation} from '@react-navigation/native';
+import {HButton} from '../components';
 
 const ReferDoctorForm = props => {
   const nav = useNavigation();
@@ -26,7 +36,7 @@ const ReferDoctorForm = props => {
   };
 
   const handleNameChange = value => {
-    dispatch(addDoctorRefer({...selectedDoctor, name: value}));
+    dispatch(addDoctorRefer({...selectedDoctor, doctor_name: value}));
   };
 
   const handleSpecialityChange = value => {
@@ -38,8 +48,7 @@ const ReferDoctorForm = props => {
   };
 
   return (
-    <View style={{ paddingHorizontal: 24,
-      paddingVertical: 24,}}>
+    <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
       <View style={styles.main}>
         <Text style={styles.title}>Refer to Doctor</Text>
       </View>
@@ -76,7 +85,7 @@ const ReferDoctorForm = props => {
                         : CUSTOMCOLOR.primary,
                   },
                 ]}>
-                {doctor?.name}
+                {doctor?.doctor_name}
               </Text>
             </TouchableOpacity>
           ))}
@@ -96,7 +105,7 @@ const ReferDoctorForm = props => {
               <TextInput
                 placeholder="Name"
                 style={styles.input}
-                value={selectedDoctor.name}
+                value={selectedDoctor.doctor_name}
                 onChangeText={handleNameChange}
               />
               <TextInput
@@ -126,7 +135,9 @@ const ReferDoctorForm = props => {
           )}
         </View>
       </View>
-      <View style={{top:150,alignItems:'center'}}><HButton label={Language[language]['submit']} onPress={onPress}/></View>
+      <View style={{top: 150, alignItems: 'center'}}>
+        <HButton label={Language[language]['submit']} onPress={onPress} />
+      </View>
     </View>
   );
 };

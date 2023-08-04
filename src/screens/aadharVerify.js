@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -14,85 +14,130 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CUSTOMCOLOR, CUSTOMFONTSIZE } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { commonstyles } from '../styles/commonstyle';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {commonstyles} from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
 import style from '../components/Searchbar/style';
-import { CONSTANTS } from '../utility/constant';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {CONSTANTS} from '../utility/constant';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {
+  UpdatetxnId,
+  updateAbhaAccess,
+} from '../redux/features/Abha/AbhaAccesToken';
 
-const AadharVerify = ({ navigation }) => {
+const AadharVerify = ({navigation}) => {
   const CELL_COUNT = 6;
   const [selected, setSelected] = useState('No');
   const [aadhar_no, setAadhar_no] = useState('');
   const [value, setValue] = useState('');
-  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
+  const token = useSelector(state => state.authenticate.auth.access);
 
   const handleOptions = value => {
     setSelected(value);
   };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const PostAbha = async () => {
+      try {
+        const response = await fetchApi(URL.AbhaGatewayAuth, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            clientId: 'SBX_002532',
+            clientSecret: 'd085d1cb-a80b-416f-9d96-5f335f833549',
+          }),
+        });
+        if (response.ok) {
+          const jsonData = await response.json();
+          dispatch(updateAbhaAccess(jsonData.accessToken));
+        } else {
+          console.log('API call failed:', response.status);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
 
-  //   const getOtp = async () => {
-  //     // const url='https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp'
-  //     try {
-  //       const response = await fetch(URL.generateOtp, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           aadharNumber: aadhar_no,
-  //         }),
-  //       });
-  //       if (response.ok) {
-  //         const jsonData = await response.json();
-  //         console.log(jsonData);
-  //         navigation.navigate('bookslot', {phoneNumber});
-  //       } else {
-  //         console.error('API call failed:', response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //     }
-  //   };
-  //   const VerifyOtp = async () => {
-  //     // const url='https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp'
-  //     try {
-  //       const response = await fetch(URL.generateOtp, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           aadharNumber: aadhar_no,
-  //           otp: value,
-  //         }),
-  //       });
-  //       if (response.ok) {
-  //         const jsonData = await response.json();
-  //         console.log(jsonData);
-  //         navigation.navigate('bookslot', {aadhar_no});
-  //       } else {
-  //         console.error('API call failed:', response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //     }
-  //   };
+    PostAbha();
+  }, []);
+  const AbhaAccessToken = useSelector(state => state.abha.auth.access);
+  console.log('====================================');
+  console.log('====abha', AbhaAccessToken);
+  console.log('====================================');
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchApi(URL.AbhaAadhargenerateOtp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+        },
+        body: JSON.stringify({
+          aadhaar: aadhar_no,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('======,AAdhar', jsonData);
+        dispatch(UpdatetxnId(jsonData.txnId));
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
+  const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
+  console.log('====================================');
+  console.log('---------abhatxnid', AbhaTxnId);
+  console.log('====================================');
+
+  const PostOtp = async () => {
+    try {
+      const response = await fetchApi(URL.AbhaVerifyAadharOtp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+        },
+        body: JSON.stringify({
+          otp: value,
+          txnId: AbhaTxnId,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('======,aadharOtp', jsonData);
+        navigation.navigate('mobileverify');
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
 
   return (
     <SafeAreaView>
-      <View style={{ gap: 32 }}>
+      <View style={{gap: 32}}>
         <View
           style={{
             paddingVertical: 24,
@@ -101,14 +146,14 @@ const AadharVerify = ({ navigation }) => {
             borderBottomLeftRadius: 8,
             borderBottomRightRadius: 8,
           }}>
-          <Text style={{ fontSize: CUSTOMFONTSIZE.h1, color: CUSTOMCOLOR.white }}>
+          <Text style={{fontSize: CUSTOMFONTSIZE.h1, color: CUSTOMCOLOR.white}}>
             {' '}
             Add New
           </Text>
           <Icon name="bell" size={24} color={'#fff'} style={styles.bellIcon} />
         </View>
-        <View style={{ paddingHorizontal: 48, gap: 32 }}>
-          <View style={{ gap: 16 }}>
+        <View style={{paddingHorizontal: 48, gap: 32}}>
+          <View style={{gap: 16}}>
             <Text
               style={{
                 fontSize: CUSTOMFONTSIZE.h2,
@@ -117,7 +162,7 @@ const AadharVerify = ({ navigation }) => {
               }}>
               {Language[language]['abha']}
             </Text>
-            <View style={{ flexDirection: 'row', gap: 160 }}>
+            <View style={{flexDirection: 'row', gap: 160}}>
               <Option
                 label="Yes"
                 value="Yes"
@@ -134,7 +179,7 @@ const AadharVerify = ({ navigation }) => {
           </View>
           {selected === 'No' ? (
             <View>
-              <View style={{ alignItems: 'center', gap: 16 }}>
+              <View style={{alignItems: 'center', gap: 16}}>
                 <InputText
                   label={Language[language]['aadhar']}
                   placeholder={Language[language]['aadhar']}
@@ -144,10 +189,10 @@ const AadharVerify = ({ navigation }) => {
                 />
                 <HButton
                   label={Language[language]['getotp']}
-                  onPress={() => console.log('Aadhar')}
+                  onPress={() => fetchData()}
                 />
               </View>
-              <View style={{ paddingHorizontal: '30%', gap: 24, top: 16 }}>
+              <View style={{paddingHorizontal: '30%', gap: 24, top: 16}}>
                 <CodeField
                   ref={ref}
                   {...props}
@@ -157,7 +202,7 @@ const AadharVerify = ({ navigation }) => {
                   rootStyle={styles.codeFiledRoot}
                   keyboardType="number-pad"
                   textContentType="oneTimeCode"
-                  renderCell={({ index, symbol, isFocused }) => (
+                  renderCell={({index, symbol, isFocused}) => (
                     <View
                       onLayout={getCellOnLayoutHandler(index)}
                       key={index}
@@ -169,10 +214,10 @@ const AadharVerify = ({ navigation }) => {
                   )}
                 />
 
-                <View style={{ alignItems: 'center' }}>
+                <View style={{alignItems: 'center'}}>
                   <HButton
                     label={Language[language]['verify']}
-                    onPress={() => navigation.navigate('mobileverify')}
+                    onPress={() => PostOtp()}
                   />
                 </View>
               </View>

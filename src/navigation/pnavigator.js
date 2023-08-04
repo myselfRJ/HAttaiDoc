@@ -27,17 +27,22 @@ import Success from '../screens/success';
 import SearchAddnew from '../screens/searchAddnew';
 import InitScreen from '../screens/init_screen';
 import MedicalRecordPatient from '../screens/medicalRecordPatients';
+import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
+import Prescribe1 from '../screens/prescibe1';
 
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
-  const isAuth = useSelector(state => state.authenticate.accesstoken);
+  console.log(getAccessToken(state => state));
+  const isAuth = useSelector(state => state.authenticate.auth.access);
+  const access = useSelector(state => state.getAccessToken);
   console.log('isAuth.....', isAuth);
 
+  console.log('isAccess.....', access);
   return (
     <Stack.Navigator
+      //initialRouteName="addclinic"
       initialRouteName="initscreen"
-      //initialRouteName="tab"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
       <Stack.Screen name="profilecreate" component={ProfileCreate} />
@@ -65,6 +70,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="addnew" component={SearchAddnew} />
       <Stack.Screen name="initscreen" component={InitScreen} />
       <Stack.Screen name="patientrecord" component={MedicalRecordPatient} />
+      <Stack.Screen name="pres" component={Prescribe1} />
     </Stack.Navigator>
   );
 };

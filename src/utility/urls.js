@@ -1,18 +1,32 @@
+const baseUrl = 'http://10.9.78.38:8000/api/v1/';
 export const URL = {
-  generateOtp:
-    'https://stoplight.io/mocks/destratum/hattai/297407/api/v1/generate_otp',
-  validateOtp:
-    'https://stoplight.io/mocks/destratum/hattai/297407/api/v1/validate_otp',
-  profileUrl:
-    'https://stoplight.io/mocks/destratum/hattai/22449895/practitioner/',
-  get_all_appointments_of_clinic:
-    'https://stoplight.io/mocks/destratum/hattai/53373690/appointment/%7Bclinic-id%7D/%7Bpractitioner-id%7D/%7Bdate%7D',
-  Appointment_Booking:
-    'https://stoplight.io/mocks/destratum/hattai/53373690/appointment',
-  SlotsAvailable:
-    'https://stoplight.io/mocks/destratum/hattai/197145559/clinic/%7Bclinic-id%7D/slot',
-  addclinic:
-    'https://stoplight.io/mocks/destratum/hattai/197145559/clinic',
-  adduser:
-  'https://stoplight.io/mocks/destratum/hattai/1755950/user'
+  generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
+  validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
+  profileUrl: `${baseUrl}practioner/practitoner-save`,
+  get_all_appointments_of_clinic: `${baseUrl}customappointment/get/appointment/`,
+  Appointment_Booking: `${baseUrl}customappointment/book-appointment/`,
+  SlotsAvailable: clinicId => `${baseUrl}clinic/get-slot/${clinicId}/`,
+  addclinic: `${baseUrl}clinic/clinic-save`,
+  adduser: `${baseUrl}customuser/create-user/`,
+  addPatient: `${baseUrl}custompatient/savepatient/`,
+  getPatientByClinic: clinicId =>
+    `${baseUrl}customappointment/get-patients/${clinicId}/`,
+  getPatientByNumber: phoneId => `${baseUrl}custompatient/${phoneId}`,
+  getClinic: phoneId =>
+    `${baseUrl}clinic/get/clinic/?doctor_phone_number=${phoneId}`,
+  getPractitionerByNumber: phoneId => `${baseUrl}practioner/${phoneId}`,
+  savePrescription: `${baseUrl}consult/savePrescription`,
+  getUserByNumber: phoneId => `${baseUrl}customuser/${phoneId}`,
+  getInitScreen: `${baseUrl}practioner/init`,
+  AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
+  AbhaAadhargenerateOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',
+  AbhaVerifyAadharOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyOTP',
+  AbhaGenerateMobileOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateMobileOTP',
+  AbhaMobileVerifyOtp:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyMobileOTP',
+  CreateAbhaAccount:
+    'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/createHealthIdWithPreVerified',
 };

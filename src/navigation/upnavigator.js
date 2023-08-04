@@ -7,6 +7,7 @@ import Intro from '../screens/intro';
 import Entry from '../screens/entry';
 import OtpScreen from '../screens/otpscreen';
 import Introduction from '../screens/introduction';
+import InitScreen from '../screens/init_screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,10 +19,10 @@ const UnProtectedRoute = () => {
       {/* <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="signup" component={Signup} />
       <Stack.Screen name="otp" component={Otp} /> */}
-      <Stack.Screen name="introduction" component={Introduction}/>
-      <Stack.Screen name="intro" component={Intro}/>
-      <Stack.Screen name="entry" component={Entry}/>
-      <Stack.Screen name='otpscreen' component={OtpScreen}/>
+      <Stack.Screen name="introduction" component={Introduction} />
+      <Stack.Screen name="intro" component={Intro} />
+      <Stack.Screen name="entry" component={Entry} />
+      <Stack.Screen name="otpscreen" component={OtpScreen} />
     </Stack.Navigator>
   );
 };

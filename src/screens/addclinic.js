@@ -23,37 +23,53 @@ import ClinicAddress from '../components/clinic_address';
 import BottomSheetView from '../components/bottomSheet';
 import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchApi} from '../api/fetchApi';
+import {addclinic_data} from '../redux/features/profiles/clinicData';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
+  const slotData = useSelector(state => state?.slotsData);
+  const token = useSelector(state => state.authenticate.auth.access);
+
+  const dispatch = useDispatch();
 
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
+  console.log('slotData==========================', slotData?.slots);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [value, setValue] = useState({
     clinic: '',
+    address: '',
     fees: '',
     slots: [],
   });
+
+  const Clinic_Data = [
+    {
+      clinic_name: value.clinic,
+      clinic_Address: 'Chennai',
+      clinic_photo_url: selectedImage,
+      fees: parseInt(value.fees),
+      slot: JSON.stringify(slotData.slots),
+    },
+  ];
+
   const fetchData = async () => {
     try {
-      const response = await fetch(URL.addclinic, {
+      const response = await fetchApi(URL.addclinic, {
         method: 'POST',
         headers: {
-          authorization: 'ghghg',
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({
-          'user-id': '0d515acf-4ebd-4d22-8697-ddc5925e029a',
-          'clinic-name': value.clinic,
-          clinic_address: '',
-          fees: value.fees,
-        }),
+        body: JSON.stringify(Clinic_Data),
       });
       if (response.ok) {
         const jsonData = await response.json();
@@ -83,10 +99,11 @@ const AddClinic = ({navigation}) => {
         ...prevValues,
         slots: [...prevValues.slots, value.clinic],
         clinic: '',
-        fees:''
+        fees: '',
       }));
     }
     setShowSlotChip(true);
+    navigation.navigate('createslot');
   };
 
   const onImagePress = () => {
@@ -119,6 +136,10 @@ const AddClinic = ({navigation}) => {
       ...prevValues,
       slots: prevValues.slots.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleAddClinicData = () => {
+    dispatch(addclinic_data.addclinic_data(Clinic_Data));
   };
 
   return (
@@ -159,11 +180,21 @@ const AddClinic = ({navigation}) => {
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
             />
-            <View style={{alignSelf: 'flex-start',paddingHorizontal:8,paddingVertical:8}}>
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingHorizontal: 8,
+                paddingVertical: 8,
+              }}>
               <HButton label="Add Slots" onPress={handlePlusIconClick} />
             </View>
             <View
-              style={{alignSelf: 'flex-end', bottom: 0, paddingVertical: 8,paddingHorizontal:8}}>
+              style={{
+                alignSelf: 'flex-end',
+                bottom: 0,
+                paddingVertical: 8,
+                paddingHorizontal: 8,
+              }}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
 
@@ -196,8 +227,10 @@ const AddClinic = ({navigation}) => {
               <HButton
                 label="Next"
                 onPress={() => {
+                  dispatch(addclinic());
                   fetchData();
                   SuccesRef?.current?.snapToIndex(1);
+                  handleAddClinicData();
                 }}
               />
             </View>

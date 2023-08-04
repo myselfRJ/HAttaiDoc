@@ -17,21 +17,85 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Icon, InputText} from '../components';
 import {CONSTANTS} from '../utility/constant';
 import {BottomSheetView} from '../components';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+import {useSelector} from 'react-redux';
 
 const PatientSearch = ({navigation}) => {
+  const [clinics, setDataClinic] = useState();
+
+  const token = useSelector(state => state.authenticate.auth.access);
+  const ClinicRef = useRef(null);
+
+  const [selectedClinic, setSelectedClinic] = useState();
+
+  const [data, setData] = useState();
+
+  const phone_number = useSelector(state => state?.phone?.phone);
+
+  const fetchClincs = async () => {
+    const response = await fetchApi(URL.getClinic(phone_number), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setDataClinic(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchClincs();
+  }, []);
+
+  const [filteredData, setFilteredData] = useState([]);
   const [name, setName] = useState('');
+
   const ChangeNameValue = e => {
     setName(e);
   };
-  const ClinicRef = useRef(null);
 
-  const clinics = CONSTANTS.clinic;
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getPatientByClinic(1), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setData(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
 
-  const [selectedClinic, setSelectedClinic] = useState(clinics[0]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (name) {
+      const filtered = data?.filter(
+        item => item?.patient_name && item?.patient_name.startsWith(name),
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
+    }
+  }, [data, name]);
+
   const handleClinicSelection = clinic => {
-    setSelectedClinic(clinic);
+    setSelectedClinic(clinic.clinic_name);
     ClinicRef?.current?.snapToIndex(0);
   };
+
+  console.log('====================================');
+  console.log('clinics', '==============', clinics);
+  console.log('====================================');
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -62,14 +126,13 @@ const PatientSearch = ({navigation}) => {
 
         <View style={styles.appointment}>
           <Text style={styles.h2}>My Patients</Text>
-
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
-          <PatientSearchCard onPress={() => navigation.navigate('visit')} />
+          {filteredData?.map((val, ind) => (
+            <PatientSearchCard
+              key={ind}
+              patient_data={val}
+              onPress={() => navigation.navigate('visit')}
+            />
+          ))}
         </View>
       </ScrollView>
 
@@ -88,7 +151,7 @@ const PatientSearch = ({navigation}) => {
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic}</Text>
+              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
             </Pressable>
           ))}
         </View>

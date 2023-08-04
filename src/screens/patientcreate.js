@@ -17,7 +17,6 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import style from '../components/Searchbar/style';
 import {CONSTANTS} from '../utility/constant';
 const PatientCreate = ({navigation}) => {
   const [selected, setSelected] = useState('');
