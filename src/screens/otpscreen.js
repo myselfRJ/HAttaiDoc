@@ -1,46 +1,46 @@
-import {useState, useEffect,useRef} from 'react';
-import {Text, View, StyleSheet, Image,TouchableOpacity} from 'react-native';
-import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
+import { useState, useEffect, useRef } from 'react';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { checkNumber, checkOtp, checkPassword } from '../utility/checks';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import {HButton} from '../components';
-import {InputText} from '../components';
-import {URL} from '../utility/urls';
-import {useNavigation} from '@react-navigation/native';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { HButton } from '../components';
+import { InputText } from '../components';
+import { URL } from '../utility/urls';
+import { useNavigation } from '@react-navigation/native';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {fetchApi} from '../api/fetchApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
+import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fetchApi } from '../api/fetchApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { authenticateActions } from '../redux/features/authenticate/authenticateSlice';
 import { addLogin_phone } from '../redux/features/phoneNumber/LoginPhoneNumber';
 // import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
 
-const OtpScreen = ({route}) => {
+const OtpScreen = ({ route }) => {
 
-  const [timer, setTimer] = useState(60); // Set the initial timer value (in seconds)
+  const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const timerRef = useRef(null);
   const CELL_COUNT = 6;
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
-  
-  const {phone,trace_id}=useSelector(state=>state?.phone?.data)
+
+  const { phone, trace_id } = useSelector(state => state?.phone?.data)
   console.log(phone)
   //console.log("..........",data)
   // const {phone, Trace_id} = route.params;
@@ -60,21 +60,21 @@ const OtpScreen = ({route}) => {
     }, 1000);
   };
   const resetTimer = () => {
-    setTimer(60);
+    setTimer(30);
     setIsTimerRunning(false);
     clearInterval(timerRef.current);
   };
   useEffect(() => {
-    startTimer(); 
+    startTimer();
     return () => {
-      clearInterval(timerRef.current); 
+      clearInterval(timerRef.current);
     };
   }, []);
 
   const handleResendOTP = async () => {
-    resetTimer(); 
+    resetTimer();
     startTimer();
-   resendOtp();
+    resendOtp();
   };
 
   const resendOtp = async () => {
@@ -85,7 +85,7 @@ const OtpScreen = ({route}) => {
           'trace-id': '12345',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phone: phone, country: 'india', code: '+91'}),
+        body: JSON.stringify({ phone: phone, country: 'india', code: '+91' }),
       });
       if (response?.ok) {
         const jsonData = await response.json();
@@ -105,12 +105,12 @@ const OtpScreen = ({route}) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phone: phone, otp: value, trace_id: trace_id}),
+        body: JSON.stringify({ phone: phone, otp: value, trace_id: trace_id }),
       });
       console.log(trace_id);
       if (response.ok) {
         const jsonData = await response.json();
-        console.log("...... update navigation===>",jsonData);
+        console.log("...... update navigation===>", jsonData);
         dispatch(authenticateActions.updateauthenticate(jsonData));
         nav.navigate('protected');
       } else {
@@ -128,15 +128,15 @@ const OtpScreen = ({route}) => {
           <View style={styles.Top}>
             <Image
               style={{
-                width: 230,
-                height: 496,
+                width: 234,
+                height: 288,
               }}
-              source={require('../assets/images/otp.jpeg')}
+              source={require('../assets/images/otp.png')}
             />
           </View>
           <View style={styles.bottom}>
             <Text style={styles.text}>OTP Verification</Text>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               {/* <InputText
               doubleCheck={[true, false]}
               check={checkOtp}
@@ -150,7 +150,7 @@ const OtpScreen = ({route}) => {
           <HButton label={Language[language]['submit']} onPress={fetchData}/>
           </View>
             /> */}
-              <View style={{paddingHorizontal: 8}}>
+              <View>
                 <CodeField
                   ref={ref}
                   {...props}
@@ -160,7 +160,7 @@ const OtpScreen = ({route}) => {
                   rootStyle={styles.codeFiledRoot}
                   keyboardType="number-pad"
                   textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
+                  renderCell={({ index, symbol, isFocused }) => (
                     <View
                       onLayout={getCellOnLayoutHandler(index)}
                       key={index}
@@ -171,20 +171,23 @@ const OtpScreen = ({route}) => {
                     </View>
                   )}
                 />
+                <View style={{ alignSelf: 'flex-end', paddingVertical: 8 }}>
+                  <TouchableOpacity onPress={handleResendOTP} disabled={isTimerRunning}>
+                    <Text style={[styles.resendButtonText, isTimerRunning && styles.disabledButtonText]}>
+                      {isTimerRunning ? `Resend OTP : ${timer}s` : 'Resend OTP'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{left:80}}>
-      <TouchableOpacity onPress={handleResendOTP} disabled={isTimerRunning}>
-        <Text style={[styles.resendButtonText, isTimerRunning && styles.disabledButtonText]}>
-          {isTimerRunning ? `Resend OTP : ${timer}s` : 'Resend OTP'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+
             </View>
-            <View style={{top: 50, alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <HButton
                 label={Language[language]['submit']}
-                onPress={()=>{fetchData(); setIsTimerRunning(false);
-                  clearInterval(timerRef.current);}}
+                onPress={() => {
+                  fetchData(); setIsTimerRunning(false);
+                  clearInterval(timerRef.current);
+                }}
               />
             </View>
           </View>
@@ -196,6 +199,7 @@ const OtpScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 48
   },
   Top: {
     height: 503,
@@ -204,17 +208,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottom: {
-    height: 680,
-    backgroundColor: CUSTOMCOLOR.white,
-    //alignItems:'center'
+    gap: 24,
   },
   text: {
     //  width:593,
     //  height:120,
     //  top:50,
     //  left:10,
-    paddingHorizontal: 64,
-    paddingVertical: 64,
+    paddingHorizontal: 24,
+    gap: 8,
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: 32,
     fontWeight: 600,
@@ -226,7 +228,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: '#000',
     borderBottomWidth: 1,
-    marginLeft: 10,
+    marginLeft: 8
+    ,
   },
   cellText: {
     color: '#000',

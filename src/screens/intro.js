@@ -15,8 +15,8 @@ const Intro=({navigation})=>{
      <View style={styles.container}>
         <View style={styles.Top}>
         <Image
-            style={{width: 272, height: 500}}
-            source={require('../assets/images/intro.jpeg')}
+            style={{width: 224, height: 261}}
+            source={require('../assets/images/intro.png')}
               />
         </View>
         <View style={styles.bottom}>
@@ -25,17 +25,17 @@ const Intro=({navigation})=>{
          <Text style={styles.text}>Instant Digitization, Limitless </Text>
          <Text style={styles.text}>Possibilities</Text>
          </View>
-        <View style={{margin:200,alignItems:'center'}}>
+       
             <HButton label='Get Start' onPress={() => navigation.navigate('entry')} btnstyles={styles.btn}/>
             </View>
-        </View>
-
+       
      </View>
     );
 }
 const styles=StyleSheet.create({
     container:{
         flex:1,
+        gap:48
         
     },
     Top:{
@@ -47,16 +47,18 @@ const styles=StyleSheet.create({
     bottom:{
         // height:680,
         // backgroundColor:CUSTOMCOLOR.white,
-        alignItems:'center'
+        alignItems:'center',
+        gap:24,
         
     },
     textcontainer:{
-        width:600,
-        height:164,
-        top:100,
+        // width:600,
+        // height:164,
+        // top:100,
         alignItems:'center',
         //left:61,
-        padding:8,
+        paddingHorizontal:24,
+        
         gap:8
     },
     text:{
@@ -66,9 +68,7 @@ const styles=StyleSheet.create({
        color:CUSTOMCOLOR.black
         
     },
-    btn:{
-        bottom:50
-    }
+ 
    
 })
 export default Intro;

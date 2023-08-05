@@ -190,7 +190,7 @@ const SlotBook = ({ navigation }) => {
           mode_of_consultation: selectedMode,
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
-          clinic_id: '1',
+          clinic_id: '41',
           complaint:complaint,
           //patient_phone_number: patientPhoneNumber.patient.phone_number,
           patient_phone_number:'9003092186',

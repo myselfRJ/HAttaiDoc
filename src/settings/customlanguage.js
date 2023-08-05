@@ -13,7 +13,7 @@ const Language = {
     time: 'Time',
     status: 'Status',
     bill: 'Bill',
-    view_more: 'view more',
+    view_more: 'See all',
     weekly: 'weekly',
     monthly: 'monthly',
     yearly: 'yearly',
