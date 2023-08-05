@@ -15,7 +15,8 @@ export const URL = {
   getPatientsAll: `${baseUrl}custompatient/allPatients`,
   getClinic: phoneId =>
     `${baseUrl}clinic/get/clinic/?doctor_phone_number=${phoneId}`,
-  getPractitionerByNumber: phoneId => `${baseUrl}practioner/${phoneId}`,
+  getPractitionerByNumber: phoneId =>
+    `${baseUrl}practioner/practioner/?doctor_phone_number=${phoneId}`,
   savePrescription: `${baseUrl}consult/savePrescription`,
   getUserByNumber: phoneId => `${baseUrl}customuser/${phoneId}`,
   getInitScreen: `${baseUrl}practioner/init`,
@@ -30,4 +31,12 @@ export const URL = {
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyMobileOTP',
   CreateAbhaAccount:
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/createHealthIdWithPreVerified',
+  AbhaExitsMobileGetOtp:
+    'https://healthidsbx.abdm.gov.in/api/v2/registration/mobile/login/generateOtp',
+  AbhaEsistsValIdateOtp:
+    'https://healthidsbx.abdm.gov.in/api//v2/registration/mobile/login/verifyOtp',
+  AbhaExistsGetUserToken:
+    'https://healthidsbx.abdm.gov.in/api/v2/registration/mobile/login/userAuthorizedToken',
+  AbhaExistsGetProfile:
+    'https://healthidsbx.abdm.gov.in/api//v1/account/profile',
 };

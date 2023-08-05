@@ -20,8 +20,9 @@ import BottomSheetView from '../components/bottomSheet';
 import {CONSTANTS} from '../utility/constant';
 import {CONSTANT} from '../utility/const';
 import {ChartCard, HeaderAvatar} from '../components';
-import {UseSelector, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
+import {addclinic_id} from '../redux/features/profiles/clinicId';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -57,6 +58,8 @@ const Appointment = ({navigation}) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const dispatch = useDispatch();
+
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     handleChangeValue(clinic.id);
@@ -91,6 +94,7 @@ const Appointment = ({navigation}) => {
       console.log(jsonData);
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
+      setClinic(jsonData?.data[0]?.id);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -165,8 +169,13 @@ const Appointment = ({navigation}) => {
   }, []);
 
   console.log('====================================');
-  console.log('filtered data', filteredData);
+  console.log('filtered data', clinicID);
   console.log('====================================');
+
+  const handlePlusBUtton = () => {
+    dispatch(addclinic_id.addclinic_id(clinicID));
+    navigation.navigate('addnew');
+  };
 
   return (
     <View style={styles.main}>
@@ -257,7 +266,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('addnew')}
+            onPress={handlePlusBUtton}
           />
         </ScrollView>
       </View>

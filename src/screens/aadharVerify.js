@@ -34,12 +34,15 @@ import {
   updateAbhaAccess,
   addAadhar,
 } from '../redux/features/Abha/AbhaAccesToken';
+import OtpEncryption from '../utility/encryption';
 
 const AadharVerify = ({navigation}) => {
   const CELL_COUNT = 6;
   const [selected, setSelected] = useState('No');
   const [aadhar_no, setAadhar_no] = useState('');
   const [value, setValue] = useState('');
+  const [phone, setPhoneNumber] = useState('');
+  const [otpValue, setOtpValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -84,16 +87,22 @@ const AadharVerify = ({navigation}) => {
   console.log('====================================');
 
   const fetchData = async () => {
+    const url =
+      selected === 'No' ? URL.AbhaAadhargenerateOtp : URL.AbhaExitsMobileGetOtp;
+    const body =
+      selected === 'No'
+        ? {
+            aadhaar: aadhar_no,
+          }
+        : {mobile: phone};
     try {
-      const response = await fetchApi(URL.AbhaAadhargenerateOtp, {
+      const response = await fetchApi(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${AbhaAccessToken}`,
         },
-        body: JSON.stringify({
-          aadhaar: aadhar_no,
-        }),
+        body: JSON.stringify(body),
       });
       if (response.ok) {
         const jsonData = await response.json();
@@ -113,24 +122,68 @@ const AadharVerify = ({navigation}) => {
   console.log('====================================');
 
   const PostOtp = async () => {
+    const url =
+      selected === 'No' ? URL.AbhaVerifyAadharOtp : URL.AbhaEsistsValIdateOtp;
+    const body =
+      selected === 'No'
+        ? {
+            otp: value,
+            txnId: AbhaTxnId,
+          }
+        : {
+            otp: OtpEncryption(value),
+            txnId: AbhaTxnId,
+          };
     try {
-      const response = await fetchApi(URL.AbhaVerifyAadharOtp, {
+      const response = await fetchApi(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${AbhaAccessToken}`,
         },
-        body: JSON.stringify({
-          otp: value,
-          txnId: AbhaTxnId,
-        }),
+        body: JSON.stringify(body),
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('======,aadharOtp', jsonData);
-        navigation.navigate('mobileverify');
-      } else {
-        console.error('API call failed:', response.status, response);
+        console.log('======,aadharOtp', jsonData?.token);
+        console.log(
+          '======,aadharOtp',
+          jsonData?.mobileLinkedHid?.[0].healthIdNumber,
+        );
+        console.log('======,aadharOtp', jsonData?.txnId);
+        let headers = {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+          'T-Token': `Bearer ${jsonData?.token}`,
+          mobileLoginWebRequest: 'mobileLoginWebRequest',
+        };
+        console.log('====================================');
+        console.log('---------------------', {
+          healthId: jsonData?.mobileLinkedHid?.[0].healthIdNumber,
+          txnId: jsonData?.txnId,
+        });
+        console.log('====================================');
+        const UserTokenResponse = await fetchApi(URL.AbhaExistsGetUserToken, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({
+            healthId: jsonData?.mobileLinkedHid[0]?.healthIdNumber,
+            txnId: jsonData?.txnId,
+          }),
+        });
+        const UserTokenData = await UserTokenResponse.json();
+        let headersProfile = {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${AbhaAccessToken}`,
+          'X-Token': `Bearer ${UserTokenData?.token}`,
+        };
+        const UserAbhaProfile = await fetchApi(URL.AbhaExistsGetProfile, {
+          method: 'GET',
+          headers: headersProfile,
+        });
+        const jsonDataProfile = await UserAbhaProfile.json();
+        console.log('abhaprofile-----------------------', jsonDataProfile);
+        navigation.navigate('abhacreate');
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -179,52 +232,58 @@ const AadharVerify = ({navigation}) => {
               />
             </View>
           </View>
-          {selected === 'No' ? (
-            <View>
-              <View style={{alignItems: 'center', gap: 16}}>
-                <InputText
-                  label={Language[language]['aadhar']}
-                  placeholder={Language[language]['aadhar']}
-                  value={aadhar_no}
-                  setValue={setAadhar_no}
-                  maxLength={12}
-                />
-                <HButton
-                  label={Language[language]['getotp']}
-                  onPress={() => fetchData()}
-                />
-              </View>
-              <View style={{paddingHorizontal: '30%', gap: 24, top: 16}}>
-                <CodeField
-                  ref={ref}
-                  {...props}
-                  value={value}
-                  onChangeText={setValue}
-                  cellCount={CELL_COUNT}
-                  rootStyle={styles.codeFiledRoot}
-                  keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <View
-                      onLayout={getCellOnLayoutHandler(index)}
-                      key={index}
-                      style={[styles.cellRoot, isFocused && styles.focusCell]}>
-                      <Text style={styles.cellText}>
-                        {symbol || (isFocused ? <Cursor /> : null)}
-                      </Text>
-                    </View>
-                  )}
-                />
+          <View>
+            <View style={{alignItems: 'center', gap: 16}}>
+              <InputText
+                label={
+                  selected === 'No'
+                    ? Language[language]['aadhar']
+                    : Language[language]['phone_number']
+                }
+                placeholder={
+                  selected === 'No'
+                    ? Language[language]['aadhar']
+                    : Language[language]['phone_number']
+                }
+                value={selected === 'No' ? aadhar_no : phone}
+                setValue={selected === 'No' ? setAadhar_no : setPhoneNumber}
+                maxLength={12}
+              />
+              <HButton
+                label={Language[language]['getotp']}
+                onPress={() => fetchData()}
+              />
+            </View>
+            <View style={{paddingHorizontal: '30%', gap: 24, top: 16}}>
+              <CodeField
+                ref={ref}
+                {...props}
+                value={value}
+                onChangeText={setValue}
+                cellCount={CELL_COUNT}
+                rootStyle={styles.codeFiledRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({index, symbol, isFocused}) => (
+                  <View
+                    onLayout={getCellOnLayoutHandler(index)}
+                    key={index}
+                    style={[styles.cellRoot, isFocused && styles.focusCell]}>
+                    <Text style={styles.cellText}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  </View>
+                )}
+              />
 
-                <View style={{alignItems: 'center'}}>
-                  <HButton
-                    label={Language[language]['verify']}
-                    onPress={() => PostOtp()}
-                  />
-                </View>
+              <View style={{alignItems: 'center'}}>
+                <HButton
+                  label={Language[language]['verify']}
+                  onPress={() => PostOtp()}
+                />
               </View>
             </View>
-          ) : null}
+          </View>
         </View>
       </View>
     </SafeAreaView>

@@ -1,5 +1,12 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -26,6 +33,7 @@ import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
+
 import {
   addclinic_users,
   updateclinic_users,
@@ -184,6 +192,7 @@ const AddUser = ({navigation}) => {
       const jsonData = await response.json();
       console.log(jsonData);
       setDataClinic(jsonData.data);
+      setSelectedClinic(jsonData?.data[0]?.clinic_name);
     } else {
       console.error('API call failed:', response.status, response);
     }

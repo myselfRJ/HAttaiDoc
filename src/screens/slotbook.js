@@ -1,35 +1,35 @@
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import {Text, View, StyleSheet, FlatList} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
 import SelectorBtn from '../components/selector';
 import Option from '../components/option';
 import SelectionTab from '../components/selectiontab';
 import SuggestionTab from '../components/suggestiontab';
 import HButton from '../components/button';
-import { useState, useEffect } from 'react';
-import moment, { min } from 'moment';
+import {useState, useEffect} from 'react';
+import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
-import { CONSTANTS } from '../utility/constant';
-import { URL } from '../utility/urls';
-import { Icon } from '../components';
-import { fetchApi } from '../api/fetchApi';
-import { HttpStatusCode } from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
-import { addPatient } from '../redux/features/patient/patientslice';
-import { addPhone } from '../redux/features/authenticate/PhoneNumber';
-import { forceTouchGestureHandlerProps } from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
+import {CONSTANTS} from '../utility/constant';
+import {URL} from '../utility/urls';
+import {Icon} from '../components';
+import {fetchApi} from '../api/fetchApi';
+import {HttpStatusCode} from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
+import {addPatient} from '../redux/features/patient/patientslice';
+import {addPhone} from '../redux/features/authenticate/PhoneNumber';
+import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
-const SlotBook = ({ navigation }) => {
-  const [complaint, setComplaint] = useState('')
-  const changeComplaint = (e) => {
-    setComplaint(e)
-  }
+const SlotBook = ({navigation}) => {
+  const [complaint, setComplaint] = useState('');
+  const changeComplaint = e => {
+    setComplaint(e);
+  };
   const patientPhoneNumber = useSelector(state => state.patient);
   //console.log('phone----', patientPhoneNumber.patient.phone_number);
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const SlotBook = ({ navigation }) => {
     selectedSlot?.slot.split('-')[0] + 'T' + selectedSlot?.slot.split('-')[1],
   );
   const selections = CONSTANTS.selections;
-  
+
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
   );
@@ -104,7 +104,7 @@ const SlotBook = ({ navigation }) => {
   };
   const Day = weekDys?.[moment().day()];
   const fetchslots = async () => {
-    const response = await fetchApi(URL.SlotsAvailable('8'), {
+    const response = await fetchApi(URL.SlotsAvailable('41'), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -123,7 +123,7 @@ const SlotBook = ({ navigation }) => {
     fetchslots();
   }, []);
 
-  useEffect(() => { }, [selectedSlot]);
+  useEffect(() => {}, [selectedSlot]);
   console.log('====================================');
   console.log(slotDetails[0]);
   console.log('====================================');
@@ -166,7 +166,7 @@ const SlotBook = ({ navigation }) => {
 
   let list = getTimeList(slotDetails[0]?.T);
 
-  const renderItems = ({ item }) => {
+  const renderItems = ({item}) => {
     return (
       <View style={styles.item}>
         <SelectionTab
@@ -191,9 +191,9 @@ const SlotBook = ({ navigation }) => {
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
           clinic_id: '1',
-          complaint:complaint,
+          complaint: complaint,
           //patient_phone_number: patientPhoneNumber.patient.phone_number,
-          patient_phone_number:'9003092186',
+          patient_phone_number: '9003092186',
           meta_data: {
             complaint: 'headache',
             patient_reference: 'ggvvf',
@@ -225,98 +225,100 @@ const SlotBook = ({ navigation }) => {
   // console.log('====================================');
 
   return (
-    
     <View style={styles.main}>
       <ScrollView>
-      <View style={styles.MainHeadContainer}>
-        <Text style={styles.MainText}>Slot Booking</Text>
-        <Icon
-          name="bell"
-          size={24}
-          color={CUSTOMCOLOR.white}
-          style={{ top: 43, right: 37 }}
-        />
-      </View>
-      <View style={styles.child}>
-        <View style={{ gap: 8, paddingHorizontal: 12, paddingVertical: 8, height: 70 }}>
-          <SelectorBtn
-            label="Date"
-            name="calendar"
-            onPress={() => setOpen('to')}
-            input={formatDate}
-          />
-          <DatePicker
-            modal
-            open={open !== false}
-            date={date}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
+        <View style={styles.MainHeadContainer}>
+          <Text style={styles.MainText}>Slot Booking</Text>
+          <Icon
+            name="bell"
+            size={24}
+            color={CUSTOMCOLOR.white}
+            style={{top: 43, right: 37}}
           />
         </View>
-        <InputText
+        <View style={styles.child}>
+          <View
+            style={{
+              gap: 8,
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              height: 70,
+            }}>
+            <SelectorBtn
+              label="Date"
+              name="calendar"
+              onPress={() => setOpen('to')}
+              input={formatDate}
+            />
+            <DatePicker
+              modal
+              open={open !== false}
+              date={date}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+          </View>
+          <InputText
             label={Language[language]['complaint']}
             placeholder="enter your complaints"
             value={complaint}
             setValue={setComplaint}
             multiline={true}
-
           />
-        <View style={styles.child}>
-          <View style={styles.type}>
-            <Option
-              label="Offline"
-              value="Offline"
-              selected={selectedMode === 'offline'}
-              onPress={() => handleOptions('offline')}
-            />
-            <Option
-              label="TelePhonic"
-              value="TelePhonic"
-              selected={selectedMode === 'TelePhonic'}
-              onPress={() => handleOptions('TelePhonic')}
-            />
-          </View>
-          <View style={styles.selection}>
-            {selections?.map((val, ind) => (
-              <View key={ind}>
-                <SelectionTab
-                  label={val}
-                  onPress={() => handleSelectType(val)}
-                  selected={selectedTypeAppointment === val}
-                />
-              </View>
-            ))}
-          </View>
-          
+          <View style={styles.child}>
+            <View style={styles.type}>
+              <Option
+                label="Offline"
+                value="Offline"
+                selected={selectedMode === 'offline'}
+                onPress={() => handleOptions('offline')}
+              />
+              <Option
+                label="TelePhonic"
+                value="TelePhonic"
+                selected={selectedMode === 'TelePhonic'}
+                onPress={() => handleOptions('TelePhonic')}
+              />
+            </View>
+            <View style={styles.selection}>
+              {selections?.map((val, ind) => (
+                <View key={ind}>
+                  <SelectionTab
+                    label={val}
+                    onPress={() => handleSelectType(val)}
+                    selected={selectedTypeAppointment === val}
+                  />
+                </View>
+              ))}
+            </View>
 
-          <View>
-            <Text style={styles.h2}>Available Slots</Text>
-            <FlatList data={list} renderItem={renderItems} numColumns={5} />
-          </View>
-          <View style={styles.btn}>
-            <HButton
-              label="Book Slot"
-              //onPress={() => navigation.navigate('dashboard')}
-              onPress={() => {
-                //dispatch(addPatient());
-                Appointment_Booking();
-              }}
-            />
+            <View>
+              <Text style={styles.h2}>Available Slots</Text>
+              <FlatList data={list} renderItem={renderItems} numColumns={5} />
+            </View>
+            <View style={styles.btn}>
+              <HButton
+                label="Book Slot"
+                //onPress={() => navigation.navigate('dashboard')}
+                onPress={() => {
+                  //dispatch(addPatient());
+                  Appointment_Booking();
+                }}
+              />
+            </View>
           </View>
         </View>
-      </View>
       </ScrollView>
     </View>
-    
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     gap: 32,
-    flex:1,
+    flex: 1,
     //backgroundColor:CUSTOMCOLOR.primary,
     // paddingHorizontal:24,
     // paddingVertical:24
@@ -358,9 +360,9 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
-  item: { margin: 8 },
+  item: {margin: 8},
   btn: {
-    height:100,
+    height: 100,
     alignItems: 'center',
   },
 });

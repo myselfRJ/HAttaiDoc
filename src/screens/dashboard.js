@@ -28,6 +28,8 @@ import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -39,7 +41,7 @@ const Dashboard = ({navigation, route}) => {
   const [clinicid, setClinicId] = useState('');
   console.log('clinic id ..', clinicid);
 
-  const [setAppointment, setDataAppointment] = useState();
+  const [setAppointment, setDataAppointment] = useState([]);
   console.log('apoointment===', setAppointment);
 
   const {phone} = useSelector(state => state?.phone?.data);
@@ -259,15 +261,23 @@ const Dashboard = ({navigation, route}) => {
               <Text style={styles.h2}>
                 {Language[language]['appointments']}
               </Text>
-              {setAppointment?.map((value, index) => {
-                return (
-                  <AppointmentCard
-                    key={index}
-                    appointment={value}
-                    openVisit={() => navigation.navigate('visit')}
-                  />
-                );
-              })}
+              {setAppointment.length > 0 ? (
+                setAppointment?.map((value, index) => {
+                  return (
+                    <AppointmentCard
+                      key={index}
+                      appointment={value}
+                      openVisit={() => navigation.navigate('visit')}
+                    />
+                  );
+                })
+              ) : (
+                <Icon
+                  name="table-alert"
+                  size={48}
+                  color={CUSTOMCOLOR.primary}
+                />
+              )}
             </View>
             <View
               style={{
