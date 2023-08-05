@@ -36,6 +36,11 @@ const MobileVerify = ({navigation}) => {
 
   const AbhaAccessToken = useSelector(state => state.abha.auth.access);
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
+  const aadhar_no = useSelector(state => state?.abha?.auth?.aadharNo);
+
+  console.log('====================================');
+  console.log('aaaadhar no ', aadhar_no, '-----------------');
+  console.log('====================================');
 
   const postPhone = async () => {
     try {

@@ -32,6 +32,7 @@ import {URL} from '../utility/urls';
 import {
   UpdatetxnId,
   updateAbhaAccess,
+  addAadhar,
 } from '../redux/features/Abha/AbhaAccesToken';
 
 const AadharVerify = ({navigation}) => {
@@ -98,6 +99,7 @@ const AadharVerify = ({navigation}) => {
         const jsonData = await response.json();
         console.log('======,AAdhar', jsonData);
         dispatch(UpdatetxnId(jsonData.txnId));
+        dispatch(addAadhar(aadhar_no));
       } else {
         console.error('API call failed:', response.status, response);
       }

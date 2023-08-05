@@ -25,8 +25,8 @@ import {fetchApi} from '../api/fetchApi';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
-  const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
-  const [clinic, setClinic] = useState('');
+  const [selectedClinic, setSelectedClinic] = useState('');
+  const [clinicID, setClinic] = useState('');
   const [clinics, setDataClinic] = useState();
 
   const phone_number = useSelector(state => state?.phone?.phone);
@@ -34,6 +34,7 @@ const Appointment = ({navigation}) => {
   console.log(
     phone_number,
     'phonenumber=++++++++++++++++++++===========================',
+    clinicID,
   );
   const handleChangeValue = e => {
     setClinic(e);
@@ -58,7 +59,7 @@ const Appointment = ({navigation}) => {
   };
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
-    handleChangeValue('clinic', clinic.clinic_name);
+    handleChangeValue(clinic.id);
     ClinicRef?.current?.snapToIndex(0);
   };
   const ChangeNameValue = e => {
@@ -78,27 +79,18 @@ const Appointment = ({navigation}) => {
 
   const token = useSelector(state => state.authenticate.auth.access);
   console.log(token);
-  console.log('====================================');
   const fetchClinic = async () => {
-    // const response = await fetchApi(URL.get_all_appointments_of_clinic);
-    // const jsonData = await response.json();
-    // setData(jsonData);
     const response = await fetchApi(URL.getClinic('9177468511'), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // params :{
-      //   doctor_phone_number :'9003092186'
-      // }
     });
     if (response.ok) {
       const jsonData = await response.json();
       console.log(jsonData);
       setDataClinic(jsonData.data);
-      console.log('====================================');
-      console.log(clinics);
-      console.log('====================================');
+      setSelectedClinic(jsonData.data[0].clinic_name);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -109,7 +101,7 @@ const Appointment = ({navigation}) => {
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
-    const clinic_id = '1';
+    const clinic_id = clinicID;
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
@@ -131,7 +123,7 @@ const Appointment = ({navigation}) => {
   };
   useEffect(() => {
     fetchAppointment();
-  }, [formatDate]);
+  }, [formatDate, clinicID]);
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
@@ -171,6 +163,11 @@ const Appointment = ({navigation}) => {
   useEffect(() => {
     fetchname();
   }, []);
+
+  console.log('====================================');
+  console.log('filtered data', filteredData);
+  console.log('====================================');
+
   return (
     <View style={styles.main}>
       <View>
@@ -260,7 +257,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('addclinic')}
           />
         </ScrollView>
       </View>

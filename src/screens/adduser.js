@@ -24,15 +24,23 @@ import {CONSTANTS} from '../utility/constant';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
-import { fetchApi } from '../api/fetchApi';
-import { useSelector } from 'react-redux';
+import {fetchApi} from '../api/fetchApi';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addclinic_users,
+  updateclinic_users,
+} from '../redux/features/profiles/ClinicUsers';
 
 const AddUser = ({navigation}) => {
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
   const [ShowClinicModal, setClinicModal] = useState(false);
-  const token = useSelector(state =>state.authenticate.auth.access)
+  const token = useSelector(state => state.authenticate.auth.access);
+  const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
+
+  console.log(clinic_users, '------------------------,users');
+  const dispatch = useDispatch();
 
   const clinics = CONSTANTS.clinic;
 
@@ -46,9 +54,19 @@ const AddUser = ({navigation}) => {
     role: '',
     clinic: '',
     slots: [],
+    user_profile_pic_url: selectedImage,
   });
-  console.log('phone', values.phone)
+  console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
+
+  const Clinic_users = {
+    clinic_user_name: values.name,
+    role: values.role,
+    user_profile_pic_url: values.selectedImage,
+    gender: values.gender,
+    user_phone_number: values.phone,
+    clinic_id: selectedClinic,
+  };
 
   const SuccesRef = useRef(null);
   useEffect(() => {
@@ -62,28 +80,20 @@ const AddUser = ({navigation}) => {
         headers: {
           Prefer: '',
           'Content-Type': 'application/json',
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           Accept: 'application/json, application/xml',
         },
-        body: JSON.stringify([{
-          clinic_user_name: values.name,
-          user_phone_number: values.phone,
-          gender: values.gender,
-          role: selectedRole,
-          clinic_id: selectedClinic,
-          user_profile_pic_url:selectedImage
-
-        }]),
+        body: JSON.stringify(clinic_users),
       });
       if (response.ok) {
         const jsonData = await response.json();
         // navigation.navigate('tab');
-        console.log('1')
+        console.log('1');
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
         setTimeout(() => {
-          //navigation.navigate('tab');
+          navigation.navigate('tab');
         }, 1000);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
@@ -100,30 +110,19 @@ const AddUser = ({navigation}) => {
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
-    if (values.name && values.role && values.clinic) {
-      setValues(prevValues => ({
-        ...prevValues,
-        slots: [
-          ...prevValues.slots,
-          {
-            name: prevValues.name,
-            role: prevValues.role,
-            clinic: prevValues.clinic,
-          },
-        ],
-        name: '',
-        phone: '',
-        gender: '',
-      }));
-      setShowSlotChip(true);
+    console.log('users--------------------------------------');
+    if (values.name) {
+      dispatch(addclinic_users(Clinic_users));
     }
+    setShowSlotChip(true);
   };
 
+  console.log(values.slots);
+
   const handleDeleteSlotChip = index => {
-    setValues(prevValues => ({
-      ...prevValues,
-      slots: prevValues.slots.filter((_, i) => i !== index),
-    }));
+    console.log('...', index);
+    const newClinic_users = clinic_users?.filter((_, i) => i !== index);
+    dispatch(updateclinic_users(newClinic_users));
   };
 
   const handleChangeValue = (field, value) => {
@@ -152,6 +151,7 @@ const AddUser = ({navigation}) => {
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      includeBase64: true,
       quality: 0.5,
     };
 
@@ -161,11 +161,13 @@ const AddUser = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
-        setSelectedImage(response?.assets?.[0]?.uri);
+        console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
+
+  console.log('selecte Image', '=============', selectedImage);
 
   return (
     <View style={{flex: 1}}>
@@ -268,14 +270,15 @@ const AddUser = ({navigation}) => {
                   </Text>
                 )}
                 {showSlotChip &&
-                  values?.slots?.map((slot, index) => (
+                  clinic_users?.map((item, index) => (
                     <View style={{margin: 5}} key={index}>
                       <SlotChip
                         style={{justifyContent: 'space-between', gap: 4}}
                         type={
                           <Text style={{gap: 8}}>
-                            Name:{slot.name},Role:{slot.role},Clinic:
-                            {slot.clinic}
+                            Name:{item.clinic_user_name},Role:{item.role}
+                            ,Clinic:
+                            {item.clinic}
                           </Text>
                         }
                         onPress={() => handleDeleteSlotChip(index)}

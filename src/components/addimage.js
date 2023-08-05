@@ -2,12 +2,12 @@ import {Pressable, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
 const AddImage = props => {
-  console.log("urel====>",props.url)
+  console.log('urel====>', props.url);
   return props?.url ? (
     <Pressable style={styles.url}>
       <Image
         style={styles.image}
-        source={{uri: props.url}}
+        source={{uri: `data:image/jpeg;base64,${props.url}`}}
         resizeMode="cover"
       />
     </Pressable>

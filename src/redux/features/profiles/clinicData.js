@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  clinic_data: {},
+  clinics: [],
 };
 
 const clinic_data_Slice = createSlice({
@@ -9,10 +9,14 @@ const clinic_data_Slice = createSlice({
   initialState,
   reducers: {
     addclinic_data: (state, action) => {
-      state.clinic_data = action.payload;
+      state.clinics = [...state.clinics, action.payload];
+      console.log(state.clinics, '+++clinics');
+    },
+    updateclinics: (state, action) => {
+      state.clinics = action.payload;
     },
   },
 });
 
-export const addclinic_data = clinic_data_Slice.actions;
+export const {addclinic_data, updateclinics} = clinic_data_Slice.actions;
 export const clinic_data_Reducer = clinic_data_Slice.reducer;
