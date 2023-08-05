@@ -23,6 +23,7 @@ import {ChartCard, HeaderAvatar} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
 import {addclinic_id} from '../redux/features/profiles/clinicId';
+import Logo from '../components/logo';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -189,10 +190,7 @@ const Appointment = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <View>
-              <Image
-                style={{width: 35, height: 32}}
-                source={require('../assets/images/logo.jpeg')}
-              />
+              <Logo />
               <Text style={styles.title}>
                 {Language[language]['welcome']},{Language[language]['dr']}
                 {doc_name?.doctor_name}

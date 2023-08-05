@@ -30,6 +30,8 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import CustomIcon from '../components/icon';
+import Logo from '../components/logo';
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -199,10 +201,7 @@ const Dashboard = ({navigation, route}) => {
                 paddingHorizontal: 8,
               }}>
               <View>
-                <Image
-                  style={{width: 35, height: 32}}
-                  source={require('../assets/images/logo.jpeg')}
-                />
+                <Logo />
                 <Text style={styles.title}>
                   {Language[language]['welcome']},{Language[language]['dr']}
                   {doc_name?.doctor_name}
@@ -261,7 +260,7 @@ const Dashboard = ({navigation, route}) => {
               <Text style={styles.h2}>
                 {Language[language]['appointments']}
               </Text>
-              {setAppointment.length > 0 ? (
+              {setAppointment?.length > 0 ? (
                 setAppointment?.map((value, index) => {
                   return (
                     <AppointmentCard
@@ -272,13 +271,10 @@ const Dashboard = ({navigation, route}) => {
                   );
                 })
               ) : (
-                <Icon
-                  name="table-alert"
-                  size={48}
-                  color={CUSTOMCOLOR.primary}
-                />
+                <CustomIcon label="No Appointments" />
               )}
             </View>
+
             <View
               style={{
                 alignItems: 'flex-end',
@@ -348,9 +344,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   appointment: {
-    gap: 2,
-    paddingHorizontal: 4,
-    paddingVertical: 4,
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
   },
   h2: {
     fontSize: 24,

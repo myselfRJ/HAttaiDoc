@@ -79,8 +79,8 @@ const Entry = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.Top}>
           <Image
-            style={{width: 352, height: 496}}
-            source={require('../assets/images/entry.jpeg')}
+            style={{width: 297, height: 286}}
+            source={require('../assets/images/entry.png')}
           />
         </View>
         <View style={styles.bottom}>
@@ -95,16 +95,17 @@ const Entry = ({navigation}) => {
               value={phone}
               setValue={setPhone}
             />
-            <View style={{margin: 30, alignItems: 'center'}}>
+            </View>
+            <View style={{alignItems:'center'}}>
               <HButton
                 label={Language[language]['getotp']}
                 onPress={() => {
                   phone ? fetchData() : null;
                 }}
               />
-            </View>
-          </View>
-        </View>
+              </View>
+              </View>
+        
       </View>
     </ScrollView>
   );
@@ -113,6 +114,7 @@ const Entry = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap:48
   },
   Top: {
     alignItems: 'center',
@@ -121,12 +123,11 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.primary,
   },
   bottom: {
-    height: 680,
+    //alignItems:'center',
+    gap:24,
   },
   input: {
-    paddingHorizontal: 64,
-    paddingVertical: 64,
-    //margin:100
+    paddingHorizontal: 24,
   },
 });
 
