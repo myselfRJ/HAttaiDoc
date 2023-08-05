@@ -13,6 +13,7 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
+import { useSelector } from 'react-redux';
 import {
   PlusButton,
   SelectorBtn,
@@ -25,19 +26,27 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import { fetchApi } from '../api/fetchApi';
-import { useSelector } from 'react-redux';
+import { TouchableOpacity } from '@gorhom/bottom-sheet';
 
 const AddUser = ({navigation}) => {
+  const [clinics, setDataClinic] = useState();
+  console.log('clinic---',clinics)
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
   const [ShowClinicModal, setClinicModal] = useState(false);
   const token = useSelector(state =>state.authenticate.auth.access)
+  console.log('token==',token)
+  const {phone}=useSelector(state=>state?.phone?.data)
+  console.log('phone==',phone)
+  //const clinics = CONSTANTS.clinic;
 
-  const clinics = CONSTANTS.clinic;
+  const clinicsData = useSelector(state=>state.clinic?.clinic_data)
+
+console.log('================================+++++++++clinic',clinicsData);
 
   const [selectedRole, setSelectedRole] = useState('');
-  const [selectedClinic, setSelectedClinic] = useState(clinics[0]);
+  const [selectedClinic, setSelectedClinic] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [values, setValues] = useState({
     name: '',
@@ -83,7 +92,7 @@ const AddUser = ({navigation}) => {
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
         setTimeout(() => {
-          //navigation.navigate('tab');
+          navigation.navigate('tab');
         }, 1000);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
@@ -144,8 +153,8 @@ const AddUser = ({navigation}) => {
   };
 
   const handleClinicSelection = clinic => {
-    setSelectedClinic(clinic);
-    handleChangeValue('clinic', clinic);
+    setSelectedClinic(clinic.clinic_name);
+    handleChangeValue('clinic', clinic.clinic_name);
     ClinicRef?.current?.snapToIndex(0);
   };
 
@@ -166,12 +175,30 @@ const AddUser = ({navigation}) => {
       }
     });
   };
+  const fetchclinic = async () => {
+    const response = await fetchApi(URL.getClinic(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setDataClinic(jsonData.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchclinic();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
-          <View style={commonstyles.content}>
+          <View style={styles.content}>
             <View style={styles.alignchild}>
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add User</Text>
@@ -284,6 +311,22 @@ const AddUser = ({navigation}) => {
                   ))}
               </View>
             </View>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+           <TouchableOpacity onPress={()=>navigation.navigate('tab')}>
+            <Text style={{paddingHorizontal: 24,
+    paddingVertical: 12,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '700',
+    borderRadius: 4,
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.white,
+    borderBottomColor:CUSTOMCOLOR.black,
+    borderBottomWidth: 1.5,
+    backgroundColor:CUSTOMCOLOR.white,
+     // Set the border underline width
+    //borderColor: 'black', // Set the border color
+    paddingBottom: 5,}}>Skip</Text>
+           </TouchableOpacity>
             <HButton
               label="Done"
               onPress={() => {
@@ -291,6 +334,7 @@ const AddUser = ({navigation}) => {
                 SuccesRef?.current?.snapToIndex(1);
               }}
             />
+            </View>
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
@@ -321,11 +365,11 @@ const AddUser = ({navigation}) => {
             }}>
             {Language[language]['clinic']}
           </Text>
-          {clinics?.map((clinic, index) => (
+          {clinics && clinics?.map((clinic, index) => (
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic}</Text>
+              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
             </Pressable>
           ))}
         </View>
@@ -340,6 +384,13 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingVertical: 20,
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    width: '100%',
+    //alignItems: 'center',
+    gap: 8,
   },
   radiogroup: {
     padding: 16,
@@ -375,5 +426,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 8,
   },
+  skip:{
+    // color:CUSTOMCOLOR.black,
+    // //backgroundColor:CUSTOMCOLOR.white,
+    // borderColor:CUSTOMCOLOR.black,
+    // height:200
+
+  }
 });
 export default AddUser;

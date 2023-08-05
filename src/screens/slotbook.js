@@ -42,6 +42,7 @@ const SlotBook = ({ navigation }) => {
     selectedSlot?.slot.split('-')[0] + 'T' + selectedSlot?.slot.split('-')[1],
   );
   const selections = CONSTANTS.selections;
+  
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
   );
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   MainHeadContainer: {
-    height: '10%',
+    height: '15%',
     backgroundColor: CUSTOMCOLOR.primary,
     flexDirection: 'row',
     justifyContent: 'space-between',

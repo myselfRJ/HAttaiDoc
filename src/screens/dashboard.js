@@ -42,10 +42,10 @@ const Dashboard = ({navigation, route}) => {
   const [setAppointment, setDataAppointment] = useState();
   console.log('apoointment===', setAppointment);
 
-  const phone_number = useSelector(state => state?.phone?.phone);
+  const {phone}=useSelector(state=>state?.phone?.data)
   console.log('====================================');
   console.log(
-    phone_number,
+    phone,
     'phonenumber=++++++++++++++++++++===========================',
   );
   const handleChangeValue = e => {
@@ -77,7 +77,7 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getClinic(phone_number), {
+    const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -98,7 +98,7 @@ const Dashboard = ({navigation, route}) => {
   console.log('doc name===>', doc_name);
 
   const fetchClinic = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber(phone_number), {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ const Dashboard = ({navigation, route}) => {
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
-    const clinic_id = '1';
+    const clinic_id = '8';
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
@@ -141,7 +141,7 @@ const Dashboard = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchAppointment();
-  }, [formatDate]);
+  }, [clinicid,formatDate]);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],

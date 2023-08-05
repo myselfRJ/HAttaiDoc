@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {useState, useEffect,useRef} from 'react';
+import {Text, View, StyleSheet, Image,TouchableOpacity} from 'react-native';
 import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
   CUSTOMCOLOR,
@@ -23,9 +23,14 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
+import { addLogin_phone } from '../redux/features/phoneNumber/LoginPhoneNumber';
 // import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
 
 const OtpScreen = ({route}) => {
+
+  const [timer, setTimer] = useState(60); // Set the initial timer value (in seconds)
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const timerRef = useRef(null);
   const CELL_COUNT = 6;
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
@@ -34,16 +39,65 @@ const OtpScreen = ({route}) => {
     value,
     setValue,
   });
-  const phone_number = useSelector(state => state?.phone?.phone);
-  console.log('====================================');
-  console.log(
-    phone_number,
-    'phonenumber=++++++++++++++++++++===========================',
-  );
-  console.log('====================================');
-  const {phone, Trace_id} = route.params;
-  console.log('route.params:', route.params);
+  
+  const {phone,trace_id}=useSelector(state=>state?.phone?.data)
+  console.log(phone)
+  //console.log("..........",data)
+  // const {phone, Trace_id} = route.params;
+  // console.log('route.params:', route.params);
   const nav = useNavigation();
+
+  const startTimer = () => {
+    setIsTimerRunning(true);
+    timerRef.current = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 1) {
+          clearInterval(timerRef.current);
+          setIsTimerRunning(false);
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
+  const resetTimer = () => {
+    setTimer(60);
+    setIsTimerRunning(false);
+    clearInterval(timerRef.current);
+  };
+  useEffect(() => {
+    startTimer(); 
+    return () => {
+      clearInterval(timerRef.current); 
+    };
+  }, []);
+
+  const handleResendOTP = async () => {
+    resetTimer(); 
+    startTimer();
+   resendOtp();
+  };
+
+  const resendOtp = async () => {
+    try {
+      const response = await fetchApi(URL.generateOtp, {
+        method: 'POST',
+        headers: {
+          'trace-id': '12345',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({phone: phone, country: 'india', code: '+91'}),
+      });
+      if (response?.ok) {
+        const jsonData = await response.json();
+        console.log('generateResponse', jsonData);
+        dispatch(addLogin_phone.addLogin_phone(jsonData.data));
+      } else {
+        console.error('API call failed:', response?.status);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
   const fetchData = async () => {
     try {
       const response = await fetchApi(URL.validateOtp, {
@@ -51,12 +105,12 @@ const OtpScreen = ({route}) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phone: phone, otp: value, trace_id: Trace_id}),
+        body: JSON.stringify({phone: phone, otp: value, trace_id: trace_id}),
       });
-      console.log(Trace_id);
+      console.log(trace_id);
       if (response.ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        console.log("...... update navigation===>",jsonData);
         dispatch(authenticateActions.updateauthenticate(jsonData));
         nav.navigate('protected');
       } else {
@@ -118,11 +172,19 @@ const OtpScreen = ({route}) => {
                   )}
                 />
               </View>
+              <View style={{left:80}}>
+      <TouchableOpacity onPress={handleResendOTP} disabled={isTimerRunning}>
+        <Text style={[styles.resendButtonText, isTimerRunning && styles.disabledButtonText]}>
+          {isTimerRunning ? `Resend OTP : ${timer}s` : 'Resend OTP'}
+        </Text>
+      </TouchableOpacity>
+    </View>
             </View>
             <View style={{top: 50, alignItems: 'center'}}>
               <HButton
                 label={Language[language]['submit']}
-                onPress={fetchData}
+                onPress={()=>{fetchData(); setIsTimerRunning(false);
+                  clearInterval(timerRef.current);}}
               />
             </View>
           </View>
@@ -174,6 +236,13 @@ const styles = StyleSheet.create({
   focusCell: {
     borderBottomColor: '#007AFF',
     borderBottomWidth: 2,
+  },
+  resendButtonText: {
+    color: CUSTOMCOLOR.primary, // Default color for the resend OTP button text
+    fontSize: 16,
+  },
+  disabledButtonText: {
+    color: 'gray', // Color when the timer is out (timer reaches 0)
   },
 });
 export default OtpScreen;
