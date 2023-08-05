@@ -31,10 +31,10 @@ const PatientSearch = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
 
-  const phone_number = useSelector(state => state?.phone?.phone);
+  const {phone} = useSelector(state => state?.phone?.data);
 
   const fetchClincs = async () => {
-    const response = await fetchApi(URL.getClinic(phone_number), {
+    const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,

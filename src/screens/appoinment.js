@@ -29,10 +29,10 @@ const Appointment = ({navigation}) => {
   const [clinicID, setClinic] = useState('');
   const [clinics, setDataClinic] = useState();
 
-  const phone_number = useSelector(state => state?.phone?.phone);
+  const {phone} = useSelector(state => state?.phone?.data);
   console.log('====================================');
   console.log(
-    phone_number,
+    phone,
     'phonenumber=++++++++++++++++++++===========================',
     clinicID,
   );
@@ -80,7 +80,7 @@ const Appointment = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   console.log(token);
   const fetchClinic = async () => {
-    const response = await fetchApi(URL.getClinic('9177468511'), {
+    const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ const Appointment = ({navigation}) => {
   const [doc_name, setDoc_name] = useState();
 
   const fetchname = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber(phone_number), {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
