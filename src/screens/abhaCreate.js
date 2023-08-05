@@ -99,7 +99,7 @@ const AbhaCreate = ({navigation}) => {
   //   setOpen(false);
   // };
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
 
   const onImagePress = () => {
     const options = {
@@ -143,7 +143,7 @@ const AbhaCreate = ({navigation}) => {
           lastName: lastName,
           middleName: middleName,
           healthId: healthID,
-          profilePhoto: '',
+          profilePhoto: selectedImage,
           password: password,
           txnId: AbhaTxnId,
         }),
