@@ -13,7 +13,8 @@ import {prescribeReducer1} from '../features/prescription/prescr';
 import {clinic_data_Reducer} from '../features/profiles/clinicData';
 import {Login_phone_Reducer} from '../features/phoneNumber/LoginPhoneNumber';
 import {AbhaReducer} from '../features/Abha/AbhaAccesToken';
-import { clinic_id_Reducer } from '../features/profiles/clinicId';
+import {clinic_users_Reducer} from '../features/profiles/ClinicUsers';
+import {clinic_id_Reducer} from '../features/profiles/clinicId';
 
 const store = configureStore({
   reducer: {
@@ -29,8 +30,9 @@ const store = configureStore({
     pres: prescribeReducer1,
     clinic: clinic_data_Reducer,
     phone: Login_phone_Reducer,
+    clinic_users: clinic_users_Reducer,
     abha: AbhaReducer,
-    clinicid:clinic_id_Reducer
+    clinicid: clinic_id_Reducer,
   },
 });
 

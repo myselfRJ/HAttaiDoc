@@ -29,7 +29,7 @@ import InitScreen from '../screens/init_screen';
 import MedicalRecordPatient from '../screens/medicalRecordPatients';
 import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
 import Prescribe1 from '../screens/prescibe1';
-
+import Abha from '../screens/AddPatient';
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
@@ -71,6 +71,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="initscreen" component={InitScreen} />
       <Stack.Screen name="patientrecord" component={MedicalRecordPatient} />
       <Stack.Screen name="pres" component={Prescribe1} />
+      <Stack.Screen name="ab" component={Abha} />
     </Stack.Navigator>
   );
 };

@@ -94,9 +94,9 @@ const Visit = ({navigation}) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const dataObject = [
     {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
@@ -111,9 +111,6 @@ const Visit = ({navigation}) => {
       navigate: 'referdoctorscreen',
     },
   ];
-  console.log('====================================');
-  console.log('vitalsdata', '=====================', vitalsData);
-  console.log('====================================');
 
   return (
     <ScrollView>
@@ -325,9 +322,9 @@ const Visit = ({navigation}) => {
                   <View style={styles.complaintcontainer}>
                     <Icon name="doctor" color={CUSTOMCOLOR.primary} size={16} />
 
-                    {selectedDoctor?.name && (
+                    {selectedDoctor?.doctor_name && (
                       <Text style={styles.pulse}>
-                        Refer to {selectedDoctor.doctor_name}{' '}
+                        Refer to {selectedDoctor?.doctor_name}{' '}
                       </Text>
                     )}
                   </View>

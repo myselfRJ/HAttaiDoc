@@ -35,11 +35,11 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 
 const AbhaCreate = ({navigation}) => {
-  const dispatch = useDispatch();
-  const patientData = useSelector(state => state.patient.patient);
-  console.log('redux data---', patientData);
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
+  // const dispatch = useDispatch();
+  // const patientData = useSelector(state => state.patient.patient);
+  // console.log('redux data---', patientData);
+  // const token =
+  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
   const [selected, setSelected] = useState('');
   const formatDate = moment(DOB).format('YYYY-MM-DD');
   const SuccesRef = useRef(null);
@@ -74,6 +74,8 @@ const AbhaCreate = ({navigation}) => {
 
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
   const AbhaAccessToken = useSelector(state => state.abha.auth.access);
+  const aadhar_no = useSelector(state => state?.abha?.auth?.aadharNo);
+  const AccesToken = useSelector(state => state.authenticate.auth.access);
 
   // const birth_date = formattedDate;
   // const handleSaveData = () => {
@@ -97,11 +99,12 @@ const AbhaCreate = ({navigation}) => {
   //   setOpen(false);
   // };
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
 
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      includeBase64: true,
       quality: 0.5,
     };
 
@@ -111,8 +114,8 @@ const AbhaCreate = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
-        setSelectedImage(response?.assets?.[0]?.uri);
+        console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
@@ -148,6 +151,30 @@ const AbhaCreate = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
+        const postPatientdata = await fetchApi(URL.addPatient, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${AccesToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            patient_pic_url: jsonData?.profilePhoto,
+            patient_name: jsonData?.name,
+            patient_phone_number: jsonData?.mobile,
+            birth_date: `${jsonData?.yearOfBirth}+${jsonData?.monthOfBirth}+${jsonData?.dayOfBirth}`,
+            gender: jsonData?.gender,
+            aadhar_no: aadhar_no,
+            abha_no: jsonData?.healthIdNumber,
+          }),
+        });
+        if (postPatientdata.status === HttpStatusCode.Ok) {
+          const PatientData = await postPatientdata.json();
+          console.log('patients', PatientData);
+          navigation.navigate('success');
+          SuccesRef?.current?.snapToIndex(1);
+        } else {
+          console.error('API call failed:', postPatientdata.status);
+        }
       } else {
         console.error('API call failed:', response.status);
       }
@@ -155,9 +182,6 @@ const AbhaCreate = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const checkPassword = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
@@ -171,8 +195,6 @@ const AbhaCreate = ({navigation}) => {
       );
     } else if (!passwordsMatch) {
       Alert.alert('Passwords do not match. Please check again.');
-    } else {
-      Alert.alert('Password is valid and matches!');
     }
     return isPasswordValid && isPasswordLengthValid && passwordsMatch;
   };
@@ -186,6 +208,7 @@ const AbhaCreate = ({navigation}) => {
     {healthId: healthID},
     {profilePhoto: selectedImage},
     {txnId: AbhaTxnId},
+    {password: password},
   );
   console.log('====================================');
 
@@ -256,10 +279,8 @@ const AbhaCreate = ({navigation}) => {
             label="Save"
             onPress={() => {
               const isPasswordValid = checkPassword();
-              handleSaveData();
               if (isPasswordValid) {
-                navigation.navigate('success');
-                SuccesRef?.current?.snapToIndex(1);
+                fetchData();
               } else {
                 console.log('Invalid password, cannot proceed.');
               }

@@ -31,18 +31,18 @@ import {useSelector} from 'react-redux';
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
-  const [selectedClinic, setSelectedClinic] = useState(clinics?.clinics[0]);
   console.log('clini name...', selectedClinic);
   const [clinic, setClinic] = useState('');
   const [item, setItem] = useState();
   const [clinics, setDataClinic] = useState();
+  const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
   console.log('clinic id ..', clinicid);
 
   const [setAppointment, setDataAppointment] = useState();
   console.log('apoointment===', setAppointment);
 
-  const {phone}=useSelector(state=>state?.phone?.data)
+  const {phone} = useSelector(state => state?.phone?.data);
   console.log('====================================');
   console.log(
     phone,
@@ -51,12 +51,6 @@ const Dashboard = ({navigation, route}) => {
   const handleChangeValue = e => {
     setClinic(e);
   };
-
-  // const mergedData = setAppointment.map(appointment =>{
-  //   const patient = item.find(patient => patient.clinic_id === appointment.clinic_id);
-  //   return {...appointment,...patient}
-  // });
-  // console.log('merge code ====>',mergedData)
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -87,6 +81,7 @@ const Dashboard = ({navigation, route}) => {
       const jsonData = await response.json();
       console.log(jsonData);
       setDataClinic(jsonData.data);
+      setSelectedClinic(jsonData.data[0].clinic_name);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -119,7 +114,7 @@ const Dashboard = ({navigation, route}) => {
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
-    const clinic_id = '8';
+    const clinic_id = clinicid;
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
@@ -141,7 +136,7 @@ const Dashboard = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchAppointment();
-  }, [clinicid,formatDate]);
+  }, [formatDate, clinicid]);
   console.log(store.getState());
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -150,6 +145,13 @@ const Dashboard = ({navigation, route}) => {
         data: [90, 45, 28, 80, 99, 43],
       },
     ],
+  };
+
+  const handleClinicSelection = clinic => {
+    setSelectedClinic(clinic.clinic_name);
+    // handleChangeValue('clinic', clinic.clinic_name);
+    setClinicId(clinic.id);
+    ClinicRef?.current?.snapToIndex(0);
   };
 
   const [Appdata, setData] = useState([]);
@@ -180,12 +182,8 @@ const Dashboard = ({navigation, route}) => {
   //   fetchdata();
   // },[]);
 
-  const handleClinicSelection = clinic => {
-    setSelectedClinic(clinic.clinic_name);
-    handleChangeValue('clinic', clinic.clinic_name);
-    setClinicId(clinic.id);
-    ClinicRef?.current?.snapToIndex(0);
-  };
+  console.log(',......', selectedClinic);
+
   return (
     <View style={{flex: 1}}>
       <View>

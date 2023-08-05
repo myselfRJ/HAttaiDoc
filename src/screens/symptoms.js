@@ -228,7 +228,7 @@ const Symptoms = ({navigation}) => {
   };
 
   const handleSymptomSubmit = () => {
-    setSymptomInput(state => [...state, {symptom: '', days: '', severity: ''}]);
+    dispatch(addSymptom(symptomCopy));
   };
 
   const handleDeleteSymptom = () => {
@@ -373,7 +373,7 @@ const Symptoms = ({navigation}) => {
             <HButton
               label={'submit'}
               onPress={() => {
-                handleSymptomSubmit;
+                handleSymptomSubmit();
                 navigation.goBack();
               }}
             />
@@ -387,8 +387,8 @@ const Symptoms = ({navigation}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingHorizontal:8,
-    paddingVertical:16,
+    paddingHorizontal: 8,
+    paddingVertical: 16,
   },
   mainHead: {
     color: CUSTOMCOLOR.black,

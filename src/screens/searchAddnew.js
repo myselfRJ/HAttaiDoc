@@ -26,7 +26,7 @@ const SearchAddnew = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientByClinic(1), {
+    const response = await fetchApi(URL.getPatientsAll, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -78,17 +78,19 @@ const SearchAddnew = ({navigation}) => {
         />
         <Icon name="search" size={20} style={styles.searchIcon} />
       </View>
-      <View style={styles.appointment}>
-        <Text style={styles.h2}>Search Results</Text>
+      <ScrollView>
+        <View style={styles.appointment}>
+          <Text style={styles.h2}>Search Results</Text>
 
-        {filteredData?.map((val, ind) => (
-          <PatientSearchCard
-            key={ind}
-            patient_data={val}
-            onPress={() => navigation.navigate('visit')}
-          />
-        ))}
-      </View>
+          {filteredData?.map((val, ind) => (
+            <PatientSearchCard
+              key={ind}
+              patient_data={val}
+              onPress={() => navigation.navigate('visit')}
+            />
+          ))}
+        </View>
+      </ScrollView>
       <View style={styles.btn}>
         <HButton
           label="Add New"

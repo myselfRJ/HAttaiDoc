@@ -26,12 +26,12 @@ const PatientSearch = ({navigation}) => {
 
   const token = useSelector(state => state.authenticate.auth.access);
   const ClinicRef = useRef(null);
-
-  const [selectedClinic, setSelectedClinic] = useState();
-
   const [data, setData] = useState();
 
-  const {phone}=useSelector(state=>state?.phone?.data)
+  const [selectedClinic, setSelectedClinic] = useState();
+  const [clinicID, setClinicId] = useState('');
+
+  const {phone} = useSelector(state => state?.phone?.data);
 
   const fetchClincs = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
@@ -43,6 +43,7 @@ const PatientSearch = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setDataClinic(jsonData.data);
+      setSelectedClinic(jsonData.data[0]?.clinic_name);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -59,7 +60,7 @@ const PatientSearch = ({navigation}) => {
   };
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientByClinic(8), {
+    const response = await fetchApi(URL.getPatientByClinic(clinicID), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +76,7 @@ const PatientSearch = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [clinicID]);
 
   useEffect(() => {
     if (name) {
@@ -90,11 +91,12 @@ const PatientSearch = ({navigation}) => {
 
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
+    setClinicId(clinic.id);
     ClinicRef?.current?.snapToIndex(0);
   };
 
   console.log('====================================');
-  console.log('clinics', '==============', clinics);
+  console.log('clinics', clinicID, '==============', clinics);
   console.log('====================================');
   return (
     <View style={styles.main}>

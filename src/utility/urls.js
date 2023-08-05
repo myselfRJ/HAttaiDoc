@@ -12,6 +12,7 @@ export const URL = {
   getPatientByClinic: clinicId =>
     `${baseUrl}customappointment/get-patients/${clinicId}/`,
   getPatientByNumber: phoneId => `${baseUrl}custompatient/${phoneId}`,
+  getPatientsAll: `${baseUrl}custompatient/allPatients`,
   getClinic: phoneId =>
     `${baseUrl}clinic/get/clinic/?doctor_phone_number=${phoneId}`,
   getPractitionerByNumber: phoneId => `${baseUrl}practioner/${phoneId}`,

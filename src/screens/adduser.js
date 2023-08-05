@@ -13,7 +13,7 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   PlusButton,
   SelectorBtn,
@@ -25,25 +25,32 @@ import {CONSTANTS} from '../utility/constant';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
-import { fetchApi } from '../api/fetchApi';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import {fetchApi} from '../api/fetchApi';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addclinic_users,
+  updateclinic_users,
+} from '../redux/features/profiles/ClinicUsers';
 
 const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
-  console.log('clinic---',clinics)
+  console.log('clinic---', clinics);
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
   const [ShowClinicModal, setClinicModal] = useState(false);
-  const token = useSelector(state =>state.authenticate.auth.access)
-  console.log('token==',token)
-  const {phone}=useSelector(state=>state?.phone?.data)
-  console.log('phone==',phone)
+  const token = useSelector(state => state.authenticate.auth.access);
+  const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
+
+  console.log(clinic_users, '------------------------,users');
+  const dispatch = useDispatch();
+  const {phone} = useSelector(state => state?.phone?.data);
+  console.log('phone==', phone);
   //const clinics = CONSTANTS.clinic;
 
-  const clinicsData = useSelector(state=>state.clinic?.clinic_data)
+  const clinicsData = useSelector(state => state.clinic?.clinic_data);
 
-console.log('================================+++++++++clinic',clinicsData);
+  console.log('================================+++++++++clinic', clinicsData);
 
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedClinic, setSelectedClinic] = useState('');
@@ -55,9 +62,19 @@ console.log('================================+++++++++clinic',clinicsData);
     role: '',
     clinic: '',
     slots: [],
+    user_profile_pic_url: selectedImage,
   });
-  console.log('phone', values.phone)
+  console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
+
+  const Clinic_users = {
+    clinic_user_name: values.name,
+    role: values.role,
+    user_profile_pic_url: values.selectedImage,
+    gender: values.gender,
+    user_phone_number: values.phone,
+    clinic_id: selectedClinic,
+  };
 
   const SuccesRef = useRef(null);
   useEffect(() => {
@@ -71,23 +88,15 @@ console.log('================================+++++++++clinic',clinicsData);
         headers: {
           Prefer: '',
           'Content-Type': 'application/json',
-          Authorization:`Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           Accept: 'application/json, application/xml',
         },
-        body: JSON.stringify([{
-          clinic_user_name: values.name,
-          user_phone_number: values.phone,
-          gender: values.gender,
-          role: selectedRole,
-          clinic_id: selectedClinic,
-          user_profile_pic_url:selectedImage
-
-        }]),
+        body: JSON.stringify(clinic_users),
       });
       if (response.ok) {
         const jsonData = await response.json();
         // navigation.navigate('tab');
-        console.log('1')
+        console.log('1');
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
@@ -109,30 +118,19 @@ console.log('================================+++++++++clinic',clinicsData);
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
-    if (values.name && values.role && values.clinic) {
-      setValues(prevValues => ({
-        ...prevValues,
-        slots: [
-          ...prevValues.slots,
-          {
-            name: prevValues.name,
-            role: prevValues.role,
-            clinic: prevValues.clinic,
-          },
-        ],
-        name: '',
-        phone: '',
-        gender: '',
-      }));
-      setShowSlotChip(true);
+    console.log('users--------------------------------------');
+    if (values.name) {
+      dispatch(addclinic_users(Clinic_users));
     }
+    setShowSlotChip(true);
   };
 
+  console.log(values.slots);
+
   const handleDeleteSlotChip = index => {
-    setValues(prevValues => ({
-      ...prevValues,
-      slots: prevValues.slots.filter((_, i) => i !== index),
-    }));
+    console.log('...', index);
+    const newClinic_users = clinic_users?.filter((_, i) => i !== index);
+    dispatch(updateclinic_users(newClinic_users));
   };
 
   const handleChangeValue = (field, value) => {
@@ -161,6 +159,7 @@ console.log('================================+++++++++clinic',clinicsData);
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      includeBase64: true,
       quality: 0.5,
     };
 
@@ -170,8 +169,8 @@ console.log('================================+++++++++clinic',clinicsData);
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
-        setSelectedImage(response?.assets?.[0]?.uri);
+        console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
@@ -193,6 +192,8 @@ console.log('================================+++++++++clinic',clinicsData);
   useEffect(() => {
     fetchclinic();
   }, []);
+
+  console.log('selecte Image', '=============', selectedImage);
 
   return (
     <View style={{flex: 1}}>
@@ -295,14 +296,15 @@ console.log('================================+++++++++clinic',clinicsData);
                   </Text>
                 )}
                 {showSlotChip &&
-                  values?.slots?.map((slot, index) => (
+                  clinic_users?.map((item, index) => (
                     <View style={{margin: 5}} key={index}>
                       <SlotChip
                         style={{justifyContent: 'space-between', gap: 4}}
                         type={
                           <Text style={{gap: 8}}>
-                            Name:{slot.name},Role:{slot.role},Clinic:
-                            {slot.clinic}
+                            Name:{item.clinic_user_name},Role:{item.role}
+                            ,Clinic:
+                            {item.clinic}
                           </Text>
                         }
                         onPress={() => handleDeleteSlotChip(index)}
@@ -311,29 +313,35 @@ console.log('================================+++++++++clinic',clinicsData);
                   ))}
               </View>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-           <TouchableOpacity onPress={()=>navigation.navigate('tab')}>
-            <Text style={{paddingHorizontal: 24,
-    paddingVertical: 12,
-    fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '700',
-    borderRadius: 4,
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.white,
-    borderBottomColor:CUSTOMCOLOR.black,
-    borderBottomWidth: 1.5,
-    backgroundColor:CUSTOMCOLOR.white,
-     // Set the border underline width
-    //borderColor: 'black', // Set the border color
-    paddingBottom: 5,}}>Skip</Text>
-           </TouchableOpacity>
-            <HButton
-              label="Done"
-              onPress={() => {
-                fetchData();
-                SuccesRef?.current?.snapToIndex(1);
-              }}
-            />
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity onPress={() => navigation.navigate('tab')}>
+                <Text
+                  style={{
+                    paddingHorizontal: 24,
+                    paddingVertical: 12,
+                    fontSize: CUSTOMFONTSIZE.h3,
+                    fontWeight: '700',
+                    borderRadius: 4,
+                    borderWidth: 0.5,
+                    borderColor: CUSTOMCOLOR.white,
+                    borderBottomColor: CUSTOMCOLOR.black,
+                    borderBottomWidth: 1.5,
+                    backgroundColor: CUSTOMCOLOR.white,
+                    // Set the border underline width
+                    //borderColor: 'black', // Set the border color
+                    paddingBottom: 5,
+                  }}>
+                  Skip
+                </Text>
+              </TouchableOpacity>
+              <HButton
+                label="Done"
+                onPress={() => {
+                  fetchData();
+                  SuccesRef?.current?.snapToIndex(1);
+                }}
+              />
             </View>
           </View>
         </Keyboardhidecontainer>
@@ -365,13 +373,14 @@ console.log('================================+++++++++clinic',clinicsData);
             }}>
             {Language[language]['clinic']}
           </Text>
-          {clinics && clinics?.map((clinic, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
-            </Pressable>
-          ))}
+          {clinics &&
+            clinics?.map((clinic, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleClinicSelection(clinic)}>
+                <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
+              </Pressable>
+            ))}
         </View>
       </BottomSheetView>
       <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
@@ -426,12 +435,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 8,
   },
-  skip:{
+  skip: {
     // color:CUSTOMCOLOR.black,
     // //backgroundColor:CUSTOMCOLOR.white,
     // borderColor:CUSTOMCOLOR.black,
     // height:200
-
-  }
+  },
 });
 export default AddUser;

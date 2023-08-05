@@ -25,13 +25,17 @@ import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
-import {addclinic_data} from '../redux/features/profiles/clinicData';
+import {
+  addclinic_data,
+  updateclinics,
+} from '../redux/features/profiles/clinicData';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
+  const clinics = useSelector(state => state.clinic);
 
   const dispatch = useDispatch();
 
@@ -42,24 +46,21 @@ const AddClinic = ({navigation}) => {
 
   console.log('slotData==========================', slotData?.slots);
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
   const [value, setValue] = useState({
     clinic: '',
     address: '',
     fees: '',
-    slots: [],
+    // slots: [],
   });
 
-  const Clinic_Data = [
-    {
-      clinic_name: value.clinic,
-      clinic_Address: 'Chennai',
-      clinic_photo_url: selectedImage,
-      fees: parseInt(value.fees),
-      slot: JSON.stringify(slotData.slots),
-    },
-  ];
-
+  const Clinic_Data = {
+    clinic_name: value.clinic,
+    clinic_Address: 'Chennai',
+    clinic_photo_url: selectedImage,
+    fees: parseInt(value.fees),
+    slot: JSON.stringify(slotData.slots),
+  };
   const fetchData = async () => {
     try {
       const response = await fetchApi(URL.addclinic, {
@@ -69,7 +70,7 @@ const AddClinic = ({navigation}) => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(Clinic_Data),
+        body: JSON.stringify(clinics?.clinics),
       });
       if (response.ok) {
         const jsonData = await response.json();
@@ -95,21 +96,15 @@ const AddClinic = ({navigation}) => {
 
   const handlePlusIconClick = () => {
     if (value.clinic) {
-      setValue(prevValues => ({
-        ...prevValues,
-        slots: [...prevValues.slots, value.clinic],
-        clinic: '',
-        fees: '',
-      }));
+      dispatch(addclinic_data(Clinic_Data));
     }
     setShowSlotChip(true);
-    //navigation.navigate('createslot');
   };
-
+  console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
-      includeBase64:true,
+      includeBase64: true,
       quality: 0.5,
     };
 
@@ -133,16 +128,20 @@ const AddClinic = ({navigation}) => {
   };
 
   const handleDeleteSlotChip = index => {
-    setValue(prevValues => ({
-      ...prevValues,
-      slots: prevValues.slots.filter((_, i) => i !== index),
-    }));
+    console.log('...', index);
+    const newClinics = clinics?.clinics?.filter((_, i) => i !== index);
+    dispatch(updateclinics(newClinics));
+    // setValue(prevValues => ({
+    //   ...prevValues,
+    //   slots: prevValues.slots.filter((_, i) => i !== index),
+    // }));
   };
 
   const handleAddClinicData = () => {
-    dispatch(addclinic_data.addclinic_data(Clinic_Data));
+    dispatch(addclinic_data(Clinic_Data));
   };
 
+  console.log('clinics', '============', clinics);
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -187,7 +186,10 @@ const AddClinic = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Add Slots" onPress={()=> navigation.navigate('createslot')} />
+              <HButton
+                label="Add Slots"
+                onPress={() => navigation.navigate('createslot')}
+              />
             </View>
             <View
               style={{
@@ -195,9 +197,15 @@ const AddClinic = ({navigation}) => {
                 bottom: 0,
                 paddingVertical: 8,
                 paddingHorizontal: 8,
-                top:0
+                top: 0,
               }}>
-              <PlusButton icon="plus" onPress={handlePlusIconClick} />
+              <PlusButton
+                icon="plus"
+                onPress={() => {
+                  handlePlusIconClick();
+                  // handleAddClinicData();
+                }}
+              />
             </View>
 
             <View style={styles.clinic}>
@@ -214,12 +222,11 @@ const AddClinic = ({navigation}) => {
               )}
 
               {showSlotChip &&
-                value.slots.map((slot, index) => (
-                  <View style={{margin: 5}}>
+                clinics?.clinics.map((item, index) => (
+                  <View key={index} style={{margin: 5}}>
                     <SlotChip
                       style={{justifyContent: 'space-between'}}
-                      key={index}
-                      type={<Text>{slot}</Text>}
+                      type={<Text>{item.clinic_name}</Text>}
                       onPress={() => handleDeleteSlotChip(index)}
                     />
                   </View>
@@ -229,10 +236,8 @@ const AddClinic = ({navigation}) => {
               <HButton
                 label="Next"
                 onPress={() => {
-                  handleAddClinicData();
                   fetchData();
                   SuccesRef?.current?.snapToIndex(1);
-                  handleAddClinicData();
                 }}
               />
             </View>
