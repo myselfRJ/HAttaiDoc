@@ -35,31 +35,11 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 
 const AbhaCreate = ({navigation}) => {
-  // const dispatch = useDispatch();
-  // const patientData = useSelector(state => state.patient.patient);
-  // console.log('redux data---', patientData);
-  // const token =
-  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
-  const [selected, setSelected] = useState('');
-  const formatDate = moment(DOB).format('YYYY-MM-DD');
   const SuccesRef = useRef(null);
 
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-
-  const handleOptions = value => {
-    setSelected(value);
-  };
-
-  const [DOB, setDOB] = useState(new Date());
-  const [open, setOpen] = useState(false);
-
-  const formattedDate = DOB.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
 
   const [firstName, setFirstname] = useState('');
   const [lastName, setLastname] = useState('');
@@ -69,35 +49,10 @@ const AbhaCreate = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
 
-  // const gender = selected;
-  // const [phone_number, setPhone_number] = useState('');
-
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
   const AbhaAccessToken = useSelector(state => state.abha.auth.access);
   const aadhar_no = useSelector(state => state?.abha?.auth?.aadharNo);
   const AccesToken = useSelector(state => state.authenticate.auth.access);
-
-  // const birth_date = formattedDate;
-  // const handleSaveData = () => {
-  //   dispatch(
-  //     addPatient.addPatient({
-  //       // name,
-  //       phone_number,
-  //       birth_date,
-  //       gender,
-  //       image: selectedImage,
-  //     }),
-  //   );
-  // };
-
-  // const handleConfirm = date => {
-  //   setDOB(date);
-  //   setOpen(false);
-  // };
-
-  // const handleCancel = () => {
-  //   setOpen(false);
-  // };
 
   const [selectedImage, setSelectedImage] = useState('');
 
