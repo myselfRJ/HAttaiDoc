@@ -150,7 +150,10 @@ const AddClinic = ({navigation}) => {
             <View style={styles.alignchild}>
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
-                <AddImage onPress={onImagePress} uri={selectedImage} />
+                <AddImage
+                  onPress={onImagePress}
+                  encodedBase64={selectedImage}
+                />
               </View>
             </View>
             <InputText

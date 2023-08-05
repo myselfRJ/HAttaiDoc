@@ -13,7 +13,6 @@ import InputText from '../components/inputext';
 import HButton from '../components/button';
 import AddImage from '../components/addimage';
 import Option from '../components/option';
-import {useSelector} from 'react-redux';
 import {
   PlusButton,
   SelectorBtn,
@@ -203,7 +202,10 @@ const AddUser = ({navigation}) => {
             <View style={styles.alignchild}>
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add User</Text>
-                <AddImage onPress={onImagePress} url={selectedImage} />
+                <AddImage
+                  onPress={onImagePress}
+                  encodedBase64={selectedImage}
+                />
               </View>
             </View>
             <InputText

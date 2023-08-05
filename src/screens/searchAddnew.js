@@ -16,8 +16,9 @@ import PatientSearchCard from '../components/patientsearchcard';
 import HButton from '../components/button';
 import {Icon, InputText} from '../components';
 import {fetchApi} from '../api/fetchApi';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {URL} from '../utility/urls';
+import {addclinic_id} from '../redux/features/profiles/clinicId';
 
 const SearchAddnew = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
