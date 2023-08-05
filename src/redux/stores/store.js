@@ -10,9 +10,10 @@ import {phoneReducer} from '../features/authenticate/PhoneNumber';
 import {patientDataReducer} from '../features/patient/patientslice';
 import {doctor_profileReducer} from '../features/profiles/doctorprofile';
 import {prescribeReducer1} from '../features/prescription/prescr';
-import {addclinic_data} from '../features/profiles/clinicData';
+import {clinic_data_Reducer} from '../features/profiles/clinicData';
 import {Login_phone_Reducer} from '../features/phoneNumber/LoginPhoneNumber';
 import {AbhaReducer} from '../features/Abha/AbhaAccesToken';
+import { clinic_id_Reducer } from '../features/profiles/clinicId';
 
 const store = configureStore({
   reducer: {
@@ -26,9 +27,10 @@ const store = configureStore({
     patient: patientDataReducer,
     doctor_profile: doctor_profileReducer,
     pres: prescribeReducer1,
-    clinic: addclinic_data,
+    clinic: clinic_data_Reducer,
     phone: Login_phone_Reducer,
     abha: AbhaReducer,
+    clinicid:clinic_id_Reducer
   },
 });
 

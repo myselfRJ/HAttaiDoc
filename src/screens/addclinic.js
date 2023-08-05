@@ -103,12 +103,13 @@ const AddClinic = ({navigation}) => {
       }));
     }
     setShowSlotChip(true);
-    navigation.navigate('createslot');
+    //navigation.navigate('createslot');
   };
 
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      includeBase64:true,
       quality: 0.5,
     };
 
@@ -118,8 +119,8 @@ const AddClinic = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
-        setSelectedImage(response?.assets?.[0]?.uri);
+        console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
@@ -150,7 +151,7 @@ const AddClinic = ({navigation}) => {
             <View style={styles.alignchild}>
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
-                <AddImage onPress={onImagePress} url={selectedImage} />
+                <AddImage onPress={onImagePress} uri={selectedImage} />
               </View>
             </View>
             <InputText
@@ -186,7 +187,7 @@ const AddClinic = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Add Slots" onPress={handlePlusIconClick} />
+              <HButton label="Add Slots" onPress={()=> navigation.navigate('createslot')} />
             </View>
             <View
               style={{
@@ -194,6 +195,7 @@ const AddClinic = ({navigation}) => {
                 bottom: 0,
                 paddingVertical: 8,
                 paddingHorizontal: 8,
+                top:0
               }}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
@@ -227,7 +229,7 @@ const AddClinic = ({navigation}) => {
               <HButton
                 label="Next"
                 onPress={() => {
-                  dispatch(addclinic());
+                  handleAddClinicData();
                   fetchData();
                   SuccesRef?.current?.snapToIndex(1);
                   handleAddClinicData();

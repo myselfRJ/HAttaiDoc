@@ -21,6 +21,8 @@ const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [Trace_id, setTrace_id] = useState();
   const dispatch = useDispatch();
+  const logindata = useSelector(state=>state?.phone)
+  console.log('===logindata===',logindata)
   // const fetchtrace = async () => {
   //   const response = await fetchApi(URL.validateOtp);
   //   const jsonData = await response.json();
@@ -44,12 +46,13 @@ const Entry = ({navigation}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
-        console.log('generateResponse', jsonData);
-
-        setTrace_id(jsonData.data.trace_id);
-        {
-          Trace_id && navigation.navigate('otpscreen', {phone, Trace_id});
-        }
+        console.log('generateResponse', jsonData.data);
+        dispatch(addLogin_phone.addLogin_phone({...jsonData.data,phone}))
+        // console.log("login DATA",logindata)
+        //setTrace_id(jsonData.data.trace_id);
+        // {
+          navigation.navigate('otpscreen');
+        // }
       } else {
         console.error('API call failed:', response?.status);
       }
@@ -57,15 +60,16 @@ const Entry = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  useEffect(() => {
-    if (Trace_id) {
-      navigation.navigate('otpscreen', {phone, Trace_id});
-    }
-  }, [Trace_id]);
+  // useEffect(() => {
+    // if (Trace_id) {
+    //   navigation.navigate('otpscreen', {phone, Trace_id});
+    // }
+  //   fetchData()
+  // }, [fetchData]);
 
-  const handlePhone = () => {
-    dispatch(addLogin_phone.addLogin_phone(phone));
-  };
+  // const handlePhone = () => {
+  //   dispatch(addLogin_phone.addLogin_phone(phone));
+  // };
 
   return (
     <ScrollView>
@@ -92,7 +96,7 @@ const Entry = ({navigation}) => {
               <HButton
                 label={Language[language]['getotp']}
                 onPress={() => {
-                  phone ? fetchData() : null, handlePhone();
+                  phone ? fetchData() : null;
                 }}
               />
             </View>

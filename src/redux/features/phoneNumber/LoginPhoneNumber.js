@@ -1,7 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  phone: {},
+  data:{
+  phone: '',
+  trace_id:''}
 };
 
 const Login_Phone_Slice = createSlice({
@@ -9,7 +11,10 @@ const Login_Phone_Slice = createSlice({
   initialState,
   reducers: {
     addLogin_phone: (state, action) => {
-      state.phone = action.payload;
+      state.data= action.payload;
+      console.log("state",state)
+      console.log(initialState)
+ 
     },
   },
 });

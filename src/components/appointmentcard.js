@@ -30,7 +30,7 @@ console.log('==============appointment',appointment);
            <Image
            style={styles.img}
            source={{
-             uri: appointment.patient_data.patient_pic_url,
+             uri: `data:image/jpeg;base64,${appointment.patient_data.patient_pic_url}`
            }}
          />
          <View style={styles.child}>

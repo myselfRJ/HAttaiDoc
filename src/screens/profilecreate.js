@@ -66,6 +66,7 @@ const ProfileCreate = ({navigation}) => {
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      includeBase64:true,
       quality: 0.5,
     };
 
@@ -75,8 +76,8 @@ const ProfileCreate = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
-        setSelectedImage(response?.assets?.[0]?.uri);
+        console.log('response====>', response?.assets?.[0].base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
@@ -161,7 +162,7 @@ const ProfileCreate = ({navigation}) => {
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Fill Profile</Text>
-              <AddImage onPress={onImagePress} url={selectedImage} />
+              <AddImage onPress={onImagePress} uri={selectedImage} />
             </View>
             <InputText
               label={Language[language]['name']}

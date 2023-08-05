@@ -31,7 +31,7 @@ const PatientSearchCard = patient_data => {
         <Image
           style={styles.img}
           source={{
-            uri: patient_data.patient_pic_url,
+            uri: `data:image/jpeg;base64,${patient_data.patient_pic_url}`,
           }}
         />
         <View style={styles.patientinfo}>
