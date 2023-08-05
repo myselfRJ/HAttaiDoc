@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
+import {Text, View, StyleSheet, Modal, Pressable,TouchableOpacity} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,

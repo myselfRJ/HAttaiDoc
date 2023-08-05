@@ -22,6 +22,7 @@ import {CONSTANT} from '../utility/const';
 import {ChartCard, HeaderAvatar} from '../components';
 import {UseSelector, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
+import Logo from '../components/logo';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -180,10 +181,7 @@ const Appointment = ({navigation}) => {
               paddingHorizontal: 8,
             }}>
             <View>
-              <Image
-                style={{width: 35, height: 32}}
-                source={require('../assets/images/logo.jpeg')}
-              />
+              <Logo/>
               <Text style={styles.title}>
                 {Language[language]['welcome']},{Language[language]['dr']}
                 {doc_name?.doctor_name}
@@ -257,7 +255,7 @@ const Appointment = ({navigation}) => {
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
-            onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('bookslot')}
           />
         </ScrollView>
       </View>
