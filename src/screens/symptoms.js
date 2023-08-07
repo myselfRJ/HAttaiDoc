@@ -228,7 +228,9 @@ const Symptoms = ({navigation}) => {
   };
 
   const handleSymptomSubmit = () => {
+    let symptomCopy = symptomInput;
     dispatch(addSymptom(symptomCopy));
+    navigation.goBack();
   };
 
   const handleDeleteSymptom = () => {
@@ -374,7 +376,6 @@ const Symptoms = ({navigation}) => {
               label={'submit'}
               onPress={() => {
                 handleSymptomSubmit();
-                navigation.goBack();
               }}
             />
           </View>

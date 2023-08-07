@@ -26,8 +26,8 @@ const SlotCreate = ({navigation}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
 
-  const [selectedConsultValue, setConsultValue] = useState('');
-  const [selectedDurationValue, setDurationValue] = useState('');
+  const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
+  const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
   const [slots, setSlots] = useState({
     M: [],
     T: [],

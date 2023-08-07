@@ -6,11 +6,19 @@ import {Language} from '../settings/customlanguage';
 import {useRef, useEffect} from 'react';
 import {BottomSheetView, StatusMessage, HButton, Icon} from '../components';
 
-const Success = ({navigation}) => {
+const Success = ({navigation, route}) => {
   // const SuccesRef = useRef(null);
   // useEffect(() => {
   //   SuccesRef?.current?.snapToIndex(1);
   // }, []);
+
+  const {patient_phone_number} = route.params;
+
+  console.log('route,params----', patient_phone_number);
+  const handleSubmit = () => {
+    const patient_phone = patient_phone_number;
+    navigation.navigate('bookslot', {patient_phone});
+  };
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -29,7 +37,7 @@ const Success = ({navigation}) => {
         <HButton
           style={{top: 10}}
           label="Book Appointment"
-          onPress={() => navigation.navigate('bookslot')}
+          onPress={handleSubmit}
         />
       </View>
       {/* <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>

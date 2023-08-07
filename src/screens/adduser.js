@@ -59,9 +59,10 @@ const AddUser = ({navigation}) => {
 
   console.log('================================+++++++++clinic', clinicsData);
 
-  const [selectedRole, setSelectedRole] = useState('');
+  const roles = CONSTANTS.role;
+  const [selectedRole, setSelectedRole] = useState(roles[0]);
   const [selectedClinic, setSelectedClinic] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
   const [values, setValues] = useState({
     name: '',
     phone: '',
@@ -77,7 +78,7 @@ const AddUser = ({navigation}) => {
   const Clinic_users = {
     clinic_user_name: values.name,
     role: values.role,
-    user_profile_pic_url: values.selectedImage,
+    user_profile_pic_url: values.user_profile_pic_url,
     gender: values.gender,
     user_phone_number: values.phone,
     clinic_id: selectedClinic,
@@ -110,6 +111,7 @@ const AddUser = ({navigation}) => {
         setTimeout(() => {
           navigation.navigate('tab');
         }, 1000);
+        setSelectedClinic(jsonData.data[0]?.clinic_name);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);

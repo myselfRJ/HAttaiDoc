@@ -183,7 +183,28 @@ const AadharVerify = ({navigation}) => {
         });
         const jsonDataProfile = await UserAbhaProfile.json();
         console.log('abhaprofile-----------------------', jsonDataProfile);
-        navigation.navigate('abhacreate');
+        const firstName = jsonDataProfile?.firstName;
+        const lastName = jsonDataProfile?.lastName;
+        const middleName = jsonDataProfile?.middleName;
+        const healthId = jsonDataProfile?.healthId;
+        const patient_pic_url = jsonDataProfile?.profilePhoto;
+        const patient_name = jsonDataProfile?.name;
+        const patient_phone_number = jsonDataProfile?.mobile;
+        const birth_date = `${jsonDataProfile?.dayOfBirth}-${jsonDataProfile?.monthOfBirth}-${jsonDataProfile?.yearOfBirth}`;
+        const gender = jsonDataProfile?.gender;
+        const abha_no = jsonDataProfile?.healthIdNumber;
+        navigation.navigate('abhaexist', {
+          firstName,
+          lastName,
+          middleName,
+          healthId,
+          patient_pic_url,
+          patient_name,
+          patient_phone_number,
+          birth_date,
+          gender,
+          abha_no,
+        });
       }
     } catch (error) {
       console.error('Error occurred:', error);

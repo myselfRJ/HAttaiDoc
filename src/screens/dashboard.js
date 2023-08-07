@@ -27,11 +27,12 @@ import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
+import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -55,6 +56,8 @@ const Dashboard = ({navigation, route}) => {
   const handleChangeValue = e => {
     setClinic(e);
   };
+
+  const dispatch = useDispatch();
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -108,6 +111,7 @@ const Dashboard = ({navigation, route}) => {
       const jsonData = await response.json();
       console.log(jsonData);
       setDoc_name(jsonData.data);
+      dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -115,6 +119,10 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchClinic();
   }, []);
+
+  const handleAddData = () => {
+    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
+  };
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
@@ -159,32 +167,6 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const [Appdata, setData] = useState([]);
-
-  // useEffect(() => {
-  //   {
-  //     fetchData();
-  //   }
-  // }, [data.length]);
-
-  // const fetchdata = async () => {
-  //   const response = await fetchApi(URL.getPatientByClinic(1), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   console.log('response===',response)
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     console.log(jsonData.data);
-  //     setItem(jsonData.data);
-  //   } else {
-  //     console.error('API call failed:', response.status, response);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchdata();
-  // },[]);
 
   console.log(',......', selectedClinic);
 

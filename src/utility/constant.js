@@ -13,7 +13,7 @@ export const CONSTANTS = {
   success: 'success',
   error: 'error',
   warning: 'warning',
-  selections: ['New', 'Follow Up', 'Report Review', 'Routine'],
+  selections: ['followup', 'routine', 'walkin'],
   prescription: ['Prescription', 'Blood Report', 'Scan'],
   cert: `MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAstWB95C5pHLXiYW59qyO
   4Xb+59KYVm9Hywbo77qETZVAyc6VIsxU+UWhd/k/YtjZibCznB+HaXWX9TVTFs9N

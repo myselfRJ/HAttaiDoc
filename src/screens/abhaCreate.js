@@ -34,16 +34,16 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 
-const AbhaCreate = ({navigation}) => {
+const AbhaCreate = ({navigation, route}) => {
   const SuccesRef = useRef(null);
 
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
-  const [firstName, setFirstname] = useState('');
-  const [lastName, setLastname] = useState('');
-  const [middleName, setMiddlename] = useState('');
+  // const [firstName, setFirstname] = useState('');
+  // const [lastName, setLastname] = useState('');
+  // const [middleName, setMiddlename] = useState('');
   const [email, setEmail] = useState('');
   const [healthID, setHealthID] = useState('');
   const [password, setPassword] = useState('');
@@ -106,6 +106,7 @@ const AbhaCreate = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
+        const patient_phone_number = jsonData?.mobile;
         const postPatientdata = await fetchApi(URL.addPatient, {
           method: 'POST',
           headers: {
@@ -125,7 +126,7 @@ const AbhaCreate = ({navigation}) => {
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
           console.log('patients', PatientData);
-          navigation.navigate('success');
+          navigation.navigate('success', {patient_phone_number});
           SuccesRef?.current?.snapToIndex(1);
         } else {
           console.error('API call failed:', postPatientdata.status);
@@ -196,19 +197,19 @@ const AbhaCreate = ({navigation}) => {
             label={'First Name'}
             placeholder={'First Name'}
             value={firstName}
-            setValue={setFirstname}
+            // setValue={setFirstname}
           />
           <InputText
             label={'Middle Name'}
             placeholder={'Middle Name'}
             value={middleName}
-            setValue={setMiddlename}
+            // setValue={setMiddlename}
           />
           <InputText
             label={'Last Name'}
             placeholder={'Last Name'}
             value={lastName}
-            setValue={setLastname}
+            // setValue={setLastname}
           />
           <InputText
             label={'E-mail'}

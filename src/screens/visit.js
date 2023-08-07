@@ -14,7 +14,7 @@ import {fetchApi} from '../api/fetchApi';
 import {HButton} from '../components';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const Visit = ({navigation}) => {
+const Visit = ({navigation, route}) => {
   const date = useSelector(getDate);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
@@ -32,7 +32,7 @@ const Visit = ({navigation}) => {
   console.log('=======================', prescribe);
 
   const token = useSelector(state => state.authenticate.auth.access);
-  const {phone}=useSelector(state=>state?.phone?.data)
+  const {phone} = useSelector(state => state?.phone?.data);
   console.log('====================================');
   console.log(
     phone,
@@ -48,6 +48,10 @@ const Visit = ({navigation}) => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
 
+  const {patient_phone, appointment_id} = route.params;
+  console.log('----------------params', patient_phone, appointment_id);
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
@@ -61,10 +65,10 @@ const Visit = ({navigation}) => {
       note: note,
 
       meta_data: {
-        patient_phone_number: '9177468511',
+        patient_phone_number: patient_phone,
         doctor_phone_number: phone,
-        clinic_id: '7',
-        appointment_id: '2',
+        clinic_id: Clinic_id,
+        appointment_id: appointment_id,
       },
     };
     try {

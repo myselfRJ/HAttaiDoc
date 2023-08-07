@@ -15,93 +15,112 @@ import {Language} from '../settings/customlanguage';
 import BottomSheetView from './bottomSheet';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
-import { fetchApi } from '../api/fetchApi';
-import { URL } from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {useNavigation} from '@react-navigation/native';
+
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
   const appointmentCardRef = useRef(null);
 
+  const navigation = useNavigation();
 
-console.log('==============appointment',appointment);
+  console.log('==============appointment', appointment);
+  const patient_phone_number = appointment?.patient_data?.patient_phone_number;
+  const appointment_id = appointment?.id;
 
+  const handleOnpress = () => {
+    const patient_phone = patient_phone_number;
+    navigation.navigate('visit', {patient_phone, appointment_id});
+  };
   return (
     <>
       <View style={styles.maincontainer}>
-           <Image
-           style={styles.img}
-           source={{
-             uri: `data:image/jpeg;base64,${appointment.patient_data.patient_pic_url}`
-           }}
-         />
-         <View style={styles.child}>
-           <Text style={styles.name}>{appointment.patient_data.patient_name }</Text>
-           <Text style={styles.age}>
-              {appointment.patient_data.gender}
-           </Text>
-           <View style={styles.seperator}></View>
-           <Text style={styles.symptom}>{appointment.complaint}</Text>
-         </View>
-         <View style={styles.hseperator}></View>
-         <View style={styles.patientinfo}>
-           <View style={styles.statusinfo}>
-             <Text style={styles.contact}>
-               {Language[language]['type']}:{appointment.appointment_type}
-             </Text>
-             <Text style={styles.statustext}>Follow Up</Text>
-           </View>
-           <View style={styles.statusinfo}>
-             <Text style={styles.contact}>
-               {Language[language]['time']}:{appointment.appointment_slot}
-               {/* {moment(appointment.appointment_slot).format('HH:mm')} */}
-             </Text>
-             <Text style={styles.statustext}>Follow Up</Text>
-           </View>
-           <View style={styles.statusinfo}>
-             <Text style={styles.contact}>
-               {Language[language]['status']}:{appointment.status}
-             </Text>
-             <Text style={styles.statustext}>Follow Up</Text>
-           </View>
-           <View style={styles.statusinfo}>
-             <Text style={styles.contact}>
-               {Language[language]['bill']}:{appointment.bill}
-             </Text>
-             <Text style={styles.statustext}>Follow Up</Text>
-           </View>
-         </View>
-                 <Pressable
-           style={styles.icon}
-           onPress={() => {
-             // setVisible(!visible);
-             appointmentCardRef?.current?.snapToIndex(1);
-           }}>
-           <View>
-             <Icon
-               name="dots-horizontal"
-               color={CUSTOMCOLOR.primary}
-               size={24}
-             />
-           </View>
-         
-         </Pressable>
-       
+        <Image
+          style={styles.img}
+          source={{
+            uri: `data:image/jpeg;base64,${appointment.patient_data.patient_pic_url}`,
+          }}
+        />
+        <View style={styles.child}>
+          <Text style={styles.name}>
+            {appointment.patient_data.patient_name}
+          </Text>
+          <Text style={styles.age}>{appointment.patient_data.gender}</Text>
+          <View style={styles.seperator}></View>
+          <Text style={styles.symptom}>{appointment.complaint}</Text>
+        </View>
+        <View style={styles.hseperator}></View>
+        <View style={styles.patientinfo}>
+          <View style={styles.statusinfo}>
+            <Text style={styles.contact}>
+              {Language[language]['type']}:{appointment.appointment_type}
+            </Text>
+            <Text style={styles.statustext}>Follow Up</Text>
+          </View>
+          <View style={styles.statusinfo}>
+            <Text style={styles.contact}>
+              {Language[language]['time']}:{appointment.appointment_slot}
+              {/* {moment(appointment.appointment_slot).format('HH:mm')} */}
+            </Text>
+            <Text style={styles.statustext}>Follow Up</Text>
+          </View>
+          <View style={styles.statusinfo}>
+            <Text style={styles.contact}>
+              {Language[language]['status']}:{appointment.status}
+            </Text>
+            <Text style={styles.statustext}>Follow Up</Text>
+          </View>
+          <View style={styles.statusinfo}>
+            <Text style={styles.contact}>
+              {Language[language]['bill']}:{appointment.bill}
+            </Text>
+            <Text style={styles.statustext}>Follow Up</Text>
+          </View>
+        </View>
+        <Pressable
+          style={styles.icon}
+          onPress={() => {
+            // setVisible(!visible);
+            appointmentCardRef?.current?.snapToIndex(1);
+          }}>
+          <View>
+            <Icon
+              name="dots-horizontal"
+              color={CUSTOMCOLOR.primary}
+              size={24}
+            />
+          </View>
+        </Pressable>
+
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}>
-             <View style={styles.tab}>
-        <SelectionTab label={Language[language]['start_visit']} selected={true} onPress={openVisit} />
-        <SelectionTab label={Language[language]['reschedule']} selected={true} />
-        <SelectionTab label={Language[language]['cancel']} selected={true} onPress={() => {
+          <View style={styles.tab}>
+            <SelectionTab
+              label={Language[language]['start_visit']}
+              selected={true}
+              onPress={handleOnpress}
+            />
+            <SelectionTab
+              label={Language[language]['reschedule']}
+              selected={true}
+            />
+            <SelectionTab
+              label={Language[language]['cancel']}
+              selected={true}
+              onPress={() => {
                 appointmentCardRef?.current?.snapToIndex(0);
               }}
             />
           </View>
-          </BottomSheetView>
+        </BottomSheetView>
       </View>
     </>
   );
 };
-  {/* {visible && (
+{
+  /* {visible && (
             <View style={[styles.option, {width: 100}]}>
               <View>
                 <TouchableOpacity onPress={openVisit}>
@@ -124,9 +143,11 @@ console.log('==============appointment',appointment);
                 </TouchableOpacity>
               </View>
             </View>
-          )} */}
+          )} */
+}
 
-           {/* <View style={[styles.option]}>
+{
+  /* <View style={[styles.option]}>
             <TouchableOpacity onPress={openVisit}>
               <Text style={styles.contact1}>
                 {Language[language]['start_visit']}
@@ -145,7 +166,8 @@ console.log('==============appointment',appointment);
                 {Language[language]['cancel']}
               </Text>
             </TouchableOpacity>
-          </View> */}
+          </View> */
+}
 
 const styles = StyleSheet.create({
   maincontainer: {

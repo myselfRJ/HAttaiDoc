@@ -17,6 +17,7 @@ import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
 import OtpEncryption from '../utility/encryption';
+import moment from 'moment';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -73,7 +74,8 @@ const Entry = ({navigation}) => {
   // const handlePhone = () => {
   //   dispatch(addLogin_phone.addLogin_phone(phone));
   // };
-
+  let a = moment().toISOString().split('T')[0] + 'T' + '16:30' + ':00Z';
+  console.log(a);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -95,17 +97,16 @@ const Entry = ({navigation}) => {
               value={phone}
               setValue={setPhone}
             />
-            </View>
-            <View style={{alignItems:'center'}}>
-              <HButton
-                label={Language[language]['getotp']}
-                onPress={() => {
-                  phone ? fetchData() : null;
-                }}
-              />
-              </View>
-              </View>
-        
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <HButton
+              label={Language[language]['getotp']}
+              onPress={() => {
+                phone ? fetchData() : null;
+              }}
+            />
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
@@ -114,7 +115,7 @@ const Entry = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap:48
+    gap: 48,
   },
   Top: {
     alignItems: 'center',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     //alignItems:'center',
-    gap:24,
+    gap: 24,
   },
   input: {
     paddingHorizontal: 24,
