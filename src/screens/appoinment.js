@@ -175,7 +175,7 @@ const Appointment = ({navigation}) => {
 
   const handlePlusBUtton = () => {
     dispatch(addclinic_id.addclinic_id(clinicID));
-    navigation.navigate('addnew');
+    navigation.navigate('bookslot');
   };
 
   return (
