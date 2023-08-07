@@ -46,64 +46,6 @@ const PatientSearch = patient => {
             {patient_data?.patient_data?.patient_phone_number}
           </Text>
         </View>
-        <Pressable
-          style={styles.icon}
-          onPress={() => {
-            patientSearchRef?.current?.snapToIndex(1);
-          }}>
-          <View>
-            <Icon
-              style={styles.icon}
-              name="dots-horizontal"
-              color={CUSTOMCOLOR.primary}
-              size={24}
-            />
-          </View>
-        </Pressable>
-        {/* <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
-            <View style={styles.tab}>
-              <SelectionTab
-                label={Language[language]['update']}
-                selected={true}
-              />
-              <SelectionTab
-                label={Language[language]['delete']}
-                selected={true}
-              />
-              <SelectionTab
-                label={Language[language]['view_more']}
-                selected={true}
-                onPress={handleOnpress}
-              />
-              <SelectionTab
-                label={Language[language]['cancel']}
-                selected={true}
-                onPress={() => {
-                  patientSearchRef?.current?.snapToIndex(0);
-                }}
-              />
-            </View>
-            {/* <View style={styles.bottomView}>
-              <TouchableOpacity>
-                <Text style={styles.content}>{Language[language]['update']}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.content}>{Language[language]['delete']}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('patientrecord')}>
-                <Text style={styles.content}>
-                  {Language[language]['view_more']}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  patientSearchRef?.current?.snapToIndex(0);
-                }}>
-                <Text style={styles.content}>{Language[language]['cancel']}</Text>
-              </TouchableOpacity>
-            </View> */}
-        {/* </BottomSheetView> */} */
       </View>
     </>
   );
