@@ -12,7 +12,7 @@ const SlotChip = props => {
         onPress={() => {
           props.onPress(props.index);
         }}>
-        <Icon name="delete" size={24} color={CUSTOMCOLOR.white} />
+        <Icon name="delete" size={24} color={CUSTOMCOLOR.primary} />
       </TouchableOpacity>
     </View>
   );
