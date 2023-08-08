@@ -35,7 +35,14 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+
 const AbhaExistDetails = ({route}) => {
+  const SuccesRef = useRef(null);
+
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
+
   const navigation = useNavigation();
 
   const {
@@ -72,7 +79,9 @@ const AbhaExistDetails = ({route}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        navigation.navigate('success', {patient_phone_number});
+        setTimeout(() => {
+          navigation.navigate('success', {patient_phone_number});
+        }, 1000);
       } else {
         console.error('API call failed:', response.status);
       }
@@ -88,22 +97,48 @@ const AbhaExistDetails = ({route}) => {
         <Text style={styles.mainText}>Abha Details</Text>
         <Icon name="bell" size={24} color={'#fff'} style={styles.bellIcon} />
       </View>
-      <View style={styles.AbhaCard}>
-        <View style={{gap: 16}}>
-          <Text style={styles.text}>Name:{patient_name}</Text>
-          <Text style={styles.text}>Gender:{gender}</Text>
-          <Text style={styles.text}>DateOfBirth:{birth_date}</Text>
-          <Text style={styles.text}>Phone:{patient_phone_number}</Text>
-          <Text style={styles.text}>HealthId:{healthId}</Text>
-          <Text style={styles.text}>AbhaNo:{abha_no}</Text>
+      <View style={styles.TopBar}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '20%',
+            backgroundColor: CUSTOMCOLOR.primary,
+          }}>
+          <Text
+            style={{fontWeight: '600', fontSize: 24, color: CUSTOMCOLOR.white}}>
+            Abha Details
+          </Text>
         </View>
-        <View>
-          <AddImage
-            style={styles.image}
-            source={{
-              encodedBase64: {patient_pic_url},
-            }}
-          />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: '#bbbbbbaa',
+            padding: 24,
+          }}>
+          <View style={{gap: 16, left: 20}}>
+            <Text style={styles.text}>Name:{patient_name}</Text>
+            <Text style={styles.text}>Gender:{gender}</Text>
+            <Text style={styles.text}>DateOfBirth:{birth_date}</Text>
+            <Text style={styles.text}>Phone:{patient_phone_number}</Text>
+            <Text style={styles.text}>HealthId:{healthId}</Text>
+            <Text style={styles.text}>AbhaNo:{abha_no}</Text>
+          </View>
+          <View>
+            <Image
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 100,
+                top: '20%',
+                right: 20,
+              }}
+              source={{
+                uri: `data:image/jpeg;base64,${patient_pic_url}`,
+              }}
+            />
+          </View>
         </View>
       </View>
       <View style={{justifyContent: 'center', alignItems: 'center', top: 56}}>
@@ -114,6 +149,9 @@ const AbhaExistDetails = ({route}) => {
           }}
         />
       </View>
+      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+        <StatusMessage status={'success'} message="Sucessfully Added" />
+      </BottomSheetView>
     </View>
   );
 };
@@ -145,23 +183,20 @@ const styles = StyleSheet.create({
     left: 662,
     bottom: 24,
   },
-  AbhaCard: {
-    backgroundColor: CUSTOMCOLOR.primary,
-    top: 36,
-    width: '55%',
-    padding: 24,
-    left: '18%',
-    gap: 16,
-    flexDirection: 'row',
+  TopBar: {
+    width: '80%',
+    top: '8%',
+    left: '10%',
+    borderRadius: 10,
   },
   text: {
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 16,
-    color: CUSTOMCOLOR.white,
+    color: CUSTOMCOLOR.black,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     borderRadius: 100,
     left: '100%',
   },

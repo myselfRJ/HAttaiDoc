@@ -4,7 +4,7 @@ import {CUSTOMCOLOR} from '../settings/styles';
 const AddImage = props => {
   console.log('urel====>', props.encodedBase64);
   return props?.encodedBase64 ? (
-    <Pressable style={styles.url}>
+    <Pressable onPress={props.onPress} style={styles.url}>
       <Image
         style={styles.image}
         source={{uri: `data:image/jpeg;base64,${props.encodedBase64}`}}

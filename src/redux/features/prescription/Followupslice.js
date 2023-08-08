@@ -1,22 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const dateTimeSlice = createSlice({
-  name: 'dateTime',
+  name: 'date',
   initialState: {
-    date: new Date().toString(),
-    open: false,
+    date: '',
   },
   reducers: {
-    setDate: (state, action) => {
+    addDate: (state, action) => {
       state.date = action.payload;
-    },
-    setOpen: (state, action) => {
-      state.open = action.payload;
     },
   },
 });
 
-export const {setDate, setOpen} = dateTimeSlice.actions;
+export const {addDate} = dateTimeSlice.actions;
 
-export const getDate = state => state.dateTime.date;
-export default dateTimeSlice.reducer;
+export const followUpReducer = dateTimeSlice.reducer;

@@ -103,8 +103,6 @@ const AddUser = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        // navigation.navigate('tab');
-        console.log('1');
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
@@ -352,7 +350,6 @@ const AddUser = ({navigation}) => {
                 label="Done"
                 onPress={() => {
                   fetchData();
-                  SuccesRef?.current?.snapToIndex(1);
                 }}
               />
             </View>

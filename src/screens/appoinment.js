@@ -178,6 +178,16 @@ const Appointment = ({navigation}) => {
     navigation.navigate('addnew');
   };
 
+  const selections = CONSTANTS.selection;
+  const [seletedType, setSelectedType] = useState(selections[0]);
+  console.log('====================================');
+  console.log('--------selected', seletedType);
+  console.log('====================================');
+
+  const handleSelect = value => {
+    setSelectedType(value);
+  };
+
   return (
     <View style={styles.main}>
       <View>
@@ -241,11 +251,14 @@ const Appointment = ({navigation}) => {
               <Icon name="search" size={20} style={styles.searchIcon} />
             </View>
             <View style={styles.tab}>
-              <SelectionTab label="All" selected={true} />
-              <SelectionTab label="New" />
-              <SelectionTab label="Follow Up" />
-              <SelectionTab label="Review Report" />
-              <SelectionTab label="Routine" />
+              {selections?.map((val, ind) => (
+                <SelectionTab
+                  label={val}
+                  key={ind}
+                  onPress={() => handleSelect(val)}
+                  selected={seletedType === val}
+                />
+              ))}
             </View>
           </View>
           <View style={styles.appointment}>

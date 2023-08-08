@@ -33,6 +33,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
 import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
+import ToggleSwitch from '../components/switch';
+
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -43,6 +45,12 @@ const Dashboard = ({navigation, route}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
   console.log('clinic id ..', clinicid);
+
+  const [visible, setVisible] = useState(false);
+
+  const handleChart = () => {
+    setVisible(!visible);
+  };
 
   const [setAppointment, setDataAppointment] = useState([]);
   console.log('apoointment===', setAppointment);
@@ -150,6 +158,7 @@ const Dashboard = ({navigation, route}) => {
     fetchAppointment();
   }, [formatDate, clinicid]);
   console.log(store.getState());
+
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -169,6 +178,7 @@ const Dashboard = ({navigation, route}) => {
   const [Appdata, setData] = useState([]);
 
   console.log(',......', selectedClinic);
+  console.log(',......', visible);
 
   return (
     <View style={{flex: 1}}>
@@ -200,15 +210,20 @@ const Dashboard = ({navigation, route}) => {
                 paddingHorizontal: 8,
                 paddingBottom: 8,
               }}>
-              <ChartCard
-                data={data}
-                title={Language[language]['total_patient']}
-              />
-              <ChartCard
-                data={data}
-                title={Language[language]['earnings']}
-                label="₹ "
-              />
+              <ToggleSwitch value={visible} onValueChange={handleChart} />
+              {visible && (
+                <>
+                  <ChartCard
+                    data={data}
+                    title={Language[language]['total_patient']}
+                  />
+                  <ChartCard
+                    data={data}
+                    title={Language[language]['earnings']}
+                    label="₹ "
+                  />
+                </>
+              )}
             </View>
             <View style={styles.select}>
               <SelectorBtn

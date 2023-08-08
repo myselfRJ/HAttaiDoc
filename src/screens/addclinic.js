@@ -83,7 +83,6 @@ const AddClinic = ({navigation}) => {
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
-        navigation.navigate('adduser');
         console.error('API call failed:', response.status, response);
       }
     } catch (error) {
@@ -240,7 +239,6 @@ const AddClinic = ({navigation}) => {
                 label="Next"
                 onPress={() => {
                   fetchData();
-                  SuccesRef?.current?.snapToIndex(1);
                 }}
               />
             </View>

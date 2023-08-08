@@ -38,10 +38,7 @@ const SlotBook = ({navigation, route}) => {
   console.log('doctor phone=====', doctorphoneNumber);
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
-  // console.log(
-  //   'slots....',
-  //   selectedSlot?.slot.split('-')[0] + 'T' + selectedSlot?.slot.split('-')[1],
-  // );
+
   const selections = CONSTANTS.selections;
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(

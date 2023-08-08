@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, Modal, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {commonstyles} from '../styles/commonstyle';
 import PlusButton from '../components/plusbtn';
 import {CUSTOMFONTSIZE} from '../settings/styles';
@@ -9,7 +16,7 @@ import SelectionTab from '../components/selectiontab';
 import SelectorBtn from '../components/selector';
 import SlotChip from '../components/slotchip';
 import DatePicker from 'react-native-date-picker';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {CONSTANTS} from '../utility/constant';
 import {BottomSheetView} from '../components';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -97,9 +104,32 @@ const SlotCreate = ({navigation}) => {
       ),
     }));
   };
-  onDaySelectionChange = value => {
+  const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
+
+  const handlewarnings = () => {
+    const TimeCheck = fromTime !== toTime;
+    // const timeList =
+    //   ToformattedTime.split(':')[0] > FromformattedTime.split(':')[0];
+    const difference =
+      parseInt(ToformattedTime.split(':')[0]) * 60 +
+      parseInt(ToformattedTime.split(':')[1]) -
+      (parseInt(FromformattedTime.split(':')[0]) * 60 +
+        parseInt(FromformattedTime.split(':')[1]));
+    const differenceCheck = difference >= selectedDurationValue;
+    if (!TimeCheck && !difference) {
+      Alert.alert(
+        'please check once again fromTime and toTime should not be equal the minimum difference between timings is selectedDuration',
+      );
+    }
+    return TimeCheck && differenceCheck;
+  };
+
+  useEffect(() => {
+    handlewarnings();
+  }, []);
+
   return (
     <View style={styles.main}>
       <View style={styles.alignchild}>
@@ -197,7 +227,20 @@ const SlotCreate = ({navigation}) => {
           input={<Text>{selectedDurationValue} Mins</Text>}
         />
       </View>
-      <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} />
+      <HButton
+        label="Add Slot"
+        icon="plus"
+        onPress={() => {
+          const isOk = handlewarnings();
+          if (isOk) {
+            handleAddSlot();
+          } else {
+            Alert.alert(
+              `please check once again fromTime and toTime should not be equal the minimum difference between timings is ${selectedDurationValue} mins`,
+            );
+          }
+        }}
+      />
 
       <PlusButton
         icon="close"

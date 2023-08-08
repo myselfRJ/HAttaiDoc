@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import VisitOpen from '../components/visitopen';
@@ -13,9 +13,10 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {HButton} from '../components';
 import {ScrollView} from 'react-native-gesture-handler';
+import {BottomSheetView, StatusMessage} from '../components';
 
 const Visit = ({navigation, route}) => {
-  const date = useSelector(getDate);
+  const date = useSelector(state => state?.dateTime?.date);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -86,7 +87,7 @@ const Visit = ({navigation, route}) => {
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         setTimeout(() => {
-          navigation.navigate('adduser');
+          navigation.navigate('tab');
         }, 1000);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
@@ -102,6 +103,12 @@ const Visit = ({navigation, route}) => {
   //   fetchData();
   // }, []);
 
+  const SuccesRef = useRef(null);
+
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
+
   const dataObject = [
     {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
     {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
@@ -115,6 +122,10 @@ const Visit = ({navigation, route}) => {
       navigate: 'referdoctorscreen',
     },
   ];
+
+  console.log('====================================');
+  console.log('----------------', date, 'date');
+  console.log('====================================');
 
   return (
     <ScrollView>
@@ -138,20 +149,27 @@ const Visit = ({navigation, route}) => {
                     <View style={{flexWrap: 'wrap'}}>
                       {Symptom?.map((item, index) => {
                         return (
-                          <View
-                            key={index}
-                            style={{flexDirection: 'row', gap: 10, padding: 8}}>
-                            <Icon
-                              name="emoticon-sick"
-                              size={16}
-                              color={CUSTOMCOLOR.primary}
-                            />
-                            <View>
-                              <Text style={{color: CUSTOMCOLOR.black}}>
-                                {item.symptom}|{item.days}|{item.severity}
-                              </Text>
+                          item.symptom != '' && (
+                            <View
+                              key={index}
+                              style={{
+                                flexDirection: 'row',
+                                gap: 10,
+                                padding: 8,
+                                alignItems: 'center',
+                              }}>
+                              <Icon
+                                name="emoticon-sick"
+                                size={16}
+                                color={CUSTOMCOLOR.primary}
+                              />
+                              <View>
+                                <Text style={{color: CUSTOMCOLOR.black}}>
+                                  {item.symptom} | {item.days} | {item.severity}
+                                </Text>
+                              </View>
                             </View>
-                          </View>
+                          )
                         );
                       })}
                     </View>
@@ -206,30 +224,36 @@ const Visit = ({navigation, route}) => {
                 )}
                 {value.label === 'Follow-Up' && (
                   <View style={styles.complaintcontainer}>
-                    <Icon
-                      name="file-document-edit"
-                      color={CUSTOMCOLOR.primary}
-                      size={16}
-                    />
-                    <Text style={styles.pulse}>{date.toString()}</Text>
+                    {date !== '' && (
+                      <>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={16}
+                        />
+                        <Text style={styles.pulse}>{date}</Text>
+                      </>
+                    )}
                   </View>
                 )}
                 {value.label === 'Vitals' && (
                   <View style={styles.basiccontainer}>
                     <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <Icon
-                        name="thermometer"
-                        color={CUSTOMCOLOR.primary}
-                        size={16}
-                      />
                       <View
                         key={index}
                         style={{flexDirection: 'row', gap: 8, padding: 2}}>
                         {vitalsData?.pulse_rate && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['pulse_rate']}:
-                            {vitalsData.pulse_rate}
-                          </Text>
+                          <>
+                            <Icon
+                              name="thermometer"
+                              color={CUSTOMCOLOR.primary}
+                              size={16}
+                            />
+                            <Text style={styles.pulse}>
+                              {Language[language]['pulse_rate']}:
+                              {vitalsData.pulse_rate}
+                            </Text>
+                          </>
                         )}
                         {vitalsData?.weight && (
                           <Text style={styles.pulse}>
@@ -255,19 +279,21 @@ const Visit = ({navigation, route}) => {
                       </View>
                     </View>
                     <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <Icon
-                        name="water-check"
-                        color={CUSTOMCOLOR.primary}
-                        size={16}
-                      />
                       <View
                         key={index}
                         style={{flexDirection: 'row', gap: 8, padding: 2}}>
                         {vitalsData?.systolic && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['systolic_bp']}:
-                            {vitalsData.systolic}mmHg
-                          </Text>
+                          <>
+                            <Icon
+                              name="water-check"
+                              color={CUSTOMCOLOR.primary}
+                              size={16}
+                            />
+                            <Text style={styles.pulse}>
+                              {Language[language]['systolic_bp']}:
+                              {vitalsData.systolic}mmHg
+                            </Text>
+                          </>
                         )}
                         {vitalsData?.diastolic && (
                           <Text style={styles.pulse}>
@@ -278,19 +304,21 @@ const Visit = ({navigation, route}) => {
                       </View>
                     </View>
                     <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <Icon
-                        name="calendar-range"
-                        color={CUSTOMCOLOR.primary}
-                        size={16}
-                      />
                       <View
                         key={index}
                         style={{flexDirection: 'row', gap: 8, padding: 2}}>
                         {vitalsData?.LDD && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['lmp_edd']}:{vitalsData.LDD}
-                            week
-                          </Text>
+                          <>
+                            <Icon
+                              name="calendar-range"
+                              color={CUSTOMCOLOR.primary}
+                              size={16}
+                            />
+                            <Text style={styles.pulse}>
+                              {Language[language]['lmp_edd']}:{vitalsData.LDD}
+                              week
+                            </Text>
+                          </>
                         )}
                         {vitalsData?.EDD && (
                           <Text style={styles.pulse}>
@@ -302,17 +330,18 @@ const Visit = ({navigation, route}) => {
                     </View>
                   </View>
                 )}
-                {value.label === 'Chief Complaints' && (
-                  <View style={styles.complaintcontainer}>
-                    <Icon
-                      name="file-document-edit"
-                      color={CUSTOMCOLOR.primary}
-                      size={16}
-                    />
-                    <Text style={styles.pulse}>{selectedComplaint}</Text>
-                  </View>
-                )}
-                {value.label === 'Notes' && (
+                {value.label === 'Chief Complaints' &&
+                  selectedComplaint !== '' && (
+                    <View style={styles.complaintcontainer}>
+                      <Icon
+                        name="file-document-edit"
+                        color={CUSTOMCOLOR.primary}
+                        size={16}
+                      />
+                      <Text style={styles.pulse}>{selectedComplaint}</Text>
+                    </View>
+                  )}
+                {value.label === 'Notes' && note !== '' && (
                   <View style={styles.complaintcontainer}>
                     <Icon
                       name="file-document-edit"
@@ -324,12 +353,17 @@ const Visit = ({navigation, route}) => {
                 )}
                 {value.label === 'Refer to Doctor' && (
                   <View style={styles.complaintcontainer}>
-                    <Icon name="doctor" color={CUSTOMCOLOR.primary} size={16} />
-
                     {selectedDoctor?.doctor_name && (
-                      <Text style={styles.pulse}>
-                        Refer to {selectedDoctor?.doctor_name}{' '}
-                      </Text>
+                      <>
+                        <Icon
+                          name="doctor"
+                          color={CUSTOMCOLOR.primary}
+                          size={16}
+                        />
+                        <Text style={styles.pulse}>
+                          Refer to {selectedDoctor?.doctor_name}{' '}
+                        </Text>
+                      </>
                     )}
                   </View>
                 )}
@@ -345,6 +379,12 @@ const Visit = ({navigation, route}) => {
           />
           <HButton label="save" onPress={() => fetchData()} />
         </View>
+        <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+          <StatusMessage
+            status={apiStatus.status}
+            message={apiStatus.message}
+          />
+        </BottomSheetView>
       </View>
     </ScrollView>
   );

@@ -41,9 +41,9 @@ const AbhaCreate = ({navigation, route}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
-  // const [firstName, setFirstname] = useState('');
-  // const [lastName, setLastname] = useState('');
-  // const [middleName, setMiddlename] = useState('');
+  const [firstName, setFirstname] = useState('');
+  const [lastName, setLastname] = useState('');
+  const [middleName, setMiddlename] = useState('');
   const [email, setEmail] = useState('');
   const [healthID, setHealthID] = useState('');
   const [password, setPassword] = useState('');
@@ -126,8 +126,17 @@ const AbhaCreate = ({navigation, route}) => {
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
           console.log('patients', PatientData);
-          navigation.navigate('success', {patient_phone_number});
+          setTimeout(() => {
+            navigation.navigate('success', {patient_phone_number});
+          }, 1000);
           SuccesRef?.current?.snapToIndex(1);
+          setFirstname();
+          setMiddlename();
+          setLastname();
+          setEmail();
+          setPassword();
+          setPassword2();
+          setSelectedImage();
         } else {
           console.error('API call failed:', postPatientdata.status);
         }
@@ -197,19 +206,19 @@ const AbhaCreate = ({navigation, route}) => {
             label={'First Name'}
             placeholder={'First Name'}
             value={firstName}
-            // setValue={setFirstname}
+            setValue={setFirstname}
           />
           <InputText
             label={'Middle Name'}
             placeholder={'Middle Name'}
             value={middleName}
-            // setValue={setMiddlename}
+            setValue={setMiddlename}
           />
           <InputText
             label={'Last Name'}
             placeholder={'Last Name'}
             value={lastName}
-            // setValue={setLastname}
+            setValue={setLastname}
           />
           <InputText
             label={'E-mail'}
@@ -238,7 +247,7 @@ const AbhaCreate = ({navigation, route}) => {
               if (isPasswordValid) {
                 fetchData();
               } else {
-                console.log('Invalid password, cannot proceed.');
+                Alert.alert('Please Check Once Again Password');
               }
             }}
           />

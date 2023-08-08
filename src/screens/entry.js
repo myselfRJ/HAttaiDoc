@@ -56,6 +56,7 @@ const Entry = ({navigation}) => {
         //setTrace_id(jsonData.data.trace_id);
         // {
         navigation.navigate('otpscreen');
+        setPhone('');
         // }
       } else {
         console.error('API call failed:', response?.status);
@@ -64,18 +65,7 @@ const Entry = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  // useEffect(() => {
-  // if (Trace_id) {
-  //   navigation.navigate('otpscreen', {phone, Trace_id});
-  // }
-  //   fetchData()
-  // }, [fetchData]);
 
-  // const handlePhone = () => {
-  //   dispatch(addLogin_phone.addLogin_phone(phone));
-  // };
-  let a = moment().toISOString().split('T')[0] + 'T' + '16:30' + ':00Z';
-  console.log(a);
   return (
     <ScrollView>
       <View style={styles.container}>
