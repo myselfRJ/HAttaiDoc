@@ -17,6 +17,7 @@ import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
 import OtpEncryption from '../utility/encryption';
+import moment from 'moment';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -55,6 +56,7 @@ const Entry = ({navigation}) => {
         //setTrace_id(jsonData.data.trace_id);
         // {
         navigation.navigate('otpscreen');
+        setPhone('');
         // }
       } else {
         console.error('API call failed:', response?.status);
@@ -63,16 +65,6 @@ const Entry = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  // useEffect(() => {
-  // if (Trace_id) {
-  //   navigation.navigate('otpscreen', {phone, Trace_id});
-  // }
-  //   fetchData()
-  // }, [fetchData]);
-
-  // const handlePhone = () => {
-  //   dispatch(addLogin_phone.addLogin_phone(phone));
-  // };
 
   return (
     <ScrollView>
@@ -95,17 +87,16 @@ const Entry = ({navigation}) => {
               value={phone}
               setValue={setPhone}
             />
-            </View>
-            <View style={{alignItems:'center'}}>
-              <HButton
-                label={Language[language]['getotp']}
-                onPress={() => {
-                  phone ? fetchData() : null;
-                }}
-              />
-              </View>
-              </View>
-        
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <HButton
+              label={Language[language]['getotp']}
+              onPress={() => {
+                phone ? fetchData() : null;
+              }}
+            />
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
@@ -114,7 +105,7 @@ const Entry = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap:48
+    gap: 48,
   },
   Top: {
     alignItems: 'center',
@@ -124,7 +115,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     //alignItems:'center',
-    gap:24,
+    gap: 24,
   },
   input: {
     paddingHorizontal: 24,

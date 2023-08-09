@@ -131,10 +131,6 @@ const ProfileCreate = ({navigation}) => {
   //   setShowDatePicker(!showDatePicker);
   // };
 
-  const handleAddData = () => {
-    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
-  };
-
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
@@ -313,7 +309,7 @@ const ProfileCreate = ({navigation}) => {
             <HButton
               label={Language[language]['save']}
               onPress={() => {
-                fetchData(), handleAddData();
+                fetchData();
               }}
             />
           </View>

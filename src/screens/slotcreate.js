@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, Modal, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {commonstyles} from '../styles/commonstyle';
 import PlusButton from '../components/plusbtn';
 import {CUSTOMFONTSIZE} from '../settings/styles';
@@ -16,15 +23,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 import moment from 'moment';
 import {UseSelector, useDispatch} from 'react-redux';
 import {addSlots} from '../redux/features/slots/slotData';
-import {
-  CUSTOMCOLOR,
-} from '../settings/styles';
+import {CUSTOMCOLOR} from '../settings/styles';
 
-
-const SlotCreate = ({navigation,route}) => {
+const SlotCreate = ({navigation, route}) => {
   const slotTypeRef = useRef(null);
   const [allSlots, setAllSlots] = useState([]);
-  console.log('allslots===',allSlots)
+  console.log('allslots===', allSlots);
   const slotDurationRef = useRef(null);
   const [fromTime, setFromTime] = useState(new Date());
   const [toTime, setToTime] = useState(new Date());
@@ -32,8 +36,8 @@ const SlotCreate = ({navigation,route}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
 
-  const [selectedConsultValue, setConsultValue] = useState('');
-  const [selectedDurationValue, setDurationValue] = useState('');
+  const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
+  const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -45,7 +49,7 @@ const SlotCreate = ({navigation,route}) => {
   });
   const [selectedDay, setSelectedDay] = useState('M');
   const dispatch = useDispatch();
-  
+
   const handleSaveSlotData = () => {
     dispatch(addSlots.addslots(slots));
     navigation.goBack();
@@ -84,12 +88,12 @@ const SlotCreate = ({navigation,route}) => {
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
       };
-      setAllSlots((prev) => [...prev,newSlot]);
+      setAllSlots(prev => [...prev, newSlot]);
       setSlots(prevSlots => ({
         ...prevSlots,
         [selectedDay]: [...prevSlots[selectedDay], newSlot],
       }));
-      
+
       setFromTime(new Date());
       setToTime(new Date());
       setConsultValue('');
@@ -105,9 +109,32 @@ const SlotCreate = ({navigation,route}) => {
       ),
     }));
   };
-  onDaySelectionChange = value => {
+  const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
+
+  const handlewarnings = () => {
+    const TimeCheck = fromTime !== toTime;
+    // const timeList =
+    //   ToformattedTime.split(':')[0] > FromformattedTime.split(':')[0];
+    const difference =
+      parseInt(ToformattedTime.split(':')[0]) * 60 +
+      parseInt(ToformattedTime.split(':')[1]) -
+      (parseInt(FromformattedTime.split(':')[0]) * 60 +
+        parseInt(FromformattedTime.split(':')[1]));
+    const differenceCheck = difference >= selectedDurationValue;
+    if (!TimeCheck && !difference) {
+      Alert.alert(
+        'please check once again fromTime and toTime should not be equal the minimum difference between timings is selectedDuration',
+      );
+    }
+    return TimeCheck && differenceCheck;
+  };
+
+  useEffect(() => {
+    handlewarnings();
+  }, []);
+
   return (
     <View style={styles.main}>
       <View style={styles.alignchild}>
@@ -150,7 +177,6 @@ const SlotCreate = ({navigation,route}) => {
           onPress={() => onDaySelectionChange('Su')}
         />
       </View>
-  
 
       <View style={styles.selector}>
         <SelectorBtn
@@ -194,6 +220,21 @@ const SlotCreate = ({navigation,route}) => {
           input={<Text>{selectedDurationValue} Mins</Text>}
         />
       </View>
+      <HButton
+        label="Add Slot"
+        icon="plus"
+        onPress={() => {
+          const isOk = handlewarnings();
+          if (isOk) {
+            handleAddSlot();
+          } else {
+            Alert.alert(
+              `please check once again fromTime and toTime should not be equal the minimum difference between timings is ${selectedDurationValue} mins`,
+            );
+          }
+        }}
+      />
+
       <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} />
       {/* <View style={styles.ShowSchedule}>
         {slots[selectedDay] && slots[selectedDay]?.map(slot => (
@@ -208,20 +249,24 @@ const SlotCreate = ({navigation,route}) => {
         ))}
       </View> */}
       <View style={styles.ShowSchedule}>
-  {Object.entries(slots).map(([day, daySlots]) =>
-    daySlots.map((slot) => (
-      <SlotChip
-      style={{borderColor:CUSTOMCOLOR.primary,backgroundColor:CUSTOMCOLOR.white,borderWidth:1}}
-        key={slot.index}
-        index={slot.index}
-        onPress={handleDelete}
-        time={slot.fromTime + '-' + slot.toTime}
-        type={<Text>Type: {slot.consultType}</Text>}
-        duration={<Text>Duration: {slot.duration}</Text>}
-      />
-    ))
-  )}
-</View>
+        {Object.entries(slots).map(([day, daySlots]) =>
+          daySlots.map(slot => (
+            <SlotChip
+              style={{
+                borderColor: CUSTOMCOLOR.primary,
+                backgroundColor: CUSTOMCOLOR.white,
+                borderWidth: 1,
+              }}
+              key={slot.index}
+              index={slot.index}
+              onPress={handleDelete}
+              time={slot.fromTime + '-' + slot.toTime}
+              type={<Text>Type: {slot.consultType}</Text>}
+              duration={<Text>Duration: {slot.duration}</Text>}
+            />
+          )),
+        )}
+      </View>
       <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}

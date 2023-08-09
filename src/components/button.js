@@ -8,7 +8,7 @@ const HButton = props => {
   return (
     <>
       <Pressable
-        style={[styles?.btncontainer,props.btnstyles]}
+        style={[styles?.btncontainer, props.btnstyles]}
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon
@@ -18,11 +18,10 @@ const HButton = props => {
             size={24}
           />
         )}
-        {props.loading ? (
+        {props.loading && (
           <ActivityIndicator size="small" color={CUSTOMCOLOR.white} />
-        ) : (
-          <Text style={styles.btntext}>{props.label}</Text>
         )}
+        <Text style={styles.btntext}>{props.label}</Text>
       </Pressable>
     </>
   );

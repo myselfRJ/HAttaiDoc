@@ -17,6 +17,7 @@ import SelectionTab from '../components/selectiontab';
 import {useNavigation} from '@react-navigation/native';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
+import AddImage from './addimage';
 
 const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
@@ -25,13 +26,26 @@ const PatientSearchCard = patient_data => {
   console.log('====================================');
   console.log(patient_data?.patient_data?.patient_name);
   console.log('====================================');
+  const patient_name = patient_data?.patient_data?.patient_name;
+  const patient_age = patient_data?.patient_data?.birth_date;
+  const patient_phone = patient_data?.patient_data?.patient_phone_number;
+  const patient_pic = patient_data?.patient_data?.patient_pic_url;
+
+  const patient_phone_number = patient_data?.patient_data?.patient_phone_number;
+
+  const handleOnpress = () => {
+    const patient_phone = patient_phone_number;
+    console.log(patient_data.data);
+    navigation.navigate('patientrecord', {patient_phone});
+  };
+
   return (
     <>
       <View style={styles.main}>
         <Image
           style={styles.img}
           source={{
-            uri: `data:image/jpeg;base64,${patient_data.patient_pic_url}`,
+            uri: `data:image/jpeg;base64,${patient_data?.patient_data?.patient_pic_url}`,
           }}
         />
         <View style={styles.patientinfo}>
@@ -73,7 +87,7 @@ const PatientSearchCard = patient_data => {
             <SelectionTab
               label={Language[language]['view_more']}
               selected={true}
-              onPress={() => navigation.navigate('patientrecord')}
+              onPress={handleOnpress}
             />
             <SelectionTab
               label={Language[language]['cancel']}

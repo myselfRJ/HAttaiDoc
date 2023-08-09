@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,10 +13,42 @@ import {HButton, PatientSearchCard} from '../components';
 import DatePicker from 'react-native-date-picker';
 import {SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {useSelector} from 'react-redux';
+import PatientSearch from '../components/PatientSearch';
+import {Image} from 'react-native';
 
-export default function MedicalRecordPatient() {
+export default function MedicalRecordPatient({route}) {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
+  const [data, setData] = useState([]);
+
+  console.log('====================================');
+  console.log('---------------data', data);
+  console.log('====================================');
+
+  const token = useSelector(state => state?.authenticate?.auth?.access);
+  const {patient_phone} = route.params;
+  console.log('-------------------phone', patient_phone);
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData.data);
+      setData(jsonData.data[0]);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const [vitals, setVitals] = useState({
     chiefComplaints: 'Headache and sever stomach pain',
@@ -75,7 +107,22 @@ export default function MedicalRecordPatient() {
       </View>
       <View style={{paddingHorizontal: 32, gap: 32}}>
         <View style={{height: 100}}>
-          <PatientSearchCard />
+          <View style={styles.main}>
+            <Image
+              style={styles.img}
+              source={{
+                uri: `data:image/jpeg;base64,${data?.patient_pic_url}`,
+              }}
+            />
+            <View style={styles.patientinfo}>
+              <Text style={styles.name}>{data?.patient_name}</Text>
+              <Text style={styles.age}>{data?.birth_date}</Text>
+              <Text style={styles?.contact}>
+                contact:
+                {data?.patient_phone_number}
+              </Text>
+            </View>
+          </View>
         </View>
         <View style={{height: 60}}>
           <SelectorBtn
@@ -103,8 +150,8 @@ export default function MedicalRecordPatient() {
             flexDirection: 'row',
           }}>
           {Views?.map((val, ind) => (
-            <View style={{width: 160}}>
-              <TouchableOpacity key={ind} onPress={() => handlePress(val)}>
+            <View key={ind} style={{width: 160}}>
+              <TouchableOpacity onPress={() => handlePress(val)}>
                 <Text
                   style={{
                     fontSize: CUSTOMFONTSIZE.h2,
@@ -164,7 +211,7 @@ export default function MedicalRecordPatient() {
             justifyContent: 'center',
             alignItems: 'center',
             left: '40%',
-            paddingHorizontal:8
+            paddingHorizontal: 8,
           }}>
           <HButton label={'Download'} />
         </View>
@@ -192,5 +239,84 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     lineHeight: 19.07,
+  },
+  main: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    padding: 12,
+    fontSize: CUSTOMFONTSIZE.h3,
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius: 4,
+    gap: 8,
+  },
+  name: {
+    fontWeight: 600,
+    fontSize: 14,
+    lineHeight: 20,
+    padding: 0,
+    color: CUSTOMCOLOR.black,
+  },
+  age: {
+    fontWeight: 400,
+    fontSize: 10,
+    lineHeight: 20,
+    padding: 0,
+    color: CUSTOMCOLOR.black,
+  },
+  contact: {
+    fontWeight: 600,
+    fontSize: 10,
+    lineHeight: 12.5,
+    padding: 0,
+    color: CUSTOMCOLOR.black,
+  },
+  img: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+  },
+  patientinfo: {},
+  icon: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
+  },
+  option: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  bottomView: {
+    width: '100%',
+    height: 500,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  modalView: {
+    height: 250,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#00BFFF',
+    shadowColor: '#ffff',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  content: {
+    fontSize: 15,
+    color: 'black',
+  },
+  tab: {
+    flexDirection: 'row',
+    gap: 16,
+    paddingHorizontal: 8,
+    alignSelf: 'center',
   },
 });

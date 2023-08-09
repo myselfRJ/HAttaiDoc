@@ -83,6 +83,8 @@ const MobileVerify = ({navigation}) => {
         const jsonData = await response.json();
         console.log('======,AAdharOtp', jsonData);
         navigation.navigate('abhacreate');
+        setPhoneNumber();
+        setValue();
       } else {
         console.error('API call failed:', response.status, response);
       }

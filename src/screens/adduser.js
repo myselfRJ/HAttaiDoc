@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Text,
   View,
@@ -12,9 +12,9 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { commonstyles } from '../styles/commonstyle';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {commonstyles} from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
@@ -27,19 +27,19 @@ import {
   StatusMessage,
   BottomSheetView,
 } from '../components';
-import { CONSTANTS } from '../utility/constant';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { URL } from '../utility/urls';
-import { ScrollView } from 'react-native-gesture-handler';
-import { fetchApi } from '../api/fetchApi';
-import { useDispatch, useSelector } from 'react-redux';
+import {CONSTANTS} from '../utility/constant';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {URL} from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
+import {fetchApi} from '../api/fetchApi';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {
   addclinic_users,
   updateclinic_users,
 } from '../redux/features/profiles/ClinicUsers';
 
-const AddUser = ({ navigation }) => {
+const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
   console.log('clinic---', clinics);
   const RoleRef = useRef(null);
@@ -51,7 +51,7 @@ const AddUser = ({ navigation }) => {
 
   console.log(clinic_users, '------------------------,users');
   const dispatch = useDispatch();
-  const { phone } = useSelector(state => state?.phone?.data);
+  const {phone} = useSelector(state => state?.phone?.data);
   console.log('phone==', phone);
   //const clinics = CONSTANTS.clinic;
 
@@ -59,7 +59,8 @@ const AddUser = ({ navigation }) => {
 
   console.log('================================+++++++++clinic', clinicsData);
 
-  const [selectedRole, setSelectedRole] = useState();
+  const roles = CONSTANTS.role;
+  const [selectedRole, setSelectedRole] = useState(roles[0]);
   const [selectedClinic, setSelectedClinic] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   const [values, setValues] = useState({
@@ -77,7 +78,7 @@ const AddUser = ({ navigation }) => {
   const Clinic_users = {
     clinic_user_name: values.name,
     role: values.role,
-    user_profile_pic_url: values.selectedImage,
+    user_profile_pic_url: values.user_profile_pic_url,
     gender: values.gender,
     user_phone_number: values.phone,
     clinic_id: selectedClinic,
@@ -102,22 +103,21 @@ const AddUser = ({ navigation }) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        // navigation.navigate('tab');
-        console.log('1');
         console.log(jsonData);
-        setApiStatus({ status: 'success', message: 'Successfully created' });
+        setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
         setTimeout(() => {
           navigation.navigate('tab');
         }, 1000);
+        setSelectedClinic(jsonData.data[0]?.clinic_name);
       } else {
-        setApiStatus({ status: 'warning', message: 'Enter all Values' });
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status, response);
       }
     } catch (error) {
       console.error('Error occurred:', error);
-      setApiStatus({ status: 'error', message: 'Please try again' });
+      setApiStatus({status: 'error', message: 'Please try again'});
       SuccesRef?.current?.snapToIndex(1);
       console.error('Error occurred:', error);
     }
@@ -130,10 +130,7 @@ const AddUser = ({ navigation }) => {
       dispatch(addclinic_users(Clinic_users));
     }
     setShowSlotChip(true);
-    values.name = '',
-      values.phone = '',
-      values.gender = ''
-
+    (values.name = ''), (values.phone = ''), (values.gender = '');
   };
 
   console.log(values.slots);
@@ -208,7 +205,7 @@ const AddUser = ({ navigation }) => {
   console.log('selecte Image', '=============', selectedImage);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
@@ -310,11 +307,15 @@ const AddUser = ({ navigation }) => {
                     Users
                   </Text>
                 )}
-                <View style={{ gap: 8 }}>
+                <View style={{gap: 8}}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
                       <SlotChip
-                        style={{ borderColor: CUSTOMCOLOR.primary, backgroundColor: CUSTOMCOLOR.white, borderWidth: 1 }}
+                        style={{
+                          borderColor: CUSTOMCOLOR.primary,
+                          backgroundColor: CUSTOMCOLOR.white,
+                          borderWidth: 1,
+                        }}
                         key={item.index}
                         index={item.index}
                         onPress={() => handleDeleteSlotChip(index)}
@@ -322,13 +323,12 @@ const AddUser = ({ navigation }) => {
                         type={<Text>Role: {item.role}</Text>}
                         duration={<Text>Clinic: {item.clinic_id}</Text>}
                       />
-
                     ))}
                 </View>
               </View>
             </View>
             <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
@@ -353,7 +353,6 @@ const AddUser = ({ navigation }) => {
                 label="Done"
                 onPress={() => {
                   fetchData();
-                  SuccesRef?.current?.snapToIndex(1);
                 }}
               />
             </View>

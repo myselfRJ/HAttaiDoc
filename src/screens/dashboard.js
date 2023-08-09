@@ -27,11 +27,14 @@ import SlotCreate from './slotcreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
+import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
+import ToggleSwitch from '../components/switch';
+
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -42,6 +45,12 @@ const Dashboard = ({navigation, route}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
   console.log('clinic id ..', clinicid);
+
+  const [visible, setVisible] = useState(false);
+
+  const handleChart = () => {
+    setVisible(!visible);
+  };
 
   const [setAppointment, setDataAppointment] = useState([]);
   console.log('apoointment===', setAppointment);
@@ -55,6 +64,8 @@ const Dashboard = ({navigation, route}) => {
   const handleChangeValue = e => {
     setClinic(e);
   };
+
+  const dispatch = useDispatch();
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -108,6 +119,7 @@ const Dashboard = ({navigation, route}) => {
       const jsonData = await response.json();
       console.log(jsonData);
       setDoc_name(jsonData.data);
+      dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -115,6 +127,10 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchClinic();
   }, []);
+
+  const handleAddData = () => {
+    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
+  };
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
@@ -142,6 +158,7 @@ const Dashboard = ({navigation, route}) => {
     fetchAppointment();
   }, [formatDate, clinicid]);
   console.log(store.getState());
+
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -160,33 +177,8 @@ const Dashboard = ({navigation, route}) => {
 
   const [Appdata, setData] = useState([]);
 
-  // useEffect(() => {
-  //   {
-  //     fetchData();
-  //   }
-  // }, [data.length]);
-
-  // const fetchdata = async () => {
-  //   const response = await fetchApi(URL.getPatientByClinic(1), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   console.log('response===',response)
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     console.log(jsonData.data);
-  //     setItem(jsonData.data);
-  //   } else {
-  //     console.error('API call failed:', response.status, response);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchdata();
-  // },[]);
-
   console.log(',......', selectedClinic);
+  console.log(',......', visible);
 
   return (
     <View style={{flex: 1}}>
@@ -218,15 +210,20 @@ const Dashboard = ({navigation, route}) => {
                 paddingHorizontal: 8,
                 paddingBottom: 8,
               }}>
-              <ChartCard
-                data={data}
-                title={Language[language]['total_patient']}
-              />
-              <ChartCard
-                data={data}
-                title={Language[language]['earnings']}
-                label="₹ "
-              />
+              <ToggleSwitch value={visible} onValueChange={handleChart} />
+              {visible && (
+                <>
+                  <ChartCard
+                    data={data}
+                    title={Language[language]['total_patient']}
+                  />
+                  <ChartCard
+                    data={data}
+                    title={Language[language]['earnings']}
+                    label="₹ "
+                  />
+                </>
+              )}
             </View>
             <View style={styles.select}>
               <SelectorBtn

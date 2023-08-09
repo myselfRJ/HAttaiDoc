@@ -31,6 +31,10 @@ const PatientSearch = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
 
+  console.log('====================================');
+  console.log('-----------------id', clinicID);
+  console.log('====================================');
+
   const {phone} = useSelector(state => state?.phone?.data);
 
   const fetchClincs = async () => {
@@ -44,6 +48,7 @@ const PatientSearch = ({navigation}) => {
       const jsonData = await response.json();
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
+      setClinicId(jsonData?.data[0]?.id);
     } else {
       console.error('API call failed:', response.status, response);
     }

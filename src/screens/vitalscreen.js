@@ -18,7 +18,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addVitals} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation} from '@react-navigation/native';
 import {HButton} from '../components';
+import {CONSTANTS} from '../utility/constant';
 const VitalScreen = props => {
+  const months = CONSTANTS.months;
   const nav = useNavigation();
   const dispatch = useDispatch();
   const [vitals, setVitals] = useState({
@@ -30,7 +32,7 @@ const VitalScreen = props => {
     bmi: '',
     diastolic: '',
     systolic: '',
-    LDD: '',
+    LDD: new Date(),
     EDD: '',
   });
 
@@ -63,10 +65,19 @@ const VitalScreen = props => {
   const rateChange = (text, index) => {
     const updatedVitals = {...vitals, rate: text};
     setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
   };
+  const handleBMI = () => {
+    const height = (parseInt(vitals.height) / 100) ** 2;
+    const weight = parseFloat(vitals.weight);
+    const BMI = (weight / height).toString().slice(0, 5);
+    return BMI;
+  };
+
+  useEffect(() => {
+    handleBMI();
+  }, []);
   const bmiChange = (text, index) => {
-    const updatedVitals = {...vitals, bmi: text};
+    const updatedVitals = {...vitals, bmi: handleBMI()};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
@@ -80,17 +91,35 @@ const VitalScreen = props => {
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
+
   const lmpChange = (text, index) => {
     const updatedVitals = {...vitals, LDD: text};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
+
+  const handleEdd = () => {
+    var startDate = new Date(vitals?.LDD);
+    var numberOfDaysToAdd = 280;
+    var endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
+    var formattedEndDate = endDate.toISOString().substring(0, 10);
+    const day = formattedEndDate.split('-')[2];
+    const year = formattedEndDate.split('-')[0];
+    const month = months[`${formattedEndDate.split('-')[1]}`];
+    const EDD = `${day}-${month}-${year}`;
+    return EDD;
+  };
+  useEffect(() => {
+    handleEdd();
+  }, []);
+
   const usChange = (text, index) => {
-    const updatedVitals = {...vitals, EDD: text};
+    const updatedVitals = {...vitals, EDD: handleEdd()};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  // 'body_temperature': '', 'diastolic': '', 'systolic': '', 'EDD': '', 'LDD': '',
+
   return (
     <>
       <View style={{paddingHorizontal: 24, paddingVertical: 24}}>

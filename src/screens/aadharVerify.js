@@ -40,6 +40,8 @@ const AadharVerify = ({navigation}) => {
   const CELL_COUNT = 6;
   const [selected, setSelected] = useState('No');
   const [aadhar_no, setAadhar_no] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [otploading, setotpLoading] = useState(false);
   const [value, setValue] = useState('');
   const [phone, setPhoneNumber] = useState('');
   const [otpValue, setOtpValue] = useState('');
@@ -95,6 +97,7 @@ const AadharVerify = ({navigation}) => {
             aadhaar: aadhar_no,
           }
         : {mobile: phone};
+    setLoading(!loading);
     try {
       const response = await fetchApi(url, {
         method: 'POST',
@@ -109,6 +112,7 @@ const AadharVerify = ({navigation}) => {
         console.log('======,AAdhar', jsonData);
         dispatch(UpdatetxnId(jsonData.txnId));
         dispatch(addAadhar(aadhar_no));
+        setLoading(!loading);
       } else {
         console.error('API call failed:', response.status, response);
       }
@@ -144,46 +148,77 @@ const AadharVerify = ({navigation}) => {
         body: JSON.stringify(body),
       });
       if (response.ok) {
-        const jsonData = await response.json();
-        console.log('======,aadharOtp', jsonData?.token);
-        console.log(
-          '======,aadharOtp',
-          jsonData?.mobileLinkedHid?.[0].healthIdNumber,
-        );
-        console.log('======,aadharOtp', jsonData?.txnId);
-        let headers = {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${AbhaAccessToken}`,
-          'T-Token': `Bearer ${jsonData?.token}`,
-          mobileLoginWebRequest: 'mobileLoginWebRequest',
-        };
-        console.log('====================================');
-        console.log('---------------------', {
-          healthId: jsonData?.mobileLinkedHid?.[0].healthIdNumber,
-          txnId: jsonData?.txnId,
-        });
-        console.log('====================================');
-        const UserTokenResponse = await fetchApi(URL.AbhaExistsGetUserToken, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify({
-            healthId: jsonData?.mobileLinkedHid[0]?.healthIdNumber,
+        if (selected === 'Yes') {
+          const jsonData = await response.json();
+          console.log('======,aadharOtp', jsonData?.token);
+          console.log(
+            '======,aadharOtp',
+            jsonData?.mobileLinkedHid?.[0].healthIdNumber,
+          );
+          console.log('======,aadharOtp', jsonData?.txnId);
+          let headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${AbhaAccessToken}`,
+            'T-Token': `Bearer ${jsonData?.token}`,
+            mobileLoginWebRequest: 'mobileLoginWebRequest',
+          };
+          console.log('====================================');
+          console.log('---------------------', {
+            healthId: jsonData?.mobileLinkedHid?.[0].healthIdNumber,
             txnId: jsonData?.txnId,
-          }),
-        });
-        const UserTokenData = await UserTokenResponse.json();
-        let headersProfile = {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${AbhaAccessToken}`,
-          'X-Token': `Bearer ${UserTokenData?.token}`,
-        };
-        const UserAbhaProfile = await fetchApi(URL.AbhaExistsGetProfile, {
-          method: 'GET',
-          headers: headersProfile,
-        });
-        const jsonDataProfile = await UserAbhaProfile.json();
-        console.log('abhaprofile-----------------------', jsonDataProfile);
-        navigation.navigate('abhacreate');
+          });
+          console.log('====================================');
+          const UserTokenResponse = await fetchApi(URL.AbhaExistsGetUserToken, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+              healthId: jsonData?.mobileLinkedHid[0]?.healthIdNumber,
+              txnId: jsonData?.txnId,
+            }),
+          });
+          const UserTokenData = await UserTokenResponse.json();
+          let headersProfile = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${AbhaAccessToken}`,
+            'X-Token': `Bearer ${UserTokenData?.token}`,
+          };
+          const UserAbhaProfile = await fetchApi(URL.AbhaExistsGetProfile, {
+            method: 'GET',
+            headers: headersProfile,
+          });
+          const jsonDataProfile = await UserAbhaProfile.json();
+          console.log('abhaprofile-----------------------', jsonDataProfile);
+          const firstName = jsonDataProfile?.firstName;
+          const lastName = jsonDataProfile?.lastName;
+          const middleName = jsonDataProfile?.middleName;
+          const healthId = jsonDataProfile?.healthId;
+          const patient_pic_url = jsonDataProfile?.profilePhoto;
+          const patient_name = jsonDataProfile?.name;
+          const patient_phone_number = jsonDataProfile?.mobile;
+          const birth_date = `${jsonDataProfile?.dayOfBirth}-${jsonDataProfile?.monthOfBirth}-${jsonDataProfile?.yearOfBirth}`;
+          const gender = jsonDataProfile?.gender;
+          const abha_no = jsonDataProfile?.healthIdNumber;
+          navigation.navigate('abhaexist', {
+            firstName,
+            lastName,
+            middleName,
+            healthId,
+            patient_pic_url,
+            patient_name,
+            patient_phone_number,
+            birth_date,
+            gender,
+            abha_no,
+          });
+          setPhoneNumber();
+          setValue();
+        } else {
+          const jsonData = await response.json();
+          console.log('======,aadharOtp', jsonData);
+          navigation.navigate('mobileverify');
+          setAadhar_no();
+          setValue();
+        }
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -250,6 +285,7 @@ const AadharVerify = ({navigation}) => {
                 maxLength={12}
               />
               <HButton
+                loading={loading}
                 label={Language[language]['getotp']}
                 onPress={() => fetchData()}
               />

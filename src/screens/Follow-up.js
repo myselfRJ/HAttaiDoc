@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from '../components/Icon';
 import {useSelector, useDispatch} from 'react-redux';
-import {setDate, setOpen} from '../redux/features/prescription/Followupslice';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {CONSTANTS} from '../utility/constant';
+import {addDate} from '../redux/features/prescription/Followupslice';
+import {HButton, SelectorBtn} from '../components';
+import {useNavigation} from '@react-navigation/native';
+
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -13,45 +17,75 @@ import {
 } from '../settings/styles';
 
 export default function DateTime() {
-  const date = useSelector(state => state.dateTime.date);
-  const open = useSelector(state => state.dateTime.open);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const handleDate = () => {
-    dispatch(setOpen(!open));
+    setOpen(!open);
   };
-  console.log(date, 'date');
-  const formattedDate = date.toString();
 
   const handleConfirm = selectedDate => {
-    dispatch(setOpen(false));
-    dispatch(setDate(selectedDate.toString()));
+    setDate(selectedDate);
   };
+
+  const dateTimeRed = useSelector(state => state.dateTime?.date);
+  console.log('-------------------', dateTimeRed, '------------------------');
 
   const handleCancel = () => {
-    dispatch(setOpen(false));
+    setOpen(open);
   };
 
-  console.log(date);
+  const handlePress = () => {
+    dispatch(addDate(follow_upDateTime));
+    navigation.goBack();
+  };
+
+  const day = date?.toString()?.split(' ')[2];
+  const month = date?.toString().split(' ')[1];
+  const year = date?.toString().split(' ')[3];
+  const follow_upTime = date?.toString().split(' ')[4].substring(0, 5);
+
+  const follow_upDateTime = `${day} ${month} ${year} at ${follow_upTime}`;
+
+  console.log(follow_upDateTime);
+
   return (
     <View style={styles.MainContainer}>
       <Text style={styles.FUP}>{Language[language]['follow_up']}</Text>
       <View style={styles.DateContainer}>
-        <Text style={styles.DateText}>{formattedDate}</Text>
-        <TouchableOpacity onPress={handleDate}>
-          <Icon name="calendar" size={24} color={CUSTOMCOLOR.primary} />
-        </TouchableOpacity>
+        <SelectorBtn
+          onPress={handleDate}
+          name={'calendar'}
+          input={follow_upDateTime}
+        />
         {open && (
           <DatePicker
             modal
             open={open}
-            date={new Date(date)}
+            date={date}
             theme="auto"
             mode="datetime"
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
         )}
+      </View>
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          top: '24%',
+        }}>
+        <HButton
+          label={'submit'}
+          onPress={() => {
+            handlePress();
+          }}
+        />
       </View>
     </View>
   );
@@ -74,7 +108,7 @@ const styles = StyleSheet.create({
   DateContainer: {
     width: '100%',
     borderRadius: 4,
-    padding: 16,
+    padding: 8,
     backgroundColor: CUSTOMCOLOR.white,
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -84,5 +118,6 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h4,
     lineHeight: 19.07,
+    color: CUSTOMCOLOR.black,
   },
 });

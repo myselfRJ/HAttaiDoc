@@ -34,7 +34,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 
-const AbhaCreate = ({navigation}) => {
+const AbhaCreate = ({navigation, route}) => {
   const SuccesRef = useRef(null);
 
   useEffect(() => {
@@ -106,6 +106,7 @@ const AbhaCreate = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
+        const patient_phone_number = jsonData?.mobile;
         const postPatientdata = await fetchApi(URL.addPatient, {
           method: 'POST',
           headers: {
@@ -125,8 +126,17 @@ const AbhaCreate = ({navigation}) => {
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
           console.log('patients', PatientData);
-          navigation.navigate('success');
+          setTimeout(() => {
+            navigation.navigate('success', {patient_phone_number});
+          }, 1000);
           SuccesRef?.current?.snapToIndex(1);
+          setFirstname();
+          setMiddlename();
+          setLastname();
+          setEmail();
+          setPassword();
+          setPassword2();
+          setSelectedImage();
         } else {
           console.error('API call failed:', postPatientdata.status);
         }
@@ -237,7 +247,7 @@ const AbhaCreate = ({navigation}) => {
               if (isPasswordValid) {
                 fetchData();
               } else {
-                console.log('Invalid password, cannot proceed.');
+                Alert.alert('Please Check Once Again Password');
               }
             }}
           />

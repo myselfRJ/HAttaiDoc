@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,24 +9,78 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import moment from 'moment';
+import {CUSTOMCOLOR} from '../settings/styles';
+
 const Account = () => {
+  const [data, setData] = useState();
+  const [clinic, setClinics] = useState([]);
+  const {phone} = useSelector(state => state?.phone?.data);
+  const token = useSelector(state => state.authenticate.auth.access);
+  const fetchDoctor = async () => {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('practitioner response====', response);
+    if (response.ok) {
+      const jsonData = await response.json();
+      // console.log('----------------------------', jsonData);
+      setData(jsonData.data);
+      // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchDoctor();
+  }, []);
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getClinic(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('--------------clinics', jsonData);
+      setClinics(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const today = moment().toISOString().split('-')[0];
+
+  console.log('====================================', clinic);
+  console.log(
+    '---------------------',
+    data?.DOB.split(' ')[1] + data?.DOB.split(' ')[2] + data?.DOB.split(' ')[3],
+  );
+  const BirthYear = data?.DOB.split(' ')[3];
+
+  const age = parseInt(today) - parseInt(BirthYear);
+  const DateOfBirth = `${data?.DOB.split(' ')[2]}-${data?.DOB.split(' ')[1]}-${
+    data?.DOB.split(' ')[3]
+  }`;
+
   return (
     <View>
-      {/* <View style={styles.MainHeadContainer}>
-        <Text style={styles.MainText}>Account and Settings</Text>
-        <Icon
-          name="bell"
-          size={24}
-          color={'#fff'}
-          style={{top: 43, right: 37}}
-        />
-      </View> */}
       <View style={{top: 40, left: 49}}>
         <Text style={styles.PersonalInf}>Personal Information</Text>
         <View style={styles.pI}>
           <Image
             source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
+              uri: `data:image/jpeg;base64,${data?.profile_pic_url}`,
             }}
             style={{height: 70, width: 70, borderRadius: 100}}
           />
@@ -38,9 +92,15 @@ const Account = () => {
               width: '87%',
             }}>
             <View>
-              <Text style={{fontSize: 16}}>Muthu Ganesh</Text>
-              <Text style={{fontSize: 12}}>Age:68 | Male</Text>
-              <Text>DOB: 01-01-2023</Text>
+              <Text style={{fontSize: 16, color: CUSTOMCOLOR.black}}>
+                {data?.doctor_name}
+              </Text>
+              <Text style={{fontSize: 12, color: CUSTOMCOLOR.black}}>
+                Age:{age} | {data?.gender}
+              </Text>
+              <Text style={{fontSize: 12, color: CUSTOMCOLOR.black}}>
+                DOB: {DateOfBirth}
+              </Text>
             </View>
             <TouchableOpacity>
               <View style={styles.editBtn}>
@@ -62,13 +122,21 @@ const Account = () => {
                   size={16}
                   color={'#4ba5fa'}
                 />
-                <Text style={{fontWeight: 600}}>Registration Council</Text>
-                <Text>Medical Registration</Text>
+                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black}}>
+                  Registration Council
+                </Text>
+                <Text style={{color: CUSTOMCOLOR.black}}>
+                  Medical Registration
+                </Text>
               </View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
                 <Icon name="medical-bag" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600}}>Medical Number</Text>
-                <Text>89562637542892929</Text>
+                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black}}>
+                  Medical Number
+                </Text>
+                <Text style={{color: CUSTOMCOLOR.black}}>
+                  {data?.medical_number}
+                </Text>
               </View>
             </View>
             <TouchableOpacity>
@@ -100,13 +168,21 @@ const Account = () => {
             <View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
                 <Icon name="hospital" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600}}>Clinics</Text>
-                <Text>Medical Registration Council</Text>
+                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black}}>
+                  Clinics:
+                </Text>
+                {clinic?.map((val, ind) => (
+                  <Text style={{color: CUSTOMCOLOR.black}} key={ind}>
+                    {val?.clinic_name}
+                  </Text>
+                ))}
               </View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
                 <Icon name="account-group" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600}}>Staff</Text>
-                <Text>Medical Number</Text>
+                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black}}>
+                  Staff
+                </Text>
+                <Text style={{color: CUSTOMCOLOR.black}}>Medical Number</Text>
               </View>
             </View>
             <TouchableOpacity>

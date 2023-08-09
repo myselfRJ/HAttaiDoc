@@ -25,7 +25,8 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
-const SlotBook = ({navigation}) => {
+
+const SlotBook = ({navigation, route}) => {
   const [complaint, setComplaint] = useState('');
   const changeComplaint = e => {
     setComplaint(e);
@@ -37,10 +38,7 @@ const SlotBook = ({navigation}) => {
   console.log('doctor phone=====', doctorphoneNumber);
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
-  console.log(
-    'slots....',
-    selectedSlot?.slot.split('-')[0] + 'T' + selectedSlot?.slot.split('-')[1],
-  );
+
   const selections = CONSTANTS.selections;
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
@@ -81,17 +79,14 @@ const SlotBook = ({navigation}) => {
     setOpen(false);
   };
 
-  // const SlotsAvailable = async () => {
-  //   const response = await fetch(URL.SlotsAvailable);
-  //   const jsonData = await response.json();
-  //   setSlotDetails(jsonData);
-  // };
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
-  // useEffect(() => {
-  //   {
-  //     SlotsAvailable();
-  //   }
-  // }, []);
+  console.log('------------------id', Clinic_id);
+  const {phone} = useSelector(state => state?.phone?.data);
+  const speciality = useSelector(
+    state => state?.doctor_profile?.doctor_profile?.specialization,
+  );
+  console.log('-----------------profile', speciality);
 
   const weekDys = {
     0: 'Su',
@@ -104,7 +99,7 @@ const SlotBook = ({navigation}) => {
   };
   const Day = weekDys?.[moment().day()];
   const fetchslots = async () => {
-    const response = await fetchApi(URL.SlotsAvailable('41'), {
+    const response = await fetchApi(URL.SlotsAvailable(Clinic_id), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -125,14 +120,14 @@ const SlotBook = ({navigation}) => {
 
   useEffect(() => {}, [selectedSlot]);
   console.log('====================================');
-  console.log(slotDetails[0]);
+  console.log('-------------', slotDetails[0]);
   console.log('====================================');
 
   const getMinute = time => {
-    value = time.split(':');
-    hour = parseInt(value[0]);
-    minute = parseInt(value[1]);
-    totalMin = parseInt(hour * 60 + minute);
+    let value = time.split(':');
+    let hour = parseInt(value[0]);
+    let minute = parseInt(value[1]);
+    let totalMin = parseInt(hour * 60 + minute);
     return totalMin;
   };
 
@@ -164,7 +159,7 @@ const SlotBook = ({navigation}) => {
   };
   const token = useSelector(state => state.authenticate.auth.access);
 
-  let list = getTimeList(slotDetails[0]?.T);
+  let list = getTimeList(slotDetails[0]?.[Day]);
 
   const renderItems = ({item}) => {
     return (
@@ -177,6 +172,11 @@ const SlotBook = ({navigation}) => {
       </View>
     );
   };
+
+  const {patient_phone} = route.params;
+  console.log('-----------------params', patient_phone);
+  let today = moment().toISOString().split('T')[0] + 'T';
+
   const Appointment_Booking = async () => {
     try {
       const response = await fetchApi(URL.Appointment_Booking, {
@@ -190,18 +190,19 @@ const SlotBook = ({navigation}) => {
           mode_of_consultation: selectedMode,
           appointment_type: selectedTypeAppointment,
           appointment_slot: selectedSlot?.slot,
-          clinic_id: '41',
+          clinic_id: Clinic_id,
           complaint: complaint,
           //patient_phone_number: patientPhoneNumber.patient.phone_number,
-          patient_phone_number: '9003092186',
+          patient_phone_number: patient_phone,
+          doctor_phone_number: phone,
           meta_data: {
-            complaint: 'headache',
-            patient_reference: 'ggvvf',
-            practitioner_reference: 'hgihfohg',
-            start: selectedSlot?.slot.split('-')[0],
-            end: selectedSlot?.slot.split('-')[1],
-            speciality: 'cardialogist',
-            type: 'followup',
+            complaint: complaint,
+            patient_reference: patient_phone,
+            practitioner_reference: phone,
+            start: today + selectedSlot?.slot.split('-')[0] + ':00Z',
+            end: today + selectedSlot?.slot.split('-')[1] + ':00Z',
+            speciality: speciality,
+            type: selectedTypeAppointment,
           },
         }),
       });
@@ -216,13 +217,6 @@ const SlotBook = ({navigation}) => {
       console.error('Error occurred:', error);
     }
   };
-  useEffect(() => {
-    Appointment_Booking();
-  }, []);
-
-  // console.log('====================================');
-  // console.log(selectedSlot?.duration);
-  // console.log('====================================');
 
   return (
     <View style={styles.main}>
@@ -317,7 +311,7 @@ const SlotBook = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    gap: 32,
+    gap: 16,
     flex: 1,
     //backgroundColor:CUSTOMCOLOR.primary,
     // paddingHorizontal:24,
@@ -329,8 +323,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   MainHeadContainer: {
-    height: '15%',
     backgroundColor: CUSTOMCOLOR.primary,
+    height: '10%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomLeftRadius: 8,
