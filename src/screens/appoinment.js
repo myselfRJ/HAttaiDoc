@@ -192,7 +192,7 @@ const Appointment = ({navigation}) => {
     <View style={styles.main}>
       <View>
         <ScrollView>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -207,7 +207,7 @@ const Appointment = ({navigation}) => {
               </Text>
             </View>
             <HeaderAvatar data={doc_name} />
-          </View>
+          </View> */}
           <View style={styles.select}>
             <SelectorBtn
               //label={Language[language]['clinic']}

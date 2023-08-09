@@ -39,6 +39,12 @@ const PatientSearchCard = patient_data => {
     navigation.navigate('patientrecord', {patient_phone});
   };
 
+  const handleOnBook = () => {
+    const patient_phone = patient_phone_number;
+    console.log(patient_data.data);
+    navigation.navigate('bookslot', {patient_phone});
+  };
+
   return (
     <>
       <View style={styles.main}>
@@ -74,18 +80,22 @@ const PatientSearchCard = patient_data => {
             />
           </View>
         </Pressable>
-        <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
+        <BottomSheetView
+          bottomSheetRef={patientSearchRef}
+          snapPoints={'100%'}
+          backgroundStyle="#000000aa">
           <View style={styles.tab}>
             <SelectionTab
-              label={Language[language]['update']}
+              label={Language[language]['book_appointment']}
               selected={true}
+              onPress={handleOnBook}
             />
-            <SelectionTab
+            {/* <SelectionTab
               label={Language[language]['delete']}
               selected={true}
-            />
+            /> */}
             <SelectionTab
-              label={Language[language]['view_more']}
+              label={Language[language]['history']}
               selected={true}
               onPress={handleOnpress}
             />

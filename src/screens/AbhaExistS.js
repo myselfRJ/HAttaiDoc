@@ -149,7 +149,10 @@ const AbhaExistDetails = ({route}) => {
           }}
         />
       </View>
-      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
         <StatusMessage status={'success'} message="Sucessfully Added" />
       </BottomSheetView>
     </View>

@@ -19,7 +19,8 @@ import {CONSTANTS} from '../utility/constant';
 import {BottomSheetView} from '../components';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {addclinic_id} from '../redux/features/profiles/clinicId';
 
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -27,7 +28,7 @@ const PatientSearch = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const ClinicRef = useRef(null);
   const [data, setData] = useState();
-
+  const dispatch = useDispatch();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
 
@@ -49,6 +50,7 @@ const PatientSearch = ({navigation}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData?.data[0]?.id);
+      dispatch(addclinic_id.addclinic_id(jsonData.data[0].id));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -97,6 +99,7 @@ const PatientSearch = ({navigation}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
+    dispatch(addclinic_id.addclinic_id(clinic.id));
     ClinicRef?.current?.snapToIndex(0);
   };
 

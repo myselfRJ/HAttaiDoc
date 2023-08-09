@@ -11,12 +11,12 @@ import Option from '../components/option';
 import SelectionTab from '../components/selectiontab';
 import SuggestionTab from '../components/suggestiontab';
 import HButton from '../components/button';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {CONSTANTS} from '../utility/constant';
 import {URL} from '../utility/urls';
-import {Icon} from '../components';
+import {Icon, BottomSheetView, StatusMessage} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {HttpStatusCode} from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
@@ -173,12 +173,22 @@ const SlotBook = ({navigation, route}) => {
     );
   };
 
+  const [loading, setLoading] = useState(false);
   const {patient_phone} = route.params;
-  console.log('-----------------params', patient_phone);
+  console.log(
+    '-----------------params',
+    patient_phone,
+    Clinic_id,
+    phone,
+    speciality,
+  );
   let today = moment().toISOString().split('T')[0] + 'T';
+
+  const [apiStatus, setApiStatus] = useState({});
 
   const Appointment_Booking = async () => {
     try {
+      setLoading(true);
       const response = await fetchApi(URL.Appointment_Booking, {
         method: 'POST',
         headers: {
@@ -209,14 +219,34 @@ const SlotBook = ({navigation, route}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        navigation.navigate('dashboard');
+        setApiStatus({
+          status: 'success',
+          message: 'Successfully created',
+        });
+        SuccesRef?.current?.snapToIndex(1);
+        setTimeout(() => {
+          navigation.navigate('dashboard');
+        }, 1000);
+        setLoading(false);
       } else {
+        setApiStatus({status: 'warning', message: 'Enter all Values'});
+        SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setApiStatus({
+        status: 'error',
+        message: 'Something Went Wrong Please After Sometime',
+      });
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('API call failed:', response.status);
     }
   };
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -297,14 +327,20 @@ const SlotBook = ({navigation, route}) => {
                 label="Book Slot"
                 //onPress={() => navigation.navigate('dashboard')}
                 onPress={() => {
-                  //dispatch(addPatient());
                   Appointment_Booking();
                 }}
+                loading={loading}
               />
             </View>
           </View>
         </View>
       </ScrollView>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
     </View>
   );
 };
@@ -320,11 +356,12 @@ const styles = StyleSheet.create({
   type: {
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-around',
+    gap: 56,
   },
   MainHeadContainer: {
     backgroundColor: CUSTOMCOLOR.primary,
-    height: '10%',
+    height: '15%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomLeftRadius: 8,
@@ -341,7 +378,8 @@ const styles = StyleSheet.create({
   },
   selection: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-evenly',
+    gap: 56,
   },
   child: {
     padding: 16,

@@ -34,6 +34,7 @@ import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
 import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 import ToggleSwitch from '../components/switch';
+import {addclinic_id} from '../redux/features/profiles/clinicId';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -97,6 +98,8 @@ const Dashboard = ({navigation, route}) => {
       console.log(jsonData);
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
+      setClinicId(jsonData.data[0].id);
+      dispatch(addclinic_id.addclinic_id(jsonData.data[0].id));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -128,9 +131,9 @@ const Dashboard = ({navigation, route}) => {
     fetchClinic();
   }, []);
 
-  const handleAddData = () => {
-    dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
-  };
+  // const handleAddData = () => {
+  //   dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
+  // };
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
@@ -172,6 +175,7 @@ const Dashboard = ({navigation, route}) => {
     setSelectedClinic(clinic.clinic_name);
     // handleChangeValue('clinic', clinic.clinic_name);
     setClinicId(clinic.id);
+    dispatch(addclinic_id.addclinic_id(clinic.id));
     ClinicRef?.current?.snapToIndex(0);
   };
 

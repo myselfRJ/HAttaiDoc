@@ -95,7 +95,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
-          snapPoints={'100%'}>
+          snapPoints={'100%'}
+          backgroundStyle="#000000aa">
           <View style={styles.tab}>
             <SelectionTab
               label={Language[language]['start_visit']}

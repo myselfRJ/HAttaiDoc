@@ -34,6 +34,9 @@ const MobileVerify = ({navigation}) => {
     setValue,
   });
 
+  const [loading, setLoading] = useState(false);
+  const [otploading, setOtpLoading] = useState(false);
+
   const AbhaAccessToken = useSelector(state => state.abha.auth.access);
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
   const aadhar_no = useSelector(state => state?.abha?.auth?.aadharNo);
@@ -43,6 +46,7 @@ const MobileVerify = ({navigation}) => {
   console.log('====================================');
 
   const postPhone = async () => {
+    setLoading(true);
     try {
       const response = await fetchApi(URL.AbhaGenerateMobileOtp, {
         method: 'POST',
@@ -58,15 +62,19 @@ const MobileVerify = ({navigation}) => {
       if (response.ok) {
         const jsonData = await response.json();
         console.log('======,AAdharMOBILE', jsonData);
+        setLoading(false);
       } else {
         console.error('API call failed:', response.status, response);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
 
   const postOtp = async () => {
+    setOtpLoading(true);
     try {
       const response = await fetchApi(URL.AbhaMobileVerifyOtp, {
         method: 'POST',
@@ -85,11 +93,14 @@ const MobileVerify = ({navigation}) => {
         navigation.navigate('abhacreate');
         setPhoneNumber();
         setValue();
+        setLoading(false);
       } else {
         console.error('API call failed:', response.status, response);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
 
@@ -137,6 +148,7 @@ const MobileVerify = ({navigation}) => {
             <HButton
               label={Language[language]['getotp']}
               onPress={() => postPhone()}
+              loading={loading}
             />
           </View>
           <View style={{paddingHorizontal: '30%', gap: 24}}>
@@ -165,6 +177,7 @@ const MobileVerify = ({navigation}) => {
               <HButton
                 label={Language[language]['verify']}
                 onPress={() => postOtp()}
+                loading={otploading}
               />
             </View>
           </View>

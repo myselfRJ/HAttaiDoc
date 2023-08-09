@@ -102,7 +102,9 @@ const Language = {
     medium: 'Medium',
     low: 'Low',
     high: 'High',
-    complaint:'Complaint'
+    complaint: 'Complaint',
+    book_appointment: 'Book Appointment',
+    history: 'Medical History',
   },
   hi: {
     welcome: 'स्वागत',

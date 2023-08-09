@@ -59,6 +59,8 @@ const AddUser = ({navigation}) => {
 
   console.log('================================+++++++++clinic', clinicsData);
 
+  const [loading, setLoading] = useState(false);
+
   const roles = CONSTANTS.role;
   const [selectedRole, setSelectedRole] = useState(roles[0]);
   const [selectedClinic, setSelectedClinic] = useState('');
@@ -91,6 +93,7 @@ const AddUser = ({navigation}) => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await fetchApi(URL.adduser, {
         method: 'POST',
         headers: {
@@ -110,16 +113,19 @@ const AddUser = ({navigation}) => {
           navigation.navigate('tab');
         }, 1000);
         setSelectedClinic(jsonData.data[0]?.clinic_name);
+        setLoading(false);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status, response);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
       SuccesRef?.current?.snapToIndex(1);
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
   const [showSlotChip, setShowSlotChip] = useState(false);
@@ -354,6 +360,7 @@ const AddUser = ({navigation}) => {
                 onPress={() => {
                   fetchData();
                 }}
+                loading={loading}
               />
             </View>
           </View>
@@ -396,7 +403,10 @@ const AddUser = ({navigation}) => {
             ))}
         </View>
       </BottomSheetView>
-      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
     </View>

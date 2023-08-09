@@ -25,6 +25,8 @@ const Entry = ({navigation}) => {
   const dispatch = useDispatch();
   const logindata = useSelector(state => state?.phone);
   console.log('===logindata===', logindata);
+
+  const [loading, setLoading] = useState(false);
   // const fetchtrace = async () => {
   //   const response = await fetchApi(URL.validateOtp);
   //   const jsonData = await response.json();
@@ -39,6 +41,7 @@ const Entry = ({navigation}) => {
   console.log(OtpEncryption(), '---------------------------------------');
   console.log('====================================');
   const fetchData = async () => {
+    setLoading(!loading);
     try {
       const response = await fetchApi(URL.generateOtp, {
         method: 'POST',
@@ -57,6 +60,7 @@ const Entry = ({navigation}) => {
         // {
         navigation.navigate('otpscreen');
         setPhone('');
+        setLoading(!loading);
         // }
       } else {
         console.error('API call failed:', response?.status);
@@ -91,6 +95,7 @@ const Entry = ({navigation}) => {
           <View style={{alignItems: 'center'}}>
             <HButton
               label={Language[language]['getotp']}
+              loading={loading}
               onPress={() => {
                 phone ? fetchData() : null;
               }}
