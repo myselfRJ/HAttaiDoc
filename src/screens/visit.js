@@ -11,7 +11,7 @@ import {useSelector} from 'react-redux';
 import {getDate} from '../redux/features/prescription/Followupslice';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
-import {HButton} from '../components';
+import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
 
@@ -84,7 +84,7 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        console.log('data---0',jsonData.data);
         setApiStatus({status: 'success', message: 'Successfully created'});
         setTimeout(() => {
           navigation.navigate('tab');
@@ -128,13 +128,22 @@ const Visit = ({navigation, route}) => {
   console.log('====================================');
 
   return (
+    <View style={{flex:1}}>
     <ScrollView>
       <View style={styles.main}>
-        <View style={styles.select}>
+        {/* <View style={styles.select}>
           <HeaderAvatar />
-        </View>
+        </View> */}
+        <View style={{alignSelf:'flex-end'}}>
+        <PlusButton
+            icon="close"
+            //style={{right:0}}
+            onPress={() => navigation.goBack()}
+          />
+          </View>
 
         <View style={styles.appointment}>
+       
           <Text style={styles.h2}>{Language[language]['consultation']}</Text>
           {dataObject.map((value, index) => (
             <View key={index}>
@@ -372,11 +381,8 @@ const Visit = ({navigation, route}) => {
           ))}
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <PlusButton
-            icon="close"
-            style={{left: 0, bottom: 0}}
-            onPress={() => navigation.goBack()}
-          />
+         
+          <HButton label="Preview"  onPress={()=> navigation.navigate('prescription')}/>
           <HButton label="save" onPress={() => fetchData()} />
         </View>
         <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
@@ -387,6 +393,7 @@ const Visit = ({navigation, route}) => {
         </BottomSheetView>
       </View>
     </ScrollView>
+    </View>
   );
 };
 

@@ -78,7 +78,8 @@ const AbhaExistDetails = ({route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        useDispatch(addPatient.addPatient(jsonData))
+        console.log('patient data----',jsonData);
         setTimeout(() => {
           navigation.navigate('success', {patient_phone_number});
         }, 1000);

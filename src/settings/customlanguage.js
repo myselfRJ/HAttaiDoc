@@ -77,7 +77,7 @@ const Language = {
     lmp_edd: 'LMP EDD',
     us_edd: 'US EDD',
     notes: 'Notes',
-    recommendation: 'Recommendation',
+    recommendation: 'Recommendations',
     getotp: 'Get Otp',
     name: 'Name',
     gender: 'Gender',
@@ -102,7 +102,14 @@ const Language = {
     medium: 'Medium',
     low: 'Low',
     high: 'High',
-    complaint:'Complaint'
+    complaint:'Complaint',
+    diagnosis:'Diagnosis',
+    symptoms:'Symptoms',
+    prescribe:'Prescribe',
+    refer_doctor:'Refer a Doctor',
+    specialist:'specialist',
+    ph:'Ph',
+    test:'Test Prescribed'
   },
   hi: {
     welcome: 'स्वागत',

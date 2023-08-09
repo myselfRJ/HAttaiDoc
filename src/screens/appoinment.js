@@ -29,6 +29,7 @@ const Appointment = ({navigation}) => {
   const ClinicRef = useRef(null);
   const [selectedClinic, setSelectedClinic] = useState('');
   const [clinicID, setClinic] = useState('');
+  const [clinicName,setClinicName] = useState('')
   const [clinics, setDataClinic] = useState();
 
   const {phone} = useSelector(state => state?.phone?.data);
