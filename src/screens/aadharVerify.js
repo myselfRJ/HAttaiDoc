@@ -315,7 +315,6 @@ const AadharVerify = ({navigation}) => {
               <View style={{alignItems: 'center'}}>
                 <HButton
                   label={Language[language]['verify']}
-                  loading={loading}
                   onPress={() => PostOtp()}
                 />
               </View>
