@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect,useCallback} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -29,15 +29,61 @@ import {
   addclinic_data,
   updateclinics,
 } from '../redux/features/profiles/clinicData';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
+  const [visibleSlot,setVisibleSlot]=useState(true)
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
 
   const dispatch = useDispatch();
+  useFocusEffect(
+    useCallback(() => {
+      Slotadded()
+
+    
+    }, [slotData])
+  );
+
+
+  const Slotadded=()=>{
+    const m = (slotData?.slots?.M?.length===0)
+    const t = (slotData?.slots?.T?.length===0)
+    const w = (slotData?.slots?.W?.length===0)
+    const th = (slotData?.slots?.TH?.length===0)
+    const f = (slotData?.slots?.F?.length===0)
+    const sa = (slotData?.slots?.Sa?.length===0)
+    const su = (slotData?.slots?.Su?.length===0)
+    console.log("........slot",m,t,w,th,f,sa,su)
+
+  
+
+   !(m&&t&&w&&th&&f&&sa&&su) ?setVisibleSlot(false):setVisibleSlot(true)
+   
+
+
+   
+    }
+
+    const handleClear =()=>{
+     setVisibleSlot(true)
+    }
+
+
+  // useEffect(()=>{
+
+  //   Slotadded()
+  //   console.log(visibleSlot)
+  // },[slotData])
+
+
+// const checkSlotAdded = Slotadded()
+
+// console.log(checkSlotAdded);
 
   const SuccesRef = useRef(null);
   useEffect(() => {
@@ -98,6 +144,9 @@ const AddClinic = ({navigation}) => {
       dispatch(addclinic_data(Clinic_Data));
     }
     setShowSlotChip(true);
+    value.clinic = '',
+    value.address ='',
+    value.fees = ''
   };
   console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
@@ -147,6 +196,7 @@ const AddClinic = ({navigation}) => {
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
+           
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
@@ -193,6 +243,15 @@ const AddClinic = ({navigation}) => {
                 onPress={() => navigation.navigate('createslot')}
               />
             </View>
+            {!visibleSlot && (<View style={styles.slotadded}>
+              <Text style={styles.addedText}>Slots are added!!!</Text>
+              <PlusButton
+        icon="close"
+        size={12}
+        onPress={handleClear}
+      />
+            </View>) }
+            
             <View
               style={{
                 alignSelf: 'flex-end',
@@ -227,8 +286,8 @@ const AddClinic = ({navigation}) => {
                 clinics?.clinics.map((item, index) => (
                   <View key={index} style={{margin: 5}}>
                     <SlotChip
-                      style={{justifyContent: 'space-between'}}
-                      type={<Text>{item.clinic_name}</Text>}
+                      style={{borderColor:CUSTOMCOLOR.primary,backgroundColor:CUSTOMCOLOR.white,borderWidth:1,justifyContent: 'space-between'}}
+                      type={<Text>Clinic: {item.clinic_name}</Text>}
                       onPress={() => handleDeleteSlotChip(index)}
                     />
                   </View>
@@ -289,6 +348,24 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
   },
+  slotadded:{
+    width:'100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'space-between',
+    //borderWidth:1,
+    borderRadius:5,
+    borderColor:CUSTOMCOLOR.primary,
+    backgroundColor:CUSTOMCOLOR.white,
+    paddingHorizontal:16
+  },
+  addedText:{
+    fontFamily: CUSTOMFONTFAMILY.h4,
+    fontSize: 14,
+    color: CUSTOMCOLOR.black,
+    paddingHorizontal:16,
+    paddingVertical:16
+  }
 });
 
 export default AddClinic;

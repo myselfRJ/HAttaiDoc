@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '700',
+    fontWeight: '600',
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: 4,
     alignItems: 'center',

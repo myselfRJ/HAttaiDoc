@@ -130,6 +130,7 @@ const AddUser = ({navigation}) => {
       dispatch(addclinic_users(Clinic_users));
     }
     setShowSlotChip(true);
+    (values.name = ''), (values.phone = ''), (values.gender = '');
   };
 
   console.log(values.slots);
@@ -306,22 +307,24 @@ const AddUser = ({navigation}) => {
                     Users
                   </Text>
                 )}
-                {showSlotChip &&
-                  clinic_users?.map((item, index) => (
-                    <View style={{margin: 5}} key={index}>
+                <View style={{gap: 8}}>
+                  {showSlotChip &&
+                    clinic_users?.map((item, index) => (
                       <SlotChip
-                        style={{justifyContent: 'space-between', gap: 4}}
-                        type={
-                          <Text style={{gap: 8}}>
-                            Name:{item.clinic_user_name},Role:{item.role}
-                            ,Clinic:
-                            {item.clinic}
-                          </Text>
-                        }
+                        style={{
+                          borderColor: CUSTOMCOLOR.primary,
+                          backgroundColor: CUSTOMCOLOR.white,
+                          borderWidth: 1,
+                        }}
+                        key={item.index}
+                        index={item.index}
                         onPress={() => handleDeleteSlotChip(index)}
+                        time={<Text>Name: {item.clinic_user_name}</Text>}
+                        type={<Text>Role: {item.role}</Text>}
+                        duration={<Text>Clinic: {item.clinic_id}</Text>}
                       />
-                    </View>
-                  ))}
+                    ))}
+                </View>
               </View>
             </View>
             <View

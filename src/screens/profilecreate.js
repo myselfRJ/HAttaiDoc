@@ -7,6 +7,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+import DocumentPicker from 'react-native-document-picker'
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {commonstyles} from '../styles/commonstyle';
@@ -27,10 +28,15 @@ import {fetchApi} from '../api/fetchApi';
 import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
+import UploadDocument from '../components/uploadDocument';
+import PlusButton from '../components/plusbtn';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
+  const [selectedFilename,setSelectedFilename] = useState('');
+  const [uploaddocument,SetUploadDocument] = useState('')
+  console.log('document...',uploaddocument)
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -44,6 +50,27 @@ const ProfileCreate = ({navigation}) => {
     medical_number: '',
     experience: '',
   });
+
+  const pickSingleFile = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+        
+      });
+      setSelectedFilename(result[0]?.name || '')
+      SetUploadDocument(result[0]?.uri || '')
+      console.log('result===',result)
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+      } else {
+        // Handle other errors
+      }
+    }
+  };
+  const handleClearFile = ()=>{
+    setSelectedFilename('');
+  }
 
   console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -112,7 +139,7 @@ const ProfileCreate = ({navigation}) => {
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage,
-    medical_doc_url: 'jsdjsbgjkd',
+    medical_doc_url: uploaddocument,
   };
 
   console.log(token);
@@ -258,7 +285,26 @@ const ProfileCreate = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-              <HButton label="Upload Document" />
+                {selectedFilename ? (
+                  <View style={styles.selectedfilecontainer}>
+                     <Text style={styles.selectedFileInfo}>
+              {selectedFilename}
+            </Text>
+            {/* <Icon
+              name="close"
+              size={20}
+              color={CUSTOMCOLOR.black}
+              onPress={handleClearFile}
+            /> */}
+             <PlusButton
+        icon="close"
+        size={12}
+        onPress={handleClearFile}
+      />
+
+                  </View>
+                ): <HButton label="Upload Document" onPress={pickSingleFile}/>}
+             
             </View>
             <HButton
               label={Language[language]['save']}
@@ -331,6 +377,22 @@ const styles = StyleSheet.create({
   DOBselect: {
     width: '100%',
     paddingHorizontal: 8,
+  },
+  selectedfilecontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    //borderWidth:1,
+    borderRadius:5,
+    borderColor:CUSTOMCOLOR.primary,
+    backgroundColor:CUSTOMCOLOR.white
+  },
+  selectedFileInfo: {
+    fontFamily: CUSTOMFONTFAMILY.h4,
+    fontSize: 14,
+    color: CUSTOMCOLOR.black,
+    paddingRight: 8,
+    paddingHorizontal:8,
+    paddingVertical:4
   },
 });
 

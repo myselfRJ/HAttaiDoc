@@ -23,9 +23,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 import moment from 'moment';
 import {UseSelector, useDispatch} from 'react-redux';
 import {addSlots} from '../redux/features/slots/slotData';
+import {CUSTOMCOLOR} from '../settings/styles';
 
-const SlotCreate = ({navigation}) => {
+const SlotCreate = ({navigation, route}) => {
   const slotTypeRef = useRef(null);
+  const [allSlots, setAllSlots] = useState([]);
+  console.log('allslots===', allSlots);
   const slotDurationRef = useRef(null);
   const [fromTime, setFromTime] = useState(new Date());
   const [toTime, setToTime] = useState(new Date());
@@ -85,10 +88,12 @@ const SlotCreate = ({navigation}) => {
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
       };
+      setAllSlots(prev => [...prev, newSlot]);
       setSlots(prevSlots => ({
         ...prevSlots,
         [selectedDay]: [...prevSlots[selectedDay], newSlot],
       }));
+
       setFromTime(new Date());
       setToTime(new Date());
       setConsultValue('');
@@ -172,18 +177,6 @@ const SlotCreate = ({navigation}) => {
           onPress={() => onDaySelectionChange('Su')}
         />
       </View>
-      <View style={styles.ShowSchedule}>
-        {slots[selectedDay]?.map(slot => (
-          <SlotChip
-            key={slot.index}
-            index={slot.index}
-            onPress={handleDelete}
-            time={slot.fromTime + '-' + slot.toTime}
-            type={<Text>Type: {slot.consultType}</Text>}
-            duration={<Text>Duration: {slot.duration}</Text>}
-          />
-        ))}
-      </View>
 
       <View style={styles.selector}>
         <SelectorBtn
@@ -242,6 +235,38 @@ const SlotCreate = ({navigation}) => {
         }}
       />
 
+      <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} />
+      {/* <View style={styles.ShowSchedule}>
+        {slots[selectedDay] && slots[selectedDay]?.map(slot => (
+          <SlotChip
+            key={slot.index}
+            index={slot.index}
+            onPress={handleDelete}
+            time={slot.fromTime + '-' + slot.toTime}
+            type={<Text>Type: {slot.consultType}</Text>}
+            duration={<Text>Duration: {slot.duration}</Text>}
+          />
+        ))}
+      </View> */}
+      <View style={styles.ShowSchedule}>
+        {Object.entries(slots).map(([day, daySlots]) =>
+          daySlots.map(slot => (
+            <SlotChip
+              style={{
+                borderColor: CUSTOMCOLOR.primary,
+                backgroundColor: CUSTOMCOLOR.white,
+                borderWidth: 1,
+              }}
+              key={slot.index}
+              index={slot.index}
+              onPress={handleDelete}
+              time={slot.fromTime + '-' + slot.toTime}
+              type={<Text>Type: {slot.consultType}</Text>}
+              duration={<Text>Duration: {slot.duration}</Text>}
+            />
+          )),
+        )}
+      </View>
       <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}
