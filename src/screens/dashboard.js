@@ -102,6 +102,7 @@ const Dashboard = ({navigation, route}) => {
       console.log(jsonData);
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
+      setClinicId(jsonData.data[0]?.id);
       dispatch(addclinic_id.addclinic_id(jsonData.data[0]?.id));
       dispatch(addclinic_name.addclinic_name(jsonData.data[0]?.clinic_name));
       dispatch(

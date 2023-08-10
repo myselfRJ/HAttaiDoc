@@ -39,7 +39,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     navigation.navigate('visit', {
-      patient_phone_number,
+      patient_phone,
       patient_name,
       gender,
       appointment_id,

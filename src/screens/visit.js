@@ -51,8 +51,14 @@ const Visit = ({navigation, route}) => {
   }, [Prescribe]);
 
   const {patient_phone, appointment_id} = route.params;
-  console.log('----------------params', patient_phone, appointment_id);
+
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  console.log(
+    '----------------params',
+    patient_phone,
+    appointment_id,
+    Clinic_id,
+  );
 
   const fetchData = async () => {
     const consultationData = {
@@ -145,6 +151,11 @@ const Visit = ({navigation, route}) => {
   useEffect(() => {
     fetchDoctor();
   }, []);
+
+  const handlePreview = () => {
+    const patient_phone_number = patient_phone;
+    navigation.navigate('prescription', {patient_phone_number});
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -437,20 +448,17 @@ const Visit = ({navigation, route}) => {
             ))}
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <HButton
-              label="Preview"
-              onPress={() => navigation.navigate('prescription')}
-            />
+            <HButton label="Preview" onPress={handlePreview} />
             <HButton label="save" onPress={() => fetchData()} />
           </View>
-          <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
-            <StatusMessage
-              status={apiStatus.status}
-              message={apiStatus.message}
-            />
-          </BottomSheetView>
         </View>
       </ScrollView>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
     </View>
   );
 };
