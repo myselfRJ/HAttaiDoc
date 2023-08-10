@@ -48,6 +48,7 @@ const patient_age = parseInt(presentYear)-parseInt(birthYear)
       patient_phone,
       appointment_id,
     });
+    appointmentCardRef?.current?.snapToIndex(0);
   };
   return (
     <>

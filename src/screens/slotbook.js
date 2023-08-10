@@ -257,7 +257,7 @@ const SlotBook = ({navigation, route}) => {
             name="bell"
             size={24}
             color={CUSTOMCOLOR.white}
-            style={{top: 43, right: 37}}
+            // style={{top: 43, right: 37, backgroundColor: CUSTOMCOLOR.white}}
           />
         </View>
         <View style={styles.child}>
@@ -361,16 +361,17 @@ const styles = StyleSheet.create({
   },
   MainHeadContainer: {
     backgroundColor: CUSTOMCOLOR.primary,
-    height: '15%',
+    // height: '15%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
+    padding: 24,
   },
   MainText: {
     color: CUSTOMCOLOR.white,
-    top: 43,
-    left: 37,
+    // top: 43,
+    // left: 37,
     gap: 33,
     fontWeight: '600',
     fontSize: 16,
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   },
   item: {margin: 8},
   btn: {
-    height: 100,
+    height: 400,
     alignItems: 'center',
   },
 });
