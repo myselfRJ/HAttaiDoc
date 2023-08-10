@@ -25,13 +25,17 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
   const navigation = useNavigation();
 
+  const presentYear = new Date().toISOString().split('-')[0];
+
   console.log('==============appointment', appointment);
   const patient_phone_number = appointment?.patient_data?.patient_phone_number;
   const appointment_id = appointment?.id;
+  const birthYear = appointment?.patient_data?.birth_date.split('-')[2];
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     navigation.navigate('visit', {patient_phone, appointment_id});
+    appointmentCardRef?.current?.snapToIndex(0);
   };
   return (
     <>
@@ -46,7 +50,10 @@ const AppointmentCard = ({appointment, openVisit}) => {
           <Text style={styles.name}>
             {appointment.patient_data.patient_name}
           </Text>
-          <Text style={styles.age}>{appointment.patient_data.gender}</Text>
+          <Text style={styles.age}>
+            {parseInt(presentYear) - parseInt(birthYear)} |{' '}
+            {appointment.patient_data.gender}
+          </Text>
           <View style={styles.seperator}></View>
           <Text style={styles.symptom}>{appointment.complaint}</Text>
         </View>

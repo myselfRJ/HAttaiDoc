@@ -19,7 +19,7 @@ import {useSelector} from 'react-redux';
 import PatientSearch from '../components/PatientSearch';
 import {Image} from 'react-native';
 
-export default function MedicalRecordPatient({route}) {
+export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
@@ -83,7 +83,14 @@ export default function MedicalRecordPatient({route}) {
   const handlePress = value => {
     setSelectedView(value);
   };
+  const birthYear = data?.birth_date?.split('-')[2];
+  const presentYear = new Date().toISOString().split('-')[0];
 
+  const handleBook = () => {
+    const patient_phone = data?.patient_phone_number;
+    console.log('-----------phonepatient', patient_phone);
+    navigation.navigate('bookslot', {patient_phone});
+  };
   return (
     <View style={{gap: 32}}>
       <View
@@ -116,7 +123,9 @@ export default function MedicalRecordPatient({route}) {
             />
             <View style={styles.patientinfo}>
               <Text style={styles.name}>{data?.patient_name}</Text>
-              <Text style={styles.age}>{data?.birth_date}</Text>
+              <Text style={styles.age}>
+                {parseInt(presentYear) - parseInt(birthYear)} | {data?.gender}
+              </Text>
               <Text style={styles?.contact}>
                 contact:
                 {data?.patient_phone_number}
@@ -222,7 +231,7 @@ export default function MedicalRecordPatient({route}) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <HButton label={'BookAppointment'} />
+          <HButton label={'BookAppointment'} onPress={handleBook} />
         </View>
       </View>
     </View>

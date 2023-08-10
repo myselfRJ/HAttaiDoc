@@ -88,7 +88,9 @@ const PatientSearch = ({navigation}) => {
   useEffect(() => {
     if (name) {
       const filtered = data?.filter(
-        item => item?.patient_name && item?.patient_name.startsWith(name),
+        item =>
+          item?.patient_name &&
+          item?.patient_name.startsWith(name.toUpperCase()),
       );
       setFilteredData(filtered);
     } else {

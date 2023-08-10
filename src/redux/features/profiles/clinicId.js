@@ -2,6 +2,8 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   clinic_id: '',
+  clinic_name: '',
+  clinic_address: '',
 };
 
 const clinic_id_Slice = createSlice({
