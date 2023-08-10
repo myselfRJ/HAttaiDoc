@@ -50,11 +50,14 @@ const Visit = ({navigation, route}) => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
 
-  const {patient_phone, appointment_id} = route.params;
+  const{name,gende,age,patient_phone, appointment_id} = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   console.log(
     '----------------params',
+    name,
+    gende,
+    age,
     patient_phone,
     appointment_id,
     Clinic_id,
@@ -154,7 +157,10 @@ const Visit = ({navigation, route}) => {
 
   const handlePreview = () => {
     const patient_phone_number = patient_phone;
-    navigation.navigate('prescription', {patient_phone_number});
+    const patient_name = patient_name;
+    const gender = gende;
+    const patient_age = age
+    navigation.navigate('prescription', {name,gender,patient_age,patient_phone_number});
   };
 
   return (

@@ -29,8 +29,8 @@ const Prescription = ({route}) => {
   console.log('name===', clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   console.log('address=', clinic_Address);
-  const {patient_phone_number} = route.params;
-  console.log('patient phone--', patient_phone_number);
+  const {name,gender,patient_age,patient_phone_number} = route.params;
+  console.log('patient phone--',name,gender,patient_age,patient_phone_number);
   return (
     <ScrollView>
       <View style={styles.main}>
@@ -69,7 +69,7 @@ const Prescription = ({route}) => {
           <Text style={styles.date}></Text>
         </View>
         <View>
-          <Text style={styles.date}></Text>
+          <Text style={styles.date}>{name} | {gender} | {patient_age} | {patient_phone_number}</Text>
         </View>
         <View>
           <Text style={styles.head}>{Language[language]['vitals']}:</Text>
@@ -139,13 +139,13 @@ const Prescription = ({route}) => {
             <Text style={styles.prescMenu}>{item.total_quantity}</Text>
           </View>
         ))}
-        <View>
+        { notes && <View>
           <Text style={styles.head}>
             {Language[language]['notes']} :{' '}
             <Text style={styles.values}>{notes}</Text>
           </Text>
-        </View>
-        <View>
+        </View>}
+       {refer_doctor.doctor_name && <View>
           <Text style={styles.head}>
             {Language[language]['refer_doctor']} :
           </Text>
@@ -163,18 +163,18 @@ const Prescription = ({route}) => {
               <Text style={styles.values}>{refer_doctor.phone}</Text>
             </Text>
           </View>
-        </View>
+        </View>}
         <View>
           <Text style={styles.head}>
             {Language[language]['test']} : <Text style={styles.values}></Text>
           </Text>
         </View>
-        <View>
+       {followup && <View>
           <Text style={styles.head}>
             {Language[language]['follow_up']} :{' '}
             <Text style={styles.values}>{followup}</Text>
           </Text>
-        </View>
+        </View>}
         <View style={styles.sign}>
           <Text style={styles.values}>Digital sign</Text>
           <Text style={styles.values}>Dr.name</Text>
