@@ -29,13 +29,21 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
   console.log('==============appointment', appointment);
   const patient_phone_number = appointment?.patient_data?.patient_phone_number;
+  const patient_name = appointment?.patient_data?.patient_name;
+  const gender = appointment?.patient_data?.gender;
+  const birth_date = appointment?.patient_data?.birth_date;
+  console.log('date=', birth_date);
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[2];
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
-    navigation.navigate('visit', {patient_phone, appointment_id});
-    appointmentCardRef?.current?.snapToIndex(0);
+    navigation.navigate('visit', {
+      patient_phone_number,
+      patient_name,
+      gender,
+      appointment_id,
+    });
   };
   return (
     <>
@@ -127,55 +135,6 @@ const AppointmentCard = ({appointment, openVisit}) => {
     </>
   );
 };
-{
-  /* {visible && (
-            <View style={[styles.option, {width: 100}]}>
-              <View>
-                <TouchableOpacity onPress={openVisit}>
-                  <Text style={styles.contact1}>
-                    {Language[language]['start_visit']}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.contact1}>
-                    {Language[language]['reschedule']}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setVisible(false);
-                  }}>
-                  <Text style={styles.contact1}>
-                    {Language[language]['cancel']}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )} */
-}
-
-{
-  /* <View style={[styles.option]}>
-            <TouchableOpacity onPress={openVisit}>
-              <Text style={styles.contact1}>
-                {Language[language]['start_visit']}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.contact1}>
-                {Language[language]['reschedule']}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                appointmentCardRef?.current?.snapToIndex(0);
-              }}>
-              <Text style={styles.contact1}>
-                {Language[language]['cancel']}
-              </Text>
-            </TouchableOpacity>
-          </View> */
-}
 
 const styles = StyleSheet.create({
   maincontainer: {

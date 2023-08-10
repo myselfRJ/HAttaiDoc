@@ -235,7 +235,7 @@ const SlotCreate = ({navigation, route}) => {
         }}
       />
 
-      <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} />
+      {/* <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} /> */}
       {/* <View style={styles.ShowSchedule}>
         {slots[selectedDay] && slots[selectedDay]?.map(slot => (
           <SlotChip

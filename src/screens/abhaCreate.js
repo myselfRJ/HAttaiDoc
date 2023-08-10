@@ -128,6 +128,7 @@ const AbhaCreate = ({navigation, route}) => {
         });
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
+          useDispatch(addPatient.addPatient(PatientData))
           console.log('patients', PatientData);
           setTimeout(() => {
             navigation.navigate('success', {patient_phone_number});
