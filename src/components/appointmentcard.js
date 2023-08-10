@@ -27,11 +27,17 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
   console.log('==============appointment', appointment);
   const patient_phone_number = appointment?.patient_data?.patient_phone_number;
+  const patient_name = appointment?.patient_data?.patient_name;
+  const gender = appointment?.patient_data?.gender;
+  const birth_date = appointment?.patient_data?.birth_date;
+  console.log('date=',birth_date)
   const appointment_id = appointment?.id;
+
+    
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
-    navigation.navigate('visit', {patient_phone, appointment_id});
+    navigation.navigate('visit', {patient_phone_number,patient_name,gender, appointment_id});
   };
   return (
     <>

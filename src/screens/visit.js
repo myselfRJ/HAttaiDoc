@@ -17,6 +17,7 @@ import {BottomSheetView, StatusMessage} from '../components';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
+  console.log('date=======',typeof(date))
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(

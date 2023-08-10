@@ -9,10 +9,11 @@ import { useSelector } from 'react-redux';
 
 
 
-const Prescription = () => {
+const Prescription = ({route}) => {
     const doctor_profile = useSelector(state=> state.doctor_profile)
     const patient = useSelector(state=>state?.patient)
     const vitals = useSelector(state=>state?.prescription?.vitalsData)
+    console.log("vitals",vitals)
     const cheif_complaint =useSelector(state=>state?.prescription?.selectedComplaint)
     const symptom =  useSelector(state=>state?.symptoms?.symptom)
     console.log('symptom==',symptom)
@@ -22,7 +23,11 @@ const Prescription = () => {
     const notes = useSelector(state=>state?.prescription?.note)
     const refer_doctor = useSelector(state=>state?.prescription?.selectedDoctor)
     const followup = useSelector(state=>state?.dateTime?.date)
-    
+    const clinic_name = useSelector(state=>state?.clinicid?.clinic_name)
+    console.log('name===',clinic_name)
+    const clinic_Address =useSelector(state=>state?.clinicid?.clinic_Address)
+    console.log('address=',clinic_Address)
+    console.log('patient phone--',patient_phone_number)
     return (
         <ScrollView>
             <View style={styles.main}>
@@ -47,16 +52,16 @@ const Prescription = () => {
                         </View>
                     </View>
                     <View>
-                        <Text style={styles.speciality}>Hello Clinic five star</Text>
-                        <Text style={styles.speciality}>Address</Text>
+                        <Text style={styles.speciality}>{clinic_name}</Text>
+                        <Text style={styles.speciality}>{clinic_Address}</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Image source={require('../assets/images/RX.png')} style={styles.img} />
-                    <Text style={styles.date}>Date,Time</Text>
+                    <Text style={styles.date}></Text>
                 </View>
                 <View>
-                    <Text style={styles.date}>Patient name, gender, age, phone number</Text>
+                    <Text style={styles.date}></Text>
                 </View>
                 <View>
                     <Text style={styles.head}>{Language[language]['vitals']}:</Text>

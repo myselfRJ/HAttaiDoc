@@ -37,6 +37,7 @@ import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const AbhaExistDetails = ({route}) => {
+
   const SuccesRef = useRef(null);
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const AbhaExistDetails = ({route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        useDispatch(addPatient.addPatient(jsonData))
+       // useDispatch(addPatient.addPatient(jsonData))
         console.log('patient data----',jsonData);
         setTimeout(() => {
           navigation.navigate('success', {patient_phone_number});
