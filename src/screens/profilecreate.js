@@ -7,7 +7,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import DocumentPicker from 'react-native-document-picker'
+import DocumentPicker from 'react-native-document-picker';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {commonstyles} from '../styles/commonstyle';
@@ -34,14 +34,15 @@ import PlusButton from '../components/plusbtn';
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
-  const [selectedFilename,setSelectedFilename] = useState('');
-  const [uploaddocument,SetUploadDocument] = useState('')
-  console.log('document...',uploaddocument)
+  const [selectedFilename, setSelectedFilename] = useState('');
+  const [uploaddocument, SetUploadDocument] = useState('');
+  console.log('document...', uploaddocument);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const [values, setValues] = useState({
@@ -55,11 +56,10 @@ const ProfileCreate = ({navigation}) => {
     try {
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
-        
       });
-      setSelectedFilename(result[0]?.name || '')
-      SetUploadDocument(result[0]?.uri || '')
-      console.log('result===',result)
+      setSelectedFilename(result[0]?.name || '');
+      SetUploadDocument(result[0]?.uri || '');
+      console.log('result===', result);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker
@@ -68,9 +68,9 @@ const ProfileCreate = ({navigation}) => {
       }
     }
   };
-  const handleClearFile = ()=>{
+  const handleClearFile = () => {
     setSelectedFilename('');
-  }
+  };
 
   console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -145,6 +145,7 @@ const ProfileCreate = ({navigation}) => {
   console.log(token);
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await fetchApi(URL.profileUrl, {
         method: 'POST',
         headers: {
@@ -166,18 +167,22 @@ const ProfileCreate = ({navigation}) => {
         setTimeout(() => {
           navigation.navigate('addclinic');
         }, 1000);
+        setLoading(false);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status);
+        setLoading(false);
       }
     } catch (error) {
       setApiStatus({status: 'error', message: 'Please try again'});
       SuccesRef?.current?.snapToIndex(1);
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
   console.log(values.formattedDate);
+
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -285,29 +290,30 @@ const ProfileCreate = ({navigation}) => {
                 paddingHorizontal: 8,
                 paddingVertical: 8,
               }}>
-                {selectedFilename ? (
-                  <View style={styles.selectedfilecontainer}>
-                     <Text style={styles.selectedFileInfo}>
-              {selectedFilename}
-            </Text>
-            {/* <Icon
+              {selectedFilename ? (
+                <View style={styles.selectedfilecontainer}>
+                  <Text style={styles.selectedFileInfo}>
+                    {selectedFilename}
+                  </Text>
+                  {/* <Icon
               name="close"
               size={20}
               color={CUSTOMCOLOR.black}
               onPress={handleClearFile}
             /> */}
-             <PlusButton
-        icon="close"
-        size={12}
-        onPress={handleClearFile}
-      />
-
-                  </View>
-                ): <HButton label="Upload Document" onPress={pickSingleFile}/>}
-             
+                  <PlusButton
+                    icon="close"
+                    size={12}
+                    onPress={handleClearFile}
+                  />
+                </View>
+              ) : (
+                <HButton label="Upload Document" onPress={pickSingleFile} />
+              )}
             </View>
             <HButton
               label={Language[language]['save']}
+              loading={loading}
               onPress={() => {
                 fetchData();
               }}
@@ -335,7 +341,10 @@ const ProfileCreate = ({navigation}) => {
           ))}
         </View>
       </BottomSheetView>
-      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
     </View>
@@ -382,17 +391,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     //borderWidth:1,
-    borderRadius:5,
-    borderColor:CUSTOMCOLOR.primary,
-    backgroundColor:CUSTOMCOLOR.white
+    borderRadius: 5,
+    borderColor: CUSTOMCOLOR.primary,
+    backgroundColor: CUSTOMCOLOR.white,
   },
   selectedFileInfo: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: 14,
     color: CUSTOMCOLOR.black,
     paddingRight: 8,
-    paddingHorizontal:8,
-    paddingVertical:4
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
 });
 

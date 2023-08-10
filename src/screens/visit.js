@@ -17,7 +17,7 @@ import {BottomSheetView, StatusMessage} from '../components';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
-  console.log('date=======',typeof(date))
+  console.log('date=======', typeof date);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -85,7 +85,7 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('data---0',jsonData.data);
+        console.log('data---0', jsonData.data);
         setApiStatus({status: 'success', message: 'Successfully created'});
         setTimeout(() => {
           navigation.navigate('tab');
@@ -117,106 +117,123 @@ const Visit = ({navigation, route}) => {
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
     {label: 'Notes', icon: 'chevron-right', navigate: 'notescreen'},
+    {label: 'Lab Reports', icon: 'chevron-right', navigate: 'notescreen'},
     {
       label: 'Refer to Doctor',
       icon: 'chevron-right',
       navigate: 'referdoctorscreen',
     },
   ];
+  const [data, setData] = useState();
 
-  console.log('====================================');
-  console.log('----------------', date, 'date');
-  console.log('====================================');
+  const fetchDoctor = async () => {
+    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('practitioner response====', response);
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setData(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchDoctor();
+  }, []);
 
   return (
-    <View style={{flex:1}}>
-    <ScrollView>
-      <View style={styles.main}>
-        {/* <View style={styles.select}>
+    <View style={{flex: 1}}>
+      <ScrollView>
+        <View style={styles.main}>
+          {/* <View style={styles.select}>
           <HeaderAvatar />
         </View> */}
-        <View style={{alignSelf:'flex-end'}}>
-        <PlusButton
-            icon="close"
-            //style={{right:0}}
-            onPress={() => navigation.goBack()}
-          />
+          <View style={{alignSelf: 'flex-end'}}>
+            <PlusButton
+              icon="close"
+              //style={{right:0}}
+              onPress={() => navigation.goBack()}
+            />
           </View>
 
-        <View style={styles.appointment}>
-       
-          <Text style={styles.h2}>{Language[language]['consultation']}</Text>
-          {dataObject.map((value, index) => (
-            <View key={index}>
-              <View style={styles.visitOpenItem}>
-                <VisitOpen
-                  label={value.label}
-                  icon={value.icon}
-                  navigate={() => navigation.navigate(value.navigate)}
-                />
-                {value.label === 'Symptoms' && (
-                  <View style={styles.basiccontainer}>
-                    <View style={{flexWrap: 'wrap'}}>
-                      {Symptom?.map((item, index) => {
-                        return (
-                          item.symptom != '' && (
-                            <View
-                              key={index}
-                              style={{
-                                flexDirection: 'row',
-                                gap: 10,
-                                padding: 8,
-                                alignItems: 'center',
-                              }}>
-                              <Icon
-                                name="emoticon-sick"
-                                size={16}
-                                color={CUSTOMCOLOR.primary}
-                              />
-                              <View>
-                                <Text style={{color: CUSTOMCOLOR.black}}>
-                                  {item.symptom} | {item.days} | {item.severity}
-                                </Text>
+          <View style={styles.appointment}>
+            <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+            {dataObject.map((value, index) => (
+              <View key={index}>
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={value.label}
+                    icon={value.icon}
+                    navigate={() => navigation.navigate(value.navigate)}
+                  />
+                  {value.label === 'Symptoms' && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexWrap: 'wrap'}}>
+                        {Symptom?.map((item, index) => {
+                          return (
+                            item.symptom != '' && (
+                              <View
+                                key={index}
+                                style={{
+                                  flexDirection: 'row',
+                                  gap: 10,
+                                  padding: 8,
+                                  alignItems: 'center',
+                                }}>
+                                <Icon
+                                  name="emoticon-sick"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                    {item.symptom} | {item.days} |{' '}
+                                    {item.severity}
+                                  </Text>
+                                </View>
                               </View>
-                            </View>
-                          )
-                        );
-                      })}
+                              // </View>
+                            )
+                          );
+                        })}
+                      </View>
                     </View>
-                  </View>
-                )}
-                {value.label === 'Prescribe' && (
-                  <View style={styles.basiccontainer}>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <View
-                        style={{
-                          gap: 8,
-                          left: 8,
-                          flexDirection: 'row',
-                          padding: 8,
-                        }}>
-                        <View>
-                          {prescribe?.map((item, ind) => (
-                            <View
-                              key={ind}
-                              style={{
-                                flexDirection: 'row',
-                                marginBottom: 5,
-                              }}>
-                              <Icon
-                                name="prescription"
-                                size={16}
-                                color={CUSTOMCOLOR.primary}
-                              />
-                              <View>
-                                <Text style={{color: CUSTOMCOLOR.black}}>
-                                  {item.mode}|{item.medicine}|
-                                  {item.dose_quantity}|{item.timing}|
-                                  {item.frequency}|{item.dose_number}|
-                                  {item.total_quantity}|{item.duration}
-                                </Text>
-                              </View>
-                              {/* <TouchableOpacity
+                  )}
+                  {value.label === 'Prescribe' && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View
+                          style={{
+                            gap: 8,
+                            flexDirection: 'row',
+                          }}>
+                          <View>
+                            {prescribe?.map((item, ind) => (
+                              <View
+                                key={ind}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 8,
+                                }}>
+                                <Icon
+                                  name="prescription"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                    {item.mode}|{item.medicine}|
+                                    {item.dose_quantity}|{item.timing}|
+                                    {item.frequency}|{item.dose_number}|
+                                    {item.total_quantity}|{item.duration}
+                                  </Text>
+                                </View>
+                                {/* <TouchableOpacity
                               onPress={() => handleDelete(ind)}
                               style={{left: '500%'}}>
                               <Icon
@@ -225,175 +242,215 @@ const Visit = ({navigation, route}) => {
                                 color={CUSTOMCOLOR.primary}
                               />
                             </TouchableOpacity> */}
-                            </View>
-                          ))}
+                              </View>
+                            ))}
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                )}
-                {value.label === 'Follow-Up' && (
-                  <View style={styles.complaintcontainer}>
-                    {date !== '' && (
-                      <>
+                  )}
+                  {value.label === 'Follow-Up' && (
+                    <View style={styles.complaintcontainer}>
+                      {date !== '' && (
+                        <>
+                          <Icon
+                            name="file-document-edit"
+                            color={CUSTOMCOLOR.primary}
+                            size={16}
+                          />
+                          <Text style={styles.pulse}>{date}</Text>
+                        </>
+                      )}
+                    </View>
+                  )}
+                  {value.label === 'Vitals' &&
+                    (vitalsData?.LDD ||
+                      vitalsData?.EDD ||
+                      vitalsData?.weight ||
+                      vitalsData?.height ||
+                      vitalsData?.pulse_rate ||
+                      vitalsData?.bmi ||
+                      vitalsData?.boby_temparature ||
+                      vitalsData?.pulse ||
+                      vitalsData?.diastolic ||
+                      vitalsData?.systolic ||
+                      vitalsData?.rate) && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View
+                            key={index}
+                            style={{flexDirection: 'row', gap: 8, padding: 2}}>
+                            {vitalsData?.pulse_rate && (
+                              <>
+                                <Icon
+                                  name="thermometer"
+                                  color={CUSTOMCOLOR.primary}
+                                  size={16}
+                                />
+                                <Text style={styles.pulse}>
+                                  {Language[language]['pulse_rate']}:
+                                  {vitalsData.pulse_rate}
+                                </Text>
+                              </>
+                            )}
+                            {vitalsData?.weight && (
+                              <Text style={styles.pulse}>
+                                {Language[language]['weight']}:
+                                {vitalsData.weight}
+                                kg
+                              </Text>
+                            )}
+                            {vitalsData?.height && (
+                              <Text style={styles.pulse}>
+                                {Language[language]['height']}:
+                                {vitalsData.height}
+                                cm
+                              </Text>
+                            )}
+                            {vitalsData?.bmi && vitalsData?.bmi !== 'NaN' ? (
+                              <Text style={styles.pulse}>
+                                {Language[language]['bmi']}:{vitalsData.bmi}
+                              </Text>
+                            ) : null}
+                            {vitalsData?.boby_temparature && (
+                              <Text style={styles.pulse}>
+                                {Language[language]['temp']}:
+                                {vitalsData.boby_temparature}F
+                              </Text>
+                            )}
+                            {vitalsData?.rate && (
+                              <Text style={styles.pulse}>
+                                {Language[language]['rate']}:{vitalsData.rate}F
+                              </Text>
+                            )}
+                          </View>
+                        </View>
+                        {(vitalsData?.systolic ||
+                          vitalsData?.pulse_rate ||
+                          vitalsData?.diastolic) && (
+                          <View
+                            style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <View
+                              key={index}
+                              style={{
+                                flexDirection: 'row',
+                                gap: 8,
+                                padding: 2,
+                              }}>
+                              {vitalsData?.systolic && (
+                                <>
+                                  <Icon
+                                    name="water-check"
+                                    color={CUSTOMCOLOR.primary}
+                                    size={16}
+                                  />
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['systolic_bp']}:
+                                    {vitalsData.systolic}mmHg
+                                  </Text>
+                                </>
+                              )}
+                              {vitalsData?.diastolic && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['diastolic_bp']}:
+                                  {vitalsData.diastolic}mmHg
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                        )}
+                        {vitalsData?.LDD && (
+                          <View
+                            style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <View
+                              key={index}
+                              style={{
+                                flexDirection: 'row',
+                                gap: 8,
+                                padding: 2,
+                              }}>
+                              {vitalsData?.LDD && (
+                                <>
+                                  <Icon
+                                    name="calendar-range"
+                                    color={CUSTOMCOLOR.primary}
+                                    size={16}
+                                  />
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['lmp_edd']}:
+                                    {vitalsData.LDD}
+                                    week
+                                  </Text>
+                                </>
+                              )}
+                              {vitalsData?.EDD && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['us_edd']}:
+                                  {vitalsData.EDD}
+                                  week
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                        )}
+                      </View>
+                    )}
+                  {value.label === 'Chief Complaints' &&
+                    selectedComplaint !== '' && (
+                      <View style={styles.complaintcontainer}>
                         <Icon
                           name="file-document-edit"
                           color={CUSTOMCOLOR.primary}
                           size={16}
                         />
-                        <Text style={styles.pulse}>{date}</Text>
-                      </>
+                        <Text style={styles.pulse}>{selectedComplaint}</Text>
+                      </View>
                     )}
-                  </View>
-                )}
-                {value.label === 'Vitals' && (
-                  <View style={styles.basiccontainer}>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <View
-                        key={index}
-                        style={{flexDirection: 'row', gap: 8, padding: 2}}>
-                        {vitalsData?.pulse_rate && (
-                          <>
-                            <Icon
-                              name="thermometer"
-                              color={CUSTOMCOLOR.primary}
-                              size={16}
-                            />
-                            <Text style={styles.pulse}>
-                              {Language[language]['pulse_rate']}:
-                              {vitalsData.pulse_rate}
-                            </Text>
-                          </>
-                        )}
-                        {vitalsData?.weight && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['weight']}:{vitalsData.weight}kg
-                          </Text>
-                        )}
-                        {vitalsData?.height && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['height']}:{vitalsData.height}cm
-                          </Text>
-                        )}
-                        {vitalsData?.boby_temparature && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['temp']}:
-                            {vitalsData.boby_temparature}F
-                          </Text>
-                        )}
-                        {vitalsData?.rate && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['rate']}:{vitalsData.rate}F
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <View
-                        key={index}
-                        style={{flexDirection: 'row', gap: 8, padding: 2}}>
-                        {vitalsData?.systolic && (
-                          <>
-                            <Icon
-                              name="water-check"
-                              color={CUSTOMCOLOR.primary}
-                              size={16}
-                            />
-                            <Text style={styles.pulse}>
-                              {Language[language]['systolic_bp']}:
-                              {vitalsData.systolic}mmHg
-                            </Text>
-                          </>
-                        )}
-                        {vitalsData?.diastolic && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['diastolic_bp']}:
-                            {vitalsData.diastolic}mmHg
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      <View
-                        key={index}
-                        style={{flexDirection: 'row', gap: 8, padding: 2}}>
-                        {vitalsData?.LDD && (
-                          <>
-                            <Icon
-                              name="calendar-range"
-                              color={CUSTOMCOLOR.primary}
-                              size={16}
-                            />
-                            <Text style={styles.pulse}>
-                              {Language[language]['lmp_edd']}:{vitalsData.LDD}
-                              week
-                            </Text>
-                          </>
-                        )}
-                        {vitalsData?.EDD && (
-                          <Text style={styles.pulse}>
-                            {Language[language]['us_edd']}:{vitalsData.EDD}
-                            week
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                  </View>
-                )}
-                {value.label === 'Chief Complaints' &&
-                  selectedComplaint !== '' && (
+                  {value.label === 'Notes' && note !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"
                         color={CUSTOMCOLOR.primary}
                         size={16}
                       />
-                      <Text style={styles.pulse}>{selectedComplaint}</Text>
+                      <Text style={styles.pulse}>{note}</Text>
                     </View>
                   )}
-                {value.label === 'Notes' && note !== '' && (
-                  <View style={styles.complaintcontainer}>
-                    <Icon
-                      name="file-document-edit"
-                      color={CUSTOMCOLOR.primary}
-                      size={16}
-                    />
-                    <Text style={styles.pulse}>{note}</Text>
-                  </View>
-                )}
-                {value.label === 'Refer to Doctor' && (
-                  <View style={styles.complaintcontainer}>
-                    {selectedDoctor?.doctor_name && (
-                      <>
-                        <Icon
-                          name="doctor"
-                          color={CUSTOMCOLOR.primary}
-                          size={16}
-                        />
-                        <Text style={styles.pulse}>
-                          Refer to {selectedDoctor?.doctor_name}{' '}
-                        </Text>
-                      </>
-                    )}
-                  </View>
-                )}
+                  {value.label === 'Refer to Doctor' && (
+                    <View style={styles.complaintcontainer}>
+                      {selectedDoctor?.doctor_name && (
+                        <>
+                          <Icon
+                            name="doctor"
+                            color={CUSTOMCOLOR.primary}
+                            size={16}
+                          />
+                          <Text style={styles.pulse}>
+                            Refer to {selectedDoctor?.doctor_name}{' '}
+                          </Text>
+                        </>
+                      )}
+                    </View>
+                  )}
+                </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <HButton
+              label="Preview"
+              onPress={() => navigation.navigate('prescription')}
+            />
+            <HButton label="save" onPress={() => fetchData()} />
+          </View>
+          <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+            <StatusMessage
+              status={apiStatus.status}
+              message={apiStatus.message}
+            />
+          </BottomSheetView>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-         
-          <HButton label="Preview"  onPress={()=> navigation.navigate('prescription')}/>
-          <HButton label="save" onPress={() => fetchData()} />
-        </View>
-        <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
-          <StatusMessage
-            status={apiStatus.status}
-            message={apiStatus.message}
-          />
-        </BottomSheetView>
-      </View>
-    </ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -434,7 +491,7 @@ const styles = StyleSheet.create({
   basiccontainer: {
     width: '100%',
     borderRadius: 4,
-    padding: 8,
+    // padding: 8,
     gap: 16,
   },
   pulse: {
@@ -446,9 +503,9 @@ const styles = StyleSheet.create({
   },
   complaintcontainer: {
     width: 635,
-    height: 32,
+    // height: 32,
     borderRadius: 4,
-    padding: 4,
+    // padding: 4,
     gap: 4,
     flexDirection: 'row',
   },

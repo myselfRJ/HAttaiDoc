@@ -17,12 +17,42 @@ import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {addVitals} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation} from '@react-navigation/native';
-import {HButton} from '../components';
+import {HButton, SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
+import DatePicker from 'react-native-date-picker';
 const VitalScreen = props => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
   const dispatch = useDispatch();
+
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [edd, setEdd] = useState();
+
+  const navigation = useNavigation();
+
+  const handleDate = () => {
+    setOpen(!open);
+  };
+
+  const handleConfirm = selectedDate => {
+    setDate(selectedDate);
+    const updateLDD = selectedDate?.toISOString().split('T')[0];
+    console.log('date formate', updateLDD);
+    lmpChange(updateLDD);
+  };
+  console.log(
+    '-------------------',
+    date.toISOString().split('T')[0],
+    '------------------------',
+  );
+
+  const handleCancel = () => {
+    setOpen(open);
+  };
+
+  const lmpdate = date.toISOString().split('T')[0];
+
   const [vitals, setVitals] = useState({
     pulse_rate: '',
     weight: '',
@@ -32,9 +62,16 @@ const VitalScreen = props => {
     bmi: '',
     diastolic: '',
     systolic: '',
-    LDD: new Date(),
+    LDD: '',
     EDD: '',
   });
+
+  console.log(
+    '--------------ldd',
+    vitals?.LDD,
+    '---------------------edd',
+    vitals?.EDD,
+  );
 
   const handlePress = () => {
     console.log(vitals);
@@ -70,14 +107,19 @@ const VitalScreen = props => {
     const height = (parseInt(vitals.height) / 100) ** 2;
     const weight = parseFloat(vitals.weight);
     const BMI = (weight / height).toString().slice(0, 5);
-    return BMI;
+    bmiChange(BMI);
+    setBmi(BMI);
+    // return BMI;
   };
 
   useEffect(() => {
     handleBMI();
-  }, []);
-  const bmiChange = (text, index) => {
-    const updatedVitals = {...vitals, bmi: handleBMI()};
+  }, [vitals.height, vitals.weight]);
+
+  const [bmi, setBmi] = useState();
+
+  const bmiChange = bmi => {
+    const updatedVitals = {...vitals, bmi: bmi};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
@@ -92,33 +134,44 @@ const VitalScreen = props => {
     // dispatch(addVitals({ index, text }));
   };
 
-  const lmpChange = (text, index) => {
-    const updatedVitals = {...vitals, LDD: text};
+  const lmpChange = lmpdate => {
+    console.log('updatedLMMP', updatedVitals);
+    const EDD = handleEdd(lmpdate);
+    usChange(EDD);
+    const updatedVitals = {...vitals, LDD: lmpdate, EDD: EDD};
+    setEdd(EDD);
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
+  const usChange = formatedDate => {
+    const updatedVitals = {...vitals, EDD: formatedDate};
+    console.log('updateValues.......', updatedVitals);
+    setVitals(updatedVitals);
+  };
 
-  const handleEdd = () => {
-    var startDate = new Date(vitals?.LDD);
-    var numberOfDaysToAdd = 280;
-    var endDate = new Date(startDate);
+  const handleEdd = selectedDate => {
+    let startDate = new Date(selectedDate);
+
+    let numberOfDaysToAdd = 280;
+    let endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
-    var formattedEndDate = endDate.toISOString().substring(0, 10);
+    let formattedEndDate = endDate.toISOString().substring(0, 10);
     const day = formattedEndDate.split('-')[2];
     const year = formattedEndDate.split('-')[0];
     const month = months[`${formattedEndDate.split('-')[1]}`];
     const EDD = `${day}-${month}-${year}`;
+    // usChange(EDD);
     return EDD;
   };
-  useEffect(() => {
-    handleEdd();
-  }, []);
+  // useEffect(() => {
+  //   handleEdd();
+  // }, []);
 
-  const usChange = (text, index) => {
-    const updatedVitals = {...vitals, EDD: handleEdd()};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
-  };
+  // const handleedd = handleEdd();
+
+  // const submitEdd = edd => {
+  //   usChange(edd);
+  // };
 
   return (
     <>
@@ -200,11 +253,12 @@ const VitalScreen = props => {
                 </View>
                 <View style={styles.bmicontainer}>
                   <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
-                  <TextInput
+                  {/* <TextInput
                     value={vitals.bmi}
                     onChangeText={text => bmiChange(text, props.index)}
                     style={styles.bmitext}
-                  />
+                  /> */}
+                  <Text style={styles.bmitext}>{bmi}</Text>
                 </View>
               </View>
             </View>
@@ -251,30 +305,43 @@ const VitalScreen = props => {
               <View style={styles.lmpcontainer}>
                 <Text style={styles.lmp}>{Language[language]['lmp_edd']}:</Text>
                 <View style={styles.hardText}>
-                  <TextInput
-                    value={vitals.LDD}
-                    onChangeText={text => lmpChange(text, props.index)}
-                    style={styles.lmptext}
-                    keyboardType="numeric"
+                  <SelectorBtn
+                    onPress={() => {
+                      handleDate();
+                    }}
+                    name={'calendar'}
+                    input={lmpdate}
                   />
-                  <Text
+                  {open && (
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={date}
+                      theme="auto"
+                      mode="date"
+                      onConfirm={handleConfirm}
+                      onCancel={handleCancel}
+                    />
+                  )}
+                  {/* <Text
                     style={{padding: 21, backgroundColor: CUSTOMCOLOR.white}}>
                     week
-                  </Text>
+                  </Text> */}
                 </View>
               </View>
               <View style={styles.uscontainer}>
                 <Text style={styles.us}>{Language[language]['us_edd']}:</Text>
                 <View style={styles.hardText}>
-                  <TextInput
-                    value={vitals.EDD}
-                    onChangeText={text => usChange(text, props.index)}
+                  {/* <TextInput
+                    value={handleedd}
+                    onChangeText={usChange}
                     style={styles.ustext}
                     keyboardType="numeric"
-                  />
+                  /> */}
+                  {/* <Text></Text> */}
                   <Text
                     style={{padding: 21, backgroundColor: CUSTOMCOLOR.white}}>
-                    week
+                    {lmpdate}
                   </Text>
                 </View>
               </View>
@@ -501,6 +568,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     gap: 4,
+    paddingRight: '15%',
   },
   lmp: {
     fontSize: 12,

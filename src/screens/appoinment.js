@@ -31,6 +31,11 @@ const Appointment = ({navigation}) => {
   const [clinicID, setClinic] = useState('');
   const [clinicName,setClinicName] = useState('')
   const [clinics, setDataClinic] = useState();
+  const selections = CONSTANTS.selection;
+  const [seletedType, setSelectedType] = useState(selections[0]);
+  console.log('====================================');
+  console.log('--------selected', seletedType);
+  console.log('====================================');
 
   const {phone} = useSelector(state => state?.phone?.data);
   console.log('====================================');
@@ -153,7 +158,13 @@ const Appointment = ({navigation}) => {
         const filtered = setAppointment?.filter(
           item =>
             item?.patient_data?.patient_name &&
-            item?.patient_data?.patient_name.startsWith(name),
+            item?.patient_data?.patient_name.startsWith(name.toUpperCase()),
+        );
+        setFilteredData(filtered);
+      } else if (seletedType && seletedType !== 'All') {
+        const filtered = setAppointment?.filter(
+          item =>
+            item?.appointment_type && item?.appointment_type === seletedType,
         );
         setFilteredData(filtered);
       } else {
@@ -162,7 +173,7 @@ const Appointment = ({navigation}) => {
     } catch (error) {
       console.error('Error in useEffect:', error);
     }
-  }, [setAppointment, name]);
+  }, [setAppointment, name, seletedType]);
 
   const [doc_name, setDoc_name] = useState();
 
@@ -194,12 +205,6 @@ const Appointment = ({navigation}) => {
     navigation.navigate('addnew');
   };
 
-  const selections = CONSTANTS.selection;
-  const [seletedType, setSelectedType] = useState(selections[0]);
-  console.log('====================================');
-  console.log('--------selected', seletedType);
-  console.log('====================================');
-
   const handleSelect = value => {
     setSelectedType(value);
   };
@@ -208,7 +213,7 @@ const Appointment = ({navigation}) => {
     <View style={styles.main}>
       <View>
         <ScrollView>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -223,7 +228,7 @@ const Appointment = ({navigation}) => {
               </Text>
             </View>
             <HeaderAvatar data={doc_name} />
-          </View>
+          </View> */}
           <View style={styles.select}>
             <SelectorBtn
               //label={Language[language]['clinic']}

@@ -84,7 +84,10 @@ const AbhaCreate = ({navigation, route}) => {
   //   },
   // ];
 
+  const [loading, setLoading] = useState(false);
+
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await fetchApi(URL.CreateAbhaAccount, {
         method: 'POST',
@@ -138,14 +141,18 @@ const AbhaCreate = ({navigation, route}) => {
           setPassword();
           setPassword2();
           setSelectedImage();
+          setLoading(false);
         } else {
           console.error('API call failed:', postPatientdata.status);
+          setLoading(false);
         }
       } else {
         console.error('API call failed:', response.status);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
 
@@ -253,7 +260,10 @@ const AbhaCreate = ({navigation, route}) => {
             }}
           />
         </View>
-        <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+        <BottomSheetView
+          bottomSheetRef={SuccesRef}
+          snapPoints={'50%'}
+          backgroundStyle={'#fff'}>
           <StatusMessage
             status={'success'}
             message="Sucessfully Created Abha ID"

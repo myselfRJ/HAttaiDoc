@@ -272,7 +272,10 @@ const SlotCreate = ({navigation, route}) => {
         style={{position: 'absolute', left: 0, bottom: 0}}
         onPress={handleSaveSlotData}
       />
-      <BottomSheetView bottomSheetRef={slotTypeRef} snapPoints={'40%'}>
+      <BottomSheetView
+        bottomSheetRef={slotTypeRef}
+        snapPoints={'40%'}
+        backgroundStyle={'#fff'}>
         <ScrollView>
           <View style={styles.bottomSheet}>
             {consultType.map((consTypes, index) => (
@@ -293,7 +296,10 @@ const SlotCreate = ({navigation, route}) => {
           </View>
         </ScrollView>
       </BottomSheetView>
-      <BottomSheetView bottomSheetRef={slotDurationRef} snapPoints={'40%'}>
+      <BottomSheetView
+        bottomSheetRef={slotDurationRef}
+        snapPoints={'40%'}
+        backgroundStyle={'#fff'}>
         <ScrollView>
           <View style={styles.bottomSheet}>
             {durationMins.map((mins, index) => (

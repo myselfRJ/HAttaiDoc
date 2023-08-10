@@ -39,6 +39,8 @@ const OtpScreen = ({route}) => {
     setValue,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const {phone, trace_id} = useSelector(state => state?.phone?.data);
   console.log(phone);
   //console.log("..........",data)
@@ -77,6 +79,7 @@ const OtpScreen = ({route}) => {
   };
 
   const resendOtp = async () => {
+    setLoading(!loading);
     try {
       const response = await fetchApi(URL.generateOtp, {
         method: 'POST',
@@ -90,14 +93,18 @@ const OtpScreen = ({route}) => {
         const jsonData = await response.json();
         console.log('generateResponse', jsonData);
         dispatch(addLogin_phone.addLogin_phone(jsonData.data));
+        setLoading(!loading);
       } else {
         console.error('API call failed:', response?.status);
+        setLoading(loading);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(loading);
     }
   };
   const fetchData = async () => {
+    setLoading(!loading);
     try {
       const response = await fetchApi(URL.validateOtp, {
         method: 'POST',
@@ -113,11 +120,14 @@ const OtpScreen = ({route}) => {
         dispatch(authenticateActions.updateauthenticate(jsonData));
         nav.navigate('protected');
         setValue('');
+        setLoading(!loading);
       } else {
         console.error('API call failed:', response.status);
+        setLoading(loading);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(loading);
     }
   };
 
@@ -194,6 +204,7 @@ const OtpScreen = ({route}) => {
                   setIsTimerRunning(false);
                   clearInterval(timerRef.current);
                 }}
+                loading={loading}
               />
             </View>
           </View>

@@ -2,9 +2,8 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   clinic_id: '',
-  clinic_name:'',
-  clinic_Address:''
-
+  clinic_name: '',
+  clinic_Address: '',
 };
 
 const clinic_id_Slice = createSlice({
@@ -23,5 +22,6 @@ const clinic_id_Slice = createSlice({
   },
 });
 
-export const {addclinic_id,addclinic_name,addclinic_Address} = clinic_id_Slice.actions;
+export const {addclinic_id, addclinic_name, addclinic_Address} =
+  clinic_id_Slice.actions;
 export const clinic_id_Reducer = clinic_id_Slice.reducer;

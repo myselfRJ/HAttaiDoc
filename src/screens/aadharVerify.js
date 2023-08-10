@@ -138,6 +138,7 @@ const AadharVerify = ({navigation}) => {
             otp: OtpEncryption(value),
             txnId: AbhaTxnId,
           };
+    setotpLoading(true);
     try {
       const response = await fetchApi(url, {
         method: 'POST',
@@ -212,12 +213,14 @@ const AadharVerify = ({navigation}) => {
           });
           setPhoneNumber();
           setValue();
+          setotpLoading(false);
         } else {
           const jsonData = await response.json();
           console.log('======,aadharOtp', jsonData);
           navigation.navigate('mobileverify');
           setAadhar_no();
           setValue();
+          setotpLoading(false);
         }
       }
     } catch (error) {
@@ -316,6 +319,7 @@ const AadharVerify = ({navigation}) => {
                 <HButton
                   label={Language[language]['verify']}
                   onPress={() => PostOtp()}
+                  loading={otploading}
                 />
               </View>
             </View>

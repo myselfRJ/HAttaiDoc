@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect,useCallback} from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -29,13 +29,12 @@ import {
   addclinic_data,
   updateclinics,
 } from '../redux/features/profiles/clinicData';
-import { useFocusEffect } from '@react-navigation/native';
-
+import {useFocusEffect} from '@react-navigation/native';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
-  const [visibleSlot,setVisibleSlot]=useState(true)
+  const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
@@ -43,36 +42,30 @@ const AddClinic = ({navigation}) => {
   const dispatch = useDispatch();
   useFocusEffect(
     useCallback(() => {
-      Slotadded()
-
-    
-    }, [slotData])
+      Slotadded();
+    }, [slotData]),
   );
 
+  const [loading, setLoading] = useState(false);
 
-  const Slotadded=()=>{
-    const m = (slotData?.slots?.M?.length===0)
-    const t = (slotData?.slots?.T?.length===0)
-    const w = (slotData?.slots?.W?.length===0)
-    const th = (slotData?.slots?.TH?.length===0)
-    const f = (slotData?.slots?.F?.length===0)
-    const sa = (slotData?.slots?.Sa?.length===0)
-    const su = (slotData?.slots?.Su?.length===0)
-    console.log("........slot",m,t,w,th,f,sa,su)
+  const Slotadded = () => {
+    const m = slotData?.slots?.M?.length === 0;
+    const t = slotData?.slots?.T?.length === 0;
+    const w = slotData?.slots?.W?.length === 0;
+    const th = slotData?.slots?.TH?.length === 0;
+    const f = slotData?.slots?.F?.length === 0;
+    const sa = slotData?.slots?.Sa?.length === 0;
+    const su = slotData?.slots?.Su?.length === 0;
+    console.log('........slot', m, t, w, th, f, sa, su);
 
-  
+    !(m && t && w && th && f && sa && su)
+      ? setVisibleSlot(false)
+      : setVisibleSlot(true);
+  };
 
-   !(m&&t&&w&&th&&f&&sa&&su) ?setVisibleSlot(false):setVisibleSlot(true)
-   
-
-
-   
-    }
-
-    const handleClear =()=>{
-     setVisibleSlot(true)
-    }
-
+  const handleClear = () => {
+    setVisibleSlot(true);
+  };
 
   // useEffect(()=>{
 
@@ -80,10 +73,9 @@ const AddClinic = ({navigation}) => {
   //   console.log(visibleSlot)
   // },[slotData])
 
+  // const checkSlotAdded = Slotadded()
 
-// const checkSlotAdded = Slotadded()
-
-// console.log(checkSlotAdded);
+  // console.log(checkSlotAdded);
 
   const SuccesRef = useRef(null);
   useEffect(() => {
@@ -108,6 +100,7 @@ const AddClinic = ({navigation}) => {
     slot: JSON.stringify(slotData.slots),
   };
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await fetchApi(URL.addclinic, {
         method: 'POST',
@@ -126,15 +119,18 @@ const AddClinic = ({navigation}) => {
         setTimeout(() => {
           navigation.navigate('adduser');
         }, 1000);
+        setLoading(false);
       } else {
         setApiStatus({status: 'warning', message: 'Enter all Values'});
         SuccesRef?.current?.snapToIndex(1);
         console.error('API call failed:', response.status, response);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
       SuccesRef?.current?.snapToIndex(1);
+      setLoading(false);
     }
   };
   const [showSlotChip, setShowSlotChip] = useState(false);
@@ -144,9 +140,7 @@ const AddClinic = ({navigation}) => {
       dispatch(addclinic_data(Clinic_Data));
     }
     setShowSlotChip(true);
-    value.clinic = '',
-    value.address ='',
-    value.fees = ''
+    (value.clinic = ''), (value.address = ''), (value.fees = '');
   };
   console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
@@ -196,7 +190,6 @@ const AddClinic = ({navigation}) => {
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
-           
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
@@ -243,15 +236,13 @@ const AddClinic = ({navigation}) => {
                 onPress={() => navigation.navigate('createslot')}
               />
             </View>
-            {!visibleSlot && (<View style={styles.slotadded}>
-              <Text style={styles.addedText}>Slots are added!!!</Text>
-              <PlusButton
-        icon="close"
-        size={12}
-        onPress={handleClear}
-      />
-            </View>) }
-            
+            {!visibleSlot && (
+              <View style={styles.slotadded}>
+                <Text style={styles.addedText}>Slots are added!!!</Text>
+                <PlusButton icon="close" size={12} onPress={handleClear} />
+              </View>
+            )}
+
             <View
               style={{
                 alignSelf: 'flex-end',
@@ -286,7 +277,12 @@ const AddClinic = ({navigation}) => {
                 clinics?.clinics.map((item, index) => (
                   <View key={index} style={{margin: 5}}>
                     <SlotChip
-                      style={{borderColor:CUSTOMCOLOR.primary,backgroundColor:CUSTOMCOLOR.white,borderWidth:1,justifyContent: 'space-between'}}
+                      style={{
+                        borderColor: CUSTOMCOLOR.primary,
+                        backgroundColor: CUSTOMCOLOR.white,
+                        borderWidth: 1,
+                        justifyContent: 'space-between',
+                      }}
                       type={<Text>Clinic: {item.clinic_name}</Text>}
                       onPress={() => handleDeleteSlotChip(index)}
                     />
@@ -299,12 +295,16 @@ const AddClinic = ({navigation}) => {
                 onPress={() => {
                   fetchData();
                 }}
+                loading={loading}
               />
             </View>
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView bottomSheetRef={addressRef} snapPoints={'100%'}>
+      <BottomSheetView
+        bottomSheetRef={addressRef}
+        snapPoints={'100%'}
+        backgroundStyle={'#fff'}>
         <View style={styles.modalcontainer}>
           <ClinicAddress
             onPress={() => {
@@ -313,7 +313,10 @@ const AddClinic = ({navigation}) => {
           />
         </View>
       </BottomSheetView>
-      <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
     </View>
@@ -348,24 +351,24 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
   },
-  slotadded:{
-    width:'100%',
+  slotadded: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     //borderWidth:1,
-    borderRadius:5,
-    borderColor:CUSTOMCOLOR.primary,
-    backgroundColor:CUSTOMCOLOR.white,
-    paddingHorizontal:16
+    borderRadius: 5,
+    borderColor: CUSTOMCOLOR.primary,
+    backgroundColor: CUSTOMCOLOR.white,
+    paddingHorizontal: 16,
   },
-  addedText:{
+  addedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: 14,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal:16,
-    paddingVertical:16
-  }
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
 });
 
 export default AddClinic;

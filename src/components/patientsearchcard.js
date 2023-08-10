@@ -31,12 +31,23 @@ const PatientSearchCard = patient_data => {
   const patient_phone = patient_data?.patient_data?.patient_phone_number;
   const patient_pic = patient_data?.patient_data?.patient_pic_url;
 
+  const presentYear = new Date().toISOString().split('-')[0];
+  const birthYear = patient_data?.patient_data?.birth_date.split('-')[2];
+
   const patient_phone_number = patient_data?.patient_data?.patient_phone_number;
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     console.log(patient_data.data);
     navigation.navigate('patientrecord', {patient_phone});
+    patientSearchRef?.current?.snapToIndex(0);
+  };
+
+  const handleOnBook = () => {
+    const patient_phone = patient_phone_number;
+    console.log(patient_data.data);
+    navigation.navigate('bookslot', {patient_phone});
+    patientSearchRef?.current?.snapToIndex(0);
   };
 
   return (
@@ -53,7 +64,8 @@ const PatientSearchCard = patient_data => {
             {patient_data?.patient_data?.patient_name}
           </Text>
           <Text style={styles.age}>
-            {patient_data?.patient_data?.birth_date}
+            {parseInt(presentYear) - parseInt(birthYear)} |{' '}
+            {patient_data?.patient_data?.gender}
           </Text>
           <Text style={styles?.contact}>
             {Language[language]['contact']}:{' '}
@@ -74,18 +86,22 @@ const PatientSearchCard = patient_data => {
             />
           </View>
         </Pressable>
-        <BottomSheetView bottomSheetRef={patientSearchRef} snapPoints={'100%'}>
+        <BottomSheetView
+          bottomSheetRef={patientSearchRef}
+          snapPoints={'100%'}
+          backgroundStyle="#000000aa">
           <View style={styles.tab}>
             <SelectionTab
-              label={Language[language]['update']}
+              label={Language[language]['book_appointment']}
               selected={true}
+              onPress={handleOnBook}
             />
-            <SelectionTab
+            {/* <SelectionTab
               label={Language[language]['delete']}
               selected={true}
-            />
+            /> */}
             <SelectionTab
-              label={Language[language]['view_more']}
+              label={Language[language]['history']}
               selected={true}
               onPress={handleOnpress}
             />
