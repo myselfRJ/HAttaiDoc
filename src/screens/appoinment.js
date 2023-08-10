@@ -22,14 +22,18 @@ import {CONSTANT} from '../utility/const';
 import {ChartCard, HeaderAvatar} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
-import {addclinic_id,addclinic_name,addclinic_Address} from '../redux/features/profiles/clinicId';
+import {
+  addclinic_id,
+  addclinic_name,
+  addclinic_Address,
+} from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
   const [selectedClinic, setSelectedClinic] = useState('');
   const [clinicID, setClinic] = useState('');
-  const [clinicName,setClinicName] = useState('')
+  const [clinicName, setClinicName] = useState('');
   const [clinics, setDataClinic] = useState();
   const selections = CONSTANTS.selection;
   const [seletedType, setSelectedType] = useState(selections[0]);
@@ -70,17 +74,12 @@ const Appointment = ({navigation}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     handleChangeValue(clinic.id);
-    dispatch(addclinic_id(clinic.id))
-    dispatch(addclinic_name(
-      clinic.clinic_name,
-    ))
-    dispatch(addclinic_Address(
-     clinic.clinic_Address,
-    ))
+    dispatch(addclinic_id(clinic.id));
+    dispatch(addclinic_name(clinic.clinic_name));
+    dispatch(addclinic_Address(clinic.clinic_Address));
     ClinicRef?.current?.snapToIndex(0);
   };
   const ChangeNameValue = e => {
-
     setName(e);
   };
   const [data, setData] = useState([]);
@@ -110,13 +109,11 @@ const Appointment = ({navigation}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
       setClinic(jsonData?.data[0]?.id);
-      dispatch(addclinic_id.addclinic_id(jsonData?.data[0]?.id))
-      dispatch(addclinic_name.addclinic_name(
-        jsonData?.data[0]?.clinic_name,
-      ))
-      dispatch(addclinic_Address.addclinic_Address(
-        jsonData?.data[0]?.clinic_Address,
-      ))
+      dispatch(addclinic_id.addclinic_id(jsonData?.data[0]?.id));
+      dispatch(addclinic_name.addclinic_name(jsonData?.data[0]?.clinic_name));
+      dispatch(
+        addclinic_Address.addclinic_Address(jsonData?.data[0]?.clinic_Address),
+      );
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -294,7 +291,6 @@ const Appointment = ({navigation}) => {
               );
             })}
           </View>
-
           <PlusButton
             icon="plus"
             style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}

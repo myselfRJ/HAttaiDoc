@@ -44,6 +44,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
       gender,
       appointment_id,
     });
+    appointmentCardRef?.current?.snapToIndex(0);
   };
   return (
     <>
