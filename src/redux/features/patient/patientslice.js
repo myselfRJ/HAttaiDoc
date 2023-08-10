@@ -1,10 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
-    name: '',
-    gender: '',
-    phone_number: '',
-    birth_date: '',
-    image: '',
+    patient_data:{}
   };
   
   const patientDataSlice = createSlice({
@@ -12,7 +8,7 @@ const initialState = {
     initialState,
     reducers: {
       addPatient: (state, action) => {
-        state.patient= action.payload;
+        state.patient_data= action.payload;
       },
     },
   });
