@@ -35,7 +35,7 @@ const InitScreen = ({navigation}) => {
   }, []);
   return (
     <View style={styles.main}>
-     <Logo imgstyle={{width: 201, height: 210}}/>
+      <Logo imgstyle={{width: 201, height: 210}} />
       <Text style={styles.text}>{Language[language]['wait']}</Text>
     </View>
   );

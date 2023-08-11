@@ -30,6 +30,8 @@ import {
   updateclinics,
 } from '../redux/features/profiles/clinicData';
 import {useFocusEffect} from '@react-navigation/native';
+import ProgresHeader from '../components/progressheader';
+import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -84,6 +86,8 @@ const AddClinic = ({navigation}) => {
 
   console.log('slotData==========================', slotData?.slots);
 
+  const [status, setStatus] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState('');
   const [value, setValue] = useState({
     clinic: '',
@@ -116,6 +120,7 @@ const AddClinic = ({navigation}) => {
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
+        dispatch(headerStatus.headerStatus({index: 1, status: true}));
         setTimeout(() => {
           navigation.navigate('adduser');
         }, 1000);
@@ -162,6 +167,8 @@ const AddClinic = ({navigation}) => {
     });
   };
 
+  const progressData = useSelector(state => state.progress?.status);
+
   const handleChangeValue = (field, value) => {
     setValue(prevValues => ({
       ...prevValues,
@@ -186,6 +193,7 @@ const AddClinic = ({navigation}) => {
   console.log('clinics', '============', clinics);
   return (
     <View style={{flex: 1}}>
+      <ProgresHeader progressData={progressData} />
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>

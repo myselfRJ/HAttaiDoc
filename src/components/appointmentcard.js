@@ -35,12 +35,12 @@ const AppointmentCard = ({appointment, openVisit}) => {
   console.log('date=', birth_date);
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[2];
-const patient_age = parseInt(presentYear)-parseInt(birthYear)
+  const patient_age = parseInt(presentYear) - parseInt(birthYear);
   const handleOnpress = () => {
-    const patient_phone = patient_phone_number;;
+    const patient_phone = patient_phone_number;
     const name = patient_name;
-    const gende = patient_gender
-    const age = patient_age
+    const gende = patient_gender;
+    const age = patient_age;
     navigation.navigate('visit', {
       name,
       gende,

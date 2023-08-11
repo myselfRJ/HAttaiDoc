@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, startTransition} from 'react';
 import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,6 +30,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 import UploadDocument from '../components/uploadDocument';
 import PlusButton from '../components/plusbtn';
+import ProgresHeader from '../components/progressheader';
+import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -44,6 +46,8 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   const [loading, setLoading] = useState(false);
 
+  const progressData = useSelector(state => state.progress?.status);
+
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     doctor_name: '',
@@ -51,6 +55,8 @@ const ProfileCreate = ({navigation}) => {
     medical_number: '',
     experience: '',
   });
+
+  const [status, setStatus] = useState(false);
 
   const pickSingleFile = async () => {
     try {
@@ -164,6 +170,8 @@ const ProfileCreate = ({navigation}) => {
           message: 'Successfully created',
         });
         SuccesRef?.current?.snapToIndex(1);
+        dispatch(headerStatus.headerStatus({index: 0, status: true}));
+        // setStatus(!status);
         setTimeout(() => {
           navigation.navigate('addclinic');
         }, 1000);
@@ -185,6 +193,7 @@ const ProfileCreate = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
+      <ProgresHeader progressData={progressData} />
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>

@@ -33,7 +33,7 @@ import Abha from '../screens/AddPatient';
 import AbhaExistDetails from '../screens/AbhaExistS';
 import Prescription from '../screens/prescription';
 const Stack = createNativeStackNavigator();
-
+import ProgresHeader from '../components/progressheader';
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
   const isAuth = useSelector(state => state.authenticate.auth.access);
@@ -47,9 +47,21 @@ const ProtectedRoute = () => {
       initialRouteName="initscreen"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="tab" component={BottomTab} />
-      <Stack.Screen name="profilecreate" component={ProfileCreate} />
-      <Stack.Screen name="cliniccreate" component={ClinicCreate} />
-      <Stack.Screen name="usercreate" component={UserCreate} />
+      <Stack.Screen
+        name="profilecreate"
+        component={ProfileCreate}
+        // options={<ProgresHeader status={true} />}
+      />
+      <Stack.Screen
+        name="cliniccreate"
+        component={ClinicCreate}
+        // options={<ProgresHeader status={true} />}
+      />
+      <Stack.Screen
+        name="usercreate"
+        component={UserCreate}
+        // options={<ProgresHeader status={true} />}
+      />
       <Stack.Screen name="createslot" component={SlotCreate} />
       <Stack.Screen name="visit" component={Visit} />
       <Stack.Screen name="patientlookup" component={Patientlookup} />
@@ -75,7 +87,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="pres" component={Prescribe1} />
       <Stack.Screen name="ab" component={Abha} />
       <Stack.Screen name="abhaexist" component={AbhaExistDetails} />
-      <Stack.Screen name='prescription' component={Prescription}/>
+      <Stack.Screen name="prescription" component={Prescription} />
     </Stack.Navigator>
   );
 };
