@@ -177,7 +177,7 @@ const Prescription = ({route}) => {
         </View>}
         <View style={styles.sign}>
           <Text style={styles.values}>Digital sign</Text>
-          <Text style={styles.values}>Dr.name</Text>
+          <Text style={styles.values}>{doctor_profile?.doctor_profile?.doctor_name}</Text>
         </View>
         <View>
           <Text style={styles.head}>

@@ -101,7 +101,7 @@ const PatientSearch = ({navigation}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
-    dispatch(addclinic_id.addclinic_id(clinic.id));
+    dispatch(addclinic_id(clinic.id));
     ClinicRef?.current?.snapToIndex(0);
   };
 

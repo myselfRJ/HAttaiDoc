@@ -375,14 +375,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   modalContainer: {
-    //flex: 1,
-    height: 200,
+    height:'100%',
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
     borderRadius: 10,
+    gap:16,
     padding: 10,
   },
   modalfields: {

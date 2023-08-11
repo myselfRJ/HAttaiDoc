@@ -25,8 +25,11 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     flexDirection: 'row',
-    backgroundColor: CUSTOMCOLOR.primary,
     alignItems: 'center',
+    justifyContent:'space-between',
+    borderColor: CUSTOMCOLOR.primary,
+    backgroundColor: '#C6E3FF',
+    borderWidth: 1,
   },
 });
 export default SlotChip;

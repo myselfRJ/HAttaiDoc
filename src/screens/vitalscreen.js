@@ -404,11 +404,9 @@ const styles = StyleSheet.create({
     gap: 4,
     padding: 8,
   },
-  // basiccontainer: {
-  //   width: '70%',
-  //   height: 87,
-
-  // },
+  basiccontainer: {
+    width: '70%',
+  },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
     paddingHorizontal: 8,
@@ -416,12 +414,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   basicFields: {
-    margin: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    width: 700,
-    gap: 32,
+    width: '100%',
+    gap: 16,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
@@ -504,7 +501,6 @@ const styles = StyleSheet.create({
   bmicontainer: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    width: 70,
   },
   bmi: {
     fontSize: 12,
@@ -512,6 +508,7 @@ const styles = StyleSheet.create({
   },
   bmitext: {
     paddingVertical: 16,
+    paddingHorizontal: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },
@@ -568,7 +565,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     flexDirection: 'row',
-    //gap: 32,
+    gap: 36,
     top: 16,
   },
   lmpcontainer: {

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {commonstyles} from '../styles/commonstyle';
 import PlusButton from '../components/plusbtn';
-import {CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import HButton from '../components/button';
@@ -35,6 +35,7 @@ const SlotCreate = ({navigation, route}) => {
   const [open, setOpen] = useState(false);
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
+  const [visibleSlot, setVisibleSlot] = useState(false);
 
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
@@ -64,6 +65,9 @@ const SlotCreate = ({navigation, route}) => {
   const handleSaveSlotData = () => {
     dispatch(addSlots.addslots(slots));
     navigation.goBack();
+  };
+  const handleClear = () => {
+    setVisibleSlot(true);
   };
 
   const handleConfirm = time => {
@@ -193,6 +197,15 @@ const SlotCreate = ({navigation, route}) => {
       setSlots(weekdaysToUpdate);
     }
   };
+  // const handleDelete = index => {
+  //   setAllSlots(prevAllSlots =>
+  //     prevAllSlots.filter(slot => slot.index !== index),
+  //   );
+  // // const handleDelete = index=>{
+  // //   setSlots(prevSlots =>(
+  // //     prevSlots.filter(slot => slot.index !== index)
+  // //   ))
+  // // }
   const handleDelete = index => {
     setAllSlots(prevAllSlots =>
       prevAllSlots.filter(slot => slot.index !== index),
@@ -202,10 +215,23 @@ const SlotCreate = ({navigation, route}) => {
       for (const day in prevSlots) {
         updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
       }
-
+      Alert.alert('Warning', '"slots are deleted"');
+      // <View style={styles.slotdelete}>
+      //           <Text style={styles.deletedText}>Slots deleted</Text>
+      //           <PlusButton icon="close" size={12} onPress={handleClear} />
+      //         </View>
       return updatedSlots;
     });
   };
+  // const handleDelete = index => {
+  //   setSlots(prevSlots => {
+  //     const updatedSlots = {};
+  //     for (const day in prevSlots) {
+  //       updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
+  //     }
+  //     return updatedSlots;
+  //   });
+  // };
   const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
@@ -236,6 +262,22 @@ const SlotCreate = ({navigation, route}) => {
 
   return (
     <View style={styles.main}>
+      {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
+      <PlusButton
+        icon="close"
+        style={{
+          zIndex: 4,
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          alignSelf: 'flex-end',
+          padding: 16,
+        }}
+        color="#000000aa"
+        size={32}
+        onPress={handleSaveSlotData}
+      />
+      {/* </View> */}
+
       <View style={styles.alignchild}>
         <Text style={commonstyles.h1}>Add Schedule</Text>
       </View>
@@ -313,6 +355,7 @@ const SlotCreate = ({navigation, route}) => {
           mode="time"
           onConfirm={handleConfirm}
           onCancel={handleCancel}
+          minuteInterval={15}
         />
       </View>
 
@@ -342,9 +385,7 @@ const SlotCreate = ({navigation, route}) => {
           if (isOk) {
             handleAddSlot();
           } else {
-            Alert.alert(
-              `please check once again fromTime and toTime should not be equal the minimum difference between timings is ${selectedDurationValue} mins`,
-            );
+            Alert.alert('Warning', '"From time" and "To time" are same');
           }
         }}
       />
@@ -366,11 +407,6 @@ const SlotCreate = ({navigation, route}) => {
         {Object.entries(slots).map(([day, daySlots]) =>
           daySlots.map(slot => (
             <SlotChip
-              style={{
-                borderColor: CUSTOMCOLOR.primary,
-                backgroundColor: CUSTOMCOLOR.white,
-                borderWidth: 1,
-              }}
               key={slot.index}
               index={slot.index}
               onPress={() => handleDelete(slot.index)}
@@ -397,6 +433,7 @@ const SlotCreate = ({navigation, route}) => {
         style={{position: 'absolute', left: 0, bottom: 0}}
         onPress={handleSaveSlotData}
       />
+
       <BottomSheetView
         bottomSheetRef={slotTypeRef}
         snapPoints={'40%'}
@@ -407,14 +444,8 @@ const SlotCreate = ({navigation, route}) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => handleTypeSelect(consTypes)}>
-                <View
-                  style={{
-                    width: 80,
-                    height: 50,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{consTypes}</Text>
+                <View style={styles.valuesContainer}>
+                  <Text style={styles.values}>{consTypes}</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -431,14 +462,8 @@ const SlotCreate = ({navigation, route}) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => handleDurationSelect(mins)}>
-                <View
-                  style={{
-                    width: 50,
-                    height: 50,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{mins}</Text>
+                <View style={styles.valuesContainer}>
+                  <Text style={styles.values}>{mins} minutes</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -479,7 +504,40 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 8,
   },
-  bottomSheet: {flex: 1, alignItems: 'center', gap: 16},
+  bottomSheet: {flex: 1, alignItems: 'center', gap: 32, paddingVertical: 16},
+  values: {
+    fontSize: 14,
+    fontWeight: 400,
+    fontFamily: CUSTOMFONTFAMILY.opensans,
+    color: CUSTOMCOLOR.black,
+  },
+  valuesContainer: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    //flexDirection:'row',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 4,
+    backgroundColor: '#C6E3FF',
+  },
+  slotdelete: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    //borderWidth:1,
+    borderRadius: 5,
+    borderColor: CUSTOMCOLOR.primary,
+    backgroundColor: CUSTOMCOLOR.white,
+    paddingHorizontal: 16,
+  },
+  deletedText: {
+    fontFamily: CUSTOMFONTFAMILY.h4,
+    fontSize: 14,
+    color: CUSTOMCOLOR.black,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
 });
 
 export default SlotCreate;

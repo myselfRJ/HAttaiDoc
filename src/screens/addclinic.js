@@ -285,12 +285,6 @@ const AddClinic = ({navigation}) => {
                 clinics?.clinics.map((item, index) => (
                   <View key={index} style={{margin: 5}}>
                     <SlotChip
-                      style={{
-                        borderColor: CUSTOMCOLOR.primary,
-                        backgroundColor: CUSTOMCOLOR.white,
-                        borderWidth: 1,
-                        justifyContent: 'space-between',
-                      }}
                       type={<Text>Clinic: {item.clinic_name}</Text>}
                       onPress={() => handleDeleteSlotChip(index)}
                     />
