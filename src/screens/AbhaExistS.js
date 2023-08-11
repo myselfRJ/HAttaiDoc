@@ -39,6 +39,7 @@ import {useNavigation} from '@react-navigation/native';
 const AbhaExistDetails = ({route}) => {
 
   const SuccesRef = useRef(null);
+  // const {phone} = useSelector(state => state?.phone?.data);
 
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -75,6 +76,7 @@ const AbhaExistDetails = ({route}) => {
           gender: gender,
           // aadhar_no: aadhar_no,
           abha_no: abha_no,
+          //doctor_phone_number : phone
         }),
       });
       if (response.status === HttpStatusCode.Ok) {

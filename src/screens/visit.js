@@ -170,13 +170,15 @@ const Visit = ({navigation, route}) => {
           {/* <View style={styles.select}>
           <HeaderAvatar />
         </View> */}
-          <View style={{alignSelf: 'flex-end'}}>
+          {/* <View style={{alignSelf: 'flex-end',position:'absolute',padding:16}}> */}
             <PlusButton
               icon="close"
-              //style={{right:0}}
+              style={{zIndex:4,backgroundColor:"transparent",position:'absolute',alignSelf:'flex-end',padding:16}}
+              color='#000000aa'
+              size={32}
               onPress={() => navigation.goBack()}
             />
-          </View>
+          {/* </View> */}
 
           <View style={styles.appointment}>
             <Text style={styles.h2}>{Language[language]['consultation']}</Text>

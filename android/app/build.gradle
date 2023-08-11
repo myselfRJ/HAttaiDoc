@@ -103,6 +103,12 @@ android {
         versionName "1.0"
     }
 
+     sourceSets {
+        main {
+            assets.srcDirs += ["src/main/assets/fonts"]
+        }
+    }
+
     splits {
         abi {
             reset()
@@ -130,6 +136,8 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+
+             resValue "string", "reactBundleAssets", "assets"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -137,6 +145,8 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            resValue "string", "reactBundleAssets", "assets"
         }
     }
 

@@ -85,6 +85,7 @@ const AbhaCreate = ({navigation, route}) => {
   // ];
 
   const [loading, setLoading] = useState(false);
+  // const {phone} = useSelector(state => state?.phone?.data);
 
   const fetchData = async () => {
     setLoading(true);
@@ -123,6 +124,7 @@ const AbhaCreate = ({navigation, route}) => {
             birth_date: `${jsonData?.yearOfBirth}+${jsonData?.monthOfBirth}+${jsonData?.dayOfBirth}`,
             gender: jsonData?.gender,
             aadhar_no: aadhar_no,
+            //doctor_phone_number:phone,
             abha_no: jsonData?.healthIdNumber,
           }),
         });

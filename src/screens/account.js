@@ -200,6 +200,8 @@ const Account = () => {
 
 const styles = StyleSheet.create({
   MainHeadContainer: {
+    paddingHorizontal:24,
+
     width: '100%',
     height: 88,
     backgroundColor: '#4ba5fa',
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
     bottom: 8,
   },
   pI: {
-    width: 650,
+    width:'90%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     bottom: 8,
   },
   ProfView: {
-    width: 650,
+    width:'90%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   HPID: {
-    width: 650,
+    width: '90%',
     top: 120,
     left: 47,
     padding: 16,
@@ -298,7 +300,7 @@ const styles = StyleSheet.create({
     bottom: 8,
   },
   manageView: {
-    width: 650,
+    width: '90%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
