@@ -10,7 +10,7 @@ const PlusButton = props => {
       <Pressable
         style={{...styles.plus, ...props.style}}
         onPress={props.onPress}>
-        <Icon name={props.icon} size={props.size ? props.size : 48} color="#ffffff" />
+        <Icon name={props.icon} size={props.size ? props.size : 48} color={props.color?props.color:'#ffffff'} />
       </Pressable>
     </>
   );

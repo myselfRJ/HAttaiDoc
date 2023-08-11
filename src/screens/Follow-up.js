@@ -75,7 +75,6 @@ export default function DateTime() {
       </View>
       <View
         style={{
-          width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
           top: '24%',
@@ -93,10 +92,11 @@ export default function DateTime() {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
     flexWrap: 'wrap',
     paddingHorizontal: 24,
     paddingVertical: 24,
+    gap:12
   },
   FUP: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   DateContainer: {
-    width: '100%',
+   // width: '100%',
     borderRadius: 4,
-    padding: 8,
+    paddingHorizontal: 16,
     backgroundColor: CUSTOMCOLOR.white,
     justifyContent: 'space-between',
-    flexDirection: 'row',
+    flexDirection:'row'
   },
   DateText: {
     fontFamily: CUSTOMFONTFAMILY.heading,

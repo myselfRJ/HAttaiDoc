@@ -62,8 +62,8 @@ const styles=StyleSheet.create({
         gap:8
     },
     text:{
-       fontFamily:CUSTOMFONTFAMILY.heading,
-       fontSize:32,
+       fontFamily:'OpenSans-SemiBold',
+       fontSize:28,
        fontWeight:400,
        color:CUSTOMCOLOR.black
         

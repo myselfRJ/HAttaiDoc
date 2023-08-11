@@ -85,7 +85,7 @@ const Entry = ({navigation}) => {
               doubleCheck={[true, false]}
               check={checkNumber}
               label={Language[language]['phone_number']}
-              placeholder={Language[language]['phone_number']}
+              placeholder='Enter your 10 digit phone number'
               keypad="numeric"
               maxLength={10}
               value={phone}

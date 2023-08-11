@@ -217,7 +217,10 @@ const Dashboard = ({navigation, route}) => {
               <HeaderAvatar data={doc_name} />
             </View>
 
-            <View
+           <View>
+            <ToggleSwitch value = {visible} onValueChange={handleChart} />
+           </View>
+           <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -225,7 +228,6 @@ const Dashboard = ({navigation, route}) => {
                 paddingHorizontal: 8,
                 paddingBottom: 8,
               }}>
-              <ToggleSwitch value={visible} onValueChange={handleChart} />
               {visible && (
                 <>
                   <ChartCard
