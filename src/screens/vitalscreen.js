@@ -52,6 +52,9 @@ const VitalScreen = props => {
   };
 
   const lmpdate = date.toISOString().split('T')[0];
+  const lmpdates = `${lmpdate.split('-')[2]}-${months[lmpdate.split('-')[1]]}-${
+    lmpdate.split('-')[0]
+  }`;
 
   const [vitals, setVitals] = useState({
     pulse_rate: '',
@@ -310,7 +313,7 @@ const VitalScreen = props => {
                       handleDate();
                     }}
                     name={'calendar'}
-                    input={lmpdate}
+                    input={lmpdates}
                   />
                   {open && (
                     <DatePicker
@@ -340,7 +343,11 @@ const VitalScreen = props => {
                   /> */}
                   {/* <Text></Text> */}
                   <Text
-                    style={{padding: 16, backgroundColor: CUSTOMCOLOR.white,color:CUSTOMCOLOR.black}}>
+                    style={{
+                      padding: 16,
+                      backgroundColor: CUSTOMCOLOR.white,
+                      color: CUSTOMCOLOR.black,
+                    }}>
                     {vitals?.EDD}
                   </Text>
                 </View>
@@ -384,8 +391,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   h3: {
-    fontSize: 20,
-    fontWeight: 600,
+    fontSize: 14,
+    fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
@@ -399,7 +406,6 @@ const styles = StyleSheet.create({
   },
   basiccontainer: {
     width: '70%',
-
   },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.opensans,
@@ -502,7 +508,7 @@ const styles = StyleSheet.create({
   },
   bmitext: {
     paddingVertical: 16,
-    paddingHorizontal:16,
+    paddingHorizontal: 16,
     gap: 4,
     backgroundColor: CUSTOMCOLOR.white,
   },

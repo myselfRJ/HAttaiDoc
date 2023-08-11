@@ -33,11 +33,12 @@ import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
-
+import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import {
   addclinic_users,
   updateclinic_users,
 } from '../redux/features/profiles/ClinicUsers';
+import ProgresHeader from '../components/progressheader';
 
 const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -77,6 +78,8 @@ const AddUser = ({navigation}) => {
   console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
 
+  const progressData = useSelector(state => state.progress?.status);
+
   const Clinic_users = {
     clinic_user_name: values.name,
     role: values.role,
@@ -109,6 +112,7 @@ const AddUser = ({navigation}) => {
         console.log(jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
+        dispatch(headerStatus.headerStatus({index: 2, status: true}));
         setTimeout(() => {
           navigation.navigate('tab');
         }, 1000);
@@ -212,6 +216,7 @@ const AddUser = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
+      <ProgresHeader progressData={progressData} />
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
