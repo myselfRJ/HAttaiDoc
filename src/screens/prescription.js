@@ -32,8 +32,9 @@ const Prescription = ({route}) => {
   const {name,gender,patient_age,patient_phone_number} = route.params;
   console.log('patient phone--',name,gender,patient_age,patient_phone_number);
   return (
+    <View style={styles.main}>
     <ScrollView>
-      <View style={styles.main}>
+      
         <View
           style={{
             flexDirection: 'row',
@@ -43,6 +44,7 @@ const Prescription = ({route}) => {
             borderBottomColor: CUSTOMCOLOR.primary,
             borderBottomWidth: 1,
             padding: 12,
+            backgroundColor:"#ffffff"
           }}>
           <View style={{flexDirection: 'row'}}>
             <Logo />
@@ -200,8 +202,9 @@ const Prescription = ({route}) => {
             style={styles.footerimg}
           />
         </View>
-      </View>
+     
     </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 24,
+    backgroundColor:'#ffffff'
   },
   title: {
     fontFamily: CUSTOMFONTFAMILY.opensans,

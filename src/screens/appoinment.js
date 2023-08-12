@@ -291,12 +291,13 @@ const Appointment = ({navigation}) => {
               );
             })}
           </View>
-          <PlusButton
+      
+        </ScrollView>
+        <PlusButton
             icon="plus"
-            style={{position: 'absolute', zIndex: 10, right: 24, bottom: 24}}
+            style={{position: 'absolute', left:24,bottom:16}}
             onPress={handlePlusBUtton}
           />
-        </ScrollView>
       </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
