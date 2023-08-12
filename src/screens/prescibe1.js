@@ -21,6 +21,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+import PrescriptionHead from '../components/prescriptionHead';
 
 export default function Prescribe1() {
   const modes = CONSTANTS.modes;
@@ -29,7 +30,7 @@ export default function Prescribe1() {
   const [setmedicine, selectedMedicine] = useState('');
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
-  const [frequency, setFrequency] = useState('');
+  const [ frequency, setFrequency] = useState('');
   const [dose_number, setDose_number] = useState('');
   const [duration, setDuration] = useState('');
   const recommdations = CONSTANTS.medicine_recomendation;
@@ -108,6 +109,8 @@ export default function Prescribe1() {
 
   const FrequencySelection = index => {
     const isSelected = frequency.includes(index);
+    console.log(frequency)
+    console.log("..........",isSelected,index)
     if (isSelected) {
       setFrequency(frequency.filter(i => i !== index));
     } else {
@@ -119,7 +122,8 @@ export default function Prescribe1() {
     <ScrollView>
       <View style={{padding: 24, gap: 24}}>
         <View style={styles.mainHead}>
-          <Text style={styles.mainText}>{Language[language]['prescribe']}</Text>
+          <PrescriptionHead heading={Language[language]['prescribe']}/>
+         {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
         </View>
         <View>
           {prevPres?.map((item, ind) => (

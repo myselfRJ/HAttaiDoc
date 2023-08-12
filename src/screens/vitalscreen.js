@@ -20,6 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import {HButton, SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
 import DatePicker from 'react-native-date-picker';
+import PrescriptionHead from '../components/prescriptionHead';
 const VitalScreen = props => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
@@ -166,20 +167,13 @@ const VitalScreen = props => {
     // usChange(EDD);
     return EDD;
   };
-  // useEffect(() => {
-  //   handleEdd();
-  // }, []);
 
-  // const handleedd = handleEdd();
-
-  // const submitEdd = edd => {
-  //   usChange(edd);
-  // };
 
   return (
     <>
       <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
-        <Text style={styles.h3}>{Language[language]['vitals']}</Text>
+        <PrescriptionHead heading={Language[language]['vitals']}/>
+        {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
         <View>
           <View style={styles.vitalmain}>
             <View style={styles.basiccontainer}>

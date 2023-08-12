@@ -13,7 +13,7 @@ const DARKCOLOR = {
   black: 'black',
   white: 'white',
 };
-const CUSTOMFONTFAMILY = {heading: 'opensans', body: 'source serif pro'};
+const CUSTOMFONTFAMILY = {heading: 'OpenSans-SemiBold', body: 'OpenSans-Regular'};
 const CUSTOMFONTSIZE = {
   h1: 20,
   h2: 18,

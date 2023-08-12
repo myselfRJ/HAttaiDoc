@@ -32,8 +32,13 @@ import Prescribe1 from '../screens/prescibe1';
 import Abha from '../screens/AddPatient';
 import AbhaExistDetails from '../screens/AbhaExistS';
 import Prescription from '../screens/prescription';
+import Diagnosis from '../screens/diagnosis';
+import Commorbities from '../screens/commorbities';
+import Allergies from '../screens/allergies';
+
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
+import PastHistory from '../screens/pasthistory';
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
   const isAuth = useSelector(state => state.authenticate.auth.access);
@@ -88,6 +93,11 @@ const ProtectedRoute = () => {
       <Stack.Screen name="ab" component={Abha} />
       <Stack.Screen name="abhaexist" component={AbhaExistDetails} />
       <Stack.Screen name="prescription" component={Prescription} />
+      <Stack.Screen name="diagnosis" component={Diagnosis} />
+      <Stack.Screen name="commorbities" component={Commorbities} />
+      <Stack.Screen name="pasthistory" component={PastHistory} />
+      <Stack.Screen name="allergies" component={Allergies} />
+      
     </Stack.Navigator>
   );
 };

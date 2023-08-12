@@ -6,6 +6,7 @@ import { Language } from '../settings/customlanguage';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNote } from '../redux/features/prescription/prescriptionSlice';
 import { useNavigation } from '@react-navigation/native';
+import PrescriptionHead from '../components/prescriptionHead';
 const NoteScreen = () => {
     const nav=useNavigation();
     const note = useSelector((state) => state.prescription.note);
@@ -21,7 +22,8 @@ const NoteScreen = () => {
         <View style={{ paddingHorizontal: 24,
             paddingVertical: 24,}}>
             <View style={styles.main}>
-                <Text style={styles.notesText}>{Language[language]['notes']}</Text>
+                <PrescriptionHead heading={Language[language]['notes']}/>
+                
             </View>
             <Notes note={note} onChangeText={handleNoteChange} onPress={handlePress} />
         </View>

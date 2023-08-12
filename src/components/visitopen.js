@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 const VisitOpen = props => {
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 8,
     paddingVertical: 8,
-    fontSize: CUSTOMFONTSIZE.h3,
+    
+   
     fontWeight: '700',
     gap: 4,
     borderRadius: 4,
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.heading,
   },
 });
 

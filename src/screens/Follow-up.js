@@ -15,6 +15,8 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+import Prescribe from './prescribe';
+import PrescriptionHead from '../components/prescriptionHead';
 
 export default function DateTime() {
   const [date, setDate] = useState(new Date());
@@ -54,7 +56,8 @@ export default function DateTime() {
 
   return (
     <View style={styles.MainContainer}>
-      <Text style={styles.FUP}>{Language[language]['follow_up']}</Text>
+      <PrescriptionHead heading={Language[language]['follow_up']}/>
+      {/* <Text style={styles.FUP}>{Language[language]['follow_up']}</Text> */}
       <View style={styles.DateContainer}>
         <SelectorBtn
           onPress={handleDate}

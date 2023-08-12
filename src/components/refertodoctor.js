@@ -17,6 +17,7 @@ import {Language} from '../settings/customlanguage';
 import {addDoctorRefer} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation} from '@react-navigation/native';
 import {HButton} from '../components';
+import PrescriptionHead from './prescriptionHead';
 
 const ReferDoctorForm = props => {
   const nav = useNavigation();
@@ -50,6 +51,7 @@ const ReferDoctorForm = props => {
   return (
     <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
       <View style={styles.main}>
+        <PrescriptionHead heading='Refer to Doctor'/>
         <Text style={styles.title}>Refer to Doctor</Text>
       </View>
       <View style={styles.container}>
