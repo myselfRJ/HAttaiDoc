@@ -8,6 +8,11 @@ import Titbit from '../screens/titbit';
 import Account from '../screens/account';
 import {CUSTOMCOLOR} from '../settings/styles';
 import {StyleSheet} from 'react-native';
+import {
+  verticalScale,
+  moderateScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const Tab = createBottomTabNavigator();
 
@@ -82,12 +87,12 @@ const BottomTab = ({navigation, route}) => {
 const styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: CUSTOMCOLOR.primary,
-    height: 80,
+    height: verticalScale(80),
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },
   leftIcon: {
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
   },
 });
 

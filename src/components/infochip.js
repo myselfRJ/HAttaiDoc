@@ -1,6 +1,7 @@
 import {View, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {moderateScale} from '../utility/scaleDimension';
 
 const InfoChip = props => {
   return (
@@ -14,7 +15,7 @@ const InfoChip = props => {
 
 const styles = StyleSheet.create({
   main: {
-    padding: 16,
+    padding: moderateScale(16),
     borderRadius: 4,
     backgroundColor: CUSTOMCOLOR.white,
     width: '100%',
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
-    padding: 4,
+    padding: moderateScale(4),
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h3,

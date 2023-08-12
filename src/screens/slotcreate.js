@@ -72,7 +72,6 @@ const SlotCreate = ({navigation, route}) => {
   //     roundedDate.setMinutes(0)
   //   }
 
-
   //   const formattedTime = roundedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   //   console.log('time', formattedTime)
   //   setFromTime(formattedTime);
@@ -80,7 +79,6 @@ const SlotCreate = ({navigation, route}) => {
   // useEffect(()=>{
   //   RoundTime()
   // },[])
-
 
   // const From=()=>{
   //   const roundedDate = new Date();
@@ -101,7 +99,7 @@ const SlotCreate = ({navigation, route}) => {
   //         roundedDate.setHours(currentHour + 1);
   //       }
   //      setFromTime(roundedDate);
-  //      const to = roundedDate.getMinutes() +15      
+  //      const to = roundedDate.getMinutes() +15
   //      setToTime(roundedDate.setMinutes(roundedDate.getMinutes()+15))
   //      console.log('from===',fromTime)
   //       console.log('too',(roundedDate.setMinutes(roundedDate.getMinutes()+15)))
@@ -161,6 +159,15 @@ const SlotCreate = ({navigation, route}) => {
     setDurationValue(value);
     slotDurationRef?.current?.snapToIndex(0);
   };
+  const [weekdays, setWeekdays] = useState({
+    M: 'Monday',
+    T: 'Tuesday',
+    W: 'Wednesday',
+    TH: 'Thursday',
+    F: 'Friday',
+    Sa: 'Saturday',
+    Su: 'Sunday',
+  });
 
   // const handleAddSlot = () => {
   //   if (selectedConsultValue && selectedDurationValue) {
@@ -217,7 +224,7 @@ const SlotCreate = ({navigation, route}) => {
   //     setDurationValue('');
   //   }
   // };
-console.log('nowwww',Date.now());
+  console.log('nowwww', Date.now());
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -234,8 +241,8 @@ console.log('nowwww',Date.now());
         ...prevSlots,
         [selectedDay]: [...prevSlots[selectedDay], newSlot],
       }));
-       setFromTime(new Date());
-      setToTime(new Date())
+      setFromTime(new Date());
+      setToTime(new Date());
       setConsultValue(consultType[0]);
       setDurationValue(durationMins[0]);
     }
@@ -261,6 +268,8 @@ console.log('nowwww',Date.now());
         W: slots.M,
         TH: slots.M,
         F: slots.M,
+        Sa: slots.M,
+        Su: slots.M,
       };
       console.log(slots, '------------------------update');
       setSlots(weekdaysToUpdate);
@@ -297,8 +306,7 @@ console.log('nowwww',Date.now());
   useEffect(() => {
     handlewarnings();
   }, []);
-  console.log('----------------', new Date().toString());
-
+  console.log(slots);
   return (
     <View style={styles.main}>
       {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
@@ -342,7 +350,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.M.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.M?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="M"
@@ -356,7 +364,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.T.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.T?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="T"
@@ -370,7 +378,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.W.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.W?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="W"
@@ -384,7 +392,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.TH.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.TH?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="TH"
@@ -398,7 +406,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.F.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.F?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="F"
@@ -412,7 +420,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Sa.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Sa?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Sa"
@@ -426,7 +434,7 @@ console.log('nowwww',Date.now());
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Su.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Su?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Su"

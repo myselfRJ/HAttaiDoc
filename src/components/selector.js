@@ -6,6 +6,11 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const SelectorBtn = props => {
   return (
@@ -22,13 +27,13 @@ const SelectorBtn = props => {
 const styles = StyleSheet.create({
   select: {
     flexDirection: 'row',
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: CUSTOMCOLOR.white,
-    minWidth: 160,
-    borderRadius:4
+    minWidth: verticalScale(160),
+    borderRadius: moderateScale(4),
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h4,

@@ -5,6 +5,11 @@ import {Language} from '../settings/customlanguage';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {useEffect, useState} from 'react';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 const HeaderAvatar = ({data}) => {
   const imgurl = data?.profile_pic_url;
   console.log('====================================');
@@ -13,7 +18,7 @@ const HeaderAvatar = ({data}) => {
   return (
     <>
       <View style={styles.avatarmain}>
-        <Image   
+        <Image
           style={styles.img}
           source={{
             //uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -31,17 +36,17 @@ const HeaderAvatar = ({data}) => {
 const styles = StyleSheet.create({
   avatarmain: {
     flexDirection: 'row',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     // backgroundColor: "#454544",
-    borderRadius: 4,
-    gap: 8,
+    borderRadius: moderateScale(4),
+    gap: moderateScale(8),
   },
   img: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
+    width: horizontalScale(60),
+    height: verticalScale(60),
+    borderRadius: moderateScale(60 / 2),
   },
   name: {
     fontStyle: 'normal',

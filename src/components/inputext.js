@@ -7,6 +7,11 @@ import {
 } from 'react-native';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
+import {
+  moderateScale,
+  horizontalScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -69,8 +74,8 @@ const InputText = props => {
 };
 const styles = StyleSheet.create({
   inpcontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
     width: '100%',
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '700',
@@ -86,8 +91,8 @@ const styles = StyleSheet.create({
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
 
-    paddingHorizontal: 8,
-    paddingVertical: 12,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(12),
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",
@@ -95,8 +100,8 @@ const styles = StyleSheet.create({
   },
   eye: {
     position: 'absolute',
-    top: 19, //12+fontsize.h3/2
-    right: 10,
+    top: moderateScale(19), //12+fontsize.h3/2
+    right: moderateScale(10),
   },
 });
 

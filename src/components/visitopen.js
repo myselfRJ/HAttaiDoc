@@ -6,9 +6,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
+
 const VisitOpen = props => {
   //props-> label, placeholder , action
   return (
@@ -26,13 +36,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    
-   
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '700',
-    gap: 4,
-    borderRadius: 4,
+    gap: moderateScale(4),
+    borderRadius: moderateScale(4),
     //borderBottomWidth: 0.4,
     // borderBottomColor: CUSTOMCOLOR.primary,
   },
@@ -40,7 +49,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.heading,
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
 });
 

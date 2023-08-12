@@ -1,6 +1,8 @@
 import {Text, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {moderateScale} from '../utility/scaleDimension';
+
 const Option = ({label, selected, onPress, value}) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
@@ -27,7 +29,7 @@ const Option = ({label, selected, onPress, value}) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    gap: 8,
+    gap: moderateScale(8),
     alignItems: 'center',
   },
 });

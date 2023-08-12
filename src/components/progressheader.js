@@ -1,5 +1,10 @@
 import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const ProgresHeader = props => {
   return (
@@ -11,8 +16,7 @@ const ProgresHeader = props => {
             style={{
               flexDirection: 'row',
 
-              // width: '33.33%',
-              justifyContent: 'center',
+              // width:horizontalScale           justifyContent: 'center',
               alignItems: 'center',
             }}>
             <View style={styles.progress}>
@@ -45,10 +49,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: 64,
-    paddingVertical: 24,
+    widthhorizontalScalelignSelf: 'center',
+    paddingHorizontal: horizontalScale(64),
+    paddingVertical: verticalScale(24),
   },
   progress: {
     justifyContent: 'space-between',
@@ -56,19 +59,19 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   seperator: {
-    paddingHorizontal: 24,
-    height: 4,
-    width: 200,
+    paddingHorizontal: horizontalScale(24),
+    height: verticalScale(4),
+    width: horizontalScale(200),
     marginBottom: 16,
-    marginHorizontal: 16,
-    borderRadius: 4,
+    marginHorizontal: horizontalScale(16),
+    borderRadius: moderateScale(4),
 
     backgroundColor: '#21f345',
   },
   circle: {
-    height: 48,
-    width: 48,
-    borderRadius: 32,
+    height: verticalScale(48),
+    width: horizontalScale(48),
+    borderRadius: moderateScale(32),
     backgroundColor: '#aaaaaa',
     justifyContent: 'center',
     alignItems: 'center',
