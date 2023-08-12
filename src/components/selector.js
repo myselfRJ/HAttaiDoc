@@ -14,7 +14,7 @@ import {
 
 const SelectorBtn = props => {
   return (
-    <View style={[{flex: 1}, props?.style]}>
+    <View style={[ props?.style]}>
       {props.label && <Text style={styles.h3}>{props.label}</Text>}
       <Pressable style={styles.select} onPress={props.onPress}>
         <Text style={styles.h3}>{props.input}</Text>

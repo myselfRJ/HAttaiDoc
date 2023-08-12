@@ -36,6 +36,7 @@ const SlotCreate = ({navigation, route}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
   const [visibleSlot, setVisibleSlot] = useState(false);
+  const [roundedTime, setRoundedTime] = useState('');
 
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
@@ -52,6 +53,71 @@ const SlotCreate = ({navigation, route}) => {
   const days = ['M', 'T', 'W', 'TH', 'F', 'Sa', 'Su'];
   const [selectedDay, setSelectedDay] = useState('M');
 
+  // const RoundTime=()=>{
+  //   const currentDateTime = new Date();
+  //   console.log('time',currentDateTime)
+  //   const roundedDate = new Date(currentDateTime);
+
+  //    const minutes = roundedDate.getMinutes();
+
+  //    if (minutes >=0 && minutes <15){
+  //     roundedDate.setMinutes(15);
+  //   }else if(minutes >=15 && minutes <30){
+  //     roundedDate.setMinutes(30)
+  //   }
+  //   else if(minutes >=30 && minutes<45){
+  //     roundedDate.setMinutes(45)
+  //   }
+  //   else{
+  //     roundedDate.setMinutes(0)
+  //   }
+
+  //   const formattedTime = roundedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  //   console.log('time', formattedTime)
+  //   setFromTime(formattedTime);
+  // }
+  // useEffect(()=>{
+  //   RoundTime()
+  // },[])
+
+  // const From=()=>{
+  //   const roundedDate = new Date();
+  //   const minutes = roundedDate.getMinutes();
+  //   //const to = minutes +15
+  //   // console.log('mins===',minutes)
+  //   if (minutes >=0 && minutes <15){
+  //         roundedDate.setMinutes(15);
+  //       }else if(minutes >=15 && minutes <30){
+  //         roundedDate.setMinutes(30)
+  //       }
+  //       else if(minutes >=30 && minutes<45){
+  //         roundedDate.setMinutes(45)
+  //       }
+  //       else{
+  //         roundedDate.setMinutes(0)
+  //         const currentHour = roundedDate.getHours();
+  //         roundedDate.setHours(currentHour + 1);
+  //       }
+  //      setFromTime(roundedDate);
+  //      const to = roundedDate.getMinutes() +15
+  //      setToTime(roundedDate.setMinutes(roundedDate.getMinutes()+15))
+  //      console.log('from===',fromTime)
+  //       console.log('too',(roundedDate.setMinutes(roundedDate.getMinutes()+15)))
+  // }
+  // useEffect(()=>{
+  //   From()
+  // },[fromTime,toTime])
+  // const To=()=>{
+  //   const totime = new Date(fromTime)
+  //   const minutes = totime.getMinutes();
+  //   console.log('to mins==',minutes);
+  //   toTime.setMinutes(minutes + 15)
+  //   setToTime(toTime)
+  //   console.log('tooooo',totime)
+  // }
+  // useEffect(()=>{
+  //   To()
+  // },[])
   const DaySelection = index => {
     const isSelected = selectedDay.includes(index);
     if (isSelected) {
@@ -103,6 +169,62 @@ const SlotCreate = ({navigation, route}) => {
     Su: 'Sunday',
   });
 
+  // const handleAddSlot = () => {
+  //   if (selectedConsultValue && selectedDurationValue) {
+  //     const newSlot = {
+  //       index: Date.now().toLocaleString(),
+  //       fromTime: FromformattedTime,
+  //       toTime: ToformattedTime,
+  //       consultType: selectedConsultValue,
+  //       duration: selectedDurationValue,
+  //     };
+
+  //     setAllSlots(prev => [...prev, newSlot]);
+
+  //     if (selectedDay === 'M') {
+  //       const weekdaysToUpdate = ['T', 'W', 'TH', 'F', 'M'];
+  //       weekdaysToUpdate.forEach(weekday => {
+  //         setSlots(prevSlots => ({
+  //           ...prevSlots,
+  //           [weekday]: [...prevSlots[selectedDay], newSlot],
+  //         }));
+  //       });
+  //     } else {
+  //       setSlots(prevSlots => ({
+  //         ...prevSlots,
+  //         [selectedDay]: [...prevSlots[selectedDay], newSlot],
+  //       }));
+  //     }
+
+  //     setFromTime(new Date());
+  //     setToTime(new Date());
+  //     setConsultValue('');
+  //     setDurationValue('');
+  //   }
+  // };
+
+  // const handleAddSlotAdd = () => {
+  //   if (selectedConsultValue && selectedDurationValue) {
+  //     const newSlot = {
+  //       index: Date.now().toLocaleString(),
+  //       fromTime: FromformattedTime,
+  //       toTime: ToformattedTime,
+  //       consultType: selectedConsultValue,
+  //       duration: selectedDurationValue,
+  //     };
+  //     setAllSlots(prev => [...prev, newSlot]);
+  //     setSlots(prevSlots => ({
+  //       ...prevSlots,
+  //       [selectedDay]: [...prevSlots[selectedDay], newSlot],
+  //     }));
+
+  //     setFromTime(new Date());
+  //     setToTime(new Date());
+  //     setConsultValue('');
+  //     setDurationValue('');
+  //   }
+  // };
+  console.log('nowwww', Date.now());
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -119,7 +241,6 @@ const SlotCreate = ({navigation, route}) => {
         ...prevSlots,
         [selectedDay]: [...prevSlots[selectedDay], newSlot],
       }));
-
       setFromTime(new Date());
       setToTime(new Date());
       setConsultValue(consultType[0]);

@@ -18,6 +18,7 @@ import {
   moderateScale,
   verticalScale,
 } from '../utility/scaleDimension';
+import PrescriptionHead from './prescriptionHead';
 
 const ComplaintsCard = props => {
   const selectedComplaint = useSelector(
@@ -35,7 +36,7 @@ const ComplaintsCard = props => {
   };
   return (
     <View style={styles.main}>
-      <Text style={styles.h3}>{Language[language]['cheif_complaints']}</Text>
+      <PrescriptionHead heading={Language[language]['cheif_complaints']} />
       <TextInput
         style={styles.input}
         placeholder="write complaints"

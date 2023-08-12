@@ -6,7 +6,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
 });
 

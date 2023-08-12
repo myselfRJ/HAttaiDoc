@@ -22,6 +22,7 @@ import {
   moderateScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import PrescriptionHead from './prescriptionHead';
 
 const ReferDoctorForm = props => {
   const nav = useNavigation();
@@ -55,6 +56,7 @@ const ReferDoctorForm = props => {
   return (
     <View style={{paddingHorizontal: horizontalScale(24), paddingVertical: 24}}>
       <View style={styles.main}>
+        <PrescriptionHead heading="Refer to Doctor" />
         <Text style={styles.title}>Refer to Doctor</Text>
       </View>
       <View style={styles.container}>

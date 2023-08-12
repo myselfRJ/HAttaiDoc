@@ -8,12 +8,10 @@ import {
 
 const Logo = props => {
   return (
-    <View>
-      <Image
-        style={[styles?.img, props?.imgstyle]}
-        source={require('../assets/images/logo.png')}
-      />
-    </View>
+    <Image
+      style={[styles?.img, props?.imgstyle]}
+      source={require('../assets/images/logo.png')}
+    />
   );
 };
 const styles = StyleSheet.create({

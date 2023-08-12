@@ -32,12 +32,11 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
   const presentYear = new Date().toISOString().split('-')[0];
 
-  console.log('==============appointment', appointment);
+  
   const patient_phone_number = appointment?.patient_data?.patient_phone_number;
   const patient_name = appointment?.patient_data?.patient_name;
   const patient_gender = appointment?.patient_data?.gender;
   const birth_date = appointment?.patient_data?.birth_date;
-  console.log('date=', birth_date);
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[2];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
