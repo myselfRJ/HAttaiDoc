@@ -98,7 +98,7 @@ const AddClinic = ({navigation}) => {
 
   const Clinic_Data = {
     clinic_name: value.clinic,
-    clinic_Address: 'Chennai',
+    clinic_Address: value.address,
     clinic_photo_url: selectedImage,
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
@@ -213,7 +213,14 @@ const AddClinic = ({navigation}) => {
               value={value.clinic}
               setValue={value => handleChangeValue('clinic', value)}
             />
-            <View
+            <InputText
+              label={Language[language]['address']}
+              multiline={true}
+              placeholder="address"
+              value={value.address}
+              setValue={value => handleChangeValue('address', value)}
+            />
+            {/* <View
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
@@ -226,7 +233,7 @@ const AddClinic = ({navigation}) => {
                   addressRef?.current?.snapToIndex(1);
                 }}
               />
-            </View>
+            </View> */}
             <InputText
               label={Language[language]['fees']}
               placeholder="Consultation Fees"

@@ -428,11 +428,11 @@ const SlotCreate = ({navigation, route}) => {
           </TouchableOpacity>
         )}
       </View>
-      <PlusButton
+      {/* <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}
         onPress={handleSaveSlotData}
-      />
+      /> */}
 
       <BottomSheetView
         bottomSheetRef={slotTypeRef}

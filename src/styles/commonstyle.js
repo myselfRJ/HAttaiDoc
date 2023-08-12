@@ -14,7 +14,7 @@ export const commonstyles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 24,
+    //paddingVertical: 24,
     width: '100%',
     alignItems: 'center',
     gap: 8,
