@@ -40,6 +40,7 @@ import {
   addclinic_Address,
 } from '../redux/features/profiles/clinicId';
 import HButton from '../components/button';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -153,6 +154,7 @@ const Dashboard = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
+  // useFocusEffect(())
   useEffect(() => {
     fetchAppointment();
   }, [formatDate, clinicid]);
@@ -178,21 +180,20 @@ const Dashboard = ({navigation, route}) => {
     ClinicRef?.current?.snapToIndex(0);
   };
 
-  const [Appdata, setData] = useState([]);
-
-
-  return (
-    <View style={{flex: 1}}>
+    return (
+    
       
-        
+       <> 
           <View style={styles.container}>
-            <View style={{flex:1}}>
+         
             <View
               style={{
+                width:'100%',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginBottom: 24,
+                // marginBottom: 24,
                 paddingHorizontal: 8,
+              
               }}>
               <View>
                 <Logo />
@@ -204,8 +205,10 @@ const Dashboard = ({navigation, route}) => {
               <HeaderAvatar data={doc_name} />
             </View>
 
+           <View>
+           <ToggleSwitch value = {visible} onValueChange={handleChart} />
            
-            <ToggleSwitch value = {visible} onValueChange={handleChart} />
+           
          
             {visible && (
                <View
@@ -214,6 +217,7 @@ const Dashboard = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 gap: 8,
                 paddingHorizontal: 8,
+                marginTop:16,
                 paddingBottom: 8,
               }}>
               
@@ -229,6 +233,7 @@ const Dashboard = ({navigation, route}) => {
                 
               
             </View>)}
+            </View>
             <View style={styles.select}>
               <SelectorBtn
                 //label={Language[language]['clinic']}
@@ -257,12 +262,15 @@ const Dashboard = ({navigation, route}) => {
 
               {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
             </View>
-            </View>
-            <View style={styles.appointment}>
-            <ScrollView>
-              <Text style={styles.h2}>
+            <Text style={styles.h2}>
                 {Language[language]['appointments']}
               </Text>
+           
+            {/* <View style={styles.appointment}> */}
+            <ScrollView style={{height:400,paddingHorizontal:8,gap:16}}
+            
+            contentContainerStyle={{gap:8}}>
+             
               {setAppointment?.length > 0 ? (
                 setAppointment?.map((value, index) => {
                   return (
@@ -277,32 +285,15 @@ const Dashboard = ({navigation, route}) => {
                 <CustomIcon label="No Appointments" />
               )}
               </ScrollView>
-              <HButton label='see all' 
-              onPress={() => navigation.navigate('myappointment') }/>
+              {/* <HButton label='See all' 
+              btnstyles={{backgroundColor:"#ffffff",alignSelf:"flex-end"}}
+              textStyle={{color:CUSTOMCOLOR.primary}}
+              onPress={() => navigation.navigate('myappointment') }/> */}
             </View>
 
-            <View
-              style={{
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                paddingHorizontal: 8,
-              }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('myappointment')}
-                style={{
-                  borderWidth: 0.5,
-                  borderRadius: 4,
-                  borderColor: CUSTOMCOLOR.primary,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                }}>
-                <Text style={{color: CUSTOMCOLOR.primary}}>
-                  {Language[language]['view_more']}
-                </Text>
-              </TouchableOpacity>
-            </View>
+      
        
-          </View>
+          {/* </View> */}
         
       
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
@@ -325,16 +316,15 @@ const Dashboard = ({navigation, route}) => {
             ))}
         </View>
       </BottomSheetView>
-    </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    // flex:1,
     paddingHorizontal: 24,
     paddingVertical: 24,
-    borderWidth:1
-  },
+    },
 
   title: {
     color: CUSTOMCOLOR.black,
@@ -343,19 +333,23 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   select: {
+  
     gap: 8,
     paddingHorizontal: 8,
+    paddingVertical:8
   },
   appointment: {
-    flex:2,
+  
     gap: 8,
      paddingHorizontal: 8,
-     paddingVertical: 64,
+     paddingVertical: 16,
      justifyContent:'center',
      alignItems:'center'
     //height:500
   },
   h2: {
+    paddingVertical:16,
+    paddingHorizontal:8,
     fontSize: 24,
     fontWeight: '700',
     fontFamily: CUSTOMFONTFAMILY.opensans,
