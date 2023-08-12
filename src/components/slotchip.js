@@ -4,7 +4,7 @@ import {CUSTOMCOLOR} from '../settings/styles';
 
 const SlotChip = props => {
   return (
-    <View style={[styles.main,props.style]}>
+    <View style={[styles.main, props.style]}>
       <Text>{props.time}</Text>
       <Text>{props.type}</Text>
       <Text>{props.duration}</Text>
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: '#C6E3FF',
     borderWidth: 1,

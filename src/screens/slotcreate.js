@@ -158,6 +158,7 @@ const SlotCreate = ({navigation, route}) => {
         toTime: ToformattedTime,
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
+        day: selectedDay,
       };
 
       setAllSlots(prev => [...prev, newSlot]);
@@ -168,8 +169,8 @@ const SlotCreate = ({navigation, route}) => {
 
       setFromTime(new Date());
       setToTime(new Date());
-      setConsultValue('');
-      setDurationValue('');
+      setConsultValue(consultType[0]);
+      setDurationValue(durationMins[0]);
     }
   };
   const [check, setCheck] = useState(false);
@@ -182,6 +183,7 @@ const SlotCreate = ({navigation, route}) => {
         toTime: ToformattedTime,
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
+        day: selectedDay,
       };
 
       setAllSlots(prev => [...prev, newSlot]);
@@ -197,15 +199,6 @@ const SlotCreate = ({navigation, route}) => {
       setSlots(weekdaysToUpdate);
     }
   };
-  // const handleDelete = index => {
-  //   setAllSlots(prevAllSlots =>
-  //     prevAllSlots.filter(slot => slot.index !== index),
-  //   );
-  // // const handleDelete = index=>{
-  // //   setSlots(prevSlots =>(
-  // //     prevSlots.filter(slot => slot.index !== index)
-  // //   ))
-  // // }
   const handleDelete = index => {
     setAllSlots(prevAllSlots =>
       prevAllSlots.filter(slot => slot.index !== index),
@@ -216,49 +209,28 @@ const SlotCreate = ({navigation, route}) => {
         updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
       }
       Alert.alert('Warning', '"slots are deleted"');
-      // <View style={styles.slotdelete}>
-      //           <Text style={styles.deletedText}>Slots deleted</Text>
-      //           <PlusButton icon="close" size={12} onPress={handleClear} />
-      //         </View>
       return updatedSlots;
     });
   };
-  // const handleDelete = index => {
-  //   setSlots(prevSlots => {
-  //     const updatedSlots = {};
-  //     for (const day in prevSlots) {
-  //       updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
-  //     }
-  //     return updatedSlots;
-  //   });
-  // };
   const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
 
   const handlewarnings = () => {
     const TimeCheck = fromTime !== toTime;
-    // const timeList =
-    //   ToformattedTime.split(':')[0] > FromformattedTime.split(':')[0];
     const difference =
       parseInt(ToformattedTime.split(':')[0]) * 60 +
       parseInt(ToformattedTime.split(':')[1]) -
       (parseInt(FromformattedTime.split(':')[0]) * 60 +
         parseInt(FromformattedTime.split(':')[1]));
     const differenceCheck = difference >= selectedDurationValue;
-    if (!TimeCheck && !difference) {
-      Alert.alert(
-        'please check once again fromTime and toTime should not be equal the minimum difference between timings is selectedDuration',
-      );
-    }
     return TimeCheck && differenceCheck;
   };
 
   useEffect(() => {
     handlewarnings();
   }, []);
-
-  // console.log(slots);
+  console.log('----------------', new Date().toString());
 
   return (
     <View style={styles.main}>
@@ -297,41 +269,104 @@ const SlotCreate = ({navigation, route}) => {
         ))}
       </View> */}
       <View style={styles.dayselector}>
-        <SelectionTab
-          label="M"
-          selected={selectedDay === 'M'}
-          onPress={() => onDaySelectionChange('M')}
-        />
-        <SelectionTab
-          label="T"
-          selected={selectedDay === 'T'}
-          onPress={() => onDaySelectionChange('T')}
-        />
-        <SelectionTab
-          label="W"
-          selected={selectedDay === 'W'}
-          onPress={() => onDaySelectionChange('W')}
-        />
-        <SelectionTab
-          label="TH"
-          selected={selectedDay === 'TH'}
-          onPress={() => onDaySelectionChange('TH')}
-        />
-        <SelectionTab
-          label="F"
-          selected={selectedDay === 'F'}
-          onPress={() => onDaySelectionChange('F')}
-        />
-        <SelectionTab
-          label="Sa"
-          selected={selectedDay === 'Sa'}
-          onPress={() => onDaySelectionChange('Sa')}
-        />
-        <SelectionTab
-          label="Su"
-          selected={selectedDay === 'Su'}
-          onPress={() => onDaySelectionChange('Su')}
-        />
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.M.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="M"
+            selected={selectedDay === 'M'}
+            onPress={() => onDaySelectionChange('M')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.T.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="T"
+            selected={selectedDay === 'T'}
+            onPress={() => onDaySelectionChange('T')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.W.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="W"
+            selected={selectedDay === 'W'}
+            onPress={() => onDaySelectionChange('W')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.TH.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="TH"
+            selected={selectedDay === 'TH'}
+            onPress={() => onDaySelectionChange('TH')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.F.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="F"
+            selected={selectedDay === 'F'}
+            onPress={() => onDaySelectionChange('F')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.Sa.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="Sa"
+            selected={selectedDay === 'Sa'}
+            onPress={() => onDaySelectionChange('Sa')}
+          />
+        </View>
+        <View
+          style={[
+            {
+              paddingHorizontal: 8,
+              paddingVertical: 8,
+            },
+            {backgroundColor: slots.Su.length > 0 ? '#2CBB15' : null},
+          ]}>
+          <SelectionTab
+            label="Su"
+            selected={selectedDay === 'Su'}
+            onPress={() => onDaySelectionChange('Su')}
+          />
+        </View>
       </View>
 
       <View style={styles.selector}>
@@ -412,7 +447,11 @@ const SlotCreate = ({navigation, route}) => {
               onPress={() => handleDelete(slot.index)}
               time={slot.fromTime + '-' + slot.toTime}
               type={<Text>Type: {slot.consultType}</Text>}
-              duration={<Text>Duration: {slot.duration}</Text>}
+              duration={
+                <Text>
+                  Duration: {slot.duration} | {slot.day}
+                </Text>
+              }
             />
           )),
         )}
@@ -428,11 +467,11 @@ const SlotCreate = ({navigation, route}) => {
           </TouchableOpacity>
         )}
       </View>
-      <PlusButton
+      {/* <PlusButton
         icon="close"
         style={{position: 'absolute', left: 0, bottom: 0}}
         onPress={handleSaveSlotData}
-      />
+      /> */}
 
       <BottomSheetView
         bottomSheetRef={slotTypeRef}
