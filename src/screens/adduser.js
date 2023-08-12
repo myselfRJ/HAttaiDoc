@@ -6,6 +6,7 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -138,12 +139,16 @@ const AddUser = ({navigation}) => {
     console.log('users--------------------------------------');
     if (values.name) {
       dispatch(addclinic_users(Clinic_users));
+    Alert.alert(
+      'Success',
+      '"User data added successfully"'
+    )
     }
     setShowSlotChip(true);
     (values.name = ''), (values.phone = ''), (values.gender = '');
   };
 
-  console.log(values.slots);
+  //console.log(values.slots);
 
   const handleDeleteSlotChip = index => {
     console.log('...', index);
@@ -318,15 +323,13 @@ const AddUser = ({navigation}) => {
                     Users
                   </Text>
                 )}
-                <View style={{gap: 8}}>
+                <View style={{gap: 8,paddingHorizontal:24}}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
                       <SlotChip
-                        style={{
-                          borderColor: CUSTOMCOLOR.primary,
-                          backgroundColor: CUSTOMCOLOR.white,
-                          borderWidth: 1,
-                        }}
+  //                       style={{
+  //                         paddingHorizontal:24
+  // }}
                         key={item.index}
                         index={item.index}
                         onPress={() => handleDeleteSlotChip(index)}

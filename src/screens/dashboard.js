@@ -39,17 +39,17 @@ import {
   addclinic_name,
   addclinic_Address,
 } from '../redux/features/profiles/clinicId';
+import HButton from '../components/button';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
-  console.log('clini name...', selectedClinic);
   const [clinic, setClinic] = useState('');
   const [item, setItem] = useState();
   const [clinics, setDataClinic] = useState();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
-  console.log('clinic id ..', clinicid);
+
 
   const [visible, setVisible] = useState(false);
 
@@ -58,14 +58,7 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const [setAppointment, setDataAppointment] = useState([]);
-  console.log('apoointment===', setAppointment);
-
   const {phone} = useSelector(state => state?.phone?.data);
-  console.log('====================================');
-  console.log(
-    phone,
-    'phonenumber=++++++++++++++++++++===========================',
-  );
   const handleChangeValue = e => {
     setClinic(e);
   };
@@ -75,7 +68,6 @@ const Dashboard = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formatDate = moment(date).format('YYYY-MM-DD');
-  console.log('date', formatDate);
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -99,7 +91,7 @@ const Dashboard = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
+      
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData.data[0]?.id);
@@ -116,7 +108,6 @@ const Dashboard = ({navigation, route}) => {
     fetchData();
   }, []);
   const [doc_name, setDoc_name] = useState();
-  console.log('doc name===>', doc_name);
 
   const fetchClinic = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -125,10 +116,8 @@ const Dashboard = ({navigation, route}) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('practitioner response====', response);
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
       setDoc_name(jsonData.data);
       dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
@@ -159,7 +148,6 @@ const Dashboard = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
       setDataAppointment(jsonData.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -168,7 +156,7 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     fetchAppointment();
   }, [formatDate, clinicid]);
-  console.log(store.getState());
+
 
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -192,14 +180,13 @@ const Dashboard = ({navigation, route}) => {
 
   const [Appdata, setData] = useState([]);
 
-  console.log(',......', selectedClinic);
-  console.log(',......', visible);
 
   return (
     <View style={{flex: 1}}>
-      <View>
-        <ScrollView>
+      
+        
           <View style={styles.container}>
+            <View style={{flex:1}}>
             <View
               style={{
                 flexDirection: 'row',
@@ -217,10 +204,11 @@ const Dashboard = ({navigation, route}) => {
               <HeaderAvatar data={doc_name} />
             </View>
 
-           <View>
+           
             <ToggleSwitch value = {visible} onValueChange={handleChart} />
-           </View>
-           <View
+         
+            {visible && (
+               <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -228,8 +216,7 @@ const Dashboard = ({navigation, route}) => {
                 paddingHorizontal: 8,
                 paddingBottom: 8,
               }}>
-              {visible && (
-                <>
+              
                   <ChartCard
                     data={data}
                     title={Language[language]['total_patient']}
@@ -239,9 +226,9 @@ const Dashboard = ({navigation, route}) => {
                     title={Language[language]['earnings']}
                     label="₹ "
                   />
-                </>
-              )}
-            </View>
+                
+              
+            </View>)}
             <View style={styles.select}>
               <SelectorBtn
                 //label={Language[language]['clinic']}
@@ -270,7 +257,9 @@ const Dashboard = ({navigation, route}) => {
 
               {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
             </View>
+            </View>
             <View style={styles.appointment}>
+            <ScrollView>
               <Text style={styles.h2}>
                 {Language[language]['appointments']}
               </Text>
@@ -287,6 +276,9 @@ const Dashboard = ({navigation, route}) => {
               ) : (
                 <CustomIcon label="No Appointments" />
               )}
+              </ScrollView>
+              <HButton label='see all' 
+              onPress={() => navigation.navigate('myappointment') }/>
             </View>
 
             <View
@@ -309,15 +301,10 @@ const Dashboard = ({navigation, route}) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={{
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                paddingHorizontal: 8,
-              }}></View>
+       
           </View>
-        </ScrollView>
-      </View>
+        
+      
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
@@ -343,8 +330,10 @@ const Dashboard = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     paddingHorizontal: 24,
     paddingVertical: 24,
+    borderWidth:1
   },
 
   title: {
@@ -358,9 +347,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   appointment: {
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    flex:2,
+    gap: 8,
+     paddingHorizontal: 8,
+     paddingVertical: 64,
+     justifyContent:'center',
+     alignItems:'center'
+    //height:500
   },
   h2: {
     fontSize: 24,
