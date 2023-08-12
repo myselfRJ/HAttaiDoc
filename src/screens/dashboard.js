@@ -39,6 +39,11 @@ import {
   addclinic_name,
   addclinic_Address,
 } from '../redux/features/profiles/clinicId';
+import {
+  horizontalScale,
+  verticalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -205,7 +210,7 @@ const Dashboard = ({navigation, route}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: 24,
-                paddingHorizontal: 8,
+                paddingHorizontal: horizontalScale(8),
               }}>
               <View>
                 <Logo />
@@ -217,15 +222,15 @@ const Dashboard = ({navigation, route}) => {
               <HeaderAvatar data={doc_name} />
             </View>
 
-           <View>
-            <ToggleSwitch value = {visible} onValueChange={handleChart} />
-           </View>
-           <View
+            <View>
+              <ToggleSwitch value={visible} onValueChange={handleChart} />
+            </View>
+            <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                gap: 8,
-                paddingHorizontal: 8,
+                gap: moderateScale(8),
+                paddingHorizontal: horizontalScale(8),
                 paddingBottom: 8,
               }}>
               {visible && (
@@ -293,16 +298,16 @@ const Dashboard = ({navigation, route}) => {
               style={{
                 alignItems: 'flex-end',
                 justifyContent: 'center',
-                paddingHorizontal: 8,
+                paddingHorizontal: horizontalScale(8),
               }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('myappointment')}
                 style={{
                   borderWidth: 0.5,
-                  borderRadius: 4,
+                  borderRadius: moderateScale(4),
                   borderColor: CUSTOMCOLOR.primary,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
+                  paddingHorizontal: horizontalScale(16),
+                  paddingVertical: verticalScale(8),
                 }}>
                 <Text style={{color: CUSTOMCOLOR.primary}}>
                   {Language[language]['view_more']}
@@ -343,8 +348,8 @@ const Dashboard = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
   },
 
   title: {
@@ -354,13 +359,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   select: {
-    gap: 8,
-    paddingHorizontal: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
   appointment: {
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    gap: moderateScale(4),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
   },
   h2: {
     fontSize: 24,
@@ -370,25 +375,25 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   modalContainer: {
-    height: 400,
+    height: verticalScale(400),
     width: '100%',
     //justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
-    borderRadius: 10,
-    padding: 16,
+    borderRadius: moderateScale(10),
+    padding: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
     fontSize: 14,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: 4,
+    padding: moderateScale(4),
   },
   DOBselect: {
     width: '100%',
-    gap: 8,
+    gap: moderateScale(8),
     //paddingHorizontal: 2,
   },
 });

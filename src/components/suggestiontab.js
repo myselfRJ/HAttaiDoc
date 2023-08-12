@@ -2,6 +2,11 @@ import {Pressable, StyleSheet, Text} from 'react-native';
 import {CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 const SuggestionTab = props => {
   return (
     <>
@@ -13,8 +18,8 @@ const SuggestionTab = props => {
 };
 const styles = StyleSheet.create({
   tabcontainer: {
-    paddingHorizontal: 24,
-    paddingVertical: 8,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(8),
     borderWidth: 0.5,
     borderColor: '#4BA5FA',
     borderRadius: 24,

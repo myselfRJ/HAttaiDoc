@@ -18,6 +18,11 @@ import moment from 'moment';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {useNavigation} from '@react-navigation/native';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -146,11 +151,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    padding: 12,
+    padding: moderateScale(12),
     fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: 4,
-    gap: 8,
+    borderRadius: moderateScale(4),
+    gap: moderateScale(8),
   },
   child: {
     width: '40%',
@@ -159,21 +164,21 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: 14,
     lineHeight: 19,
-    padding: 0,
+    padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
   },
   age: {
     fontWeight: 400,
     fontSize: 10,
     lineHeight: 19,
-    padding: 0,
+    padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
   },
   gender: {
     fontWeight: 400,
     fontSize: 10,
     lineHeight: 19,
-    padding: 0,
+    padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
   },
   symptom: {
@@ -181,22 +186,22 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h5,
     lineHeight: 1.5 * CUSTOMFONTSIZE.h5,
-    padding: 0,
+    padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
   },
   img: {
-    width: 96,
-    height: 96,
-    borderRadius: 96 / 2,
+    width: moderateScale(96),
+    height: moderateScale(96),
+    borderRadius: moderateScale(96 / 2),
   },
   patientinfo: {
-    gap: 4,
+    gap: moderateScale(4),
   },
   icon: {
     position: 'absolute',
     right: 8,
     top: 8,
-    padding: 10,
+    padding: moderateScale(10),
   },
   option: {
     width: '100%',
@@ -205,19 +210,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   seperator: {
-    height: 0.5,
+    height: verticalScale(0.5),
     margin: 8,
     backgroundColor: '#f3f4f3',
   },
   hseperator: {
     height: '100%',
-    width: 0.5,
+    width: horizontalScale(0.5),
     margin: 8,
     backgroundColor: '#f3f4f3',
   },
   statusinfo: {
     flexDirection: 'row',
-    gap: 16,
+    gap: moderateScale(16),
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -226,12 +231,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   contact: {
-    height: 25,
-    width: 150,
+    height: verticalScale(25),
+    width: horizontalScale(150),
   },
   contact1: {
-    height: 25,
-    width: 150,
+    height: verticalScale(25),
+    width: horizontalScale(150),
   },
   modal: {
     backgroundColor: '#000000aa',
@@ -240,14 +245,14 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: '#fff',
-    padding: 40,
-    borderRadius: 10,
+    padding: moderateScale(40),
+    borderRadius: moderateScale(10),
   },
   tab: {
     flexDirection: 'row',
-    gap: 16,
+    gap: moderateScale(16),
     paddingHorizontal: 8,
-    padding: 20,
+    padding: moderateScale(20),
     alignSelf: 'center',
   },
 });

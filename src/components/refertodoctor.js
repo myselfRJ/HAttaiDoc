@@ -17,6 +17,11 @@ import {Language} from '../settings/customlanguage';
 import {addDoctorRefer} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation} from '@react-navigation/native';
 import {HButton} from '../components';
+import {
+  verticalScale,
+  moderateScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const ReferDoctorForm = props => {
   const nav = useNavigation();
@@ -48,7 +53,7 @@ const ReferDoctorForm = props => {
   };
 
   return (
-    <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
+    <View style={{paddingHorizontal: horizontalScale(24), paddingVertical: 24}}>
       <View style={styles.main}>
         <Text style={styles.title}>Refer to Doctor</Text>
       </View>
@@ -56,8 +61,8 @@ const ReferDoctorForm = props => {
         <Text style={styles.head}>Recommendation</Text>
         <View
           style={{
-            width: 323,
-            height: 30,
+            width: horizontalScale(323),
+            height: verticalScale(30),
             padding: 8,
             gap: 16,
             flexDirection: 'row',
@@ -93,8 +98,8 @@ const ReferDoctorForm = props => {
 
         <View
           style={{
-            width: 651,
-            height: 50,
+            width: horizontalScale(651),
+            height: verticalScale(50),
             padding: 8,
             marginTop: 10,
             gap: 10,
@@ -143,98 +148,96 @@ const ReferDoctorForm = props => {
 };
 const styles = StyleSheet.create({
   h2: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: 700,
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
-    padding: 10,
+    padding: moderateScale(10),
   },
   main: {
-    width: 651,
-    height: 35,
+    width: horizontalScale(651),
+    height: verticalScale(35),
     justifyContent: 'space-between',
-    padding: 8,
+    padding: moderateScale(8),
   },
   title: {
-    width: 104,
-    height: 19,
+    width: horizontalScale(104),
+    height: verticalScale(19),
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: 600,
     lineHeight: 19.07,
     color: CUSTOMCOLOR.black,
   },
   container: {
-    width: 651,
-    height: 62,
-    padding: 8,
+    width: horizontalScale(651),
+    height: verticalScale(62),
+    padding: moderateScale(8),
     gap: 8,
   },
   head: {
-    width: 125,
-    height: 35,
-    padding: 8,
+    width: horizontalScale(125),
+    height: verticalScale(35),
+    padding: moderateScale(8),
     gap: 10,
     color: CUSTOMCOLOR.black,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     fontWeight: 600,
     lineHeight: 16.34,
   },
   fields: {
-    height: 14,
+    height: verticalScale(14),
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     fontWeight: 400,
     lineHeight: 13.62,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
   },
   input: {
-    width: 150,
-    height: 45,
-    borderRadius: 4,
-    padding: 16,
+    width: horizontalScale(150),
+    height: verticalScale(45),
+    borderRadius: moderateScale(4),
+    padding: moderateScale(16),
     gap: 8,
-    //borderWidth: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 12,
+    fontSize: moderateScale(12),
     backgroundColor: CUSTOMCOLOR.white,
   },
   suggestion: {
     flex: 1,
-    paddingHorizontal: 16,
-    height: 30,
+    paddingHorizontal: horizontalScale(16),
+    height: verticalScale(30),
     gap: 8,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: moderateScale(4),
     alignItems: 'center',
     justifyContent: 'center',
-    //borderColor: CUSTOMCOLOR.primary
   },
   inputfields: {
-    width: 34,
-    height: 16,
+    width: horizontalScale(34),
+    height: verticalScale(16),
     fontFamily: CUSTOMFONTFAMILY.opensans,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     fontWeight: 400,
     lineHeight: 16.34,
   },
   submitbtn: {
     //  alignItems: 'flex-start',
     //  justifyContent: 'flex-start',
-    // paddingHorizontal: 8,
+    // paddingHorizontal: horizontalScale(8),
     // alignSelf:"center",
-    margin: 100,
-    marginLeft: 20,
+    margin: moderateScale(100),
+    marginLeft: verticalScale(20),
     borderWidth: 1,
     borderColor: CUSTOMCOLOR.primary,
-    borderRadius: 4,
-    width: 60,
-    padding: 3,
+    borderRadius: moderateScale(4),
+    width: horizontalScale(60),
+    padding: moderateScale(3),
   },
 });
 export default ReferDoctorForm;

@@ -101,7 +101,7 @@ const SearchAddnew = ({navigation}) => {
         <HButton
           label="Add New"
           icon="plus"
-          onPress={() => navigation.navigate('aadharverify')}
+          onPress={() => navigation.navigate('patientcreate')}
         />
       </View>
     </View>

@@ -93,62 +93,15 @@ const SlotCreate = ({navigation, route}) => {
     setDurationValue(value);
     slotDurationRef?.current?.snapToIndex(0);
   };
-
-  // const handleAddSlot = () => {
-  //   if (selectedConsultValue && selectedDurationValue) {
-  //     const newSlot = {
-  //       index: Date.now().toLocaleString(),
-  //       fromTime: FromformattedTime,
-  //       toTime: ToformattedTime,
-  //       consultType: selectedConsultValue,
-  //       duration: selectedDurationValue,
-  //     };
-
-  //     setAllSlots(prev => [...prev, newSlot]);
-
-  //     if (selectedDay === 'M') {
-  //       const weekdaysToUpdate = ['T', 'W', 'TH', 'F', 'M'];
-  //       weekdaysToUpdate.forEach(weekday => {
-  //         setSlots(prevSlots => ({
-  //           ...prevSlots,
-  //           [weekday]: [...prevSlots[selectedDay], newSlot],
-  //         }));
-  //       });
-  //     } else {
-  //       setSlots(prevSlots => ({
-  //         ...prevSlots,
-  //         [selectedDay]: [...prevSlots[selectedDay], newSlot],
-  //       }));
-  //     }
-
-  //     setFromTime(new Date());
-  //     setToTime(new Date());
-  //     setConsultValue('');
-  //     setDurationValue('');
-  //   }
-  // };
-
-  // const handleAddSlotAdd = () => {
-  //   if (selectedConsultValue && selectedDurationValue) {
-  //     const newSlot = {
-  //       index: Date.now().toLocaleString(),
-  //       fromTime: FromformattedTime,
-  //       toTime: ToformattedTime,
-  //       consultType: selectedConsultValue,
-  //       duration: selectedDurationValue,
-  //     };
-  //     setAllSlots(prev => [...prev, newSlot]);
-  //     setSlots(prevSlots => ({
-  //       ...prevSlots,
-  //       [selectedDay]: [...prevSlots[selectedDay], newSlot],
-  //     }));
-
-  //     setFromTime(new Date());
-  //     setToTime(new Date());
-  //     setConsultValue('');
-  //     setDurationValue('');
-  //   }
-  // };
+  const [weekdays, setWeekdays] = useState({
+    M: 'Monday',
+    T: 'Tuesday',
+    W: 'Wednesday',
+    TH: 'Thursday',
+    F: 'Friday',
+    Sa: 'Saturday',
+    Su: 'Sunday',
+  });
 
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
@@ -194,6 +147,8 @@ const SlotCreate = ({navigation, route}) => {
         W: slots.M,
         TH: slots.M,
         F: slots.M,
+        Sa: slots.M,
+        Su: slots.M,
       };
       console.log(slots, '------------------------update');
       setSlots(weekdaysToUpdate);
@@ -230,8 +185,7 @@ const SlotCreate = ({navigation, route}) => {
   useEffect(() => {
     handlewarnings();
   }, []);
-  console.log('----------------', new Date().toString());
-
+  console.log(slots);
   return (
     <View style={styles.main}>
       {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
@@ -275,7 +229,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.M.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.M?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="M"
@@ -289,7 +243,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.T.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.T?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="T"
@@ -303,7 +257,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.W.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.W?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="W"
@@ -317,7 +271,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.TH.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.TH?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="TH"
@@ -331,7 +285,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.F.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.F?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="F"
@@ -345,7 +299,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Sa.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Sa?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Sa"
@@ -359,7 +313,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Su.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Su?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Su"

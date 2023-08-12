@@ -1,3 +1,9 @@
+import {
+  verticalScale,
+  moderateScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+
 let CUSTOMCOLOR = {
   primary: '#4BA5FA',
   background: 'grey',
@@ -15,11 +21,11 @@ const DARKCOLOR = {
 };
 const CUSTOMFONTFAMILY = {heading: 'opensans', body: 'source serif pro'};
 const CUSTOMFONTSIZE = {
-  h1: 20,
-  h2: 18,
-  h3: 14,
-  h4: 12,
-  h5: 10,
+  h1: moderateScale(20),
+  h2: moderateScale(18),
+  h3: moderateScale(14),
+  h4: moderateScale(12),
+  h5: moderateScale(10),
 };
 // CUSTOMCOLOR=DARKCOLOR;
 export {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE};

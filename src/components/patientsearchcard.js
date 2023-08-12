@@ -19,6 +19,12 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import AddImage from './addimage';
 
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+
 const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
@@ -141,33 +147,29 @@ const PatientSearchCard = patient_data => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    padding: 12,
+    widthhorizontalScalelignItems: 'center',
+    padding: moderateScale(12),
     fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: 4,
-    gap: 8,
+    borderRadius: moderateScale(4),
+    gap: moderateScale(8),
   },
   name: {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: moderateScale(14),
     lineHeight: 20,
-    padding: 0,
     color: CUSTOMCOLOR.black,
   },
   age: {
     fontWeight: 400,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     lineHeight: 20,
-    padding: 0,
     color: CUSTOMCOLOR.black,
   },
   contact: {
     fontWeight: 600,
     fontSize: 10,
     lineHeight: 12.5,
-    padding: 0,
     color: CUSTOMCOLOR.black,
   },
   img: {
@@ -178,8 +180,8 @@ const styles = StyleSheet.create({
   patientinfo: {},
   icon: {
     position: 'absolute',
-    right: 8,
-    top: 8,
+    right: moderateScale(8),
+    top: moderateScale(8),
   },
   option: {
     position: 'absolute',
@@ -187,21 +189,20 @@ const styles = StyleSheet.create({
     top: 0,
   },
   bottomView: {
-    width: '100%',
-    height: 500,
+    widthhorizontalScaleeight: verticalScale(500),
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   modalView: {
-    height: 250,
+    height: verticalScale(250),
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: moderateScale(20),
     borderWidth: 2,
     borderColor: '#00BFFF',
     shadowColor: '#ffff',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: horizontalScale(0),
+      height: verticalScale(2),
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -214,8 +215,8 @@ const styles = StyleSheet.create({
   },
   tab: {
     flexDirection: 'row',
-    gap: 16,
-    paddingHorizontal: 8,
+    gap: moderateScale(16),
+    paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
   },
 });

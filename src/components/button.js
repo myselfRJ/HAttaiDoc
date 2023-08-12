@@ -3,6 +3,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 const HButton = props => {
   //props -> label, action
   return (
@@ -15,7 +20,7 @@ const HButton = props => {
             style={styles.icon}
             name={props.icon}
             color={CUSTOMCOLOR.white}
-            size={24}
+            size={moderateScale(24)}
           />
         )}
         {props.loading && (
@@ -30,19 +35,19 @@ const styles = StyleSheet.create({
   btncontainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    fontSize: CUSTOMFONTSIZE.h3,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
+    fontSize: moderateScale(CUSTOMFONTSIZE.h3),
     fontWeight: '600',
     backgroundColor: CUSTOMCOLOR.primary,
-    borderRadius: 4,
+    borderRadius: moderateScale(4),
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: verticalScale(8),
   },
   btntext: {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: moderateScale(14),
     color: CUSTOMCOLOR.white,
   },
 });

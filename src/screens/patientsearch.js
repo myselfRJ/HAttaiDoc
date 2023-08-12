@@ -57,7 +57,7 @@ const PatientSearch = ({navigation}) => {
   };
   useEffect(() => {
     fetchClincs();
-  }, []);
+  }, [phone]);
 
   const [filteredData, setFilteredData] = useState([]);
   const [name, setName] = useState('');

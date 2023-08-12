@@ -18,6 +18,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
 import OtpEncryption from '../utility/encryption';
 import moment from 'moment';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -75,7 +80,7 @@ const Entry = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.Top}>
           <Image
-            style={{width: 297, height: 286}}
+            style={{width: horizontalScale(297), height: verticalScale(286)}}
             source={require('../assets/images/entry.png')}
           />
         </View>
@@ -85,7 +90,7 @@ const Entry = ({navigation}) => {
               doubleCheck={[true, false]}
               check={checkNumber}
               label={Language[language]['phone_number']}
-              placeholder='Enter your 10 digit phone number'
+              placeholder="Enter your 10 digit phone number"
               keypad="numeric"
               maxLength={10}
               value={phone}
@@ -110,20 +115,21 @@ const Entry = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 48,
+    gap: moderateScale(48),
   },
   Top: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 503,
+    padding: moderateScale(80),
+    // height: horizontalScale(503),
     backgroundColor: CUSTOMCOLOR.primary,
   },
   bottom: {
     //alignItems:'center',
-    gap: 24,
+    gap: moderateScale(24),
   },
   input: {
-    paddingHorizontal: 24,
+    paddingHorizontal: horizontalScale(24),
   },
 });
 
