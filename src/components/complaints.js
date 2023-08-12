@@ -7,6 +7,7 @@ import { language } from '../settings/userpreferences';
 import { Language } from '../settings/customlanguage';
 import { useNavigation } from '@react-navigation/native';
 import HButton from '../components/button';
+import PrescriptionHead from './prescriptionHead';
 
 const ComplaintsCard = (props) => {
   const selectedComplaint = useSelector(state => state.prescription.selectedComplaint);
@@ -22,7 +23,7 @@ const ComplaintsCard = (props) => {
   }
   return (
     <View style={styles.main}>
-      <Text style={styles.h3}>{Language[language]['cheif_complaints']}</Text>
+      <PrescriptionHead heading={Language[language]['cheif_complaints']}/>
       <TextInput
         style={styles.input}
         placeholder='write complaints'

@@ -1,6 +1,6 @@
 import {Pressable, ActivityIndicator, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 const HButton = props => {
@@ -8,7 +8,7 @@ const HButton = props => {
   return (
     <>
       <Pressable
-        style={[styles?.btncontainer, props.btnstyles]}
+        style={{...styles?.btncontainer, ...props.btnstyles}}
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon
@@ -21,7 +21,7 @@ const HButton = props => {
         {props.loading && (
           <ActivityIndicator size="small" color={CUSTOMCOLOR.white} />
         )}
-        <Text style={styles.btntext}>{props.label}</Text>
+        <Text style={{...styles.btntext,...props.textStyle}}>{props.label}</Text>
       </Pressable>
     </>
   );
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
   btntext: {
     fontWeight: 600,
+    fontFamily:CUSTOMFONTFAMILY.heading,
     fontSize: 14,
     color: CUSTOMCOLOR.white,
   },

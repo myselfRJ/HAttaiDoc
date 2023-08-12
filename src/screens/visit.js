@@ -14,10 +14,11 @@ import {fetchApi} from '../api/fetchApi';
 import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
+import { CONSTANT } from '../utility/const';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
-  console.log('date=======', typeof date);
+  //console.log('date=======', typeof date);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -31,19 +32,10 @@ const Visit = ({navigation, route}) => {
   let prescribeCopy = Prescribe;
   const [prescribe, setPrescribe] = useState(prescribeCopy);
 
-  console.log('=======================', prescribe);
+  //console.log('=======================', prescribe);
 
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
-  console.log('====================================');
-  console.log(
-    phone,
-    'phonenumber=++++++++++++++++++++===========================',
-  );
-
-  console.log('====================================');
-  console.log(selectedDoctor);
-  console.log('====================================');
   const [apiStatus, setApiStatus] = useState({});
 
   useEffect(() => {
@@ -53,16 +45,6 @@ const Visit = ({navigation, route}) => {
   const{name,gende,age,patient_phone, appointment_id} = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-  console.log(
-    '----------------params',
-    name,
-    gende,
-    age,
-    patient_phone,
-    appointment_id,
-    Clinic_id,
-  );
-
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
@@ -94,7 +76,7 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('data---0', jsonData.data);
+        //console.log('data---0', jsonData.data);
         setApiStatus({status: 'success', message: 'Successfully created'});
         setTimeout(() => {
           navigation.navigate('tab');
@@ -109,9 +91,6 @@ const Visit = ({navigation, route}) => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   const SuccesRef = useRef(null);
 
@@ -119,20 +98,6 @@ const Visit = ({navigation, route}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
-  const dataObject = [
-    {label: 'Chief Complaints', icon: 'chevron-right', navigate: 'complaints'},
-    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
-    {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
-    {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
-    {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
-    {label: 'Notes', icon: 'chevron-right', navigate: 'notescreen'},
-    {label: 'Lab Reports', icon: 'chevron-right', navigate: 'notescreen'},
-    {
-      label: 'Refer to Doctor',
-      icon: 'chevron-right',
-      navigate: 'referdoctorscreen',
-    },
-  ];
   const [data, setData] = useState();
 
   const fetchDoctor = async () => {
@@ -142,10 +107,10 @@ const Visit = ({navigation, route}) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('practitioner response====', response);
+    //console.log('practitioner response====', response);
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
+      //console.log(jsonData);
       setData(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -182,7 +147,7 @@ const Visit = ({navigation, route}) => {
 
           <View style={styles.appointment}>
             <Text style={styles.h2}>{Language[language]['consultation']}</Text>
-            {dataObject.map((value, index) => (
+            {CONSTANT.ConsultationList.map((value, index) => (
               <View key={index}>
                 <View style={styles.visitOpenItem}>
                   <VisitOpen
@@ -252,15 +217,6 @@ const Visit = ({navigation, route}) => {
                                     {item.total_quantity}|{item.duration}
                                   </Text>
                                 </View>
-                                {/* <TouchableOpacity
-                              onPress={() => handleDelete(ind)}
-                              style={{left: '500%'}}>
-                              <Icon
-                                name="delete"
-                                size={24}
-                                color={CUSTOMCOLOR.primary}
-                              />
-                            </TouchableOpacity> */}
                               </View>
                             ))}
                           </View>
@@ -269,8 +225,8 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'Follow-Up' && (
-                    <View style={styles.complaintcontainer}>
-                      {date !== '' && (
+                    date !== '' && <View style={styles.basiccontainer}>
+                
                         <>
                           <Icon
                             name="file-document-edit"
@@ -279,7 +235,7 @@ const Visit = ({navigation, route}) => {
                           />
                           <Text style={styles.pulse}>{date}</Text>
                         </>
-                      )}
+                      )
                     </View>
                   )}
                   {value.label === 'Vitals' &&
@@ -295,55 +251,7 @@ const Visit = ({navigation, route}) => {
                       vitalsData?.systolic ||
                       vitalsData?.rate) && (
                       <View style={styles.basiccontainer}>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                          <View
-                            key={index}
-                            style={{flexDirection: 'row', gap: 8, padding: 2}}>
-                            {vitalsData?.pulse_rate && (
-                              <>
-                                <Icon
-                                  name="thermometer"
-                                  color={CUSTOMCOLOR.primary}
-                                  size={16}
-                                />
-                                <Text style={styles.pulse}>
-                                  {Language[language]['pulse_rate']}:
-                                  {vitalsData.pulse_rate}
-                                </Text>
-                              </>
-                            )}
-                            {vitalsData?.weight && (
-                              <Text style={styles.pulse}>
-                                {Language[language]['weight']}:
-                                {vitalsData.weight}
-                                kg
-                              </Text>
-                            )}
-                            {vitalsData?.height && (
-                              <Text style={styles.pulse}>
-                                {Language[language]['height']}:
-                                {vitalsData.height}
-                                cm
-                              </Text>
-                            )}
-                            {vitalsData?.bmi && vitalsData?.bmi !== 'NaN' ? (
-                              <Text style={styles.pulse}>
-                                {Language[language]['bmi']}:{vitalsData.bmi}
-                              </Text>
-                            ) : null}
-                            {vitalsData?.boby_temparature && (
-                              <Text style={styles.pulse}>
-                                {Language[language]['temp']}:
-                                {vitalsData.boby_temparature}F
-                              </Text>
-                            )}
-                            {vitalsData?.rate && (
-                              <Text style={styles.pulse}>
-                                {Language[language]['rate']}:{vitalsData.rate}F
-                              </Text>
-                            )}
-                          </View>
-                        </View>
+                       
                         {(vitalsData?.systolic ||
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
@@ -436,7 +344,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'Refer to Doctor' && (
-                    <View style={styles.complaintcontainer}>
+                    <View style={styles.basiccontainer}>
                       {selectedDoctor?.doctor_name && (
                         <>
                           <Icon
@@ -455,9 +363,16 @@ const Visit = ({navigation, route}) => {
               </View>
             ))}
           </View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <HButton label="Preview" onPress={handlePreview} />
-            <HButton label="save" onPress={() => fetchData()} />
+          <View style={{flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:24}}>
+            <HButton label="Preview" onPress={handlePreview} btnstyles={{
+             
+              backgroundColor:'#ffffff',
+             
+            }}
+            textStyle={{
+              color:CUSTOMCOLOR.primary,
+            }}/>
+            <HButton label="Save" onPress={() => fetchData()} />
           </View>
         </View>
       </ScrollView>
@@ -507,7 +422,8 @@ const styles = StyleSheet.create({
   basiccontainer: {
     width: '100%',
     borderRadius: 4,
-    // padding: 8,
+    paddingVertical:8,
+    paddingHorizontal: 16,
     gap: 16,
   },
   pulse: {
@@ -518,11 +434,12 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   complaintcontainer: {
-    width: 635,
+    // width: 635,
     // height: 32,
     borderRadius: 4,
-    // padding: 4,
-    gap: 4,
+    padding: 16,
+    padding:16,
+    gap: 8,
     flexDirection: 'row',
   },
 });
