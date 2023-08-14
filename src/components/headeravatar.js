@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#454544",
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
+    
   },
   img: {
     width: horizontalScale(60),
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: CUSTOMFONTSIZE.h4,
     color: '#000000',
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   speciality: {
     fontStyle: 'normal',
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h5,
     color: '#a1a1a1',
+    fontFamily:CUSTOMFONTFAMILY.body
   },
 });
 

@@ -18,7 +18,8 @@ const styles=StyleSheet.create({
     },
     text:{
         fontFamily:CUSTOMFONTFAMILY.heading,
-        fontSize:CUSTOMFONTSIZE.h1
+        fontSize:CUSTOMFONTSIZE.h1,
+        color:CUSTOMCOLOR.black
 
     }
 })

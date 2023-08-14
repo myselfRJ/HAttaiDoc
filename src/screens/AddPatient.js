@@ -242,22 +242,22 @@ const Abha = ({navigation}) => {
             onCancel={handleCancel}
           />
           <View style={styles.alignchild}>
-            <Text> {Language[language]['gender']}</Text>
+            <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black}}> {Language[language]['gender']}</Text>
             <View style={styles.radiogroup}>
               <Option
-                label="male"
+                label="Male"
                 value="male"
                 selected={selected === 'male'}
                 onPress={() => handleOptions('male')}
               />
               <Option
-                label="female"
+                label="Female"
                 value="female"
                 selected={selected === 'female'}
                 onPress={() => handleOptions('female')}
               />
               <Option
-                label="others"
+                label="Others"
                 value="others"
                 selected={selected === 'others'}
                 onPress={() => handleOptions('others')}

@@ -14,9 +14,9 @@ import {
 
 const SelectorBtn = props => {
   return (
-    <View style={[ props?.style]}>
+    <View>
       {props.label && <Text style={styles.h3}>{props.label}</Text>}
-      <Pressable style={styles.select} onPress={props.onPress}>
+      <Pressable style={{...styles.select,...props.select}} onPress={props.onPress}>
         <Text style={styles.h3}>{props.input}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
@@ -32,13 +32,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: CUSTOMCOLOR.white,
-    minWidth: verticalScale(160),
+    // width: horizontalScale(240),
     borderRadius: moderateScale(4),
   },
   h3: {
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.opensan,
+    fontFamily: CUSTOMFONTFAMILY.body,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
   },
 });

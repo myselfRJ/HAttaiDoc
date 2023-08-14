@@ -32,7 +32,6 @@ const Visit = ({navigation, route}) => {
   let prescribeCopy = Prescribe;
   const [prescribe, setPrescribe] = useState(prescribeCopy);
 
-  //console.log('=======================', prescribe);
 
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
@@ -128,6 +127,8 @@ const Visit = ({navigation, route}) => {
     navigation.navigate('prescription', {name,gender,patient_age,patient_phone_number});
   };
 
+  // console.log("Symptom....",Symptom)
+
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -156,7 +157,7 @@ const Visit = ({navigation, route}) => {
                     navigate={() => navigation.navigate(value.navigate)}
                   />
                   {value.label === 'Symptoms' && (
-                    <View style={styles.basiccontainer}>
+                    Symptom[0].symptom!='' && <View style={styles.basiccontainer}>
                       <View style={{flexWrap: 'wrap'}}>
                         {Symptom?.map((item, index) => {
                           return (
@@ -168,7 +169,7 @@ const Visit = ({navigation, route}) => {
                                   gap: 10,
                                   padding: 8,
                                   alignItems: 'center',
-                                }}>
+                                }}> 
                                 <Icon
                                   name="emoticon-sick"
                                   size={16}
@@ -176,7 +177,7 @@ const Visit = ({navigation, route}) => {
                                 />
                                 <View>
                                   <Text style={{color: CUSTOMCOLOR.black}}>
-                                    {item.symptom} | {item.days} |{' '}
+                                    {item.symptom}  |  {item.days}  |  {' '}
                                     {item.severity}
                                   </Text>
                                 </View>
@@ -189,7 +190,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'Prescribe' && (
-                    <View style={styles.basiccontainer}>
+                   prescribe.length>0 && <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                         <View
                           style={{
@@ -203,6 +204,7 @@ const Visit = ({navigation, route}) => {
                                 style={{
                                   flexDirection: 'row',
                                   padding: 8,
+                                  gap:8
                                 }}>
                                 <Icon
                                   name="prescription"
@@ -211,10 +213,8 @@ const Visit = ({navigation, route}) => {
                                 />
                                 <View>
                                   <Text style={{color: CUSTOMCOLOR.black}}>
-                                    {item.mode}|{item.medicine}|
-                                    {item.dose_quantity}|{item.timing}|
-                                    {item.frequency}|{item.dose_number}|
-                                    {item.total_quantity}|{item.duration}
+                                    {item.mode} | {item.medicine} |
+                                    {item.dose_quantity} | {item.timing} | {item.frequency} | {item.duration}
                                   </Text>
                                 </View>
                               </View>
@@ -405,8 +405,8 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 24,
-    fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontWeight: '600',
+    fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },

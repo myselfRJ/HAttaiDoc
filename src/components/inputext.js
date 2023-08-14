@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {
   moderateScale,
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",
     borderRadius: 4,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   eye: {
     position: 'absolute',

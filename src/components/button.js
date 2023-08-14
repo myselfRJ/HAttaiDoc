@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   btntext: {
     fontWeight: 600,
     fontSize: moderateScale(14),
-    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontSize: 14,
     color: CUSTOMCOLOR.white,
   },

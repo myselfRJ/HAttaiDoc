@@ -24,6 +24,11 @@ import moment from 'moment';
 import {UseSelector, useDispatch} from 'react-redux';
 import {addSlots} from '../redux/features/slots/slotData';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const SlotCreate = ({navigation, route}) => {
   const slotTypeRef = useRef(null);
@@ -284,7 +289,7 @@ const SlotCreate = ({navigation, route}) => {
       for (const day in prevSlots) {
         updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
       }
-      Alert.alert('Warning', '"slots are deleted"');
+      Alert.alert('Warning', '"Slots are deleted"');
       return updatedSlots;
     });
   };
@@ -446,12 +451,14 @@ const SlotCreate = ({navigation, route}) => {
 
       <View style={styles.selector}>
         <SelectorBtn
+          select={styles.select1}
           label="From"
           name="clock"
           onPress={() => setOpen('from')}
           input={FromformattedTime}
         />
         <SelectorBtn
+        select={styles.select1}
           label="To"
           name="clock"
           onPress={() => setOpen('to')}
@@ -471,6 +478,7 @@ const SlotCreate = ({navigation, route}) => {
 
       <View style={styles.selector}>
         <SelectorBtn
+        select={styles.select1}
           label="Type"
           name="alpha-t-box"
           onPress={() => {
@@ -479,6 +487,7 @@ const SlotCreate = ({navigation, route}) => {
           input={selectedConsultValue}
         />
         <SelectorBtn
+        select={styles.select1}
           label="Duration"
           name="timer-sand-full"
           onPress={() => {
@@ -487,9 +496,11 @@ const SlotCreate = ({navigation, route}) => {
           input={<Text>{selectedDurationValue} Mins</Text>}
         />
       </View>
+    
       <HButton
         label="Add Slot"
         icon="plus"
+        btnstyles={{marginTop:verticalScale(24)}}
         onPress={() => {
           const isOk = handlewarnings();
           if (isOk) {
@@ -610,6 +621,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 64,
     width: '100%',
+    justifyContent:'center',
   },
   alignchild: {
     justifyContent: 'center',
@@ -652,6 +664,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
   },
+  select1:{
+    width: horizontalScale(240),
+  }
 });
 
 export default SlotCreate;

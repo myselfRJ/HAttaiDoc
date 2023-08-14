@@ -46,6 +46,7 @@ import {
 } from '../utility/scaleDimension';
 import HButton from '../components/button';
 import {useFocusEffect} from '@react-navigation/native';
+import { commonstyles } from '../styles/commonstyle';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -201,7 +202,7 @@ const Dashboard = ({navigation, route}) => {
   );
 
   return (
-    <>
+    <View style={{flex:1}}>
       <View style={styles.container}>
         <View
           style={{
@@ -274,7 +275,7 @@ const Dashboard = ({navigation, route}) => {
 
           {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
         </View>
-        <Text style={styles.h2}>{Language[language]['appointments']}</Text>
+        <Text style={commonstyles.h2}>{Language[language]['appointments']}</Text>
 
         {/* <View style={styles.appointment}> */}
         <ScrollView
@@ -326,11 +327,12 @@ const Dashboard = ({navigation, route}) => {
             ))}
         </View>
       </BottomSheetView>
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
   },
@@ -340,6 +342,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 26,
     fontWeight: '600',
+    fontFamily:CUSTOMFONTFAMILY.heading
   },
   select: {
     gap: moderateScale(8),
@@ -355,19 +358,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     fontSize: 24,
     fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
   modalContainer: {
-    height: verticalScale(400),
+    height: verticalScale(1000),
     width: '100%',
     //justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
     borderRadius: moderateScale(10),
-    padding: moderateScale(16),
+    padding: moderateScale(32),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

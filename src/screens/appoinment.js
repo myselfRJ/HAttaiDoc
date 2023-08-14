@@ -28,6 +28,7 @@ import {
   addclinic_Address,
 } from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
+import {commonstyles} from '../styles/commonstyle';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
   h2: {
     fontSize: 24,
     fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
@@ -377,11 +378,11 @@ const styles = StyleSheet.create({
     height: 400,
     width: '100%',
     //justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
+    //alignSelf: 'center',
     borderRadius: 10,
-    padding: 16,
+    padding: 32,
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

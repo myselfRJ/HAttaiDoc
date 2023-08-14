@@ -10,7 +10,7 @@ const initialState = {
       phone: '9878965678',
     },
     {
-      doctor_name: 'Dr. Mut',
+      doctor_name: 'Dr. Muthu',
       speciality: 'Gynecologist',
       phone: '9767342167',
     },

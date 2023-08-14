@@ -1,6 +1,6 @@
 import {Text, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {CUSTOMCOLOR} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {moderateScale} from '../utility/scaleDimension';
 
 const Option = ({label, selected, onPress, value}) => {
@@ -20,7 +20,7 @@ const Option = ({label, selected, onPress, value}) => {
             color={CUSTOMCOLOR.primary}
           />
         )}
-        <Text>{label}</Text>
+        <Text style={styles.options}>{label}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -32,5 +32,11 @@ const styles = StyleSheet.create({
     gap: moderateScale(8),
     alignItems: 'center',
   },
+  options:{
+    fontFamily:CUSTOMFONTFAMILY.body,
+    fontSize:12,
+    color:CUSTOMCOLOR.black
+
+  }
 });
 export default Option;
