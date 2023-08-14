@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect, useCallback} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Alert} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -115,9 +115,10 @@ const AddClinic = ({navigation}) => {
         },
         body: JSON.stringify(clinics?.clinics),
       });
-      if (response.ok) {
+      if (response.status===HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        //console.log(jsonData);
+        console.log('------------data',response);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
         dispatch(headerStatus.headerStatus({index: 1, status: true}));
@@ -143,9 +144,15 @@ const AddClinic = ({navigation}) => {
   const handlePlusIconClick = () => {
     if (value.clinic) {
       dispatch(addclinic_data(Clinic_Data));
+      Alert.alert(
+        'Success',
+        '"Clinic data added successfully"'
+      )
     }
     setShowSlotChip(true);
     (value.clinic = ''), (value.address = ''), (value.fees = '');
+    setVisibleSlot(true);
+    
   };
   console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
@@ -239,6 +246,7 @@ const AddClinic = ({navigation}) => {
               placeholder="Consultation Fees"
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
+              keypad='numeric'
             />
             <View
               style={{

@@ -1,6 +1,11 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const SlotChip = props => {
   return (
@@ -20,10 +25,10 @@ const SlotChip = props => {
 
 const styles = StyleSheet.create({
   main: {
-    gap: 64,
+    gap: moderateScale(64),
 
-    padding: 8,
-    borderRadius: 4,
+    padding: moderateScale(8),
+    borderRadius: moderateScale(4),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

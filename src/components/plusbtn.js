@@ -3,6 +3,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+
 const PlusButton = props => {
   //props -> label, action
   return (
@@ -10,7 +16,11 @@ const PlusButton = props => {
       <Pressable
         style={{...styles.plus, ...props.style}}
         onPress={props.onPress}>
-        <Icon name={props.icon} size={props.size ? props.size : 48} color={props.color?props.color:'#ffffff'} />
+        <Icon
+          name={props.icon}
+          size={props.size ? props.size : moderateScale(48)}
+          color={props.color ? props.color : '#ffffff'}
+        />
       </Pressable>
     </>
   );
@@ -19,8 +29,8 @@ const PlusButton = props => {
 const styles = StyleSheet.create({
   plus: {
     backgroundColor: CUSTOMCOLOR.primary,
-    padding: 8,
-    borderRadius: 40,
+    padding: moderateScale(8),
+    borderRadius: moderateScale(40),
     elevation: 8,
     shadowColor: CUSTOMCOLOR.primary,
     shadowOffset: {width: 0, height: 2},

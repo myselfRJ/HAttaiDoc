@@ -47,7 +47,6 @@ const ProfileCreate = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const progressData = useSelector(state => state.progress?.status);
-
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     doctor_name: '',

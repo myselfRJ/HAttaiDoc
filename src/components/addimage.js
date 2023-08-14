@@ -1,6 +1,11 @@
 import {Pressable, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 const AddImage = props => {
   console.log('urel====>', props.encodedBase64);
   return props?.encodedBase64 ? (
@@ -20,24 +25,24 @@ const AddImage = props => {
 
 const styles = StyleSheet.create({
   main: {
-    padding: 16,
+    padding: moderateScale(16),
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
-    borderRadius: 4,
+    borderRadius: moderateScale(4),
   },
   url: {
     justifyContent: 'center',
     alignItems: 'center',
     // borderWidth:2,
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
     // borderColor:CUSTOMCOLOR.primary
   },
   image: {
-    height: 80,
-    width: 80,
+    height: verticalScale(80),
+    width: horizontalScale(80),
     borderColor: CUSTOMCOLOR.primary,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
   },
 });
 export default AddImage;

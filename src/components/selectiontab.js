@@ -2,6 +2,12 @@ import {Pressable, StyleSheet, Text} from 'react-native';
 import {CUSTOMFONTSIZE, CUSTOMCOLOR} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  horizontalScale,
+  verticalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
+
 const SelectionTab = props => {
   return (
     <Pressable
@@ -24,8 +30,8 @@ const SelectionTab = props => {
 };
 const styles = StyleSheet.create({
   tabcontainer: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: 4,
   },

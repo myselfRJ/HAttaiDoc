@@ -8,6 +8,11 @@ import {
 } from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const SearchBox = props => {
   //props-> label, keyboard, icon name, icon/enter action
@@ -47,12 +52,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: moderateScale(16),
     backgroundColor: '#FFFFFF',
     borderRadius: 4,
   },
   leftItem: {
-    height: 19,
+    height: verticalScale(19),
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontStyle: 'normal',
     fontWeight: 400,
@@ -63,13 +68,13 @@ const styles = StyleSheet.create({
     // outlinedStyle: "none"
   },
   rightItem: {
-    width: 24,
-    height: 24,
+    width: horizontalScale(24),
+    height: verticalScale(24),
     backgroundColor: CUSTOMCOLOR.background,
   },
   row: {
     flexDirection: 'row',
-    gap: 10,
+    gap: moderateScale(10),
   },
 });
 

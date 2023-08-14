@@ -6,6 +6,7 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -39,6 +40,11 @@ import {
   updateclinic_users,
 } from '../redux/features/profiles/ClinicUsers';
 import ProgresHeader from '../components/progressheader';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 
 const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -138,12 +144,13 @@ const AddUser = ({navigation}) => {
     console.log('users--------------------------------------');
     if (values.name) {
       dispatch(addclinic_users(Clinic_users));
+      Alert.alert('Success', '"User data added successfully"');
     }
     setShowSlotChip(true);
     (values.name = ''), (values.phone = ''), (values.gender = '');
   };
 
-  console.log(values.slots);
+  //console.log(values.slots);
 
   const handleDeleteSlotChip = index => {
     console.log('...', index);
@@ -269,7 +276,7 @@ const AddUser = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 8,
+                paddingHorizontal: horizontalScale(8),
               }}>
               <SelectorBtn
                 label={Language[language]['role']}
@@ -284,7 +291,7 @@ const AddUser = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 8,
+                paddingHorizontal: horizontalScale(8),
               }}>
               <SelectorBtn
                 label={Language[language]['clinic']}
@@ -299,8 +306,8 @@ const AddUser = ({navigation}) => {
               style={{
                 alignSelf: 'flex-end',
                 bottom: 0,
-                paddingVertical: 8,
-                paddingHorizontal: 8,
+                paddingVertical: verticalScale(8),
+                paddingHorizontal: horizontalScale(8),
               }}>
               <PlusButton icon="plus" onPress={handlePlusIconClick} />
             </View>
@@ -312,21 +319,19 @@ const AddUser = ({navigation}) => {
                       fontFamily: CUSTOMFONTFAMILY.heading,
                       fontSize: CUSTOMFONTSIZE.h2,
                       color: CUSTOMCOLOR.black,
-                      paddingVertical: 4,
-                      paddingHorizontal: 8,
+                      paddingVertical: verticalScale(4),
+                      paddingHorizontal: horizontalScale(8),
                     }}>
                     Users
                   </Text>
                 )}
-                <View style={{gap: 8}}>
+                <View style={{gap: moderateScale(8)}}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
                       <SlotChip
-                        style={{
-                          borderColor: CUSTOMCOLOR.primary,
-                          backgroundColor: CUSTOMCOLOR.white,
-                          borderWidth: 1,
-                        }}
+                        //                       style={{
+                        //                         paddingHorizontal:24
+                        // }}
                         key={item.index}
                         index={item.index}
                         onPress={() => handleDeleteSlotChip(index)}
@@ -343,11 +348,11 @@ const AddUser = ({navigation}) => {
               <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
-                    paddingHorizontal: 24,
-                    paddingVertical: 12,
+                    paddingHorizontal: horizontalScale(24),
+                    paddingVertical: verticalScale(12),
                     fontSize: CUSTOMFONTSIZE.h3,
                     fontWeight: '700',
-                    borderRadius: 4,
+                    borderRadius: moderateScale(4),
                     borderWidth: 0.5,
                     borderColor: CUSTOMCOLOR.white,
                     borderBottomColor: CUSTOMCOLOR.black,
@@ -420,26 +425,26 @@ const AddUser = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingVertical: 20,
+    paddingVertical: verticalScale(20),
   },
   content: {
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
     width: '100%',
     //alignItems: 'center',
-    gap: 8,
+    gap: moderateScale(8),
   },
   radiogroup: {
-    padding: 16,
+    padding: moderateScale(16),
     flexDirection: 'row',
-    gap: 48,
+    gap: moderateScale(48),
     justifyContent: 'flex-start',
   },
   alignchild: {
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
   },
   modalContainer: {
     height: 400,
@@ -448,20 +453,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
-    borderRadius: 10,
-    padding: 16,
+    borderRadius: moderateScale(1),
+    padding: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
     fontSize: 14,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: 4,
+    padding: moderateScale(4),
   },
   users: {
     alignSelf: 'flex-start',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
   skip: {
     // color:CUSTOMCOLOR.black,

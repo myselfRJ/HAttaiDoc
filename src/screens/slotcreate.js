@@ -36,6 +36,7 @@ const SlotCreate = ({navigation, route}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
   const [visibleSlot, setVisibleSlot] = useState(false);
+  const [roundedTime, setRoundedTime] = useState('');
 
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
@@ -52,6 +53,71 @@ const SlotCreate = ({navigation, route}) => {
   const days = ['M', 'T', 'W', 'TH', 'F', 'Sa', 'Su'];
   const [selectedDay, setSelectedDay] = useState('M');
 
+  // const RoundTime=()=>{
+  //   const currentDateTime = new Date();
+  //   console.log('time',currentDateTime)
+  //   const roundedDate = new Date(currentDateTime);
+
+  //    const minutes = roundedDate.getMinutes();
+
+  //    if (minutes >=0 && minutes <15){
+  //     roundedDate.setMinutes(15);
+  //   }else if(minutes >=15 && minutes <30){
+  //     roundedDate.setMinutes(30)
+  //   }
+  //   else if(minutes >=30 && minutes<45){
+  //     roundedDate.setMinutes(45)
+  //   }
+  //   else{
+  //     roundedDate.setMinutes(0)
+  //   }
+
+  //   const formattedTime = roundedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  //   console.log('time', formattedTime)
+  //   setFromTime(formattedTime);
+  // }
+  // useEffect(()=>{
+  //   RoundTime()
+  // },[])
+
+  // const From=()=>{
+  //   const roundedDate = new Date();
+  //   const minutes = roundedDate.getMinutes();
+  //   //const to = minutes +15
+  //   // console.log('mins===',minutes)
+  //   if (minutes >=0 && minutes <15){
+  //         roundedDate.setMinutes(15);
+  //       }else if(minutes >=15 && minutes <30){
+  //         roundedDate.setMinutes(30)
+  //       }
+  //       else if(minutes >=30 && minutes<45){
+  //         roundedDate.setMinutes(45)
+  //       }
+  //       else{
+  //         roundedDate.setMinutes(0)
+  //         const currentHour = roundedDate.getHours();
+  //         roundedDate.setHours(currentHour + 1);
+  //       }
+  //      setFromTime(roundedDate);
+  //      const to = roundedDate.getMinutes() +15
+  //      setToTime(roundedDate.setMinutes(roundedDate.getMinutes()+15))
+  //      console.log('from===',fromTime)
+  //       console.log('too',(roundedDate.setMinutes(roundedDate.getMinutes()+15)))
+  // }
+  // useEffect(()=>{
+  //   From()
+  // },[fromTime,toTime])
+  // const To=()=>{
+  //   const totime = new Date(fromTime)
+  //   const minutes = totime.getMinutes();
+  //   console.log('to mins==',minutes);
+  //   toTime.setMinutes(minutes + 15)
+  //   setToTime(toTime)
+  //   console.log('tooooo',totime)
+  // }
+  // useEffect(()=>{
+  //   To()
+  // },[])
   const DaySelection = index => {
     const isSelected = selectedDay.includes(index);
     if (isSelected) {
@@ -93,6 +159,15 @@ const SlotCreate = ({navigation, route}) => {
     setDurationValue(value);
     slotDurationRef?.current?.snapToIndex(0);
   };
+  const [weekdays, setWeekdays] = useState({
+    M: 'Monday',
+    T: 'Tuesday',
+    W: 'Wednesday',
+    TH: 'Thursday',
+    F: 'Friday',
+    Sa: 'Saturday',
+    Su: 'Sunday',
+  });
 
   // const handleAddSlot = () => {
   //   if (selectedConsultValue && selectedDurationValue) {
@@ -149,7 +224,7 @@ const SlotCreate = ({navigation, route}) => {
   //     setDurationValue('');
   //   }
   // };
-
+  console.log('nowwww', Date.now());
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -166,7 +241,6 @@ const SlotCreate = ({navigation, route}) => {
         ...prevSlots,
         [selectedDay]: [...prevSlots[selectedDay], newSlot],
       }));
-
       setFromTime(new Date());
       setToTime(new Date());
       setConsultValue(consultType[0]);
@@ -194,6 +268,8 @@ const SlotCreate = ({navigation, route}) => {
         W: slots.M,
         TH: slots.M,
         F: slots.M,
+        Sa: slots.M,
+        Su: slots.M,
       };
       console.log(slots, '------------------------update');
       setSlots(weekdaysToUpdate);
@@ -230,8 +306,7 @@ const SlotCreate = ({navigation, route}) => {
   useEffect(() => {
     handlewarnings();
   }, []);
-  console.log('----------------', new Date().toString());
-
+  console.log(slots);
   return (
     <View style={styles.main}>
       {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
@@ -275,7 +350,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.M.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.M?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="M"
@@ -289,7 +364,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.T.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.T?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="T"
@@ -303,7 +378,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.W.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.W?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="W"
@@ -317,7 +392,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.TH.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.TH?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="TH"
@@ -331,7 +406,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.F.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.F?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="F"
@@ -345,7 +420,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Sa.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Sa?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Sa"
@@ -359,7 +434,7 @@ const SlotCreate = ({navigation, route}) => {
               paddingHorizontal: 8,
               paddingVertical: 8,
             },
-            {backgroundColor: slots.Su.length > 0 ? '#2CBB15' : null},
+            {backgroundColor: slots.Su?.length > 0 ? '#2CBB15' : null},
           ]}>
           <SelectionTab
             label="Su"
