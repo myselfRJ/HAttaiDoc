@@ -12,6 +12,7 @@ let CUSTOMCOLOR = {
   error: 'red',
   graph: '#98CDFF',
   warn: '#ffb732',
+  delete:'#FF6347'
 };
 const DARKCOLOR = {
   primary: 'red',

@@ -248,6 +248,7 @@ const AddUser = ({navigation}) => {
               placeholder="Phone Number"
               value={values.phone}
               setValue={value => handleChangeValue('phone', value)}
+              keypad='numeric'
             />
             <View style={styles.alignchild}>
               <Text>{Language[language]['gender']}</Text>
@@ -345,7 +346,7 @@ const AddUser = ({navigation}) => {
             </View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('tab')}>
+              {/* <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
                     paddingHorizontal: horizontalScale(24),
@@ -364,7 +365,15 @@ const AddUser = ({navigation}) => {
                   }}>
                   Skip
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+               <HButton label="Skip" onPress={() => navigation.navigate('tab')} btnstyles={{
+             
+             backgroundColor:'#ffffff',
+            
+           }}
+           textStyle={{
+             color:CUSTOMCOLOR.primary,
+           }}/>
               <HButton
                 label="Done"
                 onPress={() => {

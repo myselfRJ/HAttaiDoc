@@ -20,6 +20,7 @@ export const commonstyles = StyleSheet.create({
     gap: 8,
   },
   h1: {
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 32,
     color: CUSTOMCOLOR.black,
     fontWeight: '500',
