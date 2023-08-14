@@ -219,20 +219,26 @@ const SlotBook = ({navigation, route}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        setApiStatus({
-          status: 'success',
-          message: 'Successfully created',
-        });
-        SuccesRef?.current?.snapToIndex(1);
-        setTimeout(() => {
-          navigation.navigate('dashboard');
-        }, 1000);
-        setLoading(false);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status);
+        if (jsonData.status === 'success') {
+          setApiStatus({
+            status: 'success',
+            message: jsonData.mesaage,
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          setTimeout(() => {
+            navigation.navigate('dashboard');
+          }, 1000);
+          setLoading(false);
+        } else {
+          setApiStatus({
+            status: 'warning',
+            message: 'Please Enter Complaint and Slot Timings',
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status);
+        }
       }
+      setLoading(false);
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({

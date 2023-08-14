@@ -14,10 +14,15 @@ import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import moment from 'moment';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {useNavigation} from '@react-navigation/native';
+import ClinicCard from '../components/ManageCard';
+import ManageCard from '../components/ManageCard';
 
 const Account = () => {
+  const navigation = useNavigation();
   const [data, setData] = useState();
   const [clinic, setClinics] = useState([]);
+  const [users, setUsers] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const fetchDoctor = async () => {
@@ -59,6 +64,25 @@ const Account = () => {
     fetchData();
   }, []);
 
+  const fetchUsers = async () => {
+    const response = await fetchApi(URL.getUsers(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('--------------clinics', jsonData);
+      setUsers(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, [phone]);
+
   const today = moment().toISOString().split('-')[0];
 
   console.log('====================================', clinic);
@@ -74,7 +98,7 @@ const Account = () => {
   }`;
 
   return (
-    <View>
+    <View style={{marginHorizontal: 24}}>
       <View style={{top: 40, left: 49}}>
         <Text style={styles.PersonalInf}>Personal Information</Text>
         <View style={styles.pI}>
@@ -162,8 +186,8 @@ const Account = () => {
         </TouchableOpacity>
       </View>
       <View style={{top: 140, left: 47}}>
-        <Text style={styles.manageText}>Manage</Text>
-        <View style={styles.manageView}>
+        {/* <Text style={styles.manageText}>Manage</Text> */}
+        {/* <View style={styles.manageView}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
@@ -185,13 +209,38 @@ const Account = () => {
                 <Text style={{color: CUSTOMCOLOR.black}}>Medical Number</Text>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('addclinic');
+              }}>
               <View style={styles.editBtn}>
                 <Icon name="plus" size={16} color={'#4ba5fa'} />
                 <Text style={{color: '#4ba5fa'}}>Add</Text>
               </View>
             </TouchableOpacity>
           </View>
+        </View> */}
+        <View style={{width: 600}}>
+          <ManageCard
+            // style={{marginBottom: 8}}
+            data={clinic}
+            dta={'clinic_name'}
+            nameIcon={'hospital'}
+            Dataname={'Clinics'}
+            name={'plus'}
+            onPress={() => {
+              navigation.navigate('addclinic');
+            }}
+          />
+          <ManageCard
+            // label={'Manage'}
+            data={users}
+            dta={'clinic_user_name'}
+            nameIcon={'account-group'}
+            Dataname={'Users'}
+            name={'plus'}
+            onPress={() => console.log('users')}
+          />
         </View>
       </View>
     </View>
@@ -200,7 +249,7 @@ const Account = () => {
 
 const styles = StyleSheet.create({
   MainHeadContainer: {
-    paddingHorizontal:24,
+    paddingHorizontal: 24,
 
     width: '100%',
     height: 88,
@@ -227,7 +276,7 @@ const styles = StyleSheet.create({
     bottom: 8,
   },
   pI: {
-    width:'90%',
+    width: '90%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
@@ -252,7 +301,7 @@ const styles = StyleSheet.create({
     bottom: 8,
   },
   ProfView: {
-    width:'90%',
+    width: '90%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',

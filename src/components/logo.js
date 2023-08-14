@@ -16,8 +16,8 @@ const Logo = props => {
 };
 const styles = StyleSheet.create({
   img: {
-    width: horizontalScale(56),
-    height: verticalScale(56),
+    width: moderateScale(56),
+    height: moderateScale(56),
   },
 });
 export default Logo;

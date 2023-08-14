@@ -100,11 +100,9 @@ const Dashboard = ({navigation, route}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData.data[0]?.id);
-      dispatch(addclinic_id.addclinic_id(jsonData.data[0]?.id));
-      dispatch(addclinic_name.addclinic_name(jsonData.data[0]?.clinic_name));
-      dispatch(
-        addclinic_Address.addclinic_Address(jsonData.data[0]?.clinic_Address),
-      );
+      dispatch(addclinic_id(jsonData.data[0]?.id));
+      dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
+      dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -113,6 +111,10 @@ const Dashboard = ({navigation, route}) => {
     fetchData();
   }, []);
   const [doc_name, setDoc_name] = useState();
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  console.log('====================================');
+  console.log(Clinic_id, '-------clinic');
+  console.log('====================================');
 
   const fetchClinic = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -183,6 +185,21 @@ const Dashboard = ({navigation, route}) => {
     ClinicRef?.current?.snapToIndex(0);
   };
 
+  // const updateAppointment =
+  //   (setAppointment[setAppointment.length - 1],
+  //   setAppointment[setAppointment.length - 2],
+  //   setAppointment[setAppointment.length - 3]);
+
+  // console.log('====================================');
+  // console.log('---------setapp', updateAppointment);
+  // console.log('====================================');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAppointment();
+    }, [clinicid]),
+  );
+
   return (
     <>
       <View style={styles.container}>
@@ -192,7 +209,7 @@ const Dashboard = ({navigation, route}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginBottom: 24,
-            paddingHorizontal: horizontalScale(8),
+            paddingHorizontal: moderateScale(8),
           }}>
           <View>
             <Logo />
@@ -277,10 +294,14 @@ const Dashboard = ({navigation, route}) => {
             <CustomIcon label="No Appointments" />
           )}
         </ScrollView>
-        {/* <HButton label='See all' 
-              btnstyles={{backgroundColor:"#ffffff",alignSelf:"flex-end"}}
-              textStyle={{color:CUSTOMCOLOR.primary}}
-              onPress={() => navigation.navigate('myappointment') }/> */}
+        <View>
+          <HButton
+            label="Book Appointment"
+            btnstyles={{alignSelf: 'center', marginTop: 16}}
+            // textStyle={{color: CUSTOMCOLOR.primary}}
+            onPress={() => navigation.navigate('addnew')}
+          />
+        </View>
       </View>
 
       {/* </View> */}
