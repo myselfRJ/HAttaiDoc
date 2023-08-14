@@ -13,11 +13,16 @@ import {useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import moment from 'moment';
+import {CUSTOMCOLOR} from '../settings/styles';
+import {useNavigation} from '@react-navigation/native';
+import ManageCard from '../components/ManageCard';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 
 const Account = () => {
+  const navigation = useNavigation();
   const [data, setData] = useState();
   const [clinic, setClinics] = useState([]);
+  const [users, setUsers] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const fetchDoctor = async () => {
@@ -59,6 +64,25 @@ const Account = () => {
     fetchData();
   }, []);
 
+  const fetchUsers = async () => {
+    const response = await fetchApi(URL.getUsers(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('--------------clinics', jsonData);
+      setUsers(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, [phone]);
+
   const today = moment().toISOString().split('-')[0];
 
   console.log('====================================', clinic);
@@ -74,8 +98,8 @@ const Account = () => {
   }`;
 
   return (
-    <View style={{flex:1,paddingHorizontal:24,paddingVertical:24}}>
-      <View >
+    <View style={{flex: 1, paddingHorizontal: 24, paddingVertical: 24}}>
+      <View>
         <Text style={styles.PersonalInf}>Personal Information</Text>
         <View style={styles.pI}>
           <Image
@@ -92,20 +116,38 @@ const Account = () => {
               width: '87%',
             }}>
             <View>
-              <Text style={{fontSize: 16, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading}}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: CUSTOMCOLOR.black,
+                  fontFamily: CUSTOMFONTFAMILY.heading,
+                }}>
                 {data?.doctor_name}
               </Text>
-              <Text style={{fontSize: 12, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: CUSTOMCOLOR.black,
+                  fontFamily: CUSTOMFONTFAMILY.body,
+                }}>
                 Age:{age} | {data?.gender}
               </Text>
-              <Text style={{fontSize: 12, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: CUSTOMCOLOR.black,
+                  fontFamily: CUSTOMFONTFAMILY.body,
+                }}>
                 DOB: {DateOfBirth}
               </Text>
             </View>
             <TouchableOpacity>
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={'#4ba5fa'} />
-                <Text style={{color: '#4ba5fa',fontFamily:CUSTOMFONTFAMILY.body}}>Edit</Text>
+                <Text
+                  style={{color: '#4ba5fa', fontFamily: CUSTOMFONTFAMILY.body}}>
+                  Edit
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -122,19 +164,37 @@ const Account = () => {
                   size={16}
                   color={'#4ba5fa'}
                 />
-                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading}}>
+                <Text
+                  style={{
+                    fontWeight: 600,
+                    color: CUSTOMCOLOR.black,
+                    fontFamily: CUSTOMFONTFAMILY.heading,
+                  }}>
                   Registration Council
                 </Text>
-                <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
+                <Text
+                  style={{
+                    color: CUSTOMCOLOR.black,
+                    fontFamily: CUSTOMFONTFAMILY.body,
+                  }}>
                   Medical Registration
                 </Text>
               </View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
                 <Icon name="medical-bag" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading}}>
+                <Text
+                  style={{
+                    fontWeight: 600,
+                    color: CUSTOMCOLOR.black,
+                    fontFamily: CUSTOMFONTFAMILY.heading,
+                  }}>
                   Medical Number
                 </Text>
-                <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
+                <Text
+                  style={{
+                    color: CUSTOMCOLOR.black,
+                    fontFamily: CUSTOMFONTFAMILY.body,
+                  }}>
                   {data?.medical_number}
                 </Text>
               </View>
@@ -142,7 +202,10 @@ const Account = () => {
             <TouchableOpacity>
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={'#4ba5fa'} />
-                <Text style={{color: '#4ba5fa',fontFamily:CUSTOMFONTFAMILY.body}}>Edit</Text>
+                <Text
+                  style={{color: '#4ba5fa', fontFamily: CUSTOMFONTFAMILY.body}}>
+                  Edit
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -161,9 +224,9 @@ const Account = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text style={styles.manageText}>Manage</Text>
-        <View style={styles.manageView}>
+      <View style={{top: 140, left: 47}}>
+        {/* <Text style={styles.manageText}>Manage</Text> */}
+        {/* <View style={styles.manageView}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
               <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
@@ -185,13 +248,38 @@ const Account = () => {
                 <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>Medical Number</Text>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('addclinic');
+              }}>
               <View style={styles.editBtn}>
                 <Icon name="plus" size={16} color={'#4ba5fa'} />
                 <Text style={{color: '#4ba5fa'}}>Add</Text>
               </View>
             </TouchableOpacity>
           </View>
+        </View> */}
+        <View style={{width: 600}}>
+          <ManageCard
+            // style={{marginBottom: 8}}
+            data={clinic}
+            dta={'clinic_name'}
+            nameIcon={'hospital'}
+            Dataname={'Clinics'}
+            name={'plus'}
+            onPress={() => {
+              navigation.navigate('addclinic');
+            }}
+          />
+          <ManageCard
+            // label={'Manage'}
+            data={users}
+            dta={'clinic_user_name'}
+            nameIcon={'account-group'}
+            Dataname={'Users'}
+            name={'plus'}
+            onPress={() => console.log('users')}
+          />
         </View>
       </View>
     </View>
@@ -200,6 +288,8 @@ const Account = () => {
 
 const styles = StyleSheet.create({
   MainHeadContainer: {
+    paddingHorizontal: 24,
+
     //paddingHorizontal:24,
     width: '100%',
     height: 88,
@@ -224,10 +314,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 48,
     bottom: 8,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   pI: {
-    width:'100%',
+    width: '100%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
@@ -250,10 +340,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 56,
     //bottom: 4,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   ProfView: {
-    width:'100%',
+    width: '100%',
     Top: 32,
     borderRadius: 8,
     justifyContent: 'space-between',
@@ -262,7 +352,7 @@ const styles = StyleSheet.create({
   },
   HPID: {
     width: '100%',
-     top: 16,
+    top: 16,
     // left: 47,
     padding: 16,
     borderRadius: 8,
@@ -277,7 +367,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 27.24,
     color: 'black',
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   HPIDcontent: {
     gap: 8,
@@ -285,7 +375,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     color: '#fff',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   generateBtn: {
     paddingVertical: 12,
@@ -296,18 +386,18 @@ const styles = StyleSheet.create({
     top: 10,
   },
   manageText: {
-    top:16,
+    top: 16,
     color: '#000000',
     fontWeight: '500',
     fontSize: 20,
     lineHeight: 64,
     bottom: 8,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   manageView: {
     width: '100%',
     marginTop: 12,
-    gap:8,
+    gap: 8,
     borderRadius: 8,
     justifyContent: 'space-between',
     padding: 16,

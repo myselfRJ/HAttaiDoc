@@ -45,6 +45,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import {HttpStatusCode} from 'axios';
 
 const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -76,10 +77,12 @@ const AddUser = ({navigation}) => {
     name: '',
     phone: '',
     gender: 'male',
-    role: '',
+    role: selectedRole,
     clinic: '',
     slots: [],
-    user_profile_pic_url: selectedImage,
+    user_profile_pic_url: selectedImage
+      ? selectedImage
+      : CONSTANTS.default_image,
   });
   console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
@@ -113,22 +116,24 @@ const AddUser = ({navigation}) => {
         },
         body: JSON.stringify(clinic_users),
       });
-      if (response.ok) {
+      if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        dispatch(headerStatus.headerStatus({index: 2, status: true}));
-        setTimeout(() => {
-          navigation.navigate('tab');
-        }, 1000);
-        setSelectedClinic(jsonData.data[0]?.clinic_name);
-        setLoading(false);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status, response);
-        setLoading(false);
+        if (jsonData.status === 'success') {
+          setApiStatus({status: 'success', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
+          dispatch(headerStatus.headerStatus({index: 2, status: true}));
+          setTimeout(() => {
+            navigation.navigate('tab');
+          }, 1000);
+          setSelectedClinic(jsonData.data[0]?.clinic_name);
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -142,12 +147,14 @@ const AddUser = ({navigation}) => {
 
   const handlePlusIconClick = () => {
     console.log('users--------------------------------------');
-    if (values.name) {
+    if (values.name && values.gender && values.phone) {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
+      setShowSlotChip(true);
+      (values.name = ''), (values.phone = ''), (values.gender = '');
+    } else {
+      Alert.alert('"Warning"', '"Please Enter Details"');
     }
-    setShowSlotChip(true);
-    (values.name = ''), (values.phone = ''), (values.gender = '');
   };
 
   //console.log(values.slots);

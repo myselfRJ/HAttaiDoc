@@ -11,7 +11,7 @@ import {Language} from '../settings/customlanguage';
 import PlusButton from '../components/plusbtn';
 import SelectionTab from '../components/selectiontab';
 import SelectorBtn from '../components/selector';
-import {AppointmentCard} from '../components';
+import {AppointmentCard, HButton} from '../components';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Icon, InputText} from '../components';
@@ -28,7 +28,7 @@ import {
   addclinic_Address,
 } from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -110,11 +110,9 @@ const Appointment = ({navigation}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
       setClinic(jsonData?.data[0]?.id);
-      dispatch(addclinic_id.addclinic_id(jsonData?.data[0]?.id));
-      dispatch(addclinic_name.addclinic_name(jsonData?.data[0]?.clinic_name));
-      dispatch(
-        addclinic_Address.addclinic_Address(jsonData?.data[0]?.clinic_Address),
-      );
+      dispatch(addclinic_id(jsonData?.data[0]?.id));
+      dispatch(addclinic_name(jsonData?.data[0]?.clinic_name));
+      dispatch(addclinic_Address(jsonData?.data[0]?.clinic_Address));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -194,8 +192,9 @@ const Appointment = ({navigation}) => {
     fetchname();
   }, []);
 
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   console.log('====================================');
-  console.log('filtered data', clinicID);
+  console.log(Clinic_id, '-------clinic');
   console.log('====================================');
 
   const handlePlusBUtton = () => {
@@ -210,8 +209,7 @@ const Appointment = ({navigation}) => {
   return (
     <View style={styles.main}>
       <View>
-        <ScrollView>
-          {/* <View
+        {/* <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -227,78 +225,79 @@ const Appointment = ({navigation}) => {
             </View>
             <HeaderAvatar data={doc_name} />
           </View> */}
-          <View style={styles.select}>
-            <SelectorBtn
-              //label={Language[language]['clinic']}
-              name="chevron-down"
-              onPress={() => {
-                ClinicRef?.current?.snapToIndex(1);
-              }}
-              input={selectedClinic}
+        <View style={styles.select}>
+          <SelectorBtn
+            //label={Language[language]['clinic']}
+            name="chevron-down"
+            onPress={() => {
+              ClinicRef?.current?.snapToIndex(1);
+            }}
+            input={selectedClinic}
+          />
+          <SelectorBtn
+            //label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
+          <DatePicker
+            modal
+            open={open !== false}
+            date={DOB}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+          {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              bottom: 24,
+              width: '103%',
+            }}>
+            <InputText
+              placeholder="Search name"
+              value={name}
+              setValue={ChangeNameValue}
+              textStyle={styles.input}
             />
-            <SelectorBtn
-              //label={Language[language]['dob']}
-              name="calendar"
-              onPress={() => setOpen('to')}
-              input={formattedDate}
-              style={styles.DOBselect}
-            />
-            <DatePicker
-              modal
-              open={open !== false}
-              date={DOB}
-              theme="auto"
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-            />
-            {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                bottom: 24,
-                width: '103%',
-              }}>
-              <InputText
-                placeholder="Search name"
-                value={name}
-                setValue={ChangeNameValue}
-                textStyle={styles.input}
+            <Icon name="search" size={16} style={styles.searchIcon} />
+          </View>
+          <View style={styles.tab}>
+            {selections?.map((val, ind) => (
+              <SelectionTab
+                label={val}
+                key={ind}
+                onPress={() => handleSelect(val)}
+                selected={seletedType === val}
               />
-              <Icon name="search" size={20} style={styles.searchIcon} />
-            </View>
-            <View style={styles.tab}>
-              {selections?.map((val, ind) => (
-                <SelectionTab
-                  label={val}
-                  key={ind}
-                  onPress={() => handleSelect(val)}
-                  selected={seletedType === val}
-                />
-              ))}
-            </View>
+            ))}
           </View>
-          <View style={styles.appointment}>
-            <Text style={commonstyles.h2}>Appointments</Text>
-            {filteredData?.map((value, index) => {
-              return (
-                <AppointmentCard
-                  key={index}
-                  appointment={value}
-                  openVisit={() => navigation.navigate('visit')}
-                />
-              );
-            })}
-          </View>
+        </View>
+        <Text style={styles.h2}>Appointments</Text>
+        <ScrollView
+          style={{height: 400, paddingHorizontal: 8, gap: 16}}
+          contentContainerStyle={{gap: 8}}>
+          {filteredData?.map((value, index) => {
+            return (
+              <AppointmentCard
+                key={index}
+                appointment={value}
+                openVisit={() => navigation.navigate('visit')}
+              />
+            );
+          })}
         </ScrollView>
-        <PlusButton
-          icon="plus"
-          style={{position: 'absolute', left: 24, bottom: 16}}
-          onPress={handlePlusBUtton}
-        />
       </View>
+      <HButton
+        label="Book Appointment"
+        btnstyles={{alignSelf: 'center', marginTop: 16}}
+        onPress={handlePlusBUtton}
+      />
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
@@ -346,8 +345,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   appointment: {
-    gap: 8,
+    height: 400,
     paddingHorizontal: 8,
+    gap: 16,
   },
   h2: {
     fontSize: 24,
@@ -358,14 +358,16 @@ const styles = StyleSheet.create({
   },
   input: {
     gap: 4,
-    paddingVertical: 16,
+    paddingVertical: 10,
     left: 4,
+    marginRight: 4,
   },
   searchIcon: {
     top: 10,
     height: 51,
-    right: 24,
+    right: 30,
     padding: 16,
+    color: CUSTOMCOLOR.primary,
   },
   DOBselect: {
     width: '100%',

@@ -1,4 +1,10 @@
-import React, {useState, useRef, useEffect, useCallback} from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  startTransition,
+} from 'react';
 import {Text, View, StyleSheet, Alert} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -65,6 +71,24 @@ const AddClinic = ({navigation}) => {
       : setVisibleSlot(true);
   };
 
+  // const SlotaddedCheck = () => {
+  //   const m = slotData?.slots?.M?.length === 0;
+  //   const t = slotData?.slots?.T?.length === 0;
+  //   const w = slotData?.slots?.W?.length === 0;
+  //   const th = slotData?.slots?.TH?.length === 0;
+  //   const f = slotData?.slots?.F?.length === 0;
+  //   const sa = slotData?.slots?.Sa?.length === 0;
+  //   const su = slotData?.slots?.Su?.length === 0;
+
+  //   return !(m || t || w || th || f || sa || su);
+  // };
+
+  // const slotsCheck = SlotaddedCheck();
+
+  // console.log('====================================');
+  // console.log('----------check ', slotsCheck);
+  // console.log('====================================');
+
   const handleClear = () => {
     setVisibleSlot(true);
   };
@@ -96,10 +120,15 @@ const AddClinic = ({navigation}) => {
     // slots: [],
   });
 
+  const clinic_data = useSelector(state => state?.clinic?.clinic_data);
+
+  console.log('====================================');
+  console.log('----------clinicdata', slotData.slots);
+  console.log('====================================');
   const Clinic_Data = {
     clinic_name: value.clinic,
     clinic_Address: value.address,
-    clinic_photo_url: selectedImage,
+    clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
   };
@@ -115,22 +144,25 @@ const AddClinic = ({navigation}) => {
         },
         body: JSON.stringify(clinics?.clinics),
       });
-      if (response.status===HttpStatusCode.Ok) {
+      if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         //console.log(jsonData);
-        console.log('------------data',response);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        dispatch(headerStatus.headerStatus({index: 1, status: true}));
-        setTimeout(() => {
-          navigation.navigate('adduser');
-        }, 1000);
-        setLoading(false);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status, response);
-        setLoading(false);
+        console.log('------------data', jsonData);
+        if (jsonData.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          SuccesRef?.current?.snapToIndex(1);
+          dispatch(headerStatus.headerStatus({index: 1, status: true}));
+          setTimeout(() => {
+            navigation.navigate('adduser');
+          }, 1000);
+
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -143,16 +175,19 @@ const AddClinic = ({navigation}) => {
 
   const handlePlusIconClick = () => {
     if (value.clinic) {
-      dispatch(addclinic_data(Clinic_Data));
-      Alert.alert(
-        'Success',
-        '"Clinic data added successfully"'
-      )
+      if (!visibleSlot) {
+        dispatch(addclinic_data(Clinic_Data));
+        Alert.alert('Success', '"Clinic data added successfully"');
+        setShowSlotChip(true);
+        (value.clinic = ''), (value.address = ''), (value.fees = '');
+        setSelectedImage('');
+        setVisibleSlot(true);
+      } else {
+        Alert.alert('Warning', '"Please Add Slots Details Also"');
+      }
+    } else {
+      Alert.alert('Warning', '"Please Check Once Again"');
     }
-    setShowSlotChip(true);
-    (value.clinic = ''), (value.address = ''), (value.fees = '');
-    setVisibleSlot(true);
-    
   };
   console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
@@ -246,7 +281,7 @@ const AddClinic = ({navigation}) => {
               placeholder="Consultation Fees"
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
-              keypad='numeric'
+              keypad="numeric"
             />
             <View
               style={{

@@ -79,7 +79,9 @@ const ProfileCreate = ({navigation}) => {
 
   console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedSpeciality, setSelectedSpeciality] = useState('');
+  const [selectedSpeciality, setSelectedSpeciality] = useState(
+    CONSTANTS.speciality[0],
+  );
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formattedDate = DOB.toLocaleDateString('en-US', {
@@ -143,7 +145,7 @@ const ProfileCreate = ({navigation}) => {
     DOB: DOB.toString(),
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
-    profile_pic_url: selectedImage,
+    profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     medical_doc_url: uploaddocument,
   };
 
@@ -164,21 +166,29 @@ const ProfileCreate = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         console.log(jsonData);
-        setApiStatus({
-          status: 'success',
-          message: 'Successfully created',
-        });
-        SuccesRef?.current?.snapToIndex(1);
-        dispatch(headerStatus.headerStatus({index: 0, status: true}));
-        // setStatus(!status);
-        setTimeout(() => {
-          navigation.navigate('addclinic');
-        }, 1000);
-        setLoading(false);
+        if (jsonData.status === 'success') {
+          setApiStatus({
+            status: 'success',
+            message: 'Successfully created',
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          dispatch(headerStatus.headerStatus({index: 0, status: true}));
+          // setStatus(!status);
+          setTimeout(() => {
+            navigation.navigate('addclinic');
+          }, 1000);
+
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
+          // setTimeout(() => {
+          //   navigation.navigate('pro');
+          // }, 1000)
+          console.error('API call failed:', response.status);
+          setLoading(false);
+        }
       } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status);
         setLoading(false);
       }
     } catch (error) {
@@ -376,14 +386,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   modalContainer: {
-    height:'100%',
+    height: '100%',
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
     borderRadius: 10,
-    gap:16,
+    gap: 16,
     padding: 10,
   },
   modalfields: {
