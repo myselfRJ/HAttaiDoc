@@ -120,8 +120,7 @@ const styles = StyleSheet.create({
   Top: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: moderateScale(80),
-    // height: horizontalScale(503),
+    height: horizontalScale(503),
     backgroundColor: CUSTOMCOLOR.primary,
   },
   bottom: {

@@ -17,7 +17,7 @@ const SlotChip = props => {
         onPress={() => {
           props.onPress(props.index);
         }}>
-        <Icon name="delete" size={24} color={CUSTOMCOLOR.primary} />
+        <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
       </TouchableOpacity>
     </View>
   );
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderColor: CUSTOMCOLOR.primary,
-    backgroundColor: '#C6E3FF',
+    borderColor: '#2CBB15',
     borderWidth: 1,
   },
 });

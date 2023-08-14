@@ -355,7 +355,8 @@ const styles = StyleSheet.create({
     width: '70%',
   },
   basic: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,
     paddingHorizontal: 8,
     color: CUSTOMCOLOR.black,
     gap: 10,
@@ -474,6 +475,8 @@ const styles = StyleSheet.create({
     gap: 10,
     color: CUSTOMCOLOR.black,
     top: 16,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,
   },
   diascontainer: {
     paddingHorizontal: 8,
@@ -509,6 +512,8 @@ const styles = StyleSheet.create({
     gap: 10,
     color: CUSTOMCOLOR.black,
     top: 16,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,
   },
   pregnancyFields: {
     paddingHorizontal: 8,

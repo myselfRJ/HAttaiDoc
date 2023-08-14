@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '400',
+    //fontWeight: '400',
     lineHeight: 19.07,
     top: 8,
     color: CUSTOMCOLOR.black,

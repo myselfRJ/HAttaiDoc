@@ -15,7 +15,7 @@ import {Language} from '../settings/customlanguage';
 import {HButton, PlusButton} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {addSymptom} from '../redux/features/prescription/symptomslice';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
 import PrescriptionHead from '../components/prescriptionHead';
 
 const Symptoms = ({navigation}) => {
@@ -77,6 +77,8 @@ const Symptoms = ({navigation}) => {
                       padding: 10,
                       fontWeight: 'bold',
                       color: CUSTOMCOLOR.black,
+                      fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,
                     }}>
                     {Language[language]['symptoms']}:
                   </Text>
@@ -85,6 +87,7 @@ const Symptoms = ({navigation}) => {
                       height: 40,
                       width: 100,
                       textAlignVertical: 'top',
+                      
                     }}>
                     <TextInput
                       placeholder="enter Symptom"
@@ -101,6 +104,8 @@ const Symptoms = ({navigation}) => {
                       padding: 10,
                       fontWeight: 'bold',
                       color: CUSTOMCOLOR.black,
+                      fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,
                     }}>
                     {Language[language]['days']}:
                   </Text>
@@ -120,7 +125,8 @@ const Symptoms = ({navigation}) => {
                   </View>
                 </View>
                 <View style={styles.radiogroup}>
-                  <Text style={{padding: 10, fontWeight: 'bold'}}>
+                  <Text style={{padding: 10, fontWeight: 'bold',fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight:600,color:CUSTOMCOLOR.black}}>
                     {Language[language]['severity']}:
                   </Text>
                   <View style={{flexDirection: 'row'}}>

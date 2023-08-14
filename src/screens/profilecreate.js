@@ -211,19 +211,19 @@ const ProfileCreate = ({navigation}) => {
               <Text>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
-                  label="male"
+                  label="Male"
                   value="male"
                   selected={values.gender === 'male'}
                   onPress={() => handleOptions('male')}
                 />
                 <Option
-                  label="female"
+                  label="Female"
                   value="female"
                   selected={values.gender === 'female'}
                   onPress={() => handleOptions('female')}
                 />
                 <Option
-                  label="others"
+                  label="Others"
                   value="others"
                   selected={values.gender === 'others'}
                   onPress={() => handleOptions('others')}
@@ -235,6 +235,7 @@ const ProfileCreate = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
+                paddingHorizontal: 8,
               }}>
               <SelectorBtn
                 label={Language[language]['dob']}
@@ -258,6 +259,7 @@ const ProfileCreate = ({navigation}) => {
               placeholder="Medical number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
+              keypad='numeric'
             />
             <View
               style={{

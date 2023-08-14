@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {commonstyles} from '../styles/commonstyle';
@@ -170,7 +170,7 @@ const PatientCreate = ({navigation}) => {
   };
 
   return (
-    <View>
+    <View style={{flex:1}}>
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
@@ -249,29 +249,30 @@ const PatientCreate = ({navigation}) => {
             /> */}
 
             <View style={styles.alignchild}>
-              <Text>Gender</Text>
+              <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',}}>Gender</Text>
               <View style={styles.radiogroup}>
                 <Option
-                  label="male"
+                  label="Male"
                   value="male"
                   selected={selected === 'male'}
                   onPress={() => handleOptions('male')}
                 />
                 <Option
-                  label="female"
+                  label="Female"
                   value="female"
                   selected={selected === 'female'}
                   onPress={() => handleOptions('female')}
                 />
                 <Option
-                  label="others"
+                  label="Others"
                   value="others"
                   selected={selected === 'others'}
                   onPress={() => handleOptions('others')}
                 />
               </View>
             </View>
-            <View style={{width: '100%', paddingRight: 8}}>
+            <View style={{width: '100%', paddingHorizontal: 16}}>
               <SelectorBtn onPress={handleDate} name={'calendar'} input={DOB} />
               {open && (
                 <DatePicker
