@@ -31,6 +31,18 @@ const Prescription = ({route}) => {
   console.log('address=', clinic_Address);
   const {name,gender,patient_age,patient_phone_number} = route.params;
   console.log('patient phone--',name,gender,patient_age,patient_phone_number);
+
+  const current = new Date()
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+  const format = current.toLocaleDateString(undefined,options)
   return (
     <View style={styles.main}>
     <ScrollView>
@@ -68,7 +80,7 @@ const Prescription = ({route}) => {
             source={require('../assets/images/RX.png')}
             style={styles.img}
           />
-          <Text style={styles.date}></Text>
+          <Text style={styles.date}>{format}</Text>
         </View>
         <View>
           <Text style={styles.date}>{name} | {gender} | {patient_age} | {patient_phone_number}</Text>
@@ -188,13 +200,10 @@ const Prescription = ({route}) => {
         </View>
         <View style={styles.description}>
           <Text style={styles.values}>Not valid for Medical Legal Purpose</Text>
-          <Text style={styles.values}>
-            In case of any drug percations or side effects STOP all medicines
-            immediately and{' '}
-          </Text>
-          <Text style={styles.values}>
-            consult your doctor or nearest hospital
-          </Text>
+          <Text style={styles.values}>In case of any drug percations or side effects STOP all medicines </Text>
+          <Text style={styles.values}>immediately and consult your doctor or nearest hospital</Text>
+          
+          
         </View>
         <View>
           <Image
@@ -215,13 +224,13 @@ const styles = StyleSheet.create({
     backgroundColor:'#ffffff'
   },
   title: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: 600,
     fontSize: 20,
     color: CUSTOMCOLOR.primary,
   },
   speciality: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
     fontSize: 20,
     color: CUSTOMCOLOR.primary,
@@ -231,9 +240,9 @@ const styles = StyleSheet.create({
     height: 53,
   },
   date: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
-    fontSize: 18,
+    fontSize: 16,
     color: CUSTOMCOLOR.black,
   },
   commonstyle: {
@@ -242,19 +251,20 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   head: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: 400,
-    fontSize: 18,
+    fontSize: 16,
     color: CUSTOMCOLOR.primary,
     paddingVertical: 12,
     paddingHorizontal: 4,
   },
   values: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
-    fontSize: 16,
+    fontSize: 14,
     color: CUSTOMCOLOR.black,
     paddingHorizontal: 8,
+    alignItems:'center'
   },
   presc: {
     top: 8,
@@ -271,7 +281,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   prescMenu: {
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: 400,
     fontSize: 16,
     color: CUSTOMCOLOR.black,

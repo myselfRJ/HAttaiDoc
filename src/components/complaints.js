@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     fontSize: moderateScale(12),
     backgroundColor: CUSTOMCOLOR.white,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   sugg: {
     flexDirection: 'row',
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     fontWeight: 400,
     alignItems: 'center',
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   sugbtn: {
     borderRadius: moderateScale(8),

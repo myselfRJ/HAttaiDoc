@@ -55,19 +55,18 @@ const ReferDoctorForm = props => {
 
   return (
     <View style={{paddingHorizontal: horizontalScale(24), paddingVertical: 24}}>
-      <View style={styles.main}>
-        <PrescriptionHead heading="Refer to Doctor" />
-        <Text style={styles.title}>Refer to Doctor</Text>
-      </View>
+      <PrescriptionHead heading="Refer to Doctor"/>
+        {/* <Text style={styles.title}>Refer to Doctor</Text> */}
       <View style={styles.container}>
         <Text style={styles.head}>Recommendation</Text>
         <View
           style={{
-            width: horizontalScale(323),
+            //width: horizontalScale(323),
             height: verticalScale(30),
             padding: 8,
             gap: 16,
             flexDirection: 'row',
+            paddingHorizontal:8
           }}>
           {doctors.map((doctor, index) => (
             <TouchableOpacity
@@ -100,7 +99,7 @@ const ReferDoctorForm = props => {
 
         <View
           style={{
-            width: horizontalScale(651),
+            //width: horizontalScale(651),
             height: verticalScale(50),
             padding: 8,
             marginTop: 10,
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
     padding: moderateScale(10),
   },
   main: {
-    width: horizontalScale(651),
+    //width: horizontalScale(651),
     height: verticalScale(35),
     justifyContent: 'space-between',
     padding: moderateScale(8),
@@ -179,14 +178,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   head: {
-    width: horizontalScale(125),
+    //width: horizontalScale(125),
     height: verticalScale(35),
     padding: moderateScale(8),
     gap: 10,
     color: CUSTOMCOLOR.black,
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(14),
     fontWeight: 600,
     lineHeight: 16.34,
+    fontFamily: CUSTOMFONTFAMILY.body,
+
   },
   fields: {
     height: verticalScale(14),
@@ -200,10 +201,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   input: {
-    width: horizontalScale(150),
+    //width: horizontalScale(150),
+    paddingHorizontal:32,
     height: verticalScale(45),
     borderRadius: moderateScale(4),
-    padding: moderateScale(16),
+    //padding: moderateScale(16),
     gap: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -213,9 +215,8 @@ const styles = StyleSheet.create({
   suggestion: {
     flex: 1,
     paddingHorizontal: horizontalScale(16),
-    height: verticalScale(30),
+    height: verticalScale(32),
     gap: 8,
-    borderWidth: 1,
     borderRadius: moderateScale(4),
     alignItems: 'center',
     justifyContent: 'center',

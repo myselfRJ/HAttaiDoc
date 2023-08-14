@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 24,
-    fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
+    fontWeight: '600',
+    fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.primary,
     top: 16,

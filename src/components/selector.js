@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   h3: {
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.opensan,
+    fontFamily: CUSTOMFONTFAMILY.body,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
   },
 });

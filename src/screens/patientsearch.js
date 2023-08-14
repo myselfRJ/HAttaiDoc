@@ -21,6 +21,7 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addclinic_id} from '../redux/features/profiles/clinicId';
+import { commonstyles } from '../styles/commonstyle';
 
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -125,19 +126,19 @@ const PatientSearch = ({navigation}) => {
             justifyContent: 'space-around',
             alignItems: 'center',
             bottom: 16,
+            paddingHorizontal:8
           }}>
           <InputText
             placeholder="Search name"
             value={name}
             setValue={ChangeNameValue}
             textStyle={styles.input}
-            keypad="numeric"
           />
           <Icon name="search" size={20} style={styles.searchIcon} />
         </View>
 
         <View style={styles.appointment}>
-          <Text style={styles.h2}>My Patients</Text>
+          <Text style={commonstyles.h2}>My Patients</Text>
           {filteredData?.map((val, ind) => (
             <PatientSearchCard
               key={ind}
@@ -199,6 +200,7 @@ const styles = StyleSheet.create({
     width: '105%',
     padding: 16,
     gap: 4,
+    paddingHorizontal:8
   },
   searchIcon: {
     top: 10,

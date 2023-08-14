@@ -24,6 +24,13 @@ export const commonstyles = StyleSheet.create({
     fontSize: 32,
     color: CUSTOMCOLOR.black,
     fontWeight: '500',
-    lineHeight: 96,
+    lineHeight: 72,
   },
+  h2:{
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 24,
+    color: CUSTOMCOLOR.black,
+    fontWeight: '500',
+    lineHeight: 64,
+  }
 });

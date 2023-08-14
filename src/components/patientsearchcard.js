@@ -10,7 +10,7 @@ import {
 import BottomSheetView from './bottomSheet';
 import {useState, useRef, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import SelectionTab from '../components/selectiontab';
@@ -159,18 +159,21 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     lineHeight: 20,
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.heading
   },
   age: {
     fontWeight: 400,
     fontSize: moderateScale(10),
     lineHeight: 20,
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   contact: {
     fontWeight: 600,
     fontSize: 10,
     lineHeight: 12.5,
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.heading
   },
   img: {
     width: 60,
@@ -218,6 +221,7 @@ const styles = StyleSheet.create({
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
+    fontFamily:CUSTOMFONTFAMILY.body
   },
 });
 

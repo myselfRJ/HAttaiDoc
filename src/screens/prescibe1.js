@@ -121,10 +121,10 @@ export default function Prescribe1() {
   return (
     <ScrollView>
       <View style={{padding: 24, gap: 24}}>
-        <View style={styles.mainHead}>
+       
           <PrescriptionHead heading={Language[language]['prescribe']}/>
          {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
-        </View>
+
         <View>
           {prevPres?.map((item, ind) => (
             <View
@@ -137,7 +137,7 @@ export default function Prescribe1() {
               }}>
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
-                <Text style={{color: CUSTOMCOLOR.black}}>
+                <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
                   {item.mode}|{item.medicine}|{item.dose_quantity}|{item.timing}
                   |{item.frequency}|{item.dose_number}|{item.total_quantity}|
                   {item.duration}
@@ -367,35 +367,23 @@ export default function Prescribe1() {
 }
 
 const styles = StyleSheet.create({
-  mainHead: {
-    width: 651,
-    justifyContent: 'space-between',
-    padding: 8,
-  },
-  mainText: {
-    fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 'bold',
-    fontSize: 14,
-    lineHeight: 19,
-    color: CUSTOMCOLOR.black,
-  },
   prescribeConatiner: {
     width: '100%',
     gap: 4,
   },
   ModeContainer: {
-    width: 635,
+    //width: 635,
     gap: 8,
     paddingLeft: 16,
-    top: 8,
+    //top: 8,
   },
   ModeText: {
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '400',
-    lineHeight: 19.07,
-    top: 8,
+    //fontWeight: '400',
+    lineHeight:16,
+    //top: 8,
     color: CUSTOMCOLOR.black,
   },
   ModesContainer: {

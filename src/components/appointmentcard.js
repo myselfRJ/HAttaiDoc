@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import BottomSheetView from './bottomSheet';
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
+    
   },
   child: {
     width: '40%',
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.heading
   },
   age: {
     fontWeight: 400,
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   gender: {
     fontWeight: 400,
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   symptom: {
     flexWrap: 'wrap',
@@ -187,6 +191,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.5 * CUSTOMFONTSIZE.h5,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   img: {
     width: moderateScale(96),
@@ -228,10 +233,12 @@ const styles = StyleSheet.create({
   statustext: {
     textAlign: 'right',
     fontWeight: '600',
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   contact: {
     height: verticalScale(25),
     width: horizontalScale(150),
+    fontFamily:CUSTOMFONTFAMILY.body
   },
   contact1: {
     height: verticalScale(25),
