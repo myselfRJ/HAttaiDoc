@@ -75,6 +75,15 @@ export default function Prescribe1() {
         },
       ]),
     );
+    setMedicine('')
+    setMode('')
+    selectedMedicine('')
+    setDose_number('')
+    setDose_quantity('')
+    setTiming('')
+    setFrequency([])
+    setDuration('')
+
   };
   const handlePrescribeChange = (text, index, field) => {
     setPrescribeInput(prevState => {
@@ -125,7 +134,15 @@ export default function Prescribe1() {
           <PrescriptionHead heading={Language[language]['prescribe']}/>
          {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
 
-        <View>
+        <View style={{
+                flex: 1,
+                width: '100%',
+                marginBottom: 5,
+                borderWidth:1,
+                padding:16,
+                borderColor: '#2CBB15',
+                backgroundColor:CUSTOMCOLOR.white
+              }} >
           {prevPres?.map((item, ind) => (
             <View
               key={ind}
@@ -134,6 +151,7 @@ export default function Prescribe1() {
                 flex: 1,
                 width: '100%',
                 marginBottom: 5,
+                //borderWidth:1,
               }}>
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
@@ -144,7 +162,7 @@ export default function Prescribe1() {
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleDelete(ind)}>
-                <Icon name="delete" size={24} color={CUSTOMCOLOR.primary} />
+                <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
               </TouchableOpacity>
             </View>
           ))}

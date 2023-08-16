@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: moderateScale(10),
     padding: moderateScale(32),
+    gap:16
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {Text, View, StyleSheet, Pressable, Image} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -206,6 +207,12 @@ const Appointment = ({navigation}) => {
     setSelectedType(value);
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAppointment();
+    }, [clinicID]),
+  );
+
   return (
     <View style={styles.main}>
       <View>
@@ -383,6 +390,7 @@ const styles = StyleSheet.create({
     //alignSelf: 'center',
     borderRadius: 10,
     padding: 32,
+    gap:16
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

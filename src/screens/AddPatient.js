@@ -242,7 +242,7 @@ const Abha = ({navigation}) => {
             onCancel={handleCancel}
           />
           <View style={styles.alignchild}>
-            <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black}}> {Language[language]['gender']}</Text>
+            <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize:CUSTOMFONTSIZE.h4}}> {Language[language]['gender']}</Text>
             <View style={styles.radiogroup}>
               <Option
                 label="Male"

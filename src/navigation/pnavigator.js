@@ -35,10 +35,12 @@ import Prescription from '../screens/prescription';
 import Diagnosis from '../screens/diagnosis';
 import Commorbities from '../screens/commorbities';
 import Allergies from '../screens/allergies';
+import LabReports from '../screens/labReport';
+import PastHistory from '../screens/pasthistory';
 
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
-import PastHistory from '../screens/pasthistory';
+
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
   const isAuth = useSelector(state => state.authenticate.auth.access);
@@ -97,6 +99,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="commorbities" component={Commorbities} />
       <Stack.Screen name="pasthistory" component={PastHistory} />
       <Stack.Screen name="allergies" component={Allergies} />
+      <Stack.Screen name="labreport" component={LabReports}/>
       
     </Stack.Navigator>
   );

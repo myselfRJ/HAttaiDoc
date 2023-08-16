@@ -218,7 +218,7 @@ const ProfileCreate = ({navigation}) => {
             />
 
             <View style={styles.alignchild}>
-              <Text>{Language[language]['gender']}</Text>
+              <Text style={{color:CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body,fontSize:CUSTOMFONTSIZE.h4}}>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -269,7 +269,6 @@ const ProfileCreate = ({navigation}) => {
               placeholder="Medical number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
-              keypad='numeric'
             />
             <View
               style={{
