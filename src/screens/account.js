@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import moment from 'moment';
+// import {CUSTOMCOLOR} from '../settings/styles';
 import {useNavigation} from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
@@ -22,7 +23,7 @@ const Account = () => {
   const navigation = useNavigation();
   const [data, setData] = useState();
   const [clinic, setClinics] = useState([]);
-  const [cliniId,setClinicId] = useState()
+  const [cliniId, setClinicId] = useState();
   const [users, setUsers] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -57,7 +58,7 @@ const Account = () => {
       const jsonData = await response.json();
       console.log('--------------clinics', jsonData);
       setClinics(jsonData?.data);
-      setClinicId(jsonData?.data[0]?.id)
+      setClinicId(jsonData?.data[0]?.id);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -109,7 +110,6 @@ const Account = () => {
       fetchUsers();
     }, [cliniId]),
   );
-
 
   return (
     <View style={{flex: 1, paddingHorizontal: 24, paddingVertical: 24}}>

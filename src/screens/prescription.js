@@ -1,11 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
+// import {Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
+// import {View, Text, StyleSheet} from '@react-pdf/renderer';
 import {Language} from '../settings/customlanguage';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import Logo from '../components/logo';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
+// import Pdf from 'react-native-pdf';
 
 const Prescription = ({route}) => {
   const doctor_profile = useSelector(state => state.doctor_profile);
@@ -29,10 +32,16 @@ const Prescription = ({route}) => {
   console.log('name===', clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   console.log('address=', clinic_Address);
-  const {name,gender,patient_age,patient_phone_number} = route.params;
-  console.log('patient phone--',name,gender,patient_age,patient_phone_number);
+  const {name, gender, patient_age, patient_phone_number} = route.params;
+  console.log(
+    'patient phone--',
+    name,
+    gender,
+    patient_age,
+    patient_phone_number,
+  );
 
-  const current = new Date()
+  const current = new Date();
   const options = {
     year: 'numeric',
     month: 'numeric',
@@ -40,13 +49,12 @@ const Prescription = ({route}) => {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false
+    hour12: false,
   };
-  const format = current.toLocaleDateString(undefined,options)
+  const format = current.toLocaleDateString(undefined, options);
   return (
     <View style={styles.main}>
-    <ScrollView>
-      
+      <ScrollView>
         <View
           style={{
             flexDirection: 'row',
@@ -56,7 +64,7 @@ const Prescription = ({route}) => {
             borderBottomColor: CUSTOMCOLOR.primary,
             borderBottomWidth: 1,
             padding: 12,
-            backgroundColor:"#ffffff"
+            backgroundColor: '#ffffff',
           }}>
           <View style={{flexDirection: 'row'}}>
             <Logo />
@@ -83,7 +91,9 @@ const Prescription = ({route}) => {
           <Text style={styles.date}>{format}</Text>
         </View>
         <View>
-          <Text style={styles.date}>{name} | {gender} | {patient_age} | {patient_phone_number}</Text>
+          <Text style={styles.date}>
+            {name} | {gender} | {patient_age} | {patient_phone_number}
+          </Text>
         </View>
         <View>
           <Text style={styles.head}>{Language[language]['vitals']}:</Text>
@@ -153,45 +163,53 @@ const Prescription = ({route}) => {
             <Text style={styles.prescMenu}>{item.total_quantity}</Text>
           </View>
         ))}
-        { notes && <View>
-          <Text style={styles.head}>
-            {Language[language]['notes']} :{' '}
-            <Text style={styles.values}>{notes}</Text>
-          </Text>
-        </View>}
-       {refer_doctor.doctor_name && <View>
-          <Text style={styles.head}>
-            {Language[language]['refer_doctor']} :
-          </Text>
-          <View style={styles.refer}>
-            <Text style={styles.values}>
-              {Language[language]['name']} :{' '}
-              <Text style={styles.values}>{refer_doctor.doctor_name}</Text>
-            </Text>
-            <Text style={styles.values}>
-              {Language[language]['specialist']} :{' '}
-              <Text style={styles.values}>{refer_doctor.speciality}</Text>
-            </Text>
-            <Text style={styles.values}>
-              {Language[language]['ph']} :{' '}
-              <Text style={styles.values}>{refer_doctor.phone}</Text>
+        {notes && (
+          <View>
+            <Text style={styles.head}>
+              {Language[language]['notes']} :{' '}
+              <Text style={styles.values}>{notes}</Text>
             </Text>
           </View>
-        </View>}
+        )}
+        {refer_doctor.doctor_name && (
+          <View>
+            <Text style={styles.head}>
+              {Language[language]['refer_doctor']} :
+            </Text>
+            <View style={styles.refer}>
+              <Text style={styles.values}>
+                {Language[language]['name']} :{' '}
+                <Text style={styles.values}>{refer_doctor.doctor_name}</Text>
+              </Text>
+              <Text style={styles.values}>
+                {Language[language]['specialist']} :{' '}
+                <Text style={styles.values}>{refer_doctor.speciality}</Text>
+              </Text>
+              <Text style={styles.values}>
+                {Language[language]['ph']} :{' '}
+                <Text style={styles.values}>{refer_doctor.phone}</Text>
+              </Text>
+            </View>
+          </View>
+        )}
         <View>
           <Text style={styles.head}>
             {Language[language]['test']} : <Text style={styles.values}></Text>
           </Text>
         </View>
-       {followup && <View>
-          <Text style={styles.head}>
-            {Language[language]['follow_up']} :{' '}
-            <Text style={styles.values}>{followup}</Text>
-          </Text>
-        </View>}
+        {followup && (
+          <View>
+            <Text style={styles.head}>
+              {Language[language]['follow_up']} :{' '}
+              <Text style={styles.values}>{followup}</Text>
+            </Text>
+          </View>
+        )}
         <View style={styles.sign}>
           <Text style={styles.values}>Digital sign</Text>
-          <Text style={styles.values}>{doctor_profile?.doctor_profile?.doctor_name}</Text>
+          <Text style={styles.values}>
+            {doctor_profile?.doctor_profile?.doctor_name}
+          </Text>
         </View>
         <View>
           <Text style={styles.head}>
@@ -200,10 +218,12 @@ const Prescription = ({route}) => {
         </View>
         <View style={styles.description}>
           <Text style={styles.values}>Not valid for Medical Legal Purpose</Text>
-          <Text style={styles.values}>In case of any drug percations or side effects STOP all medicines </Text>
-          <Text style={styles.values}>immediately and consult your doctor or nearest hospital</Text>
-          
-          
+          <Text style={styles.values}>
+            In case of any drug percations or side effects STOP all medicines{' '}
+          </Text>
+          <Text style={styles.values}>
+            immediately and consult your doctor or nearest hospital
+          </Text>
         </View>
         <View>
           <Image
@@ -211,8 +231,7 @@ const Prescription = ({route}) => {
             style={styles.footerimg}
           />
         </View>
-     
-    </ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -221,7 +240,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 24,
-    backgroundColor:'#ffffff'
+    backgroundColor: '#ffffff',
   },
   title: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -264,7 +283,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: CUSTOMCOLOR.black,
     paddingHorizontal: 8,
-    alignItems:'center'
+    alignItems: 'center',
   },
   presc: {
     top: 8,

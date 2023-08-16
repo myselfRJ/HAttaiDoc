@@ -12,7 +12,8 @@ let CUSTOMCOLOR = {
   error: 'red',
   graph: '#98CDFF',
   warn: '#ffb732',
-  delete:'#FF6347'
+  delete: '#FF6347',
+  success: '#2CBB15',
 };
 const DARKCOLOR = {
   primary: 'red',
@@ -20,7 +21,10 @@ const DARKCOLOR = {
   black: 'black',
   white: 'white',
 };
-const CUSTOMFONTFAMILY = {heading: 'OpenSans-SemiBold', body: 'OpenSans-Regular'};
+const CUSTOMFONTFAMILY = {
+  heading: 'OpenSans-SemiBold',
+  body: 'OpenSans-Regular',
+};
 const CUSTOMFONTSIZE = {
   h1: moderateScale(20),
   h2: moderateScale(18),

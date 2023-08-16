@@ -9,7 +9,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import BottomSheetView from './bottomSheet';
@@ -32,7 +36,6 @@ const AppointmentCard = ({appointment, openVisit}) => {
 
   const presentYear = new Date().toISOString().split('-')[0];
 
-  
   const patient_phone_number = appointment?.patient_data?.patient_phone_number;
   const patient_name = appointment?.patient_data?.patient_name;
   const patient_gender = appointment?.patient_data?.gender;
@@ -91,16 +94,25 @@ const AppointmentCard = ({appointment, openVisit}) => {
           </View>
           <View style={styles.statusinfo}>
             <Text style={styles.contact}>
-              {Language[language]['status']}:{appointment.status}
+              {Language[language]['status']}:
+              <Text
+                style={{
+                  color:
+                    appointment?.status === 'pending'
+                      ? CUSTOMCOLOR.warn
+                      : CUSTOMCOLOR.success,
+                }}>
+                {appointment.status}
+              </Text>
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
-          <View style={styles.statusinfo}>
+          {/* <View style={styles.statusinfo}>
             <Text style={styles.contact}>
               {Language[language]['bill']}:{appointment.bill}
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
-          </View>
+          </View> */}
         </View>
         <Pressable
           style={styles.icon}
@@ -155,7 +167,6 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
-    
   },
   child: {
     width: '40%',
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   age: {
     fontWeight: 400,
@@ -174,7 +185,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   gender: {
     fontWeight: 400,
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   symptom: {
     flexWrap: 'wrap',
@@ -191,7 +202,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.5 * CUSTOMFONTSIZE.h5,
     padding: moderateScale(0),
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   img: {
     width: moderateScale(96),
@@ -233,12 +244,12 @@ const styles = StyleSheet.create({
   statustext: {
     textAlign: 'right',
     fontWeight: '600',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   contact: {
     height: verticalScale(25),
     width: horizontalScale(150),
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   contact1: {
     height: verticalScale(25),
