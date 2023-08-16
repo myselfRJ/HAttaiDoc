@@ -46,8 +46,9 @@ const Entry = ({navigation}) => {
   console.log(OtpEncryption(), '---------------------------------------');
   console.log('====================================');
   const fetchData = async () => {
-    setLoading(!loading);
+    
     try {
+      setLoading(!loading);
       const response = await fetchApi(URL.generateOtp, {
         method: 'POST',
         headers: {
@@ -65,7 +66,7 @@ const Entry = ({navigation}) => {
         // {
         navigation.navigate('otpscreen');
         setPhone('');
-        setLoading(!loading);
+        setLoading(false);
         // }
       } else {
         console.error('API call failed:', response?.status);

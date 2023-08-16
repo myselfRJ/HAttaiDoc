@@ -1,6 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
 import PlusButton from '../components/plusbtn';
@@ -19,6 +23,8 @@ import {CONSTANT} from '../utility/const';
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
   //console.log('date=======', typeof date);
+  const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
+  console.log('diagnosis====>', diagnosis);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -35,6 +41,13 @@ const Visit = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
   const [apiStatus, setApiStatus] = useState({});
+
+  const commorbities = useSelector(
+    state => state?.commorbities?.commorbitiesItems,
+  );
+  const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
+  const allergies = useSelector(state => state?.allergies?.allergies);
+  const labreport = useSelector(state => state?.labreport?.labReport);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -57,8 +70,14 @@ const Visit = ({navigation, route}) => {
       chief_complaint: selectedComplaint,
       vitals: vitalsData,
       refer_to_doctor: selectedDoctor,
+      // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
       follow_up: date,
       note: note,
+      diagnosis: diagnosis,
+      labReports: labreport,
+      commoribities: commorbities,
+      allergies: allergies,
+      pastHistory: pasthistory,
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -356,6 +375,200 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{note}</Text>
                     </View>
                   )}
+                  {/* {value.label === 'Diagnosis' && diagnosis !== '' && 
+                    
+                     {diagnosis.map((item,index)=>{
+                      <View style={styles.complaintcontainer}>
+                       <Icon
+                       name="prescription"
+                       color={CUSTOMCOLOR.primary}
+                       size={16}
+                     />
+                     <Text style={styles.pulse}>{diagnosis}</Text>
+                        
+                    </View>
+                     })} } */}
+                  {value.label === 'Diagnosis' && diagnosis.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View
+                          style={{
+                            gap: 4,
+                            flexDirection: 'row',
+                          }}>
+                          <View>
+                            {diagnosis?.map((item, ind) => (
+                              <View
+                                key={ind}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 4,
+                                  gap: 4,
+                                }}>
+                                <Icon
+                                  name="prescription"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text
+                                    style={{
+                                      color: CUSTOMCOLOR.black,
+                                      fontFamily: CUSTOMFONTFAMILY.body,
+                                      fontSize: CUSTOMFONTSIZE.h4,
+                                    }}>
+                                    {item?.diagnosis}
+                                  </Text>
+                                </View>
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+
+                  {value.label === 'Commorbities' &&
+                    commorbities.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View
+                            style={{
+                              gap: 4,
+                              flexDirection: 'row',
+                            }}>
+                            <View>
+                              {commorbities?.map((item, ind) => (
+                                <View
+                                  key={ind}
+                                  style={{
+                                    flexDirection: 'row',
+                                    padding: 4,
+                                    gap: 4,
+                                  }}>
+                                  <Icon
+                                    name="prescription"
+                                    size={16}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={{color: CUSTOMCOLOR.black}}>
+                                      {item?.commoribities}
+                                    </Text>
+                                  </View>
+                                </View>
+                              ))}
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    )}
+
+                  {value.label === 'Past History' && pasthistory.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View
+                          style={{
+                            gap: 4,
+                            flexDirection: 'row',
+                          }}>
+                          <View>
+                            {pasthistory?.map((item, ind) => (
+                              <View
+                                key={ind}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 4,
+                                  gap: 4,
+                                }}>
+                                <Icon
+                                  name="prescription"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                    {item?.past_history}
+                                  </Text>
+                                </View>
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+
+                  {value.label === 'Allergies' && allergies?.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View
+                          style={{
+                            gap: 4,
+                            flexDirection: 'row',
+                          }}>
+                          <View>
+                            {allergies?.map((item, ind) => (
+                              <View
+                                key={ind}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 4,
+                                  gap: 4,
+                                }}>
+                                <Icon
+                                  name="prescription"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                    {item?.allergies}
+                                  </Text>
+                                </View>
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+
+                  {value.label === 'Lab Reports' && labreport.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View
+                          style={{
+                            gap: 4,
+                            flexDirection: 'row',
+                          }}>
+                          <View>
+                            {labreport?.map((item, ind) => (
+                              <View
+                                key={ind}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 4,
+                                  gap: 4,
+                                }}>
+                                <Icon
+                                  name="prescription"
+                                  size={16}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                    {item?.lab_test}
+                                  </Text>
+                                </View>
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+
                   {value.label === 'Refer to Doctor' && (
                     <View style={styles.basiccontainer}>
                       {selectedDoctor?.doctor_name && (
@@ -440,6 +653,15 @@ const styles = StyleSheet.create({
     // height:100
   },
   basiccontainer: {
+    // flexDirection:'row',
+    width: '100%',
+    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    gap: 16,
+  },
+  FollowUpcontainer: {
+    flexDirection: 'row',
     width: '100%',
     borderRadius: 4,
     paddingVertical: 8,

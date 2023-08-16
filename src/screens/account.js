@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -22,6 +23,7 @@ const Account = () => {
   const navigation = useNavigation();
   const [data, setData] = useState();
   const [clinic, setClinics] = useState([]);
+  const [cliniId, setClinicId] = useState();
   const [users, setUsers] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -56,6 +58,7 @@ const Account = () => {
       const jsonData = await response.json();
       console.log('--------------clinics', jsonData);
       setClinics(jsonData?.data);
+      setClinicId(jsonData?.data[0]?.id);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -96,6 +99,17 @@ const Account = () => {
   const DateOfBirth = `${data?.DOB.split(' ')[2]}-${data?.DOB.split(' ')[1]}-${
     data?.DOB.split(' ')[3]
   }`;
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [cliniId]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUsers();
+    }, [cliniId]),
+  );
 
   return (
     <View style={{flex: 1, paddingHorizontal: 24, paddingVertical: 24}}>

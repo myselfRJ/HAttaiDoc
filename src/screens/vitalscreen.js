@@ -291,7 +291,7 @@ const VitalScreen = props => {
                   {/* <Text></Text> */}
                   <Text
                     style={{
-                      padding: 16,
+                      padding: 12,
                       backgroundColor: CUSTOMCOLOR.white,
                       color: CUSTOMCOLOR.black,
                     }}>
