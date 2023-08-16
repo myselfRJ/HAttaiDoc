@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import moment from 'moment';
-import {CUSTOMCOLOR} from '../settings/styles';
+// import {CUSTOMCOLOR} from '../settings/styles';
 import {useNavigation} from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';

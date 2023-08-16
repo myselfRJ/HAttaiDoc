@@ -22,6 +22,8 @@ export const URL = {
   getInitScreen: `${baseUrl}practioner/init`,
   getUsers: phoneId =>
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
+  getConsultationByPatientPhone: phoneId =>
+    `${baseUrl}consult/pres?patient_phone_number=${phoneId}`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',

@@ -23,6 +23,7 @@ export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
+  const [consultation, setConsultation] = useState([]);
 
   console.log('====================================');
   console.log('---------------data', data);
@@ -50,10 +51,40 @@ export default function MedicalRecordPatient({route, navigation}) {
     fetchData();
   }, []);
 
+  const fetchPrescribe = async () => {
+    const response = await fetchApi(
+      URL.getConsultationByPatientPhone(patient_phone),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log(jsonData.data);
+      setConsultation(jsonData?.data[0]?.consultation);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchPrescribe();
+  }, []);
+
+  console.log('====================================');
+  console.log('------------------prescribe', consultation);
+  console.log('====================================');
+
   const [vitals, setVitals] = useState({
-    chiefComplaints: 'Headache and sever stomach pain',
-    medication: 'Headache and sever stomach pain',
-    diagnosis: 'Headcha and sever fever',
+    chiefComplaints: consultation?.chief_complaint?.complaint_message,
+    medication: consultation?.prescribe?.map((item, index) => {
+      return `${item.mode} | ${item?.medicine} | ${item?.dose_quantity} | ${item?.timing} | ${item?.frequency} | ${item?.total_quantity}`;
+    }),
+    diagnosis: consultation?.diagnosis?.diagnosis?.map((item, index) => {
+      return `${item?.diagnosis}`;
+    }),
     vital: {
       BP: 'Bp',
       PR: 'Pr',
@@ -182,33 +213,45 @@ export default function MedicalRecordPatient({route, navigation}) {
             }}>
             <View>
               <Text style={styles.contentHead}>Chief Complaints</Text>
-              <Text>{vitals.chiefComplaints}</Text>
+              <Text>{consultation?.chief_complaint?.complaint_message}</Text>
             </View>
             <View>
               <Text style={styles.contentHead}>Diagnosis</Text>
-              <Text>{vitals.diagnosis}</Text>
+              <Text>
+                {consultation?.diagnosis?.diagnosis?.map((item, index) => {
+                  return `${item?.diagnosis}`;
+                })}
+              </Text>
             </View>
             <View>
               <Text style={styles.contentHead}>Medication</Text>
-              <Text>{vitals.medication}</Text>
+              <Text>
+                {consultation?.prescribe?.map((item, index) => {
+                  return `${item.mode} | ${item?.medicine} | ${item?.dose_quantity} | ${item?.timing} | ${item?.frequency} | ${item?.total_quantity}`;
+                })}
+              </Text>
             </View>
             <View>
               <Text style={styles.contentHead}>Vitals</Text>
               <View style={{flexDirection: 'row', gap: 40}}>
                 <Text>BP</Text>
                 <Text>PR</Text>
-                <Text>SPO2</Text>
+                {/* <Text>SPO2</Text> */}
                 <Text>TEMP</Text>
                 <Text>LMP</Text>
                 <Text>EDD</Text>
               </View>
               <View style={{flexDirection: 'row', gap: 40, top: 8}}>
-                <Text>{vitals.vital.BP}</Text>
-                <Text>{vitals.vital.PR}</Text>
-                <Text>{vitals.vital.SPO2}</Text>
-                <Text>{vitals.vital.TEMP}</Text>
-                <Text>{vitals.vital.LMP}</Text>
-                <Text>{vitals.vital.EDD}</Text>
+                <Text>
+                  {consultation?.vitals?.systolic}/
+                  {consultation?.vitals?.diastolic}
+                </Text>
+                <Text>{consultation?.vitals?.pulse_rate}</Text>
+                {/* <Text>{vitals.vital.SPO2}</Text> */}
+                <Text>{consultation?.vitals?.body_temperature}</Text>
+                {/* <Text>{vitals.vital.EDD}</Text> */}
+                <Text>{consultation?.vitals?.LDD}</Text>
+                <Text>{consultation?.vitals?.EDD}</Text>
               </View>
             </View>
           </View>

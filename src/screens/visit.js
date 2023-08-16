@@ -14,7 +14,7 @@ import {fetchApi} from '../api/fetchApi';
 import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
-import { CONSTANT } from '../utility/const';
+import {CONSTANT} from '../utility/const';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
@@ -32,7 +32,6 @@ const Visit = ({navigation, route}) => {
   let prescribeCopy = Prescribe;
   const [prescribe, setPrescribe] = useState(prescribeCopy);
 
-
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
   const [apiStatus, setApiStatus] = useState({});
@@ -41,7 +40,12 @@ const Visit = ({navigation, route}) => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
 
-  const{name,gende,age,patient_phone, appointment_id} = route.params;
+  // const SuccesRef = useRef(null);
+  // useEffect(() => {
+  //   SuccesRef?.current?.snapToIndex(1);
+  // }, []);
+
+  const {name, gende, age, patient_phone, appointment_id} = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchData = async () => {
@@ -77,6 +81,7 @@ const Visit = ({navigation, route}) => {
         const jsonData = await response.json();
         //console.log('data---0', jsonData.data);
         setApiStatus({status: 'success', message: 'Successfully created'});
+        SuccesRef?.current?.snapToIndex(1);
         setTimeout(() => {
           navigation.navigate('tab');
         }, 1000);
@@ -89,7 +94,6 @@ const Visit = ({navigation, route}) => {
       setApiStatus({status: 'error', message: 'Please try again'});
     }
   };
-
 
   const SuccesRef = useRef(null);
 
@@ -123,8 +127,13 @@ const Visit = ({navigation, route}) => {
     const patient_phone_number = patient_phone;
     const patient_name = patient_name;
     const gender = gende;
-    const patient_age = age
-    navigation.navigate('prescription', {name,gender,patient_age,patient_phone_number});
+    const patient_age = age;
+    navigation.navigate('prescription', {
+      name,
+      gender,
+      patient_age,
+      patient_phone_number,
+    });
   };
 
   // console.log("Symptom....",Symptom)
@@ -137,13 +146,19 @@ const Visit = ({navigation, route}) => {
           <HeaderAvatar />
         </View> */}
           {/* <View style={{alignSelf: 'flex-end',position:'absolute',padding:16}}> */}
-            <PlusButton
-              icon="close"
-              style={{zIndex:4,backgroundColor:"transparent",position:'absolute',alignSelf:'flex-end',padding:16}}
-              color='#000000aa'
-              size={32}
-              onPress={() => navigation.goBack()}
-            />
+          <PlusButton
+            icon="close"
+            style={{
+              zIndex: 4,
+              backgroundColor: 'transparent',
+              position: 'absolute',
+              alignSelf: 'flex-end',
+              padding: 16,
+            }}
+            color="#000000aa"
+            size={32}
+            onPress={() => navigation.goBack()}
+          />
           {/* </View> */}
 
           <View style={styles.appointment}>
@@ -156,8 +171,8 @@ const Visit = ({navigation, route}) => {
                     icon={value.icon}
                     navigate={() => navigation.navigate(value.navigate)}
                   />
-                  {value.label === 'Symptoms' && (
-                    Symptom[0].symptom!='' && <View style={styles.basiccontainer}>
+                  {value.label === 'Symptoms' && Symptom[0].symptom != '' && (
+                    <View style={styles.basiccontainer}>
                       <View style={{flexWrap: 'wrap'}}>
                         {Symptom?.map((item, index) => {
                           return (
@@ -169,7 +184,7 @@ const Visit = ({navigation, route}) => {
                                   gap: 10,
                                   padding: 8,
                                   alignItems: 'center',
-                                }}> 
+                                }}>
                                 <Icon
                                   name="emoticon-sick"
                                   size={16}
@@ -177,7 +192,7 @@ const Visit = ({navigation, route}) => {
                                 />
                                 <View>
                                   <Text style={{color: CUSTOMCOLOR.black}}>
-                                    {item.symptom}  |  {item.days}  |  {' '}
+                                    {item.symptom} | {item.days} |{' '}
                                     {item.severity}
                                   </Text>
                                 </View>
@@ -189,8 +204,8 @@ const Visit = ({navigation, route}) => {
                       </View>
                     </View>
                   )}
-                  {value.label === 'Prescribe' && (
-                   prescribe.length>0 && <View style={styles.basiccontainer}>
+                  {value.label === 'Prescribe' && prescribe.length > 0 && (
+                    <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                         <View
                           style={{
@@ -204,7 +219,7 @@ const Visit = ({navigation, route}) => {
                                 style={{
                                   flexDirection: 'row',
                                   padding: 8,
-                                  gap:8
+                                  gap: 8,
                                 }}>
                                 <Icon
                                   name="prescription"
@@ -214,7 +229,8 @@ const Visit = ({navigation, route}) => {
                                 <View>
                                   <Text style={{color: CUSTOMCOLOR.black}}>
                                     {item.mode} | {item.medicine} |
-                                    {item.dose_quantity} | {item.timing} | {item.frequency} | {item.duration}
+                                    {item.dose_quantity} | {item.timing} |{' '}
+                                    {item.frequency} | {item.duration}
                                   </Text>
                                 </View>
                               </View>
@@ -224,18 +240,16 @@ const Visit = ({navigation, route}) => {
                       </View>
                     </View>
                   )}
-                  {value.label === 'Follow-Up' && (
-                    date !== '' && <View style={styles.basiccontainer}>
-                
-                        <>
-                          <Icon
-                            name="file-document-edit"
-                            color={CUSTOMCOLOR.primary}
-                            size={16}
-                          />
-                          <Text style={styles.pulse}>{date}</Text>
-                        </>
-                      )
+                  {value.label === 'Follow-Up' && date !== '' && (
+                    <View style={styles.basiccontainer}>
+                      <>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={16}
+                        />
+                        <Text style={styles.pulse}>{date}</Text>
+                      </>
                     </View>
                   )}
                   {value.label === 'Vitals' &&
@@ -251,7 +265,6 @@ const Visit = ({navigation, route}) => {
                       vitalsData?.systolic ||
                       vitalsData?.rate) && (
                       <View style={styles.basiccontainer}>
-                       
                         {(vitalsData?.systolic ||
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
@@ -363,15 +376,22 @@ const Visit = ({navigation, route}) => {
               </View>
             ))}
           </View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:24}}>
-            <HButton label="Preview" onPress={handlePreview} btnstyles={{
-             
-              backgroundColor:'#ffffff',
-             
-            }}
-            textStyle={{
-              color:CUSTOMCOLOR.primary,
-            }}/>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 24,
+            }}>
+            <HButton
+              label="Preview"
+              onPress={handlePreview}
+              btnstyles={{
+                backgroundColor: '#ffffff',
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+              }}
+            />
             <HButton label="Save" onPress={() => fetchData()} />
           </View>
         </View>
@@ -422,7 +442,7 @@ const styles = StyleSheet.create({
   basiccontainer: {
     width: '100%',
     borderRadius: 4,
-    paddingVertical:8,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     gap: 16,
   },
@@ -438,7 +458,7 @@ const styles = StyleSheet.create({
     // height: 32,
     borderRadius: 4,
     padding: 16,
-    padding:16,
+    padding: 16,
     gap: 8,
     flexDirection: 'row',
   },

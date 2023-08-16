@@ -117,7 +117,7 @@ const OtpScreen = ({route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         console.log('...... update navigation===>', jsonData);
-        dispatch(authenticateActions.updateauthenticate(jsonData));
+        dispatch(authenticateActions.updateauthenticate(jsonData?.data));
         nav.navigate('protected');
         setValue('');
         setLoading(!loading);
