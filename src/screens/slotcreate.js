@@ -238,7 +238,7 @@ const SlotCreate = ({navigation, route}) => {
         toTime: ToformattedTime,
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
-        day: selectedDay,
+        day: weekdays[selectedDay],
       };
 
       setAllSlots(prev => [...prev, newSlot]);
@@ -262,7 +262,7 @@ const SlotCreate = ({navigation, route}) => {
         toTime: ToformattedTime,
         consultType: selectedConsultValue,
         duration: selectedDurationValue,
-        day: selectedDay,
+        day: weekdays[selectedDay],
       };
 
       setAllSlots(prev => [...prev, newSlot]);
@@ -278,6 +278,10 @@ const SlotCreate = ({navigation, route}) => {
       };
       console.log(slots, '------------------------update');
       setSlots(weekdaysToUpdate);
+      setFromTime(new Date());
+      setToTime(new Date());
+      setConsultValue(consultType[0]);
+      setDurationValue(durationMins[0]);
     }
   };
   const handleDelete = index => {

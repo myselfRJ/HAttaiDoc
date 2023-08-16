@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableOpacity,Alert} from 'react-native';
 import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
   CUSTOMCOLOR,
@@ -104,8 +104,9 @@ const OtpScreen = ({route}) => {
     }
   };
   const fetchData = async () => {
-    setLoading(!loading);
+    // setLoading(!loading);
     try {
+      setLoading(!loading)
       const response = await fetchApi(URL.validateOtp, {
         method: 'POST',
         headers: {
@@ -116,18 +117,22 @@ const OtpScreen = ({route}) => {
       console.log(trace_id);
       if (response.ok) {
         const jsonData = await response.json();
+        if (jsonData.status==='success'){
         console.log('...... update navigation===>', jsonData);
-        dispatch(authenticateActions.updateauthenticate(jsonData));
+        dispatch(authenticateActions.updateauthenticate(jsonData?.data));
+        Alert.alert('Success',jsonData?.message)
         nav.navigate('protected');
         setValue('');
-        setLoading(!loading);
-      } else {
+        setLoading(false);
+        }
+       else {
         console.error('API call failed:', response.status);
-        setLoading(loading);
+        Alert.alert('Warning',jsonData?.message)
+        setLoading(false);
       }
-    } catch (error) {
+     }}catch (error) {
       console.error('Error occurred:', error);
-      setLoading(loading);
+      setLoading(false);
     }
   };
 

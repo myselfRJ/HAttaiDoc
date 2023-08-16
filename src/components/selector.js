@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
   },
   h3: {
-    fontSize: CUSTOMFONTSIZE.h3,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,

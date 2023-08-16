@@ -249,7 +249,7 @@ const PatientCreate = ({navigation}) => {
             /> */}
 
             <View style={styles.alignchild}>
-              <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize: CUSTOMFONTSIZE.h3,
+              <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize: CUSTOMFONTSIZE.h4,
     fontWeight: '400',}}>Gender</Text>
               <View style={styles.radiogroup}>
                 <Option
@@ -272,8 +272,8 @@ const PatientCreate = ({navigation}) => {
                 />
               </View>
             </View>
-            <View style={{width: '100%', paddingHorizontal: 16}}>
-              <SelectorBtn onPress={handleDate} name={'calendar'} input={DOB} />
+            <View style={{width: '100%', paddingHorizontal: 8}}>
+              <SelectorBtn label='Date of Birth'  onPress={handleDate} name={'calendar'} input={DOB} />
               {open && (
                 <DatePicker
                   modal

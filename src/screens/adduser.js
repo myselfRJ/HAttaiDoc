@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Text,
   View,
@@ -13,9 +13,9 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import {commonstyles} from '../styles/commonstyle';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { commonstyles } from '../styles/commonstyle';
 import Keyboardhidecontainer from '../components/keyboardhidecontainer';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
@@ -28,13 +28,13 @@ import {
   StatusMessage,
   BottomSheetView,
 } from '../components';
-import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {URL} from '../utility/urls';
-import {ScrollView} from 'react-native-gesture-handler';
-import {fetchApi} from '../api/fetchApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import { CONSTANTS } from '../utility/constant';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { URL } from '../utility/urls';
+import { ScrollView } from 'react-native-gesture-handler';
+import { fetchApi } from '../api/fetchApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { headerStatus } from '../redux/features/headerProgress/headerProgress';
 import {
   addclinic_users,
   updateclinic_users,
@@ -45,9 +45,9 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
-import {HttpStatusCode} from 'axios';
+import { HttpStatusCode } from 'axios';
 
-const AddUser = ({navigation}) => {
+const AddUser = ({ navigation }) => {
   const [clinics, setDataClinic] = useState();
   console.log('clinic---', clinics);
   const RoleRef = useRef(null);
@@ -59,7 +59,7 @@ const AddUser = ({navigation}) => {
 
   console.log(clinic_users, '------------------------,users');
   const dispatch = useDispatch();
-  const {phone} = useSelector(state => state?.phone?.data);
+  const { phone } = useSelector(state => state?.phone?.data);
   console.log('phone==', phone);
   //const clinics = CONSTANTS.clinic;
 
@@ -96,6 +96,7 @@ const AddUser = ({navigation}) => {
     gender: values.gender,
     user_phone_number: values.phone,
     clinic_id: selectedClinic,
+    doctor_phone_number: phone
   };
 
   const SuccesRef = useRef(null);
@@ -120,16 +121,16 @@ const AddUser = ({navigation}) => {
         const jsonData = await response.json();
         console.log(jsonData);
         if (jsonData.status === 'success') {
-          setApiStatus({status: 'success', message: jsonData.message});
+          setApiStatus({ status: 'success', message: jsonData.message });
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus.headerStatus({index: 2, status: true}));
+          dispatch(headerStatus.headerStatus({ index: 2, status: true }));
           setTimeout(() => {
             navigation.navigate('tab');
           }, 1000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
         } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          setApiStatus({ status: 'warning', message: 'Enter all Values' });
           SuccesRef?.current?.snapToIndex(1);
           console.error('API call failed:', response.status, response);
           setLoading(false);
@@ -137,7 +138,7 @@ const AddUser = ({navigation}) => {
       }
     } catch (error) {
       console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
+      setApiStatus({ status: 'error', message: 'Please try again' });
       SuccesRef?.current?.snapToIndex(1);
       console.error('Error occurred:', error);
       setLoading(false);
@@ -151,7 +152,7 @@ const AddUser = ({navigation}) => {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
       setShowSlotChip(true);
-      (values.name = ''), (values.phone = ''), (values.gender = '');
+      (values.name = ''), (values.phone = ''), (values.gender = ''), (values.user_profile_pic_url = '');
     } else {
       Alert.alert('"Warning"', '"Please Enter Details"');
     }
@@ -229,7 +230,7 @@ const AddUser = ({navigation}) => {
   console.log('selecte Image', '=============', selectedImage);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ProgresHeader progressData={progressData} />
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
@@ -251,6 +252,9 @@ const AddUser = ({navigation}) => {
               setValue={value => handleChangeValue('name', value)}
             />
             <InputText
+              //  doubleCheck={[true, false]}
+              //  check={checkNumber}
+              maxLength={10}
               label={Language[language]['phone_number']}
               placeholder="Phone Number"
               value={values.phone}
@@ -258,22 +262,22 @@ const AddUser = ({navigation}) => {
               keypad='numeric'
             />
             <View style={styles.alignchild}>
-              <Text>{Language[language]['gender']}</Text>
+              <Text style={{ color: CUSTOMCOLOR.black, fontFamily: CUSTOMFONTFAMILY.body, fontSize: CUSTOMFONTSIZE.h4 }}>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
-                  label="male"
+                  label="Male"
                   value="male"
                   selected={values.gender === 'male'}
                   onPress={() => handleOptions('male')}
                 />
                 <Option
-                  label="female"
+                  label="Female"
                   value="female"
                   selected={values.gender === 'female'}
                   onPress={() => handleOptions('female')}
                 />
                 <Option
-                  label="others"
+                  label="Others"
                   value="others"
                   selected={values.gender === 'others'}
                   onPress={() => handleOptions('others')}
@@ -333,7 +337,7 @@ const AddUser = ({navigation}) => {
                     Users
                   </Text>
                 )}
-                <View style={{gap: moderateScale(8)}}>
+                <View style={{ gap: moderateScale(8) }}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
                       <SlotChip
@@ -352,7 +356,7 @@ const AddUser = ({navigation}) => {
               </View>
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               {/* <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
@@ -373,14 +377,14 @@ const AddUser = ({navigation}) => {
                   Skip
                 </Text>
               </TouchableOpacity> */}
-               <HButton label="Skip" onPress={() => navigation.navigate('tab')} btnstyles={{
-             
-             backgroundColor:'#ffffff',
-            
-           }}
-           textStyle={{
-             color:CUSTOMCOLOR.primary,
-           }}/>
+              <HButton label="Skip" onPress={() => navigation.navigate('tab')} btnstyles={{
+
+                backgroundColor: '#ffffff',
+
+              }}
+                textStyle={{
+                  color: CUSTOMCOLOR.primary,
+                }} />
               <HButton
                 label="Done"
                 onPress={() => {
@@ -466,11 +470,12 @@ const styles = StyleSheet.create({
     height: 400,
     width: '100%',
     //justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
+    //alignSelf: 'center',
     borderRadius: moderateScale(1),
     padding: moderateScale(16),
+    gap: 16
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
