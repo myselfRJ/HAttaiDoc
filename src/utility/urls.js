@@ -1,5 +1,5 @@
-const baseUrl = 'http://10.9.78.38:8000/api/v1/';
-// const baseUrl = 'http://34.205.77.155/api/v1/';
+// const baseUrl = 'http://10.9.78.38:8000/api/v1/';
+const baseUrl = 'http://34.205.77.155/api/v1/';
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
