@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
 
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(12),
+    paddingVertical: verticalScale(8),
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",

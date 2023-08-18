@@ -113,6 +113,8 @@ const Language = {
     specialist: 'specialist',
     ph: 'Ph',
     test: 'Test Prescribed',
+    bpm:'bpm',
+    symptom:'Symptom'
   },
   hi: {
     welcome: 'स्वागत',

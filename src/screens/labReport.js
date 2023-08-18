@@ -35,14 +35,14 @@ const LabReports =()=>{
     return(
         <View style={{paddingHorizontal:24,paddingVertical:16,gap:8}}>
             
-        <PrescriptionHead heading='Lab Reports'/>  
+        <PrescriptionHead heading='Test Prescribes'/>  
              
       {prev?.map((item, ind) => (
         prev.length > 0 ? ( <ShowChip text={item?.lab_test} onPress={()=>handleDelete(ind)} ind={ind}/>):null
       ))}
         <PresComponent 
-        label='Lab Report' 
-        placeholder='Enter reports'
+        label='Test Prescribes' 
+        placeholder='Eg: blood test'
         values={value}
         onChange={setValue}
         onPress={HandleAddValue}

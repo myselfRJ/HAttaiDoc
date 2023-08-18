@@ -19,6 +19,7 @@ import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
 import {CONSTANT} from '../utility/const';
+import { moderateScale } from '../utility/scaleDimension';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
@@ -26,6 +27,7 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
   console.log('diagnosis====>', diagnosis);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
+  console.log('pulse====',vitalsData)
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -190,7 +192,8 @@ const Visit = ({navigation, route}) => {
                   <VisitOpen
                     label={value.label}
                     icon={value.icon}
-                    navigate={() => navigation.navigate(value.navigate,value.navigate ==='complaints'?{complaint}:null)}
+                    navigate={() => navigation.navigate(value.navigate,value.navigate ==='complaints'?{complaint}:null,
+                    value.navigate==='FollowUp'?{date}:null)}
                   />
                   {value.label === 'Symptoms' && Symptom[0].symptom != '' && (
                     <View style={styles.basiccontainer}>
@@ -281,7 +284,6 @@ const Visit = ({navigation, route}) => {
                       vitalsData?.pulse_rate ||
                       vitalsData?.bmi ||
                       vitalsData?.boby_temparature ||
-                      vitalsData?.pulse ||
                       vitalsData?.diastolic ||
                       vitalsData?.systolic ||
                       vitalsData?.rate) && (
@@ -290,7 +292,59 @@ const Visit = ({navigation, route}) => {
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
                           <View
-                            style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            style={{flexDirection: 'row', flexWrap: 'wrap',marginBottom:4}}>
+                               <View
+                              key={index}
+                              style={{
+                                flexDirection: 'row',
+                                gap: 8,
+                                padding: 2,
+                                marginBottom:moderateScale(18)
+                              }}>
+                              {vitalsData?.pulse_rate && (
+                                <>
+                                  <Icon
+                                    name="water-check"
+                                    color={CUSTOMCOLOR.primary}
+                                    size={16}
+                                  />
+                                  <Text style={styles.pulse}>
+                                    pulse rate:
+                                    {vitalsData?.pulse_rate}bpm
+                                  </Text>
+                                </>
+                              )}
+                              {vitalsData?.height && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['height']}:
+                                  {vitalsData.height}cm
+                                </Text>
+                              )}
+                               {vitalsData?.weight && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['weight']}:
+                                  {vitalsData.weight}kg
+                                </Text>
+                              )}
+                               {vitalsData?.bmi && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['bmi']}:
+                                  {vitalsData.bmi}cm
+                                </Text>
+                              )}
+                               {vitalsData?.body_temperature && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['temp']}:
+                                  {vitalsData?.body_temperature}
+                                </Text>
+                              )}
+                               {vitalsData?.rate && (
+                                <Text style={styles.pulse}>
+                                  {Language[language]['rate']}:
+                                  {vitalsData.rate}cm
+                                </Text>
+                              )}
+                            </View>
                             <View
                               key={index}
                               style={{
@@ -363,7 +417,7 @@ const Visit = ({navigation, route}) => {
                           color={CUSTOMCOLOR.primary}
                           size={16}
                         />
-                        <Text style={styles.pulse}>{selectedComplaint}</Text>
+                        <Text style={styles.pulse}>{complaint} | {selectedComplaint}</Text>
                       </View>
                     )}
                   {value.label === 'Notes' && note !== '' && (
@@ -535,7 +589,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Lab Reports' && labreport.length > 0 && (
+                  {value.label === 'Test Prescribede' && labreport.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                         <View
