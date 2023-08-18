@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {Text, View, StyleSheet, Pressable, Image} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -156,7 +156,7 @@ const Appointment = ({navigation}) => {
         const filtered = setAppointment?.filter(
           item =>
             item?.patient_data?.patient_name &&
-            item?.patient_data?.patient_name.startsWith(name.toUpperCase()),
+            item?.patient_name.toLowerCase().startsWith(name.toLowerCase()),
         );
         setFilteredData(filtered);
       } else if (seletedType && seletedType !== 'All') {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     //alignSelf: 'center',
     borderRadius: 10,
     padding: 32,
-    gap:16
+    gap: 16,
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

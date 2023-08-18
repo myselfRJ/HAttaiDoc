@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import ProfileCreate from '../screens/profilecreate';
 import ClinicCreate from '../screens/cliniccreate';
 import UserCreate from '../screens/usercreate';
-import SlotCreate from '../screens/slotcreate';
+import SlotCreate from '../screens/SlotCreate';
 import AfterAuthLoadingScreen from '../screens/afterauthloadingscreen';
 import Visit from '../screens/visit';
 import Patientlookup from '../screens/patientlookup';
@@ -99,8 +99,7 @@ const ProtectedRoute = () => {
       <Stack.Screen name="commorbities" component={Commorbities} />
       <Stack.Screen name="pasthistory" component={PastHistory} />
       <Stack.Screen name="allergies" component={Allergies} />
-      <Stack.Screen name="labreport" component={LabReports}/>
-      
+      <Stack.Screen name="labreport" component={LabReports} />
     </Stack.Navigator>
   );
 };

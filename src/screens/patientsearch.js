@@ -21,8 +21,12 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addclinic_id} from '../redux/features/profiles/clinicId';
-import { commonstyles } from '../styles/commonstyle';
-
+import {commonstyles} from '../styles/commonstyle';
+import {
+  verticalScale,
+  horizontalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
 
@@ -92,7 +96,7 @@ const PatientSearch = ({navigation}) => {
       const filtered = data?.filter(
         item =>
           item?.patient_name &&
-          item?.patient_name.startsWith(name.toUpperCase()),
+          item?.patient_name.toLowerCase().startsWith(name.toLowerCase()),
       );
       setFilteredData(filtered);
     } else {
@@ -112,34 +116,36 @@ const PatientSearch = ({navigation}) => {
   console.log('====================================');
   return (
     <View style={styles.main}>
-      <ScrollView>
-        <View style={styles.select}>
-          <SelectorBtn
-            name="chevron-down"
-            input={selectedClinic}
-            onPress={() => ClinicRef?.current?.snapToIndex(1)}
-          />
-          {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            bottom: 16,
-            paddingHorizontal:6
-          }}>
-          <InputText
-            placeholder="Search name"
-            value={name}
-            setValue={ChangeNameValue}
-            textStyle={styles.input}
-          />
-          <Icon name="search" size={20} style={styles.searchIcon} />
-        </View>
+      <View style={styles.select}>
+        <SelectorBtn
+          name="chevron-down"
+          input={selectedClinic}
+          onPress={() => ClinicRef?.current?.snapToIndex(1)}
+        />
+        {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          bottom: 16,
+          paddingHorizontal: 8,
+        }}>
+        <InputText
+          placeholder="Search name"
+          value={name}
+          setValue={ChangeNameValue}
+          textStyle={styles.input}
+        />
+        <Icon name="search" size={20} style={styles.searchIcon} />
+      </View>
 
-        <View style={styles.appointment}>
-          <Text style={commonstyles.h2}>My Patients</Text>
+      <View style={styles.appointment}>
+        <Text style={commonstyles.h2}>My Patients</Text>
+        <ScrollView
+          contentContainerStyle={{gap: 8}}
+          style={{height: horizontalScale(550), paddingHorizontal: 8, gap: 16}}>
           {filteredData?.map((val, ind) => (
             <PatientSearchCard
               key={ind}
@@ -147,8 +153,8 @@ const PatientSearch = ({navigation}) => {
               onPress={() => navigation.navigate('visit')}
             />
           ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
 
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
@@ -201,7 +207,7 @@ const styles = StyleSheet.create({
     width: '105%',
     padding: 16,
     gap: 4,
-    paddingHorizontal:8
+    paddingHorizontal: 8,
   },
   searchIcon: {
     top: 10,

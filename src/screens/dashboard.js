@@ -23,7 +23,7 @@ import {Language} from '../settings/customlanguage';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
-import SlotCreate from './slotcreate';
+import SlotCreate from './SlotCreate';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
@@ -45,7 +45,7 @@ import {
 } from '../utility/scaleDimension';
 import HButton from '../components/button';
 import {useFocusEffect} from '@react-navigation/native';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -201,7 +201,7 @@ const Dashboard = ({navigation, route}) => {
   );
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       <View style={styles.container}>
         <View
           style={{
@@ -331,7 +331,7 @@ const Dashboard = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
   },
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 26,
     fontWeight: '600',
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   select: {
     gap: moderateScale(8),
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: moderateScale(10),
     padding: moderateScale(32),
-    gap:16
+    gap: 16,
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
