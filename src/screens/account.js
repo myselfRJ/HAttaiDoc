@@ -18,6 +18,7 @@ import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
+import { horizontalScale, verticalScale } from '../utility/scaleDimension';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -238,7 +239,7 @@ const Account = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={{top: 140, left: 47}}>
+      <View>
         {/* <Text style={styles.manageText}>Manage</Text> */}
         {/* <View style={styles.manageView}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -273,7 +274,7 @@ const Account = () => {
             </TouchableOpacity>
           </View>
         </View> */}
-        <View style={{width: 600}}>
+        <View style={{gap:8,marginTop:32}}>
           <ManageCard
             // style={{marginBottom: 8}}
             data={clinic}
@@ -292,7 +293,7 @@ const Account = () => {
             nameIcon={'account-group'}
             Dataname={'Users'}
             name={'plus'}
-            onPress={() => console.log('users')}
+            onPress={() => navigation.navigate('adduser')}
           />
         </View>
       </View>

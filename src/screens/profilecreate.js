@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect, startTransition} from 'react';
-import {Text, View, StyleSheet, Modal, Pressable} from 'react-native';
+import {Text, View, StyleSheet, Modal, Pressable,TouchableOpacity} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -100,6 +100,7 @@ const ProfileCreate = ({navigation}) => {
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
+      // cameraType: true,
       includeBase64: true,
       quality: 0.5,
     };
@@ -320,11 +321,14 @@ const ProfileCreate = ({navigation}) => {
               color={CUSTOMCOLOR.black}
               onPress={handleClearFile}
             /> */}
-                  <PlusButton
+                  {/* <PlusButton
                     icon="close"
                     size={12}
                     onPress={handleClearFile}
-                  />
+                  /> */}
+                   <TouchableOpacity onPress={handleClearFile}>
+                <Icon name="delete" size={20} color={CUSTOMCOLOR.delete} />
+              </TouchableOpacity>
                 </View>
               ) : (
                 <HButton label="Upload Document" onPress={pickSingleFile} />

@@ -36,9 +36,10 @@ const PatientSearch = ({navigation}) => {
   const dispatch = useDispatch();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
+  const [uniquePatient,setUniquePatient]=useState([...new Set(data)])
 
   console.log('====================================');
-  console.log('-----------------id', clinicID);
+  console.log('-----------------id', uniquePatient);
   console.log('====================================');
 
   const {phone} = useSelector(state => state?.phone?.data);
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   appointment: {
-    gap: 8,
+    gap: 4,
   },
   h2: {
     fontSize: 24,
@@ -218,11 +219,12 @@ const styles = StyleSheet.create({
     height: 400,
     width: '100%',
     //justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
+    //alignSelf: 'center',
     borderRadius: 10,
-    padding: 16,
+    padding: 32,
+    gap:16
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

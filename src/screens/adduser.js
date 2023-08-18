@@ -154,7 +154,6 @@ const AddUser = ({navigation}) => {
       setShowSlotChip(true);
       setSelectedImage('');
       (values.name = ''), (values.phone = ''), (values.gender = '');
-      // (values.user_profile_pic_url = '');
     } else {
       Alert.alert('"Warning"', '"Please Enter Details"');
     }
@@ -297,7 +296,7 @@ const AddUser = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: horizontalScale(8),
+                paddingHorizontal: horizontalScale(6),
               }}>
               <SelectorBtn
                 label={Language[language]['role']}
@@ -312,7 +311,7 @@ const AddUser = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: horizontalScale(8),
+                paddingHorizontal: horizontalScale(6),
               }}>
               <SelectorBtn
                 label={Language[language]['clinic']}
@@ -346,26 +345,29 @@ const AddUser = ({navigation}) => {
                     Users
                   </Text>
                 )}
-                <View style={{gap: moderateScale(8)}}>
+                <View style={{gap: 4, marginBottom: 4}}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
-                      <SlotChip
-                        //                       style={{
-                        //                         paddingHorizontal:24
-                        // }}
-                        key={item.index}
-                        index={item.index}
-                        onPress={() => handleDeleteSlotChip(index)}
-                        time={<Text>Name: {item.clinic_user_name}</Text>}
-                        type={<Text>Role: {item.role}</Text>}
-                        duration={<Text>Clinic: {item.clinic_id}</Text>}
-                      />
+                      <View style={{marginBottom: 4}}>
+                        <SlotChip
+                          key={item.index}
+                          index={item.index}
+                          onPress={() => handleDeleteSlotChip(index)}
+                          time={<Text>Name: {item.clinic_user_name}</Text>}
+                          type={<Text>Role: {item.role}</Text>}
+                          duration={<Text>Clinic: {item.clinic_id}</Text>}
+                        />
+                      </View>
                     ))}
                 </View>
               </View>
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: horizontalScale(6),
+              }}>
               {/* <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
@@ -459,7 +461,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(20),
   },
   content: {
-    paddingHorizontal: horizontalScale(24),
+    paddingHorizontal: horizontalScale(12),
     paddingVertical: verticalScale(24),
     width: '100%',
     //alignItems: 'center',
@@ -478,7 +480,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
   },
   modalContainer: {
-    height: 400,
+    height: 700,
     width: '100%',
     //justifyContent: 'center',
     alignItems: 'center',
@@ -494,6 +496,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     padding: moderateScale(4),
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   users: {
     alignSelf: 'flex-start',

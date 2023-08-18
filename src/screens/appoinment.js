@@ -30,6 +30,7 @@ import {
 } from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
 import {commonstyles} from '../styles/commonstyle';
+import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -285,7 +286,7 @@ const Appointment = ({navigation}) => {
             ))}
           </View>
         </View>
-        <Text style={styles.h2}>Appointments</Text>
+        <Text style={[commonstyles.h2,styles.appointment]}>{Language[language]['appointments']}</Text>
         <ScrollView
           style={{height: 400, paddingHorizontal: 8, gap: 16}}
           contentContainerStyle={{gap: 8}}>
@@ -300,11 +301,13 @@ const Appointment = ({navigation}) => {
           })}
         </ScrollView>
       </View>
+      <View >
       <HButton
         label="Book Appointment"
-        btnstyles={{alignSelf: 'center', marginTop: 16}}
+        btnstyles={{alignSelf: 'center', marginTop: 32}}
         onPress={handlePlusBUtton}
       />
+      </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
@@ -331,8 +334,8 @@ const Appointment = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
     flex: 1,
   },
   title: {
@@ -349,13 +352,13 @@ const styles = StyleSheet.create({
     bottom: 16,
     flexDirection: 'row',
     gap: 16,
-    paddingHorizontal: 8,
+    //paddingHorizontal: horizontalScale(4),
   },
-  appointment: {
-    height: 400,
-    paddingHorizontal: 8,
-    gap: 16,
-  },
+  // appointment: {
+  //   height: 400,
+  //   paddingHorizontal: 8,
+  //   gap: 16,
+  // },
   h2: {
     fontSize: 24,
     fontWeight: '700',
@@ -398,6 +401,11 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     padding: 4,
+  },
+  appointment: {
+    gap: moderateScale(4),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
   },
 });
 export default Appointment;

@@ -37,7 +37,7 @@ export default function Prescribe1() {
   const mg = CONSTANTS.dose;
   const timings = CONSTANTS.timing;
   const frequencys = CONSTANTS.frequency;
-  const total_quantity = '100';
+  const [total_quantity,setTotalQuantity] = useState('')
   const dispatch = useDispatch();
   const prescribe = useState([
     {
@@ -127,6 +127,16 @@ export default function Prescribe1() {
     }
   };
 
+  const totoal_quantity = () =>{
+    quantity = parseInt(dose_number)*parseInt(duration)*parseInt(frequency.length)
+    setTotalQuantity(quantity)
+    console.log('-----------quantiy',quantity);
+  }
+
+  useEffect(()=>{
+    totoal_quantity()
+  },[duration,dose_number,frequency])
+
   return (
     <ScrollView>
       <View style={{padding: 24, gap: 24}}>
@@ -134,23 +144,24 @@ export default function Prescribe1() {
           <PrescriptionHead heading={Language[language]['prescribe']}/>
          {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
 
-        <View style={{
-                flex: 1,
-                width: '100%',
-                marginBottom: 5,
-                borderWidth:1,
-                padding:16,
-                borderColor: '#2CBB15',
-                backgroundColor:CUSTOMCOLOR.white
-              }} >
+       
           {prevPres?.map((item, ind) => (
+             <View style={{
+              flex: 1,
+              width: '100%',
+              marginBottom: 5,
+              borderWidth:1,
+              padding:8,
+              borderColor: '#2CBB15',
+              backgroundColor:CUSTOMCOLOR.white
+            }} >
             <View
               key={ind}
               style={{
                 flexDirection: 'row',
                 flex: 1,
                 width: '100%',
-                marginBottom: 5,
+                // marginBottom: 5,
                 //borderWidth:1,
               }}>
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
@@ -165,8 +176,9 @@ export default function Prescribe1() {
                 <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
               </TouchableOpacity>
             </View>
+            </View>
           ))}
-        </View>
+        
         <View style={styles.prescribeConatiner}>
           <View>
             <View style={styles.prescribeItemContainer}>
@@ -400,8 +412,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
     //fontWeight: '400',
-    lineHeight:16,
-    //top: 8,
+    top: 8,
     color: CUSTOMCOLOR.black,
   },
   ModesContainer: {
@@ -497,8 +508,7 @@ const styles = StyleSheet.create({
   numText: {
     padding: 8,
     fontWeight: 400,
-    fontSize: 20,
-    lineHeight: 13,
+    fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.primary,
     gap: 10,
   },
