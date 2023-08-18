@@ -71,37 +71,9 @@ const AddClinic = ({navigation}) => {
       : setVisibleSlot(true);
   };
 
-  // const SlotaddedCheck = () => {
-  //   const m = slotData?.slots?.M?.length === 0;
-  //   const t = slotData?.slots?.T?.length === 0;
-  //   const w = slotData?.slots?.W?.length === 0;
-  //   const th = slotData?.slots?.TH?.length === 0;
-  //   const f = slotData?.slots?.F?.length === 0;
-  //   const sa = slotData?.slots?.Sa?.length === 0;
-  //   const su = slotData?.slots?.Su?.length === 0;
-
-  //   return !(m || t || w || th || f || sa || su);
-  // };
-
-  // const slotsCheck = SlotaddedCheck();
-
-  // console.log('====================================');
-  // console.log('----------check ', slotsCheck);
-  // console.log('====================================');
-
   const handleClear = () => {
     setVisibleSlot(true);
   };
-
-  // useEffect(()=>{
-
-  //   Slotadded()
-  //   console.log(visibleSlot)
-  // },[slotData])
-
-  // const checkSlotAdded = Slotadded()
-
-  // console.log(checkSlotAdded);
 
   const SuccesRef = useRef(null);
   useEffect(() => {
