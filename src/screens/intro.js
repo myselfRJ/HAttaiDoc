@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     // width: horizontalScale(00,)
     // height:164,
     // top:100,
-    // alignItems:'center',
+    alignItems:'center',
     //left:61,
     paddingHorizontal: horizontalScale(24),
 

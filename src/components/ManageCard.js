@@ -19,22 +19,26 @@ const ManageCard = props => {
   console.log('====================================');
   return (
     <View style={[props?.style, styles.style]}>
+      <View style={{flexDirection:'row'}}>
       {/* {props.label && <Text style={styles.h3}>{props.label}</Text>} */}
       <Icon name={props.nameIcon} size={24} color={CUSTOMCOLOR.primary} />
       <Text
         style={{color: CUSTOMCOLOR.black, fontWeight: '700', marginLeft: 8}}>
         {props.Dataname}:
       </Text>
-      <View style={{flexDirection: 'row', gap: 16, marginLeft: 16}}>
+      <View style={{flexDirection: 'row', gap: 32, marginLeft: 16}}>
         {props?.data?.map((val, ind) => (
           <Text key={ind} style={{color: CUSTOMCOLOR.black}}>
             {val[props?.dta]}
           </Text>
         ))}
       </View>
+      </View>
+      <View>
       <TouchableOpacity onPress={props.onPress}>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
-    // justifyContent: 'space-between',
+     justifyContent: 'space-between',
     backgroundColor: CUSTOMCOLOR.white,
     // minWidth: verticalScale(160),
     borderRadius: moderateScale(4),

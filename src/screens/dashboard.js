@@ -29,7 +29,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
 import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
@@ -275,7 +274,7 @@ const Dashboard = ({navigation, route}) => {
 
           {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
         </View>
-        <Text style={commonstyles.h2}>{Language[language]['appointments']}</Text>
+        <Text style={[commonstyles.h2,styles.appointment]}>{Language[language]['appointments']}</Text>
 
         {/* <View style={styles.appointment}> */}
         <ScrollView

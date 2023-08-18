@@ -58,7 +58,8 @@ const Visit = ({navigation, route}) => {
   //   SuccesRef?.current?.snapToIndex(1);
   // }, []);
 
-  const {name, gende, age, patient_phone, appointment_id} = route.params;
+  const {name, gende, age, patient_phone, appointment_id,complaint} = route.params;
+  console.log('complaint>>>>>>>',complaint)
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchData = async () => {
@@ -98,9 +99,10 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        //console.log('data---0', jsonData.data);
+        console.log('data---0', jsonData);
         setApiStatus({status: 'success', message: 'Successfully created'});
         SuccesRef?.current?.snapToIndex(1);
+        // Prescribe.splice(0,Prescribe.length)
         setTimeout(() => {
           navigation.navigate('tab');
         }, 1000);
@@ -188,7 +190,7 @@ const Visit = ({navigation, route}) => {
                   <VisitOpen
                     label={value.label}
                     icon={value.icon}
-                    navigate={() => navigation.navigate(value.navigate)}
+                    navigate={() => navigation.navigate(value.navigate,value.navigate ==='complaints'?{complaint}:null)}
                   />
                   {value.label === 'Symptoms' && Symptom[0].symptom != '' && (
                     <View style={styles.basiccontainer}>
@@ -248,8 +250,8 @@ const Visit = ({navigation, route}) => {
                                 <View>
                                   <Text style={{color: CUSTOMCOLOR.black}}>
                                     {item.mode} | {item.medicine} |
-                                    {item.dose_quantity} | {item.timing} |{' '}
-                                    {item.frequency} | {item.duration}
+                                    {item.dose_quantity} | {item.timing} |
+                                    {item.frequency} | {item.duration} | {item.total_quantity}
                                   </Text>
                                 </View>
                               </View>
@@ -354,8 +356,7 @@ const Visit = ({navigation, route}) => {
                         )}
                       </View>
                     )}
-                  {value.label === 'Chief Complaints' &&
-                    selectedComplaint !== '' && (
+                  {value.label === 'Chief Complaints'  && (
                       <View style={styles.complaintcontainer}>
                         <Icon
                           name="file-document-edit"

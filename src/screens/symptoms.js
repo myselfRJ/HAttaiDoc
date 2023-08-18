@@ -90,7 +90,7 @@ const Symptoms = ({navigation}) => {
                       
                     }}>
                     <TextInput
-                      placeholder="enter Symptom"
+                      placeholder="Enter Symptom"
                       value={data?.symptom}
                       onChangeText={text =>
                         handleSymptomChange(text, index, 'symptom')
@@ -116,7 +116,7 @@ const Symptoms = ({navigation}) => {
                       textAlignVertical: 'top',
                     }}>
                     <TextInput
-                      placeholder="enter Days"
+                      placeholder="Enter Days"
                       value={data?.days}
                       onChangeText={text =>
                         handleSymptomChange(text, index, 'days')

@@ -48,15 +48,18 @@ const AppointmentCard = ({appointment, openVisit}) => {
     const name = patient_name;
     const gende = patient_gender;
     const age = patient_age;
+    const complaint = appointment.complaint
     navigation.navigate('visit', {
       name,
       gende,
       age,
       patient_phone,
       appointment_id,
+      complaint
     });
     appointmentCardRef?.current?.snapToIndex(0);
   };
+  
   return (
     <>
       <View style={styles.maincontainer}>
@@ -117,8 +120,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <Pressable
           style={styles.icon}
           onPress={() => {
-            // setVisible(!visible);
-            appointmentCardRef?.current?.snapToIndex(1);
+            appointment?.status === 'pending'? appointmentCardRef?.current?.snapToIndex(1) : appointmentCardRef?.current?.snapToIndex(0)
           }}>
           <View>
             <Icon
@@ -250,6 +252,8 @@ const styles = StyleSheet.create({
     height: verticalScale(25),
     width: horizontalScale(150),
     fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize:CUSTOMFONTSIZE.h3,
+    color:CUSTOMCOLOR.black
   },
   contact1: {
     height: verticalScale(25),
