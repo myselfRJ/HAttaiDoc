@@ -62,6 +62,9 @@ const Diagnosis=({navigation})=>{
             />
             
             <PrescriptionHead heading='Diagnosis'/>  
+            {prev?.map((item, ind) => (
+            prev.length > 0 ? ( <ShowChip text={item?.diagnosis} onPress={()=>handleDelete(ind)} ind={ind}/>):null
+          ))}
                  
          <View style={{marginBottom:16}}>
             <PresComponent 
@@ -71,9 +74,7 @@ const Diagnosis=({navigation})=>{
             onChange={setValue}
             onPress={HandleAddValue}
             /></View>
-             {prev?.map((item, ind) => (
-            prev.length > 0 ? ( <ShowChip text={item?.diagnosis} onPress={()=>handleDelete(ind)} ind={ind}/>):null
-          ))}
+            
         </View>
     )
 }

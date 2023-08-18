@@ -258,7 +258,7 @@ const AddClinic = ({navigation}) => {
             <InputText
               label={Language[language]['address']}
               multiline={true}
-              placeholder="address"
+              placeholder="Address"
               value={value.address}
               setValue={value => handleChangeValue('address', value)}
             />

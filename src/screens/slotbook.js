@@ -25,6 +25,7 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
+import { horizontalScale } from '../utility/scaleDimension';
 
 const SlotBook = ({navigation, route}) => {
   const [complaint, setComplaint] = useState('');
@@ -292,7 +293,7 @@ const SlotBook = ({navigation, route}) => {
           </View>
           <InputText
             label={Language[language]['complaint']}
-            placeholder="enter your complaints"
+            placeholder="Enter your complaints"
             value={complaint}
             setValue={setComplaint}
             multiline={true}
@@ -326,7 +327,7 @@ const SlotBook = ({navigation, route}) => {
 
             <View>
               <Text style={styles.h2}>Available Slots</Text>
-              <FlatList data={list} renderItem={renderItems} numColumns={5} />
+              <FlatList data={list} renderItem={renderItems} numColumns={4} />
             </View>
             <View style={styles.btn}>
               <HButton
@@ -399,7 +400,10 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
-  item: {margin: 8},
+  item: {
+    margin: 8,
+    paddingHorizontal:horizontalScale(8)
+  },
   btn: {
     height: 400,
     alignItems: 'center',

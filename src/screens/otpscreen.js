@@ -82,10 +82,12 @@ const OtpScreen = ({route}) => {
   const handleResendOTP = async () => {
     resetTimer();
     startTimer();
+    setValue('')
     resendOtp();
   };
 
   const resendOtp = async () => {
+    //setLoading(!loading);
     try {
       const response = await fetchApi(URL.generateOtp, {
         method: 'POST',
@@ -99,11 +101,14 @@ const OtpScreen = ({route}) => {
         const jsonData = await response.json();
         console.log('generateResponse', jsonData);
         dispatch(addLogin_phone.addLogin_phone(jsonData.data));
+        //setLoading(!loading);
       } else {
         console.error('API call failed:', response?.status);
+        //setLoading(loading);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      //setLoading(loading);
     }
   };
   const fetchData = async () => {

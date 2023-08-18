@@ -18,6 +18,7 @@ import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
 import PatientSearch from '../components/PatientSearch';
 import {Image} from 'react-native';
+import { moderateScale } from '../utility/scaleDimension';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -82,9 +83,9 @@ export default function MedicalRecordPatient({route, navigation}) {
     medication: consultation?.prescribe?.map((item, index) => {
       return `${item.mode} | ${item?.medicine} | ${item?.dose_quantity} | ${item?.timing} | ${item?.frequency} | ${item?.total_quantity}`;
     }),
-    diagnosis: consultation?.diagnosis?.diagnosis?.map((item, index) => {
-      return `${item?.diagnosis}`;
-    }),
+    // diagnosis: consultation?.diagnosis?.diagnosis?.map((item, index) => {
+    //   return `${item?.diagnosis}`;
+    // }),
     vital: {
       BP: 'Bp',
       PR: 'Pr',
@@ -218,40 +219,41 @@ export default function MedicalRecordPatient({route, navigation}) {
             <View>
               <Text style={styles.contentHead}>Diagnosis</Text>
               <Text>
-                {consultation?.diagnosis?.diagnosis?.map((item, index) => {
+                {consultation?.diagnosis?.map((item, index) => {
                   return `${item?.diagnosis}`;
                 })}
+                {/* {consultation?.diagnosis?.diagnosis} */}
               </Text>
             </View>
             <View>
               <Text style={styles.contentHead}>Medication</Text>
-              <Text>
+             
                 {consultation?.prescribe?.map((item, index) => {
-                  return `${item.mode} | ${item?.medicine} | ${item?.dose_quantity} | ${item?.timing} | ${item?.frequency} | ${item?.total_quantity}`;
+                  return <Text>{item.mode} | {item?.medicine} | {item?.dose_quantity} | {item?.timing} | {item?.frequency} | {item?.total_quantity}</Text>
                 })}
-              </Text>
+            
             </View>
             <View>
               <Text style={styles.contentHead}>Vitals</Text>
-              <View style={{flexDirection: 'row', gap: 40}}>
+              <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
                 <Text>BP</Text>
-                <Text>PR</Text>
+                <Text >PR</Text>
                 {/* <Text>SPO2</Text> */}
-                <Text>TEMP</Text>
+                <Text >TEMP</Text>
                 <Text>LMP</Text>
-                <Text>EDD</Text>
+                <Text style={{paddingLeft:4}}>EDD</Text>
               </View>
-              <View style={{flexDirection: 'row', gap: 40, top: 8}}>
+              <View style={{flexDirection: 'row', gap: moderateScale(26), top: 8}}>
                 <Text>
                   {consultation?.vitals?.systolic}/
                   {consultation?.vitals?.diastolic}
                 </Text>
                 <Text>{consultation?.vitals?.pulse_rate}</Text>
                 {/* <Text>{vitals.vital.SPO2}</Text> */}
-                <Text>{consultation?.vitals?.body_temperature}</Text>
+                <Text style={{paddingLeft:20}}>{consultation?.vitals?.body_temperature}</Text>
                 {/* <Text>{vitals.vital.EDD}</Text> */}
-                <Text>{consultation?.vitals?.LDD}</Text>
-                <Text>{consultation?.vitals?.EDD}</Text>
+                <Text style={{paddingLeft:20}}>{consultation?.vitals?.LDD}</Text>
+                <Text >{consultation?.vitals?.EDD}</Text>
               </View>
             </View>
           </View>

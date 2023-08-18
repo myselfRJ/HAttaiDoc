@@ -294,6 +294,7 @@ const VitalScreen = props => {
                       padding: 12,
                       backgroundColor: CUSTOMCOLOR.white,
                       color: CUSTOMCOLOR.black,
+                      fontSize:CUSTOMFONTSIZE.h4
                     }}>
                     {vitals?.EDD}
                   </Text>
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   bmi: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   bmitext: {
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
     paddingRight: '15%',
   },
   lmp: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   lmptext: {
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   us: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   ustext: {

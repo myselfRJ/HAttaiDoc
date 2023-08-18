@@ -27,6 +27,8 @@ const Prescription = ({route}) => {
   const refer_doctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
+  const diagnosis = useSelector(state=> state?.diagnosis?.DiagnosisItems)
+  console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
   const followup = useSelector(state => state?.dateTime?.date);
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   console.log('name===', clinic_name);
@@ -127,8 +129,16 @@ const Prescription = ({route}) => {
         <View>
           <Text style={styles.head}>
             {Language[language]['diagnosis']} :{' '}
-            <Text style={styles.values}>headache</Text>
+            {diagnosis.map((item,index)=>
+             
+             <Text key={index} style={styles.values}>{item?.diagnosis}</Text>
+            
+           )}
+           
           </Text>
+         
+           
+            
         </View>
         <View>
           <Text style={styles.head}>
