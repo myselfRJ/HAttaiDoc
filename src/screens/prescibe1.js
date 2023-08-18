@@ -37,7 +37,7 @@ export default function Prescribe1() {
   const mg = CONSTANTS.dose;
   const timings = CONSTANTS.timing;
   const frequencys = CONSTANTS.frequency;
-  const [total_quantity,setTotalQuantity] = useState('')
+  const [total_quantity,setTotalQuantity] = useState()
   const dispatch = useDispatch();
   const prescribe = useState([
     {
@@ -129,7 +129,13 @@ export default function Prescribe1() {
 
   const totoal_quantity = () =>{
     quantity = parseInt(dose_number)*parseInt(duration)*parseInt(frequency.length)
-    setTotalQuantity(quantity)
+    // setTotalQuantity(quantity)
+    if (quantity !=='NaN'){
+      setTotalQuantity(quantity);
+
+    }else{
+      setTotalQuantity('00')
+    }
     console.log('-----------quantiy',quantity);
   }
 
@@ -167,9 +173,9 @@ export default function Prescribe1() {
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
                 <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
-                  {item.mode}|{item.medicine}|{item.dose_quantity}|{item.timing}
-                  |{item.frequency}|{item.dose_number}|{item.total_quantity}|
-                  {item.duration}
+                  {item.mode} | {item.medicine} | {item.dose_quantity} | {item.timing}
+                  |{item.frequency} | {item.dose_number} |
+                  {item.duration} | {item.total_quantity}
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleDelete(ind)}>
@@ -359,12 +365,12 @@ export default function Prescribe1() {
               </View>
               <View style={styles.ModeContainer}>
                 <Text style={styles.ModeText}>
-                  {Language[language]['duration']}
+                  {Language[language]['duration']}(inDays)
                 </Text>
                 <TextInput
                   style={styles.durationInput}
                   value={duration}
-                  placeholder="Enter Duration"
+                  placeholder="Enter Days"
                   onChangeText={value => setDuration(value)}
                 />
               </View>
@@ -381,7 +387,7 @@ export default function Prescribe1() {
                     alignItems: 'center',
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
-                  <Text style={styles.numText}>{total_quantity}</Text>
+                  {total_quantity !== 'NaN'?(<Text style={styles.numText}>{total_quantity}</Text>):(<Text style={styles.numText}>{'00'}</Text>) }
                 </View>
               </View>
               <View style={styles.line}></View>
@@ -506,7 +512,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   numText: {
-    padding: 8,
+    padding: 4,
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.primary,

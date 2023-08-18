@@ -8,9 +8,13 @@ import {language} from '../settings/userpreferences';
 import Logo from '../components/logo';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
+import { CONSTANT } from '../utility/const';
+import { CONSTANTS } from '../utility/constant';
+
 // import Pdf from 'react-native-pdf';
 
 const Prescription = ({route}) => {
+  const months = CONSTANTS.months
   const doctor_profile = useSelector(state => state.doctor_profile);
   const patient = useSelector(state => state?.patient);
   const vitals = useSelector(state => state?.prescription?.vitalsData);
@@ -28,13 +32,16 @@ const Prescription = ({route}) => {
     state => state?.prescription?.selectedDoctor,
   );
   const diagnosis = useSelector(state=> state?.diagnosis?.DiagnosisItems)
-  console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
+  // console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
   const followup = useSelector(state => state?.dateTime?.date);
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   console.log('name===', clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   console.log('address=', clinic_Address);
+  const test = useSelector(state=>state?.labreport?.labReport)
+  console.log('test>>>>>>>>>>',test)
   const {name, gender, patient_age, patient_phone_number} = route.params;
+
   console.log(
     'patient phone--',
     name,
@@ -52,6 +59,20 @@ const Prescription = ({route}) => {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
+  };
+  const handleEdd = selectedDate => {
+    let startDate = new Date(selectedDate);
+
+    let numberOfDaysToAdd = 280;
+    let endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
+    let formattedEndDate = endDate.toISOString().substring(0, 10);
+    const day = formattedEndDate.split('-')[2];
+    const year = formattedEndDate.split('-')[0];
+    const month = months[`${formattedEndDate.split('-')[1]}`];
+    const EDD = `${day}-${month}-${year}`;
+    // usChange(EDD);
+    return EDD;
   };
   const format = current.toLocaleDateString(undefined, options);
   return (
@@ -204,7 +225,7 @@ const Prescription = ({route}) => {
         )}
         <View>
           <Text style={styles.head}>
-            {Language[language]['test']} : <Text style={styles.values}></Text>
+            {Language[language]['test']} : {test.map((item,index)=> <Text style={styles.values}>{item?.lab_test}</Text>)}
           </Text>
         </View>
         {followup && (
@@ -223,13 +244,13 @@ const Prescription = ({route}) => {
         </View>
         <View>
           <Text style={styles.head}>
-            validity Upto : <Text style={styles.values}></Text>
+            validity Upto : <Text style={styles.values}>{followup}</Text>
           </Text>
         </View>
         <View style={styles.description}>
           <Text style={styles.values}>Not valid for Medical Legal Purpose</Text>
           <Text style={styles.values}>
-            In case of any drug percations or side effects STOP all medicines{' '}
+            In case of any drug interactions or side effects STOP all medicines{' '}
           </Text>
           <Text style={styles.values}>
             immediately and consult your doctor or nearest hospital

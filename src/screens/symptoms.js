@@ -80,12 +80,12 @@ const Symptoms = ({navigation}) => {
                       fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight:600,
                     }}>
-                    {Language[language]['symptoms']}:
+                    {Language[language]['symptom']}{parseInt(index+1)}:
                   </Text>
                   <View
                     style={{
                       height: 40,
-                      width: 100,
+                     // width: 100,
                       textAlignVertical: 'top',
                       
                     }}>

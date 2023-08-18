@@ -20,7 +20,9 @@ import {
 } from '../utility/scaleDimension';
 import PrescriptionHead from './prescriptionHead';
 
-const ComplaintsCard = props => {
+const ComplaintsCard = (props) => {
+  // const {complaint} = route.params
+  // console.log('com1111====',complaint)
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
