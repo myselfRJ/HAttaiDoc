@@ -118,8 +118,6 @@ const SlotCreate = ({navigation, route}) => {
         duration: selectedDurationValue,
         day: weekdays[selectedDay],
       };
-
-      // Check if the new slot's time conflicts with any existing slots for the selected day
       const conflictingSlotExists = slots[selectedDay].some(
         slot =>
           (newSlot.fromTime >= slot.fromTime &&
@@ -138,7 +136,6 @@ const SlotCreate = ({navigation, route}) => {
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
-        // Display an alert or message to inform the user about the conflicting time
         Alert.alert('Conflict', 'A slot with conflicting time already exists.');
       }
     }

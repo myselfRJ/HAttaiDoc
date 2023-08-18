@@ -120,7 +120,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <Pressable
           style={styles.icon}
           onPress={() => {
-            appointment?.status === 'pending'? appointmentCardRef?.current?.snapToIndex(1) : appointmentCardRef?.current?.snapToIndex(0)
+            appointment?.status === 'pending'? appointmentCardRef?.current?.snapToIndex(1) : appointmentCardRef?.current?.snapToIndex(1)
           }}>
           <View>
             <Icon

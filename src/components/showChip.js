@@ -9,7 +9,8 @@ const ShowChip = (props) => {
             borderWidth:1,
             padding:4,
             marginBottom:4,
-            marginHorizontal:8
+            marginHorizontal:8,
+            borderColor: '#2CBB15',
           }} >
         <View
               key={props.ind}

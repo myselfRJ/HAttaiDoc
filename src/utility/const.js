@@ -11,7 +11,7 @@ export const CONSTANT={
         {label: 'Allergies', icon: 'chevron-right', navigate: 'allergies'},        
         {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
         {label: 'Notes', icon: 'chevron-right', navigate: 'notescreen'},
-        {label: 'Test Prescribed', icon: 'chevron-right', navigate: 'labreport'},
+        {label: 'Test Prescribe', icon: 'chevron-right', navigate: 'labreport'},
         {
           label: 'Refer to Doctor',
           icon: 'chevron-right',

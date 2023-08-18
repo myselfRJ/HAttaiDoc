@@ -51,6 +51,8 @@ const Visit = ({navigation, route}) => {
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
 
+  console.log('---------------lab',labreport);
+
   useEffect(() => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
@@ -589,7 +591,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Test Prescribede' && labreport.length > 0 && (
+                  {value.label === 'Test Prescribe' && labreport.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                         <View
