@@ -19,9 +19,12 @@ const slotDataSlice = createSlice({
     addslots: (state, action) => {
       state.slots = action.payload;
     },
+    updateslots: (state, action) => {
+      state.slots = action.payload;
+    },
   },
 });
 
-export const addSlots = slotDataSlice.actions;
+export const {addslots, updateslots} = slotDataSlice.actions;
 
 export const slotDataReducer = slotDataSlice.reducer;
