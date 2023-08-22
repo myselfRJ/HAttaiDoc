@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     padding: 24,
-    borderWidth: 1,
+    //borderWidth: 1,
   },
   dayselector: {
     flexDirection: 'row',

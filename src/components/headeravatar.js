@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     
   },
   img: {
-    width: horizontalScale(60),
-    height: verticalScale(60),
+    width:moderateScale(64),
+    height:moderateScale(64),
     borderRadius: moderateScale(60 / 2),
   },
   name: {

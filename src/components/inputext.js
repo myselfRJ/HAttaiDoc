@@ -40,7 +40,7 @@ const InputText = props => {
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={[styles.labeltext, props.lbltext]}>{props.label}</Text>
+        <Text style={[styles.labeltext, props.lbltext]}>{props.label} {props.required ? <Text style={[styles.indicator, props.required && visible && styles.required]}>*</Text> : null}</Text>
         <View>
           <TextInput
             style={[styles.textinput, errorStyles, props.textStyle]}
@@ -105,6 +105,20 @@ const styles = StyleSheet.create({
     top: moderateScale(19), //12+fontsize.h3/2
     right: moderateScale(10),
   },
+  indicator: {
+    fontSize: 20,
+    marginRight: 5,
+  },
+  required: {
+    color: 'red',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    flex: 1,
+  },
+  
 });
 
 export default InputText;

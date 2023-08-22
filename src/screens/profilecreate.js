@@ -212,6 +212,7 @@ const ProfileCreate = ({navigation}) => {
               <AddImage onPress={onImagePress} encodedBase64={selectedImage} />
             </View>
             <InputText
+              required ={true}
               label={Language[language]['name']}
               placeholder="Full Name"
               value={values.doctor_name}
@@ -249,6 +250,7 @@ const ProfileCreate = ({navigation}) => {
                 paddingHorizontal: 8,
               }}>
               <SelectorBtn
+                required={true}
                 label={Language[language]['dob']}
                 name="calendar"
                 onPress={() => setOpen('to')}
@@ -266,6 +268,7 @@ const ProfileCreate = ({navigation}) => {
               onCancel={handleCancel}
             />
             <InputText
+              required={true}
               label={Language[language]['medical_number']}
               placeholder="Medical number"
               value={values.medical_number}
@@ -278,6 +281,7 @@ const ProfileCreate = ({navigation}) => {
                 paddingHorizontal: 8,
               }}>
               <SelectorBtn
+                required={true}
                 label={Language[language]['specialization']}
                 name="chevron-down"
                 // onPress={toggleModal}

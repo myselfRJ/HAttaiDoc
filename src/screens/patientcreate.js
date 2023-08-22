@@ -32,7 +32,7 @@ import {useSelector} from 'react-redux';
 
 const PatientCreate = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState('male');
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
   const default_image = CONSTANTS.default_image;
 
@@ -200,6 +200,7 @@ const PatientCreate = ({navigation}) => {
             ))}
           </View> */}
             <InputText
+              required={true}
               label="Name"
               placeholder="Full Name"
               value={name}
@@ -216,6 +217,7 @@ const PatientCreate = ({navigation}) => {
               }}
             />
             <InputText
+              required={true}
               label="Phone Number"
               placeholder="10 digit phone number"
               value={patient_phone_number}
@@ -273,7 +275,7 @@ const PatientCreate = ({navigation}) => {
               </View>
             </View>
             <View style={{width: '100%', paddingHorizontal: 8}}>
-              <SelectorBtn label='Date of Birth'  onPress={handleDate} name={'calendar'} input={DOB} />
+              <SelectorBtn required={true} label='Date of Birth'  onPress={handleDate} name={'calendar'} input={DOB} />
               {open && (
                 <DatePicker
                   modal
@@ -299,6 +301,7 @@ const PatientCreate = ({navigation}) => {
               setValue={setBlood_group}
             />
             <InputText
+              required={true}
               label="Address"
               placeholder="Full Address"
               value={address}

@@ -46,6 +46,7 @@ import {
   moderateScale,
 } from '../utility/scaleDimension';
 import {HttpStatusCode} from 'axios';
+import { disableBackButton } from '../utility/backDisable';
 
 const AddUser = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -227,6 +228,10 @@ const AddUser = ({navigation}) => {
   useEffect(() => {
     fetchclinic();
   }, []);
+
+  // useEffect(()=>{
+  //   disableBackButton();
+  // },[])
 
   console.log('selecte Image', '=============', selectedImage);
 

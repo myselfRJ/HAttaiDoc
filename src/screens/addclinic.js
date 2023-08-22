@@ -31,6 +31,7 @@ import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
+import { disableBackButton} from '../utility/backDisable';
 import {
   addclinic_data,
   updateclinics,
@@ -38,6 +39,7 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import ProgresHeader from '../components/progressheader';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import { BackHandler } from 'react-native';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -200,9 +202,15 @@ const AddClinic = ({navigation}) => {
     // }));
   };
 
-  const handleAddClinicData = () => {
-    dispatch(addclinic_data(Clinic_Data));
-  };
+  // const handleAddClinicData = () => {
+  //   dispatch(addclinic_data(Clinic_Data));
+  // };
+
+  // useEffect(() => {
+  //   disableBackButton();
+  // }, []);
+
+  
 
   console.log('clinics', '============', clinics);
   return (
@@ -221,6 +229,7 @@ const AddClinic = ({navigation}) => {
               </View>
             </View>
             <InputText
+              required={true}
               label={Language[language]['clinic']}
               maxLength={30}
               placeholder="Clinic"
@@ -228,6 +237,7 @@ const AddClinic = ({navigation}) => {
               setValue={value => handleChangeValue('clinic', value)}
             />
             <InputText
+              required={true}
               label={Language[language]['address']}
               multiline={true}
               placeholder="Address"
@@ -249,6 +259,7 @@ const AddClinic = ({navigation}) => {
               />
             </View> */}
             <InputText
+              required={true}
               label={Language[language]['fees']}
               placeholder="Consultation Fees"
               value={value.fees}

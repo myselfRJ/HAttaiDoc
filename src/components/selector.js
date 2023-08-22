@@ -13,9 +13,10 @@ import {
 } from '../utility/scaleDimension';
 
 const SelectorBtn = props => {
+  const [visible, setVisible] = React.useState(props.secure || true);
   return (
     <View>
-      {props.label && <Text style={styles.h3}>{props.label}</Text>}
+      {props.label && <Text style={styles.h3}>{props.label} {props.required ? <Text style={[styles.indicator, props.required && visible && styles.required]}>*</Text> : null}</Text>}
       <Pressable style={{...styles.select,...props.select}} onPress={props.onPress}>
         <Text style={styles.h3}>{props.input}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
@@ -40,6 +41,19 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
+  },
+  indicator: {
+    fontSize: 20,
+    marginRight: 5,
+  },
+  required: {
+    color: 'red',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    flex: 1,
   },
 });
 

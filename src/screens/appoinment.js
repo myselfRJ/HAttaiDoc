@@ -31,6 +31,10 @@ import {
 import Logo from '../components/logo';
 import {commonstyles} from '../styles/commonstyle';
 import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
+import CustomIcon from '../components/icon';
+
+
+
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
@@ -288,17 +292,21 @@ const Appointment = ({navigation}) => {
         </View>
         <Text style={[commonstyles.h2,styles.appointment]}>{Language[language]['appointments']}</Text>
         <ScrollView
-          style={{height: 400, paddingHorizontal: 8, gap: 16}}
-          contentContainerStyle={{gap: 8}}>
-          {filteredData?.map((value, index) => {
-            return (
-              <AppointmentCard
-                key={index}
-                appointment={value}
-                openVisit={() => navigation.navigate('visit')}
-              />
-            );
-          })}
+                style={{height: 400, paddingHorizontal: 8, gap: 16}}
+                contentContainerStyle={{gap: 8}}>
+                {filteredData?.length > 0 ? (
+                  filteredData?.map((value, index) => {
+                    return (
+                      <AppointmentCard
+                        key={index}
+                        appointment={value}
+                        openVisit={() => navigation.navigate('visit')}
+                      />
+                    );
+                  })
+                ) : (
+                  <CustomIcon label="No Appointments" />
+                )}
         </ScrollView>
       </View>
       <View >

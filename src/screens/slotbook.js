@@ -26,6 +26,7 @@ import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
 import { horizontalScale } from '../utility/scaleDimension';
+import { disableBackButton } from '../utility/backDisable';
 
 const SlotBook = ({navigation, route}) => {
   const [complaint, setComplaint] = useState('');
@@ -255,6 +256,10 @@ const SlotBook = ({navigation, route}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
+  useEffect(()=>{
+    disableBackButton()
+  },[])
+
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -292,6 +297,7 @@ const SlotBook = ({navigation, route}) => {
             />
           </View>
           <InputText
+            required={true}
             label={Language[language]['complaint']}
             placeholder="Enter your complaints"
             value={complaint}

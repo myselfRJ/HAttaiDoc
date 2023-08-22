@@ -267,7 +267,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'Follow-Up' && date !== '' && (
-                    <View style={styles.basiccontainer}>
+                    <View style={styles.FollowUpcontainer}>
                       <>
                         <Icon
                           name="file-document-edit"
@@ -710,7 +710,7 @@ const styles = StyleSheet.create({
     // height:100
   },
   basiccontainer: {
-    // flexDirection:'row',
+    //flexDirection:'row',
     width: '100%',
     borderRadius: 4,
     paddingVertical: 8,
