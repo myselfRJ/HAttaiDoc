@@ -244,7 +244,7 @@ const AddClinic = ({navigation}) => {
               value={value.address}
               setValue={value => handleChangeValue('address', value)}
             />
-            {/* <View
+            <View
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
@@ -257,7 +257,7 @@ const AddClinic = ({navigation}) => {
                   addressRef?.current?.snapToIndex(1);
                 }}
               />
-            </View> */}
+            </View>
             <InputText
               required={true}
               label={Language[language]['fees']}
