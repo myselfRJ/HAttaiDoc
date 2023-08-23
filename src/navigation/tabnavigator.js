@@ -20,18 +20,18 @@ const BottomTab = ({navigation, route}) => {
   const options = {
     headerStyle: styles.headerStyle,
     headerTintColor: 'white',
-    headerLeft: () => (
-      <View style={styles.leftIcon}>
-        <Icon
-          name="arrow-left"
-          size={24}
-          color={CUSTOMCOLOR.white}
-          onPress={
-            route.name !== 'dashboard' ? () => navigation.goBack() : null
-          }
-        />
-      </View>
-    ),
+    // headerLeft: () => (
+    //   <View style={styles.leftIcon}>
+    //     <Icon
+    //       name="arrow-left"
+    //       size={24}
+    //       color={CUSTOMCOLOR.white}
+    //       onPress={
+    //         route.name !== 'dashboard' ? () => navigation.goBack() : null
+    //       }
+    //     />
+    //   </View>
+    // ),
   };
   return (
     <Tab.Navigator

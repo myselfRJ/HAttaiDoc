@@ -16,11 +16,11 @@ import {AbhaReducer} from '../features/Abha/AbhaAccesToken';
 import {clinic_users_Reducer} from '../features/profiles/ClinicUsers';
 import {clinic_id_Reducer} from '../features/profiles/clinicId';
 import {headerDataReducer} from '../features/headerProgress/headerProgress';
-import { diagnosisReducer } from '../features/prescription/diagnosis';
-import { commorbitiesReducer } from '../features/prescription/commorbities';
-import { allergiesReducer } from '../features/prescription/allergies';
-import { labReportReducer } from '../features/prescription/labreport';
-import { pastHistoryReducer } from '../features/prescription/pastHistory';
+import {diagnosisReducer} from '../features/prescription/diagnosis';
+import {commorbitiesReducer} from '../features/prescription/commorbities';
+import {allergiesReducer} from '../features/prescription/allergies';
+import {labReportReducer} from '../features/prescription/labreport';
+import {pastHistoryReducer} from '../features/prescription/pastHistory';
 
 const store = configureStore({
   reducer: {
@@ -40,11 +40,11 @@ const store = configureStore({
     abha: AbhaReducer,
     clinicid: clinic_id_Reducer,
     progress: headerDataReducer,
-    diagnosis:diagnosisReducer,
-    commorbities:commorbitiesReducer,
-    allergies:allergiesReducer,
-    labreport:labReportReducer,
-    pasthistory:pastHistoryReducer,
+    diagnosis: diagnosisReducer,
+    commorbities: commorbitiesReducer,
+    allergies: allergiesReducer,
+    labreport: labReportReducer,
+    pasthistory: pastHistoryReducer,
   },
 });
 
