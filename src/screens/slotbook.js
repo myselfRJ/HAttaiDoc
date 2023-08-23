@@ -25,19 +25,14 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
-import { horizontalScale } from '../utility/scaleDimension';
-import { disableBackButton } from '../utility/backDisable';
+import {horizontalScale} from '../utility/scaleDimension';
+import {disableBackButton} from '../utility/backDisable';
 
 const SlotBook = ({navigation, route}) => {
   const [complaint, setComplaint] = useState('');
-  const changeComplaint = e => {
-    setComplaint(e);
-  };
-  const patientPhoneNumber = useSelector(state => state.patient);
-  //console.log('phone----', patientPhoneNumber.patient.phone_number);
-  const dispatch = useDispatch();
-  const doctorphoneNumber = useSelector(state => state.phone);
-  console.log('doctor phone=====', doctorphoneNumber);
+
+  const [bookedSlots, setData] = useState([]);
+
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
 
@@ -46,7 +41,7 @@ const SlotBook = ({navigation, route}) => {
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
     selections[0],
   );
-  const [slotData, setSlotData] = useState();
+
   const [selectedMode, setSelectedMode] = useState('offline');
 
   const handleOptions = value => {
@@ -65,13 +60,7 @@ const SlotBook = ({navigation, route}) => {
   const [open, setOpen] = useState(false);
 
   const formatDate = moment(date).format('YYYY-MM-DD');
-  console.log(formatDate);
-  const formattedDate = date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-  });
-  console.log('date....', formattedDate);
+
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
@@ -83,12 +72,10 @@ const SlotBook = ({navigation, route}) => {
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
-  console.log('------------------id', Clinic_id);
   const {phone} = useSelector(state => state?.phone?.data);
   const speciality = useSelector(
     state => state?.doctor_profile?.doctor_profile?.specialization,
   );
-  console.log('-----------------profile', speciality);
 
   const weekDys = {
     0: 'Su',
@@ -99,7 +86,34 @@ const SlotBook = ({navigation, route}) => {
     5: 'F',
     6: 'Sa',
   };
-  const Day = weekDys?.[moment().day()];
+
+  const Day = weekDys[new Date(date).getDay()];
+
+  const fetchAppointment = async () => {
+    const appointment_date = formatDate;
+    const clinic_id = Clinic_id;
+    const apiUrl = `${
+      URL.get_all_appointments_of_clinic
+    }?appointment_date=${encodeURIComponent(
+      appointment_date,
+    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const response = await fetchApi(apiUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setData(jsonData.data?.map((item, index) => item?.appointment_slot));
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchAppointment();
+  }, [formatDate, Clinic_id]);
+
   const fetchslots = async () => {
     const response = await fetchApi(URL.SlotsAvailable(Clinic_id), {
       method: 'GET',
@@ -107,10 +121,10 @@ const SlotBook = ({navigation, route}) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // let list = getTimeList(slotDetails?.slot?.[weekDys?.[moment().day()]]);
+
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('======================', jsonData);
+
       setSlotDetails(jsonData.data?.map(val => JSON.parse(val?.slot)));
     } else {
       console.error('API call failed:', response.status, response);
@@ -121,9 +135,6 @@ const SlotBook = ({navigation, route}) => {
   }, []);
 
   useEffect(() => {}, [selectedSlot]);
-  console.log('====================================');
-  console.log('-------------', slotDetails[0]);
-  console.log('====================================');
 
   const getMinute = time => {
     let value = time.split(':');
@@ -151,17 +162,32 @@ const SlotBook = ({navigation, route}) => {
       for (let i = 0; i < loopLength; i++) {
         const startTime = getTime(initialTime + duration * i);
         const endTime = getTime(initialTime + duration * (i + 1));
-        timeList.push({
-          slot: startTime + '-' + endTime,
-          duration: item.duration,
-        });
+        const Today = moment(new Date()).format('YYYY-MM-DD');
+        const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
+        const slot = startTime + '-' + endTime;
+        const bookedSlot = bookedSlots;
+        if (!bookedSlot.includes(slot)) {
+          if (formatDate === Today) {
+            if (startTime >= PresentTime) {
+              timeList.push({
+                slot: slot,
+                duration: item.duration,
+              });
+            }
+          } else {
+            timeList.push({
+              slot: slot,
+              duration: item.duration,
+            });
+          }
+        }
       }
     });
     return timeList;
   };
-  const token = useSelector(state => state.authenticate.auth.access);
 
   let list = getTimeList(slotDetails[0]?.[Day]);
+  const token = useSelector(state => state.authenticate.auth.access);
 
   const renderItems = ({item}) => {
     return (
@@ -220,7 +246,7 @@ const SlotBook = ({navigation, route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',
@@ -256,14 +282,14 @@ const SlotBook = ({navigation, route}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
-  useEffect(()=>{
-    disableBackButton()
-  },[])
+  useEffect(() => {
+    disableBackButton();
+  }, []);
 
   return (
     <View style={styles.main}>
       <ScrollView>
-        <View style={styles.MainHeadContainer}>
+        {/* <View style={styles.MainHeadContainer}>
           <Text style={styles.MainText}>Slot Booking</Text>
           <Icon
             name="bell"
@@ -271,7 +297,7 @@ const SlotBook = ({navigation, route}) => {
             color={CUSTOMCOLOR.white}
             // style={{top: 43, right: 37, backgroundColor: CUSTOMCOLOR.white}}
           />
-        </View>
+        </View> */}
         <View style={styles.child}>
           <View
             style={{
@@ -408,7 +434,7 @@ const styles = StyleSheet.create({
   },
   item: {
     margin: 8,
-    paddingHorizontal:horizontalScale(8)
+    paddingHorizontal: horizontalScale(8),
   },
   btn: {
     height: 400,

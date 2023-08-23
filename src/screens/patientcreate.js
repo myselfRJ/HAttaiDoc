@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTSIZE,
+  CUSTOMFONTFAMILY,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {commonstyles} from '../styles/commonstyle';
@@ -36,9 +40,9 @@ const PatientCreate = ({navigation}) => {
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
   const default_image = CONSTANTS.default_image;
 
-  console.log('====================================');
-  console.log('-----------default', default_image);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('-----------default', default_image);
+  // console.log('====================================');
 
   const handleOptions = value => {
     setSelected(value);
@@ -96,7 +100,7 @@ const PatientCreate = ({navigation}) => {
   const dayOfMonth = date.toISOString().split('T')[0].split('-')[1];
   const dayOfYear = date.toISOString().split('T')[0].split('-')[0];
   const DOB = `${dayOfBirth}-${dayOfMonth}-${dayOfYear}`;
-  console.log('-------------', DOB);
+  // console.log('-------------', DOB);
   const patientDetails = {
     patient_name: name,
     gender: gender,
@@ -109,19 +113,11 @@ const PatientCreate = ({navigation}) => {
     aadhar_no: aadhar_no,
     patient_address: address,
     patient_pic_url: selectedImage ? selectedImage : default_image,
-
-    // patient_pic_url: patient_pic_url,
-    //       : patient_name,
-    //       patient_phone_number: patient_phone_number,
-    //       birth_date: birth_date,
-    //       gender: gender,
-    //       // aadhar_no: aadhar_no,
-    //       abha_no: abha_no,
   };
 
-  console.log('====================================');
-  console.log(patientDetails);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(patientDetails);
+  // console.log('====================================');
 
   const [apiStatus, setApiStatus] = useState({});
   const RoleRef = useRef(null);
@@ -147,18 +143,26 @@ const PatientCreate = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        setTimeout(() => {
-          navigation.navigate('bookslot', {patient_phone});
-        }, 1000);
-        setLoading(false);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('API call failed:', response.status, response);
-        setLoading(false);
+        // console.log('---------------', jsonData);
+        if (jsonData?.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          SuccesRef?.current?.snapToIndex(1);
+          setTimeout(() => {
+            navigation.navigate('bookslot', {patient_phone});
+          }, 1000);
+          setName('');
+          setPatient_Phone_number('');
+          setAddress('');
+          setAadhar_no('');
+          setBlood_group('');
+          setSpouse_nmae('');
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -170,7 +174,7 @@ const PatientCreate = ({navigation}) => {
   };
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
@@ -251,8 +255,15 @@ const PatientCreate = ({navigation}) => {
             /> */}
 
             <View style={styles.alignchild}>
-              <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize: CUSTOMFONTSIZE.h4,
-    fontWeight: '400',}}>Gender</Text>
+              <Text
+                style={{
+                  fontFamily: CUSTOMFONTFAMILY.body,
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h4,
+                  fontWeight: '400',
+                }}>
+                Gender
+              </Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -275,7 +286,13 @@ const PatientCreate = ({navigation}) => {
               </View>
             </View>
             <View style={{width: '100%', paddingHorizontal: 8}}>
-              <SelectorBtn required={true} label='Date of Birth'  onPress={handleDate} name={'calendar'} input={DOB} />
+              <SelectorBtn
+                required={true}
+                label="Date of Birth"
+                onPress={handleDate}
+                name={'calendar'}
+                input={DOB}
+              />
               {open && (
                 <DatePicker
                   modal

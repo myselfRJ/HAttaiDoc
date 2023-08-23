@@ -2,6 +2,7 @@ export const CONSTANTS = {
   modes: ['Injection', 'Capsule', 'Syrup', 'Tablet'],
   medicine_recomendation: ['Avil', 'Paracetmol', 'Dolo650', 'Citrizen'],
   dose: ['500mg', '700mg', '800mg', '1000mg'],
+  dose_ml: ['5ml', '10ml', '15ml', '20ml'],
   timing: ['AF', 'BF'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
   speciality: ['cardialogist', 'general_physician', 'gynogologist'],
@@ -43,6 +44,10 @@ export const CONSTANTS = {
     11: 'Nov',
     12: 'Dec',
   },
-  comorbidities:['Heart disease','High BP','Diabetes','Chronic respiratory disease']
-
+  comorbidities: [
+    'Heart disease',
+    'High BP',
+    'Diabetes',
+    'Chronic respiratory disease',
+  ],
 };

@@ -19,7 +19,7 @@ import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
 import {CONSTANT} from '../utility/const';
-import { moderateScale } from '../utility/scaleDimension';
+import {moderateScale} from '../utility/scaleDimension';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
@@ -27,7 +27,7 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
   console.log('diagnosis====>', diagnosis);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
-  console.log('pulse====',vitalsData)
+  console.log('pulse====', vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -51,7 +51,7 @@ const Visit = ({navigation, route}) => {
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
 
-  console.log('---------------lab',labreport);
+  console.log('---------------lab', labreport);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -62,8 +62,18 @@ const Visit = ({navigation, route}) => {
   //   SuccesRef?.current?.snapToIndex(1);
   // }, []);
 
-  const {name, gende, age, patient_phone, appointment_id,complaint} = route.params;
-  console.log('complaint>>>>>>>',complaint)
+  const {name, gende, age, patient_phone, appointment_id, complaint} =
+    route.params;
+  console.log(
+    'complaint>>>>>>>',
+    name,
+    gende,
+    age,
+    patient_phone,
+    appointment_id,
+    complaint,
+    Symptom,
+  );
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchData = async () => {
@@ -194,10 +204,15 @@ const Visit = ({navigation, route}) => {
                   <VisitOpen
                     label={value.label}
                     icon={value.icon}
-                    navigate={() => navigation.navigate(value.navigate,value.navigate ==='complaints'?{complaint}:null,
-                    value.navigate==='FollowUp'?{date}:null)}
+                    navigate={() =>
+                      navigation.navigate(
+                        value.navigate,
+                        value.navigate === 'complaints' ? {complaint} : null,
+                        value.navigate === 'FollowUp' ? {date} : null,
+                      )
+                    }
                   />
-                  {value.label === 'Symptoms' && Symptom[0].symptom != '' && (
+                  {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexWrap: 'wrap'}}>
                         {Symptom?.map((item, index) => {
@@ -256,7 +271,8 @@ const Visit = ({navigation, route}) => {
                                   <Text style={{color: CUSTOMCOLOR.black}}>
                                     {item.mode} | {item.medicine} |
                                     {item.dose_quantity} | {item.timing} |
-                                    {item.frequency} | {item.duration} | {item.total_quantity}
+                                    {item.frequency} | {item.duration} |{' '}
+                                    {item.total_quantity}
                                   </Text>
                                 </View>
                               </View>
@@ -294,14 +310,18 @@ const Visit = ({navigation, route}) => {
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
                           <View
-                            style={{flexDirection: 'row', flexWrap: 'wrap',marginBottom:4}}>
-                               <View
+                            style={{
+                              flexDirection: 'row',
+                              flexWrap: 'wrap',
+                              marginBottom: 4,
+                            }}>
+                            <View
                               key={index}
                               style={{
                                 flexDirection: 'row',
                                 gap: 8,
                                 padding: 2,
-                                marginBottom:moderateScale(18)
+                                marginBottom: moderateScale(18),
                               }}>
                               {vitalsData?.pulse_rate && (
                                 <>
@@ -322,28 +342,27 @@ const Visit = ({navigation, route}) => {
                                   {vitalsData.height}cm
                                 </Text>
                               )}
-                               {vitalsData?.weight && (
+                              {vitalsData?.weight && (
                                 <Text style={styles.pulse}>
                                   {Language[language]['weight']}:
                                   {vitalsData.weight}kg
                                 </Text>
                               )}
-                               {vitalsData?.bmi && (
+                              {vitalsData?.bmi && (
                                 <Text style={styles.pulse}>
-                                  {Language[language]['bmi']}:
-                                  {vitalsData.bmi}cm
+                                  {Language[language]['bmi']}:{vitalsData.bmi}cm
                                 </Text>
                               )}
-                               {vitalsData?.body_temperature && (
+                              {vitalsData?.body_temperature && (
                                 <Text style={styles.pulse}>
                                   {Language[language]['temp']}:
                                   {vitalsData?.body_temperature}
                                 </Text>
                               )}
-                               {vitalsData?.rate && (
+                              {vitalsData?.rate && (
                                 <Text style={styles.pulse}>
-                                  {Language[language]['rate']}:
-                                  {vitalsData.rate}cm
+                                  {Language[language]['rate']}:{vitalsData.rate}
+                                  cm
                                 </Text>
                               )}
                             </View>
@@ -412,16 +431,18 @@ const Visit = ({navigation, route}) => {
                         )}
                       </View>
                     )}
-                  {value.label === 'Chief Complaints'  && (
-                      <View style={styles.complaintcontainer}>
-                        <Icon
-                          name="file-document-edit"
-                          color={CUSTOMCOLOR.primary}
-                          size={16}
-                        />
-                        <Text style={styles.pulse}>{complaint} | {selectedComplaint}</Text>
-                      </View>
-                    )}
+                  {value.label === 'Chief Complaints' && (
+                    <View style={styles.complaintcontainer}>
+                      <Icon
+                        name="file-document-edit"
+                        color={CUSTOMCOLOR.primary}
+                        size={16}
+                      />
+                      <Text style={styles.pulse}>
+                        {complaint} | {selectedComplaint}
+                      </Text>
+                    </View>
+                  )}
                   {value.label === 'Notes' && note !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon

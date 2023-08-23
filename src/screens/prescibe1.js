@@ -30,14 +30,15 @@ export default function Prescribe1() {
   const [setmedicine, selectedMedicine] = useState('');
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
-  const [ frequency, setFrequency] = useState('');
+  const [frequency, setFrequency] = useState('');
   const [dose_number, setDose_number] = useState('');
   const [duration, setDuration] = useState('');
   const recommdations = CONSTANTS.medicine_recomendation;
   const mg = CONSTANTS.dose;
+  const ml = CONSTANTS.dose_ml;
   const timings = CONSTANTS.timing;
   const frequencys = CONSTANTS.frequency;
-  const [total_quantity,setTotalQuantity] = useState()
+  const [total_quantity, setTotalQuantity] = useState();
   const dispatch = useDispatch();
   const prescribe = useState([
     {
@@ -75,24 +76,16 @@ export default function Prescribe1() {
         },
       ]),
     );
-    setMedicine('')
-    setMode('')
-    selectedMedicine('')
-    setDose_number('')
-    setDose_quantity('')
-    setTiming('')
-    setFrequency([])
-    setDuration('')
+    setMedicine('');
+    setMode('');
+    selectedMedicine('');
+    setDose_number('');
+    setDose_quantity('');
+    setTiming('');
+    setFrequency([]);
+    setDuration('');
+  };
 
-  };
-  const handlePrescribeChange = (text, index, field) => {
-    setPrescribeInput(prevState => {
-      const prescribeCopy = [...prevState];
-      prescribeCopy[index][field] = text;
-      return prescribeCopy;
-    });
-    dispatch(updatePrescribe({index, field, value: text}));
-  };
   const handleDelete = index => {
     console.log('prescription index', index);
     if (prevPres) {
@@ -118,8 +111,8 @@ export default function Prescribe1() {
 
   const FrequencySelection = index => {
     const isSelected = frequency.includes(index);
-    console.log(frequency)
-    console.log("..........",isSelected,index)
+    console.log(frequency);
+    console.log('..........', isSelected, index);
     if (isSelected) {
       setFrequency(frequency.filter(i => i !== index));
     } else {
@@ -127,42 +120,45 @@ export default function Prescribe1() {
     }
   };
 
-  const totoal_quantity = () =>{
-    quantity = parseInt(dose_number)*parseInt(duration)*parseInt(frequency.length)
+  const totoal_quantity = () => {
+    quantity =
+      parseInt(dose_number) * parseInt(duration) * parseInt(frequency.length);
     // setTotalQuantity(quantity)
-    if (quantity !=='NaN'){
+    if (quantity !== 'NaN') {
       setTotalQuantity(quantity);
-
-    }else{
-      setTotalQuantity('00')
+    } else {
+      setTotalQuantity('00');
     }
-    console.log('-----------quantiy',quantity);
-  }
+    console.log('-----------quantiy', quantity);
+  };
 
-  useEffect(()=>{
-    totoal_quantity()
-  },[duration,dose_number,frequency])
+  useEffect(() => {
+    totoal_quantity();
+  }, [duration, dose_number, frequency]);
+
+  console.log('====================================');
+  console.log('----------quanity', isNaN(total_quantity));
+  console.log('====================================');
 
   return (
     <ScrollView>
       <View style={{padding: 24, gap: 24}}>
-       
-          <PrescriptionHead heading={Language[language]['prescribe']}/>
-         {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
+        <PrescriptionHead heading={Language[language]['prescribe']} />
+        {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
 
-       
-          {prevPres?.map((item, ind) => (
-             <View style={{
+        {prevPres?.map((item, ind) => (
+          <View
+            key={ind}
+            style={{
               flex: 1,
               width: '100%',
               marginBottom: 5,
-              borderWidth:1,
-              padding:8,
+              borderWidth: 1,
+              padding: 8,
               borderColor: '#2CBB15',
-              backgroundColor:CUSTOMCOLOR.white
-            }} >
+              backgroundColor: CUSTOMCOLOR.white,
+            }}>
             <View
-              key={ind}
               style={{
                 flexDirection: 'row',
                 flex: 1,
@@ -172,9 +168,13 @@ export default function Prescribe1() {
               }}>
               <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
               <View style={{width: '90%'}}>
-                <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>
-                  {item.mode} | {item.medicine} | {item.dose_quantity} | {item.timing}
-                  |{item.frequency} | {item.dose_number} |
+                <Text
+                  style={{
+                    color: CUSTOMCOLOR.black,
+                    fontFamily: CUSTOMFONTFAMILY.body,
+                  }}>
+                  {item.mode} | {item.medicine} | {item.dose_quantity} |{' '}
+                  {item.timing}|{item.frequency} | {item.dose_number} |
                   {item.duration} | {item.total_quantity}
                 </Text>
               </View>
@@ -182,9 +182,9 @@ export default function Prescribe1() {
                 <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
               </TouchableOpacity>
             </View>
-            </View>
-          ))}
-        
+          </View>
+        ))}
+
         <View style={styles.prescribeConatiner}>
           <View>
             <View style={styles.prescribeItemContainer}>
@@ -271,32 +271,59 @@ export default function Prescribe1() {
                   />
                 </View>
                 <View style={styles.Modes}>
-                  {mg?.map((value, mgIndex) => (
-                    <TouchableOpacity
-                      key={mgIndex}
-                      onPress={() => setMG(value)}>
-                      <View
-                        style={[
-                          styles.ModesContainer,
-                          {
-                            backgroundColor:
-                              dose_quantity === value
-                                ? CUSTOMCOLOR.primary
-                                : CUSTOMCOLOR.white,
-                          },
-                        ]}>
-                        <Text
-                          style={{
-                            color:
-                              dose_quantity === value
-                                ? CUSTOMCOLOR.white
-                                : CUSTOMCOLOR.primary,
-                          }}>
-                          {value}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
+                  {mode === 'Injection' || mode === 'Syrup'
+                    ? ml?.map((value, mgIndex) => (
+                        <TouchableOpacity
+                          key={mgIndex}
+                          onPress={() => setMG(value)}>
+                          <View
+                            style={[
+                              styles.ModesContainer,
+                              {
+                                backgroundColor:
+                                  dose_quantity === value
+                                    ? CUSTOMCOLOR.primary
+                                    : CUSTOMCOLOR.white,
+                              },
+                            ]}>
+                            <Text
+                              style={{
+                                color:
+                                  dose_quantity === value
+                                    ? CUSTOMCOLOR.white
+                                    : CUSTOMCOLOR.primary,
+                              }}>
+                              {value}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))
+                    : mg?.map((value, mgIndex) => (
+                        <TouchableOpacity
+                          key={mgIndex}
+                          onPress={() => setMG(value)}>
+                          <View
+                            style={[
+                              styles.ModesContainer,
+                              {
+                                backgroundColor:
+                                  dose_quantity === value
+                                    ? CUSTOMCOLOR.primary
+                                    : CUSTOMCOLOR.white,
+                              },
+                            ]}>
+                            <Text
+                              style={{
+                                color:
+                                  dose_quantity === value
+                                    ? CUSTOMCOLOR.white
+                                    : CUSTOMCOLOR.primary,
+                              }}>
+                              {value}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
                 </View>
               </View>
               <View style={{padding: 16, top: 8}}>
@@ -387,7 +414,11 @@ export default function Prescribe1() {
                     alignItems: 'center',
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
-                  {total_quantity !== 'NaN'?(<Text style={styles.numText}>{total_quantity}</Text>):(<Text style={styles.numText}>{'00'}</Text>) }
+                  {isNaN(total_quantity) ? (
+                    <Text style={styles.numText}>{'00'}</Text>
+                  ) : (
+                    <Text style={styles.numText}>{total_quantity}</Text>
+                  )}
                 </View>
               </View>
               <View style={styles.line}></View>

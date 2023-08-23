@@ -30,10 +30,12 @@ import {
 } from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
 import {commonstyles} from '../styles/commonstyle';
-import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 import CustomIcon from '../components/icon';
-
-
 
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
@@ -44,22 +46,14 @@ const Appointment = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
   const selections = CONSTANTS.selection;
   const [seletedType, setSelectedType] = useState(selections[0]);
-  console.log('====================================');
-  console.log('--------selected', seletedType);
-  console.log('====================================');
 
   const {phone} = useSelector(state => state?.phone?.data);
-  console.log('====================================');
-  console.log(
-    phone,
-    'phonenumber=++++++++++++++++++++===========================',
-    clinicID,
-  );
+
   const handleChangeValue = e => {
     setClinic(e);
   };
   const [setAppointment, setDataAppointment] = useState();
-  console.log('==>setappointmnet', setAppointment);
+
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formatDate = moment(DOB).format('YYYY-MM-DD');
@@ -102,7 +96,7 @@ const Appointment = ({navigation}) => {
   }, []);
 
   const token = useSelector(state => state.authenticate.auth.access);
-  console.log(token);
+
   const fetchClinic = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
@@ -112,7 +106,7 @@ const Appointment = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
+
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
       setClinic(jsonData?.data[0]?.id);
@@ -143,7 +137,7 @@ const Appointment = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
+
       setDataAppointment(jsonData.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -188,7 +182,6 @@ const Appointment = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
       setDoc_name(jsonData.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -199,9 +192,6 @@ const Appointment = ({navigation}) => {
   }, []);
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-  console.log('====================================');
-  console.log(Clinic_id, '-------clinic');
-  console.log('====================================');
 
   const handlePlusBUtton = () => {
     dispatch(addclinic_id(clinicID));
@@ -262,7 +252,6 @@ const Appointment = ({navigation}) => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
-          {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
           <View
             style={{
               flexDirection: 'row',
@@ -290,31 +279,33 @@ const Appointment = ({navigation}) => {
             ))}
           </View>
         </View>
-        <Text style={[commonstyles.h2,styles.appointment]}>{Language[language]['appointments']}</Text>
+        <Text style={[commonstyles.h2, styles.appointment]}>
+          {Language[language]['appointments']}
+        </Text>
         <ScrollView
-                style={{height: 400, paddingHorizontal: 8, gap: 16}}
-                contentContainerStyle={{gap: 8}}>
-                {filteredData?.length > 0 ? (
-                  filteredData?.map((value, index) => {
-                    return (
-                      <AppointmentCard
-                        key={index}
-                        appointment={value}
-                        openVisit={() => navigation.navigate('visit')}
-                      />
-                    );
-                  })
-                ) : (
-                  <CustomIcon label="No Appointments" />
-                )}
+          style={{height: 400, paddingHorizontal: 8, gap: 16}}
+          contentContainerStyle={{gap: 8}}>
+          {filteredData?.length > 0 ? (
+            filteredData?.map((value, index) => {
+              return (
+                <AppointmentCard
+                  key={index}
+                  appointment={value}
+                  openVisit={() => navigation.navigate('visit')}
+                />
+              );
+            })
+          ) : (
+            <CustomIcon label="No Appointments" />
+          )}
         </ScrollView>
       </View>
-      <View >
-      <HButton
-        label="Book Appointment"
-        btnstyles={{alignSelf: 'center', marginTop: 32}}
-        onPress={handlePlusBUtton}
-      />
+      <View>
+        <HButton
+          label="Book Appointment"
+          btnstyles={{alignSelf: 'center', marginTop: 32}}
+          onPress={handlePlusBUtton}
+        />
       </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>

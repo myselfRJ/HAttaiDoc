@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -15,7 +14,11 @@ import {Language} from '../settings/customlanguage';
 import {HButton, PlusButton} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {addSymptom} from '../redux/features/prescription/symptomslice';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTSIZE,
+  CUSTOMFONTFAMILY,
+} from '../settings/styles';
 import PrescriptionHead from '../components/prescriptionHead';
 
 const Symptoms = ({navigation}) => {
@@ -26,12 +29,10 @@ const Symptoms = ({navigation}) => {
   console.log(symptomInput, '=====', symptomsData);
 
   useEffect(() => {
-    console.log(symptomInput.length);
-  }, [symptomInput.length, symptomsData.length]);
+    setSymptomInput(state => [...state, {symptom: '', days: '', severity: ''}]);
+  }, []);
   const handleAddSymptoms = () => {
     const uuid = Math.random() + 'tt';
-    let symptomCopy = symptomInput;
-    dispatch(addSymptom(symptomCopy));
     setSymptomInput(state => [...state, {symptom: '', days: '', severity: ''}]);
 
     console.log(uuid);
@@ -47,7 +48,7 @@ const Symptoms = ({navigation}) => {
     let symptomCopy = [...symptomInput];
     console.log(symptomCopy);
     symptomCopy.pop();
-    dispatch(addSymptom(symptomCopy));
+    // dispatch(addSymptom(symptomCopy));
     setSymptomInput(symptomCopy);
   };
 
@@ -63,7 +64,7 @@ const Symptoms = ({navigation}) => {
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={{margin: 10}}>
-          <PrescriptionHead heading={Language[language]['symptoms']}/>
+          <PrescriptionHead heading={Language[language]['symptoms']} />
         </View>
         <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap'}}>
           <View style={{flexDirection: 'column'}}>
@@ -78,16 +79,15 @@ const Symptoms = ({navigation}) => {
                       fontWeight: 'bold',
                       color: CUSTOMCOLOR.black,
                       fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,
                     }}>
-                    {Language[language]['symptom']}{parseInt(index+1)}:
+                    {Language[language]['symptom']}
+                    {parseInt(index + 1)}:
                   </Text>
                   <View
                     style={{
                       height: 40,
-                     // width: 100,
+                      // width: 100,
                       textAlignVertical: 'top',
-                      
                     }}>
                     <TextInput
                       placeholder="Enter Symptom"
@@ -105,7 +105,6 @@ const Symptoms = ({navigation}) => {
                       fontWeight: 'bold',
                       color: CUSTOMCOLOR.black,
                       fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,
                     }}>
                     {Language[language]['days']}:
                   </Text>
@@ -125,8 +124,14 @@ const Symptoms = ({navigation}) => {
                   </View>
                 </View>
                 <View style={styles.radiogroup}>
-                  <Text style={{padding: 10, fontWeight: 'bold',fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,color:CUSTOMCOLOR.black}}>
+                  <Text
+                    style={{
+                      padding: 10,
+                      fontWeight: 'bold',
+                      fontFamily: CUSTOMFONTFAMILY.body,
+
+                      color: CUSTOMCOLOR.black,
+                    }}>
                     {Language[language]['severity']}:
                   </Text>
                   <View style={{flexDirection: 'row'}}>
@@ -164,8 +169,7 @@ const Symptoms = ({navigation}) => {
               <Icon name="plus" style={[styles.PlusText, styles.PlusButton]} />
             </TouchableOpacity>
             {symptomInput.length > 1 && (
-              <TouchableOpacity
-                onPress={() => handleDeleteSymptom(symptomInput.length)}>
+              <TouchableOpacity onPress={() => handleDeleteSymptom()}>
                 <Icon
                   name="minus"
                   style={[styles.PlusText, styles.PlusButton]}
