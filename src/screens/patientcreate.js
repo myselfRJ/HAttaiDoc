@@ -303,7 +303,7 @@ const PatientCreate = ({navigation}) => {
             <InputText
               required={true}
               label="Address"
-              placeholder="Full Address"
+              placeholder="Enter your address"
               value={address}
               setValue={setAddress}
             />

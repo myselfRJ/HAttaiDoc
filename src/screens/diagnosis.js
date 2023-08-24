@@ -53,14 +53,14 @@ const Diagnosis=({navigation})=>{
     // const [showSlotChip, setShowSlotChip] = useState(false);
     return(
         <View style={{paddingHorizontal:24,paddingVertical:16,gap:8}}>
-             <PlusButton
+             {/* <PlusButton
               icon="close"
               style={{zIndex:4,backgroundColor:"transparent",position:'absolute',alignSelf:'flex-end',padding:16}}
               color='#000000aa'
               size={32}
               onPress={() => navigation.goBack()}
             />
-            
+             */}
             <PrescriptionHead heading='Diagnosis'/>  
             {prev?.map((item, ind) => (
             prev.length > 0 ? ( <ShowChip text={item?.diagnosis} onPress={()=>handleDelete(ind)} ind={ind}/>):null

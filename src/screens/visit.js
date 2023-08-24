@@ -171,7 +171,7 @@ const Visit = ({navigation, route}) => {
           <HeaderAvatar />
         </View> */}
           {/* <View style={{alignSelf: 'flex-end',position:'absolute',padding:16}}> */}
-          <PlusButton
+          {/* <PlusButton
             icon="close"
             style={{
               zIndex: 4,
@@ -183,7 +183,7 @@ const Visit = ({navigation, route}) => {
             color="#000000aa"
             size={32}
             onPress={() => navigation.goBack()}
-          />
+          /> */}
           {/* </View> */}
 
           <View style={styles.appointment}>
