@@ -76,6 +76,7 @@ const Prescription = ({route}) => {
     return EDD;
   };
   const format = current.toLocaleDateString(undefined, options);
+  
   return (
     <View style={styles.main}>
       <ScrollView>
