@@ -18,7 +18,7 @@ import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
-import { horizontalScale, verticalScale } from '../utility/scaleDimension';
+import {horizontalScale, verticalScale} from '../utility/scaleDimension';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -35,7 +35,7 @@ const Account = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('practitioner response====', response);
+    // console.log('practitioner response====', response);
     if (response.ok) {
       const jsonData = await response.json();
       // console.log('----------------------------', jsonData);
@@ -57,7 +57,7 @@ const Account = () => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('--------------clinics', jsonData);
+      // console.log('--------------clinics', jsonData);
       setClinics(jsonData?.data);
       setClinicId(jsonData?.data[0]?.id);
     } else {
@@ -77,7 +77,7 @@ const Account = () => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('--------------clinics', jsonData);
+      // console.log('--------------clinics', jsonData);
       setUsers(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -89,11 +89,11 @@ const Account = () => {
 
   const today = moment().toISOString().split('-')[0];
 
-  console.log('====================================', clinic);
-  console.log(
-    '---------------------',
-    data?.DOB.split(' ')[1] + data?.DOB.split(' ')[2] + data?.DOB.split(' ')[3],
-  );
+  // console.log('====================================', clinic);
+  // console.log(
+  //   '---------------------',
+  //   data?.DOB.split(' ')[1] + data?.DOB.split(' ')[2] + data?.DOB.split(' ')[3],
+  // );
   const BirthYear = data?.DOB.split(' ')[3];
 
   const age = parseInt(today) - parseInt(BirthYear);
@@ -111,7 +111,7 @@ const Account = () => {
       fetchUsers();
     }, [cliniId]),
   );
-
+  const prevScrn = 'account';
   return (
     <View style={{flex: 1, paddingHorizontal: 24, paddingVertical: 24}}>
       <View>
@@ -274,7 +274,7 @@ const Account = () => {
             </TouchableOpacity>
           </View>
         </View> */}
-        <View style={{gap:8,marginTop:32}}>
+        <View style={{gap: 8, marginTop: 32}}>
           <ManageCard
             // style={{marginBottom: 8}}
             data={clinic}
@@ -283,7 +283,7 @@ const Account = () => {
             Dataname={'Clinics'}
             name={'plus'}
             onPress={() => {
-              navigation.navigate('addclinic');
+              navigation.navigate('addclinic', {prevScrn});
             }}
           />
           <ManageCard
@@ -293,7 +293,7 @@ const Account = () => {
             nameIcon={'account-group'}
             Dataname={'Users'}
             name={'plus'}
-            onPress={() => navigation.navigate('adduser')}
+            onPress={() => navigation.navigate('adduser', {prevScrn})}
           />
         </View>
       </View>

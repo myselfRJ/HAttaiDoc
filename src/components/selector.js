@@ -16,8 +16,23 @@ const SelectorBtn = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
     <View>
-      {props.label && <Text style={styles.h3}>{props.label} {props.required ? <Text style={[styles.indicator, props.required && visible && styles.required]}>*</Text> : null}</Text>}
-      <Pressable style={{...styles.select,...props.select}} onPress={props.onPress}>
+      {props.label && (
+        <Text style={styles.h3}>
+          {props.label}{' '}
+          {props.required ? (
+            <Text
+              style={[
+                styles.indicator,
+                props.required && visible && styles.required,
+              ]}>
+              *
+            </Text>
+          ) : null}
+        </Text>
+      )}
+      <Pressable
+        style={{...styles.select, ...props.select}}
+        onPress={props.onPress}>
         <Text style={styles.h3}>{props.input}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
@@ -43,7 +58,7 @@ const styles = StyleSheet.create({
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
   },
   indicator: {
-    fontSize: 20,
+    fontSize: CUSTOMFONTSIZE.h4,
     marginRight: 5,
   },
   required: {

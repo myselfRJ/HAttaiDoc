@@ -53,7 +53,7 @@ export default function Prescribe1() {
     },
   ]);
   const prevPres = useSelector(state => state.pres.prescribeItems);
-  console.log('previous....', prevPres);
+  // console.log('previous....', prevPres);
 
   //   const [prescribeInput, setPrescribeInput] = useState([prevPres]);
   const [prescribeList, setPrescribeList] = useState([]);
@@ -87,7 +87,6 @@ export default function Prescribe1() {
   };
 
   const handleDelete = index => {
-    console.log('prescription index', index);
     if (prevPres) {
       const updatedPrescriptions = prevPres?.filter(
         (item, ind) => ind !== index,
@@ -111,14 +110,29 @@ export default function Prescribe1() {
 
   const FrequencySelection = index => {
     const isSelected = frequency.includes(index);
-    console.log(frequency);
-    console.log('..........', isSelected, index);
+
     if (isSelected) {
       setFrequency(frequency.filter(i => i !== index));
     } else {
       setFrequency([...frequency, index]);
     }
   };
+
+  // const getSelectedFreq = () => {
+  //   const selectedFreq = [];
+
+  //   for (let i = 0; i < CONSTANTS.frequency.length; i++) {
+  //     if (frequency.includes(i)) {
+  //       selectedFreq.push('1');
+  //     } else {
+  //       selectedFreq.push('0');
+  //     }
+  //   }
+
+  //   setFrequency(selectedFreq.join('-'));
+  // };
+  // const selectedDaysString = getSelectedDaysString();
+  // console.log(selectedDaysString);
 
   const totoal_quantity = () => {
     quantity =
@@ -136,9 +150,9 @@ export default function Prescribe1() {
     totoal_quantity();
   }, [duration, dose_number, frequency]);
 
-  console.log('====================================');
-  console.log('----------quanity', isNaN(total_quantity));
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('----------quanity', isNaN(total_quantity));
+  // console.log('====================================');
 
   return (
     <ScrollView>
@@ -367,7 +381,9 @@ export default function Prescribe1() {
                   {frequencys?.map((value, frequencyIndex) => (
                     <TouchableOpacity
                       key={frequencyIndex}
-                      onPress={() => FrequencySelection(value)}>
+                      onPress={() => {
+                        FrequencySelection(value);
+                      }}>
                       <View
                         style={[
                           styles.ModesContainer,

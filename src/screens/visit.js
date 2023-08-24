@@ -50,8 +50,9 @@ const Visit = ({navigation, route}) => {
   const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
+  const dateTimeRed = useSelector(state => state.valid?.date);
 
-  console.log('---------------lab', labreport);
+  console.log('---------------lab', dateTimeRed);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -291,6 +292,18 @@ const Visit = ({navigation, route}) => {
                           size={16}
                         />
                         <Text style={styles.pulse}>{date}</Text>
+                      </>
+                    </View>
+                  )}
+                  {value.label === 'Validity' && dateTimeRed !== '' && (
+                    <View style={styles.FollowUpcontainer}>
+                      <>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={16}
+                        />
+                        <Text style={styles.pulse}>{dateTimeRed}</Text>
                       </>
                     </View>
                   )}
@@ -542,40 +555,41 @@ const Visit = ({navigation, route}) => {
                       </View>
                     )}
 
-                  {value.label === 'Past History' && pasthistory.length > 0 && (
-                    <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View
-                          style={{
-                            gap: 4,
-                            flexDirection: 'row',
-                          }}>
-                          <View>
-                            {pasthistory?.map((item, ind) => (
-                              <View
-                                key={ind}
-                                style={{
-                                  flexDirection: 'row',
-                                  padding: 4,
-                                  gap: 4,
-                                }}>
-                                <Icon
-                                  name="prescription"
-                                  size={16}
-                                  color={CUSTOMCOLOR.primary}
-                                />
-                                <View>
-                                  <Text style={{color: CUSTOMCOLOR.black}}>
-                                    {item?.past_history}
-                                  </Text>
+                  {value.label === 'Past Hospitalization' &&
+                    pasthistory.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View
+                            style={{
+                              gap: 4,
+                              flexDirection: 'row',
+                            }}>
+                            <View>
+                              {pasthistory?.map((item, ind) => (
+                                <View
+                                  key={ind}
+                                  style={{
+                                    flexDirection: 'row',
+                                    padding: 4,
+                                    gap: 4,
+                                  }}>
+                                  <Icon
+                                    name="prescription"
+                                    size={16}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={{color: CUSTOMCOLOR.black}}>
+                                      {item?.past_history}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
-                            ))}
+                              ))}
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  )}
+                    )}
 
                   {value.label === 'Allergies' && allergies?.length > 0 && (
                     <View style={styles.basiccontainer}>

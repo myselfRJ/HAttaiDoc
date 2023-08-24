@@ -46,6 +46,7 @@ import {
 import HButton from '../components/button';
 import {useFocusEffect} from '@react-navigation/native';
 import {commonstyles} from '../styles/commonstyle';
+import {disableBackButton} from '../utility/backDisable';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -112,9 +113,9 @@ const Dashboard = ({navigation, route}) => {
   }, []);
   const [doc_name, setDoc_name] = useState();
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-  console.log('====================================');
-  console.log(Clinic_id, '-------clinic');
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(Clinic_id, '-------clinic');
+  // console.log('====================================');
 
   const fetchClinic = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -200,6 +201,10 @@ const Dashboard = ({navigation, route}) => {
     }, [clinicid]),
   );
 
+  useEffect(() => {
+    disableBackButton();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
@@ -274,7 +279,9 @@ const Dashboard = ({navigation, route}) => {
 
           {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
         </View>
-        <Text style={[commonstyles.h2,styles.appointment]}>{Language[language]['appointments']}</Text>
+        <Text style={[commonstyles.h2, styles.appointment]}>
+          {Language[language]['appointments']}
+        </Text>
 
         {/* <View style={styles.appointment}> */}
         <ScrollView

@@ -16,8 +16,7 @@ const symptomsSlice = createSlice({
       state.symptom.splice(state.symptom.length - 1, 1);
     },
     updateSymptom: (state, action) => {
-      const {index, field, value} = action.payload;
-      state.symptom[index][field] = value;
+      state.symptom = action.payload;
     },
   },
 });

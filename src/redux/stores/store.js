@@ -21,6 +21,7 @@ import {commorbitiesReducer} from '../features/prescription/commorbities';
 import {allergiesReducer} from '../features/prescription/allergies';
 import {labReportReducer} from '../features/prescription/labreport';
 import {pastHistoryReducer} from '../features/prescription/pastHistory';
+import {validityReducer} from '../features/prescription/valid';
 
 const store = configureStore({
   reducer: {
@@ -45,6 +46,7 @@ const store = configureStore({
     allergies: allergiesReducer,
     labreport: labReportReducer,
     pasthistory: pastHistoryReducer,
+    valid: validityReducer,
   },
 });
 

@@ -70,9 +70,9 @@ const SlotCreate = ({navigation, route}) => {
     dispatch(addslots(slots));
     navigation.goBack();
   };
-  const handleClear = () => {
-    setVisibleSlot(true);
-  };
+  // const handleClear = () => {
+  //   setVisibleSlot(true);
+  // };
 
   const handleConfirm = time => {
     if (open === 'from') {
@@ -107,7 +107,7 @@ const SlotCreate = ({navigation, route}) => {
     Su: 'Sunday',
   });
 
-  console.log('nowwww', Date.now());
+  // console.log('nowwww', Date.now());
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -131,8 +131,6 @@ const SlotCreate = ({navigation, route}) => {
           ...prevSlots,
           [selectedDay]: [...prevSlots[selectedDay], newSlot],
         }));
-        setFromTime(new Date());
-        setToTime(new Date());
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
@@ -165,15 +163,10 @@ const SlotCreate = ({navigation, route}) => {
         index: `F-${index}`,
         day: 'Friday',
       })),
-      // Sa: slots.M?.map(slot => ({...slot, day: 'Saturday'})),
-      // Su: slots.M?.map(slot => ({...slot, day: 'Sunday'})),
       Sa: [],
       Su: [],
     };
-    console.log(slots, '------------------------update');
     setSlots(weekdaysToUpdate);
-    setFromTime(new Date());
-    setToTime(new Date());
     setConsultValue(consultType[0]);
     setDurationValue(durationMins[0]);
   };
@@ -213,7 +206,7 @@ const SlotCreate = ({navigation, route}) => {
   useEffect(() => {
     handlewarnings();
   }, []);
-  console.log(slots);
+
   return (
     <ScrollView>
       <View style={styles.main}>

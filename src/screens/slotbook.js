@@ -27,6 +27,7 @@ import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/ty
 import InputText from '../components/inputext';
 import {horizontalScale} from '../utility/scaleDimension';
 import {disableBackButton} from '../utility/backDisable';
+import CustomIcon from '../components/icon';
 
 const SlotBook = ({navigation, route}) => {
   const [complaint, setComplaint] = useState('');
@@ -185,7 +186,7 @@ const SlotBook = ({navigation, route}) => {
     });
     return timeList;
   };
-
+  // console.log('---------slotsdetails', slotDetails[0]?.[Day]);
   let list = getTimeList(slotDetails[0]?.[Day]);
   const token = useSelector(state => state.authenticate.auth.access);
 

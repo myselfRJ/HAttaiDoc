@@ -46,7 +46,6 @@ const Entry = ({navigation}) => {
   console.log(OtpEncryption(), '---------------------------------------');
   console.log('====================================');
   const fetchData = async () => {
-    
     try {
       setLoading(!loading);
       const response = await fetchApi(URL.generateOtp, {
@@ -88,6 +87,7 @@ const Entry = ({navigation}) => {
         <View style={styles.bottom}>
           <View style={styles.input}>
             <InputText
+              lbltext={{fontSize: CUSTOMFONTSIZE.h3}}
               doubleCheck={[true, false]}
               check={checkNumber}
               label={Language[language]['phone_number']}

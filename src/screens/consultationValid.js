@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {CONSTANTS} from '../utility/constant';
-import {addDate} from '../redux/features/prescription/Followupslice';
+import {addValid} from '../redux/features/prescription/valid';
 import {HButton, SelectorBtn, Option} from '../components';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -23,7 +23,7 @@ import {
 import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
 
-export default function DateTime() {
+export default function Valid() {
   const months = CONSTANTS.months;
 
   const [date, setDate] = useState(new Date());
@@ -45,16 +45,11 @@ export default function DateTime() {
     setDate(selectedDate);
   };
 
-  const dateTimeRed = useSelector(state => state.dateTime?.date);
-  console.log('-------------------', dateTimeRed, '------------------------');
+  const dateTimeRed = useSelector(state => state.valid?.date);
+  console.log('----------', dateTimeRed);
 
   const handleCancel = () => {
     setOpen(open);
-  };
-
-  const handlePress = () => {
-    dispatch(addDate(handleDates(date)));
-    navigation.goBack();
   };
 
   const day = date?.toString()?.split(' ')[2];
@@ -64,7 +59,7 @@ export default function DateTime() {
 
   const follow_upDateTime = `${day} ${month} ${year} at ${follow_upTime}`;
 
-  console.log(follow_upDateTime);
+  //   console.log(follow_upDateTime);
 
   const handleDates = selectedDate => {
     let startDate = new Date(selectedDate);
@@ -79,10 +74,14 @@ export default function DateTime() {
     const Follow_UP = `${day}-${month}-${year}`;
     return Follow_UP;
   };
+  const handlePress = () => {
+    dispatch(addValid(handleDates(date)));
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.MainContainer}>
-      <PrescriptionHead heading={Language[language]['follow_up']} />
+      <PrescriptionHead heading={'Validity Up To'} />
       {/* <Text style={styles.FUP}>{Language[language]['follow_up']}</Text> */}
       <View style={styles.DateContainer}>
         <SelectorBtn
