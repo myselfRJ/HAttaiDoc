@@ -229,7 +229,7 @@ export default function Prescribe1() {
                     onChangeText={val => setMedicine(val)}
                   />
                   <Text style={styles.RecommdationText}>
-                    {Language[language]['reccomedations']}
+                    {Language[language]['reccomendations']}
                   </Text>
                   <View style={styles.Modes}>
                     {recommdations?.map(value => (
@@ -488,8 +488,8 @@ const styles = StyleSheet.create({
     paddingRight: 4,
     paddingTop: 8,
     paddingBottom: 8,
-    fontWeight: 600,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: 500,
+    fontSize: CUSTOMFONTSIZE.h3,
     lineHeight: 16,
     color: CUSTOMCOLOR.black,
   },

@@ -27,6 +27,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import PlusButton from './plusbtn';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -135,6 +136,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
+       
           <View style={styles.tab}>
             <SelectionTab
               label={Language[language]['start_visit']}
@@ -145,14 +147,24 @@ const AppointmentCard = ({appointment, openVisit}) => {
               label={Language[language]['reschedule']}
               selected={true}
             />
-            <SelectionTab
+            {/* <SelectionTab
               label={Language[language]['cancel']}
               selected={true}
               onPress={() => {
                 appointmentCardRef?.current?.snapToIndex(0);
               }}
-            />
-          </View>
+            /> */}
+            </View>
+             <View style={{alignSelf:'flex-end',paddingHorizontal:12,bottom:78}}>
+            <PlusButton icon='close' size={20} style={{
+              backgroundColor:'#000000aa'
+             
+            }}  onPress={() => {
+              appointmentCardRef?.current?.snapToIndex(0);
+            }}/>
+            </View>
+          
+         
         </BottomSheetView>
       </View>
     </>
@@ -275,6 +287,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     padding: moderateScale(20),
     alignSelf: 'center',
+    top:10
   },
 });
 

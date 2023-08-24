@@ -53,7 +53,7 @@ const Language = {
     prescribe: 'Prescribe',
     mode: 'Mode',
     medicine: 'Medicine',
-    reccomedations: 'Recommedations',
+    reccomendations: 'Recommendations',
     number: 'Number',
     timing: 'Timing',
     frequency: 'Frequency',

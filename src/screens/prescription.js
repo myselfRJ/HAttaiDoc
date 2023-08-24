@@ -27,12 +27,13 @@ const Prescription = ({route}) => {
   const symptomData = symptom.map(item => item.symptom);
   const prescribe_data = useSelector(state => state?.pres);
   console.log('pres==', prescribe_data);
+  console.log('frequencyyy===>',prescribe_data?.prescribeItems[0]?.frequency.split(","))
   const notes = useSelector(state => state?.prescription?.note);
   const refer_doctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
   const diagnosis = useSelector(state=> state?.diagnosis?.DiagnosisItems)
-  // console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
+   console.log('>>>>>>>diagnosis',diagnosis)
   const followup = useSelector(state => state?.dateTime?.date);
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   console.log('name===', clinic_name);
@@ -75,6 +76,7 @@ const Prescription = ({route}) => {
     return EDD;
   };
   const format = current.toLocaleDateString(undefined, options);
+  
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -101,7 +103,7 @@ const Prescription = ({route}) => {
               </Text>
             </View>
           </View>
-          <View>
+          <View style={{width:250}}>
             <Text style={styles.speciality}>{clinic_name}</Text>
             <Text style={styles.speciality}>{clinic_Address}</Text>
           </View>
@@ -152,7 +154,7 @@ const Prescription = ({route}) => {
             {Language[language]['diagnosis']} :{' '}
             {diagnosis.map((item,index)=>
              
-             <Text key={index} style={styles.values}>{item?.diagnosis}</Text>
+             <Text key={index} style={styles.values}>{item?.diagnosis} {" "}</Text>
             
            )}
            
@@ -164,7 +166,9 @@ const Prescription = ({route}) => {
         <View>
           <Text style={styles.head}>
             {Language[language]['symptoms']} :{' '}
-            <Text style={styles.values}>{symptomData}</Text>
+            {symptom?.map((item,index)=>
+            <Text key={index} style={styles.values}>{item?.symptom} {" "}</Text>
+            )}
           </Text>
         </View>
         <View>
@@ -225,7 +229,7 @@ const Prescription = ({route}) => {
         )}
         <View>
           <Text style={styles.head}>
-            {Language[language]['test']} : {test.map((item,index)=> <Text style={styles.values}>{item?.lab_test}</Text>)}
+            {Language[language]['test']} : {test.map((item,index)=> <Text style={styles.values}>{item?.lab_test}{" "}{" "}{" "}</Text>)}
           </Text>
         </View>
         {followup && (
@@ -318,19 +322,21 @@ const styles = StyleSheet.create({
   },
   presc: {
     top: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     paddingVertical: 8,
     backgroundColor: '#DFF0FF',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   precvalues: {
-    paddingHorizontal: 8,
+    //paddingHorizontal: 24,
+    
     paddingVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   prescMenu: {
+    width:80,
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: 400,
     fontSize: 16,

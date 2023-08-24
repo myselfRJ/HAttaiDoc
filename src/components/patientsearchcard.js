@@ -18,6 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import AddImage from './addimage';
+import PlusButton from './plusbtn';
 
 import {
   moderateScale,
@@ -96,6 +97,7 @@ const PatientSearchCard = patient_data => {
           bottomSheetRef={patientSearchRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
+            
           <View style={styles.tab}>
             <SelectionTab
               label={Language[language]['book_appointment']}
@@ -111,14 +113,24 @@ const PatientSearchCard = patient_data => {
               selected={true}
               onPress={handleOnpress}
             />
-            <SelectionTab
+            {/* <SelectionTab
               label={Language[language]['cancel']}
               selected={true}
               onPress={() => {
                 patientSearchRef?.current?.snapToIndex(0);
               }}
-            />
-          </View>
+            /> */}
+            </View>
+            <View style={{alignSelf:'flex-end',paddingHorizontal:8,bottom:38}}>
+            <PlusButton icon='close' size={20} style={{
+              backgroundColor:'#000000aa'
+             
+            }} onPress={() => {
+              patientSearchRef?.current?.snapToIndex(0);
+            }}/>
+            </View>
+            
+          
           {/* <View style={styles.bottomView}>
             <TouchableOpacity>
               <Text style={styles.content}>{Language[language]['update']}</Text>
