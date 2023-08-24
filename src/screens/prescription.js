@@ -8,13 +8,13 @@ import {language} from '../settings/userpreferences';
 import Logo from '../components/logo';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import { CONSTANT } from '../utility/const';
-import { CONSTANTS } from '../utility/constant';
+import {CONSTANT} from '../utility/const';
+import {CONSTANTS} from '../utility/constant';
 
 // import Pdf from 'react-native-pdf';
 
 const Prescription = ({route}) => {
-  const months = CONSTANTS.months
+  const months = CONSTANTS.months;
   const doctor_profile = useSelector(state => state.doctor_profile);
   const patient = useSelector(state => state?.patient);
   const vitals = useSelector(state => state?.prescription?.vitalsData);
@@ -31,15 +31,16 @@ const Prescription = ({route}) => {
   const refer_doctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
-  const diagnosis = useSelector(state=> state?.diagnosis?.DiagnosisItems)
+  const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
   // console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
   const followup = useSelector(state => state?.dateTime?.date);
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   console.log('name===', clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   console.log('address=', clinic_Address);
-  const test = useSelector(state=>state?.labreport?.labReport)
-  console.log('test>>>>>>>>>>',test)
+  const test = useSelector(state => state?.labreport?.labReport);
+  console.log('test>>>>>>>>>>', test);
+  const dateTimeRed = useSelector(state => state.valid?.date);
   const {name, gender, patient_age, patient_phone_number} = route.params;
 
   console.log(
@@ -150,16 +151,12 @@ const Prescription = ({route}) => {
         <View>
           <Text style={styles.head}>
             {Language[language]['diagnosis']} :{' '}
-            {diagnosis.map((item,index)=>
-             
-             <Text key={index} style={styles.values}>{item?.diagnosis}</Text>
-            
-           )}
-           
+            {diagnosis.map((item, index) => (
+              <Text key={index} style={styles.values}>
+                {item?.diagnosis}
+              </Text>
+            ))}
           </Text>
-         
-           
-            
         </View>
         <View>
           <Text style={styles.head}>
@@ -225,7 +222,10 @@ const Prescription = ({route}) => {
         )}
         <View>
           <Text style={styles.head}>
-            {Language[language]['test']} : {test.map((item,index)=> <Text style={styles.values}>{item?.lab_test}</Text>)}
+            {Language[language]['test']} :{' '}
+            {test.map((item, index) => (
+              <Text style={styles.values}>{item?.lab_test}</Text>
+            ))}
           </Text>
         </View>
         {followup && (
@@ -244,7 +244,7 @@ const Prescription = ({route}) => {
         </View>
         <View>
           <Text style={styles.head}>
-            validity Upto : <Text style={styles.values}>{followup}</Text>
+            validity Upto : <Text style={styles.values}>{dateTimeRed}</Text>
           </Text>
         </View>
         <View style={styles.description}>

@@ -31,7 +31,6 @@ import StatusMessage from '../components/statusMessage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
-import { disableBackButton} from '../utility/backDisable';
 import {
   addclinic_data,
   updateclinics,
@@ -39,7 +38,8 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import ProgresHeader from '../components/progressheader';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
-import { BackHandler } from 'react-native';
+import {disableBackButton} from '../utility/backDisable';
+import {useRoute} from '@react-navigation/native';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -48,6 +48,9 @@ const AddClinic = ({navigation}) => {
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
+  const route = useRoute();
+  const {prevScrn} = route.params;
+  console.log('----------prev', prevScrn);
 
   const dispatch = useDispatch();
   useFocusEffect(
@@ -66,7 +69,7 @@ const AddClinic = ({navigation}) => {
     const f = slotData?.slots?.F?.length === 0;
     const sa = slotData?.slots?.Sa?.length === 0;
     const su = slotData?.slots?.Su?.length === 0;
-    console.log('........slot', m, t, w, th, f, sa, su);
+    // console.log('........slot', m, t, w, th, f, sa, su);
 
     !(m && t && w && th && f && sa && su)
       ? setVisibleSlot(false)
@@ -82,7 +85,7 @@ const AddClinic = ({navigation}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
-  console.log('slotData==========================', slotData?.slots);
+  // console.log('slotData==========================', slotData?.slots);
 
   const [status, setStatus] = useState(false);
 
@@ -95,10 +98,11 @@ const AddClinic = ({navigation}) => {
   });
 
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
+  const prevScrn1 = 'undefineed';
 
-  console.log('====================================');
-  console.log('----------clinicdata', slotData.slots);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('----------clinicdata', slotData.slots);
+  // console.log('====================================');
   const Clinic_Data = {
     clinic_name: value.clinic,
     clinic_Address: value.address,
@@ -121,13 +125,13 @@ const AddClinic = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         //console.log(jsonData);
-        console.log('------------data', jsonData);
+        // console.log('------------data', jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
           dispatch(headerStatus.headerStatus({index: 1, status: true}));
           setTimeout(() => {
-            navigation.navigate('adduser');
+            navigation.navigate('adduser', {prevScrn1});
           }, 1000);
 
           setLoading(false);
@@ -163,7 +167,7 @@ const AddClinic = ({navigation}) => {
       Alert.alert('Warning', '"Please Check Once Again"');
     }
   };
-  console.log(slotData, '-------------------------------------------------');
+  // console.log(slotData, '-------------------------------------------------');
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
@@ -173,11 +177,11 @@ const AddClinic = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        // console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        // console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.base64);
+        // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
@@ -193,7 +197,6 @@ const AddClinic = ({navigation}) => {
   };
 
   const handleDeleteSlotChip = index => {
-    console.log('...', index);
     const newClinics = clinics?.clinics?.filter((_, i) => i !== index);
     dispatch(updateclinics(newClinics));
     // setValue(prevValues => ({
@@ -206,16 +209,36 @@ const AddClinic = ({navigation}) => {
   //   dispatch(addclinic_data(Clinic_Data));
   // };
 
-  // useEffect(() => {
-  //   disableBackButton();
-  // }, []);
+  useEffect(() => {
+    disableBackButton();
+  }, []);
 
-  
-
-  console.log('clinics', '============', clinics);
   return (
     <View style={{flex: 1}}>
-      <ProgresHeader progressData={progressData} />
+      {prevScrn !== 'account' && (
+        <View>
+          <ProgresHeader progressData={progressData} />
+        </View>
+      )}
+
+      {prevScrn !== 'undefined' && (
+        <View>
+          <PlusButton
+            icon="close"
+            style={{
+              zIndex: 4,
+              backgroundColor: 'transparent',
+              // position: 'absolute',
+              alignSelf: 'flex-end',
+              padding: 16,
+            }}
+            color="#4ba5fa"
+            size={32}
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      )}
+
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>

@@ -46,11 +46,13 @@ import {
   moderateScale,
 } from '../utility/scaleDimension';
 import {HttpStatusCode} from 'axios';
-import { disableBackButton } from '../utility/backDisable';
+import {disableBackButton} from '../utility/backDisable';
+import {useRoute} from '@react-navigation/native';
 
 const AddUser = ({navigation}) => {
+  const route = useRoute();
   const [clinics, setDataClinic] = useState();
-  console.log('clinic---', clinics);
+  // console.log('clinic---', clinics);
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const [showRoleModal, setRoleModal] = useState(false);
@@ -58,21 +60,22 @@ const AddUser = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
 
-  console.log(clinic_users, '------------------------,users');
+  // console.log(clinic_users, '------------------------,users');
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
-  console.log('phone==', phone);
+  // console.log('phone==', phone);
   //const clinics = CONSTANTS.clinic;
 
   const clinicsData = useSelector(state => state.clinic?.clinic_data);
 
-  console.log('================================+++++++++clinic', clinicsData);
+  // console.log('================================+++++++++clinic', clinicsData);
 
   const [loading, setLoading] = useState(false);
 
   const roles = CONSTANTS.role;
   const [selectedRole, setSelectedRole] = useState(roles[0]);
   const [selectedClinic, setSelectedClinic] = useState('');
+  const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   const [values, setValues] = useState({
     name: '',
@@ -85,14 +88,16 @@ const AddUser = ({navigation}) => {
       ? selectedImage
       : CONSTANTS.default_image,
   });
-  console.log('phone', values.phone);
+  // console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
 
   const progressData = useSelector(state => state.progress?.status);
+  const {prevScrn} = route.params;
+  console.log('----prevvvv', prevScrn);
 
   const Clinic_users = {
     clinic_user_name: values.name,
-    role: values.role,
+    role: values.role !== 'Others' ? values.role : otherRole,
     user_profile_pic_url: values.user_profile_pic_url,
     gender: values.gender,
     user_phone_number: values.phone,
@@ -120,7 +125,7 @@ const AddUser = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -148,7 +153,7 @@ const AddUser = ({navigation}) => {
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
-    console.log('users--------------------------------------');
+    // console.log('users--------------------------------------');
     if (values.name && values.gender && values.phone) {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
@@ -163,7 +168,7 @@ const AddUser = ({navigation}) => {
   //console.log(values.slots);
 
   const handleDeleteSlotChip = index => {
-    console.log('...', index);
+    // console.log('...', index);
     const newClinic_users = clinic_users?.filter((_, i) => i !== index);
     dispatch(updateclinic_users(newClinic_users));
   };
@@ -200,11 +205,11 @@ const AddUser = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        // console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        // console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.base64);
+        // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
@@ -218,7 +223,7 @@ const AddUser = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
+      // console.log(jsonData);
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData?.data[0]?.clinic_name);
     } else {
@@ -229,15 +234,37 @@ const AddUser = ({navigation}) => {
     fetchclinic();
   }, []);
 
-  // useEffect(()=>{
-  //   disableBackButton();
-  // },[])
+  useEffect(() => {
+    disableBackButton();
+  }, []);
 
-  console.log('selecte Image', '=============', selectedImage);
+  // console.log('selecte Image', '=============', selectedImage);
 
   return (
     <View style={{flex: 1}}>
-      <ProgresHeader progressData={progressData} />
+      {prevScrn !== 'account' && (
+        <View>
+          <ProgresHeader progressData={progressData} />
+        </View>
+      )}
+
+      {prevScrn === 'account' && (
+        <View>
+          <PlusButton
+            icon="close"
+            style={{
+              zIndex: 4,
+              backgroundColor: 'transparent',
+              // position: 'absolute',
+              alignSelf: 'flex-end',
+              padding: 16,
+            }}
+            color="#4ba5fa"
+            size={32}
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      )}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
@@ -311,6 +338,15 @@ const AddUser = ({navigation}) => {
                 }}
                 input={selectedRole}
               />
+              {selectedRole === 'Others' && (
+                <InputText
+                  label={'Role'}
+                  maxLength={30}
+                  placeholder="Enter Role"
+                  value={otherRole}
+                  setValue={setOtherRole}
+                />
+              )}
             </View>
             <View
               style={{
@@ -353,7 +389,7 @@ const AddUser = ({navigation}) => {
                 <View style={{gap: 4, marginBottom: 4}}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
-                      <View style={{marginBottom: 4}}>
+                      <View style={{marginBottom: 4}} key={index}>
                         <SlotChip
                           key={item.index}
                           index={item.index}

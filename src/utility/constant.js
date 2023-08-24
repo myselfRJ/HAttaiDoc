@@ -9,7 +9,7 @@ export const CONSTANTS = {
   consultTypes: ['Physical', 'Telephonic', 'Online'],
   duration: [10, 15, 20, 25, 30],
   abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
-  role: ['Practitioner', 'Administator', 'patient'],
+  role: ['Practitioner', 'Administator', 'Others'],
   clinic: ['Rasi Clinic', 'Magizh Clinic', 'Kamatchi Clinic'],
   success: 'success',
   error: 'error',

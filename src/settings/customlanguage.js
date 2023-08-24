@@ -53,7 +53,7 @@ const Language = {
     prescribe: 'Prescribe',
     mode: 'Mode',
     medicine: 'Medicine',
-    reccomedations: 'Recommedations',
+    reccomedations: 'Recommendations:',
     number: 'Number',
     timing: 'Timing',
     frequency: 'Frequency',
@@ -113,8 +113,8 @@ const Language = {
     specialist: 'specialist',
     ph: 'Ph',
     test: 'Test Prescribed',
-    bpm:'bpm',
-    symptom:'Symptom'
+    bpm: 'bpm',
+    symptom: 'Symptom',
   },
   hi: {
     welcome: 'स्वागत',

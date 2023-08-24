@@ -1,5 +1,12 @@
 import React, {useState, useRef, useEffect, startTransition} from 'react';
-import {Text, View, StyleSheet, Modal, Pressable,TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -32,6 +39,12 @@ import UploadDocument from '../components/uploadDocument';
 import PlusButton from '../components/plusbtn';
 import ProgresHeader from '../components/progressheader';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import {disableBackButton} from '../utility/backDisable';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -76,7 +89,7 @@ const ProfileCreate = ({navigation}) => {
   const handleClearFile = () => {
     setSelectedFilename('');
   };
-
+  const prevScrn = 'undefined';
   console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
@@ -176,7 +189,7 @@ const ProfileCreate = ({navigation}) => {
           dispatch(headerStatus.headerStatus({index: 0, status: true}));
           // setStatus(!status);
           setTimeout(() => {
-            navigation.navigate('addclinic');
+            navigation.navigate('addclinic', {prevScrn});
           }, 1000);
 
           setLoading(false);
@@ -201,6 +214,10 @@ const ProfileCreate = ({navigation}) => {
   };
   console.log(values.formattedDate);
 
+  useEffect(() => {
+    disableBackButton();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <ProgresHeader progressData={progressData} />
@@ -212,7 +229,7 @@ const ProfileCreate = ({navigation}) => {
               <AddImage onPress={onImagePress} encodedBase64={selectedImage} />
             </View>
             <InputText
-              required ={true}
+              required={true}
               label={Language[language]['name']}
               placeholder="Full Name"
               value={values.doctor_name}
@@ -220,7 +237,14 @@ const ProfileCreate = ({navigation}) => {
             />
 
             <View style={styles.alignchild}>
-              <Text style={{color:CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body,fontSize:CUSTOMFONTSIZE.h4}}>{Language[language]['gender']}</Text>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontFamily: CUSTOMFONTFAMILY.body,
+                  fontSize: CUSTOMFONTSIZE.h4,
+                }}>
+                {Language[language]['gender']}
+              </Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -330,9 +354,9 @@ const ProfileCreate = ({navigation}) => {
                     size={12}
                     onPress={handleClearFile}
                   /> */}
-                   <TouchableOpacity onPress={handleClearFile}>
-                <Icon name="delete" size={20} color={CUSTOMCOLOR.delete} />
-              </TouchableOpacity>
+                  <TouchableOpacity onPress={handleClearFile}>
+                    <Icon name="delete" size={20} color={CUSTOMCOLOR.delete} />
+                  </TouchableOpacity>
                 </View>
               ) : (
                 <HButton label="Upload Document" onPress={pickSingleFile} />
@@ -358,14 +382,22 @@ const ProfileCreate = ({navigation}) => {
             }}>
             Select Speciality
           </Text>
-          {CONSTANTS.speciality.map((speciality, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleSpecialitySelection(speciality)}
-              style={{height: 30}}>
-              <Text style={styles.modalfields}>{speciality}</Text>
-            </Pressable>
-          ))}
+          <ScrollView>
+            {CONSTANTS.speciality.map((speciality, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleSpecialitySelection(speciality)}
+                style={{height: 30}}>
+                <Text style={styles.modalfields}>{speciality}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+          <View style={styles.ContactMail}>
+            <Text style={styles.contact}>
+              If Your Specilization Not Mention please mail-to
+            </Text>
+            <Text style={styles.mail}>contact@destratum.com</Text>
+          </View>
         </View>
       </BottomSheetView>
       <BottomSheetView
@@ -429,6 +461,23 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
+  },
+  contact: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+  },
+  mail: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.primary,
+  },
+  ContactMail: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: CUSTOMCOLOR.white,
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
+    padding: moderateScale(10),
+    bottom: moderateScale(20),
   },
 });
 

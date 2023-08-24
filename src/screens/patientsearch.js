@@ -36,11 +36,11 @@ const PatientSearch = ({navigation}) => {
   const dispatch = useDispatch();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
-  const [uniquePatient,setUniquePatient]=useState([...new Set(data)])
+  // const [uniquePatient,setUniquePatient]=useState([...new Set(data)])
 
-  console.log('====================================');
-  console.log('-----------------id', uniquePatient);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('-----------------id', uniquePatient);
+  // console.log('====================================');
 
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -111,9 +111,9 @@ const PatientSearch = ({navigation}) => {
     ClinicRef?.current?.snapToIndex(0);
   };
 
-  console.log('====================================');
-  console.log('clinics', clinicID, '==============', clinics);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('clinics', clinicID, '==============', clinics);
+  // console.log('====================================');
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     //alignSelf: 'center',
     borderRadius: 10,
     padding: 32,
-    gap:16
+    gap: 16,
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,

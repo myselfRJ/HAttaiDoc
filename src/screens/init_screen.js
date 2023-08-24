@@ -15,6 +15,8 @@ const InitScreen = ({navigation}) => {
   console.log('token', token);
   console.log('====================================');
   const [data, setData] = useState();
+
+  const prevScrn = 'undefined';
   const fetchData = async () => {
     const response = await fetch(URL.getInitScreen, {
       method: 'GET',
@@ -25,7 +27,7 @@ const InitScreen = ({navigation}) => {
 
     const jsonData = await response.json();
     if (jsonData) {
-      navigation.navigate(jsonData.data.lastscreen);
+      navigation.navigate(jsonData.data.lastscreen, {prevScrn});
     }
   };
   useEffect(() => {

@@ -36,6 +36,7 @@ import {
   verticalScale,
 } from '../utility/scaleDimension';
 import CustomIcon from '../components/icon';
+import {disableBackButton} from '../utility/backDisable';
 
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
@@ -207,6 +208,10 @@ const Appointment = ({navigation}) => {
       fetchAppointment();
     }, [clinicID]),
   );
+
+  useEffect(() => {
+    disableBackButton();
+  }, []);
 
   return (
     <View style={styles.main}>

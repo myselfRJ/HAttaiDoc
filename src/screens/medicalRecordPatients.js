@@ -18,7 +18,7 @@ import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
 import PatientSearch from '../components/PatientSearch';
 import {Image} from 'react-native';
-import { moderateScale } from '../utility/scaleDimension';
+import {moderateScale} from '../utility/scaleDimension';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -26,13 +26,13 @@ export default function MedicalRecordPatient({route, navigation}) {
   const [data, setData] = useState([]);
   const [consultation, setConsultation] = useState([]);
 
-  console.log('====================================');
-  console.log('---------------data', data);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('---------------data', data);
+  // console.log('====================================');
 
   const token = useSelector(state => state?.authenticate?.auth?.access);
   const {patient_phone} = route.params;
-  console.log('-------------------phone', patient_phone);
+  // console.log('-------------------phone', patient_phone);
   const fetchData = async () => {
     const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
       method: 'GET',
@@ -42,7 +42,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
+      // console.log(jsonData.data);
       setData(jsonData.data[0]);
     } else {
       console.error('API call failed:', response.status, response);
@@ -64,7 +64,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
+      // console.log(jsonData.data);
       setConsultation(jsonData?.data[0]?.consultation);
     } else {
       console.error('API call failed:', response.status, response);
@@ -74,9 +74,9 @@ export default function MedicalRecordPatient({route, navigation}) {
     fetchPrescribe();
   }, []);
 
-  console.log('====================================');
-  console.log('------------------prescribe', consultation);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log('------------------prescribe', consultation);
+  // console.log('====================================');
 
   const [vitals, setVitals] = useState({
     chiefComplaints: consultation?.chief_complaint?.complaint_message,
@@ -120,7 +120,7 @@ export default function MedicalRecordPatient({route, navigation}) {
 
   const handleBook = () => {
     const patient_phone = data?.patient_phone_number;
-    console.log('-----------phonepatient', patient_phone);
+    // console.log('-----------phonepatient', patient_phone);
     navigation.navigate('bookslot', {patient_phone});
   };
   return (
@@ -227,33 +227,42 @@ export default function MedicalRecordPatient({route, navigation}) {
             </View>
             <View>
               <Text style={styles.contentHead}>Medication</Text>
-             
-                {consultation?.prescribe?.map((item, index) => {
-                  return <Text>{item.mode} | {item?.medicine} | {item?.dose_quantity} | {item?.timing} | {item?.frequency} | {item?.total_quantity}</Text>
-                })}
-            
+
+              {consultation?.prescribe?.map((item, index) => {
+                return (
+                  <Text>
+                    {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
+                    {item?.timing} | {item?.frequency} | {item?.total_quantity}
+                  </Text>
+                );
+              })}
             </View>
             <View>
               <Text style={styles.contentHead}>Vitals</Text>
               <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
                 <Text>BP</Text>
-                <Text >PR</Text>
+                <Text>PR</Text>
                 {/* <Text>SPO2</Text> */}
-                <Text >TEMP</Text>
+                <Text>TEMP</Text>
                 <Text>LMP</Text>
-                <Text style={{paddingLeft:4}}>EDD</Text>
+                <Text style={{paddingLeft: 4}}>EDD</Text>
               </View>
-              <View style={{flexDirection: 'row', gap: moderateScale(26), top: 8}}>
+              <View
+                style={{flexDirection: 'row', gap: moderateScale(26), top: 8}}>
                 <Text>
                   {consultation?.vitals?.systolic}/
                   {consultation?.vitals?.diastolic}
                 </Text>
                 <Text>{consultation?.vitals?.pulse_rate}</Text>
                 {/* <Text>{vitals.vital.SPO2}</Text> */}
-                <Text style={{paddingLeft:20}}>{consultation?.vitals?.body_temperature}</Text>
+                <Text style={{paddingLeft: 20}}>
+                  {consultation?.vitals?.body_temperature}
+                </Text>
                 {/* <Text>{vitals.vital.EDD}</Text> */}
-                <Text style={{paddingLeft:20}}>{consultation?.vitals?.LDD}</Text>
-                <Text >{consultation?.vitals?.EDD}</Text>
+                <Text style={{paddingLeft: 20}}>
+                  {consultation?.vitals?.LDD}
+                </Text>
+                <Text>{consultation?.vitals?.EDD}</Text>
               </View>
             </View>
           </View>

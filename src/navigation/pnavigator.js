@@ -38,6 +38,7 @@ import Allergies from '../screens/allergies';
 import LabReports from '../screens/labReport';
 import PastHistory from '../screens/pasthistory';
 import {CUSTOMCOLOR} from '../settings/styles';
+import Valid from '../screens/consultationValid';
 
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
@@ -49,6 +50,7 @@ const ProtectedRoute = () => {
   console.log('isAuth.....', isAuth);
 
   console.log('isAccess.....', access);
+
   return (
     <Stack.Navigator
       //initialRouteName="addclinic"
@@ -267,7 +269,7 @@ const ProtectedRoute = () => {
         component={Commorbities}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Commoribitities',
+          title: 'Comorbidities',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
@@ -301,6 +303,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Lab Reports',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="valid"
+        component={Valid}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Valid Up To',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

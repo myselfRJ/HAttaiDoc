@@ -111,16 +111,15 @@ const VitalScreen = props => {
     const height = (parseInt(vitals.height) / 100) ** 2;
     const weight = parseFloat(vitals.weight);
     const BMI = (weight / height).toString().slice(0, 5);
-  
-    if (BMI !==NaN){
+
+    if (BMI !== NaN) {
       bmiChange(BMI);
       setBmi(BMI);
-
-    }else{
+    } else {
       bmiChange(null);
-      setBmi(null)
+      setBmi(null);
     }
-   
+
     // return BMI;
   };
 
@@ -176,11 +175,10 @@ const VitalScreen = props => {
     return EDD;
   };
 
-
   return (
     <>
       <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
-        <PrescriptionHead heading={Language[language]['vitals']}/>
+        <PrescriptionHead heading={Language[language]['vitals']} />
         {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
         <View>
           <View style={styles.vitalmain}>
@@ -195,69 +193,71 @@ const VitalScreen = props => {
                   placeholder= {Language[language]['bpm']} 
                   setValue={text => PulseChange(text, props.index)}/> */}
 
-                <InputText 
-                  label= 'Pulse'
-                  placeholder= 'bpm'
-                  setValue= {text => PulseChange(text, props.index)}/>
-                
+                  <InputText
+                    label="Pulse"
+                    placeholder="bpm"
+                    setValue={text => PulseChange(text, props.index)}
+                  />
                 </View>
                 <View style={styles.weightcontainer}>
-                
-                <InputText 
-                  label= {Language[language]['weight']} 
-                  placeholder= 'kg'
-                  setValue= {text => weightChange(text, props.index)}/>
+                  <InputText
+                    label={Language[language]['weight']}
+                    placeholder="kg"
+                    setValue={text => weightChange(text, props.index)}
+                  />
                 </View>
                 <View style={styles.heightcontainer}>
-                <InputText 
-                  label= {Language[language]['height']} 
-                  placeholder= 'cm'
-                  setValue= {text => heightChange(text, props.index)}/>
-                
+                  <InputText
+                    label={Language[language]['height']}
+                    placeholder="cm"
+                    setValue={text => heightChange(text, props.index)}
+                  />
                 </View>
-                {bmi!== 'NaN'?(<View style={styles.bmicontainer}>
-                  <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
-                  <Text style={styles.bmitext}>{bmi}</Text>
-                </View>):(<View style={styles.bmicontainer}>
-                  <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
-                  <Text style={styles.bmitext}>{'00'}</Text>
-                </View>)}
+                {bmi !== 'NaN' ? (
+                  <View style={styles.bmicontainer}>
+                    <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
+                    <Text style={styles.bmitext}>{bmi}</Text>
+                  </View>
+                ) : (
+                  <View style={styles.bmicontainer}>
+                    <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
+                    <Text style={styles.bmitext}>{'00'}</Text>
+                  </View>
+                )}
                 <View style={styles.tempcontainer}>
-                <InputText 
-                  label= {Language[language]['temp']} 
-                  placeholder= '°C'
-                  setValue= {text => tempChange(text, props.index)}/>
+                  <InputText
+                    label={Language[language]['temp']}
+                    placeholder="°C"
+                    setValue={text => tempChange(text, props.index)}
+                  />
                   {/* <Text style={styles.temp}>{Language[language]['temp']}</Text> */}
                 </View>
                 <View style={styles.ratecontainer}>
-                <InputText 
-                  label= {Language[language]['rate']} 
-                  placeholder= 'brpm'
-                  setValue= {text => rateChange(text, props.index)}/>
-            
+                  <InputText
+                    label={Language[language]['rate']}
+                    placeholder="brpm"
+                    setValue={text => rateChange(text, props.index)}
+                  />
                 </View>
-                
               </View>
             </View>
             <Text style={styles.bloodPres}>Blood Pressure</Text>
             <View style={styles.bloodPressureContainer}>
-          
               <View style={styles.diascontainer}>
-              <InputText 
-                  label= {Language[language]['diastolic_bp']} 
-                  placeholder= {Language[language]['diastolic_bp']}
-                  setValue= {text => diastolicChange(text, props.index)}/>
-           
-                </View>
-              
+                <InputText
+                  label={Language[language]['diastolic_bp']}
+                  placeholder={Language[language]['diastolic_bp']}
+                  setValue={text => diastolicChange(text, props.index)}
+                />
+              </View>
 
               <View style={styles.syscontainer}>
-              <InputText 
-                  label= {Language[language]['systolic_bp']} 
-                  placeholder= {Language[language]['systolic_bp']}
-                  setValue= {text => systolicChange(text, props.index)}/>
-                </View>
-              
+                <InputText
+                  label={Language[language]['systolic_bp']}
+                  placeholder={Language[language]['systolic_bp']}
+                  setValue={text => systolicChange(text, props.index)}
+                />
+              </View>
             </View>
             <Text style={styles.pregText}>Pregnancy</Text>
             <View style={styles.pregnancyFields}>
@@ -288,29 +288,28 @@ const VitalScreen = props => {
                   </Text> */}
                 </View>
               </View>
-             <View style={styles.uscontainer}>
+              <View style={styles.uscontainer}>
                 <Text style={styles.us}>{Language[language]['us_edd']}:</Text>
                 {/* <View style={styles.hardText}> */}
-                  {/* <TextInput
+                {/* <TextInput
                     value={handleedd}
                     onChangeText={usChange}
                     style={styles.ustext}
                     keyboardType="numeric"
                   /> */}
-                  {/* <Text></Text> */}
-                  <Text
-                    style={{
-                      padding: 12,
-                      backgroundColor: CUSTOMCOLOR.white,
-                      color: CUSTOMCOLOR.black,
-                      fontSize:CUSTOMFONTSIZE.h4,
-                      width:100,
-                      paddingVertical:16,
-                      borderRadius:4
-
-                    }}>
-                    {vitals?.EDD}
-                  </Text>
+                {/* <Text></Text> */}
+                <Text
+                  style={{
+                    padding: 12,
+                    backgroundColor: CUSTOMCOLOR.white,
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: CUSTOMFONTSIZE.h4,
+                    width: 100,
+                    paddingVertical: 16,
+                    borderRadius: 4,
+                  }}>
+                  {vitals?.EDD}
+                </Text>
                 {/* </View> */}
               </View>
             </View>
@@ -370,11 +369,11 @@ const styles = StyleSheet.create({
   },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,
+    fontWeight: 600,
     paddingHorizontal: 8,
     color: CUSTOMCOLOR.black,
     //gap: 10,
-    fontSize:CUSTOMFONTSIZE.h2
+    fontSize: CUSTOMFONTSIZE.h2,
   },
   basicFields: {
     flexDirection: 'row',
@@ -386,7 +385,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   pulsecontainer: {
-     paddingHorizontal: 8,
+    paddingHorizontal: 8,
     paddingVertical: 4,
   },
   pulse: {
@@ -462,8 +461,6 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-
-  
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
@@ -474,10 +471,11 @@ const styles = StyleSheet.create({
   bmitext: {
     paddingVertical: 10,
     paddingHorizontal: 8,
-    top:2,
+    top: 2,
     gap: 8,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:4
+    borderRadius: 4,
+    color: CUSTOMCOLOR.primary,
   },
   bloodPressureContainer: {
     paddingHorizontal: 8,
@@ -493,8 +491,8 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     top: 16,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,
-    fontSize:CUSTOMFONTSIZE.h2
+    fontWeight: 600,
+    fontSize: CUSTOMFONTSIZE.h2,
   },
   diascontainer: {
     paddingHorizontal: 8,
@@ -531,8 +529,8 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     top: 16,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight:600,
-    fontSize:CUSTOMFONTSIZE.h2
+    fontWeight: 600,
+    fontSize: CUSTOMFONTSIZE.h2,
   },
   pregnancyFields: {
     paddingHorizontal: 12,
@@ -560,7 +558,6 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 8,
     // paddingVertical: 4,
     gap: 4,
-
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,

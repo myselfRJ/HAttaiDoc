@@ -82,7 +82,7 @@ const OtpScreen = ({route}) => {
   const handleResendOTP = async () => {
     resetTimer();
     startTimer();
-    setValue('')
+    setValue('');
     resendOtp();
   };
 

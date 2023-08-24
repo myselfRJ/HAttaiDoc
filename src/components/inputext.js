@@ -5,7 +5,11 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTSIZE,
+  CUSTOMFONTFAMILY,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {
   moderateScale,
@@ -40,7 +44,18 @@ const InputText = props => {
   return (
     <>
       <View style={styles.inpcontainer}>
-        <Text style={[styles.labeltext, props.lbltext]}>{props.label} {props.required ? <Text style={[styles.indicator, props.required && visible && styles.required]}>*</Text> : null}</Text>
+        <Text style={[styles.labeltext, props.lbltext]}>
+          {props.label}{' '}
+          {props.required ? (
+            <Text
+              style={[
+                styles.indicator,
+                props.required && visible && styles.required,
+              ]}>
+              *
+            </Text>
+          ) : null}
+        </Text>
         <View>
           <TextInput
             style={[styles.textinput, errorStyles, props.textStyle]}
@@ -87,7 +102,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",
     borderRadius: 4,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   eye: {
     position: 'absolute',
@@ -106,7 +121,7 @@ const styles = StyleSheet.create({
     right: moderateScale(10),
   },
   indicator: {
-    fontSize: 20,
+    fontSize: CUSTOMFONTSIZE.h4,
     marginRight: 5,
   },
   required: {
@@ -118,7 +133,6 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
   },
-  
 });
 
 export default InputText;

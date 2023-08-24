@@ -8,6 +8,8 @@ import Titbit from '../screens/titbit';
 import Account from '../screens/account';
 import {CUSTOMCOLOR} from '../settings/styles';
 import {StyleSheet} from 'react-native';
+import {useEffect} from 'react';
+import {disableBackButton} from '../utility/backDisable';
 import {
   verticalScale,
   moderateScale,
@@ -33,6 +35,10 @@ const BottomTab = ({navigation, route}) => {
     //   </View>
     // ),
   };
+
+  useEffect(() => {
+    disableBackButton();
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="dashboard"
