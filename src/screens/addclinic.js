@@ -140,7 +140,7 @@ const AddClinic = ({navigation}) => {
           }, 1000);
 
           setLoading(false);
-          SuccesRef?.current?.snapToIndex(0);
+          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -335,7 +335,7 @@ const AddClinic = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
         backgroundStyle={CUSTOMCOLOR.white}>
@@ -346,7 +346,7 @@ const AddClinic = ({navigation}) => {
             }}
           />
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}

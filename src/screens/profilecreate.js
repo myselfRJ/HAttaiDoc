@@ -89,8 +89,7 @@ const ProfileCreate = ({navigation}) => {
   const handleClearFile = () => {
     setSelectedFilename('');
   };
-  const prevScrn = 'undefined';
-  console.log(values);
+  const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
@@ -193,7 +192,7 @@ const ProfileCreate = ({navigation}) => {
           }, 1000);
 
           setLoading(false);
-          SuccesRef?.current?.snapToIndex(0);
+          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);

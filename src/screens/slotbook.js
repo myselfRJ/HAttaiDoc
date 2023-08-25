@@ -258,7 +258,7 @@ const SlotBook = ({navigation, route}) => {
             navigation.navigate('dashboard');
           }, 1000);
           setLoading(false);
-          SuccesRef?.current?.snapToIndex(0);
+          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({
             status: 'warning',

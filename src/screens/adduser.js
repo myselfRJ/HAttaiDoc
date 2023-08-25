@@ -135,7 +135,7 @@ const AddUser = ({navigation}) => {
           }, 1000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
-          SuccesRef?.current?.snapToIndex(0);
+          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);

@@ -26,6 +26,6 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'valid',
     },
-    API_KEY='AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ'
   ],
+  API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
 };
