@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect,createRef} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity,TouchableHighlight} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from '../components/Icon';
 import {useSelector, useDispatch} from 'react-redux';
@@ -14,6 +14,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import SignatureCapture from 'react-native-signature-capture';
 
 import {
   CUSTOMCOLOR,
@@ -77,6 +78,28 @@ export default function Valid() {
   const handlePress = () => {
     dispatch(addValid(handleDates(date)));
     navigation.goBack();
+  };
+
+  const sign = createRef();
+
+  const saveSign = () => {
+    sign.current.saveImage();
+  };
+
+  const resetSign = () => {
+    sign.current.resetImage();
+  };
+
+  const _onSaveEvent = (result) => {
+    //result.encoded - for the base64 encoded png
+    //result.pathName - for the file path name
+    alert('Signature Captured Successfully');
+    console.log(result.encoded);
+  };
+
+  const _onDragEvent = () => {
+    // This callback will be called when the user enters signature
+    console.log('dragged');
   };
 
   return (
@@ -150,6 +173,34 @@ export default function Valid() {
           onPress={() => handleOptions('90')}
         />
       </View>
+      {/* <View>
+        <Text style={{fontWeight:600,fontSize:18,color:CUSTOMCOLOR.black}}>Doctor Signature</Text>
+        <SignatureCapture
+          style={styles.signature}
+          ref={sign}
+          onSaveEvent={_onSaveEvent}
+          onDragEvent={_onDragEvent}
+          showNativeButtons={false}
+          showTitleLabel={false}
+          viewMode={'portrait'}
+        />
+        <View style={{flexDirection: 'row'}}>
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              saveSign();
+            }}>
+            <Text>Save</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              resetSign();
+            }}>
+            <Text>Reset</Text>
+          </TouchableHighlight>
+        </View>
+      </View> */}
       <View
         style={{
           justifyContent: 'center',
@@ -209,5 +260,23 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     paddingHorizontal: 8,
+  },
+  titleStyle: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  signature: {
+    flex: 1,
+    borderColor: '#000033',
+    borderWidth: 1,
+  },
+  buttonStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    backgroundColor: '#eeeeee',
+    margin: 10,
   },
 });

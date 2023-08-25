@@ -243,7 +243,7 @@ export default function Prescribe1() {
                     onChangeText={val => setMedicine(val)}
                   />
                   <Text style={styles.RecommdationText}>
-                    {Language[language]['reccomendations']}
+                    {Language[language]['reccomedations']}
                   </Text>
                   <View style={styles.Modes}>
                     {recommdations?.map(value => (
