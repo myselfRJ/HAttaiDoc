@@ -251,7 +251,7 @@ const VitalScreen = props => {
               <View style={styles.diascontainer}>
                 <InputText
                   label={Language[language]['diastolic_bp']}
-                  placeholder={Language[language]['diastolic_bp']}
+                  placeholder='mmHg'
                   setValue={text => diastolicChange(text, props.index)}
                 />
               </View>
@@ -259,7 +259,7 @@ const VitalScreen = props => {
               <View style={styles.syscontainer}>
                 <InputText
                   label={Language[language]['systolic_bp']}
-                  placeholder={Language[language]['systolic_bp']}
+                  placeholder='mmHg'
                   setValue={text => systolicChange(text, props.index)}
                 />
               </View>

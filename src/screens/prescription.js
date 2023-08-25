@@ -82,8 +82,9 @@ const Prescription = ({route}) => {
   const format = current.toLocaleDateString(undefined, options);
 
   return (
-    <View style={styles.main}>
+    
       <ScrollView>
+        <View style={styles.main}>
         <View
           style={{
             flexDirection: 'row',
@@ -107,9 +108,9 @@ const Prescription = ({route}) => {
               </Text>
             </View>
           </View>
-          <View style={{width: 250}}>
+          <View>
             <Text style={styles.speciality}>{clinic_name}</Text>
-            <Text style={styles.speciality}>{clinic_Address}</Text>
+            <Text style={styles.address}>{clinic_Address}</Text>
           </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -253,7 +254,7 @@ const Prescription = ({route}) => {
         </View>
         <View>
           <Text style={styles.head}>
-            validity Upto : <Text style={styles.values}>{dateTimeRed}</Text>
+            Validity Upto : <Text style={styles.values}>{dateTimeRed}</Text>
           </Text>
         </View>
         <View style={styles.description}>
@@ -271,8 +272,9 @@ const Prescription = ({route}) => {
             style={styles.footerimg}
           />
         </View>
+        </View>
       </ScrollView>
-    </View>
+    
   );
 };
 const styles = StyleSheet.create({
@@ -291,8 +293,18 @@ const styles = StyleSheet.create({
   speciality: {
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
-    fontSize: 20,
+    fontSize: 18,
     color: CUSTOMCOLOR.primary,
+    paddingHorizontal:4
+  },
+  address: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontWeight: 400,
+    fontSize: 16,
+    color: CUSTOMCOLOR.primary,
+    width:150,
+    paddingLeft:4
+    //paddingHorizontal:8
   },
   img: {
     width: 35,
@@ -327,7 +339,7 @@ const styles = StyleSheet.create({
   },
   presc: {
     top: 8,
-    paddingHorizontal: 4,
+    //paddingHorizontal: 4,
     paddingVertical: 8,
     backgroundColor: '#DFF0FF',
     flexDirection: 'row',
