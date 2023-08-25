@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {useNavigation} from '@react-navigation/native';
@@ -20,7 +24,7 @@ import {
 } from '../utility/scaleDimension';
 import PrescriptionHead from './prescriptionHead';
 
-const ComplaintsCard = (props) => {
+const ComplaintsCard = props => {
   // const {complaint} = route.params
   // console.log('com1111====',complaint)
   const selectedComplaint = useSelector(
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(24),
   },
   h3: {
-    fontSize: moderateScale(14),
+    fontSize: CUSTOMFONTSIZE.h4,
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.opensans,
     lineHeight: 20 * 2,
@@ -107,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     fontSize: moderateScale(12),
     backgroundColor: CUSTOMCOLOR.white,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   sugg: {
     flexDirection: 'row',
@@ -115,10 +119,10 @@ const styles = StyleSheet.create({
   },
   sugText: {
     color: CUSTOMCOLOR.primary,
-    fontSize: moderateScale(12),
+    fontSize: CUSTOMFONTSIZE.h4,
     fontWeight: 400,
     alignItems: 'center',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   sugbtn: {
     borderRadius: moderateScale(8),

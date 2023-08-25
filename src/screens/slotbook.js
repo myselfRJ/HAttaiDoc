@@ -258,6 +258,7 @@ const SlotBook = ({navigation, route}) => {
             navigation.navigate('dashboard');
           }, 1000);
           setLoading(false);
+          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({
             status: 'warning',
@@ -290,15 +291,6 @@ const SlotBook = ({navigation, route}) => {
   return (
     <View style={styles.main}>
       <ScrollView>
-        {/* <View style={styles.MainHeadContainer}>
-          <Text style={styles.MainText}>Slot Booking</Text>
-          <Icon
-            name="bell"
-            size={24}
-            color={CUSTOMCOLOR.white}
-            // style={{top: 43, right: 37, backgroundColor: CUSTOMCOLOR.white}}
-          />
-        </View> */}
         <View style={styles.child}>
           <View
             style={{

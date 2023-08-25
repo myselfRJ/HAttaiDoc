@@ -18,7 +18,11 @@ import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
 import PatientSearch from '../components/PatientSearch';
 import {Image} from 'react-native';
-import {moderateScale} from '../utility/scaleDimension';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -124,27 +128,8 @@ export default function MedicalRecordPatient({route, navigation}) {
     navigation.navigate('bookslot', {patient_phone});
   };
   return (
-    <View style={{gap: 32}}>
-      <View
-        style={{
-          paddingVertical: 24,
-          paddingHorizontal: 24,
-          backgroundColor: CUSTOMCOLOR.primary,
-          borderBottomLeftRadius: 8,
-          borderBottomRightRadius: 8,
-        }}>
-        <Text
-          style={{
-            fontSize: CUSTOMFONTSIZE.h1,
-            color: CUSTOMCOLOR.white,
-            top: 16,
-          }}>
-          {' '}
-          Medical History
-        </Text>
-        <Icon name="bell" size={24} color={'#fff'} style={styles.bellIcon} />
-      </View>
-      <View style={{paddingHorizontal: 32, gap: 32}}>
+    <View style={styles.container}>
+      <View style={{top: moderateScale(32)}}>
         <View style={{height: 100}}>
           <View style={styles.main}>
             <Image
@@ -165,7 +150,8 @@ export default function MedicalRecordPatient({route, navigation}) {
             </View>
           </View>
         </View>
-        <View style={{height: 60}}>
+        <View
+          style={{height: moderateScale(60), marginBottom: moderateScale(8)}}>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -184,14 +170,14 @@ export default function MedicalRecordPatient({route, navigation}) {
         </View>
         <View
           style={{
-            paddingHorizontal: 24,
-            top: 16,
+            // paddingHorizontal: 24,
+            top: moderateScale(16),
             width: '100%',
             justifyContent: 'space-between',
             flexDirection: 'row',
           }}>
           {Views?.map((val, ind) => (
-            <View key={ind} style={{width: 160}}>
+            <View key={ind} style={{}}>
               <TouchableOpacity onPress={() => handlePress(val)}>
                 <Text
                   style={{
@@ -208,79 +194,90 @@ export default function MedicalRecordPatient({route, navigation}) {
         {selectedView === Views[0] ? (
           <View
             style={{
-              paddingHorizontal: 32,
-              top: 16,
-              gap: 16,
+              // paddingHorizontal: 32,
+              top: moderateScale(16),
             }}>
-            <View>
-              <Text style={styles.contentHead}>Chief Complaints</Text>
-              <Text>{consultation?.chief_complaint?.complaint_message}</Text>
-            </View>
-            <View>
-              <Text style={styles.contentHead}>Diagnosis</Text>
-              <Text>
-                {consultation?.diagnosis?.map((item, index) => {
-                  return `${item?.diagnosis}`;
-                })}
-                {/* {consultation?.diagnosis?.diagnosis} */}
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.contentHead}>Medication</Text>
-
-              {consultation?.prescribe?.map((item, index) => {
-                return (
-                  <Text>
-                    {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
-                    {item?.timing} | {item?.frequency} | {item?.total_quantity}
-                  </Text>
-                );
-              })}
-            </View>
-            <View>
-              <Text style={styles.contentHead}>Vitals</Text>
-              <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
-                <Text>BP</Text>
-                <Text>PR</Text>
-                {/* <Text>SPO2</Text> */}
-                <Text>TEMP</Text>
-                <Text>LMP</Text>
-                <Text style={{paddingLeft: 4}}>EDD</Text>
+            <View
+              style={{
+                top: moderateScale(16),
+                gap: moderateScale(16),
+                marginBottom: moderateScale(64),
+              }}>
+              <View>
+                <Text style={styles.contentHead}>Chief Complaints</Text>
+                <Text>{consultation?.chief_complaint?.complaint_message}</Text>
               </View>
-              <View
-                style={{flexDirection: 'row', gap: moderateScale(26), top: 8}}>
+              <View>
+                <Text style={styles.contentHead}>Diagnosis</Text>
                 <Text>
-                  {consultation?.vitals?.systolic}/
-                  {consultation?.vitals?.diastolic}
+                  {consultation?.diagnosis?.map((item, index) => {
+                    return `${item?.diagnosis}`;
+                  })}
+                  {/* {consultation?.diagnosis?.diagnosis} */}
                 </Text>
-                <Text>{consultation?.vitals?.pulse_rate}</Text>
-                {/* <Text>{vitals.vital.SPO2}</Text> */}
-                <Text style={{paddingLeft: 20}}>
-                  {consultation?.vitals?.body_temperature}
-                </Text>
-                {/* <Text>{vitals.vital.EDD}</Text> */}
-                <Text style={{paddingLeft: 20}}>
-                  {consultation?.vitals?.LDD}
-                </Text>
-                <Text>{consultation?.vitals?.EDD}</Text>
+              </View>
+              <View style={{gap: moderateScale(8)}}>
+                <Text style={styles.contentHead}>Medication</Text>
+
+                {consultation?.prescribe?.map((item, index) => {
+                  return (
+                    <Text key={index}>
+                      {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
+                      {item?.timing} | {item?.frequency} |{' '}
+                      {item?.total_quantity}
+                    </Text>
+                  );
+                })}
+              </View>
+              <View>
+                <Text style={styles.contentHead}>Vitals</Text>
+                <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
+                  <Text>BP</Text>
+                  <Text>PR</Text>
+                  {/* <Text>SPO2</Text> */}
+                  <Text>TEMP</Text>
+                  <Text>LMP</Text>
+                  <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: moderateScale(26),
+                    top: moderateScale(8),
+                  }}>
+                  <Text>
+                    {consultation?.vitals?.systolic}/
+                    {consultation?.vitals?.diastolic}
+                  </Text>
+                  <Text>{consultation?.vitals?.pulse_rate}</Text>
+                  {/* <Text>{vitals.vital.SPO2}</Text> */}
+                  <Text style={{paddingLeft: moderateScale(20)}}>
+                    {consultation?.vitals?.body_temperature}
+                  </Text>
+                  {/* <Text>{vitals.vital.EDD}</Text> */}
+                  <Text style={{paddingLeft: moderateScale(20)}}>
+                    {consultation?.vitals?.LDD}
+                  </Text>
+                  <Text>{consultation?.vitals?.EDD}</Text>
+                </View>
               </View>
             </View>
           </View>
         ) : null}
         <View
           style={{
-            top: 24,
+            // top: 24,
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             left: '40%',
-            paddingHorizontal: 8,
+            paddingHorizontal: horizontalScale(8),
           }}>
           <HButton label={'Download'} />
         </View>
         <View
           style={{
-            top: 30,
+            // top: 30,
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -293,93 +290,48 @@ export default function MedicalRecordPatient({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
-  bellIcon: {
-    left: 662,
-    bottom: 8,
-  },
   contentHead: {
     fontWeight: '700',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    lineHeight: 19.07,
+    lineHeight: moderateScale(19.07),
   },
   main: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    padding: 12,
+    padding: moderateScale(12),
     fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: 4,
-    gap: 8,
+    borderRadius: moderateScale(4),
+    gap: moderateScale(8),
   },
   name: {
-    fontWeight: 600,
-    fontSize: 14,
-    lineHeight: 20,
+    fontWeight: '600',
+    fontSize: CUSTOMFONTSIZE.h3,
+    lineHeight: moderateScale(20),
     padding: 0,
     color: CUSTOMCOLOR.black,
   },
   age: {
     fontWeight: 400,
-    fontSize: 10,
+    fontSize: CUSTOMFONTSIZE.h5,
     lineHeight: 20,
     padding: 0,
     color: CUSTOMCOLOR.black,
   },
   contact: {
     fontWeight: 600,
-    fontSize: 10,
+    fontSize: CUSTOMFONTSIZE.h5,
     lineHeight: 12.5,
     padding: 0,
     color: CUSTOMCOLOR.black,
   },
   img: {
-    width: 60,
-    height: 60,
+    width: moderateScale(60),
+    height: moderateScale(60),
     borderRadius: 60 / 2,
   },
   patientinfo: {},
-  icon: {
-    position: 'absolute',
-    right: 8,
-    top: 8,
-  },
-  option: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-  },
-  bottomView: {
-    width: '100%',
-    height: 500,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  modalView: {
-    height: 250,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: '#00BFFF',
-    shadowColor: '#ffff',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-
-  content: {
-    fontSize: 15,
-    color: 'black',
-  },
-  tab: {
-    flexDirection: 'row',
-    gap: 16,
-    paddingHorizontal: 8,
-    alignSelf: 'center',
-  },
+  container: {gap: moderateScale(32), paddingHorizontal: horizontalScale(24)},
 });

@@ -193,6 +193,7 @@ const ProfileCreate = ({navigation}) => {
           }, 1000);
 
           setLoading(false);
+          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -237,14 +238,7 @@ const ProfileCreate = ({navigation}) => {
             />
 
             <View style={styles.alignchild}>
-              <Text
-                style={{
-                  color: CUSTOMCOLOR.black,
-                  fontFamily: CUSTOMFONTFAMILY.body,
-                  fontSize: CUSTOMFONTSIZE.h4,
-                }}>
-                {Language[language]['gender']}
-              </Text>
+              <Text style={styles.gender}>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -267,12 +261,7 @@ const ProfileCreate = ({navigation}) => {
               </View>
             </View>
 
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                width: '100%',
-                paddingHorizontal: 8,
-              }}>
+            <View style={styles.btn}>
               <SelectorBtn
                 required={true}
                 label={Language[language]['dob']}
@@ -298,12 +287,7 @@ const ProfileCreate = ({navigation}) => {
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                width: '100%',
-                paddingHorizontal: 8,
-              }}>
+            <View style={styles.specialization}>
               <SelectorBtn
                 required={true}
                 label={Language[language]['specialization']}
@@ -321,23 +305,8 @@ const ProfileCreate = ({navigation}) => {
               value={values.experience}
               setValue={value => handleChangeValue('experience', value)}
             />
-            <Text
-              style={{
-                fontFamily: CUSTOMFONTFAMILY.h4,
-                fontSize: 12,
-                color: CUSTOMCOLOR.black,
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-                alignSelf: 'flex-start',
-              }}>
-              Medical Document
-            </Text>
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              }}>
+            <Text style={styles.medtext}>Medical Document</Text>
+            <View style={styles.doc_upload}>
               {selectedFilename ? (
                 <View style={styles.selectedfilecontainer}>
                   <Text style={styles.selectedFileInfo}>
@@ -355,7 +324,11 @@ const ProfileCreate = ({navigation}) => {
                     onPress={handleClearFile}
                   /> */}
                   <TouchableOpacity onPress={handleClearFile}>
-                    <Icon name="delete" size={20} color={CUSTOMCOLOR.delete} />
+                    <Icon
+                      name="delete"
+                      size={moderateScale(20)}
+                      color={CUSTOMCOLOR.delete}
+                    />
                   </TouchableOpacity>
                 </View>
               ) : (
@@ -374,20 +347,13 @@ const ProfileCreate = ({navigation}) => {
       </ScrollView>
       <BottomSheetView bottomSheetRef={appointmentCardRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
-            Select Speciality
-          </Text>
+          <Text style={styles.bottext}>Select Speciality</Text>
           <ScrollView>
             {CONSTANTS.speciality.map((speciality, index) => (
               <Pressable
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
-                style={{height: 30}}>
+                style={{height: verticalScale(30)}}>
                 <Text style={styles.modalfields}>{speciality}</Text>
               </Pressable>
             ))}
@@ -412,9 +378,9 @@ const ProfileCreate = ({navigation}) => {
 
 const styles = StyleSheet.create({
   radiogroup: {
-    padding: 16,
+    padding: moderateScale(16),
     flexDirection: 'row',
-    gap: 48,
+    gap: moderateScale(48),
 
     justifyContent: 'flex-start',
   },
@@ -422,7 +388,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
   },
   modalContainer: {
     height: '100%',
@@ -431,36 +397,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
-    borderRadius: 10,
-    gap: 16,
-    padding: 10,
+    borderRadius: moderateScale(10),
+    gap: moderateScale(16),
+    padding: moderateScale(10),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: 4,
+    padding: moderateScale(4),
   },
   DOBselect: {
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
   },
   selectedfilecontainer: {
     flexDirection: 'row',
     alignItems: 'center',
     //borderWidth:1,
-    borderRadius: 5,
+    borderRadius: moderateScale(5),
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
   },
   selectedFileInfo: {
     fontFamily: CUSTOMFONTFAMILY.h4,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    paddingRight: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingRight: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   contact: {
     fontSize: CUSTOMFONTSIZE.h3,
@@ -478,6 +444,39 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     padding: moderateScale(10),
     bottom: moderateScale(20),
+  },
+  gender: {
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize: CUSTOMFONTSIZE.h4,
+  },
+  btn: {
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: horizontalScale(8),
+  },
+  specialization: {
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: horizontalScale(8),
+  },
+  medtext: {
+    fontFamily: CUSTOMFONTFAMILY.h4,
+    fontSize: 12,
+    color: CUSTOMCOLOR.black,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
+    alignSelf: 'flex-start',
+  },
+  doc_upload: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
+  },
+  bottext: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: 18,
+    color: CUSTOMCOLOR.black,
   },
 });
 

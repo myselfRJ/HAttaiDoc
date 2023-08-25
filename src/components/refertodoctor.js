@@ -54,20 +54,12 @@ const ReferDoctorForm = props => {
   };
 
   return (
-    <View style={{paddingHorizontal: horizontalScale(24), paddingVertical: 24}}>
-      <PrescriptionHead heading="Refer to Doctor"/>
-        {/* <Text style={styles.title}>Refer to Doctor</Text> */}
+    <View style={styles.maincontnet}>
+      <PrescriptionHead heading="Refer to Doctor" />
+      {/* <Text style={styles.title}>Refer to Doctor</Text> */}
       <View style={styles.container}>
         <Text style={styles.head}>Recommendation</Text>
-        <View
-          style={{
-            //width: horizontalScale(323),
-            height: verticalScale(30),
-            padding: 8,
-            gap: 16,
-            flexDirection: 'row',
-            paddingHorizontal:8
-          }}>
+        <View style={styles.child}>
           {doctors.map((doctor, index) => (
             <TouchableOpacity
               style={[
@@ -97,17 +89,9 @@ const ReferDoctorForm = props => {
           ))}
         </View>
 
-        <View
-          style={{
-            //width: horizontalScale(651),
-            height: verticalScale(50),
-            padding: 8,
-            marginTop: 10,
-            gap: 10,
-            flexDirection: 'row',
-          }}>
+        <View style={styles.selected}>
           {selectedDoctor ? (
-            <View style={{flexDirection: 'row', gap: 10}}>
+            <View style={{flexDirection: 'row', gap: moderateScale(10)}}>
               <TextInput
                 placeholder="Name"
                 style={styles.input}
@@ -129,7 +113,7 @@ const ReferDoctorForm = props => {
               />
             </View>
           ) : (
-            <View style={{flexDirection: 'row', gap: 10}}>
+            <View style={{flexDirection: 'row', gap: moderateScale(10)}}>
               <TextInput placeholder="Name" style={styles.input} />
               <TextInput placeholder="Speciality" style={styles.input} />
               <TextInput
@@ -141,60 +125,42 @@ const ReferDoctorForm = props => {
           )}
         </View>
       </View>
-      <View style={{top: 150, alignItems: 'center'}}>
+      <View style={{top: moderateScale(150), alignItems: 'center'}}>
         <HButton label={Language[language]['submit']} onPress={onPress} />
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  h2: {
-    fontSize: moderateScale(20),
-    fontWeight: 700,
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    lineHeight: 20 * 2,
-    color: CUSTOMCOLOR.black,
-    padding: moderateScale(10),
-  },
   main: {
     //width: horizontalScale(651),
     height: verticalScale(35),
     justifyContent: 'space-between',
     padding: moderateScale(8),
   },
-  title: {
-    width: horizontalScale(104),
-    height: verticalScale(19),
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    fontSize: moderateScale(14),
-    fontWeight: 600,
-    lineHeight: 19.07,
-    color: CUSTOMCOLOR.black,
-  },
   container: {
     width: horizontalScale(651),
     height: verticalScale(62),
     padding: moderateScale(8),
-    gap: 8,
+    gap: moderateScale(8),
   },
   head: {
     //width: horizontalScale(125),
     height: verticalScale(35),
     padding: moderateScale(8),
-    gap: 10,
+    gap: moderateScale(10),
     color: CUSTOMCOLOR.black,
     fontSize: moderateScale(14),
     fontWeight: 600,
-    lineHeight: 16.34,
+    lineHeight: moderateScale(16.34),
     fontFamily: CUSTOMFONTFAMILY.body,
-
   },
   fields: {
     height: verticalScale(14),
     fontFamily: CUSTOMFONTFAMILY.opensans,
     fontSize: moderateScale(10),
     fontWeight: 400,
-    lineHeight: 13.62,
+    lineHeight: moderateScale(13.62),
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: horizontalScale(8),
@@ -202,11 +168,11 @@ const styles = StyleSheet.create({
   },
   input: {
     //width: horizontalScale(150),
-    paddingHorizontal:32,
+    paddingHorizontal: horizontalScale(32),
     height: verticalScale(45),
     borderRadius: moderateScale(4),
     //padding: moderateScale(16),
-    gap: 8,
+    gap: moderateScale(8),
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: moderateScale(12),
@@ -216,31 +182,30 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(16),
     height: verticalScale(32),
-    gap: 8,
+    gap: moderateScale(8),
     borderRadius: moderateScale(4),
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputfields: {
-    width: horizontalScale(34),
-    height: verticalScale(16),
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    fontSize: moderateScale(12),
-    fontWeight: 400,
-    lineHeight: 16.34,
+  maincontnet: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
   },
-  submitbtn: {
-    //  alignItems: 'flex-start',
-    //  justifyContent: 'flex-start',
-    // paddingHorizontal: horizontalScale(8),
-    // alignSelf:"center",
-    margin: moderateScale(100),
-    marginLeft: verticalScale(20),
-    borderWidth: 1,
-    borderColor: CUSTOMCOLOR.primary,
-    borderRadius: moderateScale(4),
-    width: horizontalScale(60),
-    padding: moderateScale(3),
+  child: {
+    //width: horizontalScale(323),
+    height: verticalScale(30),
+    padding: moderateScale(8),
+    gap: moderateScale(16),
+    flexDirection: 'row',
+    paddingHorizontal: horizontalScale(8),
+  },
+  selected: {
+    //width: horizontalScale(651),
+    height: verticalScale(50),
+    padding: moderateScale(8),
+    marginTop: moderateScale(10),
+    gap: moderateScale(10),
+    flexDirection: 'row',
   },
 });
 export default ReferDoctorForm;

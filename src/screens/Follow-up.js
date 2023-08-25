@@ -103,16 +103,7 @@ export default function DateTime() {
           />
         )}
       </View>
-      <Text
-        style={{
-          top: moderateScale(12),
-          fontFamily: CUSTOMFONTFAMILY.body,
-          color: CUSTOMCOLOR.black,
-          fontSize: CUSTOMFONTSIZE.h4,
-          fontWeight: '400',
-        }}>
-        Days:
-      </Text>
+      <Text style={styles.dateText}>Days:</Text>
       <View style={styles.radiogroup}>
         <Option
           label="3 Days"
@@ -151,12 +142,7 @@ export default function DateTime() {
           onPress={() => handleOptions('90')}
         />
       </View>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          top: '24%',
-        }}>
+      <View style={styles.submit}>
         <HButton
           label={'submit'}
           onPress={() => {
@@ -170,45 +156,34 @@ export default function DateTime() {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    //justifyContent: 'space-between',
-    // flexWrap: 'wrap',
-    paddingHorizontal: 24,
-    paddingVertical: 24,
-    gap: 12,
-  },
-  FUP: {
-    fontFamily: CUSTOMFONTFAMILY.heading,
-    fontSize: CUSTOMFONTSIZE.h2,
-    fontWeight: '600',
-    lineHeight: 19.07,
-    color: CUSTOMCOLOR.black,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
+    gap: moderateScale(12),
   },
   DateContainer: {
-    // width: '100%',
-    borderRadius: 4,
-    paddingHorizontal: 16,
+    borderRadius: moderateScale(4),
+    paddingHorizontal: horizontalScale(16),
     backgroundColor: CUSTOMCOLOR.white,
     justifyContent: 'space-between',
-    // flexDirection: 'row',
-  },
-  DateText: {
-    fontFamily: CUSTOMFONTFAMILY.heading,
-    fontWeight: 400,
-    fontSize: CUSTOMFONTSIZE.h4,
-    lineHeight: 19.07,
-    color: CUSTOMCOLOR.black,
   },
   radiogroup: {
     padding: moderateScale(8),
     flexDirection: 'row',
-    gap: 48,
+    gap: moderateScale(48),
 
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
+    flexWrap: 'wrap',
   },
-  alignchild: {
+  dateText: {
+    top: moderateScale(12),
+    fontFamily: CUSTOMFONTFAMILY.body,
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
+  },
+  submit: {
     justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: '100%',
-    paddingHorizontal: 8,
+    alignItems: 'center',
+    top: '24%',
   },
 });

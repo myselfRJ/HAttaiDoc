@@ -8,6 +8,12 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector} from 'react-redux';
 import {State} from 'react-native-gesture-handler';
 import Logo from '../components/logo';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+
 const InitScreen = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -37,7 +43,7 @@ const InitScreen = ({navigation}) => {
   }, []);
   return (
     <View style={styles.main}>
-      <Logo imgstyle={{width: 201, height: 210}} />
+      <Logo imgstyle={styles.logo} />
       <Text style={styles.text}>{Language[language]['wait']}</Text>
     </View>
   );
@@ -56,5 +62,6 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: 24,
   },
+  logo: {width: moderateScale(201), height: moderateScale(210)},
 });
 export default InitScreen;

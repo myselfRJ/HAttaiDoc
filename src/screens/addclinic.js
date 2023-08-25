@@ -40,6 +40,11 @@ import ProgresHeader from '../components/progressheader';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import {disableBackButton} from '../utility/backDisable';
 import {useRoute} from '@react-navigation/native';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -135,6 +140,7 @@ const AddClinic = ({navigation}) => {
           }, 1000);
 
           setLoading(false);
+          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -199,15 +205,7 @@ const AddClinic = ({navigation}) => {
   const handleDeleteSlotChip = index => {
     const newClinics = clinics?.clinics?.filter((_, i) => i !== index);
     dispatch(updateclinics(newClinics));
-    // setValue(prevValues => ({
-    //   ...prevValues,
-    //   slots: prevValues.slots.filter((_, i) => i !== index),
-    // }));
   };
-
-  // const handleAddClinicData = () => {
-  //   dispatch(addclinic_data(Clinic_Data));
-  // };
 
   useEffect(() => {
     disableBackButton();
@@ -221,20 +219,14 @@ const AddClinic = ({navigation}) => {
         </View>
       )}
 
-      {prevScrn !== 'undefined' && (
+      {prevScrn === 'account' && (
         <View>
           <PlusButton
             icon="close"
-            style={{
-              zIndex: 4,
-              backgroundColor: 'transparent',
-              // position: 'absolute',
-              alignSelf: 'flex-end',
-              padding: 16,
-            }}
-            color="#4ba5fa"
-            size={32}
-            onPress={() => navigation.goBack()}
+            style={styles.clsbtn}
+            color={CUSTOMCOLOR.primary}
+            size={moderateScale(32)}
+            onPress={() => navigation.navigate('tab')}
           />
         </View>
       )}
@@ -271,7 +263,7 @@ const AddClinic = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 8,
+                paddingHorizontal: horizontalScale(8,
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
@@ -289,12 +281,7 @@ const AddClinic = ({navigation}) => {
               setValue={value => handleChangeValue('fees', value)}
               keypad="numeric"
             />
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              }}>
+            <View style={styles.addslot}>
               <HButton
                 label="Add Slots"
                 onPress={() => navigation.navigate('createslot')}
@@ -303,20 +290,17 @@ const AddClinic = ({navigation}) => {
             {!visibleSlot && (
               <View style={styles.slotadded}>
                 <Text style={styles.addedText}>Slots are added!!!</Text>
-                <PlusButton icon="close" size={12} onPress={handleClear} />
+                <PlusButton
+                  icon="close"
+                  size={moderateScale(12)}
+                  onPress={handleClear}
+                />
               </View>
             )}
 
-            <View
-              style={{
-                alignSelf: 'flex-end',
-                bottom: 0,
-                paddingVertical: 8,
-                paddingHorizontal: 8,
-                top: 0,
-              }}>
-              <PlusButton
-                icon="plus"
+            <View style={styles.save}>
+              <HButton
+                label="save"
                 onPress={() => {
                   handlePlusIconClick();
                   // handleAddClinicData();
@@ -326,20 +310,12 @@ const AddClinic = ({navigation}) => {
 
             <View style={styles.clinic}>
               {value?.slots?.length > 0 && (
-                <Text
-                  style={{
-                    fontFamily: CUSTOMFONTFAMILY.heading,
-                    fontSize: CUSTOMFONTSIZE.h2,
-                    color: CUSTOMCOLOR.black,
-                    paddingVertical: 4,
-                  }}>
-                  Clinics
-                </Text>
+                <Text style={styles.clinicText}>Clinics</Text>
               )}
 
               {showSlotChip &&
                 clinics?.clinics.map((item, index) => (
-                  <View key={index} style={{margin: 5}}>
+                  <View key={index} style={{margin: moderateScale(5)}}>
                     <SlotChip
                       type={<Text>Clinic: {item.clinic_name}</Text>}
                       onPress={() => handleDeleteSlotChip(index)}
@@ -362,7 +338,7 @@ const AddClinic = ({navigation}) => {
       <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
-        backgroundStyle={'#fff'}>
+        backgroundStyle={CUSTOMCOLOR.white}>
         <View style={styles.modalcontainer}>
           <ClinicAddress
             onPress={() => {
@@ -384,30 +360,35 @@ const AddClinic = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingVertical: 20,
+    paddingVertical: verticalScale(20),
+  },
+  addslot: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
   },
   radiogroup: {
-    padding: 16,
+    padding: moderateScale(16),
     flexDirection: 'row',
-    gap: 48,
+    gap: moderateScale(48),
     justifyContent: 'flex-start',
   },
   alignchild: {
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
   },
   clinic: {
     alignSelf: 'flex-start',
-    paddingVertical: 16,
+    paddingVertical: verticalScale(16),
     //width:"100%"
   },
   modalcontainer: {
     //borderWidth:1,
-    margin: 20,
+    margin: moderateScale(20),
     height: '100%',
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
   },
   slotadded: {
     width: '100%',
@@ -415,17 +396,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     //borderWidth:1,
-    borderRadius: 5,
+    borderRadius: moderateScale(5),
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
   },
   addedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(16),
+  },
+  clsbtn: {
+    zIndex: moderateScale(4),
+    backgroundColor: 'transparent',
+    // position: 'absolute',
+    alignSelf: 'flex-end',
+    padding: moderateScale(16),
+  },
+  save: {
+    alignSelf: 'flex-end',
+    bottom: 0,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+    top: 0,
+  },
+  clinicText: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
+    paddingVertical: verticalScale(4),
   },
 });
 

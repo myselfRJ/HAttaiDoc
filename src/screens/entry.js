@@ -80,7 +80,7 @@ const Entry = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.Top}>
           <Image
-            style={{width: horizontalScale(297), height: verticalScale(286)}}
+            style={styles.image}
             source={require('../assets/images/entry.png')}
           />
         </View>
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: horizontalScale(24),
   },
+  image: {width: horizontalScale(297), height: verticalScale(286)},
 });
 
 export default Entry;

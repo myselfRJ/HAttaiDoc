@@ -135,6 +135,7 @@ const AddUser = ({navigation}) => {
           }, 1000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
+          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -252,16 +253,10 @@ const AddUser = ({navigation}) => {
         <View>
           <PlusButton
             icon="close"
-            style={{
-              zIndex: 4,
-              backgroundColor: 'transparent',
-              // position: 'absolute',
-              alignSelf: 'flex-end',
-              padding: 16,
-            }}
-            color="#4ba5fa"
-            size={32}
-            onPress={() => navigation.goBack()}
+            style={styles.clsx}
+            color={CUSTOMCOLOR.primary}
+            size={moderateScale(32)}
+            onPress={() => navigation.navigate('tab')}
           />
         </View>
       )}
@@ -295,14 +290,7 @@ const AddUser = ({navigation}) => {
               keypad="numeric"
             />
             <View style={styles.alignchild}>
-              <Text
-                style={{
-                  color: CUSTOMCOLOR.black,
-                  fontFamily: CUSTOMFONTFAMILY.body,
-                  fontSize: CUSTOMFONTSIZE.h4,
-                }}>
-                {Language[language]['gender']}
-              </Text>
+              <Text style={styles.gender}>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -324,12 +312,7 @@ const AddUser = ({navigation}) => {
                 />
               </View>
             </View>
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                width: '100%',
-                paddingHorizontal: horizontalScale(6),
-              }}>
+            <View style={styles.btn}>
               <SelectorBtn
                 label={Language[language]['role']}
                 name="chevron-down"
@@ -348,12 +331,7 @@ const AddUser = ({navigation}) => {
                 />
               )}
             </View>
-            <View
-              style={{
-                alignSelf: 'flex-start',
-                width: '100%',
-                paddingHorizontal: horizontalScale(6),
-              }}>
+            <View style={styles.clinicselect}>
               <SelectorBtn
                 label={Language[language]['clinic']}
                 name="chevron-down"
@@ -363,33 +341,24 @@ const AddUser = ({navigation}) => {
                 input={selectedClinic}
               />
             </View>
-            <View
-              style={{
-                alignSelf: 'flex-end',
-                bottom: 0,
-                paddingVertical: verticalScale(8),
-                paddingHorizontal: horizontalScale(8),
-              }}>
-              <PlusButton icon="plus" onPress={handlePlusIconClick} />
+            <View style={styles.save}>
+              <HButton label="save" onPress={handlePlusIconClick} />
             </View>
             <View style={styles.users}>
               <View>
                 {values?.slots?.length > 0 && (
-                  <Text
-                    style={{
-                      fontFamily: CUSTOMFONTFAMILY.heading,
-                      fontSize: CUSTOMFONTSIZE.h2,
-                      color: CUSTOMCOLOR.black,
-                      paddingVertical: verticalScale(4),
-                      paddingHorizontal: horizontalScale(8),
-                    }}>
-                    Users
-                  </Text>
+                  <Text style={styles.UsersText}>Users</Text>
                 )}
-                <View style={{gap: 4, marginBottom: 4}}>
+                <View
+                  style={{
+                    gap: moderateScale(4),
+                    marginBottom: moderateScale(4),
+                  }}>
                   {showSlotChip &&
                     clinic_users?.map((item, index) => (
-                      <View style={{marginBottom: 4}} key={index}>
+                      <View
+                        style={{marginBottom: moderateScale(4)}}
+                        key={index}>
                         <SlotChip
                           key={item.index}
                           index={item.index}
@@ -403,12 +372,7 @@ const AddUser = ({navigation}) => {
                 </View>
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: horizontalScale(6),
-              }}>
+            <View style={styles.bottom}>
               {/* <TouchableOpacity onPress={() => navigation.navigate('tab')}>
                 <Text
                   style={{
@@ -433,7 +397,7 @@ const AddUser = ({navigation}) => {
                 label="Skip"
                 onPress={() => navigation.navigate('tab')}
                 btnstyles={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: CUSTOMCOLOR.white,
                 }}
                 textStyle={{
                   color: CUSTOMCOLOR.primary,
@@ -452,14 +416,7 @@ const AddUser = ({navigation}) => {
       </ScrollView>
       <BottomSheetView bottomSheetRef={RoleRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
-            Role
-          </Text>
+          <Text style={styles.role}>Role</Text>
           {CONSTANTS.role.map((role, index) => (
             <Pressable key={index} onPress={() => handleRoleSelection(role)}>
               <Text style={styles.modalfields}>{role}</Text>
@@ -469,14 +426,7 @@ const AddUser = ({navigation}) => {
       </BottomSheetView>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
-            {Language[language]['clinic']}
-          </Text>
+          <Text style={styles.clinicsname}>{Language[language]['clinic']}</Text>
           {clinics &&
             clinics?.map((clinic, index) => (
               <Pressable
@@ -508,6 +458,18 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     gap: moderateScale(8),
   },
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: horizontalScale(6),
+  },
+  UsersText: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
+    paddingVertical: verticalScale(4),
+    paddingHorizontal: horizontalScale(8),
+  },
   radiogroup: {
     padding: moderateScale(16),
     flexDirection: 'row',
@@ -521,7 +483,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
   },
   modalContainer: {
-    height: 700,
+    height: moderateScale(700),
     width: '100%',
     //justifyContent: 'center',
     alignItems: 'center',
@@ -529,15 +491,14 @@ const styles = StyleSheet.create({
     //alignSelf: 'center',
     borderRadius: moderateScale(1),
     padding: moderateScale(16),
-    gap: 16,
+    gap: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     padding: moderateScale(4),
-    fontFamily: CUSTOMFONTFAMILY.body,
   },
   users: {
     alignSelf: 'flex-start',
@@ -548,7 +509,45 @@ const styles = StyleSheet.create({
     // color:CUSTOMCOLOR.black,
     // //backgroundColor:CUSTOMCOLOR.white,
     // borderColor:CUSTOMCOLOR.black,
-    // height:200
+    // height:2moderateScale(00
+  },
+  clsx: {
+    zIndex: moderateScale(4),
+    backgroundColor: 'transparent',
+    // position: 'absolute',
+    alignSelf: 'flex-end',
+    padding: moderateScale(16),
+  },
+  gender: {
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize: CUSTOMFONTSIZE.h4,
+  },
+  btn: {
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: horizontalScale(6),
+  },
+  clinicselect: {
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: horizontalScale(6),
+  },
+  save: {
+    alignSelf: 'flex-end',
+    bottom: 0,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+  },
+  role: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
+  },
+  clinicsname: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
   },
 });
 export default AddUser;

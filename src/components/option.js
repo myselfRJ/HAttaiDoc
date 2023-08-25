@@ -29,14 +29,14 @@ const Option = ({label, selected, onPress, value}) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    gap: moderateScale(8),
+    gap: moderateScale(4),
     alignItems: 'center',
   },
-  options:{
-    fontFamily:CUSTOMFONTFAMILY.body,
-    fontSize:12,
-    color:CUSTOMCOLOR.black
-
-  }
+  options: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize: 12,
+    color: CUSTOMCOLOR.black,
+    paddingRight: moderateScale(8),
+  },
 });
 export default Option;
