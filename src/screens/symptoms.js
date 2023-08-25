@@ -94,88 +94,48 @@ const Symptoms = ({navigation}) => {
               <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 <Icon
                   name="emoticon-sick"
-                  size={16}
+                  size={moderateScale(16)}
                   color={CUSTOMCOLOR.primary}
                 />
-                <Text
-                  style={{
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.body,
-                  }}>
+                <Text style={styles.reduxText}>
                   {item.symptom} | {item.days} | {item.severity}
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleDeleteSymptom(ind)}>
-                <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
+                <Icon
+                  name="delete"
+                  size={moderateScale(24)}
+                  color={CUSTOMCOLOR.delete}
+                />
               </TouchableOpacity>
             </View>
           </View>
         ))}
 
         <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap'}}>
-          <View style={{flexDirection: 'column'}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                padding: moderateScale(10),
-                flexWrap: 'wrap',
-              }}>
+          <View>
+            <View style={styles.content}>
               <View style={styles.symptomInput}>
-                <Text
-                  style={{
-                    padding: moderateScale(10),
-                    fontWeight: 'bold',
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.body,
-                  }}>
-                  {Language[language]['symptom']}
-                  {/* {parseInt(index + 1)}: */}
+                <Text style={styles.text}>
+                  {Language[language]['symptom']}:{/* {parseInt(index + 1)}: */}
                 </Text>
-                <View
-                  style={{
-                    height: moderateScale(40),
-                    // width: 100,
-                    textAlignVertical: 'top',
-                  }}>
-                  <TextInput
-                    placeholder="Enter Symptom"
-                    value={symptom}
-                    onChangeText={text => setSymptom(text)}
-                  />
-                </View>
+
+                <TextInput
+                  placeholder="Enter Symptom"
+                  value={symptom}
+                  onChangeText={text => setSymptom(text)}
+                />
               </View>
               <View style={styles.DateInput}>
-                <Text
-                  style={{
-                    padding: moderateScale(10),
-                    fontWeight: 'bold',
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.body,
-                  }}>
-                  {Language[language]['days']}:
-                </Text>
-                <View
-                  style={{
-                    height: horizontalScale(40),
-                    width: verticalScale(100),
-                    textAlignVertical: 'top',
-                  }}>
-                  <TextInput
-                    placeholder="Enter Days"
-                    value={days}
-                    onChangeText={text => setDays(text)}
-                  />
-                </View>
+                <Text style={styles.text}>{Language[language]['days']}:</Text>
+                <TextInput
+                  placeholder="Enter Days"
+                  value={days}
+                  onChangeText={text => setDays(text)}
+                />
               </View>
               <View style={styles.radiogroup}>
-                <Text
-                  style={{
-                    padding: moderateScale(10),
-                    fontWeight: 'bold',
-                    fontFamily: CUSTOMFONTFAMILY.body,
-
-                    color: CUSTOMCOLOR.black,
-                  }}>
+                <Text style={styles.text}>
                   {Language[language]['severity']}:
                 </Text>
                 <View style={{flexDirection: 'row'}}>
@@ -226,7 +186,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
 
-    marginHorizontal: verticalScale(8),
+    marginHorizontal: verticalScale(16),
     marginVertical: horizontalScale(16),
   },
   mainHead: {
@@ -238,23 +198,17 @@ const styles = StyleSheet.create({
   symptomInput: {
     backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
-    padding: moderateScale(8),
+    // padding: moderateScale(8),
   },
   DateInput: {
     backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
-    padding: moderateScale(8),
+    // padding: moderateScale(8),
   },
   radiogroup: {
     flexDirection: 'row',
-    padding: moderateScale(8),
-    gap: moderateScale(8),
-  },
-  line: {
-    margin: moderateScale(8),
-    height: 0.5,
-    width: '100%',
-    backgroundColor: 'blue',
+    // padding: moderateScale(8),
+    // gap: moderateScale(8),
   },
   reduxData: {
     flex: 1,
@@ -262,7 +216,7 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(8),
     borderWidth: 1,
     padding: moderateScale(8),
-    borderColor: '#2CBB15',
+    borderColor: CUSTOMCOLOR.success,
     backgroundColor: CUSTOMCOLOR.white,
   },
   reduxData1: {
@@ -276,6 +230,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: moderateScale(20),
+  },
+  text: {
+    padding: moderateScale(18),
+    fontWeight: '600',
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
+  reduxText: {
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
+  content: {
+    flexDirection: 'row',
+    padding: moderateScale(8),
+    flexWrap: 'wrap',
   },
 });
 

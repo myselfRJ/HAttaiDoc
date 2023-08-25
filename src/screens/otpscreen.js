@@ -32,6 +32,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
 // import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const OtpScreen = ({route}) => {
   const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
@@ -150,10 +155,7 @@ const OtpScreen = ({route}) => {
         <View style={styles.container}>
           <View style={styles.Top}>
             <Image
-              style={{
-                width: 234,
-                height: 288,
-              }}
+              style={styles.images}
               source={require('../assets/images/otp.png')}
             />
           </View>
@@ -229,36 +231,36 @@ const OtpScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 48,
+    gap: moderateScale(48),
   },
   Top: {
-    height: 503,
+    height: verticalScale(503),
     backgroundColor: CUSTOMCOLOR.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   bottom: {
-    gap: 24,
+    gap: moderateScale(24),
   },
   text: {
     //  width:593,
     //  height:120,
     //  top:50,
     //  left:10,
-    paddingHorizontal: 24,
-    gap: 8,
+    paddingHorizontal: horizontalScale(24),
+    gap: moderateScale(8),
     fontFamily: CUSTOMFONTFAMILY.heading,
-    fontSize: 32,
+    fontSize: moderateScale(32),
     fontWeight: 600,
     color: CUSTOMCOLOR.black,
   },
   cellRoot: {
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: '#000',
     borderBottomWidth: 1,
-    marginLeft: 8,
+    marginLeft: moderateScale(8),
   },
   cellText: {
     color: '#000',
@@ -275,6 +277,10 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: 'gray', // Color when the timer is out (timer reaches 0)
+  },
+  images: {
+    width: moderateScale(234),
+    height: moderateScale(288),
   },
 });
 export default OtpScreen;

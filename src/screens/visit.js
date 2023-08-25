@@ -19,7 +19,12 @@ import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
 import {CONSTANT} from '../utility/const';
-import {moderateScale} from '../utility/scaleDimension';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+import Prescribe1 from './prescibe1';
 
 const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
@@ -47,6 +52,8 @@ const Visit = ({navigation, route}) => {
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
   );
+
+  console.log('-------commor', commorbities);
   const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
@@ -58,10 +65,11 @@ const Visit = ({navigation, route}) => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
 
-  // const SuccesRef = useRef(null);
-  // useEffect(() => {
-  //   SuccesRef?.current?.snapToIndex(1);
-  // }, []);
+  const [submit, setSubmit] = useState(false);
+
+  const habdlePrescribe = () => {
+    setSubmit(true);
+  };
 
   const {name, gende, age, patient_phone, appointment_id, complaint} =
     route.params;
@@ -192,7 +200,7 @@ const Visit = ({navigation, route}) => {
               padding: 16,
             }}
             color="#000000aa"
-            size={32}
+            size={moderateScale(32)}
             onPress={() => navigation.goBack()}
           /> */}
           {/* </View> */}
@@ -219,21 +227,14 @@ const Visit = ({navigation, route}) => {
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (
-                              <View
-                                key={index}
-                                style={{
-                                  flexDirection: 'row',
-                                  gap: 10,
-                                  padding: 8,
-                                  alignItems: 'center',
-                                }}>
+                              <View key={index} style={styles.symptomicon}>
                                 <Icon
                                   name="emoticon-sick"
-                                  size={16}
+                                  size={moderateScale(16)}
                                   color={CUSTOMCOLOR.primary}
                                 />
                                 <View>
-                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                  <Text style={styles.pulse}>
                                     {item.symptom} | {item.days} |{' '}
                                     {item.severity}
                                   </Text>
@@ -249,27 +250,17 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Prescribe' && prescribe.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View
-                          style={{
-                            gap: 8,
-                            flexDirection: 'row',
-                          }}>
+                        <View style={styles.pres}>
                           <View>
                             {prescribe?.map((item, ind) => (
-                              <View
-                                key={ind}
-                                style={{
-                                  flexDirection: 'row',
-                                  padding: 8,
-                                  gap: 8,
-                                }}>
+                              <View key={ind} style={styles.pres1}>
                                 <Icon
                                   name="prescription"
-                                  size={16}
+                                  size={moderateScale(16)}
                                   color={CUSTOMCOLOR.primary}
                                 />
                                 <View>
-                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                  <Text style={styles.pulse}>
                                     {item.mode} | {item.medicine} |
                                     {item.dose_quantity} | {item.timing} |
                                     {item.frequency} | {item.duration} |{' '}
@@ -289,7 +280,7 @@ const Visit = ({navigation, route}) => {
                         <Icon
                           name="file-document-edit"
                           color={CUSTOMCOLOR.primary}
-                          size={16}
+                          size={moderateScale(16)}
                         />
                         <Text style={styles.pulse}>{date}</Text>
                       </>
@@ -301,7 +292,7 @@ const Visit = ({navigation, route}) => {
                         <Icon
                           name="file-document-edit"
                           color={CUSTOMCOLOR.primary}
-                          size={16}
+                          size={moderateScale(16)}
                         />
                         <Text style={styles.pulse}>{dateTimeRed}</Text>
                       </>
@@ -322,26 +313,14 @@ const Visit = ({navigation, route}) => {
                         {(vitalsData?.systolic ||
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              flexWrap: 'wrap',
-                              marginBottom: 4,
-                            }}>
-                            <View
-                              key={index}
-                              style={{
-                                flexDirection: 'row',
-                                gap: 8,
-                                padding: 2,
-                                marginBottom: moderateScale(18),
-                              }}>
+                          <View style={styles.vitals}>
+                            <View key={index} style={styles.vitals1}>
                               {vitalsData?.pulse_rate && (
                                 <>
                                   <Icon
                                     name="water-check"
                                     color={CUSTOMCOLOR.primary}
-                                    size={16}
+                                    size={moderateScale(16)}
                                   />
                                   <Text style={styles.pulse}>
                                     pulse rate:
@@ -379,19 +358,13 @@ const Visit = ({navigation, route}) => {
                                 </Text>
                               )}
                             </View>
-                            <View
-                              key={index}
-                              style={{
-                                flexDirection: 'row',
-                                gap: 8,
-                                padding: 2,
-                              }}>
+                            <View key={index} style={styles.common}>
                               {vitalsData?.systolic && (
                                 <>
                                   <Icon
                                     name="water-check"
                                     color={CUSTOMCOLOR.primary}
-                                    size={16}
+                                    size={moderateScale(16)}
                                   />
                                   <Text style={styles.pulse}>
                                     {Language[language]['systolic_bp']}:
@@ -411,19 +384,13 @@ const Visit = ({navigation, route}) => {
                         {vitalsData?.LDD && (
                           <View
                             style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                            <View
-                              key={index}
-                              style={{
-                                flexDirection: 'row',
-                                gap: 8,
-                                padding: 2,
-                              }}>
+                            <View key={index} style={styles.common}>
                               {vitalsData?.LDD && (
                                 <>
                                   <Icon
                                     name="calendar-range"
                                     color={CUSTOMCOLOR.primary}
-                                    size={16}
+                                    size={moderateScale(16)}
                                   />
                                   <Text style={styles.pulse}>
                                     {Language[language]['lmp_edd']}:
@@ -449,7 +416,7 @@ const Visit = ({navigation, route}) => {
                       <Icon
                         name="file-document-edit"
                         color={CUSTOMCOLOR.primary}
-                        size={16}
+                        size={moderateScale(16)}
                       />
                       <Text style={styles.pulse}>
                         {complaint} | {selectedComplaint}
@@ -461,7 +428,7 @@ const Visit = ({navigation, route}) => {
                       <Icon
                         name="file-document-edit"
                         color={CUSTOMCOLOR.primary}
-                        size={16}
+                        size={moderateScale(16)}
                       />
                       <Text style={styles.pulse}>{note}</Text>
                     </View>
@@ -473,7 +440,7 @@ const Visit = ({navigation, route}) => {
                        <Icon
                        name="prescription"
                        color={CUSTOMCOLOR.primary}
-                       size={16}
+                       size={moderateScale(16)}
                      />
                      <Text style={styles.pulse}>{diagnosis}</Text>
                         
@@ -482,23 +449,13 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Diagnosis' && diagnosis.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View
-                          style={{
-                            gap: 4,
-                            flexDirection: 'row',
-                          }}>
+                        <View style={styles.common}>
                           <View>
                             {diagnosis?.map((item, ind) => (
-                              <View
-                                key={ind}
-                                style={{
-                                  flexDirection: 'row',
-                                  padding: 4,
-                                  gap: 4,
-                                }}>
+                              <View key={ind} style={styles.common}>
                                 <Icon
                                   name="prescription"
-                                  size={16}
+                                  size={moderateScale(16)}
                                   color={CUSTOMCOLOR.primary}
                                 />
                                 <View>
@@ -519,31 +476,21 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Commorbities' &&
+                  {value.label === 'Comorbidities' &&
                     commorbities.length > 0 && (
                       <View style={styles.basiccontainer}>
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                          <View
-                            style={{
-                              gap: 4,
-                              flexDirection: 'row',
-                            }}>
+                          <View style={styles.common}>
                             <View>
                               {commorbities?.map((item, ind) => (
-                                <View
-                                  key={ind}
-                                  style={{
-                                    flexDirection: 'row',
-                                    padding: 4,
-                                    gap: 4,
-                                  }}>
+                                <View key={ind} style={styles.common}>
                                   <Icon
                                     name="prescription"
-                                    size={16}
+                                    size={moderateScale(16)}
                                     color={CUSTOMCOLOR.primary}
                                   />
                                   <View>
-                                    <Text style={{color: CUSTOMCOLOR.black}}>
+                                    <Text style={styles.pulse}>
                                       {item?.commoribities}
                                     </Text>
                                   </View>
@@ -559,27 +506,17 @@ const Visit = ({navigation, route}) => {
                     pasthistory.length > 0 && (
                       <View style={styles.basiccontainer}>
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                          <View
-                            style={{
-                              gap: 4,
-                              flexDirection: 'row',
-                            }}>
+                          <View style={styles.common}>
                             <View>
                               {pasthistory?.map((item, ind) => (
-                                <View
-                                  key={ind}
-                                  style={{
-                                    flexDirection: 'row',
-                                    padding: 4,
-                                    gap: 4,
-                                  }}>
+                                <View key={ind} style={styles.common}>
                                   <Icon
                                     name="prescription"
-                                    size={16}
+                                    size={moderateScale(16)}
                                     color={CUSTOMCOLOR.primary}
                                   />
                                   <View>
-                                    <Text style={{color: CUSTOMCOLOR.black}}>
+                                    <Text style={styles.pulse}>
                                       {item?.past_history}
                                     </Text>
                                   </View>
@@ -594,27 +531,17 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Allergies' && allergies?.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View
-                          style={{
-                            gap: 4,
-                            flexDirection: 'row',
-                          }}>
+                        <View style={styles.common}>
                           <View>
                             {allergies?.map((item, ind) => (
-                              <View
-                                key={ind}
-                                style={{
-                                  flexDirection: 'row',
-                                  padding: 4,
-                                  gap: 4,
-                                }}>
+                              <View key={ind} style={styles.common}>
                                 <Icon
                                   name="prescription"
-                                  size={16}
+                                  size={moderateScale(16)}
                                   color={CUSTOMCOLOR.primary}
                                 />
                                 <View>
-                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                  <Text style={styles.pulse}>
                                     {item?.allergies}
                                   </Text>
                                 </View>
@@ -629,27 +556,17 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Test Prescribe' && labreport.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View
-                          style={{
-                            gap: 4,
-                            flexDirection: 'row',
-                          }}>
+                        <View style={styles.common}>
                           <View>
                             {labreport?.map((item, ind) => (
-                              <View
-                                key={ind}
-                                style={{
-                                  flexDirection: 'row',
-                                  padding: 4,
-                                  gap: 4,
-                                }}>
+                              <View key={ind} style={styles.common}>
                                 <Icon
                                   name="prescription"
-                                  size={16}
+                                  size={moderateScale(16)}
                                   color={CUSTOMCOLOR.primary}
                                 />
                                 <View>
-                                  <Text style={{color: CUSTOMCOLOR.black}}>
+                                  <Text style={styles.pulse}>
                                     {item?.lab_test}
                                   </Text>
                                 </View>
@@ -668,7 +585,7 @@ const Visit = ({navigation, route}) => {
                           <Icon
                             name="doctor"
                             color={CUSTOMCOLOR.primary}
-                            size={16}
+                            size={moderateScale(16)}
                           />
                           <Text style={styles.pulse}>
                             Refer to {selectedDoctor?.doctor_name}{' '}
@@ -685,13 +602,13 @@ const Visit = ({navigation, route}) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingHorizontal: 24,
+              paddingHorizontal: horizontalScale(24),
             }}>
             <HButton
               label="Preview"
               onPress={handlePreview}
               btnstyles={{
-                backgroundColor: '#ffffff',
+                backgroundColor: CUSTOMCOLOR.white,
               }}
               textStyle={{
                 color: CUSTOMCOLOR.primary,
@@ -704,7 +621,7 @@ const Visit = ({navigation, route}) => {
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
+        backgroundStyle={CUSTOMCOLOR.white}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
     </View>
@@ -714,25 +631,25 @@ const Visit = ({navigation, route}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    padding: 24,
-    gap: 16,
+    padding: moderateScale(24),
+    gap: moderateScale(16),
   },
   select: {
-    gap: 8,
+    gap: moderateScale(8),
   },
   tab: {
     flexDirection: 'row',
-    gap: 24,
+    gap: moderateScale(24),
   },
   appointment: {
-    gap: 8,
-    paddingHorizontal: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
   h2: {
-    fontSize: 24,
+    fontSize: moderateScale(24),
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.heading,
-    lineHeight: 20 * 2,
+    lineHeight: moderateScale(20 * 2),
     color: CUSTOMCOLOR.black,
   },
   visitOpenItem: {
@@ -747,35 +664,64 @@ const styles = StyleSheet.create({
   basiccontainer: {
     //flexDirection:'row',
     width: '100%',
-    borderRadius: 4,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    gap: 16,
+    borderRadius: moderateScale(4),
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(16),
+    gap: moderateScale(16),
   },
   FollowUpcontainer: {
     flexDirection: 'row',
     width: '100%',
-    borderRadius: 4,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    gap: 16,
+    borderRadius: moderateScale(4),
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(16),
+    gap: moderateScale(16),
   },
   pulse: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 400,
-    fontSize: 12,
-    lineHeight: 15.04,
+    // fontWeight: 400,
+    fontSize: moderateScale(14),
+    lineHeight: moderateScale(15.04),
     color: CUSTOMCOLOR.black,
   },
   complaintcontainer: {
     // width: 635,
     // height: 32,
-    borderRadius: 4,
-    padding: 16,
-    padding: 16,
-    gap: 8,
+    borderRadius: moderateScale(4),
+    padding: moderateScale(16),
+    gap: moderateScale(8),
     flexDirection: 'row',
   },
+  symptomicon: {
+    flexDirection: 'row',
+    gap: moderateScale(10),
+    padding: moderateScale(8),
+    alignItems: 'center',
+  },
+  pres: {
+    gap: moderateScale(8),
+    flexDirection: 'row',
+  },
+  pres1: {
+    flexDirection: 'row',
+    padding: moderateScale(8),
+    gap: moderateScale(8),
+  },
+  vitals: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 4,
+  },
+  vitals1: {
+    flexDirection: 'row',
+    gap: moderateScale(8),
+    padding: moderateScale(2),
+    marginBottom: moderateScale(18),
+  },
+  common: {
+    flexDirection: 'row',
+    padding: moderateScale(4),
+    gap: moderateScale(4),
+  },
 });
-
 export default Visit;

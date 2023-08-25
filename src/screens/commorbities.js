@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
 import {useState} from 'react';
@@ -11,6 +11,11 @@ import {
 } from '../redux/features/prescription/commorbities';
 import {CONSTANTS} from '../utility/constant';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const Commorbities = () => {
   const nav = useNavigation();
@@ -29,17 +34,18 @@ const Commorbities = () => {
   };
 
   const constants = (
-    <View style={{flexDirection: 'row', gap: 16}}>
+    <View style={{flexDirection: 'row', gap: moderateScale(12)}}>
       {CONSTANTS.comorbidities?.map((item, index) => (
         <TouchableOpacity
           key={index}
           onPress={() => selectChange(item)}
-          style={{
-            padding: 8,
-            borderRadius: 8,
-            backgroundColor:
-              select === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-          }}>
+          style={[
+            styles.recomend,
+            {
+              backgroundColor:
+                select === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+            },
+          ]}>
           <Text style={{color: CUSTOMCOLOR.black}}>{item}</Text>
         </TouchableOpacity>
       ))}
@@ -47,13 +53,11 @@ const Commorbities = () => {
   );
   const HandleAddValue = () => {
     if (value) {
-      console.log('valuesssssssssss');
       dispatch(addCommorbities([...prev, {commoribities: value}]));
       setValue('');
     }
   };
   const handleDelete = index => {
-    console.log('prescription index', index);
     if (prev) {
       const updatedPrescriptions = prev?.filter((item, ind) => ind !== index);
 
@@ -62,7 +66,7 @@ const Commorbities = () => {
   };
 
   return (
-    <View style={{paddingHorizontal: 24, paddingVertical: 16, gap: 8}}>
+    <View style={styles.main}>
       <PrescriptionHead heading="Comorbidities" />
 
       {prev?.map((item, ind) =>
@@ -90,3 +94,15 @@ const Commorbities = () => {
 };
 
 export default Commorbities;
+
+const styles = StyleSheet.create({
+  main: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(8),
+  },
+  recomend: {
+    padding: moderateScale(8),
+    borderRadius: moderateScale(8),
+  },
+});

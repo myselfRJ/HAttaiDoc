@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
 import {useState} from 'react';
@@ -17,6 +17,11 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 
 const Diagnosis = ({navigation}) => {
   const nav = useNavigation();
@@ -33,15 +38,6 @@ const Diagnosis = ({navigation}) => {
       setValue('');
     }
   };
-  // const handlePress = () => {
-  //     console.log(value);
-  //     nav.goBack();
-  // };
-  // const handleDeleteSlotChip = index => {
-  //     console.log('...', index);
-  //     const newData = prev?.filter((_, i) => i !== index);
-  //     dispatch(updateDiagnosis.updateDiagnosis(newData));
-  //   };
   const handleDelete = index => {
     // console.log('prescription index', index);
     if (prev) {
@@ -52,20 +48,14 @@ const Diagnosis = ({navigation}) => {
   };
   // const [showSlotChip, setShowSlotChip] = useState(false);
   return (
-    <View style={{paddingHorizontal: 24, paddingVertical: 16, gap: 8}}>
-      <PlusButton
+    <View style={styles.main}>
+      {/* <PlusButton
         icon="close"
-        style={{
-          zIndex: 4,
-          backgroundColor: 'transparent',
-          position: 'absolute',
-          alignSelf: 'flex-end',
-          padding: 16,
-        }}
+        style={styles.child}
         color="#000000aa"
-        size={32}
+        size={moderateScale(32)}
         onPress={() => navigation.goBack()}
-      />
+      /> */}
 
       <PrescriptionHead heading="Diagnosis" />
       {prev?.map((item, ind) =>
@@ -78,7 +68,7 @@ const Diagnosis = ({navigation}) => {
         ) : null,
       )}
 
-      <View style={{marginBottom: 16}}>
+      <View style={{marginBottom: moderateScale(16)}}>
         <PresComponent
           label="Diagnosis"
           placeholder="Enter diagnosis"
@@ -91,3 +81,18 @@ const Diagnosis = ({navigation}) => {
   );
 };
 export default Diagnosis;
+
+const styles = StyleSheet.create({
+  main: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(8),
+  },
+  child: {
+    zIndex: moderateScale(4),
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    padding: moderateScale(16),
+  },
+});

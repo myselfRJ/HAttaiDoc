@@ -21,6 +21,11 @@ import {HButton, InputText, SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
 import DatePicker from 'react-native-date-picker';
 import PrescriptionHead from '../components/prescriptionHead';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
 const VitalScreen = props => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
@@ -177,7 +182,7 @@ const VitalScreen = props => {
 
   return (
     <>
-      <View style={{paddingHorizontal: 24, paddingVertical: 24}}>
+      <View style={styles.main}>
         <PrescriptionHead heading={Language[language]['vitals']} />
         {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
         <View>
@@ -187,8 +192,8 @@ const VitalScreen = props => {
               <View style={styles.basicFields}>
                 <View style={styles.pulsecontainer}>
                   {/* <InputText 
-                  textStyle={{paddingVertical:12}}
-                  //lbltext={{paddingVertical:4}}
+                  textStyle={{paddingVertical:1verticalScale(2})}
+                  //lbltext={{paddingVertical:4verticalScale(}})
                   label= {Language[language]['pulse_rate']} 
                   placeholder= {Language[language]['bpm']} 
                   setValue={text => PulseChange(text, props.index)}/> */}
@@ -283,7 +288,7 @@ const VitalScreen = props => {
                     />
                   )}
                   {/* <Text
-                    style={{padding: 21, backgroundColor: CUSTOMCOLOR.white}}>
+                    style={{padding: moderateScale(21), backgroundColor: CUSTOMCOLOR.white}}>
                     week
                   </Text> */}
                 </View>
@@ -298,23 +303,12 @@ const VitalScreen = props => {
                     keyboardType="numeric"
                   /> */}
                 {/* <Text></Text> */}
-                <Text
-                  style={{
-                    padding: 12,
-                    backgroundColor: CUSTOMCOLOR.white,
-                    color: CUSTOMCOLOR.primary,
-                    fontSize: CUSTOMFONTSIZE.h4,
-                    width: 100,
-                    paddingVertical: 16,
-                    borderRadius: 4,
-                  }}>
-                  {vitals?.EDD}
-                </Text>
+                <Text style={styles.EDD}>{vitals?.EDD}</Text>
                 {/* </View> */}
               </View>
             </View>
           </View>
-          <View style={{top: 100, alignItems: 'center'}}>
+          <View style={{top: moderateScale(100), alignItems: 'center'}}>
             <HButton
               label={Language[language]['submit']}
               onPress={handlePress}
@@ -326,51 +320,43 @@ const VitalScreen = props => {
   );
 };
 const styles = StyleSheet.create({
+  main: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
+  },
+  EDD: {
+    padding: moderateScale(12),
+    backgroundColor: CUSTOMCOLOR.white,
+    color: CUSTOMCOLOR.primary,
+    fontSize: CUSTOMFONTSIZE.h4,
+    width: moderateScale(100),
+    paddingVertical: verticalScale(16),
+    borderRadius: moderateScale(4),
+  },
   inpcontainer: {
     flexDirection: 'row',
     width: '100%',
-    //paddingHorizontal: 4,
-    paddingVertical: 8,
+    //paddingHorizontal: horizontalScale(4),
+    paddingVertical: verticalScale(8),
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '700',
-    gap: 4,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-  },
-  text: {
-    fontWeight: 500,
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  h2: {
-    fontSize: 24,
-    fontWeight: 700,
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    lineHeight: 20 * 2,
-    color: CUSTOMCOLOR.black,
-    padding: 10,
-  },
-  h3: {
-    fontSize: 14,
-    fontWeight: '600',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    lineHeight: 20 * 2,
-    color: CUSTOMCOLOR.black,
-    padding: 10,
+    gap: moderateScale(4),
+    borderRadius: moderateScale(4),
+    paddingHorizontal: horizontalScale(8),
   },
   vitalmain: {
     width: '100%',
     // height: 309,
-    gap: 4,
-    padding: 8,
+    gap: moderateScale(4),
+    padding: moderateScale(8),
   },
   basiccontainer: {
     width: '100%',
   },
   basic: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 600,
-    paddingHorizontal: 8,
+    fontWeight: '600',
+    paddingHorizontal: horizontalScale(8),
     color: CUSTOMCOLOR.black,
     //gap: 10,
     fontSize: CUSTOMFONTSIZE.h2,
@@ -380,169 +366,169 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     width: '100%',
-    gap: 16,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    gap: moderateScale(16),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   pulsecontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   pulse: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   pulsetext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   weightcontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   weight: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   hardText: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 12,
-    color: CUSTOMCOLOR.black,
-    backgroundColor: CUSTOMCOLOR.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  // text: {
+  //   fontSize: CUSTOMFONTSIZE.h4,
+  //   color: CUSTOMCOLOR.black,
+  //   backgroundColor: CUSTOMCOLOR.white,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
   weighttext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   heightcontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   height: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   heighttext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   tempcontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   temp: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   temptext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   ratecontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   rate: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   ratetext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   bmi: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   bmitext: {
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    top: 2,
-    gap: 8,
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: horizontalScale(8),
+    top: moderateScale(2),
+    gap: moderateScale(8),
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: 4,
+    borderRadius: moderateScale(4),
     color: CUSTOMCOLOR.primary,
   },
   bloodPressureContainer: {
-    paddingHorizontal: 8,
-    // paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4,)
     flexDirection: 'row',
-    gap: 4,
-    top: 8,
+    gap: moderateScale(4),
+    top: moderateScale(8),
   },
   bloodPres: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    gap: 10,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
+    gap: moderateScale(10),
     color: CUSTOMCOLOR.black,
-    top: 16,
+    top: moderateScale(16),
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h2,
   },
   diascontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   diastolic: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     lineHeight: 16.34,
   },
   diatext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
 
     backgroundColor: CUSTOMCOLOR.white,
   },
   syscontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
   },
   systolic: {
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   systext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   pregText: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
     //gap: 10,
     color: CUSTOMCOLOR.black,
-    top: 16,
+    top: moderateScale(16),
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h2,
   },
   pregnancyFields: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingHorizontal: horizontalScale(12),
+    paddingVertical: verticalScale(4),
     flexDirection: 'row',
-    gap: 16,
-    top: 16,
+    gap: moderateScale(16),
+    top: moderateScale(16),
   },
   lmpcontainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    gap: 4,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
+    gap: moderateScale(4),
     // paddingRight: '15%',
   },
   lmp: {
@@ -550,33 +536,33 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   lmptext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   uscontainer: {
-    // paddingHorizontal: 8,
-    // paddingVertical: 4,
-    gap: 4,
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4,)
+    gap: moderateScale(4),
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
   },
   ustext: {
-    paddingVertical: 16,
-    gap: 4,
+    paddingVertical: verticalScale(16),
+    gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
   },
   submitbtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
-    margin: 100,
+    margin: moderateScale(100),
     borderWidth: 1,
     borderColor: CUSTOMCOLOR.primary,
-    borderRadius: 4,
+    borderRadius: moderateScale(4),
   },
 });
 

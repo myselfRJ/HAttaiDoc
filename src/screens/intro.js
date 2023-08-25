@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     // width: horizontalScale(00,)
     // height:164,
     // top:100,
-    alignItems:'center',
+    alignItems: 'center',
     //left:61,
     paddingHorizontal: horizontalScale(24),
 
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     // fontWeight: 400,
     color: CUSTOMCOLOR.black,
   },
-  img: {width: horizontalScale(224), height: verticalScale(261)},
+  img: {width: moderateScale(224), height: moderateScale(261)},
 });
 export default Intro;

@@ -22,15 +22,22 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import PrescriptionHead from '../components/prescriptionHead';
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from '../utility/scaleDimension';
+import {InputText} from '../components';
 
 export default function Prescribe1() {
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
   const [setmedicine, selectedMedicine] = useState('');
+  const [mgs, setmg] = useState('');
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
-  const [frequency, setFrequency] = useState('');
+  const [frequency, setFrequency] = useState([]);
   const [dose_number, setDose_number] = useState('');
   const [duration, setDuration] = useState('');
   const recommdations = CONSTANTS.medicine_recomendation;
@@ -40,36 +47,30 @@ export default function Prescribe1() {
   const frequencys = CONSTANTS.frequency;
   const [total_quantity, setTotalQuantity] = useState();
   const dispatch = useDispatch();
-  const prescribe = useState([
-    {
-      medicine: medicine,
-      mode: mode,
-      dose_quantity: dose_quantity,
-      timing: timing,
-      frequency: JSON.stringify(frequency),
-      dose_number: dose_number,
-      duration: duration,
-      total_quantity: total_quantity,
-    },
-  ]);
+  // const prescribe = useState([
+  //   {
+  //     medicine: medicine,
+  //     mode: mode,
+  //     dose_quantity: dose_quantity,
+  //     timing: timing,
+  //     frequency: JSON.stringify(frequency),
+  //     dose_number: dose_number,
+  //     duration: duration,
+  //     total_quantity: total_quantity,
+  //   },
+  // ]);
   const prevPres = useSelector(state => state.pres.prescribeItems);
-  // console.log('previous....', prevPres);
-
-  //   const [prescribeInput, setPrescribeInput] = useState([prevPres]);
-  const [prescribeList, setPrescribeList] = useState([]);
 
   const handleAddPrescribe = () => {
-    // const newPrescribe = {...prescribeInput};
-    // setPrescribeList(prevState => [...prevState, newPrescribe]);
     dispatch(
       addPrescribe([
         ...prevPres,
         {
           medicine: medicine,
           mode: mode,
-          dose_quantity: dose_quantity,
+          dose_quantity: mgs,
           timing: timing,
-          frequency: frequency?.join(','),
+          frequency: selectedDaysString,
           dose_number: dose_number,
           duration: duration,
           total_quantity: total_quantity,
@@ -84,6 +85,7 @@ export default function Prescribe1() {
     setTiming('');
     setFrequency([]);
     setDuration('');
+    setmg('');
   };
 
   const handleDelete = index => {
@@ -102,6 +104,7 @@ export default function Prescribe1() {
 
   const setMG = value => {
     setDose_quantity(value);
+    setmg(value);
   };
 
   const setTime = value => {
@@ -118,26 +121,25 @@ export default function Prescribe1() {
     }
   };
 
-  // const getSelectedFreq = () => {
-  //   const selectedFreq = [];
+  const getSelectedDaysString = () => {
+    const selectedDays = [];
 
-  //   for (let i = 0; i < CONSTANTS.frequency.length; i++) {
-  //     if (frequency.includes(i)) {
-  //       selectedFreq.push('1');
-  //     } else {
-  //       selectedFreq.push('0');
-  //     }
-  //   }
+    for (let i = 0; i < CONSTANTS.frequency.length; i++) {
+      if (frequency.includes(i)) {
+        selectedDays.push('1');
+      } else {
+        selectedDays.push('0');
+      }
+    }
 
-  //   setFrequency(selectedFreq.join('-'));
-  // };
-  // const selectedDaysString = getSelectedDaysString();
-  // console.log(selectedDaysString);
+    return selectedDays.join('-');
+  };
+  const selectedDaysString = getSelectedDaysString();
 
   const totoal_quantity = () => {
-    quantity =
+    const quantity =
       parseInt(dose_number) * parseInt(duration) * parseInt(frequency.length);
-    // setTotalQuantity(quantity)
+
     if (quantity !== 'NaN') {
       setTotalQuantity(quantity);
     } else {
@@ -150,28 +152,14 @@ export default function Prescribe1() {
     totoal_quantity();
   }, [duration, dose_number, frequency]);
 
-  // console.log('====================================');
-  // console.log('----------quanity', isNaN(total_quantity));
-  // console.log('====================================');
-
   return (
     <ScrollView>
-      <View style={{padding: 24, gap: 24}}>
+      <View style={styles.main}>
         <PrescriptionHead heading={Language[language]['prescribe']} />
         {/* <Text style={styles.mainText}>{Language[language]['prescribe']}</Text> */}
 
         {prevPres?.map((item, ind) => (
-          <View
-            key={ind}
-            style={{
-              flex: 1,
-              width: '100%',
-              marginBottom: 5,
-              borderWidth: 1,
-              padding: 8,
-              borderColor: '#2CBB15',
-              backgroundColor: CUSTOMCOLOR.white,
-            }}>
+          <View key={ind} style={styles.reduxText}>
             <View
               style={{
                 flexDirection: 'row',
@@ -180,7 +168,11 @@ export default function Prescribe1() {
                 // marginBottom: 5,
                 //borderWidth:1,
               }}>
-              <Icon name="prescription" size={16} color={CUSTOMCOLOR.primary} />
+              <Icon
+                name="prescription"
+                size={moderateScale(16)}
+                color={CUSTOMCOLOR.primary}
+              />
               <View style={{width: '90%'}}>
                 <Text
                   style={{
@@ -193,7 +185,11 @@ export default function Prescribe1() {
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleDelete(ind)}>
-                <Icon name="delete" size={24} color={CUSTOMCOLOR.delete} />
+                <Icon
+                  name="delete"
+                  size={moderateScale(24)}
+                  color={CUSTOMCOLOR.delete}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -201,7 +197,7 @@ export default function Prescribe1() {
 
         <View style={styles.prescribeConatiner}>
           <View>
-            <View style={styles.prescribeItemContainer}>
+            <View>
               <View style={styles.ModeContainer}>
                 <Text style={styles.ModeText}>
                   {Language[language]['mode']}
@@ -216,12 +212,17 @@ export default function Prescribe1() {
                           styles.ModesContainer,
                           {
                             backgroundColor:
-                              mode === value ? '#4ba5fa' : '#fff',
+                              mode === value
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.white,
                           },
                         ]}>
                         <Text
                           style={{
-                            color: mode === value ? '#fff' : '#4ba5fa',
+                            color:
+                              mode === value
+                                ? CUSTOMCOLOR.white
+                                : CUSTOMCOLOR.primary,
                           }}>
                           {value}
                         </Text>
@@ -235,6 +236,7 @@ export default function Prescribe1() {
                   <Text style={styles.ModeText}>
                     {Language[language]['medicine']}
                   </Text>
+                  {/* <InputText /> */}
                   <TextInput
                     style={styles.MedicineInput}
                     placeholder="Enter Medicine"
@@ -255,12 +257,17 @@ export default function Prescribe1() {
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                setmedicine === value ? '#4ba5fa' : '#fff',
+                                setmedicine === value
+                                  ? CUSTOMCOLOR.primary
+                                  : CUSTOMCOLOR.white,
                             },
                           ]}>
                           <Text
                             style={{
-                              color: setmedicine === value ? '#fff' : '#4ba5fa',
+                              color:
+                                setmedicine === value
+                                  ? CUSTOMCOLOR.white
+                                  : CUSTOMCOLOR.primary,
                             }}>
                             {value}
                           </Text>
@@ -271,7 +278,7 @@ export default function Prescribe1() {
                 </View>
               </View>
               <View style={styles.ModeContainer}>
-                <Text style={styles.ModeText}>
+                <Text style={styles.DoseText}>
                   {Language[language]['dose']}
                 </Text>
                 <View style={styles.TabInput}>
@@ -284,6 +291,11 @@ export default function Prescribe1() {
                     onChangeText={value => setDose_number(value)}
                   />
                 </View>
+                <InputText
+                  value={mgs}
+                  setValue={setmg}
+                  placeholder={'Enter Dosage eg: 100mg,200mg'}
+                />
                 <View style={styles.Modes}>
                   {mode === 'Injection' || mode === 'Syrup'
                     ? ml?.map((value, mgIndex) => (
@@ -340,7 +352,8 @@ export default function Prescribe1() {
                       ))}
                 </View>
               </View>
-              <View style={{padding: 16, top: 8}}>
+              <View
+                style={{paddingLeft: moderateScale(8), top: moderateScale(8)}}>
                 <Text style={styles.ModeText}>
                   {Language[language]['timing']}
                 </Text>
@@ -373,7 +386,7 @@ export default function Prescribe1() {
                   ))}
                 </View>
               </View>
-              <View style={{padding: 16, top: 8}}>
+              <View style={styles.frequencys}>
                 <Text style={styles.ModeText}>
                   {Language[language]['frequency']}
                 </Text>
@@ -382,20 +395,20 @@ export default function Prescribe1() {
                     <TouchableOpacity
                       key={frequencyIndex}
                       onPress={() => {
-                        FrequencySelection(value);
+                        FrequencySelection(frequencyIndex);
                       }}>
                       <View
                         style={[
                           styles.ModesContainer,
                           {
-                            backgroundColor: frequency.includes(value)
+                            backgroundColor: frequency.includes(frequencyIndex)
                               ? CUSTOMCOLOR.primary
                               : CUSTOMCOLOR.white,
                           },
                         ]}>
                         <Text
                           style={{
-                            color: frequency.includes(value)
+                            color: frequency.includes(frequencyIndex)
                               ? CUSTOMCOLOR.white
                               : CUSTOMCOLOR.primary,
                           }}>
@@ -421,15 +434,7 @@ export default function Prescribe1() {
                 <Text style={styles.ModeText}>
                   {Language[language]['quantity']}
                 </Text>
-                <View
-                  style={{
-                    height: 40,
-                    width: '25%',
-                    borderRadius: 8,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: CUSTOMCOLOR.white,
-                  }}>
+                <View style={styles.total_quantity}>
                   {isNaN(total_quantity) ? (
                     <Text style={styles.numText}>{'00'}</Text>
                   ) : (
@@ -441,7 +446,11 @@ export default function Prescribe1() {
             </View>
           </View>
           <TouchableOpacity onPress={handleAddPrescribe}>
-            <Icon name="plus" size={32} style={styles.PlusButton} />
+            <Icon
+              name="plus"
+              size={moderateScale(32)}
+              style={styles.PlusButton}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -452,12 +461,12 @@ export default function Prescribe1() {
 const styles = StyleSheet.create({
   prescribeConatiner: {
     width: '100%',
-    gap: 4,
+    gap: moderateScale(4),
   },
   ModeContainer: {
     //width: 635,
-    gap: 8,
-    paddingLeft: 16,
+    gap: moderateScale(8),
+    paddingLeft: moderateScale(8),
     //top: 8,
   },
   ModeText: {
@@ -465,123 +474,145 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
     //fontWeight: '400',
-    top: 8,
+    top: moderateScale(8),
+    color: CUSTOMCOLOR.black,
+  },
+  DoseText: {
+    fontWeight: 400,
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h3,
+    //fontWeight: '400',
+    top: moderateScale(16),
     color: CUSTOMCOLOR.black,
   },
   ModesContainer: {
-    gap: 8,
-    padding: 12,
-    borderRadius: 8,
+    gap: moderateScale(8),
+    padding: moderateScale(12),
+    borderRadius: moderateScale(8),
   },
   Modes: {
     flexDirection: 'row',
-    gap: 16,
-    paddingLeft: 8,
-    paddingRight: 8,
-    top: 8,
+    gap: moderateScale(16),
+    paddingHorizontal: horizontalScale(16),
+    top: moderateScale(8),
   },
   MedicineContainer: {
-    width: 635,
-    gap: 12,
-    top: 8,
+    // width: moderateScale(635),
+    gap: moderateScale(12),
+    top: moderateScale(8),
   },
   MedicineHead: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 8,
-    paddingRight: 8,
-    gap: 10,
+    paddingVertical: verticalScale(4),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(10),
   },
   MedicineInput: {
     width: '100%',
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingVertical: verticalScale(8),
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
   },
   RecommdationText: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingHorizontal: horizontalScale(4),
+
+    paddingVertical: verticalScale(8),
     fontWeight: 500,
     fontSize: CUSTOMFONTSIZE.h3,
-    lineHeight: 16,
+    lineHeight: moderateScale(16),
     color: CUSTOMCOLOR.black,
   },
+  reduxText: {
+    flex: 1,
+    width: '100%',
+    marginBottom: moderateScale(5),
+    borderWidth: 1,
+    padding: moderateScale(8),
+    borderColor: CUSTOMCOLOR.success,
+    backgroundColor: CUSTOMCOLOR.white,
+  },
   Dose: {
-    padding: 8,
+    padding: moderateScale(8),
   },
   DoseContainer: {
-    width: 635,
-    gap: 8,
+    width: moderateScale(635),
+    gap: moderateScale(8),
   },
   TextDose: {
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h4,
-    lineHeight: 13.62,
+    lineHeight: moderateScale(13.62),
     color: CUSTOMCOLOR.black,
-    paddingTop: 12,
+    paddingTop: moderateScale(12),
   },
   TabInput: {
-    padding: 8,
-    gap: 8,
+    padding: moderateScale(8),
+    gap: moderateScale(8),
     flexDirection: 'row',
     textAlign: 'center',
   },
   tab: {
     borderRadius: 4,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(8),
     backgroundColor: CUSTOMCOLOR.white,
   },
   frequency: {
-    width: 635,
-    gap: 8,
+    width: moderateScale(635),
+    gap: moderateScale(8),
   },
   DurationContainer: {
-    width: 635,
-    gap: 8,
+    // width: moderateScale(635),
+    gap: moderateScale(8),
   },
   durationInput: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(24),
     backgroundColor: CUSTOMCOLOR.white,
     width: '25%',
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
   },
   QuantityContainer: {
     width: '100%',
-    gap: 8,
+    gap: moderateScale(8),
   },
   numText: {
-    padding: 4,
+    padding: moderateScale(4),
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.primary,
-    gap: 10,
+    gap: moderateScale(10),
   },
   line: {
-    margin: 8,
-    height: 0.5,
+    margin: moderateScale(8),
+    height: moderateScale(0.5),
     width: '100%',
     backgroundColor: 'blue',
   },
   PlusButton: {
     backgroundColor: CUSTOMCOLOR.primary,
-    padding: 16,
-    borderRadius: 32,
+    padding: moderateScale(16),
+    borderRadius: moderateScale(32),
     justifyContent: 'center',
     alignSelf: 'center',
   },
   search: {
     position: 'absolute',
     color: CUSTOMCOLOR.primary,
-    padding: 40,
-    paddingLeft: 560,
+    padding: moderateScale(40),
+    paddingLeft: moderateScale(560),
+  },
+  main: {padding: moderateScale(24), gap: moderateScale(24)},
+  total_quantity: {
+    height: moderateScale(40),
+    width: '25%',
+    borderRadius: moderateScale(8),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: CUSTOMCOLOR.white,
+  },
+  frequencys: {
+    paddingLeft: moderateScale(8),
+    top: moderateScale(8),
+    paddingVertical: verticalScale(16),
   },
 });
