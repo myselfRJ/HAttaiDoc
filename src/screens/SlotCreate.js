@@ -134,11 +134,10 @@ const SlotCreate = ({navigation, route}) => {
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
-        Alert.alert('Conflict', 'A slot with conflicting time already exists.');
+        Alert.alert('Warning', 'A slot with conflicting time already exists.');
       }
     }
   };
-  const [check, setCheck] = useState(false);
 
   const handleAddSlotCopyMonday = () => {
     const weekdaysToUpdate = {
@@ -211,16 +210,10 @@ const SlotCreate = ({navigation, route}) => {
   return (
     <ScrollView>
       <View style={styles.main}>
-        {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
+        {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:1moderateScale(6})}> */}
         <PlusButton
           icon="close"
-          style={{
-            zIndex: 4,
-            backgroundColor: 'transparent',
-            position: 'absolute',
-            alignSelf: 'flex-end',
-            padding: 16,
-          }}
+          style={styles.Close}
           color="#000000aa"
           size={32}
           onPress={handleSaveSlotData}
@@ -233,11 +226,11 @@ const SlotCreate = ({navigation, route}) => {
         <View style={styles.dayselector}>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.M?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="M"
@@ -247,11 +240,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.T?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="T"
@@ -261,11 +254,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.W?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="W"
@@ -275,11 +268,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.TH?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="TH"
@@ -289,11 +282,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.F?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="F"
@@ -303,11 +296,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.Sa?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="Sa"
@@ -317,11 +310,11 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           <View
             style={[
+              styles.data,
               {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
+                backgroundColor:
+                  slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
               },
-              {backgroundColor: slots.Su?.length > 0 ? '#2CBB15' : null},
             ]}>
             <SelectionTab
               label="Su"
@@ -392,20 +385,6 @@ const SlotCreate = ({navigation, route}) => {
             }
           }}
         />
-
-        {/* <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} /> */}
-        {/* <View style={styles.ShowSchedule}>
-        {slots[selectedDay] && slots[selectedDay]?.map(slot => (
-          <SlotChip
-            key={slot.index}
-            index={slot.index}
-            onPress={handleDelete}
-            time={slot.fromTime + '-' + slot.toTime}
-            type={<Text>Type: {slot.consultType}</Text>}
-            duration={<Text>Duration: {slot.duration}</Text>}
-          />
-        ))}
-      </View> */}
         <View style={styles.ShowSchedule}>
           {Object.entries(slots).map(([day, daySlots]) =>
             daySlots?.map(slot => (
@@ -427,7 +406,11 @@ const SlotCreate = ({navigation, route}) => {
         <View>
           {slots?.M.length > 0 && (
             <TouchableOpacity onPress={() => handleAddSlotCopyMonday()}>
-              <View style={{padding: 16, backgroundColor: CUSTOMCOLOR.white}}>
+              <View
+                style={{
+                  padding: moderateScale(16),
+                  backgroundColor: CUSTOMCOLOR.white,
+                }}>
                 <Text style={{color: CUSTOMCOLOR.black}}>
                   Remaining Slots Sames As Monday
                 </Text>
@@ -456,10 +439,8 @@ const SlotCreate = ({navigation, route}) => {
           </View>
         ) : null}
         <View>
-          <TouchableOpacity
-            onPress={handleSaveSlotData}
-            style={{top: 16, borderRadius: 6}}>
-            <View style={{padding: 16, backgroundColor: CUSTOMCOLOR.primary}}>
+          <TouchableOpacity onPress={handleSaveSlotData} style={styles.save}>
+            <View style={styles.saveText}>
               <Text style={{color: CUSTOMCOLOR.white}}>Save</Text>
             </View>
           </TouchableOpacity>
@@ -468,7 +449,7 @@ const SlotCreate = ({navigation, route}) => {
         <BottomSheetView
           bottomSheetRef={slotTypeRef}
           snapPoints={'40%'}
-          backgroundStyle={'#fff'}>
+          backgroundStyle={CUSTOMCOLOR.white}>
           <ScrollView>
             <View style={styles.bottomSheet}>
               {consultType.map((consTypes, index) => (
@@ -486,7 +467,7 @@ const SlotCreate = ({navigation, route}) => {
         <BottomSheetView
           bottomSheetRef={slotDurationRef}
           snapPoints={'40%'}
-          backgroundStyle={'#fff'}>
+          backgroundStyle={CUSTOMCOLOR.white}>
           <ScrollView>
             <View style={styles.bottomSheet}>
               {durationMins.map((mins, index) => (
@@ -507,26 +488,28 @@ const SlotCreate = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  save: {top: moderateScale(16), borderRadius: moderateScale(6)},
+  saveText: {padding: moderateScale(16), backgroundColor: CUSTOMCOLOR.primary},
   main: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    gap: 16,
-    padding: 24,
+    gap: moderateScale(16),
+    padding: moderateScale(24),
     //borderWidth: 1,
   },
   dayselector: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: moderateScale(8),
   },
   ShowSchedule: {
-    gap: 8,
+    gap: moderateScale(8),
   },
   selector: {
     flexDirection: 'row',
-    gap: 64,
+    gap: moderateScale(64),
     width: '100%',
     justifyContent: 'center',
   },
@@ -534,13 +517,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    gap: 8,
-    paddingHorizontal: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
-  bottomSheet: {flex: 1, alignItems: 'center', gap: 32, paddingVertical: 16},
+  bottomSheet: {
+    flex: 1,
+    alignItems: 'center',
+    gap: moderateScale(32),
+    paddingVertical: verticalScale(16),
+  },
   values: {
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: '400',
     fontFamily: CUSTOMFONTFAMILY.opensans,
     color: CUSTOMCOLOR.black,
   },
@@ -548,8 +536,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     //flexDirection:'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(8),
     borderRadius: 4,
     backgroundColor: '#C6E3FF',
   },
@@ -562,17 +550,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
   },
   deletedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(16),
   },
   select1: {
     width: horizontalScale(240),
+  },
+  Close: {
+    zIndex: 4,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    padding: moderateScale(16),
+  },
+  data: {
+    paddingHorizontal: horizontalScale(4),
+    paddingVertical: verticalScale(4),
   },
 });
 

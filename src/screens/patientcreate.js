@@ -157,6 +157,7 @@ const PatientCreate = ({navigation}) => {
           setAadhar_no('');
           setBlood_group('');
           setSpouse_nmae('');
+          setAge();
           setLoading(false);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
@@ -245,8 +246,7 @@ const PatientCreate = ({navigation}) => {
               value={age}
               setValue={setAge}
               keypad={'numeric'}
-              doubleCheck={[true, false]}
-              check={checkNumber}
+              required={true}
             />
 
             <View style={styles.alignchild}>
