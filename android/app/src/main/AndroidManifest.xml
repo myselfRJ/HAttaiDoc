@@ -32,9 +32,9 @@ package="com.reactnativecommunity.geolocation">
         </intent-filter>
       </activity>
 
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ" />
+     <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ"/>
 
     </application>
 </manifest>
