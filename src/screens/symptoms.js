@@ -117,7 +117,9 @@ const Symptoms = ({navigation}) => {
             <View style={styles.content}>
               <View style={styles.symptomInput}>
                 <Text style={styles.text}>
-                  {Language[language]['symptom']}:{/* {parseInt(index + 1)}: */}
+                  {Language[language]['symptom']}{' '}
+                  {parseInt(symptomsData.length) + 1}:
+                  {/* {parseInt(index + 1)}: */}
                 </Text>
 
                 <TextInput

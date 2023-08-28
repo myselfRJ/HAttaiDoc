@@ -88,17 +88,11 @@ const Account = () => {
   }, [phone]);
 
   const today = moment().toISOString().split('-')[0];
-
-  // console.log('====================================', clinic);
-  // console.log(
-  //   '---------------------',
-  //   data?.DOB.split(' ')[1] + data?.DOB.split(' ')[2] + data?.DOB.split(' ')[3],
-  // );
-  const BirthYear = data?.DOB.split(' ')[3];
+  const BirthYear = data?.DOB.split('-')[0];
 
   const age = parseInt(today) - parseInt(BirthYear);
-  const DateOfBirth = `${data?.DOB.split(' ')[2]}-${data?.DOB.split(' ')[1]}-${
-    data?.DOB.split(' ')[3]
+  const DateOfBirth = `${data?.DOB.split('-')[2]}-${data?.DOB.split('-')[1]}-${
+    data?.DOB.split('-')[0]
   }`;
   useFocusEffect(
     React.useCallback(() => {
@@ -240,40 +234,6 @@ const Account = () => {
         </TouchableOpacity>
       </View>
       <View>
-        {/* <Text style={styles.manageText}>Manage</Text> */}
-        {/* <View style={styles.manageView}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View>
-              <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
-                <Icon name="hospital" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading}}>
-                  Clinics:
-                </Text>
-                {clinic?.map((val, ind) => (
-                  <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}} key={ind}>
-                    {val?.clinic_name}
-                  </Text>
-                ))}
-              </View>
-              <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
-                <Icon name="account-group" size={16} color={'#4ba5fa'} />
-                <Text style={{fontWeight: 600, color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading}}>
-                  Staff
-                </Text>
-                <Text style={{color: CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.body}}>Medical Number</Text>
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('addclinic');
-              }}>
-              <View style={styles.editBtn}>
-                <Icon name="plus" size={16} color={'#4ba5fa'} />
-                <Text style={{color: '#4ba5fa'}}>Add</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View> */}
         <View style={{gap: 8, marginTop: 32}}>
           <ManageCard
             // style={{marginBottom: 8}}

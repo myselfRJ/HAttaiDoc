@@ -33,6 +33,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import DatePicker from 'react-native-date-picker';
 import {useSelector} from 'react-redux';
+import {checkNumber} from '../utility/checks';
 
 const PatientCreate = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -100,12 +101,12 @@ const PatientCreate = ({navigation}) => {
   const dayOfMonth = date.toISOString().split('T')[0].split('-')[1];
   const dayOfYear = date.toISOString().split('T')[0].split('-')[0];
   const DOB = `${dayOfBirth}-${dayOfMonth}-${dayOfYear}`;
-  // console.log('-------------', DOB);
+  const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const patientDetails = {
     patient_name: name,
     gender: gender,
     patient_phone_number: patient_phone_number,
-    birth_date: DOB,
+    birth_date: `${'01'}-${'01'}-${current}`,
     // age: age,
     bloodgroup: blood_group,
     spouse_name: spouse_name,
@@ -238,21 +239,15 @@ const PatientCreate = ({navigation}) => {
                 }
               }}
             />
-            {/* <InputText
+            <InputText
               label="Age"
               placeholder="eg:25"
               value={age}
               setValue={setAge}
               keypad={'numeric'}
               doubleCheck={[true, false]}
-              check={e => {
-                if (e > 100) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
-            /> */}
+              check={checkNumber}
+            />
 
             <View style={styles.alignchild}>
               <Text
@@ -285,7 +280,7 @@ const PatientCreate = ({navigation}) => {
                 />
               </View>
             </View>
-            <View style={{width: '100%', paddingHorizontal: 8}}>
+            {/* <View style={{width: '100%', paddingHorizontal: 8}}>
               <SelectorBtn
                 required={true}
                 label="Date of Birth"
@@ -304,7 +299,7 @@ const PatientCreate = ({navigation}) => {
                   onCancel={handleCancel}
                 />
               )}
-            </View>
+            </View> */}
             <InputText
               label="Father/Husband Name"
               placeholder="Enter Father/husband Name"

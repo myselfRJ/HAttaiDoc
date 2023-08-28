@@ -31,17 +31,37 @@ const prescriptionSlice = createSlice({
     addCheifComplaint: (state, action) => {
       state.selectedComplaint = action.payload;
     },
+    UpadateCheifComplaint: (state, action) => {
+      state.selectedComplaint = action.payload;
+    },
     addNote: (state, action) => {
+      state.note = action.payload;
+    },
+    UpdateNote: (state, action) => {
       state.note = action.payload;
     },
     addDoctorRefer: (state, action) => {
       state.selectedDoctor = action.payload;
+    },
+    UpdateDoctorRefer: (state, action) => {
+      state.selectedDoctor = action.payload;
+    },
+    UpadteVitals: (state, action) => {
+      state.vitalsData = action.payload;
     },
     addVitals: (state, action) => {
       state.vitalsData = action.payload;
     },
   },
 });
-export const {addCheifComplaint, addNote, addDoctorRefer, addVitals} =
-  prescriptionSlice.actions;
+export const {
+  addCheifComplaint,
+  addNote,
+  addDoctorRefer,
+  addVitals,
+  UpadateCheifComplaint,
+  UpdateDoctorRefer,
+  UpdateNote,
+  UpadteVitals,
+} = prescriptionSlice.actions;
 export default prescriptionSlice.reducer;

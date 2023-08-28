@@ -171,6 +171,7 @@ const SlotCreate = ({navigation, route}) => {
     setDurationValue(durationMins[0]);
   };
   const slotData = useSelector(state => state?.slotsData?.slots);
+  console.log('-----------slotdata', slotData);
   const handleDelete = (dayTodelete, index) => {
     setAllSlots(prevAllSlots =>
       prevAllSlots.filter(slot => slot.index !== index),
@@ -407,7 +408,7 @@ const SlotCreate = ({navigation, route}) => {
       </View> */}
         <View style={styles.ShowSchedule}>
           {Object.entries(slots).map(([day, daySlots]) =>
-            daySlots.map(slot => (
+            daySlots?.map(slot => (
               <SlotChip
                 key={slot.index}
                 index={slot.index}
@@ -437,7 +438,7 @@ const SlotCreate = ({navigation, route}) => {
         {selectedDay === 'M' ? (
           <View>
             {Object.entries(slotData).map(([day, daySlots]) =>
-              daySlots.map(slot => (
+              daySlots?.map(slot => (
                 <SlotChip
                   key={slot.index}
                   index={slot.index}

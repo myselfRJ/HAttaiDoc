@@ -49,18 +49,18 @@ const AppointmentCard = ({appointment, openVisit}) => {
     const name = patient_name;
     const gende = patient_gender;
     const age = patient_age;
-    const complaint = appointment.complaint
+    const complaint = appointment.complaint;
     navigation.navigate('visit', {
       name,
       gende,
       age,
       patient_phone,
       appointment_id,
-      complaint
+      complaint,
     });
     appointmentCardRef?.current?.snapToIndex(0);
   };
-  
+
   return (
     <>
       <View style={styles.maincontainer}>
@@ -118,25 +118,26 @@ const AppointmentCard = ({appointment, openVisit}) => {
             <Text style={styles.statustext}>Follow Up</Text>
           </View> */}
         </View>
-        <Pressable
-          style={styles.icon}
-          onPress={() => {
-            appointment?.status === 'pending'? appointmentCardRef?.current?.snapToIndex(1) : appointmentCardRef?.current?.snapToIndex(1)
-          }}>
-          <View>
-            <Icon
-              name="dots-horizontal"
-              color={CUSTOMCOLOR.primary}
-              size={24}
-            />
-          </View>
-        </Pressable>
+        {appointment?.status === 'pending' && (
+          <Pressable
+            style={styles.icon}
+            onPress={() => {
+              appointmentCardRef?.current?.snapToIndex(1);
+            }}>
+            <View>
+              <Icon
+                name="dots-horizontal"
+                color={CUSTOMCOLOR.primary}
+                size={24}
+              />
+            </View>
+          </Pressable>
+        )}
 
         <BottomSheetView
           bottomSheetRef={appointmentCardRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
-       
           <View style={styles.tab}>
             <SelectionTab
               label={Language[language]['start_visit']}
@@ -154,17 +155,20 @@ const AppointmentCard = ({appointment, openVisit}) => {
                 appointmentCardRef?.current?.snapToIndex(0);
               }}
             /> */}
-            </View>
-             <View style={{alignSelf:'flex-end',paddingHorizontal:12,bottom:78}}>
-            <PlusButton icon='close' size={20} style={{
-              backgroundColor:'#000000aa'
-             
-            }}  onPress={() => {
-              appointmentCardRef?.current?.snapToIndex(0);
-            }}/>
-            </View>
-          
-         
+          </View>
+          <View
+            style={{alignSelf: 'flex-end', paddingHorizontal: 12, bottom: 78}}>
+            <PlusButton
+              icon="close"
+              size={20}
+              style={{
+                backgroundColor: '#000000aa',
+              }}
+              onPress={() => {
+                appointmentCardRef?.current?.snapToIndex(0);
+              }}
+            />
+          </View>
         </BottomSheetView>
       </View>
     </>
@@ -264,8 +268,8 @@ const styles = StyleSheet.create({
     height: verticalScale(25),
     width: horizontalScale(150),
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize:CUSTOMFONTSIZE.h3,
-    color:CUSTOMCOLOR.black
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
   },
   contact1: {
     height: verticalScale(25),
@@ -287,7 +291,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     padding: moderateScale(20),
     alignSelf: 'center',
-    top:10
+    top: 10,
   },
 });
 

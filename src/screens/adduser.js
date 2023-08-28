@@ -48,6 +48,7 @@ import {
 import {HttpStatusCode} from 'axios';
 import {disableBackButton} from '../utility/backDisable';
 import {useRoute} from '@react-navigation/native';
+import {checkNumber} from '../utility/checks';
 
 const AddUser = ({navigation}) => {
   const route = useRoute();
@@ -110,6 +111,11 @@ const AddUser = ({navigation}) => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
 
+  const ResetClinic_Users_Redux = () => {
+    const ResetClinic_users = [];
+    dispatch(updateclinic_users(ResetClinic_users));
+  };
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -135,7 +141,8 @@ const AddUser = ({navigation}) => {
           }, 1000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
-          SuccesRef?.current?.snapToIndex(0);
+          ResetClinic_Users_Redux();
+          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -280,8 +287,8 @@ const AddUser = ({navigation}) => {
               setValue={value => handleChangeValue('name', value)}
             />
             <InputText
-              //  doubleCheck={[true, false]}
-              //  check={checkNumber}
+              doubleCheck={[true, false]}
+              check={checkNumber}
               maxLength={10}
               label={Language[language]['phone_number']}
               placeholder="Phone Number"
@@ -323,7 +330,7 @@ const AddUser = ({navigation}) => {
               />
               {selectedRole === 'Others' && (
                 <InputText
-                  label={'Role'}
+                  label={'Please Enter Role'}
                   maxLength={30}
                   placeholder="Enter Role"
                   value={otherRole}
