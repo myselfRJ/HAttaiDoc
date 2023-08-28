@@ -44,7 +44,7 @@ const Prescription = ({route}) => {
   console.log('address=', clinic_Address);
   const test = useSelector(state => state?.labreport?.labReport);
   console.log('test>>>>>>>>>>', test);
-  const dateTimeRed = useSelector(state => state.valid?.date);
+  const dateTimeRed = useSelector(state => state.valid?.valid);
   const {name, gender, patient_age, patient_phone_number} = route.params;
 
   console.log(
@@ -82,9 +82,8 @@ const Prescription = ({route}) => {
   const format = current.toLocaleDateString(undefined, options);
 
   return (
-    
-      <ScrollView>
-        <View style={styles.main}>
+    <ScrollView>
+      <View style={styles.main}>
         <View
           style={{
             flexDirection: 'row',
@@ -272,9 +271,8 @@ const Prescription = ({route}) => {
             style={styles.footerimg}
           />
         </View>
-        </View>
-      </ScrollView>
-    
+      </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -295,15 +293,15 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: 18,
     color: CUSTOMCOLOR.primary,
-    paddingHorizontal:4
+    paddingHorizontal: 4,
   },
   address: {
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
     fontSize: 16,
     color: CUSTOMCOLOR.primary,
-    width:150,
-    paddingLeft:4
+    width: 150,
+    paddingLeft: 4,
     //paddingHorizontal:8
   },
   img: {

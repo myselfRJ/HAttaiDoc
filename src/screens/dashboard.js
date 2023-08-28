@@ -186,21 +186,16 @@ const Dashboard = ({navigation, route}) => {
     ClinicRef?.current?.snapToIndex(0);
   };
 
-  // const updateAppointment =
-  //   (setAppointment[setAppointment.length - 1],
-  //   setAppointment[setAppointment.length - 2],
-  //   setAppointment[setAppointment.length - 3]);
-
-  // console.log('====================================');
-  // console.log('---------setapp', updateAppointment);
-  // console.log('====================================');
-
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointment();
     }, [clinicid]),
   );
-
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchClinic();
+    }, []),
+  );
   useEffect(() => {
     disableBackButton();
   }, []);

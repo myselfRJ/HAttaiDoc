@@ -11,7 +11,7 @@ import PlusButton from '../components/plusbtn';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Language} from '../settings/customlanguage';
 import {language} from '../settings/userpreferences';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {getDate} from '../redux/features/prescription/Followupslice';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
@@ -25,8 +25,25 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import Prescribe1 from './prescibe1';
+import {updatePrescribe1} from '../redux/features/prescription/prescr';
+import {updateSymptom} from '../redux/features/prescription/symptomslice';
+import {updateDate} from '../redux/features/prescription/Followupslice';
+import {updateCommorbities} from '../redux/features/prescription/commorbities';
+import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
+import {updatepastHistory} from '../redux/features/prescription/pastHistory';
+import {updateLabReport} from '../redux/features/prescription/labreport';
+import {updateAllergies} from '../redux/features/prescription/allergies';
+import {updateValid} from '../redux/features/prescription/valid';
+import {
+  UpdateNote,
+  UpdateDoctorRefer,
+  UpadteVitals,
+  UpadateCheifComplaint,
+} from '../redux/features/prescription/prescriptionSlice';
 
 const Visit = ({navigation, route}) => {
+  const dispatch = useDispatch();
+
   const date = useSelector(state => state?.dateTime?.date);
   //console.log('date=======', typeof date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
@@ -57,7 +74,7 @@ const Visit = ({navigation, route}) => {
   const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
-  const dateTimeRed = useSelector(state => state.valid?.date);
+  const dateTimeRed = useSelector(state => state.valid?.valid);
 
   console.log('---------------lab', dateTimeRed);
 
@@ -85,6 +102,40 @@ const Visit = ({navigation, route}) => {
   );
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+
+  const ResetRuduxState = () => {
+    const newPrescribe = [];
+    const newSymptoms = [];
+    const newDiagnosis = [];
+    const newLabhistory = [];
+    const newCommorbities = [];
+    const newAllregies = [];
+    const newPastHistory = [];
+    const newDate = {
+      date: '',
+    };
+    const newValid = {
+      valid: '',
+    };
+    const newVitals = {};
+    const newDoctor = {};
+    const newComplaint = '';
+    const newNote = '';
+    dispatch(updatePrescribe1(newPrescribe));
+    dispatch(updateAllergies(newAllregies));
+    dispatch(updateCommorbities(newCommorbities));
+    dispatch(updateDiagnosis(newDiagnosis));
+    dispatch(updateLabReport(newLabhistory));
+    dispatch(updateSymptom(newSymptoms));
+    dispatch(updatepastHistory(newPastHistory));
+    dispatch(updateDate(newDate?.date));
+    dispatch(updateValid(newValid?.valid));
+    dispatch(UpadteVitals(newVitals));
+    dispatch(UpdateNote(newNote));
+    dispatch(UpdateDoctorRefer(newDoctor));
+    dispatch(UpadateCheifComplaint(newComplaint));
+  };
+
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
@@ -123,15 +174,18 @@ const Visit = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         console.log('data---0', jsonData);
-        setApiStatus({status: 'success', message: 'Successfully created'});
-        SuccesRef?.current?.snapToIndex(1);
-        // Prescribe.splice(0,Prescribe.length)
-        setTimeout(() => {
-          navigation.navigate('tab');
-        }, 1000);
-      } else {
-        setApiStatus({status: 'warning', message: 'Enter all Values'});
-        console.error('API call failed:', response.status, response);
+        if (jsonData?.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          SuccesRef?.current?.snapToIndex(1);
+          // Prescribe.splice(0,Prescribe.length)
+          setTimeout(() => {
+            navigation.navigate('tab');
+          }, 1000);
+          ResetRuduxState();
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          console.error('API call failed:', response.status, response);
+        }
       }
     } catch (error) {
       console.error('Error occurred:', error);

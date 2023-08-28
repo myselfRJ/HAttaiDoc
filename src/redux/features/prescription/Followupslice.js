@@ -9,9 +9,12 @@ const dateTimeSlice = createSlice({
     addDate: (state, action) => {
       state.date = action.payload;
     },
+    updateDate: (state, action) => {
+      state.date = action.payload;
+    },
   },
 });
 
-export const {addDate} = dateTimeSlice.actions;
+export const {addDate, updateDate} = dateTimeSlice.actions;
 
 export const followUpReducer = dateTimeSlice.reducer;

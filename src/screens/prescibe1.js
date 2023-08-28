@@ -257,7 +257,7 @@ export default function Prescribe1() {
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                setmedicine === value
+                                medicine === value
                                   ? CUSTOMCOLOR.primary
                                   : CUSTOMCOLOR.white,
                             },
@@ -265,7 +265,7 @@ export default function Prescribe1() {
                           <Text
                             style={{
                               color:
-                                setmedicine === value
+                                medicine === value
                                   ? CUSTOMCOLOR.white
                                   : CUSTOMCOLOR.primary,
                             }}>
@@ -307,7 +307,7 @@ export default function Prescribe1() {
                               styles.ModesContainer,
                               {
                                 backgroundColor:
-                                  dose_quantity === value
+                                  mgs === value
                                     ? CUSTOMCOLOR.primary
                                     : CUSTOMCOLOR.white,
                               },
@@ -315,7 +315,7 @@ export default function Prescribe1() {
                             <Text
                               style={{
                                 color:
-                                  dose_quantity === value
+                                  mgs === value
                                     ? CUSTOMCOLOR.white
                                     : CUSTOMCOLOR.primary,
                               }}>
@@ -333,7 +333,7 @@ export default function Prescribe1() {
                               styles.ModesContainer,
                               {
                                 backgroundColor:
-                                  dose_quantity === value
+                                  mgs === value
                                     ? CUSTOMCOLOR.primary
                                     : CUSTOMCOLOR.white,
                               },
@@ -341,7 +341,7 @@ export default function Prescribe1() {
                             <Text
                               style={{
                                 color:
-                                  dose_quantity === value
+                                  mgs === value
                                     ? CUSTOMCOLOR.white
                                     : CUSTOMCOLOR.primary,
                               }}>

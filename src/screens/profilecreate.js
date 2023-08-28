@@ -45,6 +45,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import {checkNumber} from '../utility/checks';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -94,6 +95,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
   );
+  const [age, setAge] = useState();
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
   const formattedDate = DOB.toLocaleDateString('en-US', {
@@ -147,15 +149,12 @@ const ProfileCreate = ({navigation}) => {
     handleChangeValue('gender', value);
   };
 
-  // const toggleDatePicker = () => {
-  //   setShowDatePicker(!showDatePicker);
-  // };
-
+  const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
     gender: values.gender,
-    DOB: DOB.toString(),
+    DOB: `${current}-${'01'}-${'01'}`,
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
@@ -259,8 +258,16 @@ const ProfileCreate = ({navigation}) => {
                 />
               </View>
             </View>
+            <InputText
+              label="Age"
+              placeholder="eg:25"
+              value={age}
+              setValue={setAge}
+              keypad={'numeric'}
+              required={true}
+            />
 
-            <View style={styles.btn}>
+            {/* <View style={styles.btn}>
               <SelectorBtn
                 required={true}
                 label={Language[language]['dob']}
@@ -278,7 +285,7 @@ const ProfileCreate = ({navigation}) => {
               mode="date"
               onConfirm={handleConfirm}
               onCancel={handleCancel}
-            />
+            /> */}
             <InputText
               required={true}
               label={Language[language]['medical_number']}

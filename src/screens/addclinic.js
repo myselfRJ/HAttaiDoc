@@ -45,6 +45,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import {updateslots} from '../redux/features/slots/slotData';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -54,6 +55,7 @@ const AddClinic = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
   const route = useRoute();
+
   const {prevScrn} = route.params;
   console.log('----------prev', prevScrn);
 
@@ -63,6 +65,21 @@ const AddClinic = ({navigation}) => {
       Slotadded();
     }, [slotData]),
   );
+
+  const ResetReduxSlots = () => {
+    const newSlotsss = {
+      slots: {
+        M: [],
+        T: [],
+        W: [],
+        TH: [],
+        F: [],
+        Sa: [],
+        Su: [],
+      },
+    };
+    dispatch(updateslots(newSlotsss?.slots));
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -74,7 +91,6 @@ const AddClinic = ({navigation}) => {
     const f = slotData?.slots?.F?.length === 0;
     const sa = slotData?.slots?.Sa?.length === 0;
     const su = slotData?.slots?.Su?.length === 0;
-    // console.log('........slot', m, t, w, th, f, sa, su);
 
     !(m && t && w && th && f && sa && su)
       ? setVisibleSlot(false)
@@ -105,9 +121,9 @@ const AddClinic = ({navigation}) => {
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
   const prevScrn1 = 'undefineed';
 
-  // console.log('====================================');
-  // console.log('----------clinicdata', slotData.slots);
-  // console.log('====================================');
+  console.log('====================================');
+  console.log('----------clinicdata', slotData.slots);
+  console.log('====================================');
   const Clinic_Data = {
     clinic_name: value.clinic,
     clinic_Address: value.address,
@@ -115,6 +131,12 @@ const AddClinic = ({navigation}) => {
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
   };
+
+  const ResetClinicRedux = () => {
+    const ResetClinic = [];
+    dispatch(updateclinics(ResetClinic));
+  };
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -135,11 +157,18 @@ const AddClinic = ({navigation}) => {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
           dispatch(headerStatus.headerStatus({index: 1, status: true}));
-          setTimeout(() => {
-            navigation.navigate('adduser', {prevScrn1});
-          }, 1000);
+          {
+            prevScrn === 'account'
+              ? setTimeout(() => {
+                  navigation.navigate('tab');
+                }, 1000)
+              : setTimeout(() => {
+                  navigation.navigate('adduser', {prevScrn1});
+                }, 1000);
+          }
 
           setLoading(false);
+          ResetClinicRedux();
           // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
@@ -166,6 +195,7 @@ const AddClinic = ({navigation}) => {
         (value.clinic = ''), (value.address = ''), (value.fees = '');
         setSelectedImage('');
         setVisibleSlot(true);
+        ResetReduxSlots();
       } else {
         Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
