@@ -263,7 +263,7 @@ const AddClinic = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: horizontalScale(8,
+                paddingHorizontal: horizontalScale(8),
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
@@ -335,7 +335,7 @@ const AddClinic = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
         backgroundStyle={CUSTOMCOLOR.white}>
@@ -346,7 +346,7 @@ const AddClinic = ({navigation}) => {
             }}
           />
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
