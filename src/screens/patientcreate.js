@@ -175,12 +175,11 @@ const PatientCreate = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: moderateScale(1)}}>
       <ScrollView>
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
-              <Text style={commonstyles.h1}>Add Patient</Text>
               <AddImage onPress={onImagePress} encodedBase64={selectedImage} />
             </View>
             {/* <View style={styles.CnfAbhaView}>
@@ -251,12 +250,7 @@ const PatientCreate = ({navigation}) => {
 
             <View style={styles.alignchild}>
               <Text
-                style={{
-                  fontFamily: CUSTOMFONTFAMILY.body,
-                  color: CUSTOMCOLOR.black,
-                  fontSize: CUSTOMFONTSIZE.h4,
-                  fontWeight: '400',
-                }}>
+                style={styles.genderText}>
                 Gender
               </Text>
               <View style={styles.radiogroup}>
@@ -383,7 +377,7 @@ const styles = StyleSheet.create({
   radiogroup: {
     padding: moderateScale(16),
     flexDirection: 'row',
-    gap: 48,
+    gap: moderateScale(48),
 
     justifyContent: 'flex-start',
   },
@@ -391,19 +385,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
+    paddingTop: moderateScale(16)
+  },
+  genderText:{
+    fontFamily: CUSTOMFONTFAMILY.body,
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: '400',
   },
   CnfAbhaView: {
     flexDirection: 'row',
     width: '100%',
-    height: 30,
+    height: moderateScale(30),
     justifyContent: 'space-around',
   },
   CnfAbha: {
     width: '50%',
-    height: 30,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    height: moderateScale(30),
+    borderTopLeftRadius: moderateScale(10),
+    borderTopRightRadius: moderateScale(10),
     justifyContent: 'center',
   },
 });

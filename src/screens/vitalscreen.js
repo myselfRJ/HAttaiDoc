@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.primary,
     fontSize: CUSTOMFONTSIZE.h4,
     width: moderateScale(100),
-    paddingVertical: verticalScale(16),
+    paddingVertical: verticalScale(12),
     borderRadius: moderateScale(4),
   },
   inpcontainer: {
@@ -373,6 +373,7 @@ const styles = StyleSheet.create({
   pulsecontainer: {
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(4),
+    
   },
   pulse: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -382,6 +383,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(16),
     gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.white,
+    //paddingHorizontal:horizontalScale(12)
   },
   weightcontainer: {
     paddingHorizontal: horizontalScale(8),
@@ -410,6 +412,7 @@ const styles = StyleSheet.create({
   heightcontainer: {
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(4),
+
   },
   height: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -448,14 +451,16 @@ const styles = StyleSheet.create({
   },
   bmicontainer: {
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    paddingVertical: verticalScale(8),
+  
   },
   bmi: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
+    fontWeight:400
   },
   bmitext: {
-    paddingVertical: verticalScale(10),
+    paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(8),
     top: moderateScale(2),
     gap: moderateScale(8),
@@ -543,11 +548,12 @@ const styles = StyleSheet.create({
   uscontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4,)
-    gap: moderateScale(4),
+    gap: moderateScale(8),
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
+    top:moderateScale(4)
   },
   ustext: {
     paddingVertical: verticalScale(16),

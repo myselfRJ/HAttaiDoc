@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 import {CONSTANT} from '../utility/const';
 import {CONSTANTS} from '../utility/constant';
 import { horizontalScale } from '../utility/scaleDimension';
+import { WebView } from 'react-native-webview';
 
 // import Pdf from 'react-native-pdf';
 

@@ -56,16 +56,16 @@ const Symptoms = ({navigation}) => {
   };
 
   const handleSymptomSubmit = () => {
-    dispatch(
-      addSymptom([
-        ...symptomsData,
-        {
-          symptom: symptom,
-          days: days,
-          severity: selected,
-        },
-      ]),
-    );
+    // dispatch(
+    //   addSymptom([
+    //     ...symptomsData,
+    //     {
+    //       symptom: symptom,
+    //       days: days,
+    //       severity: selected,
+    //     },
+    //   ]),
+    // );
     setDays(null);
     setSymptom(null);
     setSelected(null);

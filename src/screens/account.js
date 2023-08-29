@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -10,15 +10,15 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useSelector} from 'react-redux';
-import {fetchApi} from '../api/fetchApi';
-import {URL} from '../utility/urls';
+import { useSelector } from 'react-redux';
+import { fetchApi } from '../api/fetchApi';
+import { URL } from '../utility/urls';
 import moment from 'moment';
 // import {CUSTOMCOLOR} from '../settings/styles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
-import {horizontalScale, verticalScale} from '../utility/scaleDimension';
+import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
+import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -26,7 +26,7 @@ const Account = () => {
   const [clinic, setClinics] = useState([]);
   const [cliniId, setClinicId] = useState();
   const [users, setUsers] = useState([]);
-  const {phone} = useSelector(state => state?.phone?.data);
+  const { phone } = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -91,9 +91,8 @@ const Account = () => {
   const BirthYear = data?.DOB.split('-')[0];
 
   const age = parseInt(today) - parseInt(BirthYear);
-  const DateOfBirth = `${data?.DOB.split('-')[2]}-${data?.DOB.split('-')[1]}-${
-    data?.DOB.split('-')[0]
-  }`;
+  const DateOfBirth = `${data?.DOB.split('-')[2]}-${data?.DOB.split('-')[1]}-${data?.DOB.split('-')[0]
+    }`;
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
@@ -107,7 +106,7 @@ const Account = () => {
   );
   const prevScrn = 'account';
   return (
-    <View style={{flex: 1, paddingHorizontal: 24, paddingVertical: 24}}>
+    <View style={styles.main}>
       <View>
         <Text style={styles.PersonalInf}>Personal Information</Text>
         <View style={styles.pI}>
@@ -115,38 +114,21 @@ const Account = () => {
             source={{
               uri: `data:image/jpeg;base64,${data?.profile_pic_url}`,
             }}
-            style={{height: 70, width: 70, borderRadius: 100}}
+            style={styles.doctorImg}
           />
           <View
-            style={{
-              left: 10,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '87%',
-            }}>
+            style={styles.card}>
             <View>
               <Text
-                style={{
-                  fontSize: 16,
-                  color: CUSTOMCOLOR.black,
-                  fontFamily: CUSTOMFONTFAMILY.heading,
-                }}>
+                style={styles.docname}>
                 {data?.doctor_name}
               </Text>
               <Text
-                style={{
-                  fontSize: 12,
-                  color: CUSTOMCOLOR.black,
-                  fontFamily: CUSTOMFONTFAMILY.body,
-                }}>
+                style={styles.subinfo}>
                 Age:{age} | {data?.gender}
               </Text>
               <Text
-                style={{
-                  fontSize: 12,
-                  color: CUSTOMCOLOR.black,
-                  fontFamily: CUSTOMFONTFAMILY.body,
-                }}>
+                style={styles.subinfo}>
                 DOB: {DateOfBirth}
               </Text>
             </View>
@@ -154,7 +136,7 @@ const Account = () => {
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={'#4ba5fa'} />
                 <Text
-                  style={{color: '#4ba5fa', fontFamily: CUSTOMFONTFAMILY.body}}>
+                  style={styles.edit}>
                   Edit
                 </Text>
               </View>
@@ -165,45 +147,31 @@ const Account = () => {
       <View>
         <Text style={styles.Professional}>Professional</Text>
         <View style={styles.ProfView}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
-              <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
+              <View style={styles.profCard}>
                 <Icon
                   name="google-circles-communities"
                   size={16}
                   color={'#4ba5fa'}
                 />
                 <Text
-                  style={{
-                    fontWeight: 600,
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.heading,
-                  }}>
+                  style={styles.subhead}>
                   Registration Council
                 </Text>
                 <Text
-                  style={{
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.body,
-                  }}>
+                  style={styles.subvalue}>
                   Medical Registration
                 </Text>
               </View>
-              <View style={{flexDirection: 'row', padding: 8, gap: 8}}>
+              <View style={styles.profCard}>
                 <Icon name="medical-bag" size={16} color={'#4ba5fa'} />
                 <Text
-                  style={{
-                    fontWeight: 600,
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.heading,
-                  }}>
+                  style={styles.subhead}>
                   Medical Number
                 </Text>
                 <Text
-                  style={{
-                    color: CUSTOMCOLOR.black,
-                    fontFamily: CUSTOMFONTFAMILY.body,
-                  }}>
+                  style={styles.subvalue}>
                   {data?.medical_number}
                 </Text>
               </View>
@@ -212,7 +180,7 @@ const Account = () => {
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={'#4ba5fa'} />
                 <Text
-                  style={{color: '#4ba5fa', fontFamily: CUSTOMFONTFAMILY.body}}>
+                  style={styles.edit}>
                   Edit
                 </Text>
               </View>
@@ -229,12 +197,12 @@ const Account = () => {
         </Text>
         <TouchableOpacity>
           <View style={styles.generateBtn}>
-            <Text style={{color: '#4ba5fa'}}>Generate Via Aadhar</Text>
+            <Text style={{ color: '#4ba5fa' }}>Generate Via Aadhar</Text>
           </View>
         </TouchableOpacity>
       </View>
       <View>
-        <View style={{gap: 8, marginTop: 32}}>
+        <View style={styles.clinicCard}>
           <ManageCard
             // style={{marginBottom: 8}}
             data={clinic}
@@ -243,7 +211,7 @@ const Account = () => {
             Dataname={'Clinics'}
             name={'plus'}
             onPress={() => {
-              navigation.navigate('addclinic', {prevScrn});
+              navigation.navigate('addclinic', { prevScrn });
             }}
           />
           <ManageCard
@@ -253,7 +221,7 @@ const Account = () => {
             nameIcon={'account-group'}
             Dataname={'Users'}
             name={'plus'}
-            onPress={() => navigation.navigate('adduser', {prevScrn})}
+            onPress={() => navigation.navigate('adduser', { prevScrn })}
           />
         </View>
       </View>
@@ -262,121 +230,148 @@ const Account = () => {
 };
 
 const styles = StyleSheet.create({
-  MainHeadContainer: {
-    paddingHorizontal: 24,
-
-    //paddingHorizontal:24,
-    width: '100%',
-    height: 88,
-    backgroundColor: '#4ba5fa',
+  main: {
+    flex: moderateScale(1),
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24)
+  },
+  doctorImg: {
+    height: moderateScale(70),
+    width: moderateScale(70),
+    borderRadius: moderateScale(100)
+  },
+  card: {
+    left: moderateScale(10),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    width: '87%',
   },
-  MainText: {
-    color: '#fff',
-    top: 43,
-    left: 37,
-    gap: 33,
+  docname: {
+    fontSize: moderateScale(16),
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.heading,
+  },
+  subinfo: {
+    fontSize: CUSTOMFONTSIZE.h4,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
+  edit: {
+    color: CUSTOMCOLOR.edit,
+    fontFamily: CUSTOMFONTFAMILY.body
+  },
+  profCard: {
+    flexDirection: 'row',
+    padding: moderateScale(8),
+    gap: moderateScale(8)
+  },
+  subhead: {
     fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 21.79,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.heading,
+  },
+  subvalue: {
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
+  clinicCard:{
+    gap: moderateScale(8), 
+    marginTop: moderateScale(32) 
   },
   PersonalInf: {
-    color: '#000000',
+    color: CUSTOMCOLOR.black,
     fontWeight: '500',
-    fontSize: 20,
-    lineHeight: 48,
-    bottom: 8,
+    fontSize: CUSTOMFONTSIZE.h1,
+    lineHeight: moderateScale(48),
+    bottom: moderateScale(8),
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   pI: {
     width: '100%',
-    Top: 32,
-    borderRadius: 8,
+    Top: moderateScale(32),
+    borderRadius: moderateScale(8),
     justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: moderateScale(16),
+    backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
   },
   editBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
-    borderRadius: 8,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(8),
+    gap: moderateScale(8),
+    borderRadius: moderateScale(8),
     flexDirection: 'row',
     backgroundColor: '#E3E3E3',
-    right: 8,
+    right: moderateScale(8),
   },
   Professional: {
     color: '#000000',
     fontWeight: '500',
-    fontSize: 20,
-    lineHeight: 56,
+    fontSize: moderateScale(20),
+    lineHeight: moderateScale(56),
     //bottom: 4,
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   ProfView: {
     width: '100%',
-    Top: 32,
-    borderRadius: 8,
+    Top: moderateScale(32),
+    borderRadius: moderateScale(8),
     justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: moderateScale(16),
+    backgroundColor: CUSTOMCOLOR.white,
   },
   HPID: {
     width: '100%',
-    top: 16,
+    top: moderateScale(16),
     // left: 47,
-    padding: 16,
-    borderRadius: 8,
-    gap: 8,
+    padding: moderateScale(16),
+    borderRadius: moderateScale(8),
+    gap: moderateScale(8),
     backgroundColor: '#4ba5fa',
     alignItems: 'center',
     justifyContent: 'center',
   },
   HPIDText: {
-    padding: 8,
+    padding: moderateScale(8),
     fontWeight: '600',
-    fontSize: 20,
-    lineHeight: 27.24,
-    color: 'black',
+    fontSize: moderateScale(20),
+    lineHeight: moderateScale(27),
+    color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   HPIDcontent: {
-    gap: 8,
+    gap: moderateScale(8),
     fontWeight: '400',
-    fontSize: 18,
-    lineHeight: 24,
-    color: '#fff',
+    fontSize: CUSTOMFONTSIZE.h2,
+    lineHeight: moderateScale(24),
+    color: CUSTOMCOLOR.white,
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   generateBtn: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    gap: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    top: 10,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: horizontalScale(24),
+    gap: moderateScale(10),
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius: moderateScale(8),
+    top: moderateScale(10),
   },
   manageText: {
-    top: 16,
-    color: '#000000',
+    top: moderateScale(16),
+    color: CUSTOMCOLOR.black,
     fontWeight: '500',
-    fontSize: 20,
-    lineHeight: 64,
-    bottom: 8,
+    fontSize: CUSTOMFONTSIZE.h1,
+    lineHeight: moderateScale(64),
+    bottom: moderateScale(8),
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   manageView: {
     width: '100%',
-    marginTop: 12,
-    gap: 8,
-    borderRadius: 8,
+    marginTop: moderateScale(12),
+    gap: moderateScale(8),
+    borderRadius: moderateScale(8),
     justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: moderateScale(16),
+    backgroundColor: CUSTOMCOLOR.white,
   },
 });
 

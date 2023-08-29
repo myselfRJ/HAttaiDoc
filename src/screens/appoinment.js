@@ -216,22 +216,6 @@ const Appointment = ({navigation}) => {
   return (
     <View style={styles.main}>
       <View>
-        {/* <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 24,
-              paddingHorizontal: 8,
-            }}>
-            <View>
-              <Logo />
-              <Text style={styles.title}>
-                {Language[language]['welcome']},{Language[language]['dr']}
-                {doc_name?.doctor_name}
-              </Text>
-            </View>
-            <HeaderAvatar data={doc_name} />
-          </View> */}
         <View style={styles.select}>
           <SelectorBtn
             //label={Language[language]['clinic']}
@@ -258,13 +242,7 @@ const Appointment = ({navigation}) => {
             onCancel={handleCancel}
           />
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              bottom: 24,
-              width: '103%',
-            }}>
+            style={styles.searchname}>
             <InputText
               placeholder="Search name"
               value={name}
@@ -288,8 +266,8 @@ const Appointment = ({navigation}) => {
           {Language[language]['appointments']}
         </Text>
         <ScrollView
-          style={{height: 400, paddingHorizontal: 8, gap: 16}}
-          contentContainerStyle={{gap: 8}}>
+          style={styles.appointmentCard}
+          contentContainerStyle={{gap: moderateScale(8)}}>
           {filteredData?.length > 0 ? (
             filteredData?.map((value, index) => {
               return (
@@ -308,18 +286,14 @@ const Appointment = ({navigation}) => {
       <View>
         <HButton
           label="Book Appointment"
-          btnstyles={{alignSelf: 'center', marginTop: 32}}
+          btnstyles={{alignSelf: 'center', marginTop: moderateScale(84)}}
           onPress={handlePlusBUtton}
         />
       </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
+            style={styles.clinicText}>
             {Language[language]['clinic']}
           </Text>
           {clinics &&
@@ -340,22 +314,39 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
-    flex: 1,
+    flex: moderateScale(1),
+  },
+  searchname:{
+    flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              bottom: moderateScale(24),
+              width: '103%',
+  },
+  appointmentCard:{
+    height: moderateScale(400), 
+    paddingHorizontal: horizontalScale(8), 
+    gap: moderateScale(16)
+  },
+  clinicText:{
+    fontFamily: CUSTOMFONTFAMILY.heading,
+              fontSize: CUSTOMFONTSIZE.h2,
+              color: CUSTOMCOLOR.black,
   },
   title: {
     color: CUSTOMCOLOR.black,
-    fontSize: 18,
-    lineHeight: 26,
+    fontSize: CUSTOMFONTSIZE.h2,
+    lineHeight: moderateScale(26),
     fontWeight: '600',
   },
   select: {
-    gap: 8,
-    paddingHorizontal: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
   tab: {
-    bottom: 16,
+    bottom: moderateScale(16),
     flexDirection: 'row',
-    gap: 16,
+    gap: moderateScale(16),
     //paddingHorizontal: horizontalScale(4),
   },
   // appointment: {
@@ -371,40 +362,40 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   input: {
-    gap: 4,
-    paddingVertical: 10,
-    left: 4,
-    marginRight: 4,
+    gap: moderateScale(4),
+    paddingVertical: verticalScale(10),
+    left: moderateScale(4),
+    marginRight: moderateScale(4),
   },
   searchIcon: {
-    top: 10,
-    height: 51,
-    right: 30,
-    padding: 16,
+    top: moderateScale(10),
+    height: moderateScale(51),
+    right: moderateScale(30),
+    padding: moderateScale(16),
     color: CUSTOMCOLOR.primary,
   },
   DOBselect: {
     width: '100%',
-    gap: 8,
+    gap: moderateScale(8),
     //paddingHorizontal: 2,
   },
   modalContainer: {
-    height: 400,
+    height: moderateScale(400),
     width: '100%',
     //justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     //alignSelf: 'center',
-    borderRadius: 10,
-    padding: 32,
-    gap: 16,
+    borderRadius: moderateScale(10),
+    padding: moderateScale(32),
+    gap: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: 4,
+    padding: moderateScale(4),
   },
   appointment: {
     gap: moderateScale(4),

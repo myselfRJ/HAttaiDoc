@@ -125,13 +125,7 @@ const PatientSearch = ({navigation}) => {
         {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
       </View>
       <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          bottom: 16,
-          paddingHorizontal: 8,
-        }}>
+        style={styles.searchname}>
         <InputText
           placeholder="Search name"
           value={name}
@@ -144,8 +138,8 @@ const PatientSearch = ({navigation}) => {
       <View style={styles.appointment}>
         <Text style={commonstyles.h2}>My Patients</Text>
         <ScrollView
-          contentContainerStyle={{gap: 8}}
-          style={{height: horizontalScale(550), paddingHorizontal: 8, gap: 16}}>
+          contentContainerStyle={{gap: moderateScale(8)}}
+          style={styles.patientCard}>
           {filteredData?.map((val, ind) => (
             <PatientSearchCard
               key={ind}
@@ -160,11 +154,7 @@ const PatientSearch = ({navigation}) => {
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
+            style={styles.clinicText}>
             {Language[language]['clinic']}
           </Text>
           {clinics?.map((clinic, index) => (
@@ -182,19 +172,37 @@ const PatientSearch = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
-    padding: 24,
-    gap: 4,
+    flex: moderateScale(1),
+    padding: moderateScale(24),
+    gap: moderateScale(4),
   },
   select: {
-    gap: 8,
+    gap: moderateScale(8),
+  },
+  clinicText:{
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
+  },
+  searchname:{
+    flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          bottom: moderateScale(16),
+          paddingHorizontal: horizontalScale(8),
+          //marginRight:moderateScale(8)
+  },
+  patientCard:{
+    height: horizontalScale(550), 
+    paddingHorizontal: horizontalScale(8), 
+    gap: moderateScale(16)
   },
   tab: {
     flexDirection: 'row',
-    gap: 24,
+    gap: moderateScale(24),
   },
   appointment: {
-    gap: 4,
+    gap: moderateScale(4),
   },
   h2: {
     fontSize: 24,
@@ -205,33 +213,34 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '105%',
-    padding: 16,
-    gap: 4,
-    paddingHorizontal: 8,
+    padding: moderateScale(16),
+    gap: moderateScale(4),
+    paddingHorizontal: horizontalScale(8),
   },
   searchIcon: {
-    top: 10,
-    height: 51,
-    right: 10,
-    padding: 16,
+    top: moderateScale(10),
+    height: moderateScale(20),
+    right: moderateScale(8),
+    //padding: moderateScale(16),
+    paddingHorizontal:moderateScale(24)
   },
   modalContainer: {
-    height: 400,
+    height: moderateScale(400),
     width: '100%',
     //justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
     //alignSelf: 'center',
-    borderRadius: 10,
-    padding: 32,
-    gap: 16,
+    borderRadius: moderateScale(10),
+    padding: moderateScale(32),
+    gap: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: 4,
+    padding: moderateScale(4),
   },
 });
 

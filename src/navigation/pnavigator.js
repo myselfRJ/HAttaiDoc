@@ -97,7 +97,11 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="patientcreate"
         component={PatientCreate}
-        options={{headerShown: false}}
+        options={{headerShown: true, headerTintColor: CUSTOMCOLOR.white,
+          title: 'Add Patient',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },}}
       />
       <Stack.Screen
         name="bookslot"

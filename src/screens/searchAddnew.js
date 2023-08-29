@@ -19,6 +19,7 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {URL} from '../utility/urls';
 import {addclinic_id} from '../redux/features/profiles/clinicId';
+import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
 
 const SearchAddnew = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -70,11 +71,7 @@ const SearchAddnew = ({navigation}) => {
   return (
     <View style={styles.main}>
       <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-        }}>
+        style={styles.searchName}>
         <InputText
           placeholder="phone number"
           value={phoneNumber}
@@ -113,23 +110,28 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 16,
   },
-  input: {
+  searchName:{
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+},
+ input: {
     width: '100%',
-    height: 51,
-    top: 30,
-    left: 20,
-    padding: 16,
+    height: moderateScale(51),
+    top: moderateScale(30),
+    left: moderateScale(20),
+    padding: moderateScale(16),
   },
   searchIcon: {
-    height: 51,
-    top: 40,
-    right: 10,
-    padding: 16,
+    height: moderateScale(51),
+    top: moderateScale(40),
+    right: moderateScale(10),
+    padding: moderateScale(16),
   },
   appointment: {
-    gap: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
   },
   h2: {
     fontSize: 24,
@@ -137,11 +139,11 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.primary,
-    top: 16,
-    paddingVertical: 16,
+    top: moderateScale(16),
+    paddingVertical: verticalScale(16),
   },
   btn: {
-    gap: 8,
+    gap: moderateScale(8),
     justifyContent: 'center',
     alignItems: 'center',
   },
