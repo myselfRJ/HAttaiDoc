@@ -42,6 +42,8 @@ import {
 } from '../redux/features/prescription/prescriptionSlice';
 
 const Visit = ({navigation, route}) => {
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const date = useSelector(state => state?.dateTime?.date);
@@ -162,6 +164,7 @@ const Visit = ({navigation, route}) => {
       },
     };
     try {
+      setLoading(true);
       const response = await fetchApi(URL.savePrescription, {
         method: 'POST',
         headers: {
@@ -182,14 +185,17 @@ const Visit = ({navigation, route}) => {
             navigation.navigate('tab');
           }, 1000);
           ResetRuduxState();
+          setLoading(false);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           console.error('API call failed:', response.status, response);
+          setLoading(false);
         }
       }
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
+      setLoading(false);
     }
   };
 
@@ -668,7 +674,11 @@ const Visit = ({navigation, route}) => {
                 color: CUSTOMCOLOR.primary,
               }}
             />
-            <HButton label="Save" onPress={() => fetchData()} />
+            <HButton
+              label="Save"
+              onPress={() => fetchData()}
+              loading={loading}
+            />
           </View>
         </View>
       </ScrollView>

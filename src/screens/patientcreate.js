@@ -6,6 +6,7 @@ import {
   ScrollView,
   Touchable,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -231,14 +232,7 @@ const PatientCreate = ({navigation}) => {
               keypad={'numeric'}
               maxLength={10}
               doubleCheck={[true, false]}
-              check={e => {
-                var format = /[(A-Z)(a-z)]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
+              check={checkNumber}
             />
             <InputText
               label="Age"
@@ -340,7 +334,14 @@ const PatientCreate = ({navigation}) => {
               label="Save"
               loading={loading}
               onPress={() => {
-                fetchData();
+                if (patient_phone_number.length === 10) {
+                  fetchData();
+                } else {
+                  Alert.alert(
+                    '"Warning"',
+                    '"Please Enter Correct Phone Number"',
+                  );
+                }
               }}
             />
 

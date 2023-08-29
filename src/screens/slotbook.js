@@ -186,7 +186,6 @@ const SlotBook = ({navigation, route}) => {
     });
     return timeList;
   };
-  // console.log('---------slotsdetails', slotDetails[0]?.[Day]);
   let list = getTimeList(slotDetails[0]?.[Day]);
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -247,7 +246,6 @@ const SlotBook = ({navigation, route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        // console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',
@@ -258,7 +256,6 @@ const SlotBook = ({navigation, route}) => {
             navigation.navigate('dashboard');
           }, 1000);
           setLoading(false);
-          // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({
             status: 'warning',
@@ -273,7 +270,7 @@ const SlotBook = ({navigation, route}) => {
       console.error('Error occurred:', error);
       setApiStatus({
         status: 'error',
-        message: 'Something Went Wrong Please After Sometime',
+        message: 'Something Went Wrong Please Try After Sometime',
       });
       SuccesRef?.current?.snapToIndex(1);
       console.error('API call failed:', response.status);
@@ -350,27 +347,37 @@ const SlotBook = ({navigation, route}) => {
               ))}
             </View>
 
-            <View>
-              <Text style={styles.h2}>Available Slots</Text>
-              <FlatList data={list} renderItem={renderItems} numColumns={4} />
-            </View>
-            <View style={styles.btn}>
-              <HButton
-                label="Book Slot"
-                //onPress={() => navigation.navigate('dashboard')}
-                onPress={() => {
-                  Appointment_Booking();
-                }}
-                loading={loading}
-              />
-            </View>
+            {list.length > 0 ? (
+              <>
+                <View>
+                  <Text style={styles.h2}>Available Slots</Text>
+                  <FlatList
+                    data={list}
+                    renderItem={renderItems}
+                    numColumns={4}
+                  />
+                </View>
+                <View style={styles.btn}>
+                  <HButton
+                    label="Book Slot"
+                    //onPress={() => navigation.navigate('dashboard')}
+                    onPress={() => {
+                      Appointment_Booking();
+                    }}
+                    loading={loading}
+                  />
+                </View>
+              </>
+            ) : (
+              <CustomIcon label="No Slots Available" />
+            )}
           </View>
         </View>
       </ScrollView>
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
+        backgroundStyle={CUSTOMCOLOR.white}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
     </View>

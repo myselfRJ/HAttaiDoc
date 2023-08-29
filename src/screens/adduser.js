@@ -162,14 +162,14 @@ const AddUser = ({navigation}) => {
 
   const handlePlusIconClick = () => {
     // console.log('users--------------------------------------');
-    if (values.name && values.gender && values.phone) {
+    if (values.name && values.gender && values.phone.length === 10) {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
       setShowSlotChip(true);
       setSelectedImage('');
       (values.name = ''), (values.phone = ''), (values.gender = '');
     } else {
-      Alert.alert('"Warning"', '"Please Enter Details"');
+      Alert.alert('"Warning"', '"Please Enter Correct Details"');
     }
   };
 

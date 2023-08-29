@@ -1,5 +1,6 @@
 import {Text, View, StyleSheet, Pressable} from 'react-native';
 import {useState, useRef, useEffect} from 'react';
+import React from 'react';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -27,6 +28,8 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import {useFocusEffect} from '@react-navigation/native';
+
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
 
@@ -110,7 +113,11 @@ const PatientSearch = ({navigation}) => {
     dispatch(addclinic_id(clinic.id));
     ClinicRef?.current?.snapToIndex(0);
   };
-
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchClincs();
+    }, []),
+  );
   // console.log('====================================');
   // console.log('clinics', clinicID, '==============', clinics);
   // console.log('====================================');

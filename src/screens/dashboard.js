@@ -65,9 +65,6 @@ const Dashboard = ({navigation, route}) => {
 
   const [setAppointment, setDataAppointment] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
-  const handleChangeValue = e => {
-    setClinic(e);
-  };
 
   const dispatch = useDispatch();
 
@@ -88,7 +85,7 @@ const Dashboard = ({navigation, route}) => {
     setOpen(false);
   };
 
-  const fetchData = async () => {
+  const fetchClinic = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
       headers: {
@@ -109,15 +106,15 @@ const Dashboard = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchClinic();
+  }, [phone]);
   const [doc_name, setDoc_name] = useState();
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   // console.log('====================================');
   // console.log(Clinic_id, '-------clinic');
   // console.log('====================================');
 
-  const fetchClinic = async () => {
+  const fetchDoctors = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
       headers: {
@@ -133,7 +130,7 @@ const Dashboard = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    fetchClinic();
+    fetchDoctors();
   }, []);
 
   // const handleAddData = () => {

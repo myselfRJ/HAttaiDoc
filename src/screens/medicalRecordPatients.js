@@ -68,7 +68,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log(jsonData.data);
+      console.log(jsonData.data);
       setConsultation(jsonData?.data[0]?.consultation);
     } else {
       console.error('API call failed:', response.status, response);
