@@ -46,6 +46,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {updateslots} from '../redux/features/slots/slotData';
+import { updateAddress } from '../redux/features/profiles/clinicAddress';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -55,7 +56,8 @@ const AddClinic = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
   const route = useRoute();
-
+  const address = useSelector(state=> state?.address?.address)
+  console.log('address====',address)
   const {prevScrn} = route.params;
   console.log('----------prev', prevScrn);
 
@@ -78,7 +80,9 @@ const AddClinic = ({navigation}) => {
         Su: [],
       },
     };
+    const newAddress = ''
     dispatch(updateslots(newSlotsss?.slots));
+    dispatch(updateAddress(newAddress))
   };
 
   const [loading, setLoading] = useState(false);
@@ -121,12 +125,9 @@ const AddClinic = ({navigation}) => {
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
   const prevScrn1 = 'undefineed';
 
-  console.log('====================================');
-  console.log('----------clinicdata', slotData.slots);
-  console.log('====================================');
   const Clinic_Data = {
     clinic_name: value.clinic,
-    clinic_Address: value.address,
+    clinic_Address: address,
     clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
@@ -281,15 +282,15 @@ const AddClinic = ({navigation}) => {
               value={value.clinic}
               setValue={value => handleChangeValue('clinic', value)}
             />
-            <InputText
+            {/* <InputText
               required={true}
               label={Language[language]['address']}
               multiline={true}
               placeholder="Address"
               value={value.address}
               setValue={value => handleChangeValue('address', value)}
-            />
-            {/* <View
+            /> */}
+            <View
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
@@ -298,11 +299,12 @@ const AddClinic = ({navigation}) => {
               <SelectorBtn
                 label={Language[language]['address']}
                 name="map-marker"
+                input={address}
                 onPress={() => {
                   addressRef?.current?.snapToIndex(1);
                 }}
               />
-            </View> */}
+            </View>
             <InputText
               required={true}
               label={Language[language]['fees']}
@@ -365,7 +367,7 @@ const AddClinic = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      {/* <BottomSheetView
+      <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
         backgroundStyle={CUSTOMCOLOR.white}>
@@ -376,7 +378,7 @@ const AddClinic = ({navigation}) => {
             }}
           />
         </View>
-      </BottomSheetView> */}
+      </BottomSheetView>
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}

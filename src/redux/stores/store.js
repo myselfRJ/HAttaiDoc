@@ -23,6 +23,7 @@ import {labReportReducer} from '../features/prescription/labreport';
 import {pastHistoryReducer} from '../features/prescription/pastHistory';
 import {validityReducer} from '../features/prescription/valid';
 import { signatureReducer } from '../features/prescription/sign';
+import { addressReducer } from '../features/profiles/clinicAddress';
 
 const store = configureStore({
   reducer: {
@@ -49,6 +50,7 @@ const store = configureStore({
     pasthistory: pastHistoryReducer,
     valid: validityReducer,
     sign: signatureReducer,
+    address: addressReducer
   },
 });
 

@@ -14,28 +14,37 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { PROVIDER_GOOGLE,Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useDispatch } from 'react-redux';
+import { addAddress } from '../redux/features/profiles/clinicAddress';
 
 const ClinicAddress = (props) => {
+    const dispatch = useDispatch();
     const [currentLocation, setCurrentLocation] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [initialLatitude, setInitialLatitude] = useState(13.0827); // Chennai's latitude
     const [initialLongitude, setInitialLongitude] = useState(80.2707);
-    const [markerCoordinates, setMarkerCoordinates] = useState({
-        latitude: 13.0827, // Default initial latitude
-        longitude: 80.2707, // Default initial longitude
-    });
+    const [markerCoordinates, setMarkerCoordinates] = useState({latitude: 13.08,
+        longitude: 80.02,});
     const [formattedAddress, setFormattedAddress] = useState('');
+    const [region,setRegion] = useState({region:{},markeradta:{}})
     // console.log('current location===>',currentLocation)
     const [input, setInput] = useState({
         buildingno: '',
         street: ''
     })
-    const handleChangeValue = (field, value) => {
-        setInput(prevValues => ({
-            ...prevValues,
-            [field]: value,
-        }));
-    };
+    const [regionData,setRegiondata]=useState({
+        latitude: 13.0827,
+        longitude: 80.2707,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      })
+    // const handleChangeValue = (field, value) => {
+    //     setInput(prevValues => ({
+    //         ...prevValues,
+    //         [field]: value,
+    //     }));
+    // };
+
     useEffect(() => {
         const checkLocationPermission = async () => {
             const permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -49,7 +58,6 @@ const ClinicAddress = (props) => {
             } else {
                 
                 fetchCurrentLocation();
-                console.log("erorrr")
                 
             }
         };
@@ -61,16 +69,24 @@ const ClinicAddress = (props) => {
                     setMarkerCoordinates({ latitude, longitude });
                     console.log('current location===',currentLocation)
                     console.log('marker==',markerCoordinates)
+                    setRegiondata({...regionData,latitude,longitude})
                 },
+                
                 error => {
                     console.log('Error getting location:', error);
                 },
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
             );
+            
         };
+        
 
         checkLocationPermission();
     }, []);
+
+
+    console.log('-------------------------refhggg',regionData,currentLocation);
+    useEffect(()=>{console.log("marker data===>",markerCoordinates)},[markerCoordinates.latitude])
 
     useEffect(() => {
         if (currentLocation) {
@@ -93,6 +109,12 @@ const ClinicAddress = (props) => {
             console.log('Error fetching formatted address:', error);
         }
     };
+    const HandleAddress=()=>{
+        dispatch(addAddress(formattedAddress))
+    }
+    useEffect(()=>{
+        HandleAddress()
+    },[formattedAddress])
 
     return (
 
@@ -100,33 +122,43 @@ const ClinicAddress = (props) => {
             <View style={styles.container}>
                 <View style={styles.top}>
                 <View style={styles.Mapcontainer}>
-     <MapView
+                <MapView
+       zoomEnabled={true}
        provider={PROVIDER_GOOGLE} 
        style={styles.map}
-       region={{
-         latitude: 13.0827,
-         longitude: 80.2707,
-         latitudeDelta: 0.015,
-         longitudeDelta: 0.0121,
-       }}
+       region={regionData}
+       onPress={event => {
+        const { latitude, longitude } = event.nativeEvent.coordinate;
+       setCurrentLocation({ latitude, longitude });
+       setMarkerCoordinates({ latitude, longitude})
+    }}
      >
-        <Marker coordinate={markerCoordinates} />
+    <Marker title='current place' draggable coordinate={markerCoordinates} onDragEnd={(e) => {
+      setMarkerCoordinates(e.nativeEvent.coordinate);
+      setCurrentLocation(e.nativeEvent.coordinate);
+      fetchFormattedAddress(
+        e.nativeEvent.coordinate.latitude,
+        e.nativeEvent.coordinate.longitude
+      );
+    }}
+   
+/>
      </MapView>
    </View>
                 </View>
                 <View style={styles.bottom}>
 
-                    <InputText
+                    {/* <InputText
                         label={Language[language]['buildingno']}
                         placeholder="Building No"
                         value={input.buildingno}
                         setValue={value => handleChangeValue('buildingno', value)}
-                    />
+                    /> */}
                     <InputText
-                        label={Language[language]['street']}
+                        label='Address'
                         placeholder="Street Address"
                         value={formattedAddress}
-                        setValue={handleChangeValue}
+                        setValue={setFormattedAddress}
                         multiline={true}
                     />
                     <View style={{ alignSelf: 'center' }}>
