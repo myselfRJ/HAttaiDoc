@@ -11,7 +11,7 @@ import Option from '../components/option';
 import SelectionTab from '../components/selectiontab';
 import SuggestionTab from '../components/suggestiontab';
 import HButton from '../components/button';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, version} from 'react';
 import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {CONSTANTS} from '../utility/constant';
@@ -25,7 +25,7 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
-import {horizontalScale} from '../utility/scaleDimension';
+import {horizontalScale, moderateScale, verticalScale} from '../utility/scaleDimension';
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
 
@@ -290,12 +290,7 @@ const SlotBook = ({navigation, route}) => {
       <ScrollView>
         <View style={styles.child}>
           <View
-            style={{
-              gap: 8,
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              height: 70,
-            }}>
+            style={styles.date}>
             <SelectorBtn
               label="Date"
               name="calendar"
@@ -386,32 +381,38 @@ const SlotBook = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   main: {
-    gap: 16,
-    flex: 1,
+    gap: moderateScale(16),
+    flex: moderateScale(1),
     //backgroundColor:CUSTOMCOLOR.primary,
     // paddingHorizontal:24,
     // paddingVertical:24
+  },
+  date:{
+    gap: moderateScale(8),
+   paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(8),
+    // height: moderateScale(70),
   },
   type: {
     flexDirection: 'row',
     width: '100%',
     // justifyContent: 'space-around',
-    gap: 56,
+    gap: moderateScale(56),
   },
   MainHeadContainer: {
     backgroundColor: CUSTOMCOLOR.primary,
     // height: '15%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    padding: 24,
+    borderBottomLeftRadius: moderateScale(8),
+    borderBottomRightRadius: moderateScale(8),
+    padding: moderateScale(24),
   },
   MainText: {
     color: CUSTOMCOLOR.white,
     // top: 43,
     // left: 37,
-    gap: 33,
+    gap: moderateScale(33),
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 21.79,
@@ -419,11 +420,11 @@ const styles = StyleSheet.create({
   selection: {
     flexDirection: 'row',
     // justifyContent: 'space-evenly',
-    gap: 56,
+    gap: moderateScale(56),
   },
   child: {
-    padding: 16,
-    gap: 16,
+    padding: moderateScale(16),
+    gap: moderateScale(16),
   },
   h2: {
     fontSize: 24,
@@ -433,11 +434,11 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   item: {
-    margin: 8,
+    margin: moderateScale(8),
     paddingHorizontal: horizontalScale(8),
   },
   btn: {
-    height: 400,
+    height: moderateScale(400),
     alignItems: 'center',
   },
 });

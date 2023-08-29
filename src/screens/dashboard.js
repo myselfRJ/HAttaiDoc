@@ -6,11 +6,11 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import moment, {min} from 'moment';
-import React, {useState, useEffect, useRef} from 'react';
-import {SvgXml} from 'react-native-svg';
-import {hattailogo} from '../assets/svgs/svg';
-import {CONSTANTS} from '../utility/constant';
+import moment, { min } from 'moment';
+import React, { useState, useEffect, useRef } from 'react';
+import { SvgXml } from 'react-native-svg';
+import { hattailogo } from '../assets/svgs/svg';
+import { CONSTANTS } from '../utility/constant';
 import {
   ChartCard,
   AppointmentCard,
@@ -19,19 +19,19 @@ import {
   BottomSheetView,
 } from '../components';
 import store from '../redux/stores/store';
-import {Language} from '../settings/customlanguage';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
-import {language} from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
+import { language } from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
 import SlotCreate from './SlotCreate';
-import {URL} from '../utility/urls';
-import {ScrollView} from 'react-native-gesture-handler';
-import {fetchApi} from '../api/fetchApi';
-import {useSelector, useDispatch} from 'react-redux';
+import { URL } from '../utility/urls';
+import { ScrollView } from 'react-native-gesture-handler';
+import { fetchApi } from '../api/fetchApi';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
-import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
+import { addDoctor_profile } from '../redux/features/profiles/doctorprofile';
 import ToggleSwitch from '../components/switch';
 import {
   addclinic_id,
@@ -44,11 +44,11 @@ import {
   moderateScale,
 } from '../utility/scaleDimension';
 import HButton from '../components/button';
-import {useFocusEffect} from '@react-navigation/native';
-import {commonstyles} from '../styles/commonstyle';
-import {disableBackButton} from '../utility/backDisable';
+import { useFocusEffect } from '@react-navigation/native';
+import { commonstyles } from '../styles/commonstyle';
+import { disableBackButton } from '../utility/backDisable';
 
-const Dashboard = ({navigation, route}) => {
+const Dashboard = ({ navigation, route }) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const [clinic, setClinic] = useState('');
@@ -140,11 +140,10 @@ const Dashboard = ({navigation, route}) => {
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
     const clinic_id = clinicid;
-    const apiUrl = `${
-      URL.get_all_appointments_of_clinic
-    }?appointment_date=${encodeURIComponent(
-      appointment_date,
-    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const apiUrl = `${URL.get_all_appointments_of_clinic
+      }?appointment_date=${encodeURIComponent(
+        appointment_date,
+      )}&clinic_id=${encodeURIComponent(clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -198,16 +197,10 @@ const Dashboard = ({navigation, route}) => {
   }, []);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: moderateScale(1) }}>
       <View style={styles.container}>
         <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            paddingHorizontal: moderateScale(8),
-          }}>
+          style={styles.main}>
           <View>
             <Logo />
             <Text style={styles.title}>
@@ -223,14 +216,7 @@ const Dashboard = ({navigation, route}) => {
 
           {visible && (
             <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: 8,
-                paddingHorizontal: 8,
-                marginTop: 16,
-                paddingBottom: 8,
-              }}>
+              style={styles.cardContainer}>
               <ChartCard
                 data={data}
                 title={Language[language]['total_patient']}
@@ -277,8 +263,8 @@ const Dashboard = ({navigation, route}) => {
 
         {/* <View style={styles.appointment}> */}
         <ScrollView
-          style={{height: 400, paddingHorizontal: 8, gap: 16}}
-          contentContainerStyle={{gap: 8}}>
+          style={styles.appointmentcard}
+          contentContainerStyle={{ gap: moderateScale(8) }}>
           {setAppointment?.length > 0 ? (
             setAppointment?.map((value, index) => {
               return (
@@ -296,7 +282,7 @@ const Dashboard = ({navigation, route}) => {
         <View>
           <HButton
             label="Book Appointment"
-            btnstyles={{alignSelf: 'center', marginTop: 16}}
+            btnstyles={{ alignSelf: 'center', marginTop: moderateScale(16) }}
             // textStyle={{color: CUSTOMCOLOR.primary}}
             onPress={() => navigation.navigate('addnew')}
           />
@@ -308,11 +294,7 @@ const Dashboard = ({navigation, route}) => {
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
           <Text
-            style={{
-              fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: 18,
-              color: CUSTOMCOLOR.black,
-            }}>
+            style={styles.clinicText}>
             {Language[language]['clinic']}
           </Text>
           {clinics &&
@@ -330,17 +312,37 @@ const Dashboard = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: moderateScale(1),
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
+  },
+  main: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: moderateScale(24),
+    paddingHorizontal: horizontalScale(8),
+  },
+  clinicText: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
   },
 
   title: {
     color: CUSTOMCOLOR.black,
-    fontSize: 18,
-    lineHeight: 26,
+    fontSize: CUSTOMFONTSIZE.h2,
+    lineHeight: moderateScale(26),
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.heading,
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
+    marginTop: moderateScale(16),
+    paddingBottom: moderateScale(8),
   },
   select: {
     gap: moderateScale(8),
@@ -351,9 +353,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(8),
   },
+  appointmentcard: {
+    height: moderateScale(400),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16)
+  },
   h2: {
-    paddingVertical: 16,
-    paddingHorizontal: 8,
+    paddingVertical: verticalScale(16),
+    paddingHorizontal: horizontalScale(8),
     fontSize: 24,
     fontWeight: '700',
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -369,12 +376,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: moderateScale(10),
     padding: moderateScale(32),
-    gap: 16,
+    gap: moderateScale(16),
   },
   modalfields: {
     color: CUSTOMCOLOR.primary,
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
     fontFamily: CUSTOMFONTFAMILY.body,
     padding: moderateScale(4),
   },
