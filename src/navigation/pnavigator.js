@@ -256,7 +256,17 @@ const ProtectedRoute = () => {
         component={AbhaExistDetails}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="prescription" component={Prescription} />
+      <Stack.Screen
+        name="prescription"
+        component={Prescription}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Prescription Preview',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
       <Stack.Screen
         name="diagnosis"
         component={Diagnosis}

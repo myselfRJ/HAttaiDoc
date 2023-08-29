@@ -120,7 +120,7 @@ const Appointment = ({navigation}) => {
   };
   useEffect(() => {
     fetchClinic();
-  }, []);
+  }, [phone]);
 
   const fetchAppointment = async () => {
     const appointment_date = formatDate;
@@ -207,6 +207,11 @@ const Appointment = ({navigation}) => {
     React.useCallback(() => {
       fetchAppointment();
     }, [clinicID]),
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchClinic();
+    }, []),
   );
 
   useEffect(() => {

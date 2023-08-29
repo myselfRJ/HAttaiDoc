@@ -134,11 +134,10 @@ const SlotCreate = ({navigation, route}) => {
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
-        Alert.alert('Conflict', 'A slot with conflicting time already exists.');
+        Alert.alert('Warning', 'A slot with conflicting time already exists.');
       }
     }
   };
-  const [check, setCheck] = useState(false);
 
   const handleAddSlotCopyMonday = () => {
     const weekdaysToUpdate = {
@@ -204,240 +203,191 @@ const SlotCreate = ({navigation, route}) => {
     return TimeCheck && differenceCheck;
   };
 
-  useEffect(() => {
-    handlewarnings();
-  }, []);
+  // useEffect(() => {
+  //   handlewarnings();
+  // }, []);
 
   return (
     <ScrollView>
-      <View style={styles.main}>
-        {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:16}}> */}
-        <PlusButton
-          icon="close"
-          style={{
-            zIndex: 4,
-            backgroundColor: 'transparent',
-            position: 'absolute',
-            alignSelf: 'flex-end',
-            padding: 16,
-          }}
-          color="#000000aa"
-          size={32}
-          onPress={handleSaveSlotData}
-        />
-        {/* </View> */}
+      <View style={{flex: 1}}>
+        <View style={styles.main}>
+          {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:1moderateScale(6})}> */}
+          <PlusButton
+            icon="close"
+            style={styles.Close}
+            color="#000000aa"
+            size={32}
+            onPress={handleSaveSlotData}
+          />
+          {/* </View> */}
 
-        <View style={styles.alignchild}>
-          <Text style={commonstyles.h1}>Add Schedule</Text>
-        </View>
-        <View style={styles.dayselector}>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.M?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="M"
-              selected={selectedDay === 'M'}
-              onPress={() => onDaySelectionChange('M')}
-            />
+          <View style={styles.alignchild}>
+            <Text style={commonstyles.h1}>Add Schedule</Text>
           </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.T?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="T"
-              selected={selectedDay === 'T'}
-              onPress={() => onDaySelectionChange('T')}
-            />
-          </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.W?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="W"
-              selected={selectedDay === 'W'}
-              onPress={() => onDaySelectionChange('W')}
-            />
-          </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.TH?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="TH"
-              selected={selectedDay === 'TH'}
-              onPress={() => onDaySelectionChange('TH')}
-            />
-          </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.F?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="F"
-              selected={selectedDay === 'F'}
-              onPress={() => onDaySelectionChange('F')}
-            />
-          </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.Sa?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="Sa"
-              selected={selectedDay === 'Sa'}
-              onPress={() => onDaySelectionChange('Sa')}
-            />
-          </View>
-          <View
-            style={[
-              {
-                paddingHorizontal: 8,
-                paddingVertical: 8,
-              },
-              {backgroundColor: slots.Su?.length > 0 ? '#2CBB15' : null},
-            ]}>
-            <SelectionTab
-              label="Su"
-              selected={selectedDay === 'Su'}
-              onPress={() => onDaySelectionChange('Su')}
-            />
-          </View>
-        </View>
-
-        <View style={styles.selector}>
-          <SelectorBtn
-            select={styles.select1}
-            label="From"
-            name="clock"
-            onPress={() => setOpen('from')}
-            input={FromformattedTime}
-          />
-          <SelectorBtn
-            select={styles.select1}
-            label="To"
-            name="clock"
-            onPress={() => setOpen('to')}
-            input={ToformattedTime}
-          />
-          <DatePicker
-            modal
-            open={open !== false}
-            date={open === 'from' ? fromTime : toTime}
-            theme="auto"
-            mode="time"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-            minuteInterval={15}
-          />
-        </View>
-
-        <View style={styles.selector}>
-          <SelectorBtn
-            select={styles.select1}
-            label="Type"
-            name="alpha-t-box"
-            onPress={() => {
-              slotTypeRef?.current?.snapToIndex(1);
-            }}
-            input={selectedConsultValue}
-          />
-          <SelectorBtn
-            select={styles.select1}
-            label="Duration"
-            name="timer-sand-full"
-            onPress={() => {
-              slotDurationRef?.current?.snapToIndex(1);
-            }}
-            input={<Text>{selectedDurationValue} Mins</Text>}
-          />
-        </View>
-
-        <HButton
-          label="Add Slot"
-          icon="plus"
-          btnstyles={{marginTop: verticalScale(24)}}
-          onPress={() => {
-            const isOk = handlewarnings();
-            if (isOk) {
-              handleAddSlot();
-            } else {
-              Alert.alert('Warning', '"From time" and "To time" are same');
-            }
-          }}
-        />
-
-        {/* <HButton label="Add Slot" icon="plus" onPress={handleAddSlot} /> */}
-        {/* <View style={styles.ShowSchedule}>
-        {slots[selectedDay] && slots[selectedDay]?.map(slot => (
-          <SlotChip
-            key={slot.index}
-            index={slot.index}
-            onPress={handleDelete}
-            time={slot.fromTime + '-' + slot.toTime}
-            type={<Text>Type: {slot.consultType}</Text>}
-            duration={<Text>Duration: {slot.duration}</Text>}
-          />
-        ))}
-      </View> */}
-        <View style={styles.ShowSchedule}>
-          {Object.entries(slots).map(([day, daySlots]) =>
-            daySlots?.map(slot => (
-              <SlotChip
-                key={slot.index}
-                index={slot.index}
-                onPress={() => handleDelete(day, slot.index)}
-                time={slot.fromTime + '-' + slot.toTime}
-                type={<Text>Type: {slot.consultType}</Text>}
-                duration={
-                  <Text>
-                    Duration: {slot.duration} | {slot.day}
-                  </Text>
-                }
+          <View style={styles.dayselector}>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="M"
+                selected={selectedDay === 'M'}
+                onPress={() => onDaySelectionChange('M')}
               />
-            )),
-          )}
-        </View>
-        <View>
-          {slots?.M.length > 0 && (
-            <TouchableOpacity onPress={() => handleAddSlotCopyMonday()}>
-              <View style={{padding: 16, backgroundColor: CUSTOMCOLOR.white}}>
-                <Text style={{color: CUSTOMCOLOR.black}}>
-                  Remaining Slots Sames As Monday
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
-        {selectedDay === 'M' ? (
-          <View>
-            {Object.entries(slotData).map(([day, daySlots]) =>
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="T"
+                selected={selectedDay === 'T'}
+                onPress={() => onDaySelectionChange('T')}
+              />
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="W"
+                selected={selectedDay === 'W'}
+                onPress={() => onDaySelectionChange('W')}
+              />
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="TH"
+                selected={selectedDay === 'TH'}
+                onPress={() => onDaySelectionChange('TH')}
+              />
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="F"
+                selected={selectedDay === 'F'}
+                onPress={() => onDaySelectionChange('F')}
+              />
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="Sa"
+                selected={selectedDay === 'Sa'}
+                onPress={() => onDaySelectionChange('Sa')}
+              />
+            </View>
+            <View
+              style={[
+                styles.data,
+                {
+                  backgroundColor:
+                    slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
+                },
+              ]}>
+              <SelectionTab
+                label="Su"
+                selected={selectedDay === 'Su'}
+                onPress={() => onDaySelectionChange('Su')}
+              />
+            </View>
+          </View>
+
+          <View style={styles.selector}>
+            <SelectorBtn
+              select={styles.select1}
+              label="From"
+              name="clock"
+              onPress={() => setOpen('from')}
+              input={FromformattedTime}
+            />
+            <SelectorBtn
+              select={styles.select1}
+              label="To"
+              name="clock"
+              onPress={() => setOpen('to')}
+              input={ToformattedTime}
+            />
+            <DatePicker
+              modal
+              open={open !== false}
+              date={open === 'from' ? fromTime : toTime}
+              theme="auto"
+              mode="time"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+              minuteInterval={15}
+            />
+          </View>
+
+          <View style={styles.selector}>
+            <SelectorBtn
+              select={styles.select1}
+              label="Type"
+              name="alpha-t-box"
+              onPress={() => {
+                slotTypeRef?.current?.snapToIndex(1);
+              }}
+              input={selectedConsultValue}
+            />
+            <SelectorBtn
+              select={styles.select1}
+              label="Duration"
+              name="timer-sand-full"
+              onPress={() => {
+                slotDurationRef?.current?.snapToIndex(1);
+              }}
+              input={<Text>{selectedDurationValue} Mins</Text>}
+            />
+          </View>
+
+          <HButton
+            label="Add Slot"
+            icon="plus"
+            btnstyles={{marginTop: verticalScale(24)}}
+            onPress={() => {
+              const isOk = handlewarnings();
+              if (isOk) {
+                handleAddSlot();
+              } else {
+                Alert.alert('Warning', '"From time" and "To time" are same');
+              }
+            }}
+          />
+          <View style={styles.ShowSchedule}>
+            {Object.entries(slots).map(([day, daySlots]) =>
               daySlots?.map(slot => (
                 <SlotChip
                   key={slot.index}
@@ -454,79 +404,113 @@ const SlotCreate = ({navigation, route}) => {
               )),
             )}
           </View>
-        ) : null}
-        <View>
-          <TouchableOpacity
-            onPress={handleSaveSlotData}
-            style={{top: 16, borderRadius: 6}}>
-            <View style={{padding: 16, backgroundColor: CUSTOMCOLOR.primary}}>
-              <Text style={{color: CUSTOMCOLOR.white}}>Save</Text>
+          <View>
+            {slots?.M.length > 0 && (
+              <TouchableOpacity onPress={() => handleAddSlotCopyMonday()}>
+                <View
+                  style={{
+                    padding: moderateScale(16),
+                    backgroundColor: CUSTOMCOLOR.white,
+                  }}>
+                  <Text style={{color: CUSTOMCOLOR.black}}>
+                    Remaining Slots Sames As Monday
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
+          {selectedDay === 'M' ? (
+            <View>
+              {Object.entries(slotData).map(([day, daySlots]) =>
+                daySlots?.map(slot => (
+                  <SlotChip
+                    key={slot.index}
+                    index={slot.index}
+                    onPress={() => handleDelete(day, slot.index)}
+                    time={slot.fromTime + '-' + slot.toTime}
+                    type={<Text>Type: {slot.consultType}</Text>}
+                    duration={
+                      <Text>
+                        Duration: {slot.duration} | {slot.day}
+                      </Text>
+                    }
+                  />
+                )),
+              )}
             </View>
-          </TouchableOpacity>
-        </View>
+          ) : null}
+          <View>
+            <TouchableOpacity onPress={handleSaveSlotData} style={styles.save}>
+              <View style={styles.saveText}>
+                <Text style={{color: CUSTOMCOLOR.white}}>Save</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
-        <BottomSheetView
-          bottomSheetRef={slotTypeRef}
-          snapPoints={'40%'}
-          backgroundStyle={'#fff'}>
-          <ScrollView>
-            <View style={styles.bottomSheet}>
-              {consultType.map((consTypes, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleTypeSelect(consTypes)}>
-                  <View style={styles.valuesContainer}>
-                    <Text style={styles.values}>{consTypes}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </BottomSheetView>
-        <BottomSheetView
-          bottomSheetRef={slotDurationRef}
-          snapPoints={'40%'}
-          backgroundStyle={'#fff'}>
-          <ScrollView>
-            <View style={styles.bottomSheet}>
-              {durationMins.map((mins, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleDurationSelect(mins)}>
-                  <View style={styles.valuesContainer}>
-                    <Text style={styles.values}>{mins} minutes</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </BottomSheetView>
+          <BottomSheetView
+            bottomSheetRef={slotTypeRef}
+            snapPoints={'40%'}
+            backgroundStyle={CUSTOMCOLOR.white}>
+            <ScrollView>
+              <View style={styles.bottomSheet}>
+                {consultType.map((consTypes, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleTypeSelect(consTypes)}>
+                    <View style={styles.valuesContainer}>
+                      <Text style={styles.values}>{consTypes}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </BottomSheetView>
+          <BottomSheetView
+            bottomSheetRef={slotDurationRef}
+            snapPoints={'40%'}
+            backgroundStyle={CUSTOMCOLOR.white}>
+            <ScrollView>
+              <View style={styles.bottomSheet}>
+                {durationMins.map((mins, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleDurationSelect(mins)}>
+                    <View style={styles.valuesContainer}>
+                      <Text style={styles.values}>{mins} minutes</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </BottomSheetView>
+        </View>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  save: {top: moderateScale(16), borderRadius: moderateScale(6)},
+  saveText: {padding: moderateScale(16), backgroundColor: CUSTOMCOLOR.primary},
   main: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    gap: 16,
-    padding: 24,
-    //borderWidth: 1,
+    gap: moderateScale(16),
+    padding: moderateScale(24),
   },
   dayselector: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: moderateScale(8),
   },
   ShowSchedule: {
-    gap: 8,
+    gap: moderateScale(8),
   },
   selector: {
     flexDirection: 'row',
-    gap: 64,
+    gap: moderateScale(64),
     width: '100%',
     justifyContent: 'center',
   },
@@ -534,13 +518,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    gap: 8,
-    paddingHorizontal: 8,
+    gap: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
-  bottomSheet: {flex: 1, alignItems: 'center', gap: 32, paddingVertical: 16},
+  bottomSheet: {
+    flex: 1,
+    alignItems: 'center',
+    gap: moderateScale(32),
+    paddingVertical: verticalScale(16),
+  },
   values: {
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: '400',
     fontFamily: CUSTOMFONTFAMILY.opensans,
     color: CUSTOMCOLOR.black,
   },
@@ -548,8 +537,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     //flexDirection:'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(8),
     borderRadius: 4,
     backgroundColor: '#C6E3FF',
   },
@@ -562,17 +551,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
   },
   deletedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
-    fontSize: 14,
+    fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(16),
   },
   select1: {
     width: horizontalScale(240),
+  },
+  Close: {
+    zIndex: 4,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    padding: moderateScale(16),
+  },
+  data: {
+    paddingHorizontal: horizontalScale(4),
+    paddingVertical: verticalScale(4),
   },
 });
 

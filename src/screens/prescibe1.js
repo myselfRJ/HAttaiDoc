@@ -294,7 +294,7 @@ export default function Prescribe1() {
                 <InputText
                   value={mgs}
                   setValue={setmg}
-                  placeholder={'Enter Dosage eg: 100mg,200mg'}
+                  placeholder={'Enter Dosage eg: 100mg,200mg 0r 10m1 ,20ml'}
                 />
                 <View style={styles.Modes}>
                   {mode === 'Injection' || mode === 'Syrup'
