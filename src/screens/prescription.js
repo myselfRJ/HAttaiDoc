@@ -10,8 +10,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {CONSTANT} from '../utility/const';
 import {CONSTANTS} from '../utility/constant';
-import { horizontalScale } from '../utility/scaleDimension';
-import { WebView } from 'react-native-webview';
+import {horizontalScale} from '../utility/scaleDimension';
+import {WebView} from 'react-native-webview';
 
 // import Pdf from 'react-native-pdf';
 
@@ -48,7 +48,7 @@ const Prescription = ({route}) => {
   console.log('test>>>>>>>>>>', test);
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const {name, gender, patient_age, patient_phone_number} = route.params;
-  const sign = useSelector(state=> state?.sign)
+  const sign = useSelector(state => state?.sign);
   console.log(
     'patient phone--',
     name,
@@ -82,8 +82,8 @@ const Prescription = ({route}) => {
     return EDD;
   };
   const format = current.toLocaleDateString(undefined, options);
-  const base64Image= sign?.sign;
-  console.log('base==',base64Image)
+  const base64Image = sign?.sign;
+  console.log('base==', base64Image);
   return (
     <ScrollView>
       <View style={styles.main}>
@@ -251,9 +251,11 @@ const Prescription = ({route}) => {
         <View style={styles.sign}>
           <Text style={styles.values}>Digital sign</Text>
           <View style={{}}>
-            <Image source={{ uri: `data:image/jpeg;base64,${base64Image}` }}
-                style={{width:300,height:50 }}/>
-         </View> 
+            <Image
+              source={{uri: `data:image/jpeg;base64,${base64Image}`}}
+              style={{width: 300, height: 50}}
+            />
+          </View>
         </View>
         <View>
           <Text style={styles.head}>
@@ -302,7 +304,7 @@ const styles = StyleSheet.create({
   address: {
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
-    fontSize: 16,
+    fontSize: 12,
     color: CUSTOMCOLOR.primary,
     width: 150,
     paddingLeft: 4,
@@ -367,7 +369,7 @@ const styles = StyleSheet.create({
   },
   sign: {
     alignSelf: 'flex-end',
-    width:horizontalScale(300),
+    width: horizontalScale(300),
     paddingVertical: 64,
     // justifyContent:'flex-end'
   },

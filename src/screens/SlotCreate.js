@@ -106,8 +106,6 @@ const SlotCreate = ({navigation, route}) => {
     Sa: 'Saturday',
     Su: 'Sunday',
   });
-
-  // console.log('nowwww', Date.now());
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -170,7 +168,10 @@ const SlotCreate = ({navigation, route}) => {
     setDurationValue(durationMins[0]);
   };
   const slotData = useSelector(state => state?.slotsData?.slots);
-  console.log('-----------slotdata', slotData);
+
+
+
+
   const handleDelete = (dayTodelete, index) => {
     setAllSlots(prevAllSlots =>
       prevAllSlots.filter(slot => slot.index !== index),

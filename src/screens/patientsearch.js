@@ -118,9 +118,11 @@ const PatientSearch = ({navigation}) => {
       fetchClincs();
     }, []),
   );
-  // console.log('====================================');
-  // console.log('clinics', clinicID, '==============', clinics);
-  // console.log('====================================');
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [clinicID]),
+  );
   return (
     <View style={styles.main}>
       <View style={styles.select}>
@@ -131,8 +133,7 @@ const PatientSearch = ({navigation}) => {
         />
         {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
       </View>
-      <View
-        style={styles.searchname}>
+      <View style={styles.searchname}>
         <InputText
           placeholder="Search name"
           value={name}
@@ -160,10 +161,7 @@ const PatientSearch = ({navigation}) => {
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={styles.clinicText}>
-            {Language[language]['clinic']}
-          </Text>
+          <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics?.map((clinic, index) => (
             <Pressable
               key={index}
@@ -186,23 +184,23 @@ const styles = StyleSheet.create({
   select: {
     gap: moderateScale(8),
   },
-  clinicText:{
+  clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.black,
   },
-  searchname:{
+  searchname: {
     flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          bottom: moderateScale(16),
-          paddingHorizontal: horizontalScale(8),
-          //marginRight:moderateScale(8)
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    bottom: moderateScale(16),
+    paddingHorizontal: horizontalScale(8),
+    //marginRight:moderateScale(8)
   },
-  patientCard:{
-    height: horizontalScale(550), 
-    paddingHorizontal: horizontalScale(8), 
-    gap: moderateScale(16)
+  patientCard: {
+    height: horizontalScale(550),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
   },
   tab: {
     flexDirection: 'row',
@@ -229,7 +227,7 @@ const styles = StyleSheet.create({
     height: moderateScale(20),
     right: moderateScale(8),
     //padding: moderateScale(16),
-    paddingHorizontal:moderateScale(24)
+    paddingHorizontal: moderateScale(24),
   },
   modalContainer: {
     height: moderateScale(400),

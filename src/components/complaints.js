@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
+import {
+  UpadateCheifComplaint,
+  addCheifComplaint,
+} from '../redux/features/prescription/prescriptionSlice';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -32,14 +35,21 @@ const ComplaintsCard = props => {
   );
   const nav = useNavigation();
   const dispatch = useDispatch();
+  const complaint = props.complaint;
+
+  // useEffect(() => {
+  //   dispatch(UpadateCheifComplaint(complaint));
+  // }, []);
 
   const handlePress = suggestion => {
+    // const update = [...complaint, suggestion];
+    // dispatch(addCheifComplaint(JSON.stringify(update)));
     dispatch(addCheifComplaint(suggestion));
   };
   const onPress = () => {
-    console.log(selectedComplaint);
     nav.goBack();
   };
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={Language[language]['cheif_complaints']} />

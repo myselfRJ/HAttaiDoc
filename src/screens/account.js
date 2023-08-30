@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -8,25 +8,36 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
-import { fetchApi } from '../api/fetchApi';
-import { URL } from '../utility/urls';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
 import moment from 'moment';
 // import {CUSTOMCOLOR} from '../settings/styles';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ManageCard from '../components/ManageCard';
-import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
-import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
+import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 
 const Account = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [data, setData] = useState();
   const [clinic, setClinics] = useState([]);
   const [cliniId, setClinicId] = useState();
   const [users, setUsers] = useState([]);
-  const { phone } = useSelector(state => state?.phone?.data);
+  const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -91,8 +102,9 @@ const Account = () => {
   const BirthYear = data?.DOB.split('-')[0];
 
   const age = parseInt(today) - parseInt(BirthYear);
-  const DateOfBirth = `${data?.DOB.split('-')[2]}-${data?.DOB.split('-')[1]}-${data?.DOB.split('-')[0]
-    }`;
+  const DateOfBirth = `${data?.DOB.split('-')[2]}-${data?.DOB.split('-')[1]}-${
+    data?.DOB.split('-')[0]
+  }`;
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
@@ -108,7 +120,9 @@ const Account = () => {
   return (
     <View style={styles.main}>
       <View>
-        <Text style={styles.PersonalInf}>Personal Information</Text>
+        <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+          <Text style={styles.PersonalInf}>Personal Information</Text>
+        </View>
         <View style={styles.pI}>
           <Image
             source={{
@@ -116,29 +130,18 @@ const Account = () => {
             }}
             style={styles.doctorImg}
           />
-          <View
-            style={styles.card}>
+          <View style={styles.card}>
             <View>
-              <Text
-                style={styles.docname}>
-                {data?.doctor_name}
-              </Text>
-              <Text
-                style={styles.subinfo}>
+              <Text style={styles.docname}>{data?.doctor_name}</Text>
+              <Text style={styles.subinfo}>
                 Age:{age} | {data?.gender}
               </Text>
-              <Text
-                style={styles.subinfo}>
-                DOB: {DateOfBirth}
-              </Text>
+              <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.editBtn}>
-                <Icon name="pen" size={16} color={'#4ba5fa'} />
-                <Text
-                  style={styles.edit}>
-                  Edit
-                </Text>
+                <Icon name="pen" size={16} color={CUSTOMCOLOR.primary} />
+                <Text style={styles.edit}>Edit</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -147,42 +150,31 @@ const Account = () => {
       <View>
         <Text style={styles.Professional}>Professional</Text>
         <View style={styles.ProfView}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
               <View style={styles.profCard}>
                 <Icon
                   name="google-circles-communities"
                   size={16}
-                  color={'#4ba5fa'}
+                  color={CUSTOMCOLOR.primary}
                 />
-                <Text
-                  style={styles.subhead}>
-                  Registration Council
-                </Text>
-                <Text
-                  style={styles.subvalue}>
-                  Medical Registration
-                </Text>
+                <Text style={styles.subhead}>Registration Council</Text>
+                <Text style={styles.subvalue}>Medical Registration</Text>
               </View>
               <View style={styles.profCard}>
-                <Icon name="medical-bag" size={16} color={'#4ba5fa'} />
-                <Text
-                  style={styles.subhead}>
-                  Medical Number
-                </Text>
-                <Text
-                  style={styles.subvalue}>
-                  {data?.medical_number}
-                </Text>
+                <Icon
+                  name="medical-bag"
+                  size={16}
+                  color={CUSTOMCOLOR.primary}
+                />
+                <Text style={styles.subhead}>Medical Number</Text>
+                <Text style={styles.subvalue}>{data?.medical_number}</Text>
               </View>
             </View>
             <TouchableOpacity>
               <View style={styles.editBtn}>
-                <Icon name="pen" size={16} color={'#4ba5fa'} />
-                <Text
-                  style={styles.edit}>
-                  Edit
-                </Text>
+                <Icon name="pen" size={16} color={CUSTOMCOLOR.primary} />
+                <Text style={styles.edit}>Edit</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -197,7 +189,9 @@ const Account = () => {
         </Text>
         <TouchableOpacity>
           <View style={styles.generateBtn}>
-            <Text style={{ color: '#4ba5fa' }}>Generate Via Aadhar</Text>
+            <Text style={{color: CUSTOMCOLOR.primary}}>
+              Generate Via Aadhar
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -211,7 +205,7 @@ const Account = () => {
             Dataname={'Clinics'}
             name={'plus'}
             onPress={() => {
-              navigation.navigate('addclinic', { prevScrn });
+              navigation.navigate('addclinic', {prevScrn});
             }}
           />
           <ManageCard
@@ -221,7 +215,7 @@ const Account = () => {
             nameIcon={'account-group'}
             Dataname={'Users'}
             name={'plus'}
-            onPress={() => navigation.navigate('adduser', { prevScrn })}
+            onPress={() => navigation.navigate('adduser', {prevScrn})}
           />
         </View>
       </View>
@@ -233,12 +227,12 @@ const styles = StyleSheet.create({
   main: {
     flex: moderateScale(1),
     paddingHorizontal: horizontalScale(24),
-    paddingVertical: verticalScale(24)
+    paddingVertical: verticalScale(24),
   },
   doctorImg: {
     height: moderateScale(70),
     width: moderateScale(70),
-    borderRadius: moderateScale(100)
+    borderRadius: moderateScale(100),
   },
   card: {
     left: moderateScale(10),
@@ -258,12 +252,12 @@ const styles = StyleSheet.create({
   },
   edit: {
     color: CUSTOMCOLOR.edit,
-    fontFamily: CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   profCard: {
     flexDirection: 'row',
     padding: moderateScale(8),
-    gap: moderateScale(8)
+    gap: moderateScale(8),
   },
   subhead: {
     fontWeight: '600',
@@ -274,9 +268,9 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
   },
-  clinicCard:{
-    gap: moderateScale(8), 
-    marginTop: moderateScale(32) 
+  clinicCard: {
+    gap: moderateScale(8),
+    marginTop: moderateScale(32),
   },
   PersonalInf: {
     color: CUSTOMCOLOR.black,
@@ -327,7 +321,7 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     borderRadius: moderateScale(8),
     gap: moderateScale(8),
-    backgroundColor: '#4ba5fa',
+    backgroundColor: CUSTOMCOLOR.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

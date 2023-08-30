@@ -1,5 +1,11 @@
-import React, {useState, useEffect,createRef} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity,TouchableHighlight} from 'react-native';
+import React, {useState, useEffect, createRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from '../components/Icon';
 import {useSelector, useDispatch} from 'react-redux';
@@ -23,12 +29,12 @@ import {
 } from '../settings/styles';
 import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
-import { addSign } from '../redux/features/prescription/sign';
+import {addSign} from '../redux/features/prescription/sign';
 
 export default function Valid() {
   const months = CONSTANTS.months;
-  const [saveSelected,setIsSaveSelected] = useState(false)
-  const [resetSelected,setIsResetSelected] = useState(false)
+  const [saveSelected, setIsSaveSelected] = useState(false);
+  const [resetSelected, setIsResetSelected] = useState(false);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('0');
@@ -83,7 +89,7 @@ export default function Valid() {
   };
 
   const sign = createRef();
-  console.log('sign====>',sign)
+  console.log('sign====>', sign);
 
   const saveSign = () => {
     sign.current.saveImage();
@@ -96,20 +102,19 @@ export default function Valid() {
     sign.current.resetImage();
   };
 
-  const _onSaveEvent = (result) => {
+  const _onSaveEvent = result => {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
-    
+
     alert('Signature Captured Successfully');
     console.log(result.encoded);
-    dispatch(addSign(result.encoded))
-     console.log(result.pathName);
+    dispatch(addSign(result.encoded));
+    console.log(result.pathName);
   };
 
   const _onDragEvent = () => {
     // This callback will be called when the user enters signature
     console.log('dragged');
-    
   };
 
   return (
@@ -184,37 +189,62 @@ export default function Valid() {
         />
       </View>
       <View>
-        <Text style={{fontWeight:600,fontSize:20,color:CUSTOMCOLOR.black,fontFamily:CUSTOMFONTFAMILY.heading,paddingBottom:16}}>Doctor Signature</Text>
-        <View style={{height:moderateScale(200),width:moderateScale(400),alignSelf:'center'}}>
+        <Text
+          style={{
+            fontWeight: 600,
+            fontSize: 20,
+            color: CUSTOMCOLOR.black,
+            fontFamily: CUSTOMFONTFAMILY.heading,
+            paddingBottom: 16,
+          }}>
+          Doctor Signature
+        </Text>
+        <View
+          style={{
+            height: moderateScale(200),
+            width: moderateScale(700),
+            alignSelf: 'center',
+          }}>
           <SignatureCapture
-          style={styles.signature}
-          ref={sign}
-          onSaveEvent={_onSaveEvent}
-          onDragEvent={_onDragEvent}
-          showNativeButtons={false}
-          showTitleLabel={false}
-          viewMode={'portrait'}
-          minStrokeWidth={4}
-          maxStrokeWidth={4}
-
-        />
+            style={styles.signature}
+            ref={sign}
+            onSaveEvent={_onSaveEvent}
+            onDragEvent={_onDragEvent}
+            showNativeButtons={false}
+            showTitleLabel={false}
+            viewMode={'portrait'}
+            minStrokeWidth={4}
+            maxStrokeWidth={4}
+          />
         </View>
-        <View style={{flexDirection: 'row',width:moderateScale(235),alignSelf:'center',top:moderateScale(8)}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: moderateScale(235),
+            alignSelf: 'center',
+            top: moderateScale(8),
+          }}>
           <TouchableHighlight
-            style={[styles.buttonStyle,saveSelected ? {backgroundColor:'#2CBB15'}:null]}
+            style={[
+              styles.buttonStyle,
+              saveSelected ? {backgroundColor: '#2CBB15'} : null,
+            ]}
             onPress={() => {
               saveSign();
-              setIsSaveSelected(true)
-              setIsResetSelected(false)
+              setIsSaveSelected(true);
+              setIsResetSelected(false);
             }}>
             <Text>Save</Text>
           </TouchableHighlight>
           <TouchableHighlight
-            style={[styles.buttonStyle,resetSelected ? {backgroundColor:CUSTOMCOLOR.delete}:null]}
+            style={[
+              styles.buttonStyle,
+              resetSelected ? {backgroundColor: CUSTOMCOLOR.delete} : null,
+            ]}
             onPress={() => {
               resetSign();
-              setIsResetSelected(true)
-              setIsSaveSelected(false)
+              setIsResetSelected(true);
+              setIsSaveSelected(false);
             }}>
             <Text>Reset</Text>
           </TouchableHighlight>
@@ -287,9 +317,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 50,
     borderColor: CUSTOMCOLOR.primary,
-    borderWidth:1,
-    borderRadius:4,
+    borderWidth: 1,
+    borderRadius: 4,
     margin: 10,
-    width:100
+    width: 100,
   },
 });

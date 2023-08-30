@@ -6,11 +6,11 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import moment, { min } from 'moment';
-import React, { useState, useEffect, useRef } from 'react';
-import { SvgXml } from 'react-native-svg';
-import { hattailogo } from '../assets/svgs/svg';
-import { CONSTANTS } from '../utility/constant';
+import moment, {min} from 'moment';
+import React, {useState, useEffect, useRef} from 'react';
+import {SvgXml} from 'react-native-svg';
+import {hattailogo} from '../assets/svgs/svg';
+import {CONSTANTS} from '../utility/constant';
 import {
   ChartCard,
   AppointmentCard,
@@ -19,19 +19,23 @@ import {
   BottomSheetView,
 } from '../components';
 import store from '../redux/stores/store';
-import { Language } from '../settings/customlanguage';
-import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
-import { language } from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
+import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
 import SlotCreate from './SlotCreate';
-import { URL } from '../utility/urls';
-import { ScrollView } from 'react-native-gesture-handler';
-import { fetchApi } from '../api/fetchApi';
-import { useSelector, useDispatch } from 'react-redux';
+import {URL} from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
+import {fetchApi} from '../api/fetchApi';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomIcon from '../components/icon';
 import Logo from '../components/logo';
-import { addDoctor_profile } from '../redux/features/profiles/doctorprofile';
+import {addDoctor_profile} from '../redux/features/profiles/doctorprofile';
 import ToggleSwitch from '../components/switch';
 import {
   addclinic_id,
@@ -44,11 +48,11 @@ import {
   moderateScale,
 } from '../utility/scaleDimension';
 import HButton from '../components/button';
-import { useFocusEffect } from '@react-navigation/native';
-import { commonstyles } from '../styles/commonstyle';
-import { disableBackButton } from '../utility/backDisable';
+import {useFocusEffect} from '@react-navigation/native';
+import {commonstyles} from '../styles/commonstyle';
+import {disableBackButton} from '../utility/backDisable';
 
-const Dashboard = ({ navigation, route }) => {
+const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const [clinic, setClinic] = useState('');
@@ -137,13 +141,15 @@ const Dashboard = ({ navigation, route }) => {
   //   dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
   // };
 
+  const appointment_date = formatDate;
+
   const fetchAppointment = async () => {
-    const appointment_date = formatDate;
     const clinic_id = clinicid;
-    const apiUrl = `${URL.get_all_appointments_of_clinic
-      }?appointment_date=${encodeURIComponent(
-        appointment_date,
-      )}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    const apiUrl = `${
+      URL.get_all_appointments_of_clinic
+    }?appointment_date=${encodeURIComponent(
+      appointment_date,
+    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -185,7 +191,7 @@ const Dashboard = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointment();
-    }, [clinicid]),
+    }, [clinicid, appointment_date]),
   );
   useFocusEffect(
     React.useCallback(() => {
@@ -197,10 +203,9 @@ const Dashboard = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={{ flex: moderateScale(1) }}>
+    <View style={{flex: moderateScale(1)}}>
       <View style={styles.container}>
-        <View
-          style={styles.main}>
+        <View style={styles.main}>
           <View>
             <Logo />
             <Text style={styles.title}>
@@ -215,8 +220,7 @@ const Dashboard = ({ navigation, route }) => {
           <ToggleSwitch value={visible} onValueChange={handleChart} />
 
           {visible && (
-            <View
-              style={styles.cardContainer}>
+            <View style={styles.cardContainer}>
               <ChartCard
                 data={data}
                 title={Language[language]['total_patient']}
@@ -264,7 +268,7 @@ const Dashboard = ({ navigation, route }) => {
         {/* <View style={styles.appointment}> */}
         <ScrollView
           style={styles.appointmentcard}
-          contentContainerStyle={{ gap: moderateScale(8) }}>
+          contentContainerStyle={{gap: moderateScale(8)}}>
           {setAppointment?.length > 0 ? (
             setAppointment?.map((value, index) => {
               return (
@@ -282,7 +286,7 @@ const Dashboard = ({ navigation, route }) => {
         <View>
           <HButton
             label="Book Appointment"
-            btnstyles={{ alignSelf: 'center', marginTop: moderateScale(16) }}
+            btnstyles={{alignSelf: 'center', marginTop: moderateScale(16)}}
             // textStyle={{color: CUSTOMCOLOR.primary}}
             onPress={() => navigation.navigate('addnew')}
           />
@@ -293,10 +297,7 @@ const Dashboard = ({ navigation, route }) => {
 
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={styles.clinicText}>
-            {Language[language]['clinic']}
-          </Text>
+          <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&
             clinics?.map((clinic, index) => (
               <Pressable
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   appointmentcard: {
     height: moderateScale(400),
     paddingHorizontal: horizontalScale(8),
-    gap: moderateScale(16)
+    gap: moderateScale(16),
   },
   h2: {
     paddingVertical: verticalScale(16),

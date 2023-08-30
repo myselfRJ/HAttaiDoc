@@ -39,6 +39,7 @@ import {
   UpdateDoctorRefer,
   UpadteVitals,
   UpadateCheifComplaint,
+  addCheifComplaint,
 } from '../redux/features/prescription/prescriptionSlice';
 
 const Visit = ({navigation, route}) => {
@@ -49,9 +50,9 @@ const Visit = ({navigation, route}) => {
   const date = useSelector(state => state?.dateTime?.date);
   //console.log('date=======', typeof date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
-  console.log('diagnosis====>', diagnosis);
+
   const vitalsData = useSelector(state => state.prescription.vitalsData);
-  console.log('pulse====', vitalsData);
+
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -72,13 +73,10 @@ const Visit = ({navigation, route}) => {
     state => state?.commorbities?.commorbitiesItems,
   );
 
-  console.log('-------commor', commorbities);
   const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
   const dateTimeRed = useSelector(state => state.valid?.valid);
-
-  console.log('---------------lab', dateTimeRed);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -92,16 +90,10 @@ const Visit = ({navigation, route}) => {
 
   const {name, gende, age, patient_phone, appointment_id, complaint} =
     route.params;
-  console.log(
-    'complaint>>>>>>>',
-    name,
-    gende,
-    age,
-    patient_phone,
-    appointment_id,
-    complaint,
-    Symptom,
-  );
+
+  useEffect(() => {
+    dispatch(addCheifComplaint(complaint));
+  }, []);
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
@@ -176,7 +168,6 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('data---0', jsonData);
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
@@ -478,9 +469,7 @@ const Visit = ({navigation, route}) => {
                         color={CUSTOMCOLOR.primary}
                         size={moderateScale(16)}
                       />
-                      <Text style={styles.pulse}>
-                        {complaint} | {selectedComplaint}
-                      </Text>
+                      <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
                   {value.label === 'Notes' && note !== '' && (

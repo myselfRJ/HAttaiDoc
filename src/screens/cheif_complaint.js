@@ -1,17 +1,23 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Provider } from 'react-redux';
+import {View} from 'react-native';
+import {Provider} from 'react-redux';
 import store from '../redux/stores/store';
 import ComplaintsCard from '../components/complaints';
 
 const CheifComplaints = ({route}) => {
-  const data = ['suggestion1', 'suggestion2', 'suggestion3', 'suggestion4', 'suggestion5'];
-  const {complaint} = route.params
-  console.log('com====',complaint)
+  const data = [
+    'suggestion1',
+    'suggestion2',
+    'suggestion3',
+    'suggestion4',
+    'suggestion5',
+  ];
+  const {complaint} = route.params;
+  console.log('com====', complaint);
   return (
     <Provider store={store}>
       <View>
-        <ComplaintsCard cheifcomplaints={data} />
+        <ComplaintsCard cheifcomplaints={data} complaint={complaint} />
       </View>
     </Provider>
   );

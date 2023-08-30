@@ -122,8 +122,8 @@ const Appointment = ({navigation}) => {
     fetchClinic();
   }, [phone]);
 
+  const appointment_date = formatDate;
   const fetchAppointment = async () => {
-    const appointment_date = formatDate;
     const clinic_id = clinicID;
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
@@ -206,7 +206,7 @@ const Appointment = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointment();
-    }, [clinicID]),
+    }, [clinicID, appointment_date]),
   );
   useFocusEffect(
     React.useCallback(() => {
@@ -246,8 +246,7 @@ const Appointment = ({navigation}) => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
-          <View
-            style={styles.searchname}>
+          <View style={styles.searchname}>
             <InputText
               placeholder="Search name"
               value={name}
@@ -297,10 +296,7 @@ const Appointment = ({navigation}) => {
       </View>
       <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
         <View style={styles.modalContainer}>
-          <Text
-            style={styles.clinicText}>
-            {Language[language]['clinic']}
-          </Text>
+          <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&
             clinics?.map((clinic, index) => (
               <Pressable
@@ -321,22 +317,22 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(24),
     flex: moderateScale(1),
   },
-  searchname:{
+  searchname: {
     flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              bottom: moderateScale(24),
-              width: '103%',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    bottom: moderateScale(24),
+    width: '103%',
   },
-  appointmentCard:{
-    height: moderateScale(400), 
-    paddingHorizontal: horizontalScale(8), 
-    gap: moderateScale(16)
+  appointmentCard: {
+    height: moderateScale(400),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
   },
-  clinicText:{
+  clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
-              fontSize: CUSTOMFONTSIZE.h2,
-              color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
   },
   title: {
     color: CUSTOMCOLOR.black,
