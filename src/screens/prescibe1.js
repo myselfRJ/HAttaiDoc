@@ -27,9 +27,9 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import {InputText} from '../components';
+import {HButton, InputText, PlusButton} from '../components';
 
-export default function Prescribe1() {
+export default function Prescribe1({navigation}) {
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
@@ -38,8 +38,8 @@ export default function Prescribe1() {
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
   const [frequency, setFrequency] = useState([]);
-  const [dose_number, setDose_number] = useState('');
-  const [duration, setDuration] = useState('');
+  const [dose_number, setDose_number] = useState('1');
+  const [duration, setDuration] = useState('1');
   const recommdations = CONSTANTS.medicine_recomendation;
   const mg = CONSTANTS.dose;
   const ml = CONSTANTS.dose_ml;
@@ -445,13 +445,32 @@ export default function Prescribe1() {
               <View style={styles.line}></View>
             </View>
           </View>
-          <TouchableOpacity onPress={handleAddPrescribe}>
+
+          {/* <TouchableOpacity onPress={handleAddPrescribe}>
             <Icon
               name="plus"
               size={moderateScale(32)}
               style={styles.PlusButton}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: moderateScale(20),
+            }}>
+            <PlusButton
+              icon="plus"
+              size={moderateScale(48)}
+              onPress={handleAddPrescribe}
+            />
+            <HButton
+              label={'Next'}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

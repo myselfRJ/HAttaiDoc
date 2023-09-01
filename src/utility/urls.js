@@ -1,5 +1,5 @@
-// const baseUrl = 'http://10.9.78.38:8000/api/v1/';
-const baseUrl = 'http://34.205.77.155/api/v1/';
+const baseUrl = 'http://10.9.78.38:8000/api/v1/';
+// const baseUrl = 'http://34.205.77.155/api/v1/';
 //const baseUrl = 'http://10.9.71.38:8000/api/v1/';
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
@@ -26,6 +26,8 @@ export const URL = {
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
   getConsultationByPatientPhone: phoneId =>
     `${baseUrl}consult/pres?patient_phone_number=${phoneId}`,
+
+  logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',

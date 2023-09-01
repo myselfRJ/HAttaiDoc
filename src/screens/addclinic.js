@@ -21,7 +21,7 @@ import AddImage from '../components/addimage';
 import Option from '../components/option';
 import {PlusButton, SelectorBtn, SlotChip} from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -46,7 +46,8 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {updateslots} from '../redux/features/slots/slotData';
-import { updateAddress } from '../redux/features/profiles/clinicAddress';
+import {updateAddress} from '../redux/features/profiles/clinicAddress';
+import GalleryModel from '../components/GalleryModal';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -56,8 +57,8 @@ const AddClinic = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
   const route = useRoute();
-  const address = useSelector(state=> state?.address?.address)
-  console.log('address====',address)
+  const address = useSelector(state => state?.address?.address);
+  console.log('address====', address);
   const {prevScrn} = route.params;
   console.log('----------prev', prevScrn);
 
@@ -80,9 +81,9 @@ const AddClinic = ({navigation}) => {
         Su: [],
       },
     };
-    const newAddress = ''
+    const newAddress = '';
     dispatch(updateslots(newSlotsss?.slots));
-    dispatch(updateAddress(newAddress))
+    dispatch(updateAddress(newAddress));
   };
 
   const [loading, setLoading] = useState(false);
@@ -204,7 +205,7 @@ const AddClinic = ({navigation}) => {
       Alert.alert('Warning', '"Please Check Once Again"');
     }
   };
-  // console.log(slotData, '-------------------------------------------------');
+
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
@@ -214,11 +215,24 @@ const AddClinic = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        // console.log('User cancelled image picker');
       } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
       } else {
-        // console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+  };
+
+  const openCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
@@ -241,6 +255,11 @@ const AddClinic = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
+  const [modal, setModal] = useState(false);
+  const ModalVisible = () => {
+    setModal(true);
+    console.log('--------indra');
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -269,7 +288,11 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
-                  onPress={onImagePress}
+                  onPress={() => {
+                    onImagePress();
+                    // openCamera();
+                    // ModalVisible();
+                  }}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -385,6 +408,16 @@ const AddClinic = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
+
+      {/* {modal && (
+        <View style={{backgroundColor: '#4ba5fa'}}>
+          <GalleryModel
+            condition={true}
+            OnGallery={() => onImagePress()}
+            OnCamera={openCamera}
+          />
+        </View>
+      )} */}
     </View>
   );
 };

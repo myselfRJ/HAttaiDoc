@@ -9,6 +9,7 @@ import {
   ScrollView,
   Image,
   Pressable,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
@@ -116,12 +117,27 @@ const Account = () => {
       fetchUsers();
     }, [cliniId]),
   );
+
+  const userLogout = () => {
+    const newTokens = {
+      access: null,
+      refresh: null,
+      lastLogin: null,
+    };
+    dispatch(authenticateActions.updateauthenticate(newTokens));
+    Alert.alert('Logout Sucessfull ');
+    navigation.navigate('entry');
+  };
+
   const prevScrn = 'account';
   return (
     <View style={styles.main}>
       <View>
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
           <Text style={styles.PersonalInf}>Personal Information</Text>
+          <TouchableOpacity onPress={userLogout}>
+            <Text>LOGOUT</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.pI}>
           <Image
