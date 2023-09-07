@@ -43,10 +43,10 @@ const Commorbities = () => {
             styles.recomend,
             {
               backgroundColor:
-                select === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
             },
           ]}>
-          <Text style={{color: CUSTOMCOLOR.black}}>{item}</Text>
+          <Text style={{color: value === item ? CUSTOMCOLOR.white: CUSTOMCOLOR.black}}>{item}</Text>
         </TouchableOpacity>
       ))}
     </View>

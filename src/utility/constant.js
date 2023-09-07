@@ -70,4 +70,11 @@ export const CONSTANTS = {
     'Diabetes',
     'Chronic respiratory disease',
   ],
+  allergy: [
+    'Milk',
+    'Water',
+    'Peanut',
+    'Junk foods',
+    'Insect stings'
+  ],
 };

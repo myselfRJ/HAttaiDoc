@@ -14,10 +14,13 @@ import {
   verticalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import { CONSTANTS } from '../utility/constant';
+import { CUSTOMCOLOR,CUSTOMFONTFAMILY,CUSTOMFONTSIZE } from '../settings/styles';
 
 const Allergies = () => {
   const nav = useNavigation();
   const [value, setValue] = useState('');
+  const [select, setSelect] = useState('');
   console.log('value===', value);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.allergies?.allergies);
@@ -30,6 +33,30 @@ const Allergies = () => {
       setValue('');
     }
   };
+  const selectChange = value => {
+    console.log('12223325555');
+    setValue(value);
+    setSelect(value);
+  };
+  const constants = (
+    <View style={{flexDirection: 'row', gap: moderateScale(12),paddingHorizontal:horizontalScale(8)}}>
+      {CONSTANTS.allergy?.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => selectChange(item)}
+          style={[
+            styles.recomend,
+            {
+              backgroundColor:
+                value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+            },
+          ]}>
+          <Text style={{color: value === item ? CUSTOMCOLOR.white: CUSTOMCOLOR.black}}>{item}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+  console.log('=======>',CONSTANTS['allergy'])
   const handleDelete = index => {
     console.log('prescription index', index);
     if (prev) {
@@ -57,6 +84,7 @@ const Allergies = () => {
         values={value}
         onChange={setValue}
         onPress={HandleAddValue}
+        suggestion={constants}
       />
     </View>
   );
@@ -68,5 +96,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
+  },
+  recomend: {
+    padding: moderateScale(8),
+    borderRadius: moderateScale(8),
+    paddingHorizontal:horizontalScale(16)
   },
 });
