@@ -290,7 +290,6 @@ const AddClinic = ({navigation}) => {
   const [modal, setModal] = useState(false);
   const ModalVisible = () => {
     setModal(true);
-    GlRef?.current?.snapToIndex(1);
   };
 
   return (

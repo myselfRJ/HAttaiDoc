@@ -30,12 +30,13 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {BottomSheetView, StatusMessage, SelectorBtn} from '../components';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import DatePicker from 'react-native-date-picker';
 import {useSelector} from 'react-redux';
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
+import GalleryModel from '../components/GalleryModal';
 
 const PatientCreate = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -68,7 +69,7 @@ const PatientCreate = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formatDate,setFormatDate] = useState('')
+  const [formatDate, setFormatDate] = useState('');
   const formattedDate = date.toISOString().split('T')[0];
 
   const onImagePress = () => {
@@ -80,42 +81,56 @@ const PatientCreate = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
   };
-  const [value,setValue] = useState('')
-  const HandleInput=()=>{
-    if(age){
-      setValue(age)
-      setAge(age)
-    }
-    else{
-      {open && setValue(formattedDate)}
-    }
-  }
-  useEffect(()=>{
-    HandleInput();
-  },[date,age])
 
-  const HandleCheck=()=>{
-    if (value.length <= 3){
+  const openCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+    setModal(false);
+  };
+  const [value, setValue] = useState('');
+  const HandleInput = () => {
+    if (age) {
+      setValue(age);
+      setAge(age);
+    } else {
+      {
+        open && setValue(formattedDate);
+      }
+    }
+  };
+  useEffect(() => {
+    HandleInput();
+  }, [date, age]);
+
+  const HandleCheck = () => {
+    if (value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      console.log('current====>',`${current}-${'01'}-${'01'}`)
-      setFormatDate(`${current}-${'01'}-${'01'}`)
+      console.log('current====>', `${current}-${'01'}-${'01'}`);
+      setFormatDate(`${current}-${'01'}-${'01'}`);
+    } else {
+      setFormatDate(formattedDate);
     }
-    else{
-      setFormatDate(formattedDate)
-    }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     HandleCheck();
-  },[value])
+  }, [value]);
 
   const handleDate = () => {
     setOpen(!open);
@@ -123,7 +138,7 @@ const PatientCreate = ({navigation}) => {
 
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
-    setValue(selectedDate)
+    setValue(selectedDate);
   };
 
   const handleCancel = () => {
@@ -147,10 +162,6 @@ const PatientCreate = ({navigation}) => {
     patient_address: address,
     patient_pic_url: selectedImage ? selectedImage : default_image,
   };
-
-  // console.log('====================================');
-  // console.log(patientDetails);
-  // console.log('====================================');
 
   const [apiStatus, setApiStatus] = useState({});
   const RoleRef = useRef(null);
@@ -206,6 +217,10 @@ const PatientCreate = ({navigation}) => {
       setLoading(false);
     }
   };
+  const [modal, setModal] = useState(false);
+  const ModalVisible = () => {
+    setModal(true);
+  };
 
   return (
     <View style={{flex: moderateScale(1)}}>
@@ -213,7 +228,7 @@ const PatientCreate = ({navigation}) => {
         <Keyboardhidecontainer>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
-              <AddImage onPress={onImagePress} encodedBase64={selectedImage} />
+              <AddImage onPress={ModalVisible} encodedBase64={selectedImage} />
             </View>
             {/* <View style={styles.CnfAbhaView}>
             {CONSTANTS.abhaOption.map((val, ind) => (
@@ -275,7 +290,7 @@ const PatientCreate = ({navigation}) => {
             <View style={styles.btn}>
               <DOBselect
                 required={true}
-                label='Age/ Date of Birth'
+                label="Age/ Date of Birth"
                 name="calendar"
                 onPress={() => setOpen('to')}
                 input={value}
@@ -415,6 +430,16 @@ const PatientCreate = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
+      {modal && (
+        <View>
+          <GalleryModel
+            visible={modal}
+            Close={setModal}
+            OnGallery={onImagePress}
+            OnCamera={openCamera}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -461,8 +486,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
-    
-    
   },
 });
 export default PatientCreate;
