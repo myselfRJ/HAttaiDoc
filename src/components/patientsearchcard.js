@@ -10,7 +10,11 @@ import {
 import BottomSheetView from './bottomSheet';
 import {useState, useRef, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE,CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTSIZE,
+  CUSTOMFONTFAMILY,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import SelectionTab from '../components/selectiontab';
@@ -30,9 +34,6 @@ const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
-  console.log('====================================');
-  console.log(patient_data?.patient_data?.patient_name);
-  console.log('====================================');
   const patient_name = patient_data?.patient_data?.patient_name;
   const patient_age = patient_data?.patient_data?.birth_date;
   const patient_phone = patient_data?.patient_data?.patient_phone_number;
@@ -97,7 +98,6 @@ const PatientSearchCard = patient_data => {
           bottomSheetRef={patientSearchRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
-            
           <View style={styles.tab}>
             <SelectionTab
               label={Language[language]['book_appointment']}
@@ -120,17 +120,21 @@ const PatientSearchCard = patient_data => {
                 patientSearchRef?.current?.snapToIndex(0);
               }}
             /> */}
-            </View>
-            <View style={{alignSelf:'flex-end',paddingHorizontal:8,bottom:38}}>
-            <PlusButton icon='close' size={20} style={{
-              backgroundColor:'#000000aa'
-             
-            }} onPress={() => {
-              patientSearchRef?.current?.snapToIndex(0);
-            }}/>
-            </View>
-            
-          
+          </View>
+          <View
+            style={{alignSelf: 'flex-end', paddingHorizontal: 8, bottom: 38}}>
+            <PlusButton
+              icon="close"
+              size={20}
+              style={{
+                backgroundColor: '#000000aa',
+              }}
+              onPress={() => {
+                patientSearchRef?.current?.snapToIndex(0);
+              }}
+            />
+          </View>
+
           {/* <View style={styles.bottomView}>
             <TouchableOpacity>
               <Text style={styles.content}>{Language[language]['update']}</Text>
@@ -171,21 +175,21 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     lineHeight: 20,
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   age: {
     fontWeight: 400,
     fontSize: moderateScale(10),
     lineHeight: 20,
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   contact: {
     fontWeight: 600,
     fontSize: 10,
     lineHeight: 12.5,
     color: CUSTOMCOLOR.black,
-    fontFamily:CUSTOMFONTFAMILY.heading
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
     width: 60,
@@ -233,7 +237,7 @@ const styles = StyleSheet.create({
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
 });
 

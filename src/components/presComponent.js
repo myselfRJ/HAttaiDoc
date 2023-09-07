@@ -9,8 +9,10 @@ import {
 } from '../utility/scaleDimension';
 import {TouchableOpacity} from 'react-native';
 import {CUSTOMCOLOR} from '../settings/styles';
+import {useNavigation} from '@react-navigation/native';
 
 const PresComponent = props => {
+  const navigation = useNavigation();
   return (
     <View style={styles.main}>
       <InputText
@@ -28,6 +30,19 @@ const PresComponent = props => {
         btnstyles={{alignSelf: 'center'}}
         onPress={props.onPress}
       />
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: moderateScale(10),
+        }}>
+        <HButton
+          label={'Next'}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      </View>
     </View>
   );
 };

@@ -10,7 +10,11 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {CONSTANT} from '../utility/const';
 import {CONSTANTS} from '../utility/constant';
-import {horizontalScale} from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  verticalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
 import {WebView} from 'react-native-webview';
 
 // import Pdf from 'react-native-pdf';
@@ -87,20 +91,10 @@ const Prescription = ({route}) => {
   return (
     <ScrollView>
       <View style={styles.main}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            paddingHorizontal: 8,
-            borderBottomColor: CUSTOMCOLOR.primary,
-            borderBottomWidth: 1,
-            padding: 12,
-            backgroundColor: '#ffffff',
-          }}>
+        <View style={styles.container}>
           <View style={{flexDirection: 'row'}}>
             <Logo />
-            <View style={{paddingHorizontal: 16}}>
+            <View style={{paddingHorizontal: horizontalScale(16)}}>
               <Text style={styles.title}>
                 {Language[language]['dr']}
                 {doctor_profile?.doctor_profile?.doctor_name}
@@ -253,7 +247,7 @@ const Prescription = ({route}) => {
           <View style={{}}>
             <Image
               source={{uri: `data:image/jpeg;base64,${base64Image}`}}
-              style={{width: 300, height: 50}}
+              style={{width: moderateScale(300), height: moderateScale(50)}}
             />
           </View>
         </View>
@@ -284,67 +278,67 @@ const Prescription = ({route}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 24,
-    backgroundColor: '#ffffff',
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
+    backgroundColor: CUSTOMCOLOR.white,
   },
   title: {
     fontFamily: CUSTOMFONTFAMILY.heading,
-    fontWeight: 600,
-    fontSize: 20,
+    fontWeight: '600',
+    fontSize: moderateScale(20),
     color: CUSTOMCOLOR.primary,
   },
   speciality: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 400,
-    fontSize: 18,
+    fontWeight: '400',
+    fontSize: moderateScale(18),
     color: CUSTOMCOLOR.primary,
-    paddingHorizontal: 4,
+    paddingHorizontal: horizontalScale(4),
   },
   address: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 400,
-    fontSize: 12,
+    fontWeight: '400',
+    fontSize: moderateScale(12),
     color: CUSTOMCOLOR.primary,
-    width: 150,
-    paddingLeft: 4,
+    width: moderateScale(150),
+    paddingLeft: moderateScale(4),
     //paddingHorizontal:8
   },
   img: {
-    width: 35,
-    height: 53,
+    width: moderateScale(35),
+    height: moderateScale(53),
   },
   date: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 400,
-    fontSize: 16,
+    fontWeight: '400',
+    fontSize: moderateScale(16),
     color: CUSTOMCOLOR.black,
   },
   commonstyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
   },
   head: {
     fontFamily: CUSTOMFONTFAMILY.heading,
-    fontWeight: 400,
-    fontSize: 16,
+    fontWeight: '400',
+    fontSize: moderateScale(16),
     color: CUSTOMCOLOR.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 4,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: horizontalScale(4),
   },
   values: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 400,
-    fontSize: 14,
+    fontWeight: '400',
+    fontSize: moderateScale(14),
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: 8,
+    paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
   },
   presc: {
     top: 8,
     //paddingHorizontal: 4,
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     backgroundColor: '#DFF0FF',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -352,15 +346,15 @@ const styles = StyleSheet.create({
   precvalues: {
     //paddingHorizontal: 24,
 
-    paddingVertical: 8,
+    paddingVertical: verticalScale(8),
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   prescMenu: {
-    width: 80,
+    width: verticalScale(80),
     fontFamily: CUSTOMFONTFAMILY.heading,
-    fontWeight: 400,
-    fontSize: 16,
+    fontWeight: '400',
+    fontSize: moderateScale(16),
     color: CUSTOMCOLOR.black,
   },
   refer: {
@@ -369,19 +363,30 @@ const styles = StyleSheet.create({
   },
   sign: {
     alignSelf: 'flex-end',
-    width: horizontalScale(300),
-    paddingVertical: 64,
+    width: moderateScale(300),
+    paddingVertical: verticalScale(64),
     // justifyContent:'flex-end'
   },
   description: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 32,
+    paddingVertical: verticalScale(32),
   },
   footerimg: {
-    width: 136,
-    height: 70,
+    width: moderateScale(136),
+    height: moderateScale(70),
     alignSelf: 'flex-start',
   },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: moderateScale(24),
+    paddingHorizontal: horizontalScale(8),
+    borderBottomColor: CUSTOMCOLOR.primary,
+    borderBottomWidth: 1,
+    padding: moderateScale(12),
+    backgroundColor: CUSTOMCOLOR.white,
+  },
 });
+
 export default Prescription;

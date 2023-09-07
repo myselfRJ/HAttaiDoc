@@ -264,6 +264,15 @@ export default function MedicalRecordPatient({route, navigation}) {
             </View>
           </View>
         ) : null}
+        {selectedView === Views[1] ? (
+          <View
+            style={{
+              // paddingHorizontal: 32,
+              top: moderateScale(16),
+            }}>
+            <Text>HHIIIi</Text>
+          </View>
+        ) : null}
         <View
           style={{
             // top: 24,

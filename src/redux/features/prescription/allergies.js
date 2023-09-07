@@ -11,14 +11,13 @@ const allergiesSlice = createSlice({
   reducers: {
     addAllergies: (state, action) => {
       state.allergies = action.payload;
-      console.log('action.payload',action.payload);
     },
     updateAllergies: (state, action) => {
-        state.allergies = action.payload;
-      },
+      state.allergies = action.payload;
+    },
   },
 });
 
-export const {addAllergies,updateAllergies}=allergiesSlice.actions;
+export const {addAllergies, updateAllergies} = allergiesSlice.actions;
 
 export const allergiesReducer = allergiesSlice.reducer;

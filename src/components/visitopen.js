@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     // borderBottomColor: CUSTOMCOLOR.primary,
   },
   text: {
-    fontWeight: 600,
+    fontWeight: ' 600',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,

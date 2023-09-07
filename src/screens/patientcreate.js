@@ -294,10 +294,7 @@ const PatientCreate = ({navigation}) => {
             />
 
             <View style={styles.alignchild}>
-              <Text
-                style={styles.genderText}>
-                Gender
-              </Text>
+              <Text style={styles.genderText}>Gender</Text>
               <View style={styles.radiogroup}>
                 <Option
                   label="Male"
@@ -379,13 +376,10 @@ const PatientCreate = ({navigation}) => {
               label="Save"
               loading={loading}
               onPress={() => {
-                if (patient_phone_number.length === 10) {
+                if (patient_phone_number.length === 10 && age) {
                   fetchData();
                 } else {
-                  Alert.alert(
-                    '"Warning"',
-                    '"Please Enter Correct Phone Number"',
-                  );
+                  Alert.alert('"Warning"', '"Please Enter Correct Details"');
                 }
               }}
             />
@@ -438,9 +432,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
-    paddingTop: moderateScale(16)
+    paddingTop: moderateScale(16),
   },
-  genderText:{
+  genderText: {
     fontFamily: CUSTOMFONTFAMILY.body,
     color: CUSTOMCOLOR.black,
     fontSize: CUSTOMFONTSIZE.h4,

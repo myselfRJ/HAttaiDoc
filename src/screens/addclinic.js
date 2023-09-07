@@ -5,7 +5,7 @@ import React, {
   useCallback,
   startTransition,
 } from 'react';
-import {Text, View, StyleSheet, Alert} from 'react-native';
+import {Text, View, StyleSheet, Alert, Modal} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -21,7 +21,7 @@ import AddImage from '../components/addimage';
 import Option from '../components/option';
 import {PlusButton, SelectorBtn, SlotChip} from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -46,20 +46,23 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {updateslots} from '../redux/features/slots/slotData';
-import { updateAddress } from '../redux/features/profiles/clinicAddress';
-import { mode } from '../redux/features/prescription/prescribeslice';
+// import {updateAddress} from '../redux/features/profiles/clinicAddress';
+import GalleryModel from '../components/GalleryModal';
+import {updateAddress} from '../redux/features/profiles/clinicAddress';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
+  const GlRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
-  console.log('====clinic==>',clinics)
+  console.log('====clinic==>', clinics);
   const route = useRoute();
-  const address = useSelector(state=> state?.address?.address)
-  console.log('address====',address)
+  const address = useSelector(state => state?.address?.address);
+  console.log('address====', address);
   const {prevScrn} = route.params;
   console.log('----------prev', prevScrn);
 
@@ -82,9 +85,9 @@ const AddClinic = ({navigation}) => {
         Su: [],
       },
     };
-    const newAddress = ''
+    const newAddress = '';
     dispatch(updateslots(newSlotsss?.slots));
-    dispatch(updateAddress(newAddress))
+    dispatch(updateAddress(newAddress));
   };
 
   const [loading, setLoading] = useState(false);
@@ -117,17 +120,17 @@ const AddClinic = ({navigation}) => {
   const [status, setStatus] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState('');
-  const [selectedLogo,setSelectedLogo] = useState('');
+  const [selectedLogo, setSelectedLogo] = useState('');
   const [value, setValue] = useState({
     clinic: '',
     address: '',
-    phone:'',
+    phone: '',
     fees: '',
     // slots: [],
   });
 
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
-  console.log('clinic details===>',clinic_data)
+  console.log('clinic details===>', clinic_data);
   const prevScrn1 = 'undefineed';
 
   const Clinic_Data = {
@@ -136,9 +139,8 @@ const AddClinic = ({navigation}) => {
     clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
-    clinic_phone_number:value.phone,
-    clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image, 
-
+    clinic_phone_number: value.phone,
+    clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
   };
 
   const ResetClinicRedux = () => {
@@ -201,7 +203,10 @@ const AddClinic = ({navigation}) => {
         dispatch(addclinic_data(Clinic_Data));
         Alert.alert('Success', '"Clinic data added successfully"');
         setShowSlotChip(true);
-        (value.clinic = ''), (value.address = ''), (value.fees = ''), (value.phone = '');
+        (value.clinic = ''),
+          (value.address = ''),
+          (value.fees = ''),
+          (value.phone = '');
         setSelectedImage('');
         setSelectedLogo('');
         setVisibleSlot(true);
@@ -213,7 +218,7 @@ const AddClinic = ({navigation}) => {
       Alert.alert('Warning', '"Please Check Once Again"');
     }
   };
-  // console.log(slotData, '-------------------------------------------------');
+
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
@@ -223,14 +228,29 @@ const AddClinic = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        // console.log('User cancelled image picker');
       } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
       } else {
-        // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false);
+  };
+
+  const openCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+    setModal(false);
   };
   const onLogoPress = () => {
     const options = {
@@ -267,6 +287,11 @@ const AddClinic = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
+  const [modal, setModal] = useState(false);
+  const ModalVisible = () => {
+    setModal(true);
+    GlRef?.current?.snapToIndex(1);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -295,7 +320,11 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
-                  onPress={onImagePress}
+                  onPress={() => {
+                    // onImagePress();
+                    // openCamera();
+                    ModalVisible();
+                  }}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -347,11 +376,8 @@ const AddClinic = ({navigation}) => {
             />
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>
-            <AddImage
-                  onPress={onLogoPress}
-                  encodedBase64={selectedLogo}
-                />
-                </View> 
+              <AddImage onPress={onLogoPress} encodedBase64={selectedLogo} />
+            </View>
             <View style={styles.addslot}>
               <HButton
                 label="Add Slots"
@@ -424,6 +450,17 @@ const AddClinic = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
+
+      {modal && (
+        <View>
+          <GalleryModel
+            visible={modal}
+            Close={setModal}
+            OnGallery={onImagePress}
+            OnCamera={openCamera}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -499,12 +536,12 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     paddingVertical: verticalScale(4),
   },
-  logo:{
-    color:CUSTOMCOLOR.black,
-    fontSize:CUSTOMFONTSIZE.h4,
-    fontWeight:400,
-    marginBottom:moderateScale(4)
-  }
+  logo: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: 400,
+    marginBottom: moderateScale(4),
+  },
 });
 
 export default AddClinic;
