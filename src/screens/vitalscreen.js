@@ -26,6 +26,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import { mode } from '../redux/features/prescription/prescribeslice';
 const VitalScreen = props => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
@@ -371,8 +372,10 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(4),
   },
   pulsecontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
     
   },
   pulse: {
@@ -386,8 +389,10 @@ const styles = StyleSheet.create({
     //paddingHorizontal:horizontalScale(12)
   },
   weightcontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
   },
   weight: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -410,8 +415,10 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   heightcontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
 
   },
   height: {
@@ -424,8 +431,10 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   tempcontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
   },
   temp: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -437,8 +446,10 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   ratecontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
   },
   rate: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -450,8 +461,12 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   bmicontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(8),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(8),
+    width:moderateScale(100),  
+    // borderWidth:1,
+    height:moderateScale(85),
+    padding:moderateScale(8)
   
   },
   bmi: {
@@ -462,7 +477,7 @@ const styles = StyleSheet.create({
   bmitext: {
     paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(8),
-    top: moderateScale(2),
+    top: moderateScale(4),
     gap: moderateScale(8),
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
@@ -472,7 +487,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4,)
     flexDirection: 'row',
-    gap: moderateScale(4),
+    gap: moderateScale(16),
     top: moderateScale(8),
   },
   bloodPres: {
@@ -486,8 +501,10 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h2,
   },
   diascontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+    // borderWidth:1,
   },
   diastolic: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -501,8 +518,10 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   syscontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(4),
+    width:moderateScale(100),  
+  
   },
   systolic: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -566,7 +585,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
     margin: moderateScale(100),
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),
   },

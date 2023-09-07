@@ -13,6 +13,7 @@ const SlotChip = props => {
       <Text style={styles.text}>{props.time}</Text>
       <Text style={styles.text}>{props.type}</Text>
       <Text style={styles.text}>{props.duration}</Text>
+      <Text style={styles.text}>{props.icon}</Text>
       <TouchableOpacity
         onPress={() => {
           props.onPress(props.index);
