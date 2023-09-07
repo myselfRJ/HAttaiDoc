@@ -13,9 +13,6 @@ const prescribeSlice = createSlice({
       // state.prescribeItems.push(action.payload);
       state.prescribeItems = action.payload;
     },
-    // deletePrescribe: state => {
-    //   state.prescribeItems.splice(state.prescribeItems.length - 1, 1);
-    // },
     updatePrescribe1: (state, action) => {
       state.prescribeItems = action.payload;
     },

@@ -5,7 +5,7 @@ import React, {
   useCallback,
   startTransition,
 } from 'react';
-import {Text, View, StyleSheet, Alert} from 'react-native';
+import {Text, View, StyleSheet, Alert, Modal} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -51,6 +51,7 @@ import GalleryModel from '../components/GalleryModal';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
+  const GlRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
@@ -220,6 +221,7 @@ const AddClinic = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false);
   };
 
   const openCamera = () => {
@@ -236,6 +238,7 @@ const AddClinic = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false);
   };
 
   const progressData = useSelector(state => state.progress?.status);
@@ -258,7 +261,7 @@ const AddClinic = ({navigation}) => {
   const [modal, setModal] = useState(false);
   const ModalVisible = () => {
     setModal(true);
-    console.log('--------indra');
+    GlRef?.current?.snapToIndex(1);
   };
 
   return (
@@ -289,9 +292,9 @@ const AddClinic = ({navigation}) => {
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
                   onPress={() => {
-                    onImagePress();
+                    // onImagePress();
                     // openCamera();
-                    // ModalVisible();
+                    ModalVisible();
                   }}
                   encodedBase64={selectedImage}
                 />
@@ -409,15 +412,16 @@ const AddClinic = ({navigation}) => {
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
 
-      {/* {modal && (
-        <View style={{backgroundColor: '#4ba5fa'}}>
+      {modal && (
+        <View>
           <GalleryModel
-            condition={true}
-            OnGallery={() => onImagePress()}
+            visible={modal}
+            Close={setModal}
+            OnGallery={onImagePress}
             OnCamera={openCamera}
           />
         </View>
-      )} */}
+      )}
     </View>
   );
 };
