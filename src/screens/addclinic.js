@@ -252,6 +252,22 @@ const AddClinic = ({navigation}) => {
     });
     setModal(false);
   };
+  const LogoCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        setSelectedLogo(response?.assets?.[0]?.base64);
+      }
+    });
+    setlogo(false);
+  };
   const onLogoPress = () => {
     const options = {
       mediaType: 'photo',
@@ -268,6 +284,7 @@ const AddClinic = ({navigation}) => {
         setSelectedLogo(response?.assets?.[0]?.base64);
       }
     });
+    setlogo(false)
   };
 
   const progressData = useSelector(state => state.progress?.status);
@@ -288,8 +305,13 @@ const AddClinic = ({navigation}) => {
     disableBackButton();
   }, []);
   const [modal, setModal] = useState(false);
+  const [logo,setlogo] = useState(false)
   const ModalVisible = () => {
     setModal(true);
+  };
+  const LogoVisible = () => {
+    setlogo(true);
+    GlRef?.current?.snapToIndex(1);
   };
 
   return (
@@ -375,7 +397,7 @@ const AddClinic = ({navigation}) => {
             />
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>
-              <AddImage onPress={onLogoPress} encodedBase64={selectedLogo} />
+              <AddImage onPress={()=> LogoVisible()} encodedBase64={selectedLogo} />
             </View>
             <View style={styles.addslot}>
               <HButton
@@ -457,6 +479,16 @@ const AddClinic = ({navigation}) => {
             Close={setModal}
             OnGallery={onImagePress}
             OnCamera={openCamera}
+          />
+        </View>
+      )}
+       {logo && (
+        <View>
+          <GalleryModel
+            visible={logo}
+            Close={setlogo}
+            OnGallery={onLogoPress}
+            OnCamera={LogoCamera}
           />
         </View>
       )}
