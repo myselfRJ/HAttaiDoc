@@ -29,7 +29,7 @@ import {
   BottomSheetView,
 } from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary,launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
@@ -49,8 +49,10 @@ import {HttpStatusCode} from 'axios';
 import {disableBackButton} from '../utility/backDisable';
 import {useRoute} from '@react-navigation/native';
 import {checkNumber} from '../utility/checks';
+import GalleryModel from '../components/GalleryModal';
 
 const AddUser = ({navigation}) => {
+  const GlRef = useRef(null);
   const route = useRoute();
   const [clinics, setDataClinic] = useState();
   // console.log('clinic---', clinics);
@@ -95,7 +97,46 @@ const AddUser = ({navigation}) => {
   const progressData = useSelector(state => state.progress?.status);
   const {prevScrn} = route.params;
   console.log('----prevvvv', prevScrn);
+  const [modal, setModal] = useState(false);
+  const ModalVisible = () => {
+    setModal(true);
+    GlRef?.current?.snapToIndex(1);
+  };
+  // const onImagePress = () => {
+  //   const options = {
+  //     mediaType: 'photo',
+  //     includeBase64: true,
+  //     quality: 0.5,
+  //   };
+   
 
+  //   launchImageLibrary(options, response => {
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else {
+  //       console.log('response====>', response?.assets?.[0].base64);
+  //       setSelectedImage(response?.assets?.[0]?.base64);
+  //     }
+  //   });
+  // };
+  const openCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+    setModal(false);
+  };
   const Clinic_users = {
     clinic_user_name: values.name,
     role: values.role !== 'Others' ? values.role : otherRole,
@@ -221,6 +262,7 @@ const AddUser = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false)
   };
   const fetchclinic = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
@@ -274,7 +316,7 @@ const AddUser = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add User</Text>
                 <AddImage
-                  onPress={onImagePress}
+                  onPress={()=> ModalVisible()}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -450,6 +492,16 @@ const AddUser = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
+      {modal && (
+        <View>
+          <GalleryModel
+            visible={modal}
+            Close={setModal}
+            OnGallery={onImagePress}
+            OnCamera={openCamera}
+          />
+        </View>
+      )}
     </View>
   );
 };
