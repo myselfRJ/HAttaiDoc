@@ -47,6 +47,7 @@ import {
 } from '../utility/scaleDimension';
 import {updateslots} from '../redux/features/slots/slotData';
 import { updateAddress } from '../redux/features/profiles/clinicAddress';
+import { mode } from '../redux/features/prescription/prescribeslice';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -55,6 +56,7 @@ const AddClinic = ({navigation}) => {
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
+  console.log('====clinic==>',clinics)
   const route = useRoute();
   const address = useSelector(state=> state?.address?.address)
   console.log('address====',address)
@@ -115,14 +117,17 @@ const AddClinic = ({navigation}) => {
   const [status, setStatus] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState('');
+  const [selectedLogo,setSelectedLogo] = useState('');
   const [value, setValue] = useState({
     clinic: '',
     address: '',
+    phone:'',
     fees: '',
     // slots: [],
   });
 
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
+  console.log('clinic details===>',clinic_data)
   const prevScrn1 = 'undefineed';
 
   const Clinic_Data = {
@@ -131,6 +136,9 @@ const AddClinic = ({navigation}) => {
     clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     fees: parseInt(value.fees),
     slot: JSON.stringify(slotData.slots),
+    clinic_phone_number:value.phone,
+    clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image, 
+
   };
 
   const ResetClinicRedux = () => {
@@ -193,8 +201,9 @@ const AddClinic = ({navigation}) => {
         dispatch(addclinic_data(Clinic_Data));
         Alert.alert('Success', '"Clinic data added successfully"');
         setShowSlotChip(true);
-        (value.clinic = ''), (value.address = ''), (value.fees = '');
+        (value.clinic = ''), (value.address = ''), (value.fees = ''), (value.phone = '');
         setSelectedImage('');
+        setSelectedLogo('');
         setVisibleSlot(true);
         ResetReduxSlots();
       } else {
@@ -220,6 +229,23 @@ const AddClinic = ({navigation}) => {
       } else {
         // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+  };
+  const onLogoPress = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      quality: 0.5,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        // console.log('User cancelled image picker');
+      } else if (response.error) {
+        // console.log('ImagePicker Error: ', response.error);
+      } else {
+        // console.log('response====>', response?.assets?.[0]?.base64);
+        setSelectedLogo(response?.assets?.[0]?.base64);
       }
     });
   };
@@ -306,13 +332,26 @@ const AddClinic = ({navigation}) => {
               />
             </View>
             <InputText
-              required={true}
+              label={Language[language]['phone_number']}
+              placeholder="Enter clinic phone number"
+              value={value.phone}
+              setValue={value => handleChangeValue('phone', value)}
+              keypad="numeric"
+            />
+            <InputText
               label={Language[language]['fees']}
               placeholder="Consultation Fees"
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
               keypad="numeric"
             />
+            <View style={styles.alignchild}>
+              <Text style={styles.logo}>Clinic Logo</Text>
+            <AddImage
+                  onPress={onLogoPress}
+                  encodedBase64={selectedLogo}
+                />
+                </View> 
             <View style={styles.addslot}>
               <HButton
                 label="Add Slots"
@@ -460,6 +499,12 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     paddingVertical: verticalScale(4),
   },
+  logo:{
+    color:CUSTOMCOLOR.black,
+    fontSize:CUSTOMFONTSIZE.h4,
+    fontWeight:400,
+    marginBottom:moderateScale(4)
+  }
 });
 
 export default AddClinic;

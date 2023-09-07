@@ -446,7 +446,7 @@ const Visit = ({navigation, route}) => {
                                   <Text style={styles.pulse}>
                                     {Language[language]['lmp_edd']}:
                                     {vitalsData.LDD}
-                                    week
+                                   
                                   </Text>
                                 </>
                               )}
@@ -454,7 +454,7 @@ const Visit = ({navigation, route}) => {
                                 <Text style={styles.pulse}>
                                   {Language[language]['us_edd']}:
                                   {vitalsData.EDD}
-                                  week
+                                  
                                 </Text>
                               )}
                             </View>

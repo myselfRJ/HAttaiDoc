@@ -46,12 +46,14 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {checkNumber} from '../utility/checks';
+import DOBselect from '../components/dob';
 
 const ProfileCreate = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
   const [selectedFilename, setSelectedFilename] = useState('');
   const [uploaddocument, SetUploadDocument] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
   console.log('document...', uploaddocument);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -95,15 +97,51 @@ const ProfileCreate = ({navigation}) => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
   );
-  const [age, setAge] = useState();
+  const [age, setAge] = useState('');
+  console.log('age===',age)
   const [DOB, setDOB] = useState(new Date());
+  const [formatDate,setFormatDate] = useState('')
+  console.log('formatdate===>',formatDate)
+  console.log('dob=====>',DOB)
   const [open, setOpen] = useState(false);
-  const formattedDate = DOB.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  // const formattedDate = DOB.toLocaleDateString('en-US', {
+  //   day: 'numeric',
+  //   month: 'long',
+  //   year: 'numeric',
+  // });
+  const formattedDate = DOB.toISOString().split('T')[0];
+  const handleAge=(age)=>{
+     setValue(age)
+  }
+  const [value,setValue] = useState('')
+  const HandleInput=()=>{
+    if(age){
+      setValue(age)
+      setAge(age)
+    }
+    else{
+      {open && setValue(formattedDate)}
+    }
+  }
+  useEffect(()=>{
+    HandleInput();
+  },[DOB,age])
+
+  const HandleCheck=()=>{
+    if (value.length <= 3){
+      const current = parseInt(new Date().getFullYear()) - parseInt(value);
+      console.log('current====>',`${current}-${'01'}-${'01'}`)
+      setFormatDate(`${current}-${'01'}-${'01'}`)
+    }
+    else{
+      setFormatDate(formattedDate)
+    }
+  }
+  useEffect(()=>{
+    HandleCheck();
+  },[value])
   const handleConfirm = date => {
+    setValue(date)
     setDOB(date);
     setOpen(false);
   };
@@ -130,6 +168,9 @@ const ProfileCreate = ({navigation}) => {
       }
     });
   };
+  const handleOptions = value => {
+    handleChangeValue('gender', value);
+  };
 
   const handleChangeValue = (field, value) => {
     setValues(prevValues => ({
@@ -144,17 +185,36 @@ const ProfileCreate = ({navigation}) => {
     appointmentCardRef?.current?.snapToIndex(0);
     console.log(speciality);
   };
-
-  const handleOptions = value => {
-    handleChangeValue('gender', value);
+ 
+  const handlePressIn = () => {
+    setIsHovered(true);
   };
+
+  const handlePressOut = () => {
+    setIsHovered(false);
+  };
+
+  // const handleOptions = value => {
+  //   handleChangeValue('gender', value);
+  // };
+  // const handleCheck=()=>{
+  //   if(value == age){
+  //     const current = parseInt(new Date().getFullYear()) - parseInt(age);
+  //     console.log('year===>',current)
+  //   }
+  // }
+  // useEffect(()=>{
+  //   handleCheck()
+  // },[age])
 
   const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
     gender: values.gender,
-    DOB: `${current}-${'01'}-${'01'}`,
+    // DOB: `${current}-${'01'}-${'01'}`,
+    // DOB: formattedDate,
+    DOB:formatDate,
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
@@ -258,23 +318,24 @@ const ProfileCreate = ({navigation}) => {
                 />
               </View>
             </View>
-            <InputText
-              label="Age"
-              placeholder="eg:25"
+            {/* <InputText
+              label="Age/DOB"
+              placeholder="eg:25 / YYYY-MM-DD"
               value={age}
               setValue={setAge}
               keypad={'numeric'}
               required={true}
-            />
+            /> */}
 
-            {/* <View style={styles.btn}>
-              <SelectorBtn
+            <View style={styles.btn}>
+              <DOBselect
                 required={true}
-                label={Language[language]['dob']}
+                label='Age/ Date of Birth'
                 name="calendar"
                 onPress={() => setOpen('to')}
-                input={formattedDate}
+                input={value}
                 style={styles.DOBselect}
+                setValue={setValue}
               />
             </View>
             <DatePicker
@@ -285,7 +346,7 @@ const ProfileCreate = ({navigation}) => {
               mode="date"
               onConfirm={handleConfirm}
               onCancel={handleCancel}
-            /> */}
+            />
             <InputText
               required={true}
               label={Language[language]['medical_number']}
@@ -318,17 +379,6 @@ const ProfileCreate = ({navigation}) => {
                   <Text style={styles.selectedFileInfo}>
                     {selectedFilename}
                   </Text>
-                  {/* <Icon
-              name="close"
-              size={20}
-              color={CUSTOMCOLOR.black}
-              onPress={handleClearFile}
-            /> */}
-                  {/* <PlusButton
-                    icon="close"
-                    size={12}
-                    onPress={handleClearFile}
-                  /> */}
                   <TouchableOpacity onPress={handleClearFile}>
                     <Icon
                       name="delete"
@@ -359,6 +409,8 @@ const ProfileCreate = ({navigation}) => {
               <Pressable
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
+        //         onPressIn={handlePressIn}
+        // onPressOut={handlePressOut}
                 style={{height: verticalScale(30)}}>
                 <Text style={styles.modalfields}>{speciality}</Text>
               </Pressable>

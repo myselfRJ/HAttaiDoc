@@ -35,6 +35,7 @@ import {URL} from '../utility/urls';
 import DatePicker from 'react-native-date-picker';
 import {useSelector} from 'react-redux';
 import {checkNumber} from '../utility/checks';
+import DOBselect from '../components/dob';
 
 const PatientCreate = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -67,6 +68,8 @@ const PatientCreate = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [formatDate,setFormatDate] = useState('')
+  const formattedDate = date.toISOString().split('T')[0];
 
   const onImagePress = () => {
     const options = {
@@ -86,6 +89,33 @@ const PatientCreate = ({navigation}) => {
       }
     });
   };
+  const [value,setValue] = useState('')
+  const HandleInput=()=>{
+    if(age){
+      setValue(age)
+      setAge(age)
+    }
+    else{
+      {open && setValue(formattedDate)}
+    }
+  }
+  useEffect(()=>{
+    HandleInput();
+  },[date,age])
+
+  const HandleCheck=()=>{
+    if (value.length <= 3){
+      const current = parseInt(new Date().getFullYear()) - parseInt(value);
+      console.log('current====>',`${current}-${'01'}-${'01'}`)
+      setFormatDate(`${current}-${'01'}-${'01'}`)
+    }
+    else{
+      setFormatDate(formattedDate)
+    }
+  }
+  useEffect(()=>{
+    HandleCheck();
+  },[value])
 
   const handleDate = () => {
     setOpen(!open);
@@ -93,6 +123,7 @@ const PatientCreate = ({navigation}) => {
 
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
+    setValue(selectedDate)
   };
 
   const handleCancel = () => {
@@ -107,7 +138,7 @@ const PatientCreate = ({navigation}) => {
     patient_name: name,
     gender: gender,
     patient_phone_number: patient_phone_number,
-    birth_date: `${'01'}-${'01'}-${current}`,
+    birth_date: formatDate,
     // age: age,
     bloodgroup: blood_group,
     spouse_name: spouse_name,
@@ -233,13 +264,33 @@ const PatientCreate = ({navigation}) => {
               doubleCheck={[true, false]}
               check={checkNumber}
             />
-            <InputText
+            {/* <InputText
               label="Age"
               placeholder="eg:25"
               value={age}
               setValue={setAge}
               keypad={'numeric'}
               required={true}
+            /> */}
+            <View style={styles.btn}>
+              <DOBselect
+                required={true}
+                label='Age/ Date of Birth'
+                name="calendar"
+                onPress={() => setOpen('to')}
+                input={value}
+                style={styles.DOBselect}
+                setValue={setValue}
+              />
+            </View>
+            <DatePicker
+              modal
+              open={open !== false}
+              date={date}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
             />
 
             <View style={styles.alignchild}>
@@ -407,6 +458,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: moderateScale(10),
     borderTopRightRadius: moderateScale(10),
     justifyContent: 'center',
+  },
+  DOBselect: {
+    width: '100%',
+    paddingHorizontal: horizontalScale(8),
+  },
+  btn: {
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: horizontalScale(8),
+    
+    
   },
 });
 export default PatientCreate;

@@ -6,31 +6,32 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {commonstyles} from '../styles/commonstyle';
+import { commonstyles } from '../styles/commonstyle';
 import PlusButton from '../components/plusbtn';
-import {CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
+import { CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
 import HButton from '../components/button';
 import SelectionTab from '../components/selectiontab';
 import SelectorBtn from '../components/selector';
 import SlotChip from '../components/slotchip';
 import DatePicker from 'react-native-date-picker';
-import {useState, useRef, useEffect} from 'react';
-import {CONSTANTS} from '../utility/constant';
-import {BottomSheetView} from '../components';
-import {ScrollView} from 'react-native-gesture-handler';
+import { useState, useRef, useEffect } from 'react';
+import { CONSTANTS } from '../utility/constant';
+import { BottomSheetView } from '../components';
+import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
-import {useSelector, useDispatch} from 'react-redux';
-import {addslots, updateslots} from '../redux/features/slots/slotData';
-import {CUSTOMCOLOR} from '../settings/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { addslots, updateslots } from '../redux/features/slots/slotData';
+import { CUSTOMCOLOR } from '../settings/styles';
 import {
   verticalScale,
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const SlotCreate = ({navigation, route}) => {
+const SlotCreate = ({ navigation, route }) => {
   const slotTypeRef = useRef(null);
   const [allSlots, setAllSlots] = useState([]);
   // console.log('allslots===', allSlots);
@@ -106,6 +107,7 @@ const SlotCreate = ({navigation, route}) => {
     Sa: 'Saturday',
     Su: 'Sunday',
   });
+  console.log('frommmmmmmm', FromformattedTime)
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -139,7 +141,7 @@ const SlotCreate = ({navigation, route}) => {
 
   const handleAddSlotCopyMonday = () => {
     const weekdaysToUpdate = {
-      M: slots.M?.map((slot, index) => ({...slot, index, day: 'Monday'})),
+      M: slots.M?.map((slot, index) => ({ ...slot, index, day: 'Monday' })),
       T: slots.M?.map((slot, index) => ({
         ...slot,
         index: `T-${index}`,
@@ -207,10 +209,27 @@ const SlotCreate = ({navigation, route}) => {
   // useEffect(() => {
   //   handlewarnings();
   // }, []);
+  // const [iconstyle, setIconStyle] = useState('')
+  // const HandleIcon = () => {
+  //   const icons = FromformattedTime >= '06:00' && FromformattedTime < '18:00' ? (
+  //     <Icon
+  //       name="sun"
+  //       size={moderateScale(20)}
+  //       color={CUSTOMCOLOR.primary}
+  //     />) : (<Icon
+  //       name="close"
+  //       size={moderateScale(20)}
+  //       color={CUSTOMCOLOR.primary}
+  //     />)
+  //     setIconStyle(icons)
+  // }
+  // useEffect(()=>{
+  //   HandleIcon()
+  // },[FromformattedTime])
 
   return (
     <ScrollView>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View style={styles.main}>
           {/* <View style={{position:'absolute',alignSelf:'flex-end',padding:1moderateScale(6})}> */}
           <PlusButton
@@ -377,7 +396,7 @@ const SlotCreate = ({navigation, route}) => {
           <HButton
             label="Add Slot"
             icon="plus"
-            btnstyles={{marginTop: verticalScale(24)}}
+            btnstyles={{ marginTop: verticalScale(24) }}
             onPress={() => {
               const isOk = handlewarnings();
               if (isOk) {
@@ -390,6 +409,7 @@ const SlotCreate = ({navigation, route}) => {
           <View style={styles.ShowSchedule}>
             {Object.entries(slots).map(([day, daySlots]) =>
               daySlots?.map(slot => (
+
                 <SlotChip
                   key={slot.index}
                   index={slot.index}
@@ -398,10 +418,20 @@ const SlotCreate = ({navigation, route}) => {
                   type={<Text>Type: {slot.consultType}</Text>}
                   duration={
                     <Text>
-                      Duration: {slot.duration} | {slot.day}
+                      Duration: {slot.duration} | {slot.day} | {slot.fromTime >= '06:00' && slot.fromTime <= '18:00' ? (
+                  <Icon
+                  name="white-balance-sunny"
+                  size={moderateScale(20)}
+                  color={CUSTOMCOLOR.warn}
+                />) : (<Icon
+                  name="weather-night-partly-cloudy"
+                  size={moderateScale(20)}
+                  color='#7a7864'
+                />) }
                     </Text>
                   }
                 />
+
               )),
             )}
           </View>
@@ -413,7 +443,7 @@ const SlotCreate = ({navigation, route}) => {
                     padding: moderateScale(16),
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
-                  <Text style={{color: CUSTOMCOLOR.black}}>
+                  <Text style={{ color: CUSTOMCOLOR.black }}>
                     Remaining Slots Sames As Monday
                   </Text>
                 </View>
@@ -435,6 +465,7 @@ const SlotCreate = ({navigation, route}) => {
                         Duration: {slot.duration} | {slot.day}
                       </Text>
                     }
+                    icon= {iconstyle}
                   />
                 )),
               )}
@@ -443,7 +474,7 @@ const SlotCreate = ({navigation, route}) => {
           <View>
             <TouchableOpacity onPress={handleSaveSlotData} style={styles.save}>
               <View style={styles.saveText}>
-                <Text style={{color: CUSTOMCOLOR.white}}>Save</Text>
+                <Text style={{ color: CUSTOMCOLOR.white }}>Save</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -491,8 +522,8 @@ const SlotCreate = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  save: {top: moderateScale(16), borderRadius: moderateScale(6)},
-  saveText: {padding: moderateScale(16), backgroundColor: CUSTOMCOLOR.primary},
+  save: { top: moderateScale(16), borderRadius: moderateScale(6) },
+  saveText: { padding: moderateScale(16), backgroundColor: CUSTOMCOLOR.primary },
   main: {
     flex: 1,
     justifyContent: 'flex-start',
