@@ -61,5 +61,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: CUSTOMCOLOR.black,
   },
-  icon: {alignSelf: 'center', marginBottom: moderateScale(8)},
+  icon: {
+    alignSelf: 'center',
+    marginBottom: moderateScale(8),
+    color: CUSTOMCOLOR.primary,
+  },
 });

@@ -269,9 +269,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             style={{
               // paddingHorizontal: 32,
               top: moderateScale(16),
-            }}>
-            <Text>HHIIIi</Text>
-          </View>
+            }}></View>
         ) : null}
         <View
           style={{

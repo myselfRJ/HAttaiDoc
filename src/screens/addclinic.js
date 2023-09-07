@@ -308,7 +308,6 @@ const AddClinic = ({navigation}) => {
   const [logo,setlogo] = useState(false)
   const ModalVisible = () => {
     setModal(true);
-    GlRef?.current?.snapToIndex(1);
   };
   const LogoVisible = () => {
     setlogo(true);
