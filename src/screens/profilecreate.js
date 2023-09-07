@@ -25,7 +25,7 @@ import AddImage from '../components/addimage';
 import Option from '../components/option';
 import {SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary,launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
 import BottomSheetView from '../components/bottomSheet';
@@ -47,8 +47,10 @@ import {
 } from '../utility/scaleDimension';
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
+import GalleryModel from '../components/GalleryModal';
 
 const ProfileCreate = ({navigation}) => {
+  const GlRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
   const [selectedFilename, setSelectedFilename] = useState('');
@@ -149,13 +151,18 @@ const ProfileCreate = ({navigation}) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const [modal, setModal] = useState(false);
+  const ModalVisible = () => {
+    setModal(true);
+    GlRef?.current?.snapToIndex(1);
+  };
   const onImagePress = () => {
     const options = {
       mediaType: 'photo',
-      // cameraType: true,
       includeBase64: true,
       quality: 0.5,
     };
+   
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
@@ -167,6 +174,23 @@ const ProfileCreate = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false)
+  };
+  const openCamera = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.5,
+      includeBase64: true,
+    };
+
+    launchCamera(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        setSelectedImage(response?.assets?.[0]?.base64);
+      }
+    });
+    setModal(false);
   };
   const handleOptions = value => {
     handleChangeValue('gender', value);
@@ -285,7 +309,7 @@ const ProfileCreate = ({navigation}) => {
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Fill Profile</Text>
-              <AddImage onPress={onImagePress} encodedBase64={selectedImage} />
+              <AddImage onPress={()=>ModalVisible()} encodedBase64={selectedImage} />
             </View>
             <InputText
               required={true}
@@ -430,6 +454,17 @@ const ProfileCreate = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
+
+      {modal && (
+        <View>
+          <GalleryModel
+            visible={modal}
+            Close={setModal}
+            OnGallery={onImagePress}
+            OnCamera={openCamera}
+          />
+        </View>
+      )}
     </View>
   );
 };
