@@ -35,7 +35,7 @@ const PastHistory = () => {
   };
   return (
     <View style={{paddingHorizontal: 24, paddingVertical: 16, gap: 8}}>
-      <PrescriptionHead heading="Past History" />
+      <PrescriptionHead heading="Past Hosptilization" />
 
       {prev?.map((item, ind) =>
         prev.length > 0 ? (
@@ -47,8 +47,8 @@ const PastHistory = () => {
         ) : null,
       )}
       <PresComponent
-        label="Past Hospilization"
-        placeholder="Eg: Previous hosplilization like reason ,date,duration"
+        label="Past Hospitalization"
+        placeholder="Eg: Previous hospitalization like reason ,date,duration"
         values={value}
         onChange={setValue}
         onPress={HandleAddValue}

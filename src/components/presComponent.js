@@ -27,7 +27,7 @@ const PresComponent = props => {
       </View>
       <HButton
         label="Add"
-        btnstyles={{alignSelf: 'center'}}
+        btnstyles={{alignSelf: 'flex-end'}}
         onPress={props.onPress}
       />
       <View
@@ -37,7 +37,7 @@ const PresComponent = props => {
           marginTop: moderateScale(10),
         }}>
         <HButton
-          label={'Next'}
+          label={'Save'}
           onPress={() => {
             navigation.goBack();
           }}
