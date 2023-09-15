@@ -86,6 +86,7 @@ const PatientCreate = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
+    setModal(false);
   };
 
   const openCamera = () => {
@@ -391,7 +392,7 @@ const PatientCreate = ({navigation}) => {
               label="Save"
               loading={loading}
               onPress={() => {
-                if (patient_phone_number.length === 10 && age) {
+                if (patient_phone_number.length === 10 && value) {
                   fetchData();
                 } else {
                   Alert.alert('"Warning"', '"Please Enter Correct Details"');
