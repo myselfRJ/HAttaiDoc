@@ -42,6 +42,7 @@ import Valid from '../screens/consultationValid';
 
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
+import PatientHistory from '../screens/patientHistory';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -231,6 +232,17 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="patientrecord"
         component={MedicalRecordPatient}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Patient History',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+         <Stack.Screen
+        name="patienthistory"
+        component={PatientHistory}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Patient History',

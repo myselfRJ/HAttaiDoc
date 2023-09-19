@@ -24,7 +24,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 
-export default function MedicalRecordPatient({route, navigation}) {
+export default function PatientHistory({route, navigation}) {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
@@ -150,7 +150,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             </View>
           </View>
         </View>
-        <View
+        {/* <View
           style={{height: moderateScale(60), marginBottom: moderateScale(8)}}>
           <SelectorBtn
             label="Date"
@@ -167,7 +167,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
-        </View>
+        </View> */}
         <View
           style={{
             // paddingHorizontal: 24,

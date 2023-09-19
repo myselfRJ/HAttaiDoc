@@ -426,7 +426,7 @@ const SlotCreate = ({ navigation, route }) => {
                 />) : (<Icon
                   name="weather-night-partly-cloudy"
                   size={moderateScale(20)}
-                  color='#7a7864'
+                  color={CUSTOMCOLOR.primary}
                 />) }
                     </Text>
                   }
@@ -444,7 +444,7 @@ const SlotCreate = ({ navigation, route }) => {
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
                   <Text style={{ color: CUSTOMCOLOR.black }}>
-                    Remaining Slots Sames As Monday
+                    Remaining Slots Same As Monday
                   </Text>
                 </View>
               </TouchableOpacity>

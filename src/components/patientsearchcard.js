@@ -40,7 +40,7 @@ const PatientSearchCard = patient_data => {
   const patient_pic = patient_data?.patient_data?.patient_pic_url;
 
   const presentYear = new Date().toISOString().split('-')[0];
-  const birthYear = patient_data?.patient_data?.birth_date.split('-')[2];
+  const birthYear = patient_data?.patient_data?.birth_date.split('-')[0];
 
   const patient_phone_number = patient_data?.patient_data?.patient_phone_number;
 
