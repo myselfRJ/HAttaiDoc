@@ -29,7 +29,7 @@ import {
   BottomSheetView,
 } from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary,launchCamera} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
@@ -108,7 +108,6 @@ const AddUser = ({navigation}) => {
   //     includeBase64: true,
   //     quality: 0.5,
   //   };
-   
 
   //   launchImageLibrary(options, response => {
   //     if (response.didCancel) {
@@ -236,7 +235,9 @@ const AddUser = ({navigation}) => {
   const handleRoleSelection = role => {
     setSelectedRole(role);
     handleChangeValue('role', role);
-    RoleRef?.current?.snapToIndex(0);
+    setTimeout(() => {
+      RoleRef?.current?.snapToIndex(0);
+    }, 500);
   };
 
   const handleClinicSelection = clinic => {
@@ -262,7 +263,7 @@ const AddUser = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
-    setModal(false)
+    setModal(false);
   };
   const fetchclinic = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
@@ -316,7 +317,7 @@ const AddUser = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add User</Text>
                 <AddImage
-                  onPress={()=> ModalVisible()}
+                  onPress={() => ModalVisible()}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -468,7 +469,18 @@ const AddUser = ({navigation}) => {
           <Text style={styles.role}>Role</Text>
           {CONSTANTS.role.map((role, index) => (
             <Pressable key={index} onPress={() => handleRoleSelection(role)}>
-              <Text style={styles.modalfields}>{role}</Text>
+              <Text
+                style={[
+                  styles.modalfields,
+                  {
+                    color:
+                      selectedRole === role
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.black,
+                  },
+                ]}>
+                {role}
+              </Text>
             </Pressable>
           ))}
         </View>
@@ -481,7 +493,18 @@ const AddUser = ({navigation}) => {
               <Pressable
                 key={index}
                 onPress={() => handleClinicSelection(clinic)}>
-                <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
+                <Text
+                  style={[
+                    styles.modalfields,
+                    {
+                      color:
+                        selectedClinic === clinic
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.black,
+                    },
+                  ]}>
+                  {clinic.clinic_name}
+                </Text>
               </Pressable>
             ))}
         </View>
@@ -553,7 +576,6 @@ const styles = StyleSheet.create({
     gap: moderateScale(16),
   },
   modalfields: {
-    color: CUSTOMCOLOR.primary,
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,

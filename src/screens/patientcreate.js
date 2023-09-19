@@ -86,7 +86,7 @@ const PatientCreate = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
-    setModal(false)
+    setModal(false);
   };
 
   const openCamera = () => {

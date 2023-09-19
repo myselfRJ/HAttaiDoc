@@ -21,19 +21,19 @@ const PresComponent = props => {
         value={props.values}
         setValue={props.onChange}
       />
-        <PlusButton
-      // btnstyles={{alignSelf}}
-      icon={'plus'}
+      <PlusButton
+        // btnstyles={{alignSelf}}
+        icon={'plus'}
         // label="Add"
         size={moderateScale(32)}
-        style={{alignSelf: 'flex-end',}}
+        style={{alignSelf: 'flex-end'}}
         onPress={props.onPress}
       />
       <View
         style={{marginTop: moderateScale(4), marginBottom: moderateScale(8)}}>
         {props.suggestion}
       </View>
-    
+
       <View
         style={{
           justifyContent: 'center',

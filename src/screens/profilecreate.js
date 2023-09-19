@@ -25,7 +25,7 @@ import AddImage from '../components/addimage';
 import Option from '../components/option';
 import {SelectorBtn} from '../components';
 import {CONSTANTS} from '../utility/constant';
-import {launchImageLibrary,launchCamera} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
 import BottomSheetView from '../components/bottomSheet';
@@ -100,11 +100,11 @@ const ProfileCreate = ({navigation}) => {
     CONSTANTS.speciality[0],
   );
   const [age, setAge] = useState('');
-  console.log('age===',age)
+  console.log('age===', age);
   const [DOB, setDOB] = useState(new Date());
-  const [formatDate,setFormatDate] = useState('')
-  console.log('formatdate===>',formatDate)
-  console.log('dob=====>',DOB)
+  const [formatDate, setFormatDate] = useState('');
+  console.log('formatdate===>', formatDate);
+  console.log('dob=====>', DOB);
   const [open, setOpen] = useState(false);
   // const formattedDate = DOB.toLocaleDateString('en-US', {
   //   day: 'numeric',
@@ -112,38 +112,38 @@ const ProfileCreate = ({navigation}) => {
   //   year: 'numeric',
   // });
   const formattedDate = DOB.toISOString().split('T')[0];
-  const handleAge=(age)=>{
-     setValue(age)
-  }
-  const [value,setValue] = useState('')
-  const HandleInput=()=>{
-    if(age){
-      setValue(age)
-      setAge(age)
+  const handleAge = age => {
+    setValue(age);
+  };
+  const [value, setValue] = useState('');
+  const HandleInput = () => {
+    if (age) {
+      setValue(age);
+      setAge(age);
+    } else {
+      {
+        open && setValue(formattedDate);
+      }
     }
-    else{
-      {open && setValue(formattedDate)}
-    }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     HandleInput();
-  },[DOB,age])
+  }, [DOB, age]);
 
-  const HandleCheck=()=>{
-    if (value.length <= 3){
+  const HandleCheck = () => {
+    if (value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      console.log('current====>',`${current}-${'01'}-${'01'}`)
-      setFormatDate(`${current}-${'01'}-${'01'}`)
+      console.log('current====>', `${current}-${'01'}-${'01'}`);
+      setFormatDate(`${current}-${'01'}-${'01'}`);
+    } else {
+      setFormatDate(formattedDate);
     }
-    else{
-      setFormatDate(formattedDate)
-    }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     HandleCheck();
-  },[value])
+  }, [value]);
   const handleConfirm = date => {
-    setValue(date)
+    setValue(date);
     setDOB(date);
     setOpen(false);
   };
@@ -162,7 +162,6 @@ const ProfileCreate = ({navigation}) => {
       includeBase64: true,
       quality: 0.5,
     };
-   
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
@@ -174,7 +173,7 @@ const ProfileCreate = ({navigation}) => {
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
-    setModal(false)
+    setModal(false);
   };
   const openCamera = () => {
     const options = {
@@ -206,10 +205,12 @@ const ProfileCreate = ({navigation}) => {
   const handleSpecialitySelection = speciality => {
     setSelectedSpeciality(speciality);
     handleChangeValue('speciality', speciality);
-    appointmentCardRef?.current?.snapToIndex(0);
+    setTimeout(() => {
+      appointmentCardRef?.current?.snapToIndex(0);
+    }, 500);
     console.log(speciality);
   };
- 
+
   const handlePressIn = () => {
     setIsHovered(true);
   };
@@ -238,7 +239,7 @@ const ProfileCreate = ({navigation}) => {
     gender: values.gender,
     // DOB: `${current}-${'01'}-${'01'}`,
     // DOB: formattedDate,
-    DOB:formatDate,
+    DOB: formatDate,
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
@@ -309,7 +310,10 @@ const ProfileCreate = ({navigation}) => {
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Fill Profile</Text>
-              <AddImage onPress={()=>ModalVisible()} encodedBase64={selectedImage} />
+              <AddImage
+                onPress={() => ModalVisible()}
+                encodedBase64={selectedImage}
+              />
             </View>
             <InputText
               required={true}
@@ -354,7 +358,7 @@ const ProfileCreate = ({navigation}) => {
             <View style={styles.btn}>
               <DOBselect
                 required={true}
-                label='Age/ Date of Birth'
+                label="Age/ Date of Birth"
                 name="calendar"
                 onPress={() => setOpen('to')}
                 input={value}
@@ -433,10 +437,19 @@ const ProfileCreate = ({navigation}) => {
               <Pressable
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
-        //         onPressIn={handlePressIn}
-        // onPressOut={handlePressOut}
                 style={{height: verticalScale(30)}}>
-                <Text style={styles.modalfields}>{speciality}</Text>
+                <Text
+                  style={[
+                    styles.modalfields,
+                    {
+                      color:
+                        selectedSpeciality === speciality
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.black,
+                    },
+                  ]}>
+                  {speciality}
+                </Text>
               </Pressable>
             ))}
           </ScrollView>
@@ -495,7 +508,6 @@ const styles = StyleSheet.create({
     padding: moderateScale(10),
   },
   modalfields: {
-    color: CUSTOMCOLOR.primary,
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
