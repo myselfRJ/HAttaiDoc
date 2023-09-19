@@ -443,7 +443,7 @@ const SlotCreate = ({navigation, route}) => {
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
                   <Text style={{color: CUSTOMCOLOR.black}}>
-                    Remaining Slots Sames As Monday
+                    Remaining Slots Same As Monday
                   </Text>
                 </View>
               </TouchableOpacity>

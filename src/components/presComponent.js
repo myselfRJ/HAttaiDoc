@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import InputText from './inputext';
-import {HButton} from '.';
+import {HButton, PlusButton} from '.';
 import {
   horizontalScale,
   moderateScale,
@@ -21,15 +21,19 @@ const PresComponent = props => {
         value={props.values}
         setValue={props.onChange}
       />
-      <View
-        style={{marginTop: moderateScale(8), marginBottom: moderateScale(8)}}>
-        {props.suggestion}
-      </View>
-      <HButton
-        label="Add"
-        btnstyles={{alignSelf: 'flex-end'}}
+      <PlusButton
+        // btnstyles={{alignSelf}}
+        icon={'plus'}
+        // label="Add"
+        size={moderateScale(32)}
+        style={{alignSelf: 'flex-end'}}
         onPress={props.onPress}
       />
+      <View
+        style={{marginTop: moderateScale(4), marginBottom: moderateScale(8)}}>
+        {props.suggestion}
+      </View>
+
       <View
         style={{
           justifyContent: 'center',

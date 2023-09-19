@@ -360,14 +360,14 @@ const PatientCreate = ({navigation}) => {
             />
             <InputText
               label="Blood Group"
-              placeholder="eg:O+"
+              placeholder="eg: O+"
               value={blood_group}
               setValue={setBlood_group}
             />
             <InputText
               required={true}
               label="Address"
-              placeholder="Enter your address"
+              placeholder="Address or locality"
               value={address}
               setValue={setAddress}
             />
@@ -392,7 +392,7 @@ const PatientCreate = ({navigation}) => {
               label="Save"
               loading={loading}
               onPress={() => {
-                if (patient_phone_number.length === 10 && value) {
+                if (patient_phone_number.length === 10 && formattedDate) {
                   fetchData();
                 } else {
                   Alert.alert('"Warning"', '"Please Enter Correct Details"');

@@ -386,14 +386,14 @@ const AddClinic = ({navigation}) => {
               placeholder="Enter clinic phone number"
               value={value.phone}
               setValue={value => handleChangeValue('phone', value)}
-              keypad="numeric"
+              // keypad="numeric"
             />
             <InputText
               label={Language[language]['fees']}
               placeholder="Consultation Fees"
               value={value.fees}
               setValue={value => handleChangeValue('fees', value)}
-              keypad="numeric"
+              // keypad="numeric"
             />
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>

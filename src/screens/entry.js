@@ -92,7 +92,7 @@ const Entry = ({navigation}) => {
               check={checkNumber}
               label={Language[language]['phone_number']}
               placeholder="Enter your 10 digit phone number"
-              keypad="numeric"
+              // keypad="numeric"
               maxLength={10}
               value={phone}
               setValue={setPhone}

@@ -41,6 +41,7 @@ import {
   addclinic_id,
   addclinic_name,
   addclinic_Address,
+  addclinic_logo,
 } from '../redux/features/profiles/clinicId';
 import {
   horizontalScale,
@@ -105,6 +106,7 @@ const Dashboard = ({navigation, route}) => {
       dispatch(addclinic_id(jsonData.data[0]?.id));
       dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
       dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
+      dispatch(addclinic_logo(jsonData?.data[0]?.clinic_logo_url));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -184,6 +186,7 @@ const Dashboard = ({navigation, route}) => {
     dispatch(addclinic_id(clinic?.id));
     dispatch(addclinic_name(clinic?.clinic_name));
     dispatch(addclinic_Address(clinic?.clinic_Address));
+    dispatch(addclinic_logo(clinic?.clinic_logo_url))
 
     ClinicRef?.current?.snapToIndex(0);
   };

@@ -337,7 +337,7 @@ const AddUser = ({navigation}) => {
               placeholder="Phone Number"
               value={values.phone}
               setValue={value => handleChangeValue('phone', value)}
-              keypad="numeric"
+              // keypad="numeric"
             />
             <View style={styles.alignchild}>
               <Text style={styles.gender}>{Language[language]['gender']}</Text>
