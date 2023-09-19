@@ -41,8 +41,9 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const patient_name = appointment?.patient_data?.patient_name;
   const patient_gender = appointment?.patient_data?.gender;
   const birth_date = appointment?.patient_data?.birth_date;
+  
   const appointment_id = appointment?.id;
-  const birthYear = appointment?.patient_data?.birth_date.split('-')[2];
+  const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;

@@ -304,7 +304,9 @@ const VitalScreen = props => {
                     keyboardType="numeric"
                   /> */}
                 {/* <Text></Text> */}
+                <View style={{width:moderateScale(150)}}>
                 <Text style={styles.EDD}>{vitals?.EDD}</Text>
+                </View>
                 {/* </View> */}
               </View>
             </View>
@@ -568,11 +570,13 @@ const styles = StyleSheet.create({
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4,)
     gap: moderateScale(8),
+    // borderWidth:1
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    top:moderateScale(4)
+    top:moderateScale(4),
+    width: moderateScale(150)
   },
   ustext: {
     paddingVertical: verticalScale(16),
