@@ -19,7 +19,7 @@ export const CONSTANT = {
     {
       label: 'Refer to Doctor',
       icon: 'chevron-right',
-      navigate: 'referdoctorscreen',
+      navigate: 'refer',
     },
     {
       label: 'Validity',

@@ -16,7 +16,7 @@ import Symptoms from '../screens/symptoms';
 import CheifComplaints from '../screens/cheif_complaint';
 import {Vitals} from '../components';
 import NoteScreen from '../screens/notescreen';
-import ReferDoctorScreen from '../screens/referdoctorscreen';
+// import ReferDoctorScreen from '../screens/referdoctorscreen';
 import VitalScreen from '../screens/vitalscreen';
 import AddClinic from '../screens/addclinic';
 import AddUser from '../screens/adduser';
@@ -43,6 +43,7 @@ import Valid from '../screens/consultationValid';
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
 import PatientHistory from '../screens/patientHistory';
+import ReferToDoctor from '../screens/Refer';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -172,9 +173,20 @@ const ProtectedRoute = () => {
           },
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="referdoctorscreen"
         component={ReferDoctorScreen}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Refer to Doctor',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      /> */}
+       <Stack.Screen
+        name="refer"
+        component={ReferToDoctor}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Refer to Doctor',
