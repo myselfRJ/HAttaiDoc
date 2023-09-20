@@ -26,6 +26,7 @@ export const URL = {
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
   getConsultationByPatientPhone: phoneId =>
     `${baseUrl}consult/pres?patient_phone_number=${phoneId}`,
+  getConsultationByAppointmentId: id => `${baseUrl}consult/byId?id=${id}`,
 
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',

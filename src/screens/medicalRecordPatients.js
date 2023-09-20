@@ -23,6 +23,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import ConsultationCard from '../components/ConsultationCard';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -68,8 +69,8 @@ export default function MedicalRecordPatient({route, navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
-      setConsultation(jsonData?.data[0]?.consultation);
+      // console.log(jsonData.data);
+      setConsultation(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -78,18 +79,11 @@ export default function MedicalRecordPatient({route, navigation}) {
     fetchPrescribe();
   }, []);
 
-  // console.log('====================================');
-  // console.log('------------------prescribe', consultation);
-  // console.log('====================================');
-
   const [vitals, setVitals] = useState({
     chiefComplaints: consultation?.chief_complaint?.complaint_message,
     medication: consultation?.prescribe?.map((item, index) => {
       return `${item.mode} | ${item?.medicine} | ${item?.dose_quantity} | ${item?.timing} | ${item?.frequency} | ${item?.total_quantity}`;
     }),
-    // diagnosis: consultation?.diagnosis?.diagnosis?.map((item, index) => {
-    //   return `${item?.diagnosis}`;
-    // }),
     vital: {
       BP: 'Bp',
       PR: 'Pr',
@@ -124,9 +118,9 @@ export default function MedicalRecordPatient({route, navigation}) {
 
   const handleBook = () => {
     const patient_phone = data?.patient_phone_number;
-    // console.log('-----------phonepatient', patient_phone);
     navigation.navigate('bookslot', {patient_phone});
   };
+
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32)}}>
@@ -203,20 +197,23 @@ export default function MedicalRecordPatient({route, navigation}) {
                 gap: moderateScale(16),
                 marginBottom: moderateScale(64),
               }}>
-              <View>
+              {consultation?.map((value, index) => (
+                <ConsultationCard data={value?.consultation} />
+              ))}
+              {/* <View>
                 <Text style={styles.contentHead}>Chief Complaints</Text>
                 <Text>{consultation?.chief_complaint?.complaint_message}</Text>
-              </View>
-              <View>
+              </View> */}
+              {/* <View>
                 <Text style={styles.contentHead}>Diagnosis</Text>
                 <Text>
                   {consultation?.diagnosis?.map((item, index) => {
                     return `${item?.diagnosis}`;
                   })}
-                  {/* {consultation?.diagnosis?.diagnosis} */}
+
                 </Text>
-              </View>
-              <View style={{gap: moderateScale(8)}}>
+              </View> */}
+              {/* <View style={{gap: moderateScale(8)}}>
                 <Text style={styles.contentHead}>Medication</Text>
 
                 {consultation?.prescribe?.map((item, index) => {
@@ -228,13 +225,12 @@ export default function MedicalRecordPatient({route, navigation}) {
                     </Text>
                   );
                 })}
-              </View>
-              <View>
+              </View> */}
+              {/* <View>
                 <Text style={styles.contentHead}>Vitals</Text>
                 <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
                   <Text>BP</Text>
                   <Text>PR</Text>
-                  {/* <Text>SPO2</Text> */}
                   <Text>TEMP</Text>
                   <Text>LMP</Text>
                   <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
@@ -246,21 +242,20 @@ export default function MedicalRecordPatient({route, navigation}) {
                     top: moderateScale(8),
                   }}>
                   <Text>
-                    {consultation?.vitals?.systolic}{'/'}
+                    {consultation?.vitals?.systolic}
+                    {'/'}
                     {consultation?.vitals?.diastolic}
                   </Text>
                   <Text>{consultation?.vitals?.pulse_rate}</Text>
-                  {/* <Text>{vitals.vital.SPO2}</Text> */}
                   <Text style={{paddingLeft: moderateScale(20)}}>
                     {consultation?.vitals?.body_temperature}
                   </Text>
-                  {/* <Text>{vitals.vital.EDD}</Text> */}
                   <Text style={{paddingLeft: moderateScale(20)}}>
                     {consultation?.vitals?.LDD}
                   </Text>
                   <Text>{consultation?.vitals?.EDD}</Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           </View>
         ) : null}

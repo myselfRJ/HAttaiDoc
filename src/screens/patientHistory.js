@@ -23,6 +23,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import PrescribeHead from '../components/prescriptionHead';
 
 export default function PatientHistory({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -30,42 +31,15 @@ export default function PatientHistory({route, navigation}) {
   const [data, setData] = useState([]);
   const [consultation, setConsultation] = useState([]);
 
-  // console.log('====================================');
-  // console.log('---------------data', data);
-  // console.log('====================================');
-
   const token = useSelector(state => state?.authenticate?.auth?.access);
-  const {patient_phone} = route.params;
-  // console.log('-------------------phone', patient_phone);
-  const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
+  const {id} = route.params;
+  const fetchPrescribe = async () => {
+    const response = await fetchApi(URL.getConsultationByAppointmentId(id), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (response.ok) {
-      const jsonData = await response.json();
-      // console.log(jsonData.data);
-      setData(jsonData.data[0]);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchPrescribe = async () => {
-    const response = await fetchApi(
-      URL.getConsultationByPatientPhone(patient_phone),
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
     if (response.ok) {
       const jsonData = await response.json();
       console.log(jsonData.data);
@@ -77,10 +51,6 @@ export default function PatientHistory({route, navigation}) {
   useEffect(() => {
     fetchPrescribe();
   }, []);
-
-  // console.log('====================================');
-  // console.log('------------------prescribe', consultation);
-  // console.log('====================================');
 
   const [vitals, setVitals] = useState({
     chiefComplaints: consultation?.chief_complaint?.complaint_message,
@@ -130,7 +100,7 @@ export default function PatientHistory({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32)}}>
-        <View style={{height: 100}}>
+        {/* <View style={{height: 100}}>
           <View style={styles.main}>
             <Image
               style={styles.img}
@@ -149,7 +119,7 @@ export default function PatientHistory({route, navigation}) {
               </Text>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* <View
           style={{height: moderateScale(60), marginBottom: moderateScale(8)}}>
           <SelectorBtn
@@ -168,109 +138,80 @@ export default function PatientHistory({route, navigation}) {
             onCancel={handleCancel}
           />
         </View> */}
+        <View>
+          <PrescribeHead heading={'Consultation'} />
+        </View>
         <View
           style={{
-            // paddingHorizontal: 24,
+            // paddingHorizontal: 32,
             top: moderateScale(16),
-            width: '100%',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
           }}>
-          {Views?.map((val, ind) => (
-            <View key={ind} style={{}}>
-              <TouchableOpacity onPress={() => handlePress(val)}>
-                <Text
-                  style={{
-                    fontSize: CUSTOMFONTSIZE.h2,
-                    color: selectedView === val ? CUSTOMCOLOR.black : '#BBBBBB',
-                    fontWeight: '500',
-                  }}>
-                  {val}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-        {selectedView === Views[0] ? (
           <View
             style={{
-              // paddingHorizontal: 32,
               top: moderateScale(16),
+              gap: moderateScale(16),
+              marginBottom: moderateScale(64),
             }}>
-            <View
-              style={{
-                top: moderateScale(16),
-                gap: moderateScale(16),
-                marginBottom: moderateScale(64),
-              }}>
-              <View>
-                <Text style={styles.contentHead}>Chief Complaints</Text>
-                <Text>{consultation?.chief_complaint?.complaint_message}</Text>
-              </View>
-              <View>
-                <Text style={styles.contentHead}>Diagnosis</Text>
-                <Text>
-                  {consultation?.diagnosis?.map((item, index) => {
-                    return `${item?.diagnosis}`;
-                  })}
-                  {/* {consultation?.diagnosis?.diagnosis} */}
-                </Text>
-              </View>
-              <View style={{gap: moderateScale(8)}}>
-                <Text style={styles.contentHead}>Medication</Text>
-
-                {consultation?.prescribe?.map((item, index) => {
-                  return (
-                    <Text key={index}>
-                      {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
-                      {item?.timing} | {item?.frequency} |{' '}
-                      {item?.total_quantity}
-                    </Text>
-                  );
+            <View>
+              <Text style={styles.contentHead}>Chief Complaints</Text>
+              <Text>{consultation?.chief_complaint?.complaint_message}</Text>
+            </View>
+            <View>
+              <Text style={styles.contentHead}>Diagnosis</Text>
+              <Text>
+                {consultation?.diagnosis?.map((item, index) => {
+                  return `${item?.diagnosis}`;
                 })}
+                {/* {consultation?.diagnosis?.diagnosis} */}
+              </Text>
+            </View>
+            <View style={{gap: moderateScale(8)}}>
+              <Text style={styles.contentHead}>Medication</Text>
+
+              {consultation?.prescribe?.map((item, index) => {
+                return (
+                  <Text key={index}>
+                    {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
+                    {item?.timing} | {item?.frequency} | {item?.total_quantity}
+                  </Text>
+                );
+              })}
+            </View>
+            <View>
+              <Text style={styles.contentHead}>Vitals</Text>
+              <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
+                <Text>BP</Text>
+                <Text>PR</Text>
+                {/* <Text>SPO2</Text> */}
+                <Text>TEMP</Text>
+                <Text>LMP</Text>
+                <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
               </View>
-              <View>
-                <Text style={styles.contentHead}>Vitals</Text>
-                <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
-                  <Text>BP</Text>
-                  <Text>PR</Text>
-                  {/* <Text>SPO2</Text> */}
-                  <Text>TEMP</Text>
-                  <Text>LMP</Text>
-                  <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: moderateScale(26),
-                    top: moderateScale(8),
-                  }}>
-                  <Text>
-                    {consultation?.vitals?.systolic}{'/'}
-                    {consultation?.vitals?.diastolic}
-                  </Text>
-                  <Text>{consultation?.vitals?.pulse_rate}</Text>
-                  {/* <Text>{vitals.vital.SPO2}</Text> */}
-                  <Text style={{paddingLeft: moderateScale(20)}}>
-                    {consultation?.vitals?.body_temperature}
-                  </Text>
-                  {/* <Text>{vitals.vital.EDD}</Text> */}
-                  <Text style={{paddingLeft: moderateScale(20)}}>
-                    {consultation?.vitals?.LDD}
-                  </Text>
-                  <Text>{consultation?.vitals?.EDD}</Text>
-                </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(26),
+                  top: moderateScale(8),
+                }}>
+                <Text>
+                  {consultation?.vitals?.systolic}
+                  {'/'}
+                  {consultation?.vitals?.diastolic}
+                </Text>
+                <Text>{consultation?.vitals?.pulse_rate}</Text>
+                {/* <Text>{vitals.vital.SPO2}</Text> */}
+                <Text style={{paddingLeft: moderateScale(20)}}>
+                  {consultation?.vitals?.body_temperature}
+                </Text>
+                {/* <Text>{vitals.vital.EDD}</Text> */}
+                <Text style={{paddingLeft: moderateScale(20)}}>
+                  {consultation?.vitals?.LDD}
+                </Text>
+                <Text>{consultation?.vitals?.EDD}</Text>
               </View>
             </View>
           </View>
-        ) : null}
-        {selectedView === Views[1] ? (
-          <View
-            style={{
-              // paddingHorizontal: 32,
-              top: moderateScale(16),
-            }}></View>
-        ) : null}
+        </View>
         <View
           style={{
             // top: 24,
@@ -280,7 +221,7 @@ export default function PatientHistory({route, navigation}) {
             left: '40%',
             paddingHorizontal: horizontalScale(8),
           }}>
-          <HButton label={'Download'} />
+          {/* <HButton label={'Download'} /> */}
         </View>
         <View
           style={{
@@ -289,7 +230,7 @@ export default function PatientHistory({route, navigation}) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <HButton label={'BookAppointment'} onPress={handleBook} />
+          {/* <HButton label={'BookAppointment'} onPress={handleBook} /> */}
         </View>
       </View>
     </View>
@@ -308,6 +249,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     padding: moderateScale(12),
+    paddingHorizontal: horizontalScale(24),
     fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
@@ -340,5 +282,5 @@ const styles = StyleSheet.create({
     borderRadius: 60 / 2,
   },
   patientinfo: {},
-  container: {gap: moderateScale(32), paddingHorizontal: horizontalScale(24)},
+  container: {gap: moderateScale(32), paddingHorizontal: horizontalScale(48)},
 });

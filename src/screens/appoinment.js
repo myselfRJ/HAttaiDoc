@@ -290,7 +290,7 @@ const Appointment = ({navigation}) => {
       <View>
         <HButton
           label="Book Appointment"
-          btnstyles={{alignSelf: 'center', marginTop: moderateScale(84)}}
+          btnstyles={{alignSelf: 'center', marginTop: moderateScale(54)}}
           onPress={handlePlusBUtton}
         />
       </View>

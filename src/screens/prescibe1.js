@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {language} from '../settings/userpreferences';
@@ -145,12 +146,19 @@ export default function Prescribe1({navigation}) {
     } else {
       setTotalQuantity('00');
     }
-    console.log('-----------quantiy', quantity);
   };
 
   useEffect(() => {
     totoal_quantity();
   }, [duration, dose_number, frequency]);
+
+  const handleAlert = () => {
+    if (prevPres.length > 0) {
+      navigation.goBack();
+    } else {
+      Alert.alert('', 'Please give Atleast One Medication');
+    }
+  };
 
   return (
     <ScrollView>
@@ -464,12 +472,7 @@ export default function Prescribe1({navigation}) {
               size={moderateScale(48)}
               onPress={handleAddPrescribe}
             />
-            <HButton
-              label={'Next'}
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
+            <HButton label={'Save'} onPress={handleAlert} />
           </View>
         </View>
       </View>
