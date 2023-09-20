@@ -58,8 +58,9 @@ const Visit = ({navigation, route}) => {
     state => state.prescription.selectedComplaint,
   );
   const selectedDoctor = useSelector(
-    state => state.prescription.selectedDoctor,
+    state => state?.prescription?.selectedDoctor,
   );
+  console.log('doctorsssssss',selectedDoctor)
   const Symptom = useSelector(state => state.symptoms.symptom);
   const Prescribe = useSelector(state => state.pres.prescribeItems);
   let prescribeCopy = Prescribe;
@@ -112,7 +113,7 @@ const Visit = ({navigation, route}) => {
       valid: '',
     };
     const newVitals = {};
-    const newDoctor = {};
+    const newDoctor = [];
     const newComplaint = '';
     const newNote = '';
     dispatch(updatePrescribe1(newPrescribe));
@@ -632,18 +633,21 @@ const Visit = ({navigation, route}) => {
 
                   {value.label === 'Refer to Doctor' && (
                     <View style={styles.basiccontainer}>
-                      {selectedDoctor?.doctor_name && (
-                        <>
-                          <Icon
-                            name="doctor"
-                            color={CUSTOMCOLOR.primary}
-                            size={moderateScale(16)}
-                          />
-                          <Text style={styles.pulse}>
-                            Refer to {selectedDoctor?.doctor_name}{' '}
-                          </Text>
-                        </>
-                      )}
+                     
+                       {selectedDoctor?.map((item,ind)=>(
+                        <View style={{flexDirection:'row'}} key={ind}>
+                        <Icon
+                          name="doctor"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>
+                          Refer to {item?.doctor_name}{' '}
+                        </Text>
+                      </View>
+
+                       )) }
+                      
                     </View>
                   )}
                 </View>
@@ -739,6 +743,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     lineHeight: moderateScale(15.04),
     color: CUSTOMCOLOR.black,
+    paddingHorizontal:horizontalScale(8)
   },
   complaintcontainer: {
     // width: 635,
