@@ -33,13 +33,11 @@ const Diagnosis = ({navigation}) => {
 
   const HandleAddValue = () => {
     if (value) {
-      // console.log('valuesssssssssss');
       dispatch(addDiagnosis([...prev, {diagnosis: value}]));
       setValue('');
     }
   };
   const handleDelete = index => {
-    // console.log('prescription index', index);
     if (prev) {
       const updatedPrescriptions = prev?.filter((item, ind) => ind !== index);
 

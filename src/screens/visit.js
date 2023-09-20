@@ -147,6 +147,11 @@ const Visit = ({navigation, route}) => {
       commoribities: commorbities,
       allergies: allergies,
       pastHistory: pasthistory,
+      reports: {
+        report_url: '',
+        type_report: '',
+        record_description: '',
+      },
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -446,7 +451,6 @@ const Visit = ({navigation, route}) => {
                                   <Text style={styles.pulse}>
                                     {Language[language]['lmp_edd']}:
                                     {vitalsData.LDD}
-                                   
                                   </Text>
                                 </>
                               )}
@@ -454,7 +458,6 @@ const Visit = ({navigation, route}) => {
                                 <Text style={styles.pulse}>
                                   {Language[language]['us_edd']}:
                                   {vitalsData.EDD}
-                                  
                                 </Text>
                               )}
                             </View>

@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from '../components/option';
@@ -56,20 +57,14 @@ const Symptoms = ({navigation}) => {
   };
 
   const handleSymptomSubmit = () => {
-    // dispatch(
-    //   addSymptom([
-    //     ...symptomsData,
-    //     {
-    //       symptom: symptom,
-    //       days: days,
-    //       severity: selected,
-    //     },
-    //   ]),
-    // );
-    setDays(null);
-    setSymptom(null);
-    setSelected(null);
-    navigation.goBack();
+    if (symptomsData.length > 0) {
+      setDays(null);
+      setSymptom(null);
+      setSelected(null);
+      navigation.goBack();
+    } else {
+      Alert.alert('', 'Please Add Atleast One Symptom');
+    }
   };
 
   const handleDeleteSymptom = index => {

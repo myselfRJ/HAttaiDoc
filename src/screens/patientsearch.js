@@ -150,6 +150,7 @@ const PatientSearch = ({navigation}) => {
           style={styles.patientCard}>
           {filteredData?.map((val, ind) => (
             <PatientSearchCard
+              meta={'value'}
               key={ind}
               patient_data={val}
               onPress={() => navigation.navigate('visit')}

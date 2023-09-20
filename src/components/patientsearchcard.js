@@ -57,7 +57,7 @@ const PatientSearchCard = patient_data => {
     navigation.navigate('bookslot', {patient_phone});
     patientSearchRef?.current?.snapToIndex(0);
   };
-
+  const meta_data = patient_data.meta;
   return (
     <>
       <View style={styles.main}>
@@ -108,11 +108,13 @@ const PatientSearchCard = patient_data => {
               label={Language[language]['delete']}
               selected={true}
             /> */}
-            <SelectionTab
-              label={Language[language]['history']}
-              selected={true}
-              onPress={handleOnpress}
-            />
+            {meta_data && (
+              <SelectionTab
+                label={Language[language]['history']}
+                selected={true}
+                onPress={handleOnpress}
+              />
+            )}
             {/* <SelectionTab
               label={Language[language]['cancel']}
               selected={true}
