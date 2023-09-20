@@ -20,7 +20,7 @@ const initialState = {
       phone: '9100765472',
     },
   ],
-  selectedDoctor: {},
+  selectedDoctor: [],
   vitalsData: {},
 };
 

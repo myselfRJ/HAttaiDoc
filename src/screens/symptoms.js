@@ -32,7 +32,7 @@ import {
 
 const Symptoms = ({navigation}) => {
   const symptomsData = useSelector(state => state.symptoms.symptom);
-
+  console.log('symptommmm',symptomsData)
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
   const [selected, setSelected] = useState('');
