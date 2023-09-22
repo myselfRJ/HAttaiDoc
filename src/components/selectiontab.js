@@ -1,5 +1,9 @@
 import {Pressable, StyleSheet, Text} from 'react-native';
-import {CUSTOMFONTSIZE, CUSTOMCOLOR,CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMFONTSIZE,
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+} from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
   },
   tabtext: {
     fontStyle: 'normal',
-    fontFamily:CUSTOMFONTFAMILY.body,
+    fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.white,

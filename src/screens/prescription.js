@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 // import {Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 // import {View, Text, StyleSheet} from '@react-pdf/renderer';
@@ -53,8 +53,8 @@ const Prescription = ({route}) => {
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const {name, gender, patient_age, patient_phone_number} = route.params;
   const sign = useSelector(state => state?.sign);
-  const logo = useSelector(state=>state?.clinicid?.clinic_logo)
-  console.log('logooo',logo)
+  const logo = useSelector(state => state?.clinicid?.clinic_logo);
+  console.log('logooo', logo);
   console.log(
     'patient phone--',
     name,
@@ -90,24 +90,24 @@ const Prescription = ({route}) => {
   const format = current.toLocaleDateString(undefined, options);
   const base64Image = sign?.sign;
   console.log('base==', base64Image);
-  const [logostate,setLogo] = useState()
-const handleLogo = () => {
-  if (logo){
-    setLogo('hi')
-  }else{
-    setLogo(null)
-  }
-}
-useEffect(()=>{
-  handleLogo()
-},[logo])
+  const [logostate, setLogo] = useState();
+  const handleLogo = () => {
+    if (logo) {
+      setLogo('hi');
+    } else {
+      setLogo(null);
+    }
+  };
+  useEffect(() => {
+    handleLogo();
+  }, [logo]);
 
   return (
     <ScrollView>
       <View style={styles.main}>
         <View style={styles.container}>
           <View style={{flexDirection: 'row'}}>
-            <Logo src={logostate} encodedBase64={logo}/>
+            <Logo src={logostate} encodedBase64={logo} />
             <View style={{paddingHorizontal: horizontalScale(16)}}>
               <Text style={styles.title}>
                 {Language[language]['dr']}
@@ -219,24 +219,28 @@ useEffect(()=>{
             </Text>
           </View>
         )}
-        {refer_doctor.doctor_name && (
+        {refer_doctor?.[0]?.doctor_name && (
           <View>
             <Text style={styles.head}>
               {Language[language]['refer_doctor']} :
             </Text>
             <View style={styles.refer}>
-              <Text style={styles.values}>
-                {Language[language]['name']} :{' '}
-                <Text style={styles.values}>{refer_doctor.doctor_name}</Text>
-              </Text>
-              <Text style={styles.values}>
-                {Language[language]['specialist']} :{' '}
-                <Text style={styles.values}>{refer_doctor.speciality}</Text>
-              </Text>
-              <Text style={styles.values}>
-                {Language[language]['ph']} :{' '}
-                <Text style={styles.values}>{refer_doctor.phone}</Text>
-              </Text>
+              {refer_doctor?.map((val, ind) => (
+                <View key={ind}>
+                  <Text style={styles.values}>
+                    {Language[language]['name']} :{' '}
+                    <Text style={styles.values}>{val.doctor_name}</Text>
+                  </Text>
+                  <Text style={styles.values}>
+                    {Language[language]['specialist']} :{' '}
+                    <Text style={styles.values}>{val.speciality}</Text>
+                  </Text>
+                  <Text style={styles.values}>
+                    {Language[language]['ph']} :{' '}
+                    <Text style={styles.values}>{val.phone}</Text>
+                  </Text>
+                </View>
+              ))}
             </View>
           </View>
         )}

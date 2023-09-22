@@ -25,7 +25,11 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {addPhone} from '../redux/features/authenticate/PhoneNumber';
 import {forceTouchGestureHandlerProps} from 'react-native-gesture-handler/lib/typescript/handlers/ForceTouchGestureHandler';
 import InputText from '../components/inputext';
-import {horizontalScale, moderateScale, verticalScale} from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
 
@@ -47,6 +51,10 @@ const SlotBook = ({navigation, route}) => {
 
   const handleOptions = value => {
     setSelectedMode(value);
+  };
+  const [fee, setFee] = useState(false);
+  const handleFee = value => {
+    setFee(value);
   };
 
   const handleSelectSlot = value => {
@@ -233,6 +241,7 @@ const SlotBook = ({navigation, route}) => {
           //patient_phone_number: patientPhoneNumber.patient.phone_number,
           patient_phone_number: patient_phone,
           doctor_phone_number: phone,
+          is_paid: fee,
           meta_data: {
             complaint: complaint,
             patient_reference: patient_phone,
@@ -289,8 +298,7 @@ const SlotBook = ({navigation, route}) => {
     <View style={styles.main}>
       <ScrollView>
         <View style={styles.child}>
-          <View
-            style={styles.date}>
+          <View style={styles.date}>
             <SelectorBtn
               label="Date"
               name="calendar"
@@ -341,6 +349,24 @@ const SlotBook = ({navigation, route}) => {
                 </View>
               ))}
             </View>
+            <Text
+              style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h4}}>
+              Fees
+            </Text>
+            <View style={styles.type}>
+              <Option
+                label="UnPaid"
+                value={false}
+                selected={fee === false}
+                onPress={() => handleFee(false)}
+              />
+              <Option
+                label="Paid"
+                value={true}
+                selected={fee === true}
+                onPress={() => handleFee(true)}
+              />
+            </View>
 
             {list.length > 0 ? (
               <>
@@ -387,9 +413,9 @@ const styles = StyleSheet.create({
     // paddingHorizontal:24,
     // paddingVertical:24
   },
-  date:{
+  date: {
     gap: moderateScale(8),
-   paddingHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(8),
     // height: moderateScale(70),
   },

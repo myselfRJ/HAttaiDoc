@@ -464,9 +464,12 @@ const AddUser = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView bottomSheetRef={RoleRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={RoleRef}
+        snapPoints={'42%'}
+        backgroundStyle={null}>
         <View style={styles.modalContainer}>
-          <Text style={styles.role}>Role</Text>
+          {/* <Text style={styles.role}></Text> */}
           {CONSTANTS.role.map((role, index) => (
             <Pressable key={index} onPress={() => handleRoleSelection(role)}>
               <Text
@@ -565,15 +568,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
   },
   modalContainer: {
-    height: moderateScale(700),
-    width: '100%',
-    //justifyContent: 'center',
+    // height: '100%',
+    // width: '100%',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    //alignSelf: 'center',
-    borderRadius: moderateScale(1),
-    padding: moderateScale(16),
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
     gap: moderateScale(16),
+    padding: moderateScale(24),
   },
   modalfields: {
     fontSize: CUSTOMFONTSIZE.h3,

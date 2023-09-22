@@ -53,13 +53,17 @@ const ConsultationCard = ({data}) => {
       <View style={styles.main}>
         <Image style={styles.img} source={require('../assets/images/RX.png')} />
         <View style={styles.patientinfo}>
+          <Text style={styles?.contact}>
+            {data?.chief_complaint?.appointment_id}
+          </Text>
           <Text style={styles.name}>
-            {data?.chief_complaint?.complaint_message}
+            {data?.chief_complaint?.complaint_message} |{' '}
+            {data?.chief_complaint?.appointment_id}
           </Text>
           <Text style={styles.age}>{}</Text>
-          <Text style={styles?.contact}>
-            {Language[language]['contact']}: {''}
-          </Text>
+          {/* <Text style={styles?.contact}>
+            {data?.chief_complaint?.appointment_id}
+          </Text> */}
         </View>
         <Pressable
           style={styles.icon}
@@ -145,9 +149,9 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
-    width: 30,
-    height: 30,
-    // borderRadius: 30 / 2,
+    width: 60,
+    height: 60,
+    borderRadius: 30 / 2,
   },
   patientinfo: {},
   icon: {

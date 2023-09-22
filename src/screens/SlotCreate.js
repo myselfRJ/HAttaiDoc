@@ -34,7 +34,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SlotCreate = ({navigation, route}) => {
   const slotTypeRef = useRef(null);
   const [allSlots, setAllSlots] = useState([]);
-  // console.log('allslots===', allSlots);
+
   const slotDurationRef = useRef(null);
   const [fromTime, setFromTime] = useState(new Date());
   const [toTime, setToTime] = useState(new Date());
@@ -55,6 +55,8 @@ const SlotCreate = ({navigation, route}) => {
     Su: [],
   });
 
+  console.log('allslots===', slots);
+
   const [selectedDay, setSelectedDay] = useState('M');
 
   const DaySelection = index => {
@@ -66,14 +68,20 @@ const SlotCreate = ({navigation, route}) => {
     }
   };
   const dispatch = useDispatch();
-
   const handleSaveSlotData = () => {
-    dispatch(addslots(slots));
+    if (
+      slots?.M.length > 0 ||
+      slots?.T.length > 0 ||
+      slots?.W.length > 0 ||
+      slots?.TH.length > 0 ||
+      slots?.F.length > 0 ||
+      slots?.Sa.length > 0 ||
+      slots?.Su.length > 0
+    ) {
+      dispatch(addslots(slots));
+    }
     navigation.goBack();
   };
-  // const handleClear = () => {
-  //   setVisibleSlot(true);
-  // };
 
   const handleConfirm = time => {
     if (open === 'from') {
@@ -107,7 +115,7 @@ const SlotCreate = ({navigation, route}) => {
     Sa: 'Saturday',
     Su: 'Sunday',
   });
-  console.log('frommmmmmmm', FromformattedTime);
+
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -184,7 +192,12 @@ const SlotCreate = ({navigation, route}) => {
       return updatedSlots;
     });
     if (slotData) {
-      dispatch(updateslots(slotData));
+      const updatedSlots = {};
+      for (const day in slotData) {
+        updatedSlots[day] = slotData[day].filter(slot => slot.index !== index);
+      }
+      Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
+      dispatch(updateslots(updatedSlots));
     }
   };
 
@@ -202,27 +215,6 @@ const SlotCreate = ({navigation, route}) => {
     const differenceCheck = difference >= selectedDurationValue;
     return TimeCheck && differenceCheck;
   };
-
-  // useEffect(() => {
-  //   handlewarnings();
-  // }, []);
-  // const [iconstyle, setIconStyle] = useState('')
-  // const HandleIcon = () => {
-  //   const icons = FromformattedTime >= '06:00' && FromformattedTime < '18:00' ? (
-  //     <Icon
-  //       name="sun"
-  //       size={moderateScale(20)}
-  //       color={CUSTOMCOLOR.primary}
-  //     />) : (<Icon
-  //       name="close"
-  //       size={moderateScale(20)}
-  //       color={CUSTOMCOLOR.primary}
-  //     />)
-  //     setIconStyle(icons)
-  // }
-  // useEffect(()=>{
-  //   HandleIcon()
-  // },[FromformattedTime])
 
   return (
     <ScrollView>
@@ -415,7 +407,9 @@ const SlotCreate = ({navigation, route}) => {
                   duration={
                     <Text>
                       Duration: {slot.duration} | {slot.day} |{' '}
-                      {slot.fromTime >= '06:00' && slot.fromTime <= '18:00' ? (
+                      {slot.fromTime >= '06:00' &&
+                      slot.toTime <= '17:59' &&
+                      slot.fromTime <= '18:00' ? (
                         <Icon
                           name="white-balance-sunny"
                           size={moderateScale(20)}
@@ -462,9 +456,23 @@ const SlotCreate = ({navigation, route}) => {
                     duration={
                       <Text>
                         Duration: {slot.duration} | {slot.day}
+                        {slot.fromTime >= '06:00' &&
+                        slot.toTime <= '17:59' &&
+                        slot.fromTime <= '18:00' ? (
+                          <Icon
+                            name="white-balance-sunny"
+                            size={moderateScale(20)}
+                            color={CUSTOMCOLOR.warn}
+                          />
+                        ) : (
+                          <Icon
+                            name="weather-night-partly-cloudy"
+                            size={moderateScale(20)}
+                            color={CUSTOMCOLOR.primary}
+                          />
+                        )}
                       </Text>
                     }
-                    icon={iconstyle}
                   />
                 )),
               )}
@@ -521,8 +529,18 @@ const SlotCreate = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  save: {top: moderateScale(16), borderRadius: moderateScale(6)},
-  saveText: {padding: moderateScale(16), backgroundColor: CUSTOMCOLOR.primary},
+  save: {
+    top: moderateScale(16),
+    borderRadius: moderateScale(20),
+    // borderRadius: 2,
+  },
+  saveText: {
+    padding: moderateScale(16),
+    backgroundColor: CUSTOMCOLOR.primary,
+    borderRadius: moderateScale(4),
+    borderWidth: moderateScale(2),
+    borderColor: CUSTOMCOLOR.success,
+  },
   main: {
     flex: 1,
     justifyContent: 'flex-start',

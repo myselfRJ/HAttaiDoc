@@ -19,7 +19,12 @@ import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {URL} from '../utility/urls';
 import {addclinic_id} from '../redux/features/profiles/clinicId';
-import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
+import CustomIcon from '../components/icon';
 
 const SearchAddnew = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -70,8 +75,7 @@ const SearchAddnew = ({navigation}) => {
 
   return (
     <View style={styles.main}>
-      <View
-        style={styles.searchName}>
+      <View style={styles.searchName}>
         <InputText
           placeholder="phone number"
           value={phoneNumber}
@@ -81,19 +85,24 @@ const SearchAddnew = ({navigation}) => {
         />
         <Icon name="search" size={20} style={styles.searchIcon} />
       </View>
+
       <ScrollView>
         <View style={styles.appointment}>
           <Text style={styles.h2}>Search Results</Text>
-
-          {filteredData?.map((val, ind) => (
-            <PatientSearchCard
-              key={ind}
-              patient_data={val}
-              onPress={() => navigation.navigate('visit')}
-            />
-          ))}
+          {filteredData?.length > 0 ? (
+            filteredData?.map((val, ind) => (
+              <PatientSearchCard
+                key={ind}
+                patient_data={val}
+                onPress={() => navigation.navigate('visit')}
+              />
+            ))
+          ) : (
+            <CustomIcon label="No Patients Found" />
+          )}
         </View>
       </ScrollView>
+
       <View style={styles.btn}>
         <HButton
           label="Add New"
@@ -110,12 +119,12 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 16,
   },
-  searchName:{
+  searchName: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-},
- input: {
+  },
+  input: {
     width: '100%',
     height: moderateScale(51),
     top: moderateScale(30),

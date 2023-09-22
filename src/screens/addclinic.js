@@ -59,12 +59,9 @@ const AddClinic = ({navigation}) => {
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
-  console.log('====clinic==>', clinics);
   const route = useRoute();
   const address = useSelector(state => state?.address?.address);
-  console.log('address====', address);
   const {prevScrn} = route.params;
-  console.log('----------prev', prevScrn);
 
   const dispatch = useDispatch();
   useFocusEffect(
@@ -108,6 +105,18 @@ const AddClinic = ({navigation}) => {
 
   const handleClear = () => {
     setVisibleSlot(true);
+    const newSlotsss = {
+      slots: {
+        M: [],
+        T: [],
+        W: [],
+        TH: [],
+        F: [],
+        Sa: [],
+        Su: [],
+      },
+    };
+    dispatch(updateslots(newSlotsss?.slots));
   };
 
   const SuccesRef = useRef(null);
@@ -130,7 +139,7 @@ const AddClinic = ({navigation}) => {
   });
 
   const clinic_data = useSelector(state => state?.clinic?.clinic_data);
-  console.log('clinic details===>', clinic_data);
+  // console.log('clinic details===>', clinic_data);
   const prevScrn1 = 'undefineed';
 
   const Clinic_Data = {
@@ -276,15 +285,12 @@ const AddClinic = ({navigation}) => {
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        // console.log('User cancelled image picker');
       } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
       } else {
-        // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedLogo(response?.assets?.[0]?.base64);
       }
     });
-    setlogo(false)
+    setlogo(false);
   };
 
   const progressData = useSelector(state => state.progress?.status);
@@ -305,7 +311,7 @@ const AddClinic = ({navigation}) => {
     disableBackButton();
   }, []);
   const [modal, setModal] = useState(false);
-  const [logo,setlogo] = useState(false)
+  const [logo, setlogo] = useState(false);
   const ModalVisible = () => {
     setModal(true);
   };
@@ -313,6 +319,8 @@ const AddClinic = ({navigation}) => {
     setlogo(true);
     GlRef?.current?.snapToIndex(1);
   };
+
+  // console.log('----------slots', slotData);
 
   return (
     <View style={{flex: 1}}>
@@ -386,7 +394,15 @@ const AddClinic = ({navigation}) => {
               placeholder="Enter clinic phone number"
               value={value.phone}
               setValue={value => handleChangeValue('phone', value)}
-              // keypad="numeric"
+              doubleCheck={[true, false]}
+              check={e => {
+                var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
+                if (format.test(e)) {
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
             />
             <InputText
               label={Language[language]['fees']}
@@ -397,7 +413,10 @@ const AddClinic = ({navigation}) => {
             />
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>
-              <AddImage onPress={()=> LogoVisible()} encodedBase64={selectedLogo} />
+              <AddImage
+                onPress={() => LogoVisible()}
+                encodedBase64={selectedLogo}
+              />
             </View>
             <View style={styles.addslot}>
               <HButton
@@ -482,7 +501,7 @@ const AddClinic = ({navigation}) => {
           />
         </View>
       )}
-       {logo && (
+      {logo && (
         <View>
           <GalleryModel
             visible={logo}

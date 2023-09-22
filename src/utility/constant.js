@@ -29,7 +29,7 @@ export const CONSTANTS = {
   consultTypes: ['Physical', 'Telephonic', 'Online'],
   duration: [10, 15, 20, 25, 30],
   abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
-  role: ['Receptionist', 'Administrator', 'Physician','Others'],
+  role: ['Receptionist', 'Administrator', 'Others'],
   clinic: ['Rasi Clinic', 'Magizh Clinic', 'Kamatchi Clinic'],
   success: 'success',
   error: 'error',
@@ -70,13 +70,7 @@ export const CONSTANTS = {
     'Diabetes',
     'Chronic respiratory disease',
   ],
-  allergy: [
-    'Milk',
-    'Water',
-    'Peanut',
-    'Junk foods',
-    'Insect stings'
-  ],
+  allergy: ['Milk', 'Water', 'Peanut', 'Junk foods', 'Insect stings'],
   doctors: [
     {
       doctor_name: 'Dr. Raju',
@@ -94,4 +88,5 @@ export const CONSTANTS = {
       phone: '9100765472',
     },
   ],
+  blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
 };

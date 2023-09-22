@@ -301,7 +301,7 @@ const ProfileCreate = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-
+  // backgroundColor: modal ? '#000000aa' : null
   return (
     <View style={{flex: 1}}>
       <ProgresHeader progressData={progressData} />
@@ -429,10 +429,13 @@ const ProfileCreate = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView bottomSheetRef={appointmentCardRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={appointmentCardRef}
+        snapPoints={'50%'}
+        backgroundStyle={null}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
-          <ScrollView>
+          <ScrollView persistentScrollbar={true}>
             {CONSTANTS.speciality.map((speciality, index) => (
               <Pressable
                 key={index}
@@ -455,7 +458,7 @@ const ProfileCreate = ({navigation}) => {
           </ScrollView>
           <View style={styles.ContactMail}>
             <Text style={styles.contact}>
-              If Your Specilization Not Mention please mail-to
+              If Your Specialization Not Mention please mail-to
             </Text>
             <Text style={styles.mail}>contact@destratum.com</Text>
           </View>
@@ -498,7 +501,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     height: '100%',
-    width: '100%',
+    // width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,

@@ -85,7 +85,7 @@ const PatientSearchCard = patient_data => {
           onPress={() => {
             patientSearchRef?.current?.snapToIndex(1);
           }}>
-          <View>
+          <View style={{width: moderateScale(40), height: moderateScale(40)}}>
             <Icon
               style={styles.icon}
               name="dots-horizontal"
@@ -202,7 +202,12 @@ const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
     right: moderateScale(8),
+    // left: moderateScale(8),
     top: moderateScale(8),
+    // width: moderateScale(50),
+    justifyContent: 'center',
+    // alignItems: 'center',
+    alignSelf: 'center',
   },
   option: {
     position: 'absolute',
