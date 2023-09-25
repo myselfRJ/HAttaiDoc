@@ -39,6 +39,7 @@ import LabReports from '../screens/labReport';
 import PastHistory from '../screens/pasthistory';
 import {CUSTOMCOLOR} from '../settings/styles';
 import Valid from '../screens/consultationValid';
+import Uploadrecord from '../screens/UploadRecord';
 
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
@@ -95,15 +96,29 @@ const ProtectedRoute = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="upload-record"
+        component={Uploadrecord}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Records',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
       <Stack.Screen name="patientlookup" component={Patientlookup} />
       <Stack.Screen
         name="patientcreate"
         component={PatientCreate}
-        options={{headerShown: true, headerTintColor: CUSTOMCOLOR.white,
+        options={{
+          headerShown: true,
+          headerTintColor: CUSTOMCOLOR.white,
           title: 'Add Patient',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
-          },}}
+          },
+        }}
       />
       <Stack.Screen
         name="bookslot"
@@ -184,7 +199,7 @@ const ProtectedRoute = () => {
           },
         }}
       /> */}
-       <Stack.Screen
+      <Stack.Screen
         name="refer"
         component={ReferToDoctor}
         options={{
@@ -252,7 +267,7 @@ const ProtectedRoute = () => {
           },
         }}
       />
-         <Stack.Screen
+      <Stack.Screen
         name="patienthistory"
         component={PatientHistory}
         options={{

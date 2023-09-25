@@ -232,7 +232,7 @@ const ProfileCreate = ({navigation}) => {
   //   handleCheck()
   // },[age])
 
-  const current = parseInt(new Date().getFullYear()) - parseInt(age);
+  // const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,

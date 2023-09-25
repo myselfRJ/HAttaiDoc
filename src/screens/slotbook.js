@@ -133,7 +133,8 @@ const SlotBook = ({navigation, route}) => {
 
     if (response.ok) {
       const jsonData = await response.json();
-
+      console.log('--------------slotshgdfhsdgchsgd', jsonData.data[0].slot);
+      // setSlotDetails(jsonData.data[0]?.(slot));
       setSlotDetails(jsonData.data?.map(val => JSON.parse(val?.slot)));
     } else {
       console.error('API call failed:', response.status, response);

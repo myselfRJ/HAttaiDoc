@@ -131,6 +131,10 @@ const Visit = ({navigation, route}) => {
     dispatch(addCheifComplaint(complaint));
   }, []);
 
+  const [chief_complaint, setComplaint] = useState('');
+  const [vitals, setVitals] = useState({});
+  console.log('vitals---------', vitals);
+  console.log('complaint-------', chief_complaint);
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
@@ -148,11 +152,11 @@ const Visit = ({navigation, route}) => {
       commoribities: commorbities,
       allergies: allergies,
       pastHistory: pasthistory,
-      reports: {
-        report_url: '',
-        type_report: '',
-        record_description: '',
-      },
+      // reports: {
+      //   report_url: '',
+      //   type_report: '',
+      //   record_description: '',
+      // },
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -239,13 +243,20 @@ const Visit = ({navigation, route}) => {
 
   const putVitals = async () => {
     const consultationData = {
-      vitals: vitalsData,
-      meta_data: {
-        patient_phone_number: patient_phone,
-        doctor_phone_number: phone,
-        clinic_id: Clinic_id,
-        appointment_id: appointment_id,
-      },
+      pulse_rate: vitalsData?.pulse_rate,
+      weight: vitalsData?.weight,
+      height: vitalsData?.height,
+      body_temperature: vitalsData?.body_temperature,
+      rate: vitalsData?.rate,
+      diastolic: vitalsData?.diastolic,
+      systolic: vitalsData?.systolic,
+      EDD: vitalsData?.EDD,
+      LDD: vitalsData?.LDD,
+      bmi: vitalsData?.bmi,
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
     };
     try {
       const response = await fetchApi(URL.updatevitlas(appointment_id), {
@@ -271,13 +282,11 @@ const Visit = ({navigation, route}) => {
 
   const putComplaint = async () => {
     const consultationData = {
-      chief_complaint: selectedComplaint,
-      meta_data: {
-        patient_phone_number: patient_phone,
-        doctor_phone_number: phone,
-        clinic_id: Clinic_id,
-        appointment_id: appointment_id,
-      },
+      complaint_message: selectedComplaint,
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
     };
     try {
       const response = await fetchApi(URL.updateComplaints(appointment_id), {
@@ -300,9 +309,6 @@ const Visit = ({navigation, route}) => {
       console.error('An error occurred:', error);
     }
   };
-
-  const [chief_complaint, setComplaint] = useState('');
-  const [vitals, setVitals] = useState({});
 
   const fetchComplaint = async () => {
     const response = await fetchApi(URL.updateComplaints(appointment_id), {

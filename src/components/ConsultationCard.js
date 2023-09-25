@@ -40,7 +40,16 @@ const ConsultationCard = ({data}) => {
 
   const handleOnpress = () => {
     patientSearchRef?.current?.snapToIndex(0);
-    navigation.navigate('');
+    const patient_phone_number = data?.chief_complaint?.patient_phone_number;
+    const doctor_phone_number = data?.chief_complaint?.doctor_phone_number;
+    const clinic_id = data?.chief_complaint?.clinic_id;
+    const appointment_id = data?.chief_complaint?.appointment_id;
+    navigation.navigate('upload-record', {
+      patient_phone_number,
+      doctor_phone_number,
+      clinic_id,
+      appointment_id,
+    });
   };
 
   const handleOnBook = () => {
