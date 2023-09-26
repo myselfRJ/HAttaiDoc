@@ -187,6 +187,9 @@ const Visit = ({navigation, route}) => {
           }, 1000);
           ResetRuduxState();
           setLoading(false);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           console.error('API call failed:', response.status, response);

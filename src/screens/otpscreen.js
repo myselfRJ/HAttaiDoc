@@ -15,8 +15,7 @@ import {
 } from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import {HButton} from '../components';
-import {InputText} from '../components';
+import {HButton, StatusMessage, BottomSheetView} from '../components';
 import {URL} from '../utility/urls';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -50,7 +49,7 @@ const OtpScreen = ({route}) => {
     value,
     setValue,
   });
-
+  const [apiStatus, setApiStatus] = useState({});
   const [loading, setLoading] = useState(false);
 
   const {phone, trace_id} = useSelector(state => state?.phone?.data);
@@ -90,6 +89,11 @@ const OtpScreen = ({route}) => {
     setValue('');
     resendOtp();
   };
+
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
 
   const resendOtp = async () => {
     //setLoading(!loading);
@@ -131,26 +135,34 @@ const OtpScreen = ({route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
-          console.log('...... update navigation===>', jsonData);
           dispatch(authenticateActions.updateauthenticate(jsonData?.data));
-          Alert.alert('Success', jsonData?.message);
-          nav.navigate('protected');
+          setApiStatus({
+            status: 'success',
+            message: jsonData?.message,
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          setTimeout(() => {
+            nav.navigate('protected');
+          }, 1000);
           setValue('');
           setLoading(false);
         } else {
+          setApiStatus({status: 'warning', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
           console.error('API call failed:', response.status);
-          Alert.alert('Warning', jsonData?.message);
           setLoading(false);
         }
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
       setLoading(false);
     }
   };
 
   return (
-    <SafeAreaView>
+    <View style={{flex: 1}}>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.Top}>
@@ -225,7 +237,13 @@ const OtpScreen = ({route}) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={CUSTOMCOLOR.white}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

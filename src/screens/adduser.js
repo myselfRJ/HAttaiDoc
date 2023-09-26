@@ -58,16 +58,12 @@ const AddUser = ({navigation}) => {
   // console.log('clinic---', clinics);
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
-  const [showRoleModal, setRoleModal] = useState(false);
-  const [ShowClinicModal, setClinicModal] = useState(false);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
 
-  // console.log(clinic_users, '------------------------,users');
+  console.log('----------------users', clinic_users);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
-  // console.log('phone==', phone);
-  //const clinics = CONSTANTS.clinic;
 
   const clinicsData = useSelector(state => state.clinic?.clinic_data);
 
@@ -76,8 +72,8 @@ const AddUser = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const roles = CONSTANTS.role;
-  const [selectedRole, setSelectedRole] = useState(roles[0]);
-  const [selectedClinic, setSelectedClinic] = useState('');
+  const [selectedRole, setSelectedRole] = useState();
+  const [selectedClinic, setSelectedClinic] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   const [values, setValues] = useState({
@@ -91,7 +87,6 @@ const AddUser = ({navigation}) => {
       ? selectedImage
       : CONSTANTS.default_image,
   });
-  // console.log('phone', values.phone);
   const [apiStatus, setApiStatus] = useState({});
 
   const progressData = useSelector(state => state.progress?.status);
@@ -102,24 +97,6 @@ const AddUser = ({navigation}) => {
     setModal(true);
     GlRef?.current?.snapToIndex(1);
   };
-  // const onImagePress = () => {
-  //   const options = {
-  //     mediaType: 'photo',
-  //     includeBase64: true,
-  //     quality: 0.5,
-  //   };
-
-  //   launchImageLibrary(options, response => {
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('ImagePicker Error: ', response.error);
-  //     } else {
-  //       console.log('response====>', response?.assets?.[0].base64);
-  //       setSelectedImage(response?.assets?.[0]?.base64);
-  //     }
-  //   });
-  // };
   const openCamera = () => {
     const options = {
       mediaType: 'photo',
@@ -138,7 +115,7 @@ const AddUser = ({navigation}) => {
   };
   const Clinic_users = {
     clinic_user_name: values.name,
-    role: values.role !== 'Others' ? values.role : otherRole,
+    role: selectedRole !== 'Others' ? selectedRole : otherRole,
     user_profile_pic_url: values.user_profile_pic_url,
     gender: values.gender,
     user_phone_number: values.phone,
@@ -175,10 +152,13 @@ const AddUser = ({navigation}) => {
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus.headerStatus({index: 2, status: true}));
+          dispatch(headerStatus({index: 2, status: true}));
           setTimeout(() => {
             navigation.navigate('tab');
           }, 1000);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 2000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
           ResetClinic_Users_Redux();
@@ -201,22 +181,26 @@ const AddUser = ({navigation}) => {
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
-    // console.log('users--------------------------------------');
-    if (values.name && values.gender && values.phone.length === 10) {
+    if (
+      values.name &&
+      values.gender &&
+      values.phone.length === 10 &&
+      selectedClinic &&
+      selectedRole
+    ) {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
       setShowSlotChip(true);
       setSelectedImage('');
-      (values.name = ''), (values.phone = ''), (values.gender = '');
+      setValues({name: '', phone: '', gender: 'male'});
+      setSelectedClinic('');
+      setSelectedRole('');
     } else {
       Alert.alert('"Warning"', '"Please Enter Correct Details"');
     }
   };
 
-  //console.log(values.slots);
-
   const handleDeleteSlotChip = index => {
-    // console.log('...', index);
     const newClinic_users = clinic_users?.filter((_, i) => i !== index);
     dispatch(updateclinic_users(newClinic_users));
   };
@@ -232,19 +216,19 @@ const AddUser = ({navigation}) => {
     handleChangeValue('gender', value);
   };
 
-  const handleRoleSelection = role => {
-    setSelectedRole(role);
-    handleChangeValue('role', role);
-    setTimeout(() => {
-      RoleRef?.current?.snapToIndex(0);
-    }, 500);
-  };
+  // const handleRoleSelection = role => {
+  //   setSelectedRole(role);
+  //   handleChangeValue('role', role);
+  //   setTimeout(() => {
+  //     RoleRef?.current?.snapToIndex(0);
+  //   }, 500);
+  // };
 
-  const handleClinicSelection = clinic => {
-    setSelectedClinic(clinic.clinic_name);
-    handleChangeValue('clinic', clinic.clinic_name);
-    ClinicRef?.current?.snapToIndex(0);
-  };
+  // const handleClinicSelection = clinic => {
+  //   setSelectedClinic(clinic.clinic_name);
+  //   handleChangeValue('clinic', clinic.clinic_name);
+  //   ClinicRef?.current?.snapToIndex(0);
+  // };
 
   const onImagePress = () => {
     const options = {
@@ -274,9 +258,8 @@ const AddUser = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log(jsonData);
       setDataClinic(jsonData.data);
-      setSelectedClinic(jsonData?.data[0]?.clinic_name);
+      // setSelectedClinic(jsonData?.data[0]?.clinic_name);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -288,9 +271,6 @@ const AddUser = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-
-  // console.log('selecte Image', '=============', selectedImage);
-
   return (
     <View style={{flex: 1}}>
       {prevScrn !== 'account' && (
@@ -335,6 +315,7 @@ const AddUser = ({navigation}) => {
               maxLength={10}
               label={Language[language]['phone_number']}
               placeholder="Phone Number"
+              numeric={true}
               value={values.phone}
               setValue={value => handleChangeValue('phone', value)}
               // keypad="numeric"
@@ -362,34 +343,66 @@ const AddUser = ({navigation}) => {
                 />
               </View>
             </View>
-            <View style={styles.btn}>
-              <SelectorBtn
-                label={Language[language]['role']}
-                name="chevron-down"
-                onPress={() => {
-                  RoleRef?.current?.snapToIndex(1);
-                }}
-                input={selectedRole}
-              />
-              {selectedRole === 'Others' && (
-                <InputText
-                  label={'Please Enter Role'}
-                  maxLength={30}
-                  placeholder="Enter Role"
-                  value={otherRole}
-                  setValue={setOtherRole}
-                />
-              )}
-            </View>
             <View style={styles.clinicselect}>
-              <SelectorBtn
+              <Text style={styles.labeltext}>Role:</Text>
+              {CONSTANTS.role?.map((val, ind) => (
+                <SelectorBtn
+                  select={{
+                    backgroundColor:
+                      selectedRole === val
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.white,
+                  }}
+                  inputstyle={{
+                    color:
+                      selectedRole === val
+                        ? CUSTOMCOLOR.white
+                        : CUSTOMCOLOR.black,
+                  }}
+                  key={ind}
+                  onPress={() => setSelectedRole(val)}
+                  input={val}
+                />
+              ))}
+            </View>
+            {selectedRole === 'Others' && (
+              <InputText
+                label={'Please Enter Role'}
+                maxLength={30}
+                placeholder="Enter Role"
+                value={otherRole}
+                setValue={setOtherRole}
+              />
+            )}
+            <View style={styles.clinicselect}>
+              <Text style={styles.labeltext}>Clinic:</Text>
+              {clinics?.map((val, ind) => (
+                <SelectorBtn
+                  select={{
+                    backgroundColor:
+                      selectedClinic === val?.clinic_name
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.white,
+                  }}
+                  inputstyle={{
+                    color:
+                      selectedClinic === val?.clinic_name
+                        ? CUSTOMCOLOR.white
+                        : CUSTOMCOLOR.black,
+                  }}
+                  input={val?.clinic_name}
+                  key={ind}
+                  onPress={() => setSelectedClinic(val?.clinic_name)}
+                />
+              ))}
+              {/* <SelectorBtn
                 label={Language[language]['clinic']}
                 name="chevron-down"
                 onPress={() => {
                   ClinicRef?.current?.snapToIndex(1);
                 }}
                 input={selectedClinic}
-              />
+              /> */}
             </View>
             <View style={styles.save}>
               <HButton label="save" onPress={handlePlusIconClick} />
@@ -464,12 +477,11 @@ const AddUser = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={RoleRef}
-        snapPoints={'42%'}
-        backgroundStyle={null}>
+        snapPoints={'20%'}
+        backgroundStyle={CUSTOMCOLOR.white}>
         <View style={styles.modalContainer}>
-          {/* <Text style={styles.role}></Text> */}
           {CONSTANTS.role.map((role, index) => (
             <Pressable key={index} onPress={() => handleRoleSelection(role)}>
               <Text
@@ -487,8 +499,11 @@ const AddUser = ({navigation}) => {
             </Pressable>
           ))}
         </View>
-      </BottomSheetView>
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+      </BottomSheetView> */}
+      {/* <BottomSheetView
+        bottomSheetRef={ClinicRef}
+        snapPoints={'35%'}
+        backgroundStyle={CUSTOMCOLOR.white}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicsname}>{Language[language]['clinic']}</Text>
           {clinics &&
@@ -511,7 +526,7 @@ const AddUser = ({navigation}) => {
               </Pressable>
             ))}
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
@@ -532,6 +547,12 @@ const AddUser = ({navigation}) => {
   );
 };
 const styles = StyleSheet.create({
+  labeltext: {
+    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h4,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
   container: {
     flexGrow: 1,
     paddingVertical: verticalScale(20),
@@ -613,7 +634,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(6),
   },
   clinicselect: {
+    gap: moderateScale(16),
     alignSelf: 'flex-start',
+    flexDirection: 'row',
     width: '100%',
     paddingHorizontal: horizontalScale(6),
   },

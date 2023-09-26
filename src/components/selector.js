@@ -33,7 +33,7 @@ const SelectorBtn = props => {
       <Pressable
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
-        <Text style={styles.h3}>{props.input}</Text>
+        <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
     </View>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: 'gray',
-    padding: 10,
+    padding: moderateScale(10),
     flex: 1,
   },
 });

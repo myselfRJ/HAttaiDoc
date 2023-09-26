@@ -45,6 +45,7 @@ const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
 import PatientHistory from '../screens/patientHistory';
 import ReferToDoctor from '../screens/Refer';
+import ClinicAddress from '../components/clinic_address';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -102,6 +103,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Records',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="address"
+        component={ClinicAddress}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Select Address',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

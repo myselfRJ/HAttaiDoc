@@ -203,6 +203,9 @@ const PatientCreate = ({navigation}) => {
           setSpouse_nmae('');
           setAge();
           setLoading(false);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -222,8 +225,6 @@ const PatientCreate = ({navigation}) => {
   const ModalVisible = () => {
     setModal(true);
   };
-
-  console.log('-==========', blood_group);
   return (
     <View style={{flex: moderateScale(1)}}>
       <ScrollView>
@@ -277,6 +278,7 @@ const PatientCreate = ({navigation}) => {
               value={patient_phone_number}
               setValue={setPatient_Phone_number}
               // keypad={'numeric'}
+              numeric={true}
               maxLength={10}
               doubleCheck={[true, false]}
               check={e => {
