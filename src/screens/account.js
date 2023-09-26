@@ -30,6 +30,7 @@ import {
   verticalScale,
 } from '../utility/scaleDimension';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
+import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -124,7 +125,13 @@ const Account = () => {
       refresh: null,
       lastLogin: null,
     };
+    const updateStatus = [
+      {progressname: 'Profile', status: false},
+      {progressname: 'Add Clinic', status: false},
+      {progressname: 'Add User', status: false},
+    ];
     dispatch(authenticateActions.updateauthenticate(newTokens));
+    dispatch(updateheaderStatus(updateStatus));
     Alert.alert('Logout Sucessfull ');
     navigation.navigate('entry');
   };

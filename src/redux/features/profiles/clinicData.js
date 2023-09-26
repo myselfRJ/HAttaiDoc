@@ -10,7 +10,6 @@ const clinic_data_Slice = createSlice({
   reducers: {
     addclinic_data: (state, action) => {
       state.clinics = [...state.clinics, action.payload];
-      console.log(state.clinics, '+++clinics');
     },
     updateclinics: (state, action) => {
       state.clinics = action.payload;

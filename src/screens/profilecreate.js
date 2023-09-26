@@ -58,7 +58,6 @@ const ProfileCreate = ({navigation}) => {
   const [selectedFilename, setSelectedFilename] = useState('');
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
-  console.log('document...', uploaddocument);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -111,11 +110,9 @@ const ProfileCreate = ({navigation}) => {
     CONSTANTS.speciality[0],
   );
   const [age, setAge] = useState('');
-  console.log('age===', age);
+
   const [DOB, setDOB] = useState(new Date());
   const [formatDate, setFormatDate] = useState('');
-  console.log('formatdate===>', formatDate);
-  console.log('dob=====>', DOB);
   const [open, setOpen] = useState(false);
   // const formattedDate = DOB.toLocaleDateString('en-US', {
   //   day: 'numeric',
@@ -144,7 +141,6 @@ const ProfileCreate = ({navigation}) => {
   const HandleCheck = () => {
     if (value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      console.log('current====>', `${current}-${'01'}-${'01'}`);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
       setFormatDate(formattedDate);
@@ -176,11 +172,8 @@ const ProfileCreate = ({navigation}) => {
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0].base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
@@ -219,7 +212,6 @@ const ProfileCreate = ({navigation}) => {
     setTimeout(() => {
       appointmentCardRef?.current?.snapToIndex(0);
     }, 500);
-    console.log(speciality);
   };
 
   const handlePressIn = () => {
@@ -243,7 +235,7 @@ const ProfileCreate = ({navigation}) => {
   //   handleCheck()
   // },[age])
 
-  const current = parseInt(new Date().getFullYear()) - parseInt(age);
+  // const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
@@ -257,7 +249,6 @@ const ProfileCreate = ({navigation}) => {
     medical_doc_url: uploaddocument,
   };
 
-  console.log(token);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -273,14 +264,13 @@ const ProfileCreate = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',
             message: 'Successfully created',
           });
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus.headerStatus({index: 0, status: true}));
+          dispatch(headerStatus({index: 0, status: true}));
           // setStatus(!status);
           setTimeout(() => {
             navigation.navigate('addclinic', {prevScrn});
@@ -307,7 +297,6 @@ const ProfileCreate = ({navigation}) => {
       setLoading(false);
     }
   };
-  console.log(values.formattedDate);
 
   useEffect(() => {
     disableBackButton();
