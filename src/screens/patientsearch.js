@@ -29,6 +29,7 @@ import {
   moderateScale,
 } from '../utility/scaleDimension';
 import {useFocusEffect} from '@react-navigation/native';
+import CustomIcon from '../components/icon';
 
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -145,18 +146,22 @@ const PatientSearch = ({navigation}) => {
 
       <View style={styles.appointment}>
         <Text style={commonstyles.h2}>My Patients</Text>
-        <ScrollView
-          contentContainerStyle={{gap: moderateScale(8)}}
-          style={styles.patientCard}>
-          {filteredData?.map((val, ind) => (
-            <PatientSearchCard
-              meta={'value'}
-              key={ind}
-              patient_data={val}
-              onPress={() => navigation.navigate('visit')}
-            />
-          ))}
-        </ScrollView>
+        {filteredData?.length > 0 ? (
+          <ScrollView
+            contentContainerStyle={{gap: moderateScale(8)}}
+            style={styles.patientCard}>
+            {filteredData?.map((val, ind) => (
+              <PatientSearchCard
+                meta={'value'}
+                key={ind}
+                patient_data={val}
+                onPress={() => navigation.navigate('visit')}
+              />
+            ))}
+          </ScrollView>
+        ) : (
+          <CustomIcon label="No Patients Found" />
+        )}
       </View>
 
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}

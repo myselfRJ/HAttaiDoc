@@ -9,7 +9,6 @@ const BottomSheetView = ({
   isOpen,
   backgroundStyle,
 }) => {
-  console.log(backgroundStyle);
   return (
     <BottomSheet
       backgroundStyle={{backgroundColor: backgroundStyle}}

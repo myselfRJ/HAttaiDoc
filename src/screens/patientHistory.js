@@ -100,46 +100,8 @@ export default function PatientHistory({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32)}}>
-        {/* <View style={{height: 100}}>
-          <View style={styles.main}>
-            <Image
-              style={styles.img}
-              source={{
-                uri: `data:image/jpeg;base64,${data?.patient_pic_url}`,
-              }}
-            />
-            <View style={styles.patientinfo}>
-              <Text style={styles.name}>{data?.patient_name}</Text>
-              <Text style={styles.age}>
-                {parseInt(presentYear) - parseInt(birthYear)} | {data?.gender}
-              </Text>
-              <Text style={styles?.contact}>
-                contact:
-                {data?.patient_phone_number}
-              </Text>
-            </View>
-          </View>
-        </View> */}
-        {/* <View
-          style={{height: moderateScale(60), marginBottom: moderateScale(8)}}>
-          <SelectorBtn
-            label="Date"
-            name="calendar"
-            onPress={() => setOpen('to')}
-            input={formattedDate}
-          />
-          <DatePicker
-            modal
-            open={open !== false}
-            date={date}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-          />
-        </View> */}
         <View>
-          <PrescribeHead heading={'Consultation'} />
+          <Text style={styles.Head}>Consultation:</Text>
         </View>
         <View
           style={{
@@ -154,11 +116,13 @@ export default function PatientHistory({route, navigation}) {
             }}>
             <View>
               <Text style={styles.contentHead}>Chief Complaints</Text>
-              <Text>{consultation?.chief_complaint?.complaint_message}</Text>
+              <Text style={styles.text}>
+                {consultation?.chief_complaint?.complaint_message}
+              </Text>
             </View>
             <View>
               <Text style={styles.contentHead}>Diagnosis</Text>
-              <Text>
+              <Text style={styles.text}>
                 {consultation?.diagnosis?.map((item, index) => {
                   return `${item?.diagnosis}`;
                 })}
@@ -170,7 +134,7 @@ export default function PatientHistory({route, navigation}) {
 
               {consultation?.prescribe?.map((item, index) => {
                 return (
-                  <Text key={index}>
+                  <Text key={index} style={styles.text}>
                     {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
                     {item?.timing} | {item?.frequency} | {item?.total_quantity}
                   </Text>
@@ -180,12 +144,14 @@ export default function PatientHistory({route, navigation}) {
             <View>
               <Text style={styles.contentHead}>Vitals</Text>
               <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
-                <Text>BP</Text>
-                <Text>PR</Text>
-                {/* <Text>SPO2</Text> */}
-                <Text>TEMP</Text>
-                <Text>LMP</Text>
-                <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
+                <Text style={styles.text}>BP</Text>
+                <Text style={styles.text}>PR</Text>
+                <Text style={styles.text}>BMI</Text>
+                <Text style={styles.text}>TEMP</Text>
+                <Text style={styles.text}>LMP</Text>
+                <Text style={[styles.text, {paddingLeft: moderateScale(30)}]}>
+                  EDD
+                </Text>
               </View>
               <View
                 style={{
@@ -193,21 +159,25 @@ export default function PatientHistory({route, navigation}) {
                   gap: moderateScale(26),
                   top: moderateScale(8),
                 }}>
-                <Text>
+                <Text style={styles.text}>
                   {consultation?.vitals?.systolic}
                   {'/'}
                   {consultation?.vitals?.diastolic}
                 </Text>
-                <Text>{consultation?.vitals?.pulse_rate}</Text>
-                {/* <Text>{vitals.vital.SPO2}</Text> */}
-                <Text style={{paddingLeft: moderateScale(20)}}>
+                <Text style={styles.text}>
+                  {consultation?.vitals?.pulse_rate}
+                </Text>
+                <Text style={[styles.text, {paddingLeft: moderateScale(20)}]}>
+                  {consultation?.vitals?.bmi}
+                </Text>
+                <Text style={[styles.text, {paddingLeft: moderateScale(30)}]}>
                   {consultation?.vitals?.body_temperature}
                 </Text>
                 {/* <Text>{vitals.vital.EDD}</Text> */}
-                <Text style={{paddingLeft: moderateScale(20)}}>
+                <Text style={[styles.text, {paddingLeft: moderateScale(20)}]}>
                   {consultation?.vitals?.LDD}
                 </Text>
-                <Text>{consultation?.vitals?.EDD}</Text>
+                <Text style={[styles.text]}>{consultation?.vitals?.EDD}</Text>
               </View>
             </View>
           </View>
@@ -238,12 +208,19 @@ export default function PatientHistory({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  Head: {
+    fontWeight: '700',
+    fontSize: CUSTOMFONTSIZE.h1,
+    color: CUSTOMCOLOR.black,
+    lineHeight: moderateScale(19.07),
+  },
   contentHead: {
     fontWeight: '700',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     lineHeight: moderateScale(19.07),
   },
+
   main: {
     flexDirection: 'row',
     width: '100%',
@@ -281,6 +258,8 @@ const styles = StyleSheet.create({
     height: moderateScale(60),
     borderRadius: 60 / 2,
   },
-  patientinfo: {},
+  text: {
+    color: CUSTOMCOLOR.black,
+  },
   container: {gap: moderateScale(32), paddingHorizontal: horizontalScale(48)},
 });

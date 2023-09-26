@@ -35,6 +35,7 @@ import {updateLabReport} from '../redux/features/prescription/labreport';
 import {updateAllergies} from '../redux/features/prescription/allergies';
 import {updateValid} from '../redux/features/prescription/valid';
 import {
+  addVitals,
   UpdateNote,
   UpdateDoctorRefer,
   UpadteVitals,
@@ -60,7 +61,6 @@ const Visit = ({navigation, route}) => {
   const selectedDoctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
-  console.log('doctorsssssss',selectedDoctor)
   const Symptom = useSelector(state => state.symptoms.symptom);
   const Prescribe = useSelector(state => state.pres.prescribeItems);
   let prescribeCopy = Prescribe;
@@ -91,10 +91,6 @@ const Visit = ({navigation, route}) => {
 
   const {name, gende, age, patient_phone, appointment_id, complaint} =
     route.params;
-
-  useEffect(() => {
-    dispatch(addCheifComplaint(complaint));
-  }, []);
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
@@ -131,14 +127,22 @@ const Visit = ({navigation, route}) => {
     dispatch(UpadateCheifComplaint(newComplaint));
   };
 
+  useEffect(() => {
+    dispatch(addCheifComplaint(complaint));
+  }, []);
+
+  const [chief_complaint, setComplaint] = useState('');
+  const [vitals, setVitals] = useState({});
+  console.log('vitals---------', vitals);
+  console.log('complaint-------', chief_complaint);
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
 
       symptoms: Symptom,
 
-      chief_complaint: selectedComplaint,
-      vitals: vitalsData,
+      chief_complaint: chief_complaint ? {} : selectedComplaint,
+      vitals: vitals ? {} : vitalsData,
       refer_to_doctor: selectedDoctor,
       // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
       follow_up: date,
@@ -148,11 +152,11 @@ const Visit = ({navigation, route}) => {
       commoribities: commorbities,
       allergies: allergies,
       pastHistory: pasthistory,
-      reports: {
-        report_url: '',
-        type_report: '',
-        record_description: '',
-      },
+      // reports: {
+      //   report_url: '',
+      //   type_report: '',
+      //   record_description: '',
+      // },
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -183,6 +187,9 @@ const Visit = ({navigation, route}) => {
           }, 1000);
           ResetRuduxState();
           setLoading(false);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           console.error('API call failed:', response.status, response);
@@ -237,7 +244,118 @@ const Visit = ({navigation, route}) => {
     });
   };
 
-  // console.log("Symptom....",Symptom)
+  const putVitals = async () => {
+    const consultationData = {
+      pulse_rate: vitalsData?.pulse_rate,
+      weight: vitalsData?.weight,
+      height: vitalsData?.height,
+      body_temperature: vitalsData?.body_temperature,
+      rate: vitalsData?.rate,
+      diastolic: vitalsData?.diastolic,
+      systolic: vitalsData?.systolic,
+      EDD: vitalsData?.EDD,
+      LDD: vitalsData?.LDD,
+      bmi: vitalsData?.bmi,
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
+    };
+    try {
+      const response = await fetchApi(URL.updatevitlas(appointment_id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(consultationData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        // Handle successful response data
+        console.log('Complaint updated successfully:', jsonData);
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
+  const putComplaint = async () => {
+    const consultationData = {
+      complaint_message: selectedComplaint,
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
+    };
+    try {
+      const response = await fetchApi(URL.updateComplaints(appointment_id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(consultationData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        // Handle successful response data
+        console.log('Complaint updated successfully:', jsonData);
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
+  const fetchComplaint = async () => {
+    const response = await fetchApi(URL.updateComplaints(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.data?.complaint_message) {
+        dispatch(UpadateCheifComplaint(jsonData?.data?.complaint_message));
+      }
+
+      setComplaint(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchComplaint();
+  }, []);
+
+  const fetchVitals = async () => {
+    const response = await fetchApi(URL.updatevitlas(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setVitals(jsonData?.data);
+      dispatch(UpadteVitals(jsonData?.data));
+      console.log('-----------------js', jsonData);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchVitals();
+  }, []);
+
+  console.log('----------complaintxxxxxx', selectedComplaint);
 
   return (
     <View style={{flex: 1}}>
@@ -633,21 +751,18 @@ const Visit = ({navigation, route}) => {
 
                   {value.label === 'Refer to Doctor' && (
                     <View style={styles.basiccontainer}>
-                     
-                       {selectedDoctor?.map((item,ind)=>(
-                        <View style={{flexDirection:'row'}} key={ind}>
-                        <Icon
-                          name="doctor"
-                          color={CUSTOMCOLOR.primary}
-                          size={moderateScale(16)}
-                        />
-                        <Text style={styles.pulse}>
-                          Refer to {item?.doctor_name}{' '}
-                        </Text>
-                      </View>
-
-                       )) }
-                      
+                      {selectedDoctor?.map((item, ind) => (
+                        <View style={{flexDirection: 'row'}} key={ind}>
+                          <Icon
+                            name="doctor"
+                            color={CUSTOMCOLOR.primary}
+                            size={moderateScale(16)}
+                          />
+                          <Text style={styles.pulse}>
+                            Refer to {item?.doctor_name}{' '}
+                          </Text>
+                        </View>
+                      ))}
                     </View>
                   )}
                 </View>
@@ -672,7 +787,11 @@ const Visit = ({navigation, route}) => {
             />
             <HButton
               label="Save"
-              onPress={() => fetchData()}
+              onPress={() => {
+                fetchData();
+                putVitals();
+                putComplaint();
+              }}
               loading={loading}
             />
           </View>
@@ -743,7 +862,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     lineHeight: moderateScale(15.04),
     color: CUSTOMCOLOR.black,
-    paddingHorizontal:horizontalScale(8)
+    paddingHorizontal: horizontalScale(8),
   },
   complaintcontainer: {
     // width: 635,

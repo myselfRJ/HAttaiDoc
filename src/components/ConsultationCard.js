@@ -40,7 +40,16 @@ const ConsultationCard = ({data}) => {
 
   const handleOnpress = () => {
     patientSearchRef?.current?.snapToIndex(0);
-    navigation.navigate('');
+    const patient_phone_number = data?.chief_complaint?.patient_phone_number;
+    const doctor_phone_number = data?.chief_complaint?.doctor_phone_number;
+    const clinic_id = data?.chief_complaint?.clinic_id;
+    const appointment_id = data?.chief_complaint?.appointment_id;
+    navigation.navigate('upload-record', {
+      patient_phone_number,
+      doctor_phone_number,
+      clinic_id,
+      appointment_id,
+    });
   };
 
   const handleOnBook = () => {
@@ -53,13 +62,17 @@ const ConsultationCard = ({data}) => {
       <View style={styles.main}>
         <Image style={styles.img} source={require('../assets/images/RX.png')} />
         <View style={styles.patientinfo}>
+          <Text style={styles?.contact}>
+            {data?.chief_complaint?.appointment_id}
+          </Text>
           <Text style={styles.name}>
-            {data?.chief_complaint?.complaint_message}
+            {data?.chief_complaint?.complaint_message} |{' '}
+            {data?.chief_complaint?.appointment_id}
           </Text>
           <Text style={styles.age}>{}</Text>
-          <Text style={styles?.contact}>
-            {Language[language]['contact']}: {''}
-          </Text>
+          {/* <Text style={styles?.contact}>
+            {data?.chief_complaint?.appointment_id}
+          </Text> */}
         </View>
         <Pressable
           style={styles.icon}
@@ -145,9 +158,9 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
-    width: 30,
-    height: 30,
-    // borderRadius: 30 / 2,
+    width: 60,
+    height: 60,
+    borderRadius: 30 / 2,
   },
   patientinfo: {},
   icon: {

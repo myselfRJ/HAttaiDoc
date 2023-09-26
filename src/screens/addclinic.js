@@ -59,12 +59,10 @@ const AddClinic = ({navigation}) => {
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinics = useSelector(state => state.clinic);
-  console.log('====clinic==>', clinics);
   const route = useRoute();
   const address = useSelector(state => state?.address?.address);
-  console.log('address====', address);
   const {prevScrn} = route.params;
-  console.log('----------prev', prevScrn);
+  const [cnFess, setCnFees] = useState('');
 
   const dispatch = useDispatch();
   useFocusEffect(
@@ -108,14 +106,24 @@ const AddClinic = ({navigation}) => {
 
   const handleClear = () => {
     setVisibleSlot(true);
+    const newSlotsss = {
+      slots: {
+        M: [],
+        T: [],
+        W: [],
+        TH: [],
+        F: [],
+        Sa: [],
+        Su: [],
+      },
+    };
+    dispatch(updateslots(newSlotsss?.slots));
   };
 
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
-
-  // console.log('slotData==========================', slotData?.slots);
 
   const [status, setStatus] = useState(false);
 
@@ -128,16 +136,13 @@ const AddClinic = ({navigation}) => {
     fees: '',
     // slots: [],
   });
-
-  const clinic_data = useSelector(state => state?.clinic?.clinic_data);
-  console.log('clinic details===>', clinic_data);
   const prevScrn1 = 'undefineed';
 
   const Clinic_Data = {
     clinic_name: value.clinic,
     clinic_Address: address,
     clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
-    fees: parseInt(value.fees),
+    fees: cnFess === 'others' ? parseInt(value.fees) : parseInt(cnFess),
     slot: JSON.stringify(slotData.slots),
     clinic_phone_number: value.phone,
     clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
@@ -162,12 +167,10 @@ const AddClinic = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        //console.log(jsonData);
-        // console.log('------------data', jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus.headerStatus({index: 1, status: true}));
+          dispatch(headerStatus({index: 1, status: true}));
           {
             prevScrn === 'account'
               ? setTimeout(() => {
@@ -177,7 +180,9 @@ const AddClinic = ({navigation}) => {
                   navigation.navigate('adduser', {prevScrn1});
                 }, 1000);
           }
-
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 2000);
           setLoading(false);
           ResetClinicRedux();
           // SuccesRef?.current?.snapToIndex(0);
@@ -276,15 +281,12 @@ const AddClinic = ({navigation}) => {
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        // console.log('User cancelled image picker');
       } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
       } else {
-        // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedLogo(response?.assets?.[0]?.base64);
       }
     });
-    setlogo(false)
+    setlogo(false);
   };
 
   const progressData = useSelector(state => state.progress?.status);
@@ -305,7 +307,7 @@ const AddClinic = ({navigation}) => {
     disableBackButton();
   }, []);
   const [modal, setModal] = useState(false);
-  const [logo,setlogo] = useState(false)
+  const [logo, setlogo] = useState(false);
   const ModalVisible = () => {
     setModal(true);
   };
@@ -377,7 +379,8 @@ const AddClinic = ({navigation}) => {
                 name="map-marker"
                 input={address}
                 onPress={() => {
-                  addressRef?.current?.snapToIndex(1);
+                  // addressRef?.current?.snapToIndex(1);
+                  navigation.navigate('address');
                 }}
               />
             </View>
@@ -386,18 +389,56 @@ const AddClinic = ({navigation}) => {
               placeholder="Enter clinic phone number"
               value={value.phone}
               setValue={value => handleChangeValue('phone', value)}
-              // keypad="numeric"
+              doubleCheck={[true, false]}
+              numeric={true}
+              check={e => {
+                var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
+                if (format.test(e)) {
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
             />
-            <InputText
-              label={Language[language]['fees']}
-              placeholder="Consultation Fees"
-              value={value.fees}
-              setValue={value => handleChangeValue('fees', value)}
-              // keypad="numeric"
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(8),
+                alignSelf: 'flex-start',
+              }}>
+              <Text style={styles.labeltext}>
+                {Language[language]['fees']}:
+              </Text>
+              {CONSTANTS.clinic_fees?.map((val, ind) => (
+                <SelectorBtn
+                  select={{
+                    backgroundColor:
+                      cnFess === val ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                  }}
+                  inputstyle={{
+                    color:
+                      cnFess === val ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}
+                  input={val}
+                  key={ind}
+                  onPress={() => setCnFees(val)}
+                />
+              ))}
+            </View>
+            {cnFess === 'others' ? (
+              <InputText
+                placeholder="Enter Fees"
+                value={value.fees}
+                setValue={value => handleChangeValue('fees', value)}
+                // keypad="numeric"
+              />
+            ) : null}
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>
-              <AddImage onPress={()=> LogoVisible()} encodedBase64={selectedLogo} />
+              <AddImage
+                onPress={() => LogoVisible()}
+                encodedBase64={selectedLogo}
+              />
             </View>
             <View style={styles.addslot}>
               <HButton
@@ -482,7 +523,7 @@ const AddClinic = ({navigation}) => {
           />
         </View>
       )}
-       {logo && (
+      {logo && (
         <View>
           <GalleryModel
             visible={logo}
@@ -497,6 +538,12 @@ const AddClinic = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  labeltext: {
+    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h4,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
   container: {
     flexGrow: 1,
     paddingVertical: verticalScale(20),

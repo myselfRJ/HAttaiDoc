@@ -22,6 +22,7 @@ const GalleryModel = props => {
       <View
         style={{
           flex: 1,
+          // alignSelf: 'flex-end',
           justifyContent: 'flex-end',
           alignItems: 'center',
         }}>
@@ -29,9 +30,9 @@ const GalleryModel = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            backgroundColor: CUSTOMCOLOR.white,
+            backgroundColor: CUSTOMCOLOR.primary,
             width: '100%',
-            padding: moderateScale(20),
+            padding: moderateScale(40),
             borderTopEndRadius: moderateScale(16),
             borderTopLeftRadius: moderateScale(16),
           }}>
@@ -59,11 +60,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 'bold',
-    color: CUSTOMCOLOR.black,
+    color: CUSTOMCOLOR.white,
   },
   icon: {
     alignSelf: 'center',
     marginBottom: moderateScale(8),
-    color: CUSTOMCOLOR.primary,
+    color: CUSTOMCOLOR.white,
   },
 });

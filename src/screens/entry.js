@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, Alert} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -92,7 +92,7 @@ const Entry = ({navigation}) => {
               check={checkNumber}
               label={Language[language]['phone_number']}
               placeholder="Enter your 10 digit phone number"
-              // keypad="numeric"
+              numeric={true}
               maxLength={10}
               value={phone}
               setValue={setPhone}
@@ -103,7 +103,11 @@ const Entry = ({navigation}) => {
               label={Language[language]['getotp']}
               loading={loading}
               onPress={() => {
-                phone ? fetchData() : null;
+                if (phone.length === 10) {
+                  phone ? fetchData() : null;
+                } else {
+                  Alert.alert('', 'Please enter correct number');
+                }
               }}
             />
           </View>

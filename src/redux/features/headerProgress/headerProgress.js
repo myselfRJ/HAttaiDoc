@@ -14,9 +14,12 @@ const hedaerSlice = createSlice({
     headerStatus: (state, action) => {
       state.status[action.payload.index].status = action.payload.status;
     },
+    updateheaderStatus: (state, action) => {
+      state.status = action.payload;
+    },
   },
 });
 
-export const headerStatus = hedaerSlice.actions;
+export const {headerStatus, updateheaderStatus} = hedaerSlice.actions;
 
 export const headerDataReducer = hedaerSlice.reducer;

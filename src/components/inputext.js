@@ -41,6 +41,13 @@ const InputText = props => {
     }
   };
 
+  const handleNumericInput = input => {
+    // (/[^a-zA-Z]/g, '') for only strings
+    const numericValue = input.replace(/[^0-9]/g, '');
+    passtoParent(numericValue);
+  };
+  const numeric = props.numeric;
+
   return (
     <>
       <View style={styles.inpcontainer}>
@@ -65,7 +72,7 @@ const InputText = props => {
             secureTextEntry={props.secure ? visible : false}
             inputMode={props.keypad ?? 'none'}
             maxLength={props.maxLength ?? 1000}
-            onChangeText={passtoParent}
+            onChangeText={numeric ? handleNumericInput : passtoParent}
             value={props.value}
             multiline={props.multiline}
           />

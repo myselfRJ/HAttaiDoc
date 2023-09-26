@@ -41,7 +41,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const patient_name = appointment?.patient_data?.patient_name;
   const patient_gender = appointment?.patient_data?.gender;
   const birth_date = appointment?.patient_data?.birth_date;
-  
+
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
@@ -61,7 +61,10 @@ const AppointmentCard = ({appointment, openVisit}) => {
     });
     appointmentCardRef?.current?.snapToIndex(0);
   };
-
+  const paidOpt = {
+    false: 'UnPaid',
+    true: 'Paid',
+  };
   return (
     <>
       <View style={styles.maincontainer}>
@@ -112,12 +115,19 @@ const AppointmentCard = ({appointment, openVisit}) => {
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
-          {/* <View style={styles.statusinfo}>
-            <Text style={styles.contact}>
-              {Language[language]['bill']}:{appointment.bill}
+          <Text style={styles.contact}>
+            {Language[language]['bill']}:
+            <Text
+              style={{
+                color:
+                  appointment?.is_paid.toString() === 'false'
+                    ? CUSTOMCOLOR.warn
+                    : CUSTOMCOLOR.success,
+              }}>
+              {' '}
+              {paidOpt[appointment?.is_paid.toString()]}
             </Text>
-            <Text style={styles.statustext}>Follow Up</Text>
-          </View> */}
+          </Text>
         </View>
         {appointment?.status === 'pending' && (
           <Pressable

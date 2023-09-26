@@ -203,6 +203,9 @@ const PatientCreate = ({navigation}) => {
           setSpouse_nmae('');
           setAge();
           setLoading(false);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -222,7 +225,6 @@ const PatientCreate = ({navigation}) => {
   const ModalVisible = () => {
     setModal(true);
   };
-
   return (
     <View style={{flex: moderateScale(1)}}>
       <ScrollView>
@@ -261,7 +263,7 @@ const PatientCreate = ({navigation}) => {
               doubleCheck={[true, false]}
               check={e => {
                 var format =
-                  /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~11234567890]/;
+                  /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~11234567890]/;
                 if (format.test(e)) {
                   return false;
                 } else {
@@ -275,10 +277,18 @@ const PatientCreate = ({navigation}) => {
               placeholder="10 digit phone number"
               value={patient_phone_number}
               setValue={setPatient_Phone_number}
-              keypad={'numeric'}
+              // keypad={'numeric'}
+              numeric={true}
               maxLength={10}
               doubleCheck={[true, false]}
-              check={checkNumber}
+              check={e => {
+                var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
+                if (format.test(e)) {
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
             />
             {/* <InputText
               label="Age"
@@ -358,12 +368,57 @@ const PatientCreate = ({navigation}) => {
               value={spouse_name}
               setValue={setSpouse_nmae}
             />
-            <InputText
+            {/* <View style={{flexDirection: 'row', gap: 8}}>
+              {CONSTANTS.blood_Groups?.map((bld_grp, index) => (
+                <SelectorBtn
+                  key={index}
+                  input={bld_grp}
+                  onPress={() => setBlood_group(bld_grp)}
+                />
+              ))}
+            </View> */}
+            {/* <InputText
               label="Blood Group"
               placeholder="eg: O+"
               value={blood_group}
               setValue={setBlood_group}
-            />
+            /> */}
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                paddingLeft: moderateScale(8),
+                gap: moderateScale(8),
+              }}>
+              <Text
+                style={{
+                  alignSelf: 'flex-start',
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h4,
+                }}>
+                Blood Group
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  alignSelf: 'flex-start',
+                }}>
+                {CONSTANTS.blood_Groups?.map((bld_grp, index) => (
+                  <SelectorBtn
+                    select={{
+                      backgroundColor:
+                        blood_group === bld_grp
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    // label="Blood Group"
+                    key={index}
+                    input={bld_grp}
+                    onPress={() => setBlood_group(bld_grp)}
+                  />
+                ))}
+              </View>
+            </View>
             <InputText
               required={true}
               label="Address"
@@ -377,7 +432,7 @@ const PatientCreate = ({navigation}) => {
               placeholder="12-digit Aadhar Number"
               value={aadhar_no}
               setValue={setAadhar_no}
-              keypad={'numeric'}
+              // keypad={'numeric'}
               doubleCheck={[true, false]}
               check={e => {
                 var format = /[(A-Z)(a-z)]/;

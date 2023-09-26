@@ -213,7 +213,7 @@ const Abha = ({navigation}) => {
             placeholder={Language[language]['phone_number']}
             value={phone_number}
             setValue={setPhone_number}
-            keypad={'numeric'}
+            // keypad={'numeric'}
             maxLength={10}
             doubleCheck={[true, false]}
             check={e => {
@@ -242,7 +242,15 @@ const Abha = ({navigation}) => {
             onCancel={handleCancel}
           />
           <View style={styles.alignchild}>
-            <Text style={{fontFamily:CUSTOMFONTFAMILY.body,color:CUSTOMCOLOR.black,fontSize:CUSTOMFONTSIZE.h4}}> {Language[language]['gender']}</Text>
+            <Text
+              style={{
+                fontFamily: CUSTOMFONTFAMILY.body,
+                color: CUSTOMCOLOR.black,
+                fontSize: CUSTOMFONTSIZE.h4,
+              }}>
+              {' '}
+              {Language[language]['gender']}
+            </Text>
             <View style={styles.radiogroup}>
               <Option
                 label="Male"
