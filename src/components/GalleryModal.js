@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {View, Text, StyleSheet, Modal, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   moderateScale,
   verticalScale,
@@ -7,7 +7,7 @@ import {
 } from '../utility/scaleDimension';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import Modal from "react-native-modal";
 const GalleryModel = props => {
   const setVisible = props.Close;
   return (
@@ -26,6 +26,11 @@ const GalleryModel = props => {
           justifyContent: 'flex-end',
           alignItems: 'center',
         }}>
+        <TouchableOpacity
+          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onPress={props.onPress}
+        />
+
         <View
           style={{
             flexDirection: 'row',

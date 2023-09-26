@@ -33,6 +33,14 @@ const HButton = props => {
         <Text style={{...styles.btntext, ...props.textStyle}}>
           {props.label}
         </Text>
+        {props.rightIcon && (
+          <Icon
+            style={styles.icon}
+            name={props.rightIcon}
+            color={props.color ? props.color : CUSTOMCOLOR.white}
+            size={moderateScale(24)}
+          />
+        )}
       </Pressable>
     </>
   );
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     alignItems: 'center',
     justifyContent: 'center',
-    gap: verticalScale(8),
+    gap: verticalScale(4),
   },
   btntext: {
     fontWeight: 600,

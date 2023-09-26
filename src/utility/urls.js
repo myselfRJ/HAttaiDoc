@@ -29,6 +29,7 @@ export const URL = {
   getConsultationByAppointmentId: id => `${baseUrl}consult/byId?id=${id}`,
   updatevitlas: Id => `${baseUrl}consult/vi?id=${Id}`,
   updateComplaints: Id => `${baseUrl}consult/id?id=${Id}`,
+  updateDoctorProfile: phoneId => `${baseUrl}practioner/change?doctor_phone_number=${phoneId}`,
 
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
