@@ -304,7 +304,7 @@ const VitalScreen = props => {
                     keyboardType="numeric"
                   /> */}
                 {/* <Text></Text> */}
-                <View style={{width:moderateScale(150)}}>
+                <View style={{width:moderateScale(170)}}>
                 <Text style={styles.EDD}>{vitals?.EDD}</Text>
                 </View>
                 {/* </View> */}
