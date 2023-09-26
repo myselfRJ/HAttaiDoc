@@ -862,6 +862,7 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     gap: moderateScale(8),
     flexDirection: 'row',
+   
   },
   symptomicon: {
     flexDirection: 'row',

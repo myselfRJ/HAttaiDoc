@@ -81,12 +81,13 @@ export default function Prescribe1({navigation}) {
     setMedicine('');
     setMode('');
     selectedMedicine('');
-    setDose_number('');
+    setDose_number('1');
     setDose_quantity('');
     setTiming('');
     setFrequency([]);
-    setDuration('');
+    setDuration('1');
     setmg('');
+
   };
 
   const handleDelete = index => {

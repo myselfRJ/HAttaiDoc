@@ -25,7 +25,6 @@ const VisitOpen = props => {
     <>
       <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
         <Text style={styles.text}>{props.label}</Text>
-
         <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16} />
       </TouchableOpacity>
     </>

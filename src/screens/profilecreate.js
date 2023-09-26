@@ -3,9 +3,9 @@ import {
   Text,
   View,
   StyleSheet,
-  Modal,
   Pressable,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -48,6 +48,8 @@ import {
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
+import RNFS from 'react-native-fs';
+import Modal from "react-native-modal";
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -75,19 +77,28 @@ const ProfileCreate = ({navigation}) => {
 
   const [status, setStatus] = useState(false);
 
+  const convertUriToBase64 = async (documentUri) => {
+    try {
+      const base64Data = await RNFS.readFile(documentUri, 'base64');
+      return base64Data;
+    } catch (error) {
+      console.error('Error converting document to base64:', error);
+      return null;
+    }
+  };
+  
   const pickSingleFile = async () => {
     try {
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      setSelectedFilename(result[0]?.name || '');
-      SetUploadDocument(result[0]?.uri || '');
-      console.log('result===', result);
+      const originalFilename = result[0]?.name || '';
+      setSelectedFilename(originalFilename);
+      const base64Document = await convertUriToBase64(result[0]?.uri || '');
+      SetUploadDocument(base64Document)
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
       } else {
-        // Handle other errors
       }
     }
   };
@@ -303,6 +314,7 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
   return (
+    
     <View style={{flex: 1}}>
       <ProgresHeader progressData={progressData} />
       <ScrollView>
@@ -476,8 +488,10 @@ const ProfileCreate = ({navigation}) => {
           <GalleryModel
             visible={modal}
             Close={setModal}
+            // closeModal={()=> setModal(false)}
             OnGallery={onImagePress}
             OnCamera={openCamera}
+            onPress={()=>setModal(false)}
           />
         </View>
       )}

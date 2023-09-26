@@ -74,12 +74,12 @@ export const CONSTANTS = {
   doctors: [
     {
       doctor_name: 'Dr. Raju',
-      speciality: 'Cardiologists',
+      speciality: 'Cardiologist',
       phone: '9878965678',
     },
     {
       doctor_name: 'Dr. Muthu',
-      speciality: 'Gynecologist',
+      speciality: 'Gynaecologist',
       phone: '9767342167',
     },
     {

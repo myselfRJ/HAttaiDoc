@@ -154,7 +154,7 @@ const Account = () => {
               </Text>
               <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate('updateprofile')}>
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={CUSTOMCOLOR.primary} />
                 <Text style={styles.edit}>Edit</Text>

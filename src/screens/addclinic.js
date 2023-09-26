@@ -462,6 +462,7 @@ const AddClinic = ({navigation}) => {
             </View>
             <View>
               <HButton
+                // rightIcon='arrow-right-thin'
                 label="Next"
                 onPress={() => {
                   fetchData();

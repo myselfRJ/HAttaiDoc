@@ -444,6 +444,8 @@ const AddUser = ({navigation}) => {
                 </Text>
               </TouchableOpacity> */}
               <HButton
+              rightIcon='arrow-right-thin'
+              color={CUSTOMCOLOR.primary}
                 label="Skip"
                 onPress={() => navigation.navigate('tab')}
                 btnstyles={{

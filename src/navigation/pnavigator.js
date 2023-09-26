@@ -44,6 +44,7 @@ const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
 import PatientHistory from '../screens/patientHistory';
 import ReferToDoctor from '../screens/Refer';
+import UpdateProfile from '../screens/updateProfile';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -68,6 +69,11 @@ const ProtectedRoute = () => {
         name="profilecreate"
         component={ProfileCreate}
         options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name="updateprofile"
+        component={UpdateProfile}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="cliniccreate"
