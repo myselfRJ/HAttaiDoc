@@ -378,8 +378,8 @@ const ProfileCreate = ({navigation}) => {
             />
             <InputText
               required={true}
-              label={Language[language]['medical_number']}
-              placeholder="Medical number"
+              label='Medical Registration Number'
+              placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
@@ -457,12 +457,12 @@ const ProfileCreate = ({navigation}) => {
               </Pressable>
             ))}
           </ScrollView>
-          <View style={styles.ContactMail}>
+          {/* <View style={styles.ContactMail}>
             <Text style={styles.contact}>
               If Your Specialization Not Mention please mail-to
             </Text>
             <Text style={styles.mail}>contact@destratum.com</Text>
-          </View>
+          </View> */}
         </View>
       </BottomSheetView>
       <BottomSheetView

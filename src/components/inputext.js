@@ -66,7 +66,7 @@ const InputText = props => {
         </Text>
         <View>
           <TextInput
-            style={[styles.textinput, errorStyles, props.textStyle]}
+            style={[styles.textinput, errorStyles, props.textStyle, props.search ? styles.bottom : styles.textinput]}
             textAlign={props.textAlign ?? 'left'}
             // underlineColorAndroid="transparent"
             placeholder={props.placeholder}
@@ -92,8 +92,8 @@ const InputText = props => {
           )}
 
 {props.search !== undefined && (
-              <TouchableOpacity style={styles.eye} onPress={props.onPress}>
-                <Icon name={props.IconName} color={CUSTOMCOLOR.primary} size={16} />
+              <TouchableOpacity style={styles.search} onPress={props.onPress}>
+                <Icon name={props.IconName} color={CUSTOMCOLOR.primary} size={24} />
               </TouchableOpacity>
           
           )}
@@ -136,6 +136,11 @@ const styles = StyleSheet.create({
     top: moderateScale(19), //12+fontsize.h3/2
     right: moderateScale(10),
   },
+  search:{
+    position: 'absolute',
+    top: moderateScale(8), //12+fontsize.h3/2
+    right: moderateScale(10),
+  },
   indicator: {
     fontSize: CUSTOMFONTSIZE.h4,
     marginRight: 5,
@@ -149,6 +154,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
   },
+  bottom:{
+    borderBottomWidth:0.8,
+    elevation: 2,
+    borderBottomColor:'#A9A9A9'
+  }
 });
 
 export default InputText;

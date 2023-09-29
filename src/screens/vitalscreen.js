@@ -268,7 +268,7 @@ const VitalScreen = props => {
             <Text style={styles.pregText}>Pregnancy</Text>
             <View style={styles.pregnancyFields}>
               <View style={styles.lmpcontainer}>
-                <Text style={styles.lmp}>{Language[language]['lmp_edd']}:</Text>
+                <Text style={styles.lmp}>LMP</Text>
                 <View style={styles.hardText}>
                   <SelectorBtn
                     onPress={() => {
@@ -295,7 +295,7 @@ const VitalScreen = props => {
                 </View>
               </View>
               <View style={styles.uscontainer}>
-                <Text style={styles.us}>{Language[language]['us_edd']}:</Text>
+                <Text style={styles.us}>EDD</Text>
                 {/* <View style={styles.hardText}> */}
                 {/* <TextInput
                     value={handleedd}

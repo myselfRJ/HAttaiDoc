@@ -281,14 +281,7 @@ const PatientCreate = ({navigation}) => {
               numeric={true}
               maxLength={10}
               doubleCheck={[true, false]}
-              check={e => {
-                var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
+              check={checkNumber}
             />
             {/* <InputText
               label="Age"

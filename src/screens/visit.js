@@ -576,7 +576,9 @@ const Visit = ({navigation, route}) => {
                                     size={moderateScale(16)}
                                   />
                                   <Text style={styles.pulse}>
-                                    {Language[language]['lmp_edd']}:
+                                    LMP:
+                                    {/* {" "}{vitalsData.LDD} */}
+                                    {/* {Language[language]['lmp_edd']}: */}
                                     {/* {vitalsData.LDD} */}
                                     {`${day}-${months[month]}-${Year}`}
                                   </Text>
@@ -584,8 +586,8 @@ const Visit = ({navigation, route}) => {
                               )}
                               {vitalsData?.EDD && (
                                 <Text style={styles.pulse}>
-                                  {Language[language]['us_edd']}:
-                                  {vitalsData.EDD}
+                                  EDD:
+                                  {" "}{vitalsData.EDD}
                                 </Text>
                               )}
                             </View>

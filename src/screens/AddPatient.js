@@ -32,6 +32,8 @@ import {HttpStatusCode} from 'axios';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
+import { checkNotifications } from 'react-native-permissions';
+import { checkNumber } from '../utility/checks';
 
 const Abha = ({navigation}) => {
   const dispatch = useDispatch();
@@ -209,21 +211,15 @@ const Abha = ({navigation}) => {
             }}
           />
           <InputText
+          doubleCheck={[true, false]}
+          check={checkNumber}
             label={Language[language]['phone_number']}
             placeholder={Language[language]['phone_number']}
             value={phone_number}
             setValue={setPhone_number}
             // keypad={'numeric'}
             maxLength={10}
-            doubleCheck={[true, false]}
-            check={e => {
-              var format = /[(A-Z)(a-z)]/;
-              if (format.test(e)) {
-                return false;
-              } else {
-                return true;
-              }
-            }}
+            numeric={true}
           />
           <SelectorBtn
             label={Language[language]['dob']}
