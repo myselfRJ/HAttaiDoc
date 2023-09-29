@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, FlatList} from 'react-native';
+import {Text, View, StyleSheet, FlatList,TouchableOpacity} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -33,7 +33,14 @@ import {
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
 
+
+
 const SlotBook = ({navigation, route}) => {
+  const option = 'finding'
+  const [data,SetData] = useState([]);
+  const [filtered,setFilteredData] = useState([]);
+  const [selected,setSelected]= useState('');
+  const [show,setShow] = useState(false)
   const [complaint, setComplaint] = useState('');
 
   const [bookedSlots, setData] = useState([]);
@@ -295,6 +302,47 @@ const SlotBook = ({navigation, route}) => {
     disableBackButton();
   }, []);
 
+  const fetchComplaints = async () => {
+    const response = await fetchApi(URL.snomed(complaint,option), {
+      method: 'GET',
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      // console.log('complaints====>',jsonData)
+      SetData(jsonData);
+      // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchComplaints();
+  }, [complaint,option]);
+
+  useEffect(() => {
+    if (complaint) {
+      const filtered = data?.filter(
+        item =>
+          item?.term &&
+          item?.term.toLowerCase().startsWith(complaint.toLowerCase()),
+      );
+      setFilteredData([...filtered,{term:complaint}]);
+    } else {
+      setFilteredData(data);
+    }
+  }, [data, complaint]);
+  const HandlePress=(value)=>{
+    setComplaint(value)
+     setSelected(value)
+    //  dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+    //  setComplaint('')
+  }
+
+
+
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -316,14 +364,32 @@ const SlotBook = ({navigation, route}) => {
               onCancel={handleCancel}
             />
           </View>
+          <View style={{gap:moderateScale(0)}}>
           <InputText
             required={true}
-            label={Language[language]['complaint']}
-            placeholder="Enter your complaints"
+            label='Reason for Visit'
+            placeholder="Chief complaint / Purpose"
             value={complaint}
             setValue={setComplaint}
             multiline={true}
+            search={true}
+        IconName={(show  && filtered.length>0 || complaint === selected || complaint.length===0) ? 'magnify': 'close'}
+        onPress={()=>setShow(!show)}
           />
+          {complaint.length>=4 && (
+      (complaint === selected || show )? null : (       <View style={styles.dropdownContainer}>
+        <ScrollView>
+        {filtered?.map((val,index)=>(
+         <TouchableOpacity style={styles.touch}onPress={()=>HandlePress(val?.term)}>
+           <Text style={{fontSize:CUSTOMFONTSIZE.h3,padding:moderateScale(10),color:CUSTOMCOLOR.black}} key={index}>
+            {val.term}
+           </Text>
+           </TouchableOpacity>
+           ))}
+        </ScrollView>
+      </View>)
+     )}
+     </View>
           <View style={styles.child}>
             <View style={styles.type}>
               <Option
@@ -468,6 +534,15 @@ const styles = StyleSheet.create({
     height: moderateScale(400),
     alignItems: 'center',
   },
+  dropdownContainer:{
+    height:moderateScale(300),
+    backgroundColor:CUSTOMCOLOR.white,
+    marginHorizontal:horizontalScale(8),
+  },
+  touch:{
+    paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(4)
+  }
 });
 
 export default SlotBook;

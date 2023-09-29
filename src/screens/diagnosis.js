@@ -93,6 +93,7 @@ const Diagnosis = ({navigation}) => {
      setValue(value);
      setSelected(value)
      dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+     setValue('')
   }
 
 const [show,setShow] = useState(false)
@@ -132,7 +133,7 @@ const [show,setShow] = useState(false)
       <InputText
       inputContainer={styles.inputtext}
         label="Diagnosis"
-        placeholder="Enter diagnosis"
+        placeholder="Enter four letters"
         value={value}
         setValue={setValue}
         search={true}
@@ -143,7 +144,7 @@ const [show,setShow] = useState(false)
       (value === selected || show )? null : (       <View style={styles.dropdownContainer}>
         <ScrollView>
         {filtered?.map((val,index)=>(
-         <TouchableOpacity onPress={()=>HandlePress(val?.term)}>
+         <TouchableOpacity  style={styles.touch} onPress={()=>HandlePress(val?.term)}>
            <Text style={{fontSize:CUSTOMFONTSIZE.h3,padding:moderateScale(10),color:CUSTOMCOLOR.black}} key={index}>
             {val.term}
            </Text>
@@ -211,5 +212,9 @@ const styles = StyleSheet.create({
   inputtext:{
     paddingVertical:verticalScale(0),
     // borderWidth:1
+  },
+  touch:{
+    paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(4)
   }
 });

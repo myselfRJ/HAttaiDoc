@@ -22,7 +22,7 @@ export const CONSTANT = {
       navigate: 'refer',
     },
     {
-      label: 'Validity',
+      label: 'Doctor Signature',
       icon: 'chevron-right',
       navigate: 'valid',
     },

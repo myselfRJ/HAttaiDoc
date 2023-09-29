@@ -89,13 +89,13 @@ const AppointmentCard = ({appointment, openVisit}) => {
         <View style={styles.patientinfo}>
           <View style={styles.statusinfo}>
             <Text style={styles.contact}>
-              {Language[language]['type']}:{appointment.appointment_type}
+              {Language[language]['type']}: {" "}{appointment.appointment_type}
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
           </View>
           <View style={styles.statusinfo}>
             <Text style={styles.contact}>
-              {Language[language]['time']}:{appointment.appointment_slot}
+              {Language[language]['time']}:  {" "}{appointment.appointment_slot}
               {/* {moment(appointment.appointment_slot).format('HH:mm')} */}
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>
@@ -110,7 +110,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
                       ? CUSTOMCOLOR.warn
                       : CUSTOMCOLOR.success,
                 }}>
-                {appointment.status}
+                {"  "}{appointment.status}
               </Text>
             </Text>
             <Text style={styles.statustext}>Follow Up</Text>

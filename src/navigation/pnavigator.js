@@ -390,7 +390,7 @@ const ProtectedRoute = () => {
         component={Valid}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Valid Up To',
+          title: 'Doctor Signature',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

@@ -568,15 +568,15 @@ const Visit = ({navigation, route}) => {
                                     size={moderateScale(16)}
                                   />
                                   <Text style={styles.pulse}>
-                                    {Language[language]['lmp_edd']}:
-                                    {vitalsData.LDD}
+                                    LMP:
+                                    {" "}{vitalsData.LDD}
                                   </Text>
                                 </>
                               )}
                               {vitalsData?.EDD && (
                                 <Text style={styles.pulse}>
-                                  {Language[language]['us_edd']}:
-                                  {vitalsData.EDD}
+                                  EDD:
+                                  {" "}{vitalsData.EDD}
                                 </Text>
                               )}
                             </View>
