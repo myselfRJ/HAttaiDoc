@@ -28,7 +28,7 @@ export default function DateTime() {
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState('0');
+  const [selected, setSelected] = useState('30');
 
   const dispatch = useDispatch();
   const navigation = useNavigation();

@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
@@ -14,57 +14,109 @@ import {
   verticalScale,
   moderateScale,
 } from '../utility/scaleDimension';
-import { CONSTANTS } from '../utility/constant';
-import { CUSTOMCOLOR,CUSTOMFONTFAMILY,CUSTOMFONTSIZE } from '../settings/styles';
+import {CONSTANTS} from '../utility/constant';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
+import {InputText, HButton} from '../components';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+import {ScrollView} from 'react-native-gesture-handler';
+import {
+  StoreAsyncData,
+  RetriveAsyncData,
+  UpdateAsyncData,
+} from '../utility/AsyncStorage';
 
 const Allergies = () => {
-  const nav = useNavigation();
-  const [value, setValue] = useState('');
+  const navigation = useNavigation();
   const [select, setSelect] = useState('');
-  console.log('value===', value);
+  const option = 'finding';
+  const [value, setValue] = useState('');
+  const [data, setData] = useState([]);
+  const [filtered, setFilteredData] = useState([]);
+  const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [sug, setSug] = useState([]);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.allergies?.allergies);
-  console.log('prev-----', prev);
 
   const HandleAddValue = () => {
     if (value) {
-      console.log('valuesssssssssss');
       dispatch(addAllergies([...prev, {allergies: value}]));
       setValue('');
     }
   };
   const selectChange = value => {
-    console.log('12223325555');
-    setValue(value);
     setSelect(value);
+    dispatch(addAllergies([...prev, {allergies: value}]));
   };
-  const constants = (
-    <View style={{flexDirection: 'row', gap: moderateScale(12),paddingHorizontal:horizontalScale(8)}}>
-      {CONSTANTS.allergy?.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          onPress={() => selectChange(item)}
-          style={[
-            styles.recomend,
-            {
-              backgroundColor:
-                value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-            },
-          ]}>
-          <Text style={{color: value === item ? CUSTOMCOLOR.white: CUSTOMCOLOR.black}}>{item}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-  console.log('=======>',CONSTANTS['allergy'])
   const handleDelete = index => {
-    console.log('prescription index', index);
     if (prev) {
       const updatedPrescriptions = prev?.filter((item, ind) => ind !== index);
 
       dispatch(updateAllergies(updatedPrescriptions));
     }
   };
+  const fetchAllergies = async () => {
+    const response = await fetchApi(URL.snomed(value, option), {
+      method: 'GET',
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setData(jsonData);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchAllergies();
+  }, [value, option]);
+
+  useEffect(() => {
+    if (value) {
+      const filtered = data?.filter(
+        item =>
+          item?.term &&
+          item?.term.toLowerCase().startsWith(value.toLowerCase()),
+      );
+      setFilteredData([...filtered, {term: value}]);
+    } else {
+      setFilteredData(data);
+    }
+  }, [data, value]);
+
+  const HandlePress = value => {
+    setValue(value);
+    setSelected(value);
+
+    dispatch(addAllergies([...prev, {allergies: value}]));
+    setValue('');
+  };
+
+  const suggestions = useSelector;
+
+  const handleBack = () => {
+    if (sug.length > 0) {
+      UpdateAsyncData('allergies', {allergies: selected});
+      // StoreAsyncData('allergies', prev);
+    } else {
+      StoreAsyncData('allergies', prev);
+    }
+    navigation.goBack();
+  };
+  useEffect(() => {
+    RetriveAsyncData('allergies').then(array => {
+      setSug(array);
+    });
+  }, []);
+  console.log(sug.length);
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Allergies" />
@@ -78,14 +130,89 @@ const Allergies = () => {
           />
         ) : null,
       )}
-      <PresComponent
-        label="Allergies"
-        placeholder="Enter allergies"
-        values={value}
-        onChange={setValue}
-        onPress={HandleAddValue}
-        suggestion={constants}
-      />
+      <View style={{marginBottom: moderateScale(16)}}>
+        <View style={styles.input}>
+          <InputText
+            inputContainer={styles.inputtext}
+            label="Allergies"
+            placeholder="Enter allergies"
+            value={value}
+            setValue={setValue}
+            search={true}
+            IconName={
+              (show && filtered.length > 0) ||
+              value === selected ||
+              value.length === 0
+                ? 'magnify'
+                : 'close'
+            }
+            onPress={() => setShow(!show)}
+          />
+          {value.length >= 4 &&
+            (value === selected || show ? null : (
+              <View style={styles.dropdownContainer}>
+                <ScrollView persistentScrollbar={true}>
+                  {filtered?.map((val, index) => (
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(8),
+                      }}
+                      onPress={() => HandlePress(val?.term)}
+                      key={index}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h3,
+                          padding: moderateScale(10),
+                          color: CUSTOMCOLOR.black,
+                        }}>
+                        {val.term}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
+
+          <View
+            style={{
+              marginTop: moderateScale(16),
+              flexDirection: 'row',
+              gap: moderateScale(12),
+              paddingHorizontal: horizontalScale(8),
+            }}>
+            {sug?.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => selectChange(item?.allergies)}
+                style={[
+                  styles.recomend,
+                  {
+                    backgroundColor:
+                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                  },
+                ]}>
+                <Text
+                  style={{
+                    color:
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}>
+                  {item?.allergies}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: moderateScale(32),
+            }}>
+            <HButton label={'Save'} onPress={handleBack} />
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
@@ -100,6 +227,20 @@ const styles = StyleSheet.create({
   recomend: {
     padding: moderateScale(8),
     borderRadius: moderateScale(8),
-    paddingHorizontal:horizontalScale(16)
+    paddingHorizontal: horizontalScale(16),
+  },
+  input: {
+    // paddingHorizontal:24,
+    // paddingVertical:24,
+    gap: moderateScale(0),
+  },
+  inputtext: {
+    paddingVertical: verticalScale(0),
+    // borderWidth:1
+  },
+  dropdownContainer: {
+    height: moderateScale(300),
+    backgroundColor: CUSTOMCOLOR.white,
+    marginHorizontal: horizontalScale(8),
   },
 });
