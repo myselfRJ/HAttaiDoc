@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addDiagnosis,
@@ -22,23 +22,23 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import { URL } from '../utility/urls';
-import { fetchApi } from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 // import PlusButton from '../components';
 
 const Diagnosis = ({navigation}) => {
-  const option = 'finding'
+  const option = 'finding';
   const nav = useNavigation();
   const [value, setValue] = useState('');
-  const [selected,setSelected]= useState('');
-  const [icon,setIcon] = useState('magnify')
-  const [filtered,setFilteredData] = useState([])
+  const [selected, setSelected] = useState('');
+  const [icon, setIcon] = useState('magnify');
+  const [filtered, setFilteredData] = useState([]);
   // console.log('trem=====',filtered);
-  const [data,setData] = useState([])
+  const [data, setData] = useState([]);
   // console.log('value===',value)
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.diagnosis?.DiagnosisItems);
@@ -58,7 +58,7 @@ const Diagnosis = ({navigation}) => {
     }
   };
   const fetchDiagnosis = async () => {
-    const response = await fetchApi(URL.snomed(value,option), {
+    const response = await fetchApi(URL.snomed(value, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -66,7 +66,6 @@ const Diagnosis = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('diagnosis====>',jsonData)
       setData(jsonData);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
@@ -75,7 +74,7 @@ const Diagnosis = ({navigation}) => {
   };
   useEffect(() => {
     fetchDiagnosis();
-  }, [value,option]);
+  }, [value, option]);
 
   useEffect(() => {
     if (value) {
@@ -84,31 +83,22 @@ const Diagnosis = ({navigation}) => {
           item?.term &&
           item?.term.toLowerCase().startsWith(value.toLowerCase()),
       );
-      setFilteredData([...filtered,{term:value}]);
+      setFilteredData([...filtered, {term: value}]);
     } else {
       setFilteredData(data);
     }
   }, [data, value]);
-  const HandlePress=(value)=>{
-     setValue(value);
-     setSelected(value)
-     dispatch(addDiagnosis([...prev, {diagnosis: value}]));
-  }
+  const HandlePress = value => {
+    setValue(value);
+    setSelected(value);
+    dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+    setValue('');
+  };
 
-const [show,setShow] = useState(false)
+  const [show, setShow] = useState(false);
 
-
-  // const [showSlotChip, setShowSlotChip] = useState(false);
   return (
     <View style={styles.main}>
-      {/* <PlusButton
-        icon="close"
-        style={styles.child}
-        color="#000000aa"
-        size={moderateScale(32)}
-        onPress={() => navigation.goBack()}
-      /> */}
-
       <PrescriptionHead heading="Diagnosis" />
       {prev?.map((item, ind) =>
         prev.length > 0 ? (
@@ -121,64 +111,63 @@ const [show,setShow] = useState(false)
       )}
 
       <View style={{marginBottom: moderateScale(16)}}>
-        {/* <PresComponent
-          label="Diagnosis"
-          placeholder="Enter diagnosis"
-          values={value}
-          onChange={setValue}
-          onPress={HandleAddValue}
-        /> */}
-         <View style={styles.input}>
-      <InputText
-      inputContainer={styles.inputtext}
-        label="Diagnosis"
-        placeholder="Enter diagnosis"
-        value={value}
-        setValue={setValue}
-        search={true}
-        IconName={(show  && filtered.length>0 || value === selected || value.length===0) ? 'magnify': 'close'}
-        onPress={()=>setShow(!show)}
-      />
-     {value.length>=4 && (
-      (value === selected || show )? null : (       <View style={styles.dropdownContainer}>
-        <ScrollView>
-        {filtered?.map((val,index)=>(
-         <TouchableOpacity onPress={()=>HandlePress(val?.term)}>
-           <Text style={{fontSize:CUSTOMFONTSIZE.h3,padding:moderateScale(10),color:CUSTOMCOLOR.black}} key={index}>
-            {val.term}
-           </Text>
-           </TouchableOpacity>
-           ))}
-        </ScrollView>
-      </View>)
-     )}
-      {/* <PlusButton
-        // btnstyles={{alignSelf}}
-        icon={'plus'}
-        // label="Add"
-        size={moderateScale(32)}
-        style={{alignSelf: 'flex-end',top:moderateScale(16)}}
-        onPress={HandleAddValue}
-      /> */}
-      {/* <View
-        style={{marginTop: moderateScale(4), marginBottom: moderateScale(8)}}>
-        {props.suggestion}
-      </View> */}
+        <View style={styles.input}>
+          <InputText
+            inputContainer={styles.inputtext}
+            label="Diagnosis"
+            placeholder="Enter diagnosis"
+            value={value}
+            setValue={setValue}
+            search={true}
+            IconName={
+              (show && filtered.length > 0) ||
+              value === selected ||
+              value.length === 0
+                ? 'magnify'
+                : 'close'
+            }
+            onPress={() => setShow(!show)}
+          />
+          {value.length >= 4 &&
+            (value === selected || show ? null : (
+              <View style={styles.dropdownContainer}>
+                <ScrollView persistentScrollbar={true}>
+                  {filtered?.map((val, index) => (
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(8),
+                      }}
+                      onPress={() => HandlePress(val?.term)}
+                      key={index}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h3,
+                          padding: moderateScale(10),
+                          color: CUSTOMCOLOR.black,
+                        }}>
+                        {val.term}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
 
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: moderateScale(32),
-        }}>
-        <HButton
-          label={'Save'}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      </View>
-    </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: moderateScale(32),
+            }}>
+            <HButton
+              label={'Save'}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -203,13 +192,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     padding: moderateScale(16),
   },
-  dropdownContainer:{
-    height:moderateScale(300),
-    backgroundColor:CUSTOMCOLOR.white,
-    marginHorizontal:horizontalScale(8),
+  dropdownContainer: {
+    height: moderateScale(300),
+    backgroundColor: CUSTOMCOLOR.white,
+    marginHorizontal: horizontalScale(8),
   },
-  inputtext:{
-    paddingVertical:verticalScale(0),
+  inputtext: {
+    paddingVertical: verticalScale(0),
     // borderWidth:1
-  }
+  },
 });

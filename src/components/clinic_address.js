@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -21,8 +21,15 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const ClinicAddress = ({navigation}) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.setAddressText('Some Text');
+  }, []);
+
   const dispatch = useDispatch();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -51,6 +58,8 @@ const ClinicAddress = ({navigation}) => {
   //         [field]: value,
   //     }));
   // };
+
+  // navigator.geolocation = require(GEOLOCATION_PACKAGE);
 
   useEffect(() => {
     const checkLocationPermission = async () => {
@@ -129,7 +138,7 @@ const ClinicAddress = ({navigation}) => {
     <>
       <View style={styles.container}>
         <View style={styles.top}>
-          <View style={styles.Mapcontainer}>
+          {/* <View style={styles.Mapcontainer}>
             <MapView
               zoomEnabled={true}
               provider={PROVIDER_GOOGLE}
@@ -154,7 +163,7 @@ const ClinicAddress = ({navigation}) => {
                 }}
               />
             </MapView>
-          </View>
+          </View> */}
         </View>
         <View style={styles.bottom}>
           {/* <InputText
@@ -178,6 +187,34 @@ const ClinicAddress = ({navigation}) => {
               }}
             />
           </View>
+          <GooglePlacesAutocomplete
+            ref={ref}
+            placeholder="Search"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              console.log('===============>', data, details);
+            }}
+            query={{
+              key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+              language: 'en',
+            }}
+            currentLocation={true}
+            currentLocationLabel="Current location"
+            styles={{
+              textInputContainer: {
+                backgroundColor: 'grey',
+              },
+              textInput: {
+                height: 38,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb',
+              },
+            }}
+          />
         </View>
       </View>
     </>
@@ -190,7 +227,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(8),
   },
   top: {
-    height: moderateScale(800),
+    height: moderateScale(600),
     backgroundColor: CUSTOMCOLOR.primary,
   },
   bottom: {

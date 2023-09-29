@@ -42,6 +42,8 @@ import {
   UpadateCheifComplaint,
   addCheifComplaint,
 } from '../redux/features/prescription/prescriptionSlice';
+import VitalScreen from './vitalscreen';
+import {CONSTANTS} from '../utility/constant';
 
 const Visit = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
@@ -133,8 +135,6 @@ const Visit = ({navigation, route}) => {
 
   const [chief_complaint, setComplaint] = useState('');
   const [vitals, setVitals] = useState({});
-  console.log('vitals---------', vitals);
-  console.log('complaint-------', chief_complaint);
   const fetchData = async () => {
     const consultationData = {
       prescribe: Prescribe,
@@ -355,8 +355,16 @@ const Visit = ({navigation, route}) => {
     fetchVitals();
   }, []);
 
-  console.log('----------complaintxxxxxx', selectedComplaint);
+  const months = CONSTANTS.months;
 
+  const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : null;
+  const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : null;
+  const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : null;
+  console.log(
+    '----------complaintxxxxxx',
+    typeof vitalsData.LDD,
+    months[month],
+  );
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -569,7 +577,8 @@ const Visit = ({navigation, route}) => {
                                   />
                                   <Text style={styles.pulse}>
                                     {Language[language]['lmp_edd']}:
-                                    {vitalsData.LDD}
+                                    {/* {vitalsData.LDD} */}
+                                    {`${day}-${months[month]}-${Year}`}
                                   </Text>
                                 </>
                               )}
@@ -871,7 +880,6 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     gap: moderateScale(8),
     flexDirection: 'row',
-   
   },
   symptomicon: {
     flexDirection: 'row',
