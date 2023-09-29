@@ -344,7 +344,8 @@ const AddUser = ({navigation}) => {
               </View>
             </View>
             <View style={styles.clinicselect}>
-              <Text style={styles.labeltext}>Role:</Text>
+              <Text style={styles.labeltext}>Role</Text>
+              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
               {CONSTANTS.role?.map((val, ind) => (
                 <SelectorBtn
                   select={{
@@ -364,6 +365,7 @@ const AddUser = ({navigation}) => {
                   input={val}
                 />
               ))}
+              </View>
             </View>
             {selectedRole === 'Others' && (
               <InputText
@@ -376,6 +378,7 @@ const AddUser = ({navigation}) => {
             )}
             <View style={styles.clinicselect}>
               <Text style={styles.labeltext}>Clinic:</Text>
+              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
               {clinics?.map((val, ind) => (
                 <SelectorBtn
                   select={{
@@ -395,6 +398,7 @@ const AddUser = ({navigation}) => {
                   onPress={() => setSelectedClinic(val?.clinic_name)}
                 />
               ))}
+              </View>
               {/* <SelectorBtn
                 label={Language[language]['clinic']}
                 name="chevron-down"
@@ -638,9 +642,9 @@ const styles = StyleSheet.create({
   clinicselect: {
     gap: moderateScale(16),
     alignSelf: 'flex-start',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: horizontalScale(6),
+    paddingHorizontal: horizontalScale(8),
   },
   save: {
     alignSelf: 'flex-end',

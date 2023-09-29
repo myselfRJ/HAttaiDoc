@@ -4,6 +4,7 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -50,7 +51,7 @@ const InputText = props => {
 
   return (
     <>
-      <View style={styles.inpcontainer}>
+      <View style={[styles.inpcontainer,props.inputContainer]}>
         <Text style={[styles.labeltext, props.lbltext]}>
           {props.label}{' '}
           {props.required ? (
@@ -89,6 +90,14 @@ const InputText = props => {
           ) : (
             <></>
           )}
+
+{props.search !== undefined && (
+              <TouchableOpacity style={styles.eye} onPress={props.onPress}>
+                <Icon name={props.IconName} color={CUSTOMCOLOR.primary} size={16} />
+              </TouchableOpacity>
+          
+          )}
+
         </View>
       </View>
     </>

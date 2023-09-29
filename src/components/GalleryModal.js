@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useState,useEffect} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity,TouchableWithoutFeedback} from 'react-native';
 import {
   moderateScale,
   verticalScale,
@@ -10,26 +10,44 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from "react-native-modal";
 const GalleryModel = props => {
   const setVisible = props.Close;
+  // useEffect(()=>{
+  //   if(props.dismiss){
+  //     setVisible(!props.visible)
+  //   }
+  // })
   return (
+    
     <Modal
       animationType="slide"
       // transparent={true}
       visible={props.visible}
+    
       onRequestClose={() => {
         setVisible(!props.visible);
       }}
       transparent={true}>
+       
+
       <View
         style={{
           flex: 1,
           // alignSelf: 'flex-end',
           justifyContent: 'flex-end',
           alignItems: 'center',
+          // borderWidth:1,
+          width:'100%',
+          // paddingHorizontal:horizontalScale(4)
+          
         }}>
-        <TouchableOpacity
+           <TouchableWithoutFeedback onPress={() => {
+        setVisible(!props.visible);
+      }}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+        {/* <TouchableOpacity
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           onPress={props.onPress}
-        />
+        /> */}
 
         <View
           style={{
@@ -71,5 +89,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: moderateScale(8),
     color: CUSTOMCOLOR.white,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    // width:'100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // borderWidth:1
+    // backgroundColor: 'rgba(0,0,0,0.5)'
   },
 });

@@ -207,39 +207,7 @@ export default function Prescribe1({navigation}) {
         <View style={styles.prescribeConatiner}>
           <View>
             <View>
-              <View style={styles.ModeContainer}>
-                <Text style={styles.ModeText}>
-                  {Language[language]['mode']}
-                </Text>
-                <View style={styles.Modes}>
-                  {modes?.map(value => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => setMode(value)}>
-                      <View
-                        style={[
-                          styles.ModesContainer,
-                          {
-                            backgroundColor:
-                              mode === value
-                                ? CUSTOMCOLOR.primary
-                                : CUSTOMCOLOR.white,
-                          },
-                        ]}>
-                        <Text
-                          style={{
-                            color:
-                              mode === value
-                                ? CUSTOMCOLOR.white
-                                : CUSTOMCOLOR.primary,
-                          }}>
-                          {value}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+             
               <View style={styles.MedicineContainer}>
                 <View style={styles.MedicineHead}>
                   <Text style={styles.ModeText}>
@@ -284,6 +252,39 @@ export default function Prescribe1({navigation}) {
                       </TouchableOpacity>
                     ))}
                   </View>
+                </View>
+              </View>
+              <View style={styles.ModeContainer}>
+                <Text style={styles.ModeText}>
+                  {Language[language]['mode']}
+                </Text>
+                <View style={styles.Modes}>
+                  {modes?.map(value => (
+                    <TouchableOpacity
+                      key={value}
+                      onPress={() => setMode(value)}>
+                      <View
+                        style={[
+                          styles.ModesContainer,
+                          {
+                            backgroundColor:
+                              mode === value
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.white,
+                          },
+                        ]}>
+                        <Text
+                          style={{
+                            color:
+                              mode === value
+                                ? CUSTOMCOLOR.white
+                                : CUSTOMCOLOR.primary,
+                          }}>
+                          {value}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
                 </View>
               </View>
               <View style={styles.ModeContainer}>

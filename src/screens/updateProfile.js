@@ -393,6 +393,7 @@ const UpdateProfile = ({navigation})=>{
       medical_doc_url:uploaddocument,
     };
     try {
+      setLoading(true)
       const response = await fetchApi(URL.updateDoctorProfile(phone), {
         method: 'PUT',
         headers: {

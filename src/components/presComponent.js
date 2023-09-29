@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import InputText from './inputext';
-import {HButton, PlusButton} from '.';
+import {HButton, PlusButton} from '../components';
 import {
   horizontalScale,
   moderateScale,

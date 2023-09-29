@@ -480,7 +480,8 @@ const ProfileCreate = ({navigation}) => {
             // closeModal={()=> setModal(false)}
             OnGallery={onImagePress}
             OnCamera={openCamera}
-            onPress={()=>setModal(false)}
+            // onPress={()=>setModal(false)}
+            // dismiss={()=>setModal(false)}
           />
         </View>
       )}

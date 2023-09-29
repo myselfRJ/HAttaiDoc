@@ -216,6 +216,7 @@ const AddClinic = ({navigation}) => {
         setSelectedLogo('');
         setVisibleSlot(true);
         ResetReduxSlots();
+        setCnFees('')
       } else {
         Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
@@ -402,15 +403,19 @@ const AddClinic = ({navigation}) => {
             />
             <View
               style={{
-                flexDirection: 'row',
+                // flexDirection: 'row',
                 gap: moderateScale(8),
                 alignSelf: 'flex-start',
+                paddingHorizontal: horizontalScale(8)
               }}>
               <Text style={styles.labeltext}>
-                {Language[language]['fees']}:
+                {Language[language]['fees']}
               </Text>
+              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
               {CONSTANTS.clinic_fees?.map((val, ind) => (
-                <SelectorBtn
+                
+                  
+                  <SelectorBtn
                   select={{
                     backgroundColor:
                       cnFess === val ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
@@ -423,7 +428,10 @@ const AddClinic = ({navigation}) => {
                   key={ind}
                   onPress={() => setCnFees(val)}
                 />
+                
+                
               ))}
+              </View>
             </View>
             {cnFess === 'others' ? (
               <InputText
