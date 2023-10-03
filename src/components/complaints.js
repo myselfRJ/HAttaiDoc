@@ -99,7 +99,7 @@ const [show,setShow] = useState(false)
 
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading={Language[language]['cheif_complaints']} />
+      <PrescriptionHead heading='Reason for Visit' />
       {/* <TextInput
         style={styles.input}
         placeholder="write complaints"

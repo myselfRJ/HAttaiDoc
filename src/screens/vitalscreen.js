@@ -203,6 +203,7 @@ const VitalScreen = props => {
                     label="Pulse"
                     placeholder="bpm"
                     setValue={text => PulseChange(text, props.index)}
+                    numeric={true}
                   />
                 </View>
                 <View style={styles.weightcontainer}>
@@ -210,6 +211,7 @@ const VitalScreen = props => {
                     label={Language[language]['weight']}
                     placeholder="kg"
                     setValue={text => weightChange(text, props.index)}
+                    numeric={true}
                   />
                 </View>
                 <View style={styles.heightcontainer}>
@@ -217,6 +219,7 @@ const VitalScreen = props => {
                     label={Language[language]['height']}
                     placeholder="cm"
                     setValue={text => heightChange(text, props.index)}
+                    numeric={true}
                   />
                 </View>
                 {bmi !== 'NaN' ? (
@@ -235,6 +238,7 @@ const VitalScreen = props => {
                     label={Language[language]['temp']}
                     placeholder="°C"
                     setValue={text => tempChange(text, props.index)}
+                    numeric={true}
                   />
                   {/* <Text style={styles.temp}>{Language[language]['temp']}</Text> */}
                 </View>
@@ -243,25 +247,29 @@ const VitalScreen = props => {
                     label={Language[language]['rate']}
                     placeholder="brpm"
                     setValue={text => rateChange(text, props.index)}
+                    numeric={true}
                   />
                 </View>
               </View>
             </View>
             <Text style={styles.bloodPres}>Blood Pressure</Text>
             <View style={styles.bloodPressureContainer}>
-              <View style={styles.diascontainer}>
-                <InputText
-                  label={Language[language]['diastolic_bp']}
-                  placeholder='mmHg'
-                  setValue={text => diastolicChange(text, props.index)}
-                />
-              </View>
+             
 
               <View style={styles.syscontainer}>
                 <InputText
                   label={Language[language]['systolic_bp']}
                   placeholder='mmHg'
                   setValue={text => systolicChange(text, props.index)}
+                  numeric={true}
+                />
+              </View>
+              <View style={styles.diascontainer}>
+                <InputText
+                  label={Language[language]['diastolic_bp']}
+                  placeholder='mmHg'
+                  setValue={text => diastolicChange(text, props.index)}
+                  numeric={true}
                 />
               </View>
             </View>

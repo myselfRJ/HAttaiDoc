@@ -10,6 +10,7 @@ import {Language} from '../settings/customlanguage';
 import {HButton} from '../components';
 import {horizontalScale} from '../utility/scaleDimension';
 import {verticalScale, moderateScale} from '../utility/scaleDimension';
+import Logo from '../components/logo';
 
 const Intro = ({navigation}) => {
   return (
@@ -22,25 +23,48 @@ const Intro = ({navigation}) => {
       </View>
       <View style={styles.bottom}>
         <View style={styles.textcontainer}>
-          <Text style={styles.text}>Touch & Handwriting Prescriptions,</Text>
-          <Text style={styles.text}>Instant Digitization, Limitless </Text>
-          <Text style={styles.text}>Possibilities</Text>
+          <Text style={styles.text}>The Easiest Way to manage your </Text>
+          <Text style={styles.text}>Clinic digitally</Text>
+      
         </View>
 
         <HButton
-          label="Get Start"
+          label="Get Started"
           onPress={() => navigation.navigate('entry')}
           btnstyles={styles.btn}
         />
       </View>
     </View>
+    // <View style={styles.container}>
+    //   <Text style={styles.text}>Welcome to</Text>
+    //   <View style={styles.logo}>
+    //   <Logo imgstyle={styles.imgstyle}/>
+    //   </View>
+    // </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: verticalScale(48),
+    // alignItems:'center',
+    // top:moderateScale(64),
+    gap:moderateScale(64)
+    
   },
+  text:{
+     fontSize:CUSTOMFONTSIZE.h1,
+     color:CUSTOMCOLOR.black,
+     fontWeight:'400',
+     fontFamily:CUSTOMFONTFAMILY.heading
+  },
+  imgstyle:{
+     width:moderateScale(119),
+     height:moderateScale(120),
+  },
+  // logo:{
+ 
+   
+  // },
   Top: {
     height: verticalScale(503),
     backgroundColor: CUSTOMCOLOR.primary,

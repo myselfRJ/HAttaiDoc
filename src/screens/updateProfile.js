@@ -445,6 +445,7 @@ const UpdateProfile = ({navigation})=>{
       {/* <ProgresHeader progressData={progressData} /> */}
       <ScrollView>
         <Keyboardhidecontainer>
+          <View>
           <View style={commonstyles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Update Profile</Text>
@@ -533,8 +534,8 @@ const UpdateProfile = ({navigation})=>{
             />
             <InputText
               required={true}
-              label={Language[language]['medical_number']}
-              placeholder="Medical number"
+              label='Medical Council Registration Number'
+              placeholder="Medical Council Registration Number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
@@ -568,12 +569,13 @@ const UpdateProfile = ({navigation})=>{
               }}
             />
           </View>
+          </View>
         </Keyboardhidecontainer>
       </ScrollView>
       <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}
-        backgroundStyle={null}>
+        backgroundStyle={"#000000aa"}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
           <ScrollView persistentScrollbar={true}>
@@ -581,7 +583,8 @@ const UpdateProfile = ({navigation})=>{
               <Pressable
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
-                style={{height: verticalScale(30)}}>
+                // style={{height: verticalScale(1)}}
+                >
                 <Text
                   style={[
                     styles.modalfields,
@@ -597,12 +600,12 @@ const UpdateProfile = ({navigation})=>{
               </Pressable>
             ))}
           </ScrollView>
-          <View style={styles.ContactMail}>
+          {/* <View style={styles.ContactMail}>
             <Text style={styles.contact}>
               If Your Specialization Not Mention please mail-to
             </Text>
             <Text style={styles.mail}>contact@destratum.com</Text>
-          </View>
+          </View> */}
         </View>
       </BottomSheetView>
       <BottomSheetView
@@ -656,7 +659,9 @@ const styles = StyleSheet.create({
       fontSize: CUSTOMFONTSIZE.h3,
       fontWeight: 400,
       fontFamily: CUSTOMFONTFAMILY.body,
-      padding: moderateScale(4),
+      paddingHorizontal:horizontalScale(32),
+      paddingVertical:verticalScale(12),
+      // gap:moderateScale(8)
     },
     DOBselect: {
       width: '100%',

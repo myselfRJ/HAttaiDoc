@@ -196,12 +196,12 @@ const Account = () => {
                 <Text style={styles.subvalue}>{data?.medical_number}</Text>
               </View>
             </View>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={CUSTOMCOLOR.primary} />
                 <Text style={styles.edit}>Edit</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>

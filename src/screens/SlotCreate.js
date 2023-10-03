@@ -538,8 +538,8 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),
-    borderWidth: moderateScale(2),
-    borderColor: CUSTOMCOLOR.success,
+    //  borderWidth: moderateScale(2),
+    // borderColor: CUSTOMCOLOR.success,
   },
   main: {
     flex: 1,
