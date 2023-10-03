@@ -14,7 +14,8 @@ let CUSTOMCOLOR = {
   warn: '#ffb732',
   delete: '#FF6347',
   success: '#2CBB15',
-  edit: '#4ba5fa'
+  edit: '#4ba5fa',
+  disable: '#A9A9A9',
 };
 const DARKCOLOR = {
   primary: 'red',

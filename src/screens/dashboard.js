@@ -52,6 +52,7 @@ import HButton from '../components/button';
 import {useFocusEffect} from '@react-navigation/native';
 import {commonstyles} from '../styles/commonstyle';
 import {disableBackButton} from '../utility/backDisable';
+import DButton from '../components/DButton';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -186,7 +187,7 @@ const Dashboard = ({navigation, route}) => {
     dispatch(addclinic_id(clinic?.id));
     dispatch(addclinic_name(clinic?.clinic_name));
     dispatch(addclinic_Address(clinic?.clinic_Address));
-    dispatch(addclinic_logo(clinic?.clinic_logo_url))
+    dispatch(addclinic_logo(clinic?.clinic_logo_url));
 
     ClinicRef?.current?.snapToIndex(0);
   };

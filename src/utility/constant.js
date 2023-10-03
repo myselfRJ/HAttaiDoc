@@ -89,5 +89,5 @@ export const CONSTANTS = {
     },
   ],
   blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
-  clinic_fees: ['100', '200', '300', '400', '500', 'others'],
+  clinic_fees: ['100', '200', '300', '400', '500', '1000', '2000', 'others'],
 };

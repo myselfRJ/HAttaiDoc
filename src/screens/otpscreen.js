@@ -36,6 +36,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import {Validators} from '../utils/FormUtils/Validators';
 
 const OtpScreen = ({route}) => {
   const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
@@ -225,11 +226,21 @@ const OtpScreen = ({route}) => {
             </View>
             <View style={{alignItems: 'center'}}>
               <HButton
+                btnstyles={{
+                  backgroundColor:
+                    value.length === 6
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.disable,
+                }}
                 label={Language[language]['submit']}
                 onPress={() => {
-                  fetchData();
-                  setIsTimerRunning(false);
-                  clearInterval(timerRef.current);
+                  if (value.length === 6) {
+                    fetchData();
+                    setIsTimerRunning(false);
+                    clearInterval(timerRef.current);
+                  } else {
+                    Alert.alert('Warn', 'Please Enter Correct Otp');
+                  }
                 }}
                 loading={loading}
               />

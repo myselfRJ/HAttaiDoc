@@ -92,7 +92,6 @@ export default function Prescribe1({navigation}) {
     setFrequency([]);
     setDuration('1');
     setmg('');
-
   };
 
   const handleDelete = index => {
@@ -165,6 +164,33 @@ export default function Prescribe1({navigation}) {
       Alert.alert('', 'Please give Atleast One Medication');
     }
   };
+  // const option = 'product';
+  // const [data, setData] = useState([]);
+  // const fetchMedicine = async () => {
+  //   const response = await fetchApi(URL.snomed(medicine, option), {
+  //     method: 'GET',
+  //     headers: {
+  //       // Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     console.log('-----------data', jsonData?.term);
+  //     setData(jsonData);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchMedicine();
+  // }, [medicine, option]);
+
+  // const filters = data.filter(item => {
+  //   const regex = new RegExp(query, 'i'); // Case-insensitive search
+  //   return regex.test(item.term);
+  // });
+
+  // console.log('filter values=====>', filters);
 
   const fetchMedicine = async () => {
     const response = await fetchApi(URL.snomed(mode, option), {
@@ -261,7 +287,6 @@ const HandlePress = value => {
         <View style={styles.prescribeConatiner}>
           <View>
             <View>
-             
               <View style={styles.MedicineContainer}>
                 <View style={styles.MedicineHead}>
                 <View style={styles.ModeContainer}>

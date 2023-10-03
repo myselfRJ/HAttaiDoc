@@ -41,6 +41,7 @@ const Account = () => {
   const [users, setUsers] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
+  const rtoken = useSelector(state => state.authenticate.auth.refresh);
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
@@ -161,7 +162,8 @@ const Account = () => {
               </Text>
               <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
             </View>
-            <TouchableOpacity onPress={()=> navigation.navigate('updateprofile')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('updateprofile')}>
               <View style={styles.editBtn}>
                 <Icon name="pen" size={16} color={CUSTOMCOLOR.primary} />
                 <Text style={styles.edit}>Edit</Text>

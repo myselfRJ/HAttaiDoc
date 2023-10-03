@@ -61,6 +61,8 @@ const AddUser = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
 
+  console.log();
+
   console.log('----------------users', clinic_users);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
@@ -345,26 +347,26 @@ const AddUser = ({navigation}) => {
             </View>
             <View style={styles.clinicselect}>
               <Text style={styles.labeltext}>Role</Text>
-              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
-              {CONSTANTS.role?.map((val, ind) => (
-                <SelectorBtn
-                  select={{
-                    backgroundColor:
-                      selectedRole === val
-                        ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.white,
-                  }}
-                  inputstyle={{
-                    color:
-                      selectedRole === val
-                        ? CUSTOMCOLOR.white
-                        : CUSTOMCOLOR.black,
-                  }}
-                  key={ind}
-                  onPress={() => setSelectedRole(val)}
-                  input={val}
-                />
-              ))}
+              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+                {CONSTANTS.role?.map((val, ind) => (
+                  <SelectorBtn
+                    select={{
+                      backgroundColor:
+                        selectedRole === val
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                        selectedRole === val
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.black,
+                    }}
+                    key={ind}
+                    onPress={() => setSelectedRole(val)}
+                    input={val}
+                  />
+                ))}
               </View>
             </View>
             {selectedRole === 'Others' && (
@@ -378,26 +380,26 @@ const AddUser = ({navigation}) => {
             )}
             <View style={styles.clinicselect}>
               <Text style={styles.labeltext}>Clinic:</Text>
-              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
-              {clinics?.map((val, ind) => (
-                <SelectorBtn
-                  select={{
-                    backgroundColor:
-                      selectedClinic === val?.clinic_name
-                        ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.white,
-                  }}
-                  inputstyle={{
-                    color:
-                      selectedClinic === val?.clinic_name
-                        ? CUSTOMCOLOR.white
-                        : CUSTOMCOLOR.black,
-                  }}
-                  input={val?.clinic_name}
-                  key={ind}
-                  onPress={() => setSelectedClinic(val?.clinic_name)}
-                />
-              ))}
+              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+                {clinics?.map((val, ind) => (
+                  <SelectorBtn
+                    select={{
+                      backgroundColor:
+                        selectedClinic === val?.clinic_name
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                        selectedClinic === val?.clinic_name
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.black,
+                    }}
+                    input={val?.clinic_name}
+                    key={ind}
+                    onPress={() => setSelectedClinic(val?.clinic_name)}
+                  />
+                ))}
               </View>
               {/* <SelectorBtn
                 label={Language[language]['clinic']}
@@ -409,7 +411,20 @@ const AddUser = ({navigation}) => {
               /> */}
             </View>
             <View style={styles.save}>
-              <HButton label="save" onPress={handlePlusIconClick} />
+              <HButton
+                btnstyles={{
+                  backgroundColor:
+                    values.name &&
+                    values.gender &&
+                    values.phone.length === 10 &&
+                    selectedClinic &&
+                    selectedRole
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.disable,
+                }}
+                label="save"
+                onPress={handlePlusIconClick}
+              />
             </View>
             <View style={styles.users}>
               <View>
@@ -440,29 +455,9 @@ const AddUser = ({navigation}) => {
               </View>
             </View>
             <View style={styles.bottom}>
-              {/* <TouchableOpacity onPress={() => navigation.navigate('tab')}>
-                <Text
-                  style={{
-                    paddingHorizontal: horizontalScale(24),
-                    paddingVertical: verticalScale(12),
-                    fontSize: CUSTOMFONTSIZE.h3,
-                    fontWeight: '700',
-                    borderRadius: moderateScale(4),
-                    borderWidth: 0.5,
-                    borderColor: CUSTOMCOLOR.white,
-                    borderBottomColor: CUSTOMCOLOR.black,
-                    borderBottomWidth: 1.5,
-                    backgroundColor: CUSTOMCOLOR.white,
-                    // Set the border underline width
-                    //borderColor: 'black', // Set the border color
-                    paddingBottom: 5,
-                  }}>
-                  Skip
-                </Text>
-              </TouchableOpacity> */}
               <HButton
-              rightIcon='arrow-right-thin'
-              color={CUSTOMCOLOR.primary}
+                rightIcon="arrow-right-thin"
+                color={CUSTOMCOLOR.primary}
                 label="Skip"
                 onPress={() => navigation.navigate('tab')}
                 btnstyles={{
@@ -473,9 +468,19 @@ const AddUser = ({navigation}) => {
                 }}
               />
               <HButton
+                btnstyles={{
+                  backgroundColor:
+                    clinic_users.length > 0
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.disable,
+                }}
                 label="Done"
                 onPress={() => {
-                  fetchData();
+                  if (clinic_users.length > 0) {
+                    fetchData();
+                  } else {
+                    Alert.alert('Please Add Atleast One User');
+                  }
                 }}
                 loading={loading}
               />
