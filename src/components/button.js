@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),
-    alignItems: 'center',
     justifyContent: 'center',
     gap: verticalScale(4),
   },
@@ -63,7 +62,6 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: moderateScale(14),
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize: 14,
     color: CUSTOMCOLOR.white,
   },
 });

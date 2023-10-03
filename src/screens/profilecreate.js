@@ -6,6 +6,7 @@ import {
   Pressable,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,7 +50,7 @@ import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
 import RNFS from 'react-native-fs';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -76,7 +77,7 @@ const ProfileCreate = ({navigation}) => {
 
   const [status, setStatus] = useState(false);
 
-  const convertUriToBase64 = async (documentUri) => {
+  const convertUriToBase64 = async documentUri => {
     try {
       const base64Data = await RNFS.readFile(documentUri, 'base64');
       return base64Data;
@@ -85,7 +86,7 @@ const ProfileCreate = ({navigation}) => {
       return null;
     }
   };
-  
+
   const pickSingleFile = async () => {
     try {
       const result = await DocumentPicker.pick({
@@ -94,7 +95,7 @@ const ProfileCreate = ({navigation}) => {
       const originalFilename = result[0]?.name || '';
       setSelectedFilename(originalFilename);
       const base64Document = await convertUriToBase64(result[0]?.uri || '');
-      SetUploadDocument(base64Document)
+      SetUploadDocument(base64Document);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
       } else {
@@ -303,7 +304,6 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
   return (
-    
     <View style={{flex: 1}}>
       <ProgresHeader progressData={progressData} />
       <ScrollView>
@@ -378,7 +378,7 @@ const ProfileCreate = ({navigation}) => {
             />
             <InputText
               required={true}
-              label='Medical Registration Number'
+              label="Medical Registration Number"
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
@@ -421,10 +421,26 @@ const ProfileCreate = ({navigation}) => {
               )}
             </View>
             <HButton
+              btnstyles={{
+                backgroundColor:
+                  values.doctor_name &&
+                  values.gender &&
+                  formatDate &&
+                  selectedSpeciality &&
+                  values.medical_number
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.disable,
+              }}
               label={Language[language]['save']}
               loading={loading}
               onPress={() => {
-                fetchData();
+                if (!values.doctor_name) {
+                  Alert.alert('Please enter Name');
+                } else if (!values.medical_number) {
+                  Alert.alert('Please Enter Your Medical Number ');
+                } else {
+                  fetchData();
+                }
               }}
             />
           </View>

@@ -138,6 +138,8 @@ const Allergies = () => {
             placeholder="Enter allergies"
             value={value}
             setValue={setValue}
+            // value={query}
+            // setValue={setQuery}
             search={true}
             IconName={
               (show && filtered.length > 0) ||

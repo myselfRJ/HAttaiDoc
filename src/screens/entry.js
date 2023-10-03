@@ -100,6 +100,12 @@ const Entry = ({navigation}) => {
           </View>
           <View style={{alignItems: 'center'}}>
             <HButton
+              btnstyles={{
+                backgroundColor:
+                  phone.length === 10
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.disable,
+              }}
               label={Language[language]['getotp']}
               loading={loading}
               onPress={() => {

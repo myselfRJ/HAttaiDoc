@@ -136,87 +136,91 @@ const ClinicAddress = ({navigation}) => {
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.top}>
-          {/* <View style={styles.Mapcontainer}>
-            <MapView
-              zoomEnabled={true}
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              region={regionData}
-              onPress={event => {
-                const {latitude, longitude} = event.nativeEvent.coordinate;
-                setCurrentLocation({latitude, longitude});
-                setMarkerCoordinates({latitude, longitude});
-              }}>
-              <Marker
-                title="current place"
-                draggable
-                coordinate={markerCoordinates}
-                onDragEnd={e => {
-                  setMarkerCoordinates(e.nativeEvent.coordinate);
-                  setCurrentLocation(e.nativeEvent.coordinate);
-                  fetchFormattedAddress(
-                    e.nativeEvent.coordinate.latitude,
-                    e.nativeEvent.coordinate.longitude,
-                  );
-                }}
-              />
-            </MapView>
-          </View> */}
-        </View>
-        <View style={styles.bottom}>
-          {/* <InputText
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <View style={styles.Mapcontainer}>
+              <MapView
+                zoomEnabled={true}
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                region={regionData}
+                onPress={event => {
+                  const {latitude, longitude} = event.nativeEvent.coordinate;
+                  setCurrentLocation({latitude, longitude});
+                  setMarkerCoordinates({latitude, longitude});
+                }}>
+                <Marker
+                  title="current place"
+                  draggable
+                  coordinate={markerCoordinates}
+                  onDragEnd={e => {
+                    setMarkerCoordinates(e.nativeEvent.coordinate);
+                    setCurrentLocation(e.nativeEvent.coordinate);
+                    fetchFormattedAddress(
+                      e.nativeEvent.coordinate.latitude,
+                      e.nativeEvent.coordinate.longitude,
+                    );
+                  }}
+                />
+              </MapView>
+            </View>
+          </View>
+          <View style={styles.bottom}>
+            {/* <InputText
                         label={Language[language]['buildingno']}
                         placeholder="Building No"
                         value={input.buildingno}
                         setValue={value => handleChangeValue('buildingno', value)}
                     /> */}
-          <InputText
-            label="Address"
-            placeholder="Street Address"
-            value={formattedAddress}
-            setValue={setFormattedAddress}
-            multiline={true}
-          />
-          <View style={{alignSelf: 'center'}}>
-            <HButton
-              label="Save"
-              onPress={() => {
-                navigation.goBack();
+            <InputText
+              label="Address"
+              placeholder="Street Address"
+              value={formattedAddress}
+              setValue={setFormattedAddress}
+              multiline={true}
+            />
+            <View style={{alignSelf: 'center'}}>
+              <HButton
+                label="Save"
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              />
+            </View>
+            <GooglePlacesAutocomplete
+              ref={ref}
+              placeholder="Search"
+              fetchDetails={true}
+              onPress={(data, details = null) => {
+                const latitude = details?.geometry?.location?.lat;
+                const longitude = details?.geometry?.location?.lng;
+                setMarkerCoordinates({latitude, longitude});
+                setCurrentLocation({latitude, longitude});
+              }}
+              query={{
+                key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+                language: 'en',
+              }}
+              currentLocation={true}
+              currentLocationLabel="Current location"
+              styles={{
+                textInputContainer: {
+                  backgroundColor: 'grey',
+                },
+                textInput: {
+                  height: moderateScale(38),
+                  color: '#5d5d5d',
+                  fontSize: moderateScale(16),
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb',
+                },
               }}
             />
           </View>
-          <GooglePlacesAutocomplete
-            ref={ref}
-            placeholder="Search"
-            fetchDetails={true}
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              console.log('===============>', data, details);
-            }}
-            query={{
-              key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
-              language: 'en',
-            }}
-            currentLocation={true}
-            currentLocationLabel="Current location"
-            styles={{
-              textInputContainer: {
-                backgroundColor: 'grey',
-              },
-              textInput: {
-                height: 38,
-                color: '#5d5d5d',
-                fontSize: 16,
-              },
-              predefinedPlacesDescription: {
-                color: '#1faadb',
-              },
-            }}
-          />
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };

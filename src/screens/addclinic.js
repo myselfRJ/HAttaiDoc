@@ -216,12 +216,12 @@ const AddClinic = ({navigation}) => {
         setSelectedLogo('');
         setVisibleSlot(true);
         ResetReduxSlots();
-        setCnFees('')
+        setCnFees('');
       } else {
         Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
     } else {
-      Alert.alert('Warning', '"Please Check Once Again"');
+      Alert.alert('Warning', '"Please Enter All Details"');
     }
   };
 
@@ -406,31 +406,27 @@ const AddClinic = ({navigation}) => {
                 // flexDirection: 'row',
                 gap: moderateScale(8),
                 alignSelf: 'flex-start',
-                paddingHorizontal: horizontalScale(8)
+                paddingHorizontal: horizontalScale(8),
               }}>
-              <Text style={styles.labeltext}>
-                {Language[language]['fees']}
-              </Text>
-              <View style={{flexDirection:'row',gap:moderateScale(8)}}>
-              {CONSTANTS.clinic_fees?.map((val, ind) => (
-                
-                  
+              <Text style={styles.labeltext}>{Language[language]['fees']}</Text>
+              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+                {CONSTANTS.clinic_fees?.map((val, ind) => (
                   <SelectorBtn
-                  select={{
-                    backgroundColor:
-                      cnFess === val ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-                  }}
-                  inputstyle={{
-                    color:
-                      cnFess === val ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
-                  }}
-                  input={val}
-                  key={ind}
-                  onPress={() => setCnFees(val)}
-                />
-                
-                
-              ))}
+                    select={{
+                      backgroundColor:
+                        cnFess === val
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                        cnFess === val ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                    }}
+                    input={val}
+                    key={ind}
+                    onPress={() => setCnFees(val)}
+                  />
+                ))}
               </View>
             </View>
             {cnFess === 'others' ? (
@@ -467,10 +463,15 @@ const AddClinic = ({navigation}) => {
 
             <View style={styles.save}>
               <HButton
+                btnstyles={{
+                  backgroundColor:
+                    value.clinic && !visibleSlot
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.disable,
+                }}
                 label="save"
                 onPress={() => {
                   handlePlusIconClick();
-                  // handleAddClinicData();
                 }}
               />
             </View>
