@@ -138,7 +138,7 @@ const ClinicAddress = ({navigation}) => {
     <>
       <View style={styles.container}>
         <View style={styles.top}>
-          {/* <View style={styles.Mapcontainer}>
+          <View style={styles.Mapcontainer}>
             <MapView
               zoomEnabled={true}
               provider={PROVIDER_GOOGLE}
@@ -163,7 +163,7 @@ const ClinicAddress = ({navigation}) => {
                 }}
               />
             </MapView>
-          </View> */}
+          </View>
         </View>
         <View style={styles.bottom}>
           {/* <InputText
@@ -187,7 +187,7 @@ const ClinicAddress = ({navigation}) => {
               }}
             />
           </View>
-          <GooglePlacesAutocomplete
+          {/* <GooglePlacesAutocomplete
             ref={ref}
             placeholder="Search"
             fetchDetails={true}
@@ -214,7 +214,7 @@ const ClinicAddress = ({navigation}) => {
                 color: '#1faadb',
               },
             }}
-          />
+          /> */}
         </View>
       </View>
     </>

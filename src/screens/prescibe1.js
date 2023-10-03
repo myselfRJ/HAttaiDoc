@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,12 +28,17 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {HButton, InputText, PlusButton} from '../components';
+import { URL } from '../utility/urls';
+import { fetchApi } from '../api/fetchApi';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Prescribe1({navigation}) {
+  const [data,setData] = useState([])
+  const option = 'product';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
-  const [setmedicine, selectedMedicine] = useState('');
+  const [setmedicine, selectedMedicine] = useState(null);
   const [mgs, setmg] = useState('');
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
@@ -47,6 +51,7 @@ export default function Prescribe1({navigation}) {
   const timings = CONSTANTS.timing;
   const frequencys = CONSTANTS.frequency;
   const [total_quantity, setTotalQuantity] = useState();
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   // const prescribe = useState([
   //   {
@@ -161,6 +166,55 @@ export default function Prescribe1({navigation}) {
     }
   };
 
+  const fetchMedicine = async () => {
+    const response = await fetchApi(URL.snomed(mode, option), {
+      method: 'GET',
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('fetch data====>',jsonData)
+      setData(jsonData);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchMedicine();
+  }, [mode,option]);
+
+//   const [query, setQuery] = useState('');
+
+//  const handleInputChange = text => {
+//  setQuery(text);
+//  };
+ const filters = data?.term?.filter(item => {
+ const regex = new RegExp(mode, 'i'); // Case-insensitive search
+ return regex.test(item?.term);
+ });
+
+ const [filtered,setFilteredData] = useState('')
+ console.log('filter values=====>',filtered)
+ useEffect(() => {
+  if (medicine) {
+    const filtered = data?.filter(
+      item =>
+        item?.term &&
+        item?.term.toLowerCase().startsWith(medicine.toLowerCase()),
+    );
+    // console.log('=======00000',filtered)
+    setFilteredData([...filtered, {term: medicine}]);
+  } else {
+    setFilteredData(data);
+  }
+}, [data, medicine]);
+
+const HandlePress = value => {
+  setMedicine(value);
+  selectedMedicine(value);
+};
   return (
     <ScrollView>
       <View style={styles.main}>
@@ -210,17 +264,102 @@ export default function Prescribe1({navigation}) {
              
               <View style={styles.MedicineContainer}>
                 <View style={styles.MedicineHead}>
-                  <Text style={styles.ModeText}>
+                <View style={styles.ModeContainer}>
+                <Text style={styles.ModeText}>
+                  {Language[language]['mode']}
+                </Text>
+                <View style={styles.Modes}>
+                  {modes?.map(value => (
+                    <TouchableOpacity
+                      key={value}
+                      onPress={() => setMode(value)}>
+                      <View
+                        style={[
+                          styles.ModesContainer,
+                          {
+                            backgroundColor:
+                              mode === value
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.white,
+                          },
+                        ]}>
+                        <Text
+                          style={{
+                            color:
+                              mode === value
+                                ? CUSTOMCOLOR.white
+                                : CUSTOMCOLOR.primary,
+                          }}>
+                          {value}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+                  {/* <Text style={styles.ModeText}>
                     {Language[language]['medicine']}
-                  </Text>
+                  </Text> */}
                   {/* <InputText /> */}
-                  <TextInput
+                  {/* <TextInput
                     style={styles.MedicineInput}
                     placeholder="Enter Medicine"
                     multiline={true}
                     value={medicine}
                     onChangeText={val => setMedicine(val)}
-                  />
+                    search={true}
+            IconName={
+              (show && filtered.length > 0) ||
+              medicine === setmedicine ||
+              medicine.length === 0
+                ? 'magnify'
+                : 'close'
+            }
+            onPress={() => setShow(!show)}
+                  /> */}
+                  <InputText
+                  lbltext={{fontSize:14}}
+            inputContainer={styles.MedicineInput}
+            label={Language[language]['medicine']}
+            placeholder="Enter Medicine"
+            multiline={true}
+            value={medicine}
+            setValue={val => setMedicine(val)}
+            search={true}
+            IconName={
+              (show && filtered.length > 0) ||
+              medicine === setmedicine ||
+              medicine.length === 0
+                ? 'magnify'
+                : 'close'
+            }
+            onPress={() => setShow(!show)}
+          />
+                  {medicine.length >= 4 &&
+            (medicine === setmedicine || show ? null : (
+              <View style={styles.dropdownContainer}>
+                <ScrollView persistentScrollbar={true}>
+                  {filtered?.map((val, index) => (
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(8),
+                      }}
+                      onPress={() => HandlePress(val?.term)}
+                      key={index}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h3,
+                          padding: moderateScale(10),
+                          color: CUSTOMCOLOR.black,
+                        }}>
+                        {val.term}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
                   <Text style={styles.RecommdationText}>
                     {Language[language]['reccomedations']}
                   </Text>
@@ -254,39 +393,7 @@ export default function Prescribe1({navigation}) {
                   </View>
                 </View>
               </View>
-              <View style={styles.ModeContainer}>
-                <Text style={styles.ModeText}>
-                  {Language[language]['mode']}
-                </Text>
-                <View style={styles.Modes}>
-                  {modes?.map(value => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => setMode(value)}>
-                      <View
-                        style={[
-                          styles.ModesContainer,
-                          {
-                            backgroundColor:
-                              mode === value
-                                ? CUSTOMCOLOR.primary
-                                : CUSTOMCOLOR.white,
-                          },
-                        ]}>
-                        <Text
-                          style={{
-                            color:
-                              mode === value
-                                ? CUSTOMCOLOR.white
-                                : CUSTOMCOLOR.primary,
-                          }}>
-                          {value}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              
               <View style={styles.ModeContainer}>
                 <Text style={styles.DoseText}>
                   {Language[language]['dose']}
@@ -531,10 +638,8 @@ const styles = StyleSheet.create({
     gap: moderateScale(10),
   },
   MedicineInput: {
-    width: '100%',
     paddingVertical: verticalScale(8),
-    backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: moderateScale(8),
+    paddingHorizontal:horizontalScale(4)
   },
   RecommdationText: {
     paddingHorizontal: horizontalScale(4),
@@ -625,7 +730,11 @@ const styles = StyleSheet.create({
     padding: moderateScale(40),
     paddingLeft: moderateScale(560),
   },
-  main: {padding: moderateScale(24), gap: moderateScale(24)},
+  main: {
+    padding: moderateScale(24), 
+    gap: moderateScale(24),
+    // backgroundColor:CUSTOMCOLOR.primary
+  },
   total_quantity: {
     height: moderateScale(40),
     width: '25%',
@@ -638,5 +747,10 @@ const styles = StyleSheet.create({
     paddingLeft: moderateScale(8),
     top: moderateScale(8),
     paddingVertical: verticalScale(16),
+  },
+  dropdownContainer: {
+    height: moderateScale(300),
+    backgroundColor: CUSTOMCOLOR.white,
+    marginHorizontal: horizontalScale(8),
   },
 });

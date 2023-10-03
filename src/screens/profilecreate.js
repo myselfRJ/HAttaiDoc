@@ -376,13 +376,7 @@ const ProfileCreate = ({navigation}) => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             />
-            <InputText
-              required={true}
-              label='Medical Registration Number'
-              placeholder="Medical Registration number"
-              value={values.medical_number}
-              setValue={value => handleChangeValue('medical_number', value)}
-            />
+           
             <View style={styles.specialization}>
               <SelectorBtn
                 required={true}
@@ -400,6 +394,14 @@ const ProfileCreate = ({navigation}) => {
               placeholder="experience in years"
               value={values.experience}
               setValue={value => handleChangeValue('experience', value)}
+              numeric={true}
+            />
+             <InputText
+              required={true}
+              label='Medical Registration Number'
+              placeholder="Medical Registration number"
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
             />
             <Text style={styles.medtext}>Medical Document</Text>
             <View style={styles.doc_upload}>
@@ -433,7 +435,7 @@ const ProfileCreate = ({navigation}) => {
       <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}
-        backgroundStyle={null}>
+        backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
           <ScrollView persistentScrollbar={true}>
@@ -441,7 +443,8 @@ const ProfileCreate = ({navigation}) => {
               <Pressable
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
-                style={{height: verticalScale(30)}}>
+                // style={{height: verticalScale(30)}}
+                >
                 <Text
                   style={[
                     styles.modalfields,
@@ -518,7 +521,8 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
-    padding: moderateScale(4),
+    paddingHorizontal: moderateScale(32),
+    paddingVertical:moderateScale(12)
   },
   DOBselect: {
     width: '100%',
@@ -583,7 +587,8 @@ const styles = StyleSheet.create({
   doc_upload: {
     alignSelf: 'flex-start',
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(8),
+    // paddingVertical: verticalScale(4),
+    marginBottom:moderateScale(4)
   },
   bottext: {
     fontFamily: CUSTOMFONTFAMILY.heading,

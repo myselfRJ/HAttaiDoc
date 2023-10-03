@@ -595,7 +595,7 @@ const Visit = ({navigation, route}) => {
                         )}
                       </View>
                     )}
-                  {value.label === 'Chief Complaints' && (
+                  {value.label === 'Reason for visit' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"

@@ -374,6 +374,7 @@ const AddClinic = ({navigation}) => {
                 alignSelf: 'flex-start',
                 width: '100%',
                 paddingHorizontal: horizontalScale(8),
+        
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
@@ -573,6 +574,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
+    paddingVertical:verticalScale(12)
   },
   clinic: {
     alignSelf: 'flex-start',

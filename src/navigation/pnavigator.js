@@ -184,7 +184,7 @@ const ProtectedRoute = () => {
         component={CheifComplaints}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Chief Complaints',
+          title: 'Reason for Visit',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

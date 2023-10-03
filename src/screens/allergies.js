@@ -36,6 +36,7 @@ const Allergies = () => {
   const option = 'finding';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
+  console.log('data======',data)
   const [filtered, setFilteredData] = useState([]);
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -102,7 +103,7 @@ const Allergies = () => {
   const suggestions = useSelector;
 
   const handleBack = () => {
-    if (sug.length > 0) {
+    if (sug?.length > 0) {
       UpdateAsyncData('allergies', {allergies: selected});
       // StoreAsyncData('allergies', prev);
     } else {
@@ -115,7 +116,7 @@ const Allergies = () => {
       setSug(array);
     });
   }, []);
-  console.log(sug.length);
+  // console.log(sug.length);
 
   return (
     <View style={styles.main}>
