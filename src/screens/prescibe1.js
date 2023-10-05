@@ -31,6 +31,12 @@ import {HButton, InputText, PlusButton} from '../components';
 import { URL } from '../utility/urls';
 import { fetchApi } from '../api/fetchApi';
 import { ScrollView } from 'react-native-gesture-handler';
+import {
+  StoreAsyncData,
+  RetriveAsyncData,
+  UpdateAsyncData,
+  clearStorage
+} from '../utility/AsyncStorage';
 
 export default function Prescribe1({navigation}) {
   const [data,setData] = useState([])
@@ -44,6 +50,7 @@ export default function Prescribe1({navigation}) {
   const [timing, setTiming] = useState('');
   const [frequency, setFrequency] = useState([]);
   const [dose_number, setDose_number] = useState('1');
+  const [generic,setGeneric] = useState('')
   const [duration, setDuration] = useState('1');
   const recommdations = CONSTANTS.medicine_recomendation;
   const mg = CONSTANTS.dose;
@@ -53,6 +60,8 @@ export default function Prescribe1({navigation}) {
   const [total_quantity, setTotalQuantity] = useState();
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
+  const [sug, setSug] = useState([]);
+  // console.log('suggggggg',sug)
   // const prescribe = useState([
   //   {
   //     medicine: medicine,
@@ -85,13 +94,17 @@ export default function Prescribe1({navigation}) {
     );
     setMedicine('');
     setMode('');
-    selectedMedicine('');
     setDose_number('1');
     setDose_quantity('');
     setTiming('');
     setFrequency([]);
     setDuration('1');
     setmg('');
+    if (sug.length>0){
+      UpdateAsyncData('prescribe',{medicine:setmedicine});
+      selectedMedicine('');
+    }
+  
   };
 
   const handleDelete = index => {
@@ -201,7 +214,7 @@ export default function Prescribe1({navigation}) {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('fetch data====>',jsonData)
+      // console.log('fetch data====>',jsonData)
       setData(jsonData);
     } else {
       console.error('API call failed:', response.status, response);
@@ -210,19 +223,23 @@ export default function Prescribe1({navigation}) {
   useEffect(() => {
     fetchMedicine();
   }, [mode,option]);
-
-//   const [query, setQuery] = useState('');
-
-//  const handleInputChange = text => {
-//  setQuery(text);
-//  };
- const filters = data?.term?.filter(item => {
- const regex = new RegExp(mode, 'i'); // Case-insensitive search
- return regex.test(item?.term);
- });
+const [newMedicine,setnewMedicine] = useState([])
+// const HandleNew=(item)=>{
+//   if(filtered !== data?.term){
+//     setnewMedicine(item)
+//   }
+// }
+// useEffect(()=>{
+//   HandleNew();
+// },[filtered,data])
+// console.log('newwww======',newMedicine);
+//  const filters = data?.term?.filter(item => {
+//  const regex = new RegExp(mode, 'i'); // Case-insensitive search
+//  return regex.test(item?.term);
+//  });
 
  const [filtered,setFilteredData] = useState('')
- console.log('filter values=====>',filtered)
+//  console.log('filter values=====>',filtered)
  useEffect(() => {
   if (medicine) {
     const filtered = data?.filter(
@@ -230,17 +247,51 @@ export default function Prescribe1({navigation}) {
         item?.term &&
         item?.term.toLowerCase().startsWith(medicine.toLowerCase()),
     );
-    // console.log('=======00000',filtered)
+     
     setFilteredData([...filtered, {term: medicine}]);
+    // setnewMedicine([...filtered, {term: medicine}])
   } else {
     setFilteredData(data);
+    // setnewMedicine(data);
   }
 }, [data, medicine]);
+
+useEffect(() => {
+  if (medicine && !data?.find(item => item.term.toLowerCase() === medicine.toLowerCase())) {
+    setnewMedicine([{ term: medicine }]);
+  } else {
+    setnewMedicine(null);
+  }
+}, [medicine, data]);
 
 const HandlePress = value => {
   setMedicine(value);
   selectedMedicine(value);
 };
+
+const handleBack = () => {
+  if (sug?.length === 0) {
+    StoreAsyncData('prescribe', prevPres)
+  } 
+  selectedMedicine('')
+};
+useEffect(() => {
+  RetriveAsyncData('prescribe').then(array => {
+    console.log('--arrauy',array);
+    setSug(array);
+  });
+}, []);
+const [med_filter,setMed_filter] = useState([])
+useEffect(() => {
+  console.log("sug:", sug);
+  console.log("mode:", mode);
+  if (sug && mode) {
+      const resultArray = sug?.filter(word => word?.medicine?.includes(mode.toLowerCase()));
+      setMed_filter(resultArray)
+  }
+}, [mode]);
+console.log('suggggg=>',sug)
+console.log('-----setmedicine',medicine);
   return (
     <ScrollView>
       <View style={styles.main}>
@@ -385,20 +436,24 @@ const HandlePress = value => {
                 </ScrollView>
               </View>
             ))}
-                  <Text style={styles.RecommdationText}>
-                    {Language[language]['reccomedations']}
+                  {med_filter.length>=1 ? (
+                    <Text style={styles.RecommdationText}>
+                    Recently Used
                   </Text>
+                  ):null}
+                 
                   <View style={styles.Modes}>
-                    {recommdations?.map(value => (
+                  <ScrollView horizontal={true} persistentScrollbar={true} contentContainerStyle={{gap: moderateScale(12)}}>
+                  {med_filter?.map(value => (
                       <TouchableOpacity
                         key={value}
-                        onPress={() => setMedicineValue(value)}>
+                        onPress={() => setMedicineValue(value?.medicine)}>
                         <View
                           style={[
                             styles.ModesContainer,
                             {
                               backgroundColor:
-                                medicine === value
+                                medicine === value?.medicine
                                   ? CUSTOMCOLOR.primary
                                   : CUSTOMCOLOR.white,
                             },
@@ -406,18 +461,32 @@ const HandlePress = value => {
                           <Text
                             style={{
                               color:
-                                medicine === value
+                                medicine === value?.medicine
                                   ? CUSTOMCOLOR.white
                                   : CUSTOMCOLOR.primary,
                             }}>
-                            {value}
+                            {value?.medicine}
                           </Text>
                         </View>
                       </TouchableOpacity>
                     ))}
+                    </ScrollView> 
                   </View>
+                    
                 </View>
               </View>
+              {newMedicine != null && (
+                <View style={{top:moderateScale(24)}}>
+                <InputText
+                lbltext={{fontSize:14,color:CUSTOMCOLOR.black}}
+                label='Generic Name'
+                placeholder='Medicine generic name'
+                value={generic}
+                setValue={(txt)=>setGeneric(txt)}
+                
+              />
+              </View>
+              )}
               
               <View style={styles.ModeContainer}>
                 <Text style={styles.DoseText}>
@@ -433,7 +502,10 @@ const HandlePress = value => {
                     onChangeText={value => setDose_number(value)}
                   />
                 </View>
-                <InputText
+              {newMedicine != null && (
+              <>
+              <InputText
+                  // inputContainer={{}}
                   value={mgs}
                   setValue={setmg}
                   placeholder={'Enter Dosage eg: 100mg,200mg 0r 10m1 ,20ml'}
@@ -493,6 +565,7 @@ const HandlePress = value => {
                         </TouchableOpacity>
                       ))}
                 </View>
+              </>) }
               </View>
               <View
                 style={{paddingLeft: moderateScale(8), top: moderateScale(8)}}>
@@ -606,7 +679,11 @@ const HandlePress = value => {
               size={moderateScale(48)}
               onPress={handleAddPrescribe}
             />
-            <HButton label={'Save'} onPress={handleAlert} />
+            <HButton label={'Save'} onPress={()=> {
+              handleAlert();
+              handleBack();
+            }
+            } />
           </View>
         </View>
       </View>
@@ -638,7 +715,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
     //fontWeight: '400',
-    top: moderateScale(16),
+    top: moderateScale(28),
     color: CUSTOMCOLOR.black,
   },
   ModesContainer: {
@@ -703,6 +780,7 @@ const styles = StyleSheet.create({
     gap: moderateScale(8),
     flexDirection: 'row',
     textAlign: 'center',
+    top:moderateScale(24)
   },
   tab: {
     borderRadius: 4,

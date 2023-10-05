@@ -377,13 +377,13 @@ const ProfileCreate = ({navigation}) => {
               onCancel={handleCancel}
             />
            
-            <InputText
+            {/* <InputText
               required={true}
               label="Medical Registration Number"
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
-            />
+            /> */}
             <View style={styles.specialization}>
               <SelectorBtn
                 required={true}

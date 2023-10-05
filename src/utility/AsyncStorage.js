@@ -37,4 +37,11 @@ async function UpdateAsyncData(key, newElement) {
   }
 }
 
-export {StoreAsyncData, RetriveAsyncData, UpdateAsyncData};
+async function clearStorage() {
+  try {
+      await EncryptedStorage.clear();
+  } catch (error) {
+  }
+}
+
+export {StoreAsyncData, RetriveAsyncData, UpdateAsyncData,clearStorage};

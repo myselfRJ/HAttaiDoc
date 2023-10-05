@@ -23,6 +23,7 @@ import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
 } from '../settings/styles';
+import { StoreAsyncData,UpdateAsyncData,RetriveAsyncData } from '../utility/AsyncStorage';
 
 const LabReports = () => {
   const navigation = useNavigation();
@@ -87,6 +88,26 @@ const LabReports = () => {
     setValue('');
   };
 
+  const [sug,setSug] = useState([])
+
+  const handleBack = () => {
+    if (sug?.length > 0) {
+      UpdateAsyncData('labs', {lab_test: selected});
+      // StoreAsyncData('allergies', prev);
+    } else {
+      StoreAsyncData('labs', prev);
+    }
+    navigation.goBack();
+  };
+  const selectChange = value => {
+    setSelected(value);
+    dispatch(addAllergies([...prev, {lab_test: value}]));
+  };
+  useEffect(() => {
+    RetriveAsyncData('labs').then(array => {
+      setSug(array);
+    });
+  }, []);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Test Prescribes" />
@@ -143,7 +164,34 @@ const LabReports = () => {
                 </ScrollView>
               </View>
             ))}
-
+<View
+            style={{
+              marginTop: moderateScale(16),
+              flexDirection: 'row',
+              gap: moderateScale(12),
+              paddingHorizontal: horizontalScale(8),
+            }}>
+            {sug?.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => selectChange(item?.lab_test)}
+                style={[
+                  styles.recomend,
+                  {
+                    backgroundColor:
+                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                  },
+                ]}>
+                <Text
+                  style={{
+                    color:
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}>
+                  {item?.lab_test}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
           <View
             style={{
               justifyContent: 'center',
@@ -153,7 +201,7 @@ const LabReports = () => {
             <HButton
               label={'Save'}
               onPress={() => {
-                navigation.goBack();
+                handleBack()
               }}
             />
           </View>

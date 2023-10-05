@@ -76,19 +76,12 @@ const VitalScreen = props => {
     EDD: '',
   });
 
-  console.log(
-    '--------------ldd',
-    vitals?.LDD,
-    '---------------------edd',
-    vitals?.EDD,
-  );
-
   const handlePress = () => {
     console.log(vitals);
     dispatch(addVitals(vitals));
     nav.goBack();
   };
-  const PulseChange = (text, index) => {
+  const PulseChange = (text) => {
     const updatedVitals = {...vitals, pulse_rate: text};
     // console.log(updatedVitals);
     setVitals(updatedVitals);
@@ -202,7 +195,7 @@ const VitalScreen = props => {
                   <InputText
                     label="Pulse"
                     placeholder="bpm"
-                    setValue={text => PulseChange(text, props.index)}
+                    setValue={text => PulseChange(text)}
                     numeric={true}
                   />
                 </View>
