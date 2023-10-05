@@ -813,20 +813,18 @@ const Visit = ({navigation, route}) => {
       // readFile();
     }
   };
-
   const postData = async url => {
-    const pdfContent = await RNFS.readFile(
-      '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf',
-      'base64',
-    );
-    const blob = new Blob([pdfContent], {type: 'application/pdf'});
-    // console.log('-pdf content', pdfContent);
     const formData = new FormData();
     formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
     formData.append('patient_phone_number', `${patient_phone}`);
     formData.append('clinic_id', `${Clinic_id}`);
     formData.append('appointment_id', `${appointment_id}`);
-    formData.append('file_url', blob, 'develop.pdf');
+    formData.append('file_url', {
+      uri: 'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf',
+      type: 'application/pdf',
+      name: `${patient_phone}.pdf`,
+    });
+
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -844,29 +842,26 @@ const Visit = ({navigation, route}) => {
       console.error('Error:', error);
     }
   };
-
   const apiUrl = URL.uploadPDF;
 
   const handle = () => {
     postData(apiUrl);
   };
 
-  const readFile = async () => {
-    try {
-      const path =
-        RNFS.DocumentDirectoryPath +
-        '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
-      console.log('path---======', path);
-      const content = await RNFS.readFile(
-        '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf',
-        'base64',
-      );
-      console.log('File Content:', content);
-    } catch (error) {
-      console.error('Error reading file:', error);
-    }
-  };
-  // console.log('---------', readFile());
+  // const readFile = async () => {
+  //   try {
+  //     const path =
+  //       RNFS.DocumentDirectoryPath +
+  //       '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
+  //     console.log('path---======', path);
+
+  //   } catch (error) {
+  //     console.error('Error reading file:', error);
+  //   }
+  // };
+
+  // const pdf = readFile();
+  // console.log('---------pdf', pdf);
   return (
     <View style={{flex: 1}}>
       <ScrollView>

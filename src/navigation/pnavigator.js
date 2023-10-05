@@ -47,6 +47,7 @@ import PatientHistory from '../screens/patientHistory';
 import ReferToDoctor from '../screens/Refer';
 import UpdateProfile from '../screens/updateProfile';
 import ClinicAddress from '../components/clinic_address';
+import Symptoms1 from '../screens/Symptom1';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -72,7 +73,7 @@ const ProtectedRoute = () => {
         component={ProfileCreate}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="updateprofile"
         component={UpdateProfile}
         options={{
@@ -115,6 +116,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Records',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="symp"
+        component={Uploadrecord}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Symptoms',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
