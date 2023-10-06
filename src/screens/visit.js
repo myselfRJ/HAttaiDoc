@@ -820,7 +820,7 @@ const Visit = ({navigation, route}) => {
     formData.append('clinic_id', `${Clinic_id}`);
     formData.append('appointment_id', `${appointment_id}`);
     formData.append('file_url', {
-      uri: 'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf',
+      uri: `file://${filePath}`,
       type: 'application/pdf',
       name: `${patient_phone}.pdf`,
     });
