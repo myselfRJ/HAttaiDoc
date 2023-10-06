@@ -36,7 +36,6 @@ const Allergies = () => {
   const option = 'finding';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
-  console.log('data======',data)
   const [filtered, setFilteredData] = useState([]);
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -52,6 +51,7 @@ const Allergies = () => {
   };
   const selectChange = value => {
     setSelect(value);
+    UpdateAsyncData('allergies', {allergies: value});
     dispatch(addAllergies([...prev, {allergies: value}]));
   };
   const handleDelete = index => {
@@ -61,8 +61,10 @@ const Allergies = () => {
       dispatch(updateAllergies(updatedPrescriptions));
     }
   };
+
+  const term = 'allergy';
   const fetchAllergies = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(term, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -77,7 +79,7 @@ const Allergies = () => {
   };
   useEffect(() => {
     fetchAllergies();
-  }, [value, option]);
+  }, [term, option]);
 
   useEffect(() => {
     if (value) {
@@ -95,18 +97,13 @@ const Allergies = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-
+    UpdateAsyncData('allergies', {allergies: value});
     dispatch(addAllergies([...prev, {allergies: value}]));
     setValue('');
   };
 
-  const suggestions = useSelector;
-
   const handleBack = () => {
-    if (sug?.length > 0) {
-      UpdateAsyncData('allergies', {allergies: selected});
-      // StoreAsyncData('allergies', prev);
-    } else {
+    if (sug?.length === 0 || !sug) {
       StoreAsyncData('allergies', prev);
     }
     navigation.goBack();
@@ -151,7 +148,7 @@ const Allergies = () => {
             }
             onPress={() => setShow(!show)}
           />
-          {value.length >= 4 &&
+          {value.length >= 3 &&
             (value === selected || show ? null : (
               <View style={styles.dropdownContainer}>
                 <ScrollView persistentScrollbar={true}>

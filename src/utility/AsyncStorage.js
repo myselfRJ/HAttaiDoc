@@ -28,7 +28,7 @@ async function UpdateAsyncData(key, newElement) {
   try {
     const existingDataString = await EncryptedStorage.getItem(key);
     let existingData = existingDataString ? JSON.parse(existingDataString) : [];
-    existingData.push(newElement);
+    existingData.unshift(newElement);
     await EncryptedStorage.setItem(key, JSON.stringify(existingData));
   } catch (error) {
     console.error('Error occurred', error);
@@ -39,9 +39,8 @@ async function UpdateAsyncData(key, newElement) {
 
 async function clearStorage() {
   try {
-      await EncryptedStorage.clear();
-  } catch (error) {
-  }
+    await EncryptedStorage.clear();
+  } catch (error) {}
 }
 
-export {StoreAsyncData, RetriveAsyncData, UpdateAsyncData,clearStorage};
+export {StoreAsyncData, RetriveAsyncData, UpdateAsyncData, clearStorage};
