@@ -23,7 +23,11 @@ import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
 } from '../settings/styles';
-import { StoreAsyncData,UpdateAsyncData,RetriveAsyncData } from '../utility/AsyncStorage';
+import {
+  StoreAsyncData,
+  UpdateAsyncData,
+  RetriveAsyncData,
+} from '../utility/AsyncStorage';
 
 const LabReports = () => {
   const navigation = useNavigation();
@@ -35,6 +39,7 @@ const LabReports = () => {
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.labreport?.labReport);
+  const [sug, setSug] = useState([]);
 
   const HandleAddValue = () => {
     if (value) {
@@ -85,15 +90,15 @@ const LabReports = () => {
     setValue(value);
     setSelected(value);
     dispatch(addLabReport([...prev, {lab_test: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('labs', {lab_test: value});
+    }
     setValue('');
   };
 
-  const [sug,setSug] = useState([])
-
-  const handleBack = () => {
+  const handledata = () => {
     if (sug?.length > 0) {
       UpdateAsyncData('labs', {lab_test: selected});
-      // StoreAsyncData('allergies', prev);
     } else {
       StoreAsyncData('labs', prev);
     }
@@ -101,13 +106,18 @@ const LabReports = () => {
   };
   const selectChange = value => {
     setSelected(value);
-    dispatch(addAllergies([...prev, {lab_test: value}]));
+    dispatch(addLabReport([...prev, {lab_test: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('labs', {lab_test: value});
+    }
   };
   useEffect(() => {
     RetriveAsyncData('labs').then(array => {
       setSug(array);
     });
   }, []);
+
+  console.log('----------sug', sug?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Test Prescribes" />
@@ -164,7 +174,7 @@ const LabReports = () => {
                 </ScrollView>
               </View>
             ))}
-<View
+          <View
             style={{
               marginTop: moderateScale(16),
               flexDirection: 'row',
@@ -201,7 +211,7 @@ const LabReports = () => {
             <HButton
               label={'Save'}
               onPress={() => {
-                handleBack()
+                handledata();
               }}
             />
           </View>
