@@ -90,4 +90,10 @@ export const CONSTANTS = {
   ],
   blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
   clinic_fees: ['100', '200', '300', '400', '500', '1000', '2000', 'others'],
+  state:['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar',
+  'Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh',
+  'Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra',
+  'Manipur','Meghalaya','Mizoram','Nagaland','odisha','Punjab',
+  'Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura',
+  'Uttarakhand','Uttar Pradesh','West Bengal']
 };

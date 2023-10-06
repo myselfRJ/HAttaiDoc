@@ -15,6 +15,12 @@ import { TextInput } from 'react-native-gesture-handler';
 
 const DOBselect = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
+  const handleNumericInput = input => {
+    // (/[^a-zA-Z]/g, '') for only strings
+    const numericValue = input.replace(/[^0-9]/g, '');
+    props.setValue(numericValue);
+  };
+  const numeric = props.numeric;
   return (
     <View>
       {props.label && (
@@ -37,7 +43,7 @@ const DOBselect = props => {
         <TextInput style={styles.h3}
         placeholder='Enter age or select DOB'
         value={props.input}
-        onChangeText={props.setValue}
+        onChangeText={props.numeric ? handleNumericInput : props.setValue}
         />
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>

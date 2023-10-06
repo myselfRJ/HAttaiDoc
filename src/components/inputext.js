@@ -93,7 +93,7 @@ const InputText = props => {
           )}
 
 {props.search !== undefined && (
-              <TouchableOpacity style={styles.search} onPress={props.onPress}>
+              <TouchableOpacity style={[styles.search, props.searchtxt]} onPress={props.onPress}>
                 <Icon name={props.IconName} color={CUSTOMCOLOR.primary} size={24} />
               </TouchableOpacity>
           

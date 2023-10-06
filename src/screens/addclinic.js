@@ -433,6 +433,7 @@ const AddClinic = ({navigation}) => {
             {cnFess === 'others' ? (
               <InputText
                 placeholder="Enter Fees"
+                label='Fees'
                 value={value.fees}
                 setValue={value => handleChangeValue('fees', value)}
                 // keypad="numeric"
