@@ -110,7 +110,12 @@ const Allergies = () => {
   };
   useEffect(() => {
     RetriveAsyncData('allergies').then(array => {
-      setSug(array);
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index === array?.findIndex(obj => obj.allergies === item?.allergies)
+        );
+      });
+      setSug(uniqueArray);
     });
   }, []);
   // console.log(sug.length);

@@ -122,7 +122,6 @@ const LabReports = () => {
     });
   }, []);
 
-  console.log('----------sug', sug?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Test Prescribes" />

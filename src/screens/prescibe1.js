@@ -277,8 +277,12 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     RetriveAsyncData('prescribe').then(array => {
-      console.log('--arrauy', array);
-      setSug(array);
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index === array?.findIndex(obj => obj.medicine === item?.medicine)
+        );
+      });
+      setSug(uniqueArray);
     });
   }, []);
   const [med_filter, setMed_filter] = useState([]);
