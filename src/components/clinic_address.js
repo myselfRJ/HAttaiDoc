@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -24,7 +24,7 @@ import {
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const ClinicAddress = ({navigation}) => {
-  const ref = useRef();
+  const ref = useRef(null);
 
   useEffect(() => {
     ref.current?.setAddressText('Some Text');
@@ -103,6 +103,8 @@ const ClinicAddress = ({navigation}) => {
     console.log('marker data===>', markerCoordinates);
   }, [markerCoordinates.latitude]);
 
+  const onRegionChangeComplete = () => console.log('chnage region');
+
   useEffect(() => {
     if (currentLocation) {
       fetchFormattedAddress(
@@ -114,7 +116,6 @@ const ClinicAddress = ({navigation}) => {
 
   const fetchFormattedAddress = async (latitude, longitude) => {
     try {
-      console.log('latitude', latitude);
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ`,
       );
@@ -133,7 +134,7 @@ const ClinicAddress = ({navigation}) => {
   useEffect(() => {
     HandleAddress();
   }, [formattedAddress]);
-
+  // const handleRegionChangeComplete = newRegion => {};
   return (
     <>
       <ScrollView>
@@ -141,10 +142,12 @@ const ClinicAddress = ({navigation}) => {
           <View style={styles.top}>
             <View style={styles.Mapcontainer}>
               <MapView
+                ref={ref}
                 zoomEnabled={true}
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 region={regionData}
+                onRegionChangeComplete={onRegionChangeComplete}
                 onPress={event => {
                   const {latitude, longitude} = event.nativeEvent.coordinate;
                   setCurrentLocation({latitude, longitude});
@@ -195,18 +198,23 @@ const ClinicAddress = ({navigation}) => {
               onPress={(data, details = null) => {
                 const latitude = details?.geometry?.location?.lat;
                 const longitude = details?.geometry?.location?.lng;
+                // ref.current.animateToRegion({
+                //   latitude: latitude,
+                //   longitude: longitude,
+                // });
                 setMarkerCoordinates({latitude, longitude});
                 setCurrentLocation({latitude, longitude});
+                // fetchFormattedAddress(latitude, longitude);
               }}
               query={{
                 key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
                 language: 'en',
               }}
-              currentLocation={true}
-              currentLocationLabel="Current location"
+              // currentLocation={true}
+              // currentLocationLabel="Current location"
               styles={{
                 textInputContainer: {
-                  backgroundColor: 'grey',
+                  // backgroundColor: 'g,
                 },
                 textInput: {
                   height: moderateScale(38),
