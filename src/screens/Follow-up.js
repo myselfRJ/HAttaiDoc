@@ -7,7 +7,7 @@ import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
 import {CONSTANTS} from '../utility/constant';
 import {addDate} from '../redux/features/prescription/Followupslice';
-import {HButton, SelectorBtn, Option} from '../components';
+import {HButton, SelectorBtn, Option, InputText} from '../components';
 import {useNavigation} from '@react-navigation/native';
 import {
   moderateScale,
@@ -28,6 +28,7 @@ export default function DateTime() {
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [customDays, setCustomDays] = useState('');
   const [selected, setSelected] = useState('30');
 
   const dispatch = useDispatch();
@@ -57,6 +58,11 @@ export default function DateTime() {
     navigation.goBack();
   };
 
+  const handelvalue = value => {
+    setCustomDays(value);
+    setSelected(value.length > 0 ? value : '30');
+  };
+
   const day = date?.toString()?.split(' ')[2];
   const month = date?.toString().split(' ')[1];
   const year = date?.toString().split(' ')[3];
@@ -69,7 +75,7 @@ export default function DateTime() {
   const handleDates = selectedDate => {
     let startDate = new Date(selectedDate);
 
-    let numberOfDaysToAdd = parseInt(selected);
+    let numberOfDaysToAdd = parseInt(customDays ? customDays : selected);
     let endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
     let formattedEndDate = endDate.toISOString().substring(0, 10);
@@ -141,6 +147,13 @@ export default function DateTime() {
           selected={selected === '90'}
           onPress={() => handleOptions('90')}
         />
+        <View style={{width: moderateScale(100)}}>
+          <InputText
+            value={customDays}
+            placeholder={'Enter Days'}
+            setValue={val => handelvalue(val)}
+          />
+        </View>
       </View>
       <View style={styles.submit}>
         <HButton

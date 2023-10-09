@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
@@ -10,60 +10,46 @@ import {
   updateCommorbities,
 } from '../redux/features/prescription/commorbities';
 import {CONSTANTS} from '../utility/constant';
-import {CUSTOMCOLOR,CUSTOMFONTFAMILY,CUSTOMFONTSIZE} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import { URL } from '../utility/urls';
-import { fetchApi } from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+import {
+  StoreAsyncData,
+  UpdateAsyncData,
+  RetriveAsyncData,
+  clearStorage,
+} from '../utility/AsyncStorage';
+
 const Commorbities = ({navigation}) => {
-  const option = 'finding'
-  const [data,setData] = useState([])
-  const [selected,setSelected]= useState('');
-  const [filtered,setFilteredData] = useState([])
+  const option = 'finding';
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState('');
+  const [filtered, setFilteredData] = useState([]);
   const nav = useNavigation();
   const [value, setValue] = useState('');
-  console.log('value===', value);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.commorbities?.commorbitiesItems);
-  console.log('prev-----', prev);
+
   const [select, setSelect] = useState('');
-  console.log('select>>>>>>', select);
+  const [sug, setSug] = useState([]);
 
   const selectChange = value => {
-    console.log('12223325555');
-    // setValue(value);
-    setSelect(value);
+    setSelected(value);
     dispatch(addCommorbities([...prev, {commoribities: value}]));
-  };
-
-  const constants = (
-    <View style={{flexDirection: 'row', gap: moderateScale(12)}}>
-      {CONSTANTS.comorbidities?.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          onPress={() => selectChange(item)}
-          style={[
-            styles.recomend,
-            {
-              backgroundColor:
-                value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-            },
-          ]}>
-          <Text style={{color: value === item ? CUSTOMCOLOR.white: CUSTOMCOLOR.black}}>{item}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-  const HandleAddValue = () => {
-    if (value) {
-      dispatch(addCommorbities([...prev, {commoribities: value}]));
-      setValue('');
+    if (sug?.length > 0) {
+      UpdateAsyncData('commoribities', {commoribities: value});
     }
   };
   const handleDelete = index => {
@@ -74,7 +60,7 @@ const Commorbities = ({navigation}) => {
     }
   };
   const fetchComorbidities = async () => {
-    const response = await fetchApi(URL.snomed(value,option), {
+    const response = await fetchApi(URL.snomed(value, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -82,7 +68,6 @@ const Commorbities = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('diagnosis====>',jsonData)
       setData(jsonData);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
@@ -91,7 +76,7 @@ const Commorbities = ({navigation}) => {
   };
   useEffect(() => {
     fetchComorbidities();
-  }, [value,option]);
+  }, [value, option]);
 
   useEffect(() => {
     if (value) {
@@ -100,21 +85,50 @@ const Commorbities = ({navigation}) => {
           item?.term &&
           item?.term.toLowerCase().startsWith(value.toLowerCase()),
       );
-      setFilteredData([...filtered,{term:value}]);
+      setFilteredData([...filtered, {term: value}]);
     } else {
       setFilteredData(data);
     }
   }, [data, value]);
-  const HandlePress=(value)=>{
-     setValue(value);
-     setSelected(value)
-     dispatch(addCommorbities([...prev, {commoribities: value}]));
-     setValue('')
-  }
+  // const HandlePress=(value)=>{
+  //    setValue(value);
+  //    setSelected(value)
+  //    dispatch(addCommorbities([...prev, {commoribities: value}]));
+  //    setValue('')
+  // }
 
-const [show,setShow] = useState(false)
+  const [show, setShow] = useState(false);
+  const HandlePress = value => {
+    setValue(value);
+    setSelected(value);
+    dispatch(addCommorbities([...prev, {commoribities: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('commoribities', {commoribities: value});
+    }
+    setValue('');
+  };
 
+  const handledata = () => {
+    if (sug?.length === 0 || !sug) {
+      StoreAsyncData('commoribities', prev);
+    }
+    navigation.goBack();
+  };
 
+  useEffect(() => {
+    RetriveAsyncData('commoribities').then(array => {
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index ===
+          array?.findIndex(obj => obj.commoribities === item?.commoribities)
+        );
+      });
+      setSug(uniqueArray);
+      console.log('============>array', array);
+    });
+  }, []);
+
+  console.log('=========>sug', sug);
 
   return (
     <View style={styles.main}>
@@ -140,58 +154,88 @@ const [show,setShow] = useState(false)
         // data={CONSTANTS.comorbidities}
         // select={selectChange}
       /> */}
-       <View style={styles.input}>
-      <InputText
-      inputContainer={styles.inputtext}
-        label="Comorbidities"
-        placeholder="Enter comorbidities"
-        value={value}
-        setValue={setValue}
-        search={true}
-        IconName={(show  && filtered.length>0 || value === selected || value.length===0) ? 'magnify': 'close'}
-        onPress={()=>setShow(!show)}
-      />
-     {value.length>=4 && (
-      (value === selected || show )? null : (       
-      <View style={styles.dropdownContainer}>
-        <ScrollView>
-        {filtered?.map((val,index)=>(
-         <TouchableOpacity style={styles.touch} onPress={()=>HandlePress(val?.term)}>
-           <Text style={{fontSize:CUSTOMFONTSIZE.h3,padding:moderateScale(10),color:CUSTOMCOLOR.black}} key={index}>
-            {val.term}
-           </Text>
-           </TouchableOpacity>
-           ))}
-        </ScrollView>
-      </View>)
-     )}
-      {/* <PlusButton
-        // btnstyles={{alignSelf}}
-        icon={'plus'}
-        // label="Add"
-        size={moderateScale(32)}
-        style={{alignSelf: 'flex-end',top:moderateScale(16)}}
-        onPress={HandleAddValue}
-      /> */}
-      <View
-        style={{marginTop: moderateScale(16), marginBottom: moderateScale(8)}}>
-        {constants}
-      </View>
-
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: moderateScale(32),
-        }}>
-        <HButton
-          label={'Save'}
-          onPress={() => {
-            navigation.goBack();
-          }}
+      <View style={styles.input}>
+        <InputText
+          inputContainer={styles.inputtext}
+          label="Comorbidities"
+          placeholder="Enter comorbidities"
+          value={value}
+          setValue={setValue}
+          search={true}
+          IconName={
+            (show && filtered.length > 0) ||
+            value === selected ||
+            value.length === 0
+              ? 'magnify'
+              : 'close'
+          }
+          onPress={() => setShow(!show)}
         />
+        {value.length >= 4 &&
+          (value === selected || show ? null : (
+            <View style={styles.dropdownContainer}>
+              <ScrollView>
+                {filtered?.map((val, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.touch}
+                    onPress={() => HandlePress(val?.term)}>
+                    <Text
+                      style={{
+                        fontSize: CUSTOMFONTSIZE.h3,
+                        padding: moderateScale(10),
+                        color: CUSTOMCOLOR.black,
+                      }}
+                      key={index}>
+                      {val.term}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          ))}
+        <View
+          style={{
+            marginTop: moderateScale(16),
+            flexDirection: 'row',
+            gap: moderateScale(12),
+            paddingHorizontal: horizontalScale(8),
+          }}>
+          {sug?.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => selectChange(item?.commoribities)}
+              style={[
+                styles.recomend,
+                {
+                  backgroundColor:
+                    value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                },
+              ]}>
+              <Text
+                style={{
+                  color: value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                }}>
+                {item?.commoribities}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: moderateScale(32),
+          }}>
+          <HButton
+            label={'Save'}
+            onPress={() => {
+              handledata();
+            }}
+          />
+        </View>
       </View>
-    </View>
     </View>
   );
 };
@@ -207,14 +251,15 @@ const styles = StyleSheet.create({
   recomend: {
     padding: moderateScale(8),
     borderRadius: moderateScale(8),
+    paddingHorizontal: horizontalScale(16),
   },
-  dropdownContainer:{
-    height:moderateScale(300),
-    backgroundColor:CUSTOMCOLOR.white,
-    marginHorizontal:horizontalScale(8),
+  dropdownContainer: {
+    height: moderateScale(300),
+    backgroundColor: CUSTOMCOLOR.white,
+    marginHorizontal: horizontalScale(8),
   },
-  inputtext:{
-    paddingVertical:verticalScale(0),
+  inputtext: {
+    paddingVertical: verticalScale(0),
     // borderWidth:1
   },
   input: {
@@ -222,8 +267,8 @@ const styles = StyleSheet.create({
     // paddingVertical:24,
     gap: moderateScale(0),
   },
-  touch:{
-    paddingHorizontal:horizontalScale(8),
-    paddingVertical:verticalScale(4)
-  }
+  touch: {
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(4),
+  },
 });

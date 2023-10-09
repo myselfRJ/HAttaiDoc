@@ -23,10 +23,16 @@ import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
 } from '../settings/styles';
+import {
+  StoreAsyncData,
+  UpdateAsyncData,
+  RetriveAsyncData,
+  clearStorage,
+} from '../utility/AsyncStorage';
 
 const LabReports = () => {
   const navigation = useNavigation();
-  const option = 'procedure';
+  const option = 'procedure,finding';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
@@ -34,6 +40,7 @@ const LabReports = () => {
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.labreport?.labReport);
+  const [sug, setSug] = useState([]);
 
   const HandleAddValue = () => {
     if (value) {
@@ -49,8 +56,9 @@ const LabReports = () => {
     }
   };
 
+  const term = 'test';
   const fetchTests = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(term, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -65,7 +73,7 @@ const LabReports = () => {
   };
   useEffect(() => {
     fetchTests();
-  }, [value, option]);
+  }, [term, option]);
 
   useEffect(() => {
     if (value) {
@@ -84,8 +92,35 @@ const LabReports = () => {
     setValue(value);
     setSelected(value);
     dispatch(addLabReport([...prev, {lab_test: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('labs', {lab_test: value});
+    }
     setValue('');
   };
+
+  const handledata = () => {
+    if (sug?.length === 0 || !sug) {
+      StoreAsyncData('labs', prev);
+    }
+    navigation.goBack();
+  };
+  const selectChange = value => {
+    setSelected(value);
+    dispatch(addLabReport([...prev, {lab_test: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('labs', {lab_test: value});
+    }
+  };
+  useEffect(() => {
+    RetriveAsyncData('labs').then(array => {
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index === array?.findIndex(obj => obj.lab_test === item?.lab_test)
+        );
+      });
+      setSug(uniqueArray);
+    });
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -118,7 +153,7 @@ const LabReports = () => {
             }
             onPress={() => setShow(!show)}
           />
-          {value.length >= 4 &&
+          {value.length >= 3 &&
             (value === selected || show ? null : (
               <View style={styles.dropdownContainer}>
                 <ScrollView persistentScrollbar={true}>
@@ -143,7 +178,34 @@ const LabReports = () => {
                 </ScrollView>
               </View>
             ))}
-
+          <View
+            style={{
+              marginTop: moderateScale(16),
+              flexDirection: 'row',
+              gap: moderateScale(12),
+              paddingHorizontal: horizontalScale(8),
+            }}>
+            {sug?.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => selectChange(item?.lab_test)}
+                style={[
+                  styles.recomend,
+                  {
+                    backgroundColor:
+                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                  },
+                ]}>
+                <Text
+                  style={{
+                    color:
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}>
+                  {item?.lab_test}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
           <View
             style={{
               justifyContent: 'center',
@@ -153,7 +215,7 @@ const LabReports = () => {
             <HButton
               label={'Save'}
               onPress={() => {
-                navigation.goBack();
+                handledata();
               }}
             />
           </View>
@@ -183,5 +245,10 @@ const styles = StyleSheet.create({
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     marginHorizontal: horizontalScale(8),
+  },
+  recomend: {
+    padding: moderateScale(8),
+    borderRadius: moderateScale(8),
+    paddingHorizontal: horizontalScale(16),
   },
 });

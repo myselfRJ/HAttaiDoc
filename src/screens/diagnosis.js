@@ -27,6 +27,11 @@ import {fetchApi} from '../api/fetchApi';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
+import {
+  StoreAsyncData,
+  UpdateAsyncData,
+  RetriveAsyncData,
+} from '../utility/AsyncStorage';
 
 // import PlusButton from '../components';
 
@@ -39,6 +44,7 @@ const Diagnosis = ({navigation}) => {
   const [filtered, setFilteredData] = useState([]);
   // console.log('trem=====',filtered);
   const [data, setData] = useState([]);
+  const [sug, setSug] = useState([]);
   // console.log('value===',value)
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.diagnosis?.DiagnosisItems);
@@ -88,15 +94,42 @@ const Diagnosis = ({navigation}) => {
       setFilteredData(data);
     }
   }, [data, value]);
+
+  const [show, setShow] = useState(false);
+
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
     dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('diagnosis', {diagnosis: value});
+    }
     setValue('');
   };
 
-  const [show, setShow] = useState(false);
-
+  const handledata = () => {
+    if (sug?.length === 0 || !sug) {
+      StoreAsyncData('diagnosis', prev);
+    }
+    navigation.goBack();
+  };
+  const selectChange = value => {
+    setSelected(value);
+    dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+    if (sug?.length > 0) {
+      UpdateAsyncData('diagnosis', {diagnosis: value});
+    }
+  };
+  useEffect(() => {
+    RetriveAsyncData('diagnosis').then(array => {
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index === array?.findIndex(obj => obj.diagnosis === item?.diagnosis)
+        );
+      });
+      setSug(uniqueArray);
+    });
+  }, []);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Diagnosis" />
@@ -153,6 +186,34 @@ const Diagnosis = ({navigation}) => {
                 </ScrollView>
               </View>
             ))}
+          <View
+            style={{
+              marginTop: moderateScale(16),
+              flexDirection: 'row',
+              gap: moderateScale(12),
+              paddingHorizontal: horizontalScale(8),
+            }}>
+            {sug?.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => selectChange(item?.diagnosis)}
+                style={[
+                  styles.recomend,
+                  {
+                    backgroundColor:
+                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                  },
+                ]}>
+                <Text
+                  style={{
+                    color:
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}>
+                  {item?.diagnosis}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
           <View
             style={{
@@ -163,7 +224,7 @@ const Diagnosis = ({navigation}) => {
             <HButton
               label={'Save'}
               onPress={() => {
-                navigation.goBack();
+                handledata();
               }}
             />
           </View>
@@ -200,5 +261,10 @@ const styles = StyleSheet.create({
   inputtext: {
     paddingVertical: verticalScale(0),
     // borderWidth:1
+  },
+  recomend: {
+    padding: moderateScale(8),
+    borderRadius: moderateScale(8),
+    paddingHorizontal: horizontalScale(16),
   },
 });

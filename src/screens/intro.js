@@ -11,44 +11,66 @@ import {HButton} from '../components';
 import {horizontalScale} from '../utility/scaleDimension';
 import {verticalScale, moderateScale} from '../utility/scaleDimension';
 import Logo from '../components/logo';
+import Gif from '../components/gif';
 
 const Intro = ({navigation}) => {
   return (
+    // <View style={styles.container}>
+    //   <View style={styles.Top}>
+    //     <Image
+    //       style={styles.img}
+    //       source={require('../assets/images/intro.png')}
+    //     />
+    //   </View>
+    //   <View style={styles.bottom}>
+    //     <View style={styles.textcontainer}>
+    //       <Text style={styles.text}>The Easiest Way to manage your </Text>
+    //       <Text style={styles.text}>Clinic digitally</Text>
+      
+    //     </View>
+
+    //     <HButton
+    //       label="Get Started"
+    //       onPress={() => navigation.navigate('entry')}
+    //       btnstyles={styles.btn}
+    //     />
+    //   </View>
+    // </View>
     <View style={styles.container}>
-      <View style={styles.Top}>
-        <Image
-          style={styles.img}
-          source={require('../assets/images/intro.png')}
-        />
+      <View style={{top:moderateScale(32)}}>
+      <Text style={styles.text}>Welcome to</Text>
+      <View style={styles.logo}>
+      <Logo imgstyle={styles.imgstyle}/>
+      </View>
+      </View>
+      <View style={{top:moderateScale(64)}}>
+      <View style={{justifyContent:'center'}}>
+                <Gif gif={require('../assets/gif/home.gif')} style={{alignSelf:'center'}} />
+            </View>
       </View>
       <View style={styles.bottom}>
-        <View style={styles.textcontainer}>
-          <Text style={styles.text}>The Easiest Way to manage your </Text>
-          <Text style={styles.text}>Clinic digitally</Text>
+      <View style={styles.textcontainer}>
+      <Text style={styles.text}>The Easiest Way to manage your </Text>
+      <Text style={styles.text}>Clinic digitally</Text>
       
         </View>
 
-        <HButton
+         <HButton
           label="Get Started"
           onPress={() => navigation.navigate('entry')}
           btnstyles={styles.btn}
         />
       </View>
     </View>
-    // <View style={styles.container}>
-    //   <Text style={styles.text}>Welcome to</Text>
-    //   <View style={styles.logo}>
-    //   <Logo imgstyle={styles.imgstyle}/>
-    //   </View>
-    // </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems:'center',
+    alignItems:'center',
     // top:moderateScale(64),
-    gap:moderateScale(64)
+    // gap:moderateScale(64)
+    backgroundColor:CUSTOMCOLOR.white
     
   },
   text:{
@@ -61,10 +83,14 @@ const styles = StyleSheet.create({
      width:moderateScale(119),
      height:moderateScale(120),
   },
-  // logo:{
- 
+  logo:{
+     top:moderateScale(12)
    
-  // },
+  },
+  tinyLogo:{
+    width:moderateScale(600),
+    height:moderateScale(400)
+  },
   Top: {
     height: verticalScale(503),
     backgroundColor: CUSTOMCOLOR.primary,
