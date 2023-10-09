@@ -112,7 +112,10 @@ const PatientSearch = ({navigation}) => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
     dispatch(addclinic_id(clinic.id));
-    ClinicRef?.current?.snapToIndex(0);
+    
+    setTimeout(() => {
+      ClinicRef?.current?.snapToIndex(0);
+    }, 1000);
   };
   useFocusEffect(
     React.useCallback(() => {
@@ -172,7 +175,12 @@ const PatientSearch = ({navigation}) => {
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
-              <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
+              <Text style={[styles.modalfields,{
+                      color:
+                        selectedClinic === clinic
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.black,
+                    },]}>{clinic.clinic_name}</Text>
             </Pressable>
           ))}
         </View>

@@ -312,6 +312,7 @@ const AddUser = ({navigation}) => {
               setValue={value => handleChangeValue('name', value)}
             />
             <InputText
+            required={true}
               doubleCheck={[true, false]}
               check={checkNumber}
               maxLength={10}
@@ -346,10 +347,12 @@ const AddUser = ({navigation}) => {
               </View>
             </View>
             <View style={styles.clinicselect}>
-              <Text style={styles.labeltext}>Role</Text>
+              <Text style={styles.labeltext}>Role <Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text>
               <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 {CONSTANTS.role?.map((val, ind) => (
                   <SelectorBtn
+  
+                  required={true}
                     select={{
                       backgroundColor:
                         selectedRole === val
@@ -379,10 +382,11 @@ const AddUser = ({navigation}) => {
               />
             )}
             <View style={styles.clinicselect}>
-              <Text style={styles.labeltext}>Clinic:</Text>
+              <Text style={styles.labeltext}>Clinic<Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text>
               <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 {clinics?.map((val, ind) => (
                   <SelectorBtn
+                  required={true}
                     select={{
                       backgroundColor:
                         selectedClinic === val?.clinic_name

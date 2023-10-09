@@ -32,6 +32,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const Diagnosis = ({navigation}) => {
   const option = 'finding';
+  const term = 'diagnosis'
   const nav = useNavigation();
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('');
@@ -58,7 +59,7 @@ const Diagnosis = ({navigation}) => {
     }
   };
   const fetchDiagnosis = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(term, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -67,6 +68,7 @@ const Diagnosis = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setData(jsonData);
+      jsonData?.map((item)=>console.log('========>',item?.term))
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
@@ -74,7 +76,7 @@ const Diagnosis = ({navigation}) => {
   };
   useEffect(() => {
     fetchDiagnosis();
-  }, [value, option]);
+  }, [term, option]);
 
   useEffect(() => {
     if (value) {
