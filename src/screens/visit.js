@@ -100,6 +100,9 @@ const Visit = ({navigation, route}) => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
 
+  const logo = useSelector(state => state?.clinicid?.clinic_logo);
+  console.log('-------------logo============>', logo?.length);
+
   const [submit, setSubmit] = useState(false);
 
   const habdlePrescribe = () => {
@@ -401,10 +404,14 @@ const Visit = ({navigation, route}) => {
     }
   };
 
-  console.log('---------', logo, '--------------');
-
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
+  const logo_url = `data:image/png;base64,${logo}`;
+  const sign = useSelector(state => state?.sign?.sign);
+  console.log('---------sign=========>', sign);
+  const Sign_base64 = sign
+    ? `data:image/jpeg;base64,${sign}`
+    : data?.doctor_name;
 
   const createPDF = async () => {
     if (await isPermitted()) {
@@ -430,8 +437,9 @@ const Visit = ({navigation, route}) => {
                         display: flex;
                         flex-direction: row;
                         border-bottom:1px #4ba5fa solid;">
-                            <img id='img' src="../assests/images/download.jpeg" alt="Sample Image" style="width: 52px;
-                            height: 58px;" />
+                            <img id='img' src=${
+                              logo ? logo_url : CONSTANTS.default_clinic_logo
+                            } style="width: 52px;height: 58px;" alt="Sample Image"/>
                             <div class='address' style="   display: flex;
                             margin-right: 0px;
                             flex-direction: row;
@@ -471,7 +479,9 @@ const Visit = ({navigation, route}) => {
                         <div class='second' style="display: flex;
                         flex-direction: row;
                         justify-content: space-between;">
-                            <img id='rximg' src='./images/rx.png' style="width:28px;
+                            <img id='rximg' src=${
+                              CONSTANTS.prescription_logo
+                            } style="width:28px;
                             height: 43px;"/>
                             <p id='date' style="font-size: 14px;
                             font-weight: 400px;">Date:${
@@ -742,18 +752,18 @@ const Visit = ({navigation, route}) => {
                             color:#000000;">${date}</p>
                         </div>
                         <div class='sign' style="  display: flex;
-                        align-items: center;
-                        justify-content: flex-end;
-                        line-height: 4px;">
-                            <div>
-                            <p id='values1' style="  font-weight: 500;
-                            font-size: 12px;
-                            color:#000000;">Signature</p>
-                            <p id='values'  style=" font-weight: 300px;
-                            font-size: 12px;
-                            color:#000000;">${data?.doctor_name}</p>
-                            </div>
-                        </div>
+                align-items: center;
+                justify-content: flex-end;
+                line-height: 4px;">
+                    <div>
+                    <p id='values1' style="  font-weight: 500;
+                    font-size: 12px;
+                    color:#000000;">Signature</p>
+                    <p id='values'  style=" font-weight: 300px;
+                    font-size: 12px;
+                    color:#000000;">Dr.name</p>
+                    </div>
+                </div>
                         <div class='subContaioner' style="  display: flex;
                         flex-direction: row;
                         gap: 8px;
@@ -794,7 +804,9 @@ const Visit = ({navigation, route}) => {
                         </div>
                         </div>
                     <div>
-                        <img  id='foot' src='./images/footer.png' style="margin-top: 32px;
+                        <img  id='foot' src=${
+                          CONSTANTS.pdf_footer
+                        } style="margin-top: 32px;
                         width: 87px;
                         height: 45px;"/>
                     </div>
