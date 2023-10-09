@@ -27,11 +27,12 @@ import {
   StoreAsyncData,
   UpdateAsyncData,
   RetriveAsyncData,
+  clearStorage,
 } from '../utility/AsyncStorage';
 
 const LabReports = () => {
   const navigation = useNavigation();
-  const option = 'procedure';
+  const option = 'procedure,finding';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
@@ -55,8 +56,9 @@ const LabReports = () => {
     }
   };
 
+  const term = 'test';
   const fetchTests = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(term, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -71,7 +73,7 @@ const LabReports = () => {
   };
   useEffect(() => {
     fetchTests();
-  }, [value, option]);
+  }, [term, option]);
 
   useEffect(() => {
     if (value) {
@@ -97,9 +99,7 @@ const LabReports = () => {
   };
 
   const handledata = () => {
-    if (sug?.length > 0) {
-      UpdateAsyncData('labs', {lab_test: selected});
-    } else {
+    if (sug?.length === 0 || !sug) {
       StoreAsyncData('labs', prev);
     }
     navigation.goBack();
@@ -113,11 +113,15 @@ const LabReports = () => {
   };
   useEffect(() => {
     RetriveAsyncData('labs').then(array => {
-      setSug(array);
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index === array?.findIndex(obj => obj.lab_test === item?.lab_test)
+        );
+      });
+      setSug(uniqueArray);
     });
   }, []);
 
-  console.log('----------sug', sug?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Test Prescribes" />
@@ -149,7 +153,7 @@ const LabReports = () => {
             }
             onPress={() => setShow(!show)}
           />
-          {value.length >= 4 &&
+          {value.length >= 3 &&
             (value === selected || show ? null : (
               <View style={styles.dropdownContainer}>
                 <ScrollView persistentScrollbar={true}>
@@ -241,5 +245,10 @@ const styles = StyleSheet.create({
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     marginHorizontal: horizontalScale(8),
+  },
+  recomend: {
+    padding: moderateScale(8),
+    borderRadius: moderateScale(8),
+    paddingHorizontal: horizontalScale(16),
   },
 });
