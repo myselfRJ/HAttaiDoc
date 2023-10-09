@@ -49,7 +49,7 @@ import {
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
-import RNFS from 'react-native-fs';
+import RNFS, { stat } from 'react-native-fs';
 import Modal from 'react-native-modal';
 
 const ProfileCreate = ({navigation}) => {
@@ -59,6 +59,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedFilename, setSelectedFilename] = useState('');
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
+  const [show,setshow] = useState(false)
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -110,6 +111,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
   );
+  const [selectedState,setState] = useState('Select')
   const [age, setAge] = useState('');
 
   const [DOB, setDOB] = useState(new Date());
@@ -214,6 +216,10 @@ const ProfileCreate = ({navigation}) => {
       appointmentCardRef?.current?.snapToIndex(0);
     }, 500);
   };
+  const handleStateSelection = state => {
+    setState(state);
+    handleChangeValue('state', state);
+  };
 
   const handlePressIn = () => {
     setIsHovered(true);
@@ -248,6 +254,7 @@ const ProfileCreate = ({navigation}) => {
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     medical_doc_url: uploaddocument,
+    state:selectedState === 'select' ? null : selectedState
   };
 
   const fetchData = async () => {
@@ -365,6 +372,7 @@ const ProfileCreate = ({navigation}) => {
                 input={value}
                 style={styles.DOBselect}
                 setValue={setValue}
+                numeric={true}
               />
             </View>
             <DatePicker
@@ -403,13 +411,61 @@ const ProfileCreate = ({navigation}) => {
               setValue={value => handleChangeValue('experience', value)}
               numeric={true}
             />
+            <View style={{flexDirection:'row'}}>
              <InputText
+             inputContainer={{width:'50%'}}
               required={true}
               label='Medical Registration Number'
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
+            <View style={{width:'50%',paddingHorizontal:horizontalScale(8)}}>
+              <SelectorBtn
+              // selectContainer={{paddingHorizontal:horizontalScale(6)}}
+                required={true}
+                label='State'
+                name="menu-down"
+                size={32}
+                // onPress={toggleModal}
+                onPress={() => {
+                  setshow(!show)
+                }}
+                input={selectedState}
+              />
+
+             {show === true && ( 
+             <View style={styles.statecontainer}>
+          <ScrollView persistentScrollbar={true}>
+            {CONSTANTS.state.map((state, index) => (
+              <Pressable
+                key={index}
+                onPress={() => {
+                handleStateSelection(state);
+                setshow(false)
+                }}
+    
+                >
+                <Text
+                  style={[
+                    styles.statefields,
+                    {
+                      color:
+                        selectedState === state
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.black,
+                    },
+                  ]}>
+                  {state}
+                </Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>)}
+            
+              </View>
+            </View>
+            <View style={{alignSelf:'flex-start'}}>
             <Text style={styles.medtext}>Medical Document</Text>
             <View style={styles.doc_upload}>
               {selectedFilename ? (
@@ -428,6 +484,7 @@ const ProfileCreate = ({navigation}) => {
               ) : (
                 <HButton label="Upload Document" onPress={pickSingleFile} />
               )}
+            </View>
             </View>
             <HButton
               btnstyles={{
@@ -540,7 +597,26 @@ const styles = StyleSheet.create({
     gap: moderateScale(16),
     padding: moderateScale(10),
   },
+  statecontainer:{
+    height: moderateScale(250),
+    // width: '100%',
+    // justifyContent: 'flex-start',
+    // alignItems: 'center',
+    backgroundColor: CUSTOMCOLOR.white,
+    // alignSelf: 'center',
+    borderRadius: moderateScale(4),
+    gap: moderateScale(6),
+    // padding: moderateScale(4),
+
+  },
   modalfields: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: 400,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    paddingHorizontal: moderateScale(32),
+    paddingVertical:moderateScale(12)
+  },
+  statefields:{
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,

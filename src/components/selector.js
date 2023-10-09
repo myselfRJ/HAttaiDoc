@@ -15,7 +15,7 @@ import {
 const SelectorBtn = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <View>
+    <View style={props.selectContainer}>
       {props.label && (
         <Text style={styles.h3}>
           {props.label}{' '}
@@ -34,7 +34,7 @@ const SelectorBtn = props => {
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
         <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
-        <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
+        <Icon name={props.name} size={props.size ? props.size : 24} color={CUSTOMCOLOR.primary} />
       </Pressable>
     </View>
   );
