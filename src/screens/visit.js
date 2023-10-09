@@ -1,5 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -44,8 +53,14 @@ import {
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
+import logo from '../assets/images/logo.png';
+import footer from '../assets/images/footer.png';
+import rx from '../assets/images/RX.png';
+import RNFS from 'react-native-fs';
 
 const Visit = ({navigation, route}) => {
+  const [filePath, setFilePath] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -84,6 +99,9 @@ const Visit = ({navigation, route}) => {
   useEffect(() => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
+
+  const logo = useSelector(state => state?.clinicid?.clinic_logo);
+  console.log('-------------logo============>', logo?.length);
 
   const [submit, setSubmit] = useState(false);
 
@@ -365,6 +383,497 @@ const Visit = ({navigation, route}) => {
     typeof vitalsData.LDD,
     months[month],
   );
+
+  const isPermitted = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs access to Storage data',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        alert('Write permission err', err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
+  const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
+  const logo_url = `data:image/png;base64,${logo}`;
+  const sign = useSelector(state => state?.sign?.sign);
+  console.log('---------sign=========>', sign);
+  const Sign_base64 = sign
+    ? `data:image/jpeg;base64,${sign}`
+    : data?.doctor_name;
+
+  const createPDF = async () => {
+    if (await isPermitted()) {
+      let options = {
+        //Content to print
+        html: `<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- <link rel="stylesheet" href="style.css" type="text/css"> -->
+                <title>
+                    Consultation Pdf
+                </title>
+            </head>
+            <body>
+                <div class='maincontaioner' style=" width: 650px;
+                height: 842px;
+                background-color: #ffffff;
+                padding: 24px;">
+                    <div class='head'>
+                        <div class='first' style="  padding: 8px;
+                        display: flex;
+                        flex-direction: row;
+                        border-bottom:1px #4ba5fa solid;">
+                            <img id='img' src=${
+                              logo ? logo_url : CONSTANTS.default_clinic_logo
+                            } style="width: 52px;height: 58px;" alt="Sample Image"/>
+                            <div class='address' style="   display: flex;
+                            margin-right: 0px;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            width:500px">
+                                <div class='namecontaioner' style="padding: 4px;">
+                                    <p id='docname' style=" font-weight: 600px;
+                                    font-size: 14px;
+                                    margin-left: 8px ;
+                                    color: #4ba5fa;
+                                    line-height: 8px;">${data.doctor_name}</p>
+                                    <p id='spec' style="font-weight: 400px;
+                                    font-size: 12px;
+                                    margin-left: 8px ;
+                                    line-height: 0px;
+                                    color: #4ba5fa;">${data.specialization}</p>
+                                </div>
+                                <div class='namecontaioner' style="  padding: 4px;">
+                                    <p id='docname' style="font-weight: 600px;
+                                    font-size: 14px;
+                                    margin-left: 8px ;
+                                    color: #4ba5fa;
+                                    line-height: 8px;">
+                                    <p id='docname' style="font-weight: 600px;
+                                    font-size: 14px;
+                                    margin-left: 8px ;
+                                    color: #4ba5fa;
+                                    line-height: 8px;">${clinic_name}</p>
+                                    <p id='spec' style="font-weight: 400px;
+                                    font-size: 12px;
+                                    margin-left: 8px ;
+                                    line-height: 0px;
+                                    color: #4ba5fa;">${clinic_Address}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='second' style="display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;">
+                            <img id='rximg' src=${
+                              CONSTANTS.prescription_logo
+                            } style="width:28px;
+                            height: 43px;"/>
+                            <p id='date' style="font-size: 14px;
+                            font-weight: 400px;">Date:${
+                              new Date().toISOString().split('T')[0]
+                            },Time:${new Date().toString().split(' ')[4]}</p>
+                        </div>
+                    </div>
+                    <div class='third' >
+                        <p id='patientDetails' style=" font-size: 12px;
+                        font-weight: 400px;">${name} | ${gende} | ${age} | ${patient_phone}</p>
+                        <div class='subContaioner' style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Cheif Complaint:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${selectedComplaint}</p>
+                        </div>
+                        <div class='subContaioner'  style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Symptoms:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${Symptom?.map(
+                              item => item?.symptom,
+                            )}</p>
+                        </div>
+                        <div >
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Vitals:</p>
+                            <div class='vitalscontaioner' style="display: flex;
+                            flex-direction: row;
+                            gap: 8px;
+                            margin-left: 8px;
+                            line-height: 2px;">
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Pulse rate:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.pulse_rate
+                                    ? vitalsData?.pulse_rate
+                                    : ''
+                                }</p>
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Weight:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.weight ? vitalsData?.weight : ''
+                                }</p>
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Height:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.height ? vitalsData?.height : ''
+                                }</p>
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Temp:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.body_temperature
+                                    ? vitalsData?.body_temperature
+                                    : ''
+                                }</p>
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Res.rate:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.rate ? vitalsData?.rate : ''
+                                }</p>
+                                <p id='values1' style="font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">BMI:</p>
+                                <p id='values' style="font-weight: 300px;
+                                font-size: 12px;
+                                color:#000000;">${
+                                  vitalsData?.bmi ? vitalsData?.bmi : ''
+                                }</p>
+                            </div>
+                        </div>
+                        <div class='subContaioner' style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Diagnosis:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${diagnosis?.map(
+                              item => item?.diagnosis,
+                            )}</p>
+                        </div>
+                    </div>
+                    <div class='presContaioner' style=" display: flex;
+                    justify-content: space-between;
+                    background-color: #DFF0FF;
+                    padding: 2px;
+                    line-height: 4px;
+                    flex-direction: row;">
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">S.No</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Mode</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Medicine</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Dose</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Timing</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Frequency</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Duration</p>
+                        <p id='values3' style="font-weight: 500;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;">Quantity</p>
+                    </div>
+                   ${prescribe?.map(
+                     (item, ind) =>
+                       `<div class='presContaioner1' style="display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    padding: 2px;
+                    line-height: 4px;">
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${parseInt(ind) + 1}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item.mode}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:300px;
+                        padding-left: 4px;">${item?.medicine}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item?.dose_quantity}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item?.timing}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item?.frequency}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item?.duration}</p>
+                        <p id='values4' style="  font-weight: 400;
+                        font-size: 12px;
+                        color:#000000;
+                        width:130px;
+                        padding-left: 4px;">${item?.total_quantity}</p>
+                    </div>`,
+                   )}
+                    <div class='subContaioner' style="  display: flex;
+                    flex-direction: row;
+                    gap: 8px;
+                    line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Notes:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${note}</p>
+                        </div>
+        
+                        <div >
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Refer a Doctor:</p>
+                            ${selectedDoctor?.map(
+                              (
+                                item,
+                                ind,
+                              ) => `<div class='vitalscontaioner' style=" display: flex;
+                            flex-direction: row;
+                            gap: 8px;
+                            margin-left: 8px;
+                            line-height: 2px;">
+                                <p id='values1' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Name:</p>
+                                <p id='values' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">${item?.doctor_name}</p>
+                                <p id='values1' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Specialist:</p>
+                                <p id='values' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">${item?.speciality}</p>
+                                <p id='values1' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">Ph:</p>
+                                <p id='values' style="  font-weight: 500;
+                                font-size: 12px;
+                                color:#000000;">${item?.phone}</p>
+                            </div>`,
+                            )}
+                        </div>
+                        <div class='subContaioner' style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Test Prescribed:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${labreport?.map(
+                              (item, ind) => item?.lab_test,
+                            )}</p>
+                        </div>
+                        <div class='subContaioner' style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Follow Up:</p>
+                            <p id='values'  style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${date}</p>
+                        </div>
+                        <div class='sign' style="  display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                line-height: 4px;">
+                    <div>
+                    <p id='values1' style="  font-weight: 500;
+                    font-size: 12px;
+                    color:#000000;">Signature</p>
+                    <p id='values'  style=" font-weight: 300px;
+                    font-size: 12px;
+                    color:#000000;">Dr.name</p>
+                    </div>
+                </div>
+                        <div class='subContaioner' style="  display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        line-height:4px;">
+                            <p id='subhead' style="font-weight: 400px;
+                            font-size: 12px;
+                            color:#4ba5fa;">Validity Upto:</p>
+                            <p id='values' style=" font-weight: 300px;
+                            font-size: 12px;
+                            color:#000000;">${dateTimeRed}</p>
+                        </div>
+                        <div class='desc' style=" display: flex;
+                        align-items:center;
+                        justify-content: center;
+                        margin-top: 84px;">
+                            <div>
+                            <p id='values2' style="  font-weight: 300;
+                            font-size: 12px;
+                            color:#000000;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            line-height: 4px;">Not valid for Medical Legal Purpose</p>
+                            <p id='values2'  style="  font-weight: 300;
+                            font-size: 12px;
+                            color:#000000;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            line-height: 4px;">In case of any drug interactions or side effects STOP all medicines</p>
+                            <p id='values2'  style="  font-weight: 300;
+                            font-size: 12px;
+                            color:#000000;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            line-height: 4px;">immediately and consult your doctor or nearest hospital</p>
+                        </div>
+                        </div>
+                    <div>
+                        <img  id='foot' src=${
+                          CONSTANTS.pdf_footer
+                        } style="margin-top: 32px;
+                        width: 87px;
+                        height: 45px;"/>
+                    </div>
+                </div>
+            </body>
+        </html>`,
+        //File Name
+        fileName: 'test',
+        //File directory
+        directory: 'docs',
+      };
+      let file = await RNHTMLtoPDF.convert(options);
+      console.log(file.filePath);
+      setFilePath(file.filePath);
+      handle();
+      // readFile();
+    }
+  };
+  const postData = async url => {
+    const formData = new FormData();
+    formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
+    formData.append('patient_phone_number', `${patient_phone}`);
+    formData.append('clinic_id', `${Clinic_id}`);
+    formData.append('appointment_id', `${appointment_id}`);
+    formData.append('file_url', {
+      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
+      type: 'application/pdf',
+      name: `${patient_phone}.pdf`,
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+      console.log('API Response:', responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const apiUrl = URL.uploadPDF;
+
+  const handle = () => {
+    postData(apiUrl);
+  };
+
+  // const readFile = async () => {
+  //   try {
+  //     const path =
+  //       RNFS.DocumentDirectoryPath +
+  //       '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
+  //     console.log('path---======', path);
+
+  //   } catch (error) {
+  //     console.error('Error reading file:', error);
+  //   }
+  // };
+
+  // const pdf = readFile();
+  // console.log('---------pdf', pdf);
   return (
     <View style={{flex: 1}}>
       <ScrollView>
@@ -586,8 +1095,7 @@ const Visit = ({navigation, route}) => {
                               )}
                               {vitalsData?.EDD && (
                                 <Text style={styles.pulse}>
-                                  EDD:
-                                  {" "}{vitalsData.EDD}
+                                  EDD: {vitalsData.EDD}
                                 </Text>
                               )}
                             </View>
@@ -788,7 +1296,8 @@ const Visit = ({navigation, route}) => {
             }}>
             <HButton
               label="Preview"
-              onPress={handlePreview}
+              // onPress={handlePreview}
+              onPress={createPDF}
               btnstyles={{
                 backgroundColor: CUSTOMCOLOR.white,
               }}
@@ -799,9 +1308,10 @@ const Visit = ({navigation, route}) => {
             <HButton
               label="Save"
               onPress={() => {
-                fetchData();
-                putVitals();
-                putComplaint();
+                // fetchData();
+                // putVitals();
+                // putComplaint();
+                createPDF();
               }}
               loading={loading}
             />

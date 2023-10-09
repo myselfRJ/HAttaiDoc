@@ -307,7 +307,7 @@ const SlotBook = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('complaints====>',jsonData)
+      // console.log('complaints====>', jsonData);
       SetData(jsonData);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {

@@ -69,9 +69,11 @@ const Entry = ({navigation}) => {
         // }
       } else {
         console.error('API call failed:', response?.status);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      setLoading(false);
     }
   };
 
