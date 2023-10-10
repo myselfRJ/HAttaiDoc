@@ -374,6 +374,16 @@ const ProfileCreate = ({navigation}) => {
                 setValue={setValue}
                 numeric={true}
               />
+              {/* <Text style={{paddingHorizontal:moderateScale(4),borderWidth:1}}>(OR)</Text>
+              <InputText
+              inputContainer={{width:'50%'}}
+              label="Age/DOB"
+              placeholder="eg:25 / YYYY-MM-DD"
+              value={age}
+              setValue={setAge}
+              keypad={'numeric'}
+              required={true}
+            /> */}
             </View>
             <DatePicker
               modal
@@ -666,7 +676,8 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h4,
   },
   btn: {
-    alignSelf: 'flex-start',
+    // flexDirection:'row',
+    alignSelf:'flex-start',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
   },

@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
-
+    borderColor: CUSTOMCOLOR.primary,
+    borderWidth:0.5,
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(8),
     fontWeight: '400',

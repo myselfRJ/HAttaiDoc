@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     // width: horizontalScale(240),
     borderRadius: moderateScale(4),
+    borderColor:CUSTOMCOLOR.primary,
+    borderWidth:0.5
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h4,
