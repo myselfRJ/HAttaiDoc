@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -34,7 +33,10 @@ import {
 } from '../utility/scaleDimension';
 import PrescriptionHead from '../components/prescriptionHead';
 import ClinicCard from '../components/ClinicCard';
-import {updateclinics} from '../redux/features/profiles/clinicData';
+import {
+  deleteclinics,
+  updateclinics,
+} from '../redux/features/profiles/clinicData';
 import {useRoute} from '@react-navigation/native';
 import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
@@ -56,17 +58,14 @@ const MyClinics = ({navigation}) => {
   }, []);
   const ResetClinicRedux = () => {
     const ResetClinic = [];
-    dispatch(updateclinics(ResetClinic));
-  };
-  const handleInd = index => {
-    setInd(index);
+    dispatch(deleteclinics(ResetClinic));
   };
   const handleDeleteSlotChip = index => {
     const newClinics = clinics?.filter((_, i) => i !== index);
-    dispatch(updateclinics(newClinics));
+    dispatch(deleteclinics(newClinics));
   };
 
-  console.log('=========<>clinics', clinics);
+  console.log('=========<>clinics', clinics?.length);
 
   const fetchData = async () => {
     setLoading(true);
@@ -115,8 +114,14 @@ const MyClinics = ({navigation}) => {
       setLoading(false);
     }
   };
+  const progressData = useSelector(state => state.progress?.status);
   return (
     <View style={styles.Main}>
+      {prevScrn === 'account' && (
+        <View>
+          <ProgresHeader progressData={progressData} />
+        </View>
+      )}
       <PrescriptionHead heading={'My Clinics'} />
       <ScrollView>
         <View
@@ -128,7 +133,7 @@ const MyClinics = ({navigation}) => {
           <SelectorBtn
             select={styles.btn}
             inputstyle={styles.input}
-            input={'Add Clinic'}
+            input={clinics?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
             Bname={'plus'}
             onPress={() => {
               navigation.navigate('addclinic', {prevScrn});
@@ -138,11 +143,10 @@ const MyClinics = ({navigation}) => {
         {clinics?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
             <ClinicCard
-              index={ind}
+              index={index}
               data={item}
               cancel={() => {
                 handleDeleteSlotChip(index);
-                handleInd(index);
               }}
             />
           </View>

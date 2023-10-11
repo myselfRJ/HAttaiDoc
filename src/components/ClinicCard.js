@@ -51,6 +51,7 @@ const ClinicCard = props => {
   const Clinic_details = props.data;
   const navigation = useNavigation();
   const index = props.index;
+  const slots = JSON.parse(Clinic_details?.slot);
 
   return (
     <View style={styles.Main}>
@@ -87,13 +88,17 @@ const ClinicCard = props => {
               style={styles.gap}
               onPress={() => navigation.navigate('addclinic', {index})}>
               <Icon
-                name={'square-edit-outline'}
-                size={24}
+                name={'pencil'}
+                size={moderateScale(24)}
                 color={CUSTOMCOLOR.primary}
               />
             </Pressable>
             <Pressable style={styles.gap} onPress={props.cancel}>
-              <Icon name={'close'} size={24} color={CUSTOMCOLOR.error} />
+              <Icon
+                name={'close'}
+                size={moderateScale(24)}
+                color={CUSTOMCOLOR.error}
+              />
             </Pressable>
             <Pressable
               style={styles.gap}
@@ -121,7 +126,7 @@ const ClinicCard = props => {
         <View
           style={{
             paddingTop: moderateScale(24),
-            paddingHorizontal: horizontalScale(144),
+            // paddingHorizontal: horizontalScale(144),
           }}>
           <View style={styles.slot}>
             <Text
@@ -130,16 +135,64 @@ const ClinicCard = props => {
                 fontSize: CUSTOMFONTSIZE.h3,
                 fontWeight: '700',
               }}>
-              Slots
+              Slots :
             </Text>
-            <Text
-              style={{
-                color: CUSTOMCOLOR.black,
-                fontSize: CUSTOMFONTSIZE.h4,
-                fontWeight: '400',
-              }}>
-              s m t w th f s
-            </Text>
+            <View>
+              <Text style={styles.slotTime}>S</Text>
+              {slots?.Su?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>M</Text>
+              {slots?.M?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>T</Text>
+              {slots?.T?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>W</Text>
+              {slots?.W?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>Th</Text>
+              {slots?.TH?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>F</Text>
+              {slots?.F?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
+            <View>
+              <Text style={styles.slotTime}>Sa</Text>
+              {slots?.Sa?.map((item, ind) => (
+                <Text style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))}
+            </View>
           </View>
         </View>
       )}
@@ -163,9 +216,9 @@ const styles = StyleSheet.create({
   },
   gap: {
     padding: moderateScale(4),
-    borderWidth: moderateScale(1),
+    borderWidth: moderateScale(2),
     borderColor: '#C0DFFC',
-    borderRadius: moderateScale(2),
+    borderRadius: moderateScale(100),
   },
   slot: {
     padding: moderateScale(12),
@@ -175,6 +228,12 @@ const styles = StyleSheet.create({
     borderColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(10),
     backgroundColor: '#ECF6FF',
+  },
+  slotTime: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h4,
+    fontWeight: '400',
+    alignSelf: 'center',
   },
 });
 

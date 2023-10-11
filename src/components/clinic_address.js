@@ -83,13 +83,13 @@ const ClinicAddress = ({navigation}) => {
           const {latitude, longitude} = position.coords;
           setCurrentLocation({latitude, longitude});
           setMarkerCoordinates({latitude, longitude});
-          console.log('current location===', currentLocation);
-          console.log('marker==', markerCoordinates);
+          // console.log('current location===', currentLocation);
+          // console.log('marker==', markerCoordinates);
           setRegiondata({...regionData, latitude, longitude});
         },
 
         error => {
-          console.log('Error getting location:', error);
+          // console.log('Error getting location:', error);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
@@ -98,10 +98,7 @@ const ClinicAddress = ({navigation}) => {
     checkLocationPermission();
   }, []);
 
-  console.log('-------------------------refhggg', regionData, currentLocation);
-  useEffect(() => {
-    console.log('marker data===>', markerCoordinates);
-  }, [markerCoordinates.latitude]);
+  useEffect(() => {}, [markerCoordinates.latitude]);
 
   const onRegionChangeComplete = () => console.log('chnage region');
 
@@ -125,7 +122,7 @@ const ClinicAddress = ({navigation}) => {
         setFormattedAddress(firstResult.formatted_address);
       }
     } catch (error) {
-      console.log('Error fetching formatted address:', error);
+      // console.log('Error fetching formatted address:', error);
     }
   };
   const HandleAddress = () => {

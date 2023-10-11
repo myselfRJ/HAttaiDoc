@@ -69,11 +69,13 @@ const AddClinic = ({navigation}) => {
   const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
-  const clinics = useSelector(state => state.clinic);
   const route = useRoute();
   const address = useSelector(state => state?.address?.address);
   const {prevScrn} = route.params;
+  const {index} = route.params;
   const [cnFess, setCnFees] = useState('');
+  const clinics = useSelector(state => state.clinic?.clinics);
+  console.log('==============>clinic.log', clinics[index]?.clinic_name);
 
   const dispatch = useDispatch();
 
@@ -175,53 +177,53 @@ const AddClinic = ({navigation}) => {
     dispatch(updateclinics(ResetClinic));
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetchApi(URL.addclinic, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(clinics?.clinics),
-      });
-      if (response.status === HttpStatusCode.Ok) {
-        const jsonData = await response.json();
-        if (jsonData.status === 'success') {
-          setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus({index: 1, status: true}));
-          {
-            prevScrn === 'account'
-              ? setTimeout(() => {
-                  navigation.navigate('tab');
-                }, 1000)
-              : setTimeout(() => {
-                  navigation.navigate('adduser', {prevScrn1});
-                }, 1000);
-          }
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 2000);
-          setLoading(false);
-          ResetClinicRedux();
-          // SuccesRef?.current?.snapToIndex(0);
-        } else {
-          setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
-          console.error('API call failed:', response.status, response);
-          setLoading(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      setLoading(false);
-    }
-  };
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetchApi(URL.addclinic, {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //         Accept: 'application/json',
+  //       },
+  //       body: JSON.stringify(clinics?.clinics),
+  //     });
+  //     if (response.status === HttpStatusCode.Ok) {
+  //       const jsonData = await response.json();
+  //       if (jsonData.status === 'success') {
+  //         setApiStatus({status: 'success', message: 'Successfully created'});
+  //         SuccesRef?.current?.snapToIndex(1);
+  //         dispatch(headerStatus({index: 1, status: true}));
+  //         {
+  //           prevScrn === 'account'
+  //             ? setTimeout(() => {
+  //                 navigation.navigate('tab');
+  //               }, 1000)
+  //             : setTimeout(() => {
+  //                 navigation.navigate('adduser', {prevScrn1});
+  //               }, 1000);
+  //         }
+  //         setTimeout(() => {
+  //           SuccesRef?.current?.snapToIndex(0);
+  //         }, 2000);
+  //         setLoading(false);
+  //         ResetClinicRedux();
+  //         // SuccesRef?.current?.snapToIndex(0);
+  //       } else {
+  //         setApiStatus({status: 'warning', message: jsonData.message});
+  //         SuccesRef?.current?.snapToIndex(1);
+  //         console.error('API call failed:', response.status, response);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error occurred:', error);
+  //     setApiStatus({status: 'error', message: 'Please try again'});
+  //     SuccesRef?.current?.snapToIndex(1);
+  //     setLoading(false);
+  //   }
+  // };
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const onImagePress = () => {
@@ -322,7 +324,7 @@ const AddClinic = ({navigation}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
   const [selectSlot, setselectSlot] = useState([]);
-  console.log('length===', selectSlot);
+  // console.log('length===', selectSlot);
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
 
@@ -522,12 +524,18 @@ const AddClinic = ({navigation}) => {
     });
     setselectSlot([]);
   };
-
+  console.log('==========>index', index);
   const handlePlusIconClick = () => {
     if (value.clinic) {
-      console.log('===========>visible', visibleSlot);
+      // console.log('===========>visible', visibleSlot);
       if (!visibleSlot) {
-        dispatch(addclinic_data(Clinic_Data));
+        {
+          index !== undefined
+            ? dispatch(
+                updateclinics({index: index, updatedClinic: Clinic_Data}),
+              )
+            : dispatch(addclinic_data(Clinic_Data));
+        }
         Alert.alert('Success', '"Clinic data added successfully"');
         setShowSlotChip(true);
         (value.clinic = ''),
@@ -557,28 +565,47 @@ const AddClinic = ({navigation}) => {
     }
   };
 
-  const {index} = route.params;
-  console.log('==========>ind', index);
+  if (index !== undefined) {
+    useEffect(() => {
+      const clinicData = {
+        clinic: clinics[index]?.clinic_name,
+        address: clinics[index]?.clinic_Address,
+        phone: clinics[index]?.clinic_phone_number,
+        fees: clinics[index]?.fees,
+      };
 
+      setValue(clinicData);
+      setCnFees(clinics[index]?.fees);
+      setSelectedImage(clinics[index]?.clinic_photo_url);
+      setSelectedLogo(clinics[index]?.clinic_logo_url);
+
+      try {
+        const slots = JSON.parse(clinics[index]?.slot);
+        setSlots(slots);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    }, []);
+  }
   return (
     <View style={{flex: 1}}>
-      {prevScrn !== 'account' && (
+      {/* {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>
-      )}
+      )} */}
 
-      {prevScrn === 'account' && (
-        <View>
-          <PlusButton
-            icon="close"
-            style={styles.clsbtn}
-            color={CUSTOMCOLOR.primary}
-            size={moderateScale(32)}
-            onPress={() => navigation.navigate('tab')}
-          />
-        </View>
-      )}
+      {/* {prevScrn === 'account' && ( */}
+      <View>
+        <PlusButton
+          icon="close"
+          style={styles.clsbtn}
+          color={CUSTOMCOLOR.primary}
+          size={moderateScale(32)}
+          onPress={() => navigation.navigate('tab')}
+        />
+      </View>
+      {/* )} */}
 
       <ScrollView>
         <Keyboardhidecontainer>

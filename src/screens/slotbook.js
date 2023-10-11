@@ -138,7 +138,10 @@ const SlotBook = ({navigation, route}) => {
 
     if (response.ok) {
       const jsonData = await response.json();
-      setSlotDetails(jsonData.data?.map(val => JSON.parse(val?.slot)));
+      const slot = jsonData?.data[0]?.slot;
+      const slots = JSON.parse(slot);
+      setSlotDetails(slots);
+      // setSlotDetails(jsonData.data?.map(val => JSON.parse(val?.slot)));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -198,7 +201,7 @@ const SlotBook = ({navigation, route}) => {
     });
     return timeList;
   };
-  let list = getTimeList(slotDetails[0]?.[Day]);
+  let list = getTimeList(slotDetails?.[Day]);
   const token = useSelector(state => state.authenticate.auth.access);
 
   const renderItems = ({item}) => {
