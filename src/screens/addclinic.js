@@ -177,7 +177,7 @@ const AddClinic = ({navigation}) => {
                   navigation.navigate('tab');
                 }, 1000)
               : setTimeout(() => {
-                  navigation.navigate('adduser', {prevScrn1});
+                  navigation.navigate('userdisplay', {prevScrn1});
                 }, 1000);
           }
           setTimeout(() => {
@@ -344,11 +344,13 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={commonstyles.h1}>Add Clinic</Text>
                 <AddImage
-                  onPress={() => {
-                    // onImagePress();
-                    // openCamera();
-                    ModalVisible();
-                  }}
+                  // onPress={() => {
+                  //   // onImagePress();
+                  //   // openCamera();
+                  //   ModalVisible();
+                  // }}
+                  OnGallery={onImagePress}
+                  OnCamera={openCamera}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -442,7 +444,9 @@ const AddClinic = ({navigation}) => {
             <View style={styles.alignchild}>
               <Text style={styles.logo}>Clinic Logo</Text>
               <AddImage
-                onPress={() => LogoVisible()}
+                // onPress={() => LogoVisible()}
+                OnGallery={onImagePress}
+                OnCamera={openCamera}
                 encodedBase64={selectedLogo}
               />
             </View>
@@ -525,7 +529,7 @@ const AddClinic = ({navigation}) => {
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
 
-      {modal && (
+      {/* {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -544,7 +548,7 @@ const AddClinic = ({navigation}) => {
             OnCamera={LogoCamera}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };

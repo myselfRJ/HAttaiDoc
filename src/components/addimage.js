@@ -1,31 +1,110 @@
-import {Pressable, Image, StyleSheet} from 'react-native';
+import {Pressable, Image, StyleSheet,View,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR} from '../settings/styles';
+import React, {useState, useRef, useEffect, startTransition} from 'react';
 import {
   horizontalScale,
   moderateScale,
   verticalScale,
 } from '../utility/scaleDimension';
+import CustomCalendar from './calendar';
 const AddImage = props => {
   // console.log('urel====>', props.encodedBase64);
+  const [show,setshow] = useState(false)
+  console.log(show)
+  
   return props?.encodedBase64 ? (
-    <Pressable onPress={props.onPress} style={styles.url}>
+    <View style={{flexDirection:'row'}}>
+    <View><Pressable onPress={props.onPress} style={styles.url}>
       <Image
         style={styles.image}
         source={{uri: `data:image/jpeg;base64,${props.encodedBase64}`}}
         resizeMode="cover"
       />
     </Pressable>
+    <View style={{bottom:moderateScale(16),left:moderateScale(10),alignSelf:'flex-end',borderRadius:moderateScale(24),backgroundColor:CUSTOMCOLOR.white}} >
+    <Pressable onPress={() => {
+            // props.onPress();
+            setshow(!show); 
+          }}>
+      {show == true ?(<View style={{paddingHorizontal:horizontalScale(4)}}><Icon name="close" size={24} color={CUSTOMCOLOR.primary}/></View>)
+      :(<Icon name="plus" size={26} color={CUSTOMCOLOR.primary}/>)}
+      </Pressable>
+      </View>
+      </View>
+       {show && (<View style={{paddingHorizontal:horizontalScale(12),bottom:moderateScale(8)}}>
+       <TouchableOpacity onPress={()=>
+       {
+        props.OnGallery();
+        setshow(!show)
+      
+      }}>
+             <Icon
+               name="image-multiple"
+               size={moderateScale(32)}
+               color={CUSTOMCOLOR.primary}
+             />
+       
+           </TouchableOpacity>
+           <TouchableOpacity onPress={()=>{
+           props.OnCamera();
+           setshow(!show)}}>
+             <Icon name="camera" size={moderateScale(32)} color={CUSTOMCOLOR.primary} />
+   
+           </TouchableOpacity>
+       </View>)}
+       </View>
   ) : (
-    <Pressable onPress={props.onPress} style={styles.main}>
+    <View style={{flexDirection:'row'}}>
+      <View>
+    <Pressable onPress={() => {
+            // props.onPress();
+            setshow(true); 
+          }} style={styles.main}>
       <Icon name="account-plus" size={24} color={CUSTOMCOLOR.primary} />
+      
     </Pressable>
+    <View style={{bottom:moderateScale(16),left:moderateScale(10),alignSelf:'flex-end',borderRadius:moderateScale(24),backgroundColor:CUSTOMCOLOR.white}} >
+    <Pressable onPress={() => {
+            // props.onPress();
+            setshow(!show); 
+          }}>
+      {show == true ?(<View style={{paddingHorizontal:horizontalScale(4)}}><Icon name="close" size={24} color={CUSTOMCOLOR.primary}/></View>)
+      :(<Icon name="plus" size={26} color={CUSTOMCOLOR.primary}/>)}
+      </Pressable>
+      </View>
+      </View>
+      {show && (<View style={{paddingHorizontal:horizontalScale(12),bottom:moderateScale(8)}}>
+      <TouchableOpacity  onPress={()=>
+       {
+        props.OnGallery();
+        setshow(!show)
+      
+      }}>
+            <Icon
+              name="image-multiple"
+              size={moderateScale(32)}
+              color={CUSTOMCOLOR.primary}
+            />
+      
+          </TouchableOpacity>
+          <TouchableOpacity  onPress={()=>
+       {
+        props.OnCamera();
+        setshow(!show)
+      
+      }}>
+            <Icon name="camera" size={moderateScale(32)} color={CUSTOMCOLOR.primary} />
+  
+          </TouchableOpacity>
+      </View>)}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    padding: moderateScale(16),
+    padding: moderateScale(20),
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),

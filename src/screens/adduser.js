@@ -50,6 +50,7 @@ import {disableBackButton} from '../utility/backDisable';
 import {useRoute} from '@react-navigation/native';
 import {checkNumber} from '../utility/checks';
 import GalleryModel from '../components/GalleryModal';
+import { mode } from '../redux/features/prescription/prescribeslice';
 
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
@@ -60,7 +61,9 @@ const AddUser = ({navigation}) => {
   const ClinicRef = useState(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-
+  const [select,setSelect] = useState('select')
+  const [show,setShow] = useState(false)
+  const [showclinic,setShowclinic] = useState(false)
   console.log();
 
   console.log('----------------users', clinic_users);
@@ -82,7 +85,7 @@ const AddUser = ({navigation}) => {
     name: '',
     phone: '',
     gender: 'male',
-    role: selectedRole,
+    role: '',
     clinic: '',
     slots: [],
     user_profile_pic_url: selectedImage
@@ -117,7 +120,7 @@ const AddUser = ({navigation}) => {
   };
   const Clinic_users = {
     clinic_user_name: values.name,
-    role: selectedRole !== 'Others' ? selectedRole : otherRole,
+    role: select !== 'Others' ? select : otherRole,
     user_profile_pic_url: values.user_profile_pic_url,
     gender: values.gender,
     user_phone_number: values.phone,
@@ -146,11 +149,11 @@ const AddUser = ({navigation}) => {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json, application/xml',
         },
-        body: JSON.stringify(clinic_users),
+        body: JSON.stringify(Clinic_users),
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        // console.log(jsonData);
+        console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -188,7 +191,7 @@ const AddUser = ({navigation}) => {
       values.gender &&
       values.phone.length === 10 &&
       selectedClinic &&
-      selectedRole
+      select
     ) {
       dispatch(addclinic_users(Clinic_users));
       Alert.alert('Success', '"User data added successfully"');
@@ -196,15 +199,19 @@ const AddUser = ({navigation}) => {
       setSelectedImage('');
       setValues({name: '', phone: '', gender: 'male'});
       setSelectedClinic('');
-      setSelectedRole('');
+      setSelect('');
+      navigation.navigate('userdisplay',{prevScrn})
     } else {
       Alert.alert('"Warning"', '"Please Enter Correct Details"');
     }
+    
   };
 
-  const handleDeleteSlotChip = index => {
-    const newClinic_users = clinic_users?.filter((_, i) => i !== index);
-    dispatch(updateclinic_users(newClinic_users));
+  const handleDeleteUser = (name, role) => {
+    // Filter out the user you want to delete based on name and role
+    const updatedClinicUsers = clinic_users.filter(user => user.clinic_user_name !== name || user.role !== role);
+    dispatch(updateclinic_users(updatedClinicUsers));
+    // setShowSlotChip(false); // Assuming you want to hide the user chips after deletion
   };
 
   const handleChangeValue = (field, value) => {
@@ -273,9 +280,18 @@ const AddUser = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
+
+  const HandleRoleSelect=(val)=>{
+    setSelect(val);
+    setShow(!show)
+  }
+  const handleClinicSelect =(val) =>{
+    setSelectedClinic(val?.clinic_name);
+    setShowclinic(!showclinic)
+  }
   return (
-    <View style={{flex: 1}}>
-      {prevScrn !== 'account' && (
+    <View style={{flex: 1,padding:moderateScale(24)}}>
+      {/* {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>
@@ -291,19 +307,20 @@ const AddUser = ({navigation}) => {
             onPress={() => navigation.navigate('tab')}
           />
         </View>
-      )}
+      )} */}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
-            <View style={styles.alignchild}>
-              <View style={styles.alignchild}>
+            {/* <View style={styles.alignchild}> */}
+              <View style={styles.alignchild1}>
                 <Text style={commonstyles.h1}>Add User</Text>
                 <AddImage
-                  onPress={() => ModalVisible()}
+                 OnGallery={onImagePress}
+                 OnCamera={openCamera}
                   encodedBase64={selectedImage}
                 />
               </View>
-            </View>
+            {/* </View> */}
             <InputText
               label={Language[language]['name']}
               maxLength={30}
@@ -347,8 +364,32 @@ const AddUser = ({navigation}) => {
               </View>
             </View>
             <View style={styles.clinicselect}>
-              <Text style={styles.labeltext}>Role <Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+              {/* <Text style={styles.labeltext}>Role <Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text> */}
+              <SelectorBtn
+                required={true}
+                label='Role'
+                name="chevron-down"
+                // onPress={toggleModal}
+                onPress={() => {
+                  setShow(!show)
+                }}
+                input={select}
+              />
+              {show == true && (
+                <View style={styles.rolemenu}>
+                
+                {CONSTANTS.role?. map((val,ind)=>(
+                  <TouchableOpacity key={ind} onPress={()=> HandleRoleSelect(val)}>
+                  <Text style={[styles.txt, 
+                  select == val ? {color : CUSTOMCOLOR.primary} : null
+                  ]}>{val}</Text>
+                  </TouchableOpacity>
+                ))}
+              
+            </View>
+              )}
+
+              {/* <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 {CONSTANTS.role?.map((val, ind) => (
                   <SelectorBtn
   
@@ -370,20 +411,44 @@ const AddUser = ({navigation}) => {
                     input={val}
                   />
                 ))}
-              </View>
+              </View> */}
             </View>
-            {selectedRole === 'Others' && (
+            {select === 'Others' && (
               <InputText
-                label={'Please Enter Role'}
+                label={'Enter Role'}
                 maxLength={30}
-                placeholder="Enter Role"
+                placeholder="Enter the Role"
                 value={otherRole}
                 setValue={setOtherRole}
               />
             )}
             <View style={styles.clinicselect}>
-              <Text style={styles.labeltext}>Clinic<Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+            <SelectorBtn
+                required={true}
+                label='Clinic'
+                name="chevron-down"
+                // onPress={toggleModal}
+                onPress={() => {
+                  setShowclinic(!show)
+                }}
+                input={selectedClinic}
+              />
+              {showclinic == true && (
+                <View style={styles.rolemenu}>
+                
+                {clinics?. map((val,ind)=>(
+                  <TouchableOpacity key={ind} onPress={()=> handleClinicSelect(val)}>
+                  <Text style={[styles.txt, 
+                  selectedClinic == val?.clinic_name ? {color : CUSTOMCOLOR.primary} : null
+                  ]}>{val?.clinic_name}</Text>
+                  </TouchableOpacity>
+                ))}
+              
+            </View>
+              )}
+
+              {/* <Text style={styles.labeltext}>Clinic<Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text> */}
+              {/* <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 {clinics?.map((val, ind) => (
                   <SelectorBtn
                   required={true}
@@ -404,7 +469,7 @@ const AddUser = ({navigation}) => {
                     onPress={() => setSelectedClinic(val?.clinic_name)}
                   />
                 ))}
-              </View>
+              </View> */}
               {/* <SelectorBtn
                 label={Language[language]['clinic']}
                 name="chevron-down"
@@ -414,7 +479,7 @@ const AddUser = ({navigation}) => {
                 input={selectedClinic}
               /> */}
             </View>
-            <View style={styles.save}>
+            {/* <View style={styles.save}>
               <HButton
                 btnstyles={{
                   backgroundColor:
@@ -429,8 +494,8 @@ const AddUser = ({navigation}) => {
                 label="save"
                 onPress={handlePlusIconClick}
               />
-            </View>
-            <View style={styles.users}>
+            </View> */}
+            {/* <View style={styles.users}>
               <View>
                 {values?.slots?.length > 0 && (
                   <Text style={styles.UsersText}>Users</Text>
@@ -457,9 +522,9 @@ const AddUser = ({navigation}) => {
                     ))}
                 </View>
               </View>
-            </View>
+            </View> */}
             <View style={styles.bottom}>
-              <HButton
+              {/* <HButton
                 rightIcon="arrow-right-thin"
                 color={CUSTOMCOLOR.primary}
                 label="Skip"
@@ -470,21 +535,28 @@ const AddUser = ({navigation}) => {
                 textStyle={{
                   color: CUSTOMCOLOR.primary,
                 }}
-              />
+              /> */}
               <HButton
+          
                 btnstyles={{
+                  // top:moderateScale(100),
                   backgroundColor:
-                    clinic_users.length > 0
+                    values.name &&
+                    values.gender &&
+                    values.phone.length === 10 &&
+                    selectedClinic &&
+                    select
                       ? CUSTOMCOLOR.primary
                       : CUSTOMCOLOR.disable,
                 }}
-                label="Done"
+                label="Save"
                 onPress={() => {
-                  if (clinic_users.length > 0) {
-                    fetchData();
-                  } else {
-                    Alert.alert('Please Add Atleast One User');
-                  }
+                   handlePlusIconClick();
+                  // if (clinic_users.length > 0) {
+                  //   fetchData();
+                  // } else {
+                  //   Alert.alert('Please Add Atleast One User');
+                  // }
                 }}
                 loading={loading}
               />
@@ -548,7 +620,7 @@ const AddUser = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
-      {modal && (
+      {/* {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -557,7 +629,7 @@ const AddUser = ({navigation}) => {
             OnCamera={openCamera}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };
@@ -574,15 +646,16 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: horizontalScale(12),
-    paddingVertical: verticalScale(24),
+    paddingVertical: verticalScale(32),
     width: '100%',
     //alignItems: 'center',
     gap: moderateScale(8),
+    // borderWidth:1
   },
   bottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // borderWidth:1,
     paddingHorizontal: horizontalScale(6),
+    top:verticalScale(250)
   },
   UsersText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -592,7 +665,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
   },
   radiogroup: {
-    padding: moderateScale(16),
+    padding: moderateScale(12),
     flexDirection: 'row',
     gap: moderateScale(48),
     justifyContent: 'flex-start',
@@ -601,7 +674,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
+    // height:'20%',
     paddingHorizontal: horizontalScale(8),
+    // borderWidth:1
+  },
+  alignchild1: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
+    height:'20%',
+    paddingHorizontal: horizontalScale(8),
+    // borderWidth:1
   },
   modalContainer: {
     // height: '100%',
@@ -649,11 +732,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(6),
   },
   clinicselect: {
-    gap: moderateScale(16),
+    // gap: moderateScale(16),
     alignSelf: 'flex-start',
     // flexDirection: 'row',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
+    // borderWidth:1
+    // paddingVertical:moderateScale(4)
   },
   save: {
     alignSelf: 'flex-end',
@@ -671,5 +756,18 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.black,
   },
+  rolemenu:{
+    backgroundColor:CUSTOMCOLOR.white,
+    // gap:moderateScale(4),
+    paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(16)
+  },
+  txt:{
+    color:CUSTOMCOLOR.black,
+    fontSize:CUSTOMFONTSIZE.h3,
+    fontWeight:'400',
+    paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(8)
+  }
 });
 export default AddUser;

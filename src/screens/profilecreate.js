@@ -51,6 +51,7 @@ import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
 import RNFS, { stat } from 'react-native-fs';
 import Modal from 'react-native-modal';
+import { mode } from '../redux/features/prescription/prescribeslice';
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -140,6 +141,7 @@ const ProfileCreate = ({navigation}) => {
   useEffect(() => {
     HandleInput();
   }, [DOB, age]);
+  console.log('age===',formatDate)
 
   const HandleCheck = () => {
     if (value.length <= 3) {
@@ -249,7 +251,7 @@ const ProfileCreate = ({navigation}) => {
     gender: values.gender,
     // DOB: `${current}-${'01'}-${'01'}`,
     // DOB: formattedDate,
-    DOB: formatDate,
+    DOB: formatDate ? formatDate : formattedDate,
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
@@ -315,15 +317,18 @@ const ProfileCreate = ({navigation}) => {
       <ProgresHeader progressData={progressData} />
       <ScrollView>
         <Keyboardhidecontainer>
-          <View style={commonstyles.content}>
+          <View style={styles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Fill Profile</Text>
               <AddImage
-                onPress={() => ModalVisible()}
+                // onPress={true}
+                OnGallery={onImagePress}
+            OnCamera={openCamera}
                 encodedBase64={selectedImage}
               />
             </View>
             <InputText
+            // inputContainer={{bottom:moderateScale(4)}}
               required={true}
               label={Language[language]['name']}
               placeholder="Full Name"
@@ -331,7 +336,7 @@ const ProfileCreate = ({navigation}) => {
               setValue={value => handleChangeValue('doctor_name', value)}
             />
 
-            <View style={styles.alignchild}>
+            <View style={styles.alignchild1}>
               <Text style={styles.gender}>{Language[language]['gender']}</Text>
               <View style={styles.radiogroup}>
                 <Option
@@ -364,7 +369,7 @@ const ProfileCreate = ({navigation}) => {
             /> */}
 
             <View style={styles.btn}>
-              <DOBselect
+              {/* <DOBselect
                 required={true}
                 label="Age/ Date of Birth"
                 name="calendar"
@@ -373,17 +378,28 @@ const ProfileCreate = ({navigation}) => {
                 style={styles.DOBselect}
                 setValue={setValue}
                 numeric={true}
-              />
-              {/* <Text style={{paddingHorizontal:moderateScale(4),borderWidth:1}}>(OR)</Text>
+              /> */}
               <InputText
-              inputContainer={{width:'50%'}}
-              label="Age/DOB"
-              placeholder="eg:25 / YYYY-MM-DD"
-              value={age}
-              setValue={setAge}
-              keypad={'numeric'}
+              inputContainer={{width:'45%',paddingHorizontal:horizontalScale(0)}}
+              label="Age"
+              placeholder="eg:25"
+              input={value}
+              setValue={setValue}
+              numeric={true}
               required={true}
-            /> */}
+            />
+             
+              <Text style={{paddingHorizontal:moderateScale(16)}}>(OR)</Text>
+              
+             <SelectorBtn
+              required={true}
+              selectContainer={{width:'46%'}}
+            label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
             </View>
             <DatePicker
               modal
@@ -432,7 +448,7 @@ const ProfileCreate = ({navigation}) => {
             />
             <View style={{width:'50%',paddingHorizontal:horizontalScale(8)}}>
               <SelectorBtn
-              // selectContainer={{paddingHorizontal:horizontalScale(6)}}
+    
                 required={true}
                 label='State'
                 name="menu-down"
@@ -492,12 +508,24 @@ const ProfileCreate = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               ) : (
-                <HButton label="Upload Document" onPress={pickSingleFile} />
+                <HButton label="Upload Document" 
+                onPress={pickSingleFile} 
+                btnstyles={{backgroundColor:CUSTOMCOLOR.white,
+                  borderColor:CUSTOMCOLOR.primary,
+                  borderWidth:0.5,
+                  borderRadius:4,
+                }}
+                textStyle={{color:CUSTOMCOLOR.primary}}
+                />
               )}
             </View>
             </View>
             <HButton
               btnstyles={{
+                width:'100%',
+                paddingHorizontal:horizontalScale(16),
+                borderRadius:moderateScale(16),
+                top:moderateScale(16),
                 backgroundColor:
                   values.doctor_name &&
                   values.gender &&
@@ -565,7 +593,7 @@ const ProfileCreate = ({navigation}) => {
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
 
-      {modal && (
+      {/* {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -577,24 +605,39 @@ const ProfileCreate = ({navigation}) => {
             // dismiss={()=>setModal(false)}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   radiogroup: {
-    padding: moderateScale(16),
+    paddingHorizontal: moderateScale(8),
+    paddingVertical:moderateScale(6),
     flexDirection: 'row',
     gap: moderateScale(48),
-
+    // borderWidth:1,
     justifyContent: 'flex-start',
   },
   alignchild: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    height:'20%',
+    // gap:moderateScale(0),
+    // paddingHorizontal: horizontalScale(8),
+    // borderWidth:1,
+    paddingVertical:moderateScale(0),
+  },
+  alignchild1: {
+    // justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
+    // height:'20%',
+    // gap:moderateScale(0),
+    // paddingHorizontal: horizontalScale(8),
+    // borderWidth:1,
+    paddingVertical:moderateScale(0),
   },
   modalContainer: {
     height: '100%',
@@ -606,6 +649,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     gap: moderateScale(16),
     padding: moderateScale(10),
+    borderWidth:1
   },
   statecontainer:{
     height: moderateScale(250),
@@ -618,6 +662,15 @@ const styles = StyleSheet.create({
     gap: moderateScale(6),
     // padding: moderateScale(4),
 
+  },
+  content: {
+    paddingHorizontal: 24,
+    //paddingVertical: 24,
+    width: '100%',
+    alignItems: 'center',
+    // gap: moderateScale(4),
+    // borderWidth:1,
+    height:'100%'
   },
   modalfields: {
     fontSize: CUSTOMFONTSIZE.h3,
@@ -635,7 +688,8 @@ const styles = StyleSheet.create({
   },
   DOBselect: {
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(8),
+    // paddingHorizontal:horizontalScale(16)
   },
   selectedfilecontainer: {
     flexDirection: 'row',
@@ -674,10 +728,11 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     fontSize: CUSTOMFONTSIZE.h4,
+    paddingHorizontal:horizontalScale(8)
   },
   btn: {
-    // flexDirection:'row',
-    alignSelf:'flex-start',
+    flexDirection:'row',
+    alignItems:'center',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
   },

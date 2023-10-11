@@ -48,6 +48,7 @@ import ReferToDoctor from '../screens/Refer';
 import UpdateProfile from '../screens/updateProfile';
 import ClinicAddress from '../components/clinic_address';
 import Symptoms1 from '../screens/Symptom1';
+import UserDisplay from '../screens/userDisplay';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -254,6 +255,11 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="adduser"
         component={AddUser}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="userdisplay"
+        component={UserDisplay}
         options={{headerShown: false}}
       />
       <Stack.Screen
