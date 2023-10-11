@@ -241,7 +241,7 @@ const Account = () => {
             nameIcon={'account-group'}
             Dataname={'Users'}
             name={'plus'}
-            onPress={() => navigation.navigate('adduser', {prevScrn})}
+            onPress={() => navigation.navigate('userdisplay', {prevScrn})}
           />
         </View>
       </View>

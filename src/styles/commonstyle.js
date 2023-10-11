@@ -22,7 +22,8 @@ export const commonstyles = StyleSheet.create({
     //paddingVertical: 24,
     width: '100%',
     alignItems: 'center',
-    gap: moderateScale(8),
+    gap: moderateScale(4),
+    // borderWidth:1
   },
   h1: {
     fontFamily: 'OpenSans-SemiBold',

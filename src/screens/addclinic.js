@@ -1060,7 +1060,7 @@ const AddClinic = ({navigation}) => {
         </ScrollView>
       </BottomSheetView>
 
-      {modal && (
+      {/* {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -1079,7 +1079,7 @@ const AddClinic = ({navigation}) => {
             OnCamera={LogoCamera}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };

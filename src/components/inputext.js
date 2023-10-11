@@ -67,7 +67,10 @@ const InputText = props => {
         </Text>
         <View>
           <TextInput
-            style={[styles.textinput, errorStyles, props.textStyle, props.search ? styles.bottom : styles.textinput]}
+            style={[styles.textinput, errorStyles, props.textStyle, 
+              props.search ? styles.bottom : styles.textinput,
+              // props.doubleCheck ? styles.numStyle : styles.textinput
+            ]}
             textAlign={props.textAlign ?? 'left'}
             // underlineColorAndroid="transparent"
             placeholder={props.placeholder}
@@ -124,6 +127,18 @@ const styles = StyleSheet.create({
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
     borderColor: CUSTOMCOLOR.primary,
+    borderWidth:0.5,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
+    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h3,
+    // outlinedStyle: "none",
+    borderRadius: 4,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
+  numStyle: {
+    backgroundColor: CUSTOMCOLOR.white,
+    // borderColor: CUSTOMCOLOR.primary,
     borderWidth:0.5,
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(8),
