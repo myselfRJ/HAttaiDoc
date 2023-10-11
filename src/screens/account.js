@@ -230,7 +230,8 @@ const Account = () => {
             Dataname={'Clinics'}
             name={'plus'}
             onPress={() => {
-              navigation.navigate('addclinic', {prevScrn});
+              // navigation.navigate('addclinic', {prevScrn});
+              navigation.navigate('clinic', {prevScrn});
             }}
           />
           <ManageCard

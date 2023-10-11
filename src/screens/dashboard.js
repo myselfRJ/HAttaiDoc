@@ -221,7 +221,7 @@ const Dashboard = ({navigation, route}) => {
         </View>
 
         <View>
-          <ToggleSwitch value={visible} onValueChange={handleChart} />
+          {/* <ToggleSwitch value={visible} onValueChange={handleChart} /> */}
 
           {visible && (
             <View style={styles.cardContainer}>
@@ -239,7 +239,7 @@ const Dashboard = ({navigation, route}) => {
         </View>
         <View style={styles.select}>
           <SelectorBtn
-            //label={Language[language]['clinic']}
+            label={'Clinic :'}
             name="chevron-down"
             onPress={() => {
               ClinicRef?.current?.snapToIndex(1);
@@ -247,7 +247,7 @@ const Dashboard = ({navigation, route}) => {
             input={selectedClinic}
           />
           <SelectorBtn
-            //label={Language[language]['dob']}
+            label={'Select Date :'}
             name="calendar"
             onPress={() => setOpen('to')}
             input={formatDate}
@@ -279,7 +279,7 @@ const Dashboard = ({navigation, route}) => {
                 <AppointmentCard
                   key={index}
                   appointment={value}
-                  openVisit={() => navigation.navigate('visit')}
+                  // openVisit={() => navigation.navigate('visit')}
                 />
               );
             })
@@ -287,6 +287,7 @@ const Dashboard = ({navigation, route}) => {
             <CustomIcon label="No Appointments" />
           )}
         </ScrollView>
+
         <View>
           <HButton
             label="Book Appointment"

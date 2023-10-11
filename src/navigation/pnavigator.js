@@ -49,6 +49,7 @@ import UpdateProfile from '../screens/updateProfile';
 import ClinicAddress from '../components/clinic_address';
 import Symptoms1 from '../screens/Symptom1';
 import UserDisplay from '../screens/userDisplay';
+import MyClinics from '../screens/MyClinics';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -68,6 +69,11 @@ const ProtectedRoute = () => {
         name="tab"
         component={BottomTab}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="clinic"
+        component={MyClinics}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="profilecreate"
