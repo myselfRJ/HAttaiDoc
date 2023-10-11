@@ -66,244 +66,174 @@ const AppointmentCard = ({appointment, openVisit}) => {
     true: 'Paid',
   };
   return (
-    <>
-      <View style={styles.maincontainer}>
-        <Image
-          style={styles.img}
-          source={{
-            uri: `data:image/jpeg;base64,${appointment.patient_data.patient_pic_url}`,
-          }}
-        />
-        <View style={styles.child}>
-          <Text style={styles.name}>
-            {appointment.patient_data.patient_name}
-          </Text>
-          <Text style={styles.age}>
-            {parseInt(presentYear) - parseInt(birthYear)} |{' '}
-            {appointment.patient_data.gender}
-          </Text>
-          <View style={styles.seperator}></View>
-          <Text style={styles.symptom}>{appointment.complaint}</Text>
+    <View style={styles.main}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: moderateScale(16),
+            // paddingTop: moderateScale(34),
+          }}>
+          <View>
+            <Image
+              style={styles.img}
+              source={{
+                uri: `data:image/jpeg;base64,${appointment.patient_data.patient_pic_url}`,
+              }}
+            />
+          </View>
+          <View style={{gap: moderateScale(4)}}>
+            <Text style={styles.name}>
+              {appointment.patient_data.patient_name}
+            </Text>
+            <Text style={styles.subText}>
+              {parseInt(presentYear) - parseInt(birthYear)} |{' '}
+              {appointment.patient_data.gender}
+            </Text>
+            <Text style={styles.subText}>{appointment.complaint}</Text>
+          </View>
         </View>
-        <View style={styles.hseperator}></View>
-        <View style={styles.patientinfo}>
+        <View>
+          <View style={{marginLeft: moderateScale(220)}}>
+            <Pressable style={styles.icon} onPress={() => setVisible(!visible)}>
+              <Icon
+                name={visible ? 'chevron-up' : 'chevron-down'}
+                size={moderateScale(24)}
+                color={CUSTOMCOLOR.primary}
+              />
+            </Pressable>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: moderateScale(16),
+              paddingTop: moderateScale(24),
+            }}>
+            <Pressable style={styles.btn}>
+              <Text style={styles.btnText}>Reschedule</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleOnpress}
+              style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
+              <Text style={[styles.btnText, {color: CUSTOMCOLOR.white}]}>
+                Start Visit
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+      {visible && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            backgroundColor: '#ECF6FF',
+            borderWidth: moderateScale(2),
+            borderColor: '#3683CC',
+            padding: moderateScale(8),
+            marginTop: moderateScale(18),
+            borderRadius: moderateScale(12),
+          }}>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>
-              {Language[language]['type']}: {" "}{appointment.appointment_type}
-            </Text>
-            <Text style={styles.statustext}>Follow Up</Text>
+            <Text style={styles.contact}>Type:</Text>
+            <Text style={styles.contact}> {appointment.appointment_type}</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>
-              {Language[language]['time']}:  {" "}{appointment.appointment_slot}
-              {/* {moment(appointment.appointment_slot).format('HH:mm')} */}
-            </Text>
-            <Text style={styles.statustext}>Follow Up</Text>
+            <Text style={styles.contact}>Time:</Text>
+            <Text style={styles.contact}> {appointment.appointment_slot}</Text>
           </View>
           <View style={styles.statusinfo}>
-            <Text style={styles.contact}>
-              {Language[language]['status']}:
-              <Text
-                style={{
+            <Text style={styles.contact}>Status:</Text>
+            <Text
+              style={[
+                styles.contact,
+                {
+                  fontWeight: '600',
                   color:
                     appointment?.status === 'pending'
                       ? CUSTOMCOLOR.warn
                       : CUSTOMCOLOR.success,
-                }}>
-                {"  "}{appointment.status}
-              </Text>
+                },
+              ]}>
+              {'  '}
+              {appointment.status}
             </Text>
-            <Text style={styles.statustext}>Follow Up</Text>
           </View>
-          <Text style={styles.contact}>
-            {Language[language]['bill']}:
+          <View style={styles.statusinfo}>
+            <Text style={styles.contact}>Bill:</Text>
             <Text
-              style={{
-                color:
-                  appointment?.is_paid.toString() === 'false'
-                    ? CUSTOMCOLOR.warn
-                    : CUSTOMCOLOR.success,
-              }}>
+              style={[
+                styles.contact,
+                {
+                  fontWeight: '600',
+                  color:
+                    appointment?.is_paid.toString() === 'false'
+                      ? CUSTOMCOLOR.warn
+                      : CUSTOMCOLOR.success,
+                },
+              ]}>
               {' '}
               {paidOpt[appointment?.is_paid.toString()]}
             </Text>
-          </Text>
+          </View>
         </View>
-        {appointment?.status === 'pending' && (
-          <Pressable
-            style={styles.icon}
-            onPress={() => {
-              appointmentCardRef?.current?.snapToIndex(1);
-            }}>
-            <View>
-              <Icon
-                name="dots-horizontal"
-                color={CUSTOMCOLOR.primary}
-                size={24}
-              />
-            </View>
-          </Pressable>
-        )}
-
-        <BottomSheetView
-          bottomSheetRef={appointmentCardRef}
-          snapPoints={'100%'}
-          backgroundStyle="#000000aa">
-          <View style={styles.tab}>
-            <SelectionTab
-              label={Language[language]['start_visit']}
-              selected={true}
-              onPress={handleOnpress}
-            />
-            <SelectionTab
-              label={Language[language]['reschedule']}
-              selected={true}
-            />
-            {/* <SelectionTab
-              label={Language[language]['cancel']}
-              selected={true}
-              onPress={() => {
-                appointmentCardRef?.current?.snapToIndex(0);
-              }}
-            /> */}
-          </View>
-          <View
-            style={{alignSelf: 'flex-end', paddingHorizontal: 12, bottom: 78}}>
-            <PlusButton
-              icon="close"
-              size={20}
-              style={{
-                backgroundColor: '#000000aa',
-              }}
-              onPress={() => {
-                appointmentCardRef?.current?.snapToIndex(0);
-              }}
-            />
-          </View>
-        </BottomSheetView>
-      </View>
-    </>
+      )}
+    </View>
   );
 };
 
+export default AppointmentCard;
+
 const styles = StyleSheet.create({
-  maincontainer: {
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    padding: moderateScale(12),
-    fontSize: CUSTOMFONTSIZE.h3,
+  main: {
+    paddingHorizontal: horizontalScale(36),
+    paddingVertical: verticalScale(24),
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: moderateScale(4),
-    gap: moderateScale(8),
-  },
-  child: {
-    width: '40%',
-  },
-  name: {
-    fontWeight: 600,
-    fontSize: 14,
-    lineHeight: 19,
-    padding: moderateScale(0),
-    color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.heading,
-  },
-  age: {
-    fontWeight: 400,
-    fontSize: 10,
-    lineHeight: 19,
-    padding: moderateScale(0),
-    color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.body,
-  },
-  gender: {
-    fontWeight: 400,
-    fontSize: 10,
-    lineHeight: 19,
-    padding: moderateScale(0),
-    color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.body,
-  },
-  symptom: {
-    flexWrap: 'wrap',
-    fontWeight: 600,
-    fontSize: CUSTOMFONTSIZE.h5,
-    lineHeight: 1.5 * CUSTOMFONTSIZE.h5,
-    padding: moderateScale(0),
-    color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.body,
+    borderWidth: moderateScale(2),
+    borderColor: CUSTOMCOLOR.borderColor,
+
+    borderRadius: moderateScale(16),
   },
   img: {
-    width: moderateScale(96),
-    height: moderateScale(96),
-    borderRadius: moderateScale(96 / 2),
+    width: moderateScale(84),
+    height: moderateScale(84),
+    borderRadius: moderateScale(8),
   },
-  patientinfo: {
-    gap: moderateScale(4),
+  name: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+    fontWeight: '600',
+  },
+  subText: {
+    fontSize: CUSTOMFONTSIZE.h4,
+    color: CUSTOMCOLOR.black,
+    fontWeight: '400',
   },
   icon: {
-    position: 'absolute',
-    right: 8,
-    top: 8,
-    padding: moderateScale(10),
+    padding: moderateScale(2),
+    borderWidth: moderateScale(2),
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderRadius: moderateScale(100),
   },
-  option: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  btn: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
+    borderWidth: moderateScale(2),
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderRadius: moderateScale(16),
   },
-  seperator: {
-    height: verticalScale(0.5),
-    margin: 8,
-    backgroundColor: '#f3f4f3',
-  },
-  hseperator: {
-    height: '100%',
-    width: horizontalScale(0.5),
-    margin: 8,
-    backgroundColor: '#f3f4f3',
+  btnText: {
+    fontSize: CUSTOMFONTSIZE.h4,
+    color: CUSTOMCOLOR.primary,
+    fontWeight: '700',
   },
   statusinfo: {
     flexDirection: 'row',
-    gap: moderateScale(16),
-    width: '100%',
     justifyContent: 'space-between',
   },
-  statustext: {
-    textAlign: 'right',
-    fontWeight: '600',
-    fontFamily: CUSTOMFONTFAMILY.body,
-  },
   contact: {
-    height: verticalScale(25),
-    width: horizontalScale(150),
     fontFamily: CUSTOMFONTFAMILY.body,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
   },
-  contact1: {
-    height: verticalScale(25),
-    width: horizontalScale(150),
-  },
-  modal: {
-    backgroundColor: '#000000aa',
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  modalContainer: {
-    backgroundColor: '#fff',
-    padding: moderateScale(40),
-    borderRadius: moderateScale(10),
-  },
-  tab: {
-    flexDirection: 'row',
-    gap: moderateScale(16),
-    paddingHorizontal: 8,
-    padding: moderateScale(20),
-    alignSelf: 'center',
-    top: 10,
-  },
 });
-
-export default AppointmentCard;

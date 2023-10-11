@@ -33,8 +33,24 @@ const SelectorBtn = props => {
       <Pressable
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
-        <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
-        <Icon name={props.name} size={props.size ? props.size : 24} color={CUSTOMCOLOR.primary} />
+        {/* <Icon
+          name={props.Bname}
+          size={props.size ? props.size : 24}
+          color={CUSTOMCOLOR.white}
+        /> */}
+        <View style={{flexDirection: 'row'}}>
+          <Icon
+            name={props.Bname}
+            size={props.size ? props.size : 24}
+            color={CUSTOMCOLOR.white}
+          />
+          <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
+        </View>
+        <Icon
+          name={props.name}
+          size={props.size ? props.size : 24}
+          color={CUSTOMCOLOR.primary}
+        />
       </Pressable>
     </View>
   );
@@ -50,8 +66,8 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     // width: horizontalScale(240),
     borderRadius: moderateScale(4),
-    borderColor:CUSTOMCOLOR.primary,
-    borderWidth:0.5
+    borderColor: CUSTOMCOLOR.primary,
+    borderWidth: 0.5,
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h4,

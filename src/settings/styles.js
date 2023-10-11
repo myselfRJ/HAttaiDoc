@@ -16,6 +16,7 @@ let CUSTOMCOLOR = {
   success: '#2CBB15',
   edit: '#4ba5fa',
   disable: '#A9A9A9',
+  borderColor: '#C0DFFC',
 };
 const DARKCOLOR = {
   primary: 'red',

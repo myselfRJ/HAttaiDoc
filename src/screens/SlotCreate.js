@@ -5,7 +5,7 @@ import {
   Modal,
   TouchableOpacity,
   Alert,
-  Pressable
+  Pressable,
 } from 'react-native';
 import {commonstyles} from '../styles/commonstyle';
 import PlusButton from '../components/plusbtn';
@@ -43,8 +43,8 @@ const SlotCreate = ({navigation, route}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
   const [visibleSlot, setVisibleSlot] = useState(false);
-  const [selectSlot,setselectSlot] = useState([])
-  console.log('length===',selectSlot)
+  const [selectSlot, setselectSlot] = useState([]);
+  console.log('length===', selectSlot);
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
   const [slots, setSlots] = useState({
@@ -227,7 +227,6 @@ const SlotCreate = ({navigation, route}) => {
     }
   };
   const handleClearAllSlots = () => {
-    
     setSlots({
       M: [],
       T: [],
@@ -238,26 +237,24 @@ const SlotCreate = ({navigation, route}) => {
       Su: [],
     });
     setselectSlot([]);
-    Alert.alert('Success',
-    'All Slots are cleared')
+    Alert.alert('Success', 'All Slots are cleared');
   };
-  const handleSelectedDelete = (selectedIndices) => {
+  const handleSelectedDelete = selectedIndices => {
     setAllSlots(prevAllSlots =>
-      prevAllSlots.filter(slot => !selectedIndices.includes(slot.index))
+      prevAllSlots.filter(slot => !selectedIndices.includes(slot.index)),
     );
-  
+
     setSlots(prevSlots => {
-      const updatedSlots = { ...prevSlots };
+      const updatedSlots = {...prevSlots};
       for (const day in prevSlots) {
         updatedSlots[day] = prevSlots[day].filter(
-          slot => !selectedIndices.includes(slot.index)
+          slot => !selectedIndices.includes(slot.index),
         );
       }
       return updatedSlots;
     });
     setselectSlot([]);
   };
-  
 
   return (
     <ScrollView>
@@ -424,99 +421,102 @@ const SlotCreate = ({navigation, route}) => {
               input={<Text>{selectedDurationValue} Mins</Text>}
             />
           </View>
-         <View style={{alignItems:'center'}}>
-          <HButton
-          
-            label="Add Slot"
-            icon="plus"
-            btnstyles={{marginTop: verticalScale(24)}}
-            onPress={() => {
-              const isOk = handlewarnings();
-              if (isOk) {
-                handleAddSlot();
-              } else {
-                Alert.alert('Warning', '"From time" and "To time" are same');
-              }
-            }}
-          />
+          <View style={{alignItems: 'center'}}>
+            <HButton
+              label="Add Slot"
+              icon="plus"
+              btnstyles={{marginTop: verticalScale(24)}}
+              onPress={() => {
+                const isOk = handlewarnings();
+                if (isOk) {
+                  handleAddSlot();
+                } else {
+                  Alert.alert('Warning', '"From time" and "To time" are same');
+                }
+              }}
+            />
           </View>
-          
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-  {/* {slots && selectSlot.length > 1 && (<View style={{ alignItems: 'flex-start', paddingHorizontal: moderateScale(8),flexDirection:'row',borderRadius:moderateScale(4),backgroundColor:CUSTOMCOLOR.white }}>
-      <Text style={styles.number}>{selectSlot.length}</Text>
-      <Icon name='check' size={28} color={CUSTOMCOLOR.success}/>
-    </View>)} */}
-  </View>
-  <View style={{ flexDirection: 'row', gap: moderateScale(4) }}>
-    {slots && selectSlot.length > 1 &&(<HButton
-      color={CUSTOMCOLOR.primary}
-      label="Delete"
-      onPress={() => handleSelectedDelete(selectSlot)}
-      btnstyles={{
-        backgroundColor: CUSTOMCOLOR.delete,
-        paddingHorizontal: horizontalScale(4),
-      }}
-      textStyle={{
-        color: CUSTOMCOLOR.white,
-      }}
-    />)}
-    {Object.values(slots).some(daySlots => daySlots.length > 0) && (
-  <HButton
-    color={CUSTOMCOLOR.primary}
-    label="Clear"
-    onPress={handleClearAllSlots}
-    btnstyles={{
-      backgroundColor: CUSTOMCOLOR.white,
-      paddingHorizontal: horizontalScale(8),
-    }}
-    textStyle={{
-      color: CUSTOMCOLOR.primary,
-    }}
-  />
-)}
-  </View>
-</View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}></View>
+            <View style={{flexDirection: 'row', gap: moderateScale(4)}}>
+              {slots && selectSlot.length > 1 && (
+                <HButton
+                  color={CUSTOMCOLOR.primary}
+                  label="Delete"
+                  onPress={() => handleSelectedDelete(selectSlot)}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.delete,
+                    paddingHorizontal: horizontalScale(4),
+                  }}
+                  textStyle={{
+                    color: CUSTOMCOLOR.white,
+                  }}
+                />
+              )}
+              {Object.values(slots).some(daySlots => daySlots.length > 0) && (
+                <HButton
+                  color={CUSTOMCOLOR.primary}
+                  label="Clear"
+                  onPress={handleClearAllSlots}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    paddingHorizontal: horizontalScale(8),
+                  }}
+                  textStyle={{
+                    color: CUSTOMCOLOR.primary,
+                  }}
+                />
+              )}
+            </View>
+          </View>
 
           <View style={styles.ShowSchedule}>
             {Object.entries(slots).map(([day, daySlots]) =>
               daySlots?.map(slot => (
-                <Pressable onPress={()=> handleSlotSelect(day,slot.index)}>
-                <SlotChip
-                  key={slot.index}
-                  index={slot.index}
-                  onPress={() => handleDelete(day, slot.index)}
-                  time={slot.fromTime + '-' + slot.toTime}
-                  type={<Text>Type: {slot.consultType}</Text>}
-                  duration={
-                    <Text>
-                      Duration: {slot.duration} | {slot.day} |{' '}
-                      {slot.fromTime >= '06:00' &&
-                      slot.toTime <= '17:59' &&
-                      slot.fromTime <= '18:00' ? (
-                        <Icon
-                          name="white-balance-sunny"
-                          size={moderateScale(20)}
-                          color={CUSTOMCOLOR.warn}
-                        />
-                      ) : (
-                        <Icon
-                          name="weather-night-partly-cloudy"
-                          size={moderateScale(20)}
-                          color={CUSTOMCOLOR.primary}
-                        />
-                      )}
-                    </Text>
-                  }
-                  style={{
-                    backgroundColor: selectSlot.includes(slot.index) ? '#C5FFBC' : 'white',
-                  }}
-                />
+                <Pressable onPress={() => handleSlotSelect(day, slot.index)}>
+                  <SlotChip
+                    key={slot.index}
+                    index={slot.index}
+                    onPress={() => handleDelete(day, slot.index)}
+                    time={slot.fromTime + '-' + slot.toTime}
+                    type={<Text>Type: {slot.consultType}</Text>}
+                    duration={
+                      <Text>
+                        Duration: {slot.duration} | {slot.day} |{' '}
+                        {slot.fromTime >= '06:00' &&
+                        slot.toTime <= '17:59' &&
+                        slot.fromTime <= '18:00' ? (
+                          <Icon
+                            name="white-balance-sunny"
+                            size={moderateScale(20)}
+                            color={CUSTOMCOLOR.warn}
+                          />
+                        ) : (
+                          <Icon
+                            name="weather-night-partly-cloudy"
+                            size={moderateScale(20)}
+                            color={CUSTOMCOLOR.primary}
+                          />
+                        )}
+                      </Text>
+                    }
+                    style={{
+                      backgroundColor: selectSlot.includes(slot.index)
+                        ? '#C5FFBC'
+                        : 'white',
+                    }}
+                  />
                 </Pressable>
               )),
             )}
           </View>
-          <View style={{alignItems:'center'}}>
+          <View style={{alignItems: 'center'}}>
             {slots?.M.length > 0 && (
               <TouchableOpacity onPress={() => handleAddSlotCopyMonday()}>
                 <View
@@ -533,10 +533,8 @@ const SlotCreate = ({navigation, route}) => {
           </View>
           {selectedDay === 'M' ? (
             <View>
-              
               {Object.entries(slotData).map(([day, daySlots]) =>
                 daySlots?.map(slot => (
-                  
                   <SlotChip
                     key={slot.index}
                     index={slot.index}
@@ -560,15 +558,12 @@ const SlotCreate = ({navigation, route}) => {
                             size={moderateScale(20)}
                             color={CUSTOMCOLOR.primary}
                           />
-
                         )}
                       </Text>
                     }
                   />
-                  
                 )),
               )}
-              
             </View>
           ) : null}
           <View>
@@ -625,7 +620,7 @@ const styles = StyleSheet.create({
   save: {
     top: moderateScale(16),
     borderRadius: moderateScale(20),
-    alignItems:'center'
+    alignItems: 'center',
     // borderRadius: 2,
   },
   saveText: {
@@ -717,10 +712,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(4),
     paddingVertical: verticalScale(4),
   },
-  number:{
-    fontSize:CUSTOMFONTSIZE.h2,
-    color:CUSTOMCOLOR.black
-  }
+  number: {
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.black,
+  },
 });
 
 export default SlotCreate;
