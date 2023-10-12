@@ -38,7 +38,7 @@ const SelectorBtn = props => {
           size={props.size ? props.size : 24}
           color={CUSTOMCOLOR.white}
         /> */}
-        <View style={{flexDirection: 'row',alignItems:'center'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon
             name={props.Bname}
             size={props.size ? props.size : 24}
@@ -59,7 +59,7 @@ const SelectorBtn = props => {
 const styles = StyleSheet.create({
   select: {
     flexDirection: 'row',
-    paddingVertical: verticalScale(4),
+    paddingVertical: verticalScale(5),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    lineHeight: CUSTOMFONTSIZE.h3 * 2,
+    lineHeight: CUSTOMFONTSIZE.h3 * 1.5,
   },
   indicator: {
     fontSize: CUSTOMFONTSIZE.h4,

@@ -313,62 +313,66 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
   return (
-    <View style={{flex: 1,backgroundColor:CUSTOMCOLOR.white,paddingVertical:verticalScale(8)}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: CUSTOMCOLOR.white,
+        paddingVertical: verticalScale(8),
+      }}>
       <ProgresHeader progressData={progressData} />
       {modal && (
-          <GalleryModel
-            visible={modal}
-            Close={setModal}
-            // closeModal={()=> setModal(false)}
-            OnGallery={onImagePress}
-            OnCamera={openCamera}
-            // onPress={()=>setModal(false)}
-            // dismiss={()=>setModal(false)}
-          />
+        <GalleryModel
+          visible={modal}
+          Close={setModal}
+          // closeModal={()=> setModal(false)}
+          OnGallery={onImagePress}
+          OnCamera={openCamera}
+          // onPress={()=>setModal(false)}
+          // dismiss={()=>setModal(false)}
+        />
       )}
       <ScrollView contentContainerStyle={styles.container}>
-        <Keyboardhidecontainer>
-          <View style={styles.content}>
-            <View style={styles.alignchild}>
-              <Text style={commonstyles.h1}>Fill Profile</Text>
-              <AddImage
-                onPress={() => ModalVisible()}
-                encodedBase64={selectedImage}
+        <View>
+          <View style={styles.alignchild}>
+            <Text style={commonstyles.h1}>Fill Profile</Text>
+            <AddImage
+              onPress={() => ModalVisible()}
+              encodedBase64={selectedImage}
+            />
+          </View>
+          <InputText
+            inputContainer={{paddingHorizontal: moderateScale(0)}}
+            required={true}
+            label={Language[language]['name']}
+            placeholder="Full Name"
+            value={values.doctor_name}
+            setValue={value => handleChangeValue('doctor_name', value)}
+          />
+
+          <View style={styles.alignchild1}>
+            <Text style={styles.gender}>{Language[language]['gender']}</Text>
+            <View style={styles.radiogroup}>
+              <Option
+                label="Male"
+                value="male"
+                selected={values.gender === 'male'}
+                onPress={() => handleOptions('male')}
+              />
+              <Option
+                label="Female"
+                value="female"
+                selected={values.gender === 'female'}
+                onPress={() => handleOptions('female')}
+              />
+              <Option
+                label="Others"
+                value="others"
+                selected={values.gender === 'others'}
+                onPress={() => handleOptions('others')}
               />
             </View>
-            <InputText
-              // inputContainer={{bottom:moderateScale(4)}}
-              required={true}
-              label={Language[language]['name']}
-              placeholder="Full Name"
-              value={values.doctor_name}
-              setValue={value => handleChangeValue('doctor_name', value)}
-            />
-
-            <View style={styles.alignchild1}>
-              <Text style={styles.gender}>{Language[language]['gender']}</Text>
-              <View style={styles.radiogroup}>
-                <Option
-                  label="Male"
-                  value="male"
-                  selected={values.gender === 'male'}
-                  onPress={() => handleOptions('male')}
-                />
-                <Option
-                  label="Female"
-                  value="female"
-                  selected={values.gender === 'female'}
-                  onPress={() => handleOptions('female')}
-                />
-                <Option
-                  label="Others"
-                  value="others"
-                  selected={values.gender === 'others'}
-                  onPress={() => handleOptions('others')}
-                />
-              </View>
-            </View>
-            {/* <InputText
+          </View>
+          {/* <InputText
               label="Age/DOB"
               placeholder="eg:25 / YYYY-MM-DD"
               value={age}
@@ -377,8 +381,8 @@ const ProfileCreate = ({navigation}) => {
               required={true}
             /> */}
 
-            <View style={styles.btn}>
-              {/* <DOBselect
+          <View style={styles.btn}>
+            {/* <DOBselect
                 required={true}
                 label="Age/ Date of Birth"
                 name="calendar"
@@ -388,8 +392,11 @@ const ProfileCreate = ({navigation}) => {
                 setValue={setValue}
                 numeric={true}
               /> */}
-              <InputText
-              inputContainer={{width:'45%',paddingHorizontal:horizontalScale(0)}}
+            <InputText
+              inputContainer={{
+                flex: 5,
+                paddingHorizontal: horizontalScale(0),
+              }}
               label="Age"
               placeholder="eg:25"
               input={value}
@@ -397,182 +404,186 @@ const ProfileCreate = ({navigation}) => {
               numeric={true}
               required={true}
             />
-             
-              <Text style={{top:moderateScale(10),paddingHorizontal:moderateScale(11),alignSelf:'center',justifyContent:'center'}}>(OR)</Text>
-              
-             <SelectorBtn
-            //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
-              required={true}
-              selectContainer={{width:'46%',paddingTop:moderateScale(4)}}
-            label={Language[language]['dob']}
-            name="calendar"
-            onPress={() => setOpen('to')}
-            input={formattedDate}
-            style={styles.DOBselect}
-          />
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}>
+              <Text style={{marginTop: moderateScale(20)}}>(OR)</Text>
             </View>
-            <DatePicker
-              modal
-              open={open !== false}
-              date={DOB}
-              theme="auto"
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-            />
 
-            {/* <InputText
+            <SelectorBtn
+              //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
+              required={true}
+              selectContainer={{flex: 5, paddingTop: moderateScale(4)}}
+              label={Language[language]['dob']}
+              name="calendar"
+              onPress={() => setOpen('to')}
+              input={formattedDate}
+              style={styles.DOBselect}
+            />
+          </View>
+          <DatePicker
+            modal
+            open={open !== false}
+            date={DOB}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+
+          {/* <InputText
               required={true}
               label="Medical Registration Number"
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             /> */}
-            <View style={styles.specialization}>
-              <SelectorBtn
-                required={true}
-                label={Language[language]['specialization']}
-                name="chevron-down"
-                // onPress={toggleModal}
-                onPress={() => {
-                  appointmentCardRef?.current?.snapToIndex(1);
-                }}
-                input={selectedSpeciality}
-              />
-            </View>
-            <InputText
-              label={Language[language]['experience']}
-              placeholder="experience in years"
-              value={values.experience}
-              setValue={value => handleChangeValue('experience', value)}
-              numeric={true}
-            />
-            <View style={styles.btn1}>
-             <InputText
-             inputContainer={{width:'50%',paddingHorizontal:horizontalScale(0)}}
+          <View style={styles.specialization}>
+            <SelectorBtn
               required={true}
-              label='Medical Registration Number'
+              label={Language[language]['specialization']}
+              name="chevron-down"
+              // onPress={toggleModal}
+              onPress={() => {
+                appointmentCardRef?.current?.snapToIndex(1);
+              }}
+              input={selectedSpeciality}
+            />
+          </View>
+          <InputText
+            inputContainer={{paddingHorizontal: moderateScale(0)}}
+            label={Language[language]['experience']}
+            placeholder="experience in years"
+            value={values.experience}
+            setValue={value => handleChangeValue('experience', value)}
+            numeric={true}
+          />
+          <View style={styles.btn}>
+            <InputText
+              required={true}
+              inputContainer={{
+                flex: 1,
+                paddingHorizontal: moderateScale(0),
+              }}
+              label="Medical Registration Number"
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
-            <View style={{width:'50%',paddingHorizontal:horizontalScale(4),paddingVertical:moderateScale(2)}}>
+
+            <View style={{flex: 1}}>
               <SelectorBtn
                 required={true}
-                label='State'
-                name="chevron-down"
+                // selectContainer={{width: '50%', paddingTop: moderateScale(4)}}
+                label="State"
+                name="menu-down"
+                size={moderateScale(24)}
+                // onPress={toggleModal}
                 onPress={() => {
-                  setshow(!show)
+                  setshow(!show);
                 }}
                 input={selectedState}
               />
-              <View
-                style={{width: '50%', paddingHorizontal: horizontalScale(8)}}>
-                <SelectorBtn
-                  required={true}
-                  label="State"
-                  name="menu-down"
-                  size={32}
-                  // onPress={toggleModal}
-                  onPress={() => {
-                    setshow(!show);
-                  }}
-                  input={selectedState}
-                />
 
-                {show === true && (
-                  <View style={styles.statecontainer}>
-                    <ScrollView persistentScrollbar={true}>
-                      {CONSTANTS.state.map((state, index) => (
-                        <Pressable
-                          key={index}
-                          onPress={() => {
-                            handleStateSelection(state);
-                            setshow(false);
-                          }}>
-                          <Text
-                            style={[
-                              styles.statefields,
-                              {
-                                color:
-                                  selectedState === state
-                                    ? CUSTOMCOLOR.primary
-                                    : CUSTOMCOLOR.black,
-                              },
-                            ]}>
-                            {state}
-                          </Text>
-                        </Pressable>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
-              </View>
+              {show === true && (
+                <View style={styles.statecontainer}>
+                  <ScrollView persistentScrollbar={true}>
+                    {CONSTANTS.state.map((state, index) => (
+                      <Pressable
+                        key={index}
+                        onPress={() => {
+                          handleStateSelection(state);
+                          setshow(false);
+                        }}>
+                        <Text
+                          style={[
+                            styles.statefields,
+                            {
+                              color:
+                                selectedState === state
+                                  ? CUSTOMCOLOR.primary
+                                  : CUSTOMCOLOR.black,
+                            },
+                          ]}>
+                          {state}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
             </View>
-            <View style={{alignSelf: 'flex-start'}}>
-              <Text style={styles.medtext}>Medical Document</Text>
-              <View style={styles.doc_upload}>
-                {selectedFilename ? (
-                  <View style={styles.selectedfilecontainer}>
-                    <Text style={styles.selectedFileInfo}>
-                      {selectedFilename}
-                    </Text>
-                    <TouchableOpacity onPress={handleClearFile}>
-                      <Icon
-                        name="delete"
-                        size={moderateScale(20)}
-                        color={CUSTOMCOLOR.delete}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <HButton
-                    label="Upload Document"
-                    onPress={pickSingleFile}
-                    btnstyles={{
-                      backgroundColor: CUSTOMCOLOR.white,
-                      borderColor: CUSTOMCOLOR.primary,
-                      borderWidth: 0.5,
-                      borderRadius: 4,
-                    }}
-                    textStyle={{color: CUSTOMCOLOR.primary}}
-                  />
-                )}
-              </View>
-            </View>
-           
           </View>
-        </Keyboardhidecontainer>
-      </ScrollView>
-      <View style={{padding:moderateScale(32)}}>
-      <HButton
-              btnstyles={{
-                width:'100%',
-                paddingHorizontal:horizontalScale(32),
-                paddingVertical:verticalScale(16),
-                borderRadius:moderateScale(16),
-                backgroundColor:
-                  values.doctor_name &&
-                  values.gender &&
-                  formatDate &&
-                  selectedSpeciality &&
-                  values.medical_number
-                    ? CUSTOMCOLOR.primary
-                    : CUSTOMCOLOR.disable,
-              }}
-              label={Language[language]['save']}
-              loading={loading}
-              onPress={() => {
-                if (!values.doctor_name) {
-                  Alert.alert('Please enter Name');
-                } else if (!values.medical_number) {
-                  Alert.alert('Please Enter Your Medical Number ');
-                } else {
-                  fetchData();
-                }
-              }}
-            />
+          <View style={{alignSelf: 'flex-start'}}>
+            <Text style={styles.medtext}>Medical Document</Text>
+            <View style={styles.doc_upload}>
+              {selectedFilename ? (
+                <View style={styles.selectedfilecontainer}>
+                  <Text style={styles.selectedFileInfo}>
+                    {selectedFilename}
+                  </Text>
+                  <TouchableOpacity onPress={handleClearFile}>
+                    <Icon
+                      name="delete"
+                      size={moderateScale(20)}
+                      color={CUSTOMCOLOR.delete}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <HButton
+                  label="Upload Document"
+                  onPress={pickSingleFile}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderColor: CUSTOMCOLOR.primary,
+                    borderWidth: 0.5,
+                    borderRadius: 4,
+                  }}
+                  textStyle={{color: CUSTOMCOLOR.primary}}
+                />
+              )}
             </View>
+          </View>
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          padding: moderateScale(32),
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <HButton
+          textStyle={{fontSize: CUSTOMFONTSIZE.h2}}
+          btnstyles={{
+            paddingHorizontal: horizontalScale(96),
+            paddingVertical: verticalScale(16),
+            borderRadius: moderateScale(8),
+            backgroundColor:
+              values.doctor_name &&
+              values.gender &&
+              formatDate &&
+              selectedSpeciality &&
+              values.medical_number
+                ? CUSTOMCOLOR.primary
+                : CUSTOMCOLOR.disable,
+          }}
+          label={Language[language]['save']}
+          loading={loading}
+          onPress={() => {
+            if (!values.doctor_name) {
+              Alert.alert('Please enter Name');
+            } else if (!values.medical_number) {
+              Alert.alert('Please Enter Your Medical Number ');
+            } else {
+              fetchData();
+            }
+          }}
+        />
+      </View>
       <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}
@@ -601,12 +612,6 @@ const ProfileCreate = ({navigation}) => {
               </Pressable>
             ))}
           </ScrollView>
-          {/* <View style={styles.ContactMail}>
-            <Text style={styles.contact}>
-              If Your Specialization Not Mention please mail-to
-            </Text>
-            <Text style={styles.mail}>contact@destratum.com</Text>
-          </View> */}
         </View>
       </BottomSheetView>
       <BottomSheetView
@@ -615,8 +620,6 @@ const ProfileCreate = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
-
-      
     </View>
   );
 };
@@ -634,9 +637,10 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    height:'18%',
+    marginBottom: 24,
+    // height: '18%',
     // gap:moderateScale(0),
-    paddingHorizontal: horizontalScale(8),
+
     // borderWidth:1,
     paddingVertical: moderateScale(0),
   },
@@ -646,7 +650,7 @@ const styles = StyleSheet.create({
     width: '100%',
     // height:'20%',
     // gap:moderateScale(0),
-    // paddingHorizontal: horizontalScale(8),
+    //
     // borderWidth:1,
     paddingVertical: moderateScale(0),
   },
@@ -664,6 +668,8 @@ const styles = StyleSheet.create({
   },
   statecontainer: {
     height: moderateScale(250),
+    position: 'absolute',
+    top: 72,
     // width: '100%',
     // justifyContent: 'flex-start',
     // alignItems: 'center',
@@ -674,13 +680,12 @@ const styles = StyleSheet.create({
     // padding: moderateScale(4),
   },
   content: {
-    paddingHorizontal: 24,
+    // paddingHorizontal: 24,
     //paddingVertical: 24,
-    width: '100%',
+
     alignItems: 'center',
     // gap: moderateScale(4),
     // borderWidth:1,
-    height: '100%',
   },
   modalfields: {
     fontSize: CUSTOMFONTSIZE.h3,
@@ -694,7 +699,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     paddingHorizontal: moderateScale(32),
-    paddingVertical:moderateScale(10)
+    paddingVertical: moderateScale(10),
   },
   DOBselect: {
     width: '100%',
@@ -705,7 +710,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     //borderWidth:1,
-    borderRadius: moderateScale(5),
+    borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
   },
@@ -714,7 +719,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     paddingRight: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
+
     paddingVertical: verticalScale(4),
   },
   contact: {
@@ -731,44 +736,42 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     alignSelf: 'center',
     borderRadius: moderateScale(10),
-    padding: moderateScale(10),
+    // padding: moderateScale(10),
     bottom: moderateScale(20),
   },
   gender: {
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     fontSize: CUSTOMFONTSIZE.h4,
-    paddingHorizontal: horizontalScale(8),
   },
   btn: {
-    flexDirection:'row',
-    // alignItems:'center',
-    width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    // paddingHorizontal: horizontalScale(24),
+    gap: moderateScale(8),
   },
   btn1: {
-    flexDirection:'row',
-    position:'relative',
+    flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
-    gap:moderateScale(4)
+
+    gap: moderateScale(8),
   },
   specialization: {
     alignSelf: 'flex-start',
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
   },
   medtext: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: 12,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: horizontalScale(8),
+
     paddingVertical: verticalScale(8),
     alignSelf: 'flex-start',
   },
   doc_upload: {
     alignSelf: 'flex-start',
-    paddingHorizontal: horizontalScale(8),
+
     // paddingVertical: verticalScale(4),
     marginBottom: moderateScale(4),
   },
@@ -778,8 +781,9 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   container: {
-    flexGrow: 1,
-    paddingVertical: verticalScale(20),
+    // paddingVertical: verticalScale(20),
+
+    margin: moderateScale(32),
   },
 });
 

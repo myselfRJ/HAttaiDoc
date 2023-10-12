@@ -716,20 +716,14 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Photo</Text>
                 <AddImage
-                  // onPress={() => {
-                  //   ModalVisible();
-                  // }}
-                  OnGallery={onImagePress}
-                  OnCamera={openCamera}
+                  onPress={() => ModalVisible()}
                   encodedBase64={selectedImage}
                 />
               </View>
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Logo</Text>
                 <AddImage
-                  OnGallery={onLogoPress}
-                  OnCamera={LogoCamera}
-                  // onPress={() => LogoVisible()}
+                  onPress={() => setlogo(!logo)}
                   encodedBase64={selectedLogo}
                 />
               </View>
@@ -1131,8 +1125,19 @@ const AddClinic = ({navigation}) => {
           </View>
         </ScrollView>
       </BottomSheetView>
-
       {/* {modal && (
+        <GalleryModel
+          visible={modal}
+          Close={setModal}
+          // closeModal={()=> setModal(false)}
+          OnGallery={onImagePress}
+          OnCamera={openCamera}
+          // onPress={()=>setModal(false)}
+          // dismiss={()=>setModal(false)}
+        />
+      )} */}
+
+      {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -1151,7 +1156,7 @@ const AddClinic = ({navigation}) => {
             OnCamera={LogoCamera}
           />
         </View>
-      )} */}
+      )}
     </View>
   );
 };

@@ -1,9 +1,23 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
-import { horizontalScale, moderateScale, verticalScale } from '../utility/scaleDimension';
-import { CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE } from '../settings/styles';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 
 const UserCard = props => {
   const userdata = props.data;
@@ -12,13 +26,13 @@ const UserCard = props => {
   const decodedData = userdata?.user_profile_pic_url;
   return (
     <View style={styles.Main}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View style={{ flexDirection: 'row', gap: moderateScale(12) }}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flexDirection: 'row', gap: moderateScale(12)}}>
           <Image
             source={{
-              uri: `data:image/jpeg;base64,${userdata?.user_profile_pic_url}`,
+              uri: `data:image/jpeg;base64,${decodedData}`,
             }}
-            onError={(error) => console.error('Image load error:', error)}
+            onError={error => console.error('Image load error:', error)}
             style={{
               height: moderateScale(65),
               width: moderateScale(65),
@@ -35,16 +49,14 @@ const UserCard = props => {
               {userdata?.clinic_user_name}
             </Text>
             <Text style={styles.text}>{userdata?.clinic_id}</Text>
-            <Text style={styles.text}>
-              {userdata?.role}
-            </Text>
+            <Text style={styles.text}>{userdata?.role}</Text>
           </View>
         </View>
-        <View style={{ gap: moderateScale(16) }}>
-          <View style={{ flexDirection: 'row', gap: moderateScale(8) }}>
+        <View style={{gap: moderateScale(16)}}>
+          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
             <Pressable
               style={styles.gap}
-              onPress={() => navigation.navigate('adduser', { index })}>
+              onPress={() => navigation.navigate('adduser', {index})}>
               <Icon
                 name={'pencil'}
                 size={moderateScale(24)}
@@ -54,7 +66,7 @@ const UserCard = props => {
             <Pressable
               style={styles.gap}
               // onPress={() => navigation.navigate('adduser', { index })}
-              >
+            >
               <Icon
                 name={'share-variant'}
                 size={moderateScale(24)}
@@ -90,10 +102,9 @@ const UserCard = props => {
           </Text>
         </View>
       </View>
-
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   Main: {
     paddingHorizontal: horizontalScale(32),
@@ -129,5 +140,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     alignSelf: 'center',
   },
-})
+});
 export default UserCard;
