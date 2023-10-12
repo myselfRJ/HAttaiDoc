@@ -36,6 +36,12 @@ export const URL = {
     `${baseUrl}practioner/change?doctor_phone_number=${phoneId}`,
   snomed: (term, option) =>
     `${snomedUrl}snomed/searchbyterm/?term=${term}&option=${option}`,
+  get_clinics_slots: phoneId =>
+    `${baseUrl}clinic/Clinic_slots?doctor_phone_number=${phoneId}`,
+  get_clinic_slots_by_id: id => `${baseUrl}clinic/clinic_id?id=${id}`,
+  update_clinic: id => `${baseUrl}clinic/update_clinic?id=${id}`,
+  update_slots: id => `${baseUrl}clinic/update_slot?id=${id}`,
+  delete_clinic_slot: id => `${baseUrl}clinic/delete_clinic?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

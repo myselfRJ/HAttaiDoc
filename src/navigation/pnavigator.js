@@ -73,7 +73,13 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="clinic"
         component={MyClinics}
-        options={{headerShown: true}}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Clinics',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
       />
       <Stack.Screen
         name="profilecreate"

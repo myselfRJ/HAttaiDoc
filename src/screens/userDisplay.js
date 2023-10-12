@@ -59,17 +59,16 @@ const UserDisplay = ({navigation, route}) => {
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus({index: 2, status: true}));
+          // dispatch(headerStatus({index: 2, status: true}));
           setTimeout(() => {
             navigation.navigate('tab');
           }, 1000);
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 2000);
+          // setTimeout(() => {
+          //   SuccesRef?.current?.snapToIndex(0);
+          // }, 2000);
           // setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
           ResetClinic_Users_Redux();
-          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -101,12 +100,14 @@ const UserDisplay = ({navigation, route}) => {
       <View style={styles.alignchild}>
         <Text style={commonstyles.h1}>Add User</Text>
       </View>
-      <View style={styles.btn}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <HButton
           icon="plus"
           label="Add User"
           onPress={() => navigation.navigate('adduser', {prevScrn})}
         />
+      </View>
+      <View style={styles.btn}>
         {clinic_users ? null : (
           <HButton
             label="Skip"

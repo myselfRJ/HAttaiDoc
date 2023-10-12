@@ -69,13 +69,12 @@ const AddClinic = ({navigation}) => {
   const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
   const token = useSelector(state => state.authenticate.auth.access);
+  const {phone} = useSelector(state => state?.phone?.data);
   const route = useRoute();
   const address = useSelector(state => state?.address?.address);
-  const {prevScrn} = route.params;
-  const {index} = route.params;
+  // const {prevScrn} = route.params;
   const [cnFess, setCnFees] = useState('');
   const clinics = useSelector(state => state.clinic?.clinics);
-  console.log('==============>clinic.log', clinics[index]?.clinic_name);
 
   const dispatch = useDispatch();
 
@@ -160,70 +159,72 @@ const AddClinic = ({navigation}) => {
     fees: '',
     // slots: [],
   });
-  const prevScrn1 = 'undefineed';
-
-  const Clinic_Data = {
-    clinic_name: value.clinic,
-    clinic_Address: address,
-    clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
-    fees: cnFess === 'others' ? parseInt(value.fees) : parseInt(cnFess),
-    slot: JSON.stringify(slots),
-    clinic_phone_number: value.phone,
-    clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
-  };
+  const prevScrn = 'account';
+  const Clinic_Data = [
+    {
+      clinic_name: value.clinic,
+      clinic_Address: address,
+      clinic_photo_url: selectedImage ? selectedImage : CONSTANTS.default_image,
+      fees: cnFess === 'others' ? parseInt(value.fees) : parseInt(cnFess),
+      slot: JSON.stringify(slots),
+      clinic_phone_number: value.phone,
+      clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
+    },
+  ];
 
   const ResetClinicRedux = () => {
     const ResetClinic = [];
     dispatch(updateclinics(ResetClinic));
   };
-
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetchApi(URL.addclinic, {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         'Content-Type': 'application/json',
-  //         Accept: 'application/json',
-  //       },
-  //       body: JSON.stringify(clinics?.clinics),
-  //     });
-  //     if (response.status === HttpStatusCode.Ok) {
-  //       const jsonData = await response.json();
-  //       if (jsonData.status === 'success') {
-  //         setApiStatus({status: 'success', message: 'Successfully created'});
-  //         SuccesRef?.current?.snapToIndex(1);
-  //         dispatch(headerStatus({index: 1, status: true}));
-  //         {
-  //           prevScrn === 'account'
-  //             ? setTimeout(() => {
-  //                 navigation.navigate('tab');
-  //               }, 1000)
-  //             : setTimeout(() => {
-  //                 navigation.navigate('adduser', {prevScrn1});
-  //               }, 1000);
-  //         }
-  //         setTimeout(() => {
-  //           SuccesRef?.current?.snapToIndex(0);
-  //         }, 2000);
-  //         setLoading(false);
-  //         ResetClinicRedux();
-  //         // SuccesRef?.current?.snapToIndex(0);
-  //       } else {
-  //         setApiStatus({status: 'warning', message: jsonData.message});
-  //         SuccesRef?.current?.snapToIndex(1);
-  //         console.error('API call failed:', response.status, response);
-  //         setLoading(false);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Error occurred:', error);
-  //     setApiStatus({status: 'error', message: 'Please try again'});
-  //     SuccesRef?.current?.snapToIndex(1);
-  //     setLoading(false);
-  //   }
-  // };
+  // const prevScrn = 'undefine'
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchApi(URL.addclinic, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(Clinic_Data),
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          SuccesRef?.current?.snapToIndex(1);
+          dispatch(headerStatus({index: 1, status: true}));
+          // {
+          //   prevScrn === 'account'
+          //     ? setTimeout(() => {
+          //         navigation.navigate('tab');
+          //       }, 1000)
+          //     : setTimeout(() => {
+          //         navigation.navigate('adduser', {prevScrn1});
+          //       }, 1000);
+          // }
+          navigation.goBack();
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 2000);
+          setLoading(false);
+          ResetClinicRedux();
+          // SuccesRef?.current?.snapToIndex(0);
+        } else {
+          setApiStatus({status: 'warning', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
+      setLoading(false);
+    }
+  };
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const onImagePress = () => {
@@ -524,19 +525,115 @@ const AddClinic = ({navigation}) => {
     });
     setselectSlot([]);
   };
-  console.log('==========>index', index);
+
+  const {id} = route.params;
+  console.log('==========>index', id);
+  const fetchClinic_slots = async () => {
+    const response = await fetchApi(URL.get_clinic_slots_by_id(id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setSlots(JSON.parse(jsonData.data?.slot));
+      const clinicdata = {
+        clinic: jsonData.data?.clinic_name,
+        address: jsonData.data?.clinic_Address,
+        phone: jsonData.data?.clinic_phone_number,
+        fees: jsonData.data?.fees,
+      };
+      setValue(clinicdata);
+      setCnFees(jsonData.data?.fees);
+      setSelectedImage(jsonData.data?.clinic_photo_url);
+      setSelectedLogo(jsonData.data?.clinic_logo_url);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchClinic_slots();
+  }, []);
+
+  const Update_Clinic_slots = async () => {
+    const updateClinic = {
+      clinic_name: value.clinic,
+      clinic_Address: value.address,
+      doctor_phone_number: phone,
+      clinic_phone_number: value.phone,
+      clinic_photo_url: selectedImage,
+      clinic_logo_url: selectedLogo,
+    };
+    const slots_data = {
+      slot: JSON.stringify(slots),
+      clinic_id: id,
+    };
+    try {
+      const response = await fetchApi(URL.update_clinic(id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(updateClinic),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          Alert.alert('Success', jsonData?.message);
+        } else {
+          Alert.alert('warn', jsonData?.message);
+        }
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+    try {
+      const response = await fetchApi(URL.update_slots(id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(slots_data),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          Alert.alert('Success', jsonData?.message);
+          navigation.navigate('clinic', {prevScrn});
+        } else {
+          Alert.alert('warn', jsonData?.message);
+        }
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
   const handlePlusIconClick = () => {
     if (value.clinic) {
-      // console.log('===========>visible', visibleSlot);
       if (!visibleSlot) {
+        // {
+        //   index !== undefined
+        //     ? dispatch(
+        //         updateclinics({index: index, updatedClinic: Clinic_Data}),
+        //       )
+        //     : dispatch(addclinic_data(Clinic_Data));
+        // }
         {
-          index !== undefined
-            ? dispatch(
-                updateclinics({index: index, updatedClinic: Clinic_Data}),
-              )
-            : dispatch(addclinic_data(Clinic_Data));
+          id !== undefined
+            ? Update_Clinic_slots()
+            : (fetchData(),
+              Alert.alert('Success', '"Clinic data added successfully"'));
         }
-        Alert.alert('Success', '"Clinic data added successfully"');
         setShowSlotChip(true);
         (value.clinic = ''),
           (value.address = ''),
@@ -556,7 +653,7 @@ const AddClinic = ({navigation}) => {
           Sa: [],
           Su: [],
         });
-        navigation.goBack();
+        // navigation.goBack();
       } else {
         Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
@@ -565,37 +662,8 @@ const AddClinic = ({navigation}) => {
     }
   };
 
-  if (index !== undefined) {
-    useEffect(() => {
-      const clinicData = {
-        clinic: clinics[index]?.clinic_name,
-        address: clinics[index]?.clinic_Address,
-        phone: clinics[index]?.clinic_phone_number,
-        fees: clinics[index]?.fees,
-      };
-
-      setValue(clinicData);
-      setCnFees(clinics[index]?.fees);
-      setSelectedImage(clinics[index]?.clinic_photo_url);
-      setSelectedLogo(clinics[index]?.clinic_logo_url);
-
-      try {
-        const slots = JSON.parse(clinics[index]?.slot);
-        setSlots(slots);
-      } catch (error) {
-        console.error('Error parsing JSON:', error);
-      }
-    }, []);
-  }
   return (
     <View style={{flex: 1}}>
-      {/* {prevScrn !== 'account' && (
-        <View>
-          <ProgresHeader progressData={progressData} />
-        </View>
-      )} */}
-
-      {/* {prevScrn === 'account' && ( */}
       <View>
         <PlusButton
           icon="close"
