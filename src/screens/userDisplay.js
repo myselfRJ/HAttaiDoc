@@ -1,7 +1,7 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
-import {useSelector, dispatch} from 'react-redux';
+import {useSelector, dispatch, useDispatch} from 'react-redux';
 import {useRoute} from '@react-navigation/native';
 import {commonstyles} from '../styles/commonstyle';
 import {
@@ -14,7 +14,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {HButton} from '../components';
+import {HButton, SelectorBtn} from '../components';
 import UserCard from '../components/userCard';
 import ClinicCreate from './cliniccreate';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -23,23 +23,31 @@ import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import {updateclinic_users} from '../redux/features/profiles/ClinicUsers';
-const UserDisplay = ({navigation, route}) => {
+import PrescriptionHead from '../components/prescriptionHead';
+import {err} from 'react-native-svg/lib/typescript/xml';
+
+const UserDisplay = ({navigation}) => {
+  const dispatch = useDispatch();
   const SuccesRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const token = useSelector(state => state.authenticate.auth.access);
-  // const progressData = useSelector(state => state.progress?.status);
+  const progressData = useSelector(state => state.progress?.status);
+  const route = useRoute();
   const {prevScrn} = route.params;
   const [apiStatus, setApiStatus] = useState({});
+  // const route = useRoute();
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-  // console.log('users===>',clinic_users)
+  console.log('users===>', clinic_users);
   const ResetClinic_Users_Redux = () => {
     const ResetClinic_users = [];
     dispatch(updateclinic_users(ResetClinic_users));
   };
-  // const handleDelete = (user, index) => {
-  //   setAllSlots(prevAllSlots =>
-  //     clinic_users.filter(slot => slot.index !== index),
-  //   }
+  const handleDelete = index => {
+    const newUser = clinic_users?.filter((_, i) => i !== index);
+    dispatch(updateclinic_users(newUser));
+    console.log('new==', newUser);
+    Alert.alert('Success', 'User data deleted');
+  };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -55,7 +63,7 @@ const UserDisplay = ({navigation, route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -63,12 +71,13 @@ const UserDisplay = ({navigation, route}) => {
           setTimeout(() => {
             navigation.navigate('tab');
           }, 1000);
-          // setTimeout(() => {
-          //   SuccesRef?.current?.snapToIndex(0);
-          // }, 2000);
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+          }, 2000);
           // setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
           ResetClinic_Users_Redux();
+          SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           SuccesRef?.current?.snapToIndex(1);
@@ -77,96 +86,94 @@ const UserDisplay = ({navigation, route}) => {
         }
       }
     } catch (error) {
-      console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      console.error('Error occurred:', error);
-      setLoading(false);
+      console.error('Error Occured', error);
     }
   };
-  const progressData = useSelector(state => state.progress?.status);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingHorizontal: horizontalScale(24),
-        paddingVertical: verticalScale(24),
-      }}>
-      {prevScrn !== 'account' && (
+    <View style={styles.Main}>
+      {prevScrn === 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>
       )}
-      <View style={styles.alignchild}>
-        <Text style={commonstyles.h1}>Add User</Text>
-      </View>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <HButton
-          icon="plus"
-          label="Add User"
-          onPress={() => navigation.navigate('adduser', {prevScrn})}
-        />
-      </View>
-      <View style={styles.btn}>
-        {clinic_users ? null : (
-          <HButton
-            label="Skip"
-            onPress={() => navigation.navigate('tab')}
-            btnstyles={{
-              backgroundColor: CUSTOMCOLOR.white,
-              borderWidth: 1,
-              borderColor: CUSTOMCOLOR.primary,
-            }}
-            textStyle={{
-              color: CUSTOMCOLOR.primary,
-            }}
-          />
-        )}
-      </View>
-      <ScrollView
-        style={styles.appointmentcard}
-        contentContainerStyle={{gap: moderateScale(8), top: moderateScale(64)}}>
-        {/* <View style={{top:moderateScale(64)}}> */}
-        {clinic_users?.map((value, index) => {
-          return <UserCard key={index} userdata={value} />;
-        })}
-
-        {/* </View> */}
-      </ScrollView>
-      {clinic_users && (
-        <View>
-          <HButton
-            label="Next"
+      <PrescriptionHead heading={'My User'} />
+      <ScrollView>
+        <View
+          style={{
+            alignSelf: clinic_users?.length > 0 ? 'flex-end' : 'center',
+            alignItems: 'center',
+            marginBottom: moderateScale(12),
+            gap: moderateScale(8),
+          }}>
+          <SelectorBtn
+            select={styles.btn}
+            inputstyle={styles.input}
+            input={clinic_users?.length > 0 ? 'Add more User' : 'Add User'}
+            Bname={'plus'}
             onPress={() => {
-              if (clinic_users.length > 0) {
-                fetchData();
-              } else {
-                Alert.alert('Please Add Atleast One User');
-              }
+              navigation.navigate('adduser', {prevScrn});
             }}
-            loading={loading}
           />
+          {clinic_users?.length > 0 ? null : (
+            <HButton
+              rightIcon="arrow-right-thin"
+              color={CUSTOMCOLOR.primary}
+              label="Skip"
+              onPress={() => navigation.navigate('tab')}
+              btnstyles={{
+                backgroundColor: CUSTOMCOLOR.white,
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+              }}
+            />
+          )}
         </View>
-      )}
+        {clinic_users?.map((item, index) => (
+          <View key={index} style={{marginBottom: moderateScale(8)}}>
+            <UserCard
+              index={index}
+              data={item}
+              cancel={() => {
+                handleDelete(index);
+              }}
+            />
+          </View>
+        ))}
+      </ScrollView>
+      {clinic_users?.length > 0 ? (
+        <HButton
+          btnstyles={styles.btnNext}
+          textStyle={styles.input}
+          label={'Next'}
+          onPress={fetchData}
+          loading={loading}
+        />
+      ) : null}
     </View>
   );
 };
 const styles = StyleSheet.create({
-  alignchild: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: '100%',
-    paddingHorizontal: horizontalScale(8),
+  Main: {
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
+    flex: 1,
+  },
+  input: {
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.white,
+    paddingLeft: moderateScale(8),
   },
   btn: {
-    alignItems: 'center',
-    top: moderateScale(32),
-    gap: moderateScale(16),
+    backgroundColor: CUSTOMCOLOR.primary,
+    borderRadius: moderateScale(10),
   },
-  appointmentcard: {
-    height: moderateScale(300),
-    paddingHorizontal: horizontalScale(8),
-    gap: moderateScale(16),
+  btnNext: {
+    backgroundColor: CUSTOMCOLOR.primary,
+    justifyContent: 'center',
+    marginHorizontal: moderateScale(56),
+    borderRadius: moderateScale(10),
   },
 });
 export default UserDisplay;

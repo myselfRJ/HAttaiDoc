@@ -313,17 +313,26 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1,backgroundColor:CUSTOMCOLOR.white,paddingVertical:verticalScale(8)}}>
       <ProgresHeader progressData={progressData} />
-      <ScrollView>
+      {modal && (
+          <GalleryModel
+            visible={modal}
+            Close={setModal}
+            // closeModal={()=> setModal(false)}
+            OnGallery={onImagePress}
+            OnCamera={openCamera}
+            // onPress={()=>setModal(false)}
+            // dismiss={()=>setModal(false)}
+          />
+      )}
+      <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Fill Profile</Text>
               <AddImage
-                // onPress={true}
-                OnGallery={onImagePress}
-                OnCamera={openCamera}
+                onPress={() => ModalVisible()}
                 encodedBase64={selectedImage}
               />
             </View>
@@ -380,29 +389,27 @@ const ProfileCreate = ({navigation}) => {
                 numeric={true}
               /> */}
               <InputText
-                inputContainer={{
-                  width: '45%',
-                  paddingHorizontal: horizontalScale(0),
-                }}
-                label="Age"
-                placeholder="eg:25"
-                input={value}
-                setValue={setValue}
-                numeric={true}
-                required={true}
-              />
-
-              <Text style={{paddingHorizontal: moderateScale(16)}}>(OR)</Text>
-
-              <SelectorBtn
-                required={true}
-                selectContainer={{width: '46%'}}
-                label={Language[language]['dob']}
-                name="calendar"
-                onPress={() => setOpen('to')}
-                input={formattedDate}
-                style={styles.DOBselect}
-              />
+              inputContainer={{width:'45%',paddingHorizontal:horizontalScale(0)}}
+              label="Age"
+              placeholder="eg:25"
+              input={value}
+              setValue={setValue}
+              numeric={true}
+              required={true}
+            />
+             
+              <Text style={{top:moderateScale(10),paddingHorizontal:moderateScale(11),alignSelf:'center',justifyContent:'center'}}>(OR)</Text>
+              
+             <SelectorBtn
+            //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
+              required={true}
+              selectContainer={{width:'46%',paddingTop:moderateScale(4)}}
+            label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
             </View>
             <DatePicker
               modal
@@ -440,14 +447,24 @@ const ProfileCreate = ({navigation}) => {
               setValue={value => handleChangeValue('experience', value)}
               numeric={true}
             />
-            <View style={{flexDirection: 'row'}}>
-              <InputText
-                inputContainer={{width: '50%'}}
+            <View style={styles.btn1}>
+             <InputText
+             inputContainer={{width:'50%',paddingHorizontal:horizontalScale(0)}}
+              required={true}
+              label='Medical Registration Number'
+              placeholder="Medical Registration number"
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
+            />
+            <View style={{width:'50%',paddingHorizontal:horizontalScale(4),paddingVertical:moderateScale(2)}}>
+              <SelectorBtn
                 required={true}
-                label="Medical Registration Number"
-                placeholder="Medical Registration number"
-                value={values.medical_number}
-                setValue={value => handleChangeValue('medical_number', value)}
+                label='State'
+                name="chevron-down"
+                onPress={() => {
+                  setshow(!show)
+                }}
+                input={selectedState}
               />
               <View
                 style={{width: '50%', paddingHorizontal: horizontalScale(8)}}>
@@ -523,12 +540,17 @@ const ProfileCreate = ({navigation}) => {
                 )}
               </View>
             </View>
-            <HButton
+           
+          </View>
+        </Keyboardhidecontainer>
+      </ScrollView>
+      <View style={{padding:moderateScale(32)}}>
+      <HButton
               btnstyles={{
-                width: '100%',
-                paddingHorizontal: horizontalScale(16),
-                borderRadius: moderateScale(16),
-                top: moderateScale(16),
+                width:'100%',
+                paddingHorizontal:horizontalScale(32),
+                paddingVertical:verticalScale(16),
+                borderRadius:moderateScale(16),
                 backgroundColor:
                   values.doctor_name &&
                   values.gender &&
@@ -550,9 +572,7 @@ const ProfileCreate = ({navigation}) => {
                 }
               }}
             />
-          </View>
-        </Keyboardhidecontainer>
-      </ScrollView>
+            </View>
       <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}
@@ -596,19 +616,7 @@ const ProfileCreate = ({navigation}) => {
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
 
-      {/* {modal && (
-        <View>
-          <GalleryModel
-            visible={modal}
-            Close={setModal}
-            // closeModal={()=> setModal(false)}
-            OnGallery={onImagePress}
-            OnCamera={openCamera}
-            // onPress={()=>setModal(false)}
-            // dismiss={()=>setModal(false)}
-          />
-        </View>
-      )} */}
+      
     </View>
   );
 };
@@ -626,9 +634,9 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    height: '20%',
+    height:'18%',
     // gap:moderateScale(0),
-    // paddingHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(8),
     // borderWidth:1,
     paddingVertical: moderateScale(0),
   },
@@ -686,7 +694,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     paddingHorizontal: moderateScale(32),
-    paddingVertical: moderateScale(12),
+    paddingVertical:moderateScale(10)
   },
   DOBselect: {
     width: '100%',
@@ -733,10 +741,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
   },
   btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection:'row',
+    // alignItems:'center',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
+  },
+  btn1: {
+    flexDirection:'row',
+    position:'relative',
+    width: '100%',
+    paddingHorizontal: horizontalScale(8),
+    gap:moderateScale(4)
   },
   specialization: {
     alignSelf: 'flex-start',
@@ -761,6 +776,10 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: 18,
     color: CUSTOMCOLOR.black,
+  },
+  container: {
+    flexGrow: 1,
+    paddingVertical: verticalScale(20),
   },
 });
 
