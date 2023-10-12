@@ -13,7 +13,8 @@ const clinic_users_data_Slice = createSlice({
       console.log(state.clinic_users, '+++clinics');
     },
     updateclinic_users: (state, action) => {
-      state.clinic_users = action.payload;
+      const {index, updatedUser} = action.payload;
+      state.clinic_users[index] = {...state.clinic_users[index], ...updatedUser};
     },
   },
 });
