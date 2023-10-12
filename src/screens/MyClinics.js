@@ -40,8 +40,10 @@ import {
 import {useRoute} from '@react-navigation/native';
 import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import ProgresHeader from '../components/progressheader';
 
 const MyClinics = ({navigation}) => {
+  const prevScrn1 = 'undefineed';
   const token = useSelector(state => state.authenticate.auth.access);
   const dispatch = useDispatch();
 
@@ -91,7 +93,7 @@ const MyClinics = ({navigation}) => {
                   navigation.navigate('tab');
                 }, 1000)
               : setTimeout(() => {
-                  navigation.navigate('adduser', {prevScrn1});
+                  navigation.navigate('userdisplay', {prevScrn1});
                 }, 1000);
           }
           setTimeout(() => {
@@ -117,7 +119,7 @@ const MyClinics = ({navigation}) => {
   const progressData = useSelector(state => state.progress?.status);
   return (
     <View style={styles.Main}>
-      {prevScrn === 'account' && (
+      {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>

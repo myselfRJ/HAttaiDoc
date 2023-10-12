@@ -602,7 +602,7 @@ const AddClinic = ({navigation}) => {
           style={styles.clsbtn}
           color={CUSTOMCOLOR.primary}
           size={moderateScale(32)}
-          onPress={() => navigation.navigate('tab')}
+          onPress={() => navigation.goBack()}
         />
       </View>
       {/* )} */}
@@ -648,16 +648,20 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Photo</Text>
                 <AddImage
-                  onPress={() => {
-                    ModalVisible();
-                  }}
+                  // onPress={() => {
+                  //   ModalVisible();
+                  // }}
+                  OnGallery={onImagePress}
+                  OnCamera={openCamera}
                   encodedBase64={selectedImage}
                 />
               </View>
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Logo</Text>
                 <AddImage
-                  onPress={() => LogoVisible()}
+                  OnGallery={onLogoPress}
+                  OnCamera={LogoCamera}
+                  // onPress={() => LogoVisible()}
                   encodedBase64={selectedLogo}
                 />
               </View>
