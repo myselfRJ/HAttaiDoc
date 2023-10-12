@@ -1,93 +1,97 @@
-import { View, Text,StyleSheet, Alert} from 'react-native';
-import { useState,useEffect,useRef } from 'react';
+import {View, Text, StyleSheet, Alert} from 'react-native';
+import {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
-import { useSelector,dispatch, useDispatch } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
-import { commonstyles } from '../styles/commonstyle';
-import { horizontalScale,verticalScale,moderateScale } from '../utility/scaleDimension';
-import { CUSTOMCOLOR,CUSTOMFONTFAMILY,CUSTOMFONTSIZE } from '../settings/styles';
-import { HButton, SelectorBtn } from '../components';
+import {useSelector, dispatch, useDispatch} from 'react-redux';
+import {useRoute} from '@react-navigation/native';
+import {commonstyles} from '../styles/commonstyle';
+import {
+  horizontalScale,
+  verticalScale,
+  moderateScale,
+} from '../utility/scaleDimension';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
+import {HButton, SelectorBtn} from '../components';
 import UserCard from '../components/userCard';
 import ClinicCreate from './cliniccreate';
-import { ScrollView } from 'react-native-gesture-handler';
-import { fetchApi } from '../api/fetchApi';
-import { URL } from '../utility/urls';
+import {ScrollView} from 'react-native-gesture-handler';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
 import {HttpStatusCode} from 'axios';
-import { headerStatus } from '../redux/features/headerProgress/headerProgress';
-import { updateclinic_users } from '../redux/features/profiles/ClinicUsers';
+import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import {updateclinic_users} from '../redux/features/profiles/ClinicUsers';
 import PrescriptionHead from '../components/prescriptionHead';
+import {err} from 'react-native-svg/lib/typescript/xml';
 
 const UserDisplay = ({navigation}) => {
-  const dispatch= useDispatch();
+  const dispatch = useDispatch();
   const SuccesRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const token = useSelector(state => state.authenticate.auth.access);
   const progressData = useSelector(state => state.progress?.status);
   const route = useRoute();
   const {prevScrn} = route.params;
-    const [apiStatus, setApiStatus] = useState({});
-    // const route = useRoute();
-    const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-    console.log('users===>',clinic_users)
-    const ResetClinic_Users_Redux = () => {
-      const ResetClinic_users = [];
-      dispatch(updateclinic_users(ResetClinic_users));
-    };
-    const handleDelete = index => {
-      const newUser = clinic_users?.filter((_, i) => i !== index);
-      dispatch(updateclinic_users(newUser));
-      console.log('new==',newUser)
-      Alert.alert('Success',
-      'User data deleted')
-    };
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchApi(URL.adduser, {
-          method: 'POST',
-          headers: {
-            Prefer: '',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json, application/xml',
-          },
-          body: JSON.stringify(clinic_users),
-        });
-        if (response.status === HttpStatusCode.Ok) {
-          const jsonData = await response.json();
-          // console.log(jsonData);
-          if (jsonData.status === 'success') {
-            setApiStatus({status: 'success', message: jsonData.message});
-            SuccesRef?.current?.snapToIndex(1);
-            // dispatch(headerStatus({index: 2, status: true}));
-            setTimeout(() => {
-              navigation.navigate('tab');
-            }, 1000);
-            setTimeout(() => {
-              SuccesRef?.current?.snapToIndex(0);
-            }, 2000);
-            // setSelectedClinic(jsonData.data[0]?.clinic_name);
-            setLoading(false);
-            ResetClinic_Users_Redux();
+  const [apiStatus, setApiStatus] = useState({});
+  // const route = useRoute();
+  const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
+  console.log('users===>', clinic_users);
+  const ResetClinic_Users_Redux = () => {
+    const ResetClinic_users = [];
+    dispatch(updateclinic_users(ResetClinic_users));
+  };
+  const handleDelete = index => {
+    const newUser = clinic_users?.filter((_, i) => i !== index);
+    dispatch(updateclinic_users(newUser));
+    console.log('new==', newUser);
+    Alert.alert('Success', 'User data deleted');
+  };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchApi(URL.adduser, {
+        method: 'POST',
+        headers: {
+          Prefer: '',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json, application/xml',
+        },
+        body: JSON.stringify(clinic_users),
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+        // console.log(jsonData);
+        if (jsonData.status === 'success') {
+          setApiStatus({status: 'success', message: jsonData.message});
+          SuccesRef?.current?.snapToIndex(1);
+          // dispatch(headerStatus({index: 2, status: true}));
+          setTimeout(() => {
+            navigation.navigate('tab');
+          }, 1000);
+          setTimeout(() => {
             SuccesRef?.current?.snapToIndex(0);
-          } else {
-            setApiStatus({status: 'warning', message: 'Enter all Values'});
-            SuccesRef?.current?.snapToIndex(1);
-            console.error('API call failed:', response.status, response);
-            setLoading(false);
-          }
+          }, 2000);
+          // setSelectedClinic(jsonData.data[0]?.clinic_name);
+          setLoading(false);
+          ResetClinic_Users_Redux();
+          SuccesRef?.current?.snapToIndex(0);
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('Error occurred:', error);
-        setApiStatus({status: 'error', message: 'Please try again'});
-        SuccesRef?.current?.snapToIndex(1);
-        console.error('Error occurred:', error);
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error('Error Occured', error);
+    }
+  };
 
-    return (
-      <View style={styles.Main}>
+  return (
+    <View style={styles.Main}>
       {prevScrn === 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
@@ -100,7 +104,7 @@ const UserDisplay = ({navigation}) => {
             alignSelf: clinic_users?.length > 0 ? 'flex-end' : 'center',
             alignItems: 'center',
             marginBottom: moderateScale(12),
-            gap:moderateScale(8)
+            gap: moderateScale(8),
           }}>
           <SelectorBtn
             select={styles.btn}
@@ -111,19 +115,20 @@ const UserDisplay = ({navigation}) => {
               navigation.navigate('adduser', {prevScrn});
             }}
           />
-         {clinic_users?.length > 0  ? null : (
-           <HButton
-                rightIcon="arrow-right-thin"
-                color={CUSTOMCOLOR.primary}
-                label="Skip"
-                onPress={() => navigation.navigate('tab')}
-                btnstyles={{
-                  backgroundColor: CUSTOMCOLOR.white,
-                }}
-                textStyle={{
-                  color: CUSTOMCOLOR.primary,
-                }}
-              />)}
+          {clinic_users?.length > 0 ? null : (
+            <HButton
+              rightIcon="arrow-right-thin"
+              color={CUSTOMCOLOR.primary}
+              label="Skip"
+              onPress={() => navigation.navigate('tab')}
+              btnstyles={{
+                backgroundColor: CUSTOMCOLOR.white,
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+              }}
+            />
+          )}
         </View>
         {clinic_users?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
@@ -147,7 +152,7 @@ const UserDisplay = ({navigation}) => {
         />
       ) : null}
     </View>
-    );
+  );
 };
 const styles = StyleSheet.create({
   Main: {
@@ -170,5 +175,5 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(56),
     borderRadius: moderateScale(10),
   },
-})
+});
 export default UserDisplay;

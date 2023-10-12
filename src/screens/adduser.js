@@ -50,7 +50,7 @@ import {disableBackButton} from '../utility/backDisable';
 import {useRoute} from '@react-navigation/native';
 import {checkNumber} from '../utility/checks';
 import GalleryModel from '../components/GalleryModal';
-import { mode } from '../redux/features/prescription/prescribeslice';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
@@ -62,17 +62,15 @@ const AddUser = ({navigation}) => {
   const ClinicRef = useState(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-  const [select,setSelect] = useState('select')
-  const [show,setShow] = useState(false)
-  const [showclinic,setShowclinic] = useState(false)
+  const [select, setSelect] = useState('select');
+  const [show, setShow] = useState(false);
+  const [showclinic, setShowclinic] = useState(false);
 
   // console.log('----------------users', clinic_users);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
 
   const clinicsData = useSelector(state => state.clinic?.clinic_data);
-
-  
 
   const [loading, setLoading] = useState(false);
 
@@ -89,9 +87,9 @@ const AddUser = ({navigation}) => {
     role: '',
     clinic: '',
     slots: [],
-    user_profile_pic_url: selectedImage
-      // ? selectedImage
-      // : CONSTANTS.default_image,
+    user_profile_pic_url: selectedImage,
+    // ? selectedImage
+    // : CONSTANTS.default_image,
   });
   const [apiStatus, setApiStatus] = useState({});
 
@@ -207,16 +205,17 @@ const AddUser = ({navigation}) => {
       setValues({name: '', phone: '', gender: 'male'});
       setSelectedClinic('');
       setSelect('');
-      navigation.navigate('userdisplay',{prevScrn})
+      navigation.navigate('userdisplay', {prevScrn});
     } else {
       Alert.alert('"Warning"', '"Please Enter Correct Details"');
     }
-    
   };
-  
+
   const handleDeleteUser = (name, role) => {
     // Filter out the user you want to delete based on name and role
-    const updatedClinicUsers = clinic_users.filter(user => user.clinic_user_name !== name || user.role !== role);
+    const updatedClinicUsers = clinic_users.filter(
+      user => user.clinic_user_name !== name || user.role !== role,
+    );
     dispatch(updateclinic_users(updatedClinicUsers));
     // setShowSlotChip(false); // Assuming you want to hide the user chips after deletion
   };
@@ -261,7 +260,6 @@ const AddUser = ({navigation}) => {
       } else {
         // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
-
       }
     });
     setModal(false);
@@ -289,14 +287,14 @@ const AddUser = ({navigation}) => {
     disableBackButton();
   }, []);
 
-  const HandleRoleSelect=(val)=>{
+  const HandleRoleSelect = val => {
     setSelect(val);
-    setShow(!show)
-  }
-  const handleClinicSelect =(val) =>{
+    setShow(!show);
+  };
+  const handleClinicSelect = val => {
     setSelectedClinic(val?.clinic_name);
-    setShowclinic(!showclinic)
-  }
+    setShowclinic(!showclinic);
+  };
 
   if (index !== undefined) {
     useEffect(() => {
@@ -307,12 +305,12 @@ const AddUser = ({navigation}) => {
       };
       setValues(userData);
       setSelect(clinic_users[index]?.role);
-      setSelectedClinic(clinic_users[index]?.clinic_id)
+      setSelectedClinic(clinic_users[index]?.clinic_id);
       setSelectedImage(clinic_users[index]?.user_profile_pic_url);
     }, []);
   }
   return (
-    <View style={{flex: 1,padding:moderateScale(24)}}>
+    <View style={{flex: 1, padding: moderateScale(24)}}>
       {/* {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
@@ -320,27 +318,27 @@ const AddUser = ({navigation}) => {
       )} */}
 
       {/* {prevScrn === 'account' && ( */}
-        <View>
-          <PlusButton
-            icon="close"
-            style={styles.clsx}
-            color={CUSTOMCOLOR.primary}
-            size={moderateScale(32)}
-            onPress={() => navigation.navigate('tab')}
-          />
-        </View>
+      <View>
+        <PlusButton
+          icon="close"
+          style={styles.clsx}
+          color={CUSTOMCOLOR.primary}
+          size={moderateScale(32)}
+          onPress={() => navigation.navigate('tab')}
+        />
+      </View>
       {/* )} */}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
             {/* <View style={styles.alignchild}> */}
-              <View style={styles.alignchild1}>
-                <Text style={commonstyles.h1}>Add User</Text>
-                <AddImage
-                  onPress={() => ModalVisible()}
-                  encodedBase64={selectedImage}
-                />
-              </View>
+            <View style={styles.alignchild1}>
+              <Text style={commonstyles.h1}>Add User</Text>
+              <AddImage
+                onPress={() => ModalVisible()}
+                encodedBase64={selectedImage}
+              />
+            </View>
             {/* </View> */}
             <InputText
               label={Language[language]['name']}
@@ -350,7 +348,7 @@ const AddUser = ({navigation}) => {
               setValue={value => handleChangeValue('name', value)}
             />
             <InputText
-            required={true}
+              required={true}
               doubleCheck={[true, false]}
               check={checkNumber}
               maxLength={10}
@@ -388,26 +386,30 @@ const AddUser = ({navigation}) => {
               {/* <Text style={styles.labeltext}>Role <Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text> */}
               <SelectorBtn
                 required={true}
-                label='Role'
+                label="Role"
                 name="chevron-down"
                 // onPress={toggleModal}
                 onPress={() => {
-                  setShow(!show)
+                  setShow(!show);
                 }}
                 input={select}
               />
               {show == true && (
                 <View style={styles.rolemenu}>
-                
-                {CONSTANTS.role?. map((val,ind)=>(
-                  <TouchableOpacity key={ind} onPress={()=> HandleRoleSelect(val)}>
-                  <Text style={[styles.txt, 
-                  select == val ? {color : CUSTOMCOLOR.primary} : null
-                  ]}>{val}</Text>
-                  </TouchableOpacity>
-                ))}
-              
-            </View>
+                  {CONSTANTS.role?.map((val, ind) => (
+                    <TouchableOpacity
+                      key={ind}
+                      onPress={() => HandleRoleSelect(val)}>
+                      <Text
+                        style={[
+                          styles.txt,
+                          select == val ? {color: CUSTOMCOLOR.primary} : null,
+                        ]}>
+                        {val}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               )}
 
               {/* <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
@@ -444,28 +446,34 @@ const AddUser = ({navigation}) => {
               />
             )}
             <View style={styles.clinicselect}>
-            <SelectorBtn
+              <SelectorBtn
                 required={true}
-                label='Clinic'
+                label="Clinic"
                 name="chevron-down"
                 // onPress={toggleModal}
                 onPress={() => {
-                  setShowclinic(!show)
+                  setShowclinic(!show);
                 }}
                 input={selectedClinic}
               />
               {showclinic == true && (
                 <View style={styles.rolemenu}>
-                
-                {clinics?. map((val,ind)=>(
-                  <TouchableOpacity key={ind} onPress={()=> handleClinicSelect(val)}>
-                  <Text style={[styles.txt, 
-                  selectedClinic == val?.clinic_name ? {color : CUSTOMCOLOR.primary} : null
-                  ]}>{val?.clinic_name}</Text>
-                  </TouchableOpacity>
-                ))}
-              
-            </View>
+                  {clinics?.map((val, ind) => (
+                    <TouchableOpacity
+                      key={ind}
+                      onPress={() => handleClinicSelect(val)}>
+                      <Text
+                        style={[
+                          styles.txt,
+                          selectedClinic == val?.clinic_name
+                            ? {color: CUSTOMCOLOR.primary}
+                            : null,
+                        ]}>
+                        {val?.clinic_name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               )}
 
               {/* <Text style={styles.labeltext}>Clinic<Text style={{color:CUSTOMCOLOR.delete}}>*</Text></Text> */}
@@ -557,28 +565,27 @@ const AddUser = ({navigation}) => {
                   color: CUSTOMCOLOR.primary,
                 }}
               /> */}
-              
             </View>
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
       <HButton
-                btnstyles={{
-                  backgroundColor:
-                    values.name &&
-                    values.gender &&
-                    values.phone.length === 10 &&
-                    selectedClinic &&
-                    select
-                      ? CUSTOMCOLOR.primary
-                      : CUSTOMCOLOR.disable,
-                }}
-                label="Save"
-                onPress={() => {
-                   handlePlusIconClick();
-                }}
-                loading={loading}
-              />
+        btnstyles={{
+          backgroundColor:
+            values.name &&
+            values.gender &&
+            values.phone.length === 10 &&
+            selectedClinic &&
+            select
+              ? CUSTOMCOLOR.primary
+              : CUSTOMCOLOR.disable,
+        }}
+        label="Save"
+        onPress={() => {
+          handlePlusIconClick();
+        }}
+        loading={loading}
+      />
       {/* <BottomSheetView
         bottomSheetRef={RoleRef}
         snapPoints={'20%'}
@@ -670,7 +677,7 @@ const styles = StyleSheet.create({
   bottom: {
     // borderWidth:1,
     paddingHorizontal: horizontalScale(6),
-    top:verticalScale(250)
+    top: verticalScale(250),
   },
   UsersText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -697,7 +704,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    height:'20%',
+    height: '20%',
     paddingHorizontal: horizontalScale(8),
     // borderWidth:1
   },
@@ -771,18 +778,18 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.black,
   },
-  rolemenu:{
-    backgroundColor:CUSTOMCOLOR.white,
+  rolemenu: {
+    backgroundColor: CUSTOMCOLOR.white,
     // gap:moderateScale(4),
-    paddingHorizontal:horizontalScale(8),
-    paddingVertical:verticalScale(16)
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(16),
   },
-  txt:{
-    color:CUSTOMCOLOR.black,
-    fontSize:CUSTOMFONTSIZE.h3,
-    fontWeight:'400',
-    paddingHorizontal:horizontalScale(8),
-    paddingVertical:verticalScale(8)
-  }
+  txt: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(8),
+  },
 });
 export default AddUser;

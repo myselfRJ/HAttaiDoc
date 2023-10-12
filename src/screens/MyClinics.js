@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Text,
   View,
@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -40,14 +42,16 @@ import {
 import {useRoute} from '@react-navigation/native';
 import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
+import ProgresHeader from '../components/progressheader';
+import {useFocusEffect} from '@react-navigation/native';
 
 const MyClinics = ({navigation}) => {
+  const prevScrn1 = 'undefineed';
   const token = useSelector(state => state.authenticate.auth.access);
   const dispatch = useDispatch();
 
   const route = useRoute();
   const {prevScrn} = route.params;
-  console.log('=========>prev', prevScrn);
   const clinics = useSelector(state => state.clinic?.clinics);
   const [loading, setLoading] = useState(false);
   const [apiStatus, setApiStatus] = useState({});
@@ -64,104 +68,228 @@ const MyClinics = ({navigation}) => {
     const newClinics = clinics?.filter((_, i) => i !== index);
     dispatch(deleteclinics(newClinics));
   };
+  const [visible, setVisible] = useState(false);
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetchApi(URL.addclinic, {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //         Accept: 'application/json',
+  //       },
+  //       body: JSON.stringify(clinics),
+  //     });
+  //     if (response.status === HttpStatusCode.Ok) {
+  //       const jsonData = await response.json();
+  //       if (jsonData.status === 'success') {
+  //         setApiStatus({status: 'success', message: 'Successfully created'});
+  //         SuccesRef?.current?.snapToIndex(1);
+  //         dispatch(headerStatus({index: 1, status: true}));
+  //         {
+  //           prevScrn === 'account'
+  //             ? setTimeout(() => {
+  //                 navigation.navigate('tab');
+  //               }, 1000)
+  //             : setTimeout(() => {
+  //                 navigation.navigate('userdisplay', {prevScrn1});
+  //               }, 1000);
+  //         }
+  //         setTimeout(() => {
+  //           SuccesRef?.current?.snapToIndex(0);
+  //         }, 5000);
+  //         setLoading(false);
+  //         ResetClinicRedux();
+  //         // SuccesRef?.current?.snapToIndex(0);
+  //       } else {
+  //         setApiStatus({status: 'warning', message: jsonData.message});
+  //         SuccesRef?.current?.snapToIndex(1);
+  //         console.error('API call failed:', response.status, response);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error occurred:', error);
+  //     setApiStatus({status: 'error', message: 'Please try again'});
+  //     SuccesRef?.current?.snapToIndex(1);
+  //     setLoading(false);
+  //   }
+  // };
+  const handleNav = () => {
+    prevScrn === 'account'
+      ? setTimeout(() => {
+          navigation.navigate('tab');
+        }, 1000)
+      : setTimeout(() => {
+          navigation.navigate('userdisplay', {prevScrn1});
+        }, 1000);
+  };
 
-  console.log('=========<>clinics', clinics?.length);
-
-  const fetchData = async () => {
-    setLoading(true);
+  const progressData = useSelector(state => state.progress?.status);
+  const {phone} = useSelector(state => state?.phone?.data);
+  const [clinicData, setClinicData] = useState([]);
+  const fetchClinics = async () => {
+    const response = await fetchApi(URL.get_clinics_slots(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setClinicData(() => jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  const deleteClinic = async id => {
     try {
-      const response = await fetchApi(URL.addclinic, {
-        method: 'POST',
+      const response = await fetch(URL.delete_clinic_slot(id), {
+        method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          Accept: 'application/json',
         },
-        body: JSON.stringify(clinics),
       });
-      if (response.status === HttpStatusCode.Ok) {
-        const jsonData = await response.json();
-        if (jsonData.status === 'success') {
-          setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus({index: 1, status: true}));
-          {
-            prevScrn === 'account'
-              ? setTimeout(() => {
-                  navigation.navigate('tab');
-                }, 1000)
-              : setTimeout(() => {
-                  navigation.navigate('adduser', {prevScrn1});
-                }, 1000);
-          }
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 5000);
-          setLoading(false);
-          ResetClinicRedux();
-          // SuccesRef?.current?.snapToIndex(0);
-        } else {
-          setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
-          console.error('API call failed:', response.status, response);
-          setLoading(false);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success') {
+          setVisible(!visible);
         }
+      } else {
+        console.log('Error Occured', response.status);
       }
     } catch (error) {
-      console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      setLoading(false);
+      console.error('Error deleting clinic:', error);
     }
   };
-  const progressData = useSelector(state => state.progress?.status);
+  useEffect(() => {
+    fetchClinics();
+  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchClinics();
+    }, []),
+  );
+
+  useEffect(() => {
+    fetchClinics();
+  }, [visible]);
+
   return (
-    <View style={styles.Main}>
-      {prevScrn === 'account' && (
-        <View>
-          <ProgresHeader progressData={progressData} />
-        </View>
-      )}
-      <PrescriptionHead heading={'My Clinics'} />
-      <ScrollView>
+    <>
+      <View style={styles.Main}>
+        {prevScrn !== 'account' && (
+          <View>
+            <ProgresHeader progressData={progressData} />
+          </View>
+        )}
+        <PrescriptionHead heading={'My Clinics'} />
+
         <View
           style={{
-            alignSelf: clinics?.length > 0 ? 'flex-end' : 'center',
+            alignSelf: clinicData?.length > 0 ? 'flex-end' : 'center',
             alignItems: 'center',
             marginBottom: moderateScale(12),
           }}>
           <SelectorBtn
             select={styles.btn}
             inputstyle={styles.input}
-            input={clinics?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
+            input={clinicData?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
             Bname={'plus'}
             onPress={() => {
               navigation.navigate('addclinic', {prevScrn});
             }}
           />
         </View>
-        {clinics?.map((item, index) => (
-          <View key={index} style={{marginBottom: moderateScale(8)}}>
-            <ClinicCard
-              index={index}
-              data={item}
-              cancel={() => {
-                handleDeleteSlotChip(index);
-              }}
-            />
-          </View>
-        ))}
-      </ScrollView>
-      {clinics?.length > 0 ? (
-        <HButton
-          btnstyles={styles.btnNext}
-          textStyle={styles.input}
-          label={'Next'}
-          onPress={fetchData}
-          loading={loading}
-        />
-      ) : null}
-    </View>
+        <ScrollView>
+          {clinicData?.map((item, index) => (
+            <View key={index} style={{marginBottom: moderateScale(8)}}>
+              <ClinicCard
+                index={item.id}
+                data={item}
+                cancel={() => {
+                  setVisible(!visible);
+                }}
+              />
+              <Modal
+                animationType="slide"
+                visible={visible}
+                onRequestClose={() => {
+                  setVisible(!visible);
+                }}
+                transparent={true}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#000000aa',
+                    width: '100%',
+                  }}>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      setVisible(!visible);
+                    }}>
+                    <View style={styles.modalOverlay} />
+                  </TouchableWithoutFeedback>
+
+                  <View
+                    style={{
+                      backgroundColor: CUSTOMCOLOR.white,
+                      padding: moderateScale(40),
+                      borderRadius: moderateScale(16),
+                    }}>
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: CUSTOMCOLOR.black,
+                        fontWeight: '700',
+                        fontSize: CUSTOMFONTSIZE.h2,
+                      }}>
+                      Are You sure Want To Delete
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        gap: moderateScale(16),
+                        padding: moderateScale(16),
+                        borderRadius: moderateScale(16),
+                      }}>
+                      <HButton
+                        label={'No'}
+                        onPress={() => setVisible(!visible)}
+                      />
+                      <HButton
+                        textStyle={{color: CUSTOMCOLOR.primary}}
+                        label={'Yes'}
+                        btnstyles={{
+                          backgroundColor: CUSTOMCOLOR.white,
+                          borderWidth: moderateScale(2),
+                          borderColor: CUSTOMCOLOR.borderColor,
+                        }}
+                        onPress={() => deleteClinic(item.id)}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+          ))}
+        </ScrollView>
+        {clinicData?.length > 0 ? (
+          <HButton
+            btnstyles={styles.btnNext}
+            textStyle={styles.input}
+            label={'Next'}
+            onPress={handleNav}
+            loading={loading}
+          />
+        ) : null}
+      </View>
+    </>
   );
 };
 
@@ -185,6 +313,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: moderateScale(56),
     borderRadius: moderateScale(10),
+  },
+  modalOverlay: {
+    position: 'absolute',
+    // width:'100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // borderWidth:1
+    // backgroundColor: 'rgba(0,0,0,0.5)'
   },
 });
 export default MyClinics;

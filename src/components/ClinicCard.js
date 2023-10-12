@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Alert,
   Pressable,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import {checkNumber, checkOtp, checkPassword} from '../utility/checks';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -25,33 +26,23 @@ import {
 import {URL} from '../utility/urls';
 import {useNavigation} from '@react-navigation/native';
 import {
-  CodeField,
-  Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell,
-} from 'react-native-confirmation-code-field';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {fetchApi} from '../api/fetchApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
-import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
-// import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
-import {
   moderateScale,
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import {Validators} from '../utils/FormUtils/Validators';
 import PrescriptionHead from '../components/prescriptionHead';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ClinicCard = props => {
   const [show, setShow] = useState(false);
   const Clinic_details = props.data;
   const navigation = useNavigation();
-  const index = props.index;
-  const slots = JSON.parse(Clinic_details?.slot);
+  const id = Clinic_details?.id;
+  const [slots] = useState(JSON.parse(Clinic_details?.slot_data?.slot));
+
+  const token = useSelector(state => state.authenticate.auth.access);
 
   return (
     <View style={styles.Main}>
@@ -86,7 +77,7 @@ const ClinicCard = props => {
           <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
             <Pressable
               style={styles.gap}
-              onPress={() => navigation.navigate('addclinic', {index})}>
+              onPress={() => navigation.navigate('addclinic', {id})}>
               <Icon
                 name={'pencil'}
                 size={moderateScale(24)}

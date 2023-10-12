@@ -49,9 +49,9 @@ import {
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
-import RNFS, { stat } from 'react-native-fs';
+import RNFS, {stat} from 'react-native-fs';
 import Modal from 'react-native-modal';
-import { mode } from '../redux/features/prescription/prescribeslice';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -60,7 +60,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedFilename, setSelectedFilename] = useState('');
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
-  const [show,setshow] = useState(false)
+  const [show, setshow] = useState(false);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -112,7 +112,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
   );
-  const [selectedState,setState] = useState('Select')
+  const [selectedState, setState] = useState('Select');
   const [age, setAge] = useState('');
 
   const [DOB, setDOB] = useState(new Date());
@@ -141,7 +141,7 @@ const ProfileCreate = ({navigation}) => {
   useEffect(() => {
     HandleInput();
   }, [DOB, age]);
-  console.log('age===',formatDate)
+  console.log('age===', formatDate);
 
   const HandleCheck = () => {
     if (value.length <= 3) {
@@ -256,7 +256,7 @@ const ProfileCreate = ({navigation}) => {
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     medical_doc_url: uploaddocument,
-    state:selectedState === 'select' ? null : selectedState
+    state: selectedState === 'select' ? null : selectedState,
   };
 
   const fetchData = async () => {
@@ -337,7 +337,7 @@ const ProfileCreate = ({navigation}) => {
               />
             </View>
             <InputText
-            // inputContainer={{bottom:moderateScale(4)}}
+              // inputContainer={{bottom:moderateScale(4)}}
               required={true}
               label={Language[language]['name']}
               placeholder="Full Name"
@@ -420,7 +420,7 @@ const ProfileCreate = ({navigation}) => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             />
-           
+
             {/* <InputText
               required={true}
               label="Medical Registration Number"
@@ -466,66 +466,79 @@ const ProfileCreate = ({navigation}) => {
                 }}
                 input={selectedState}
               />
+              <View
+                style={{width: '50%', paddingHorizontal: horizontalScale(8)}}>
+                <SelectorBtn
+                  required={true}
+                  label="State"
+                  name="menu-down"
+                  size={32}
+                  // onPress={toggleModal}
+                  onPress={() => {
+                    setshow(!show);
+                  }}
+                  input={selectedState}
+                />
 
-             {show === true && ( 
-             <View style={styles.statecontainer}>
-          <ScrollView persistentScrollbar={true}>
-            {CONSTANTS.state.map((state, index) => (
-              <Pressable
-                key={index}
-                onPress={() => {
-                handleStateSelection(state);
-                setshow(false)
-                }}
-    
-                >
-                <Text
-                  style={[
-                    styles.statefields,
-                    {
-                      color:
-                        selectedState === state
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.black,
-                    },
-                  ]}>
-                  {state}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>)}
-            
+                {show === true && (
+                  <View style={styles.statecontainer}>
+                    <ScrollView persistentScrollbar={true}>
+                      {CONSTANTS.state.map((state, index) => (
+                        <Pressable
+                          key={index}
+                          onPress={() => {
+                            handleStateSelection(state);
+                            setshow(false);
+                          }}>
+                          <Text
+                            style={[
+                              styles.statefields,
+                              {
+                                color:
+                                  selectedState === state
+                                    ? CUSTOMCOLOR.primary
+                                    : CUSTOMCOLOR.black,
+                              },
+                            ]}>
+                            {state}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
               </View>
             </View>
-            <View style={{alignSelf:'flex-start'}}>
-            <Text style={styles.medtext}>Medical Document</Text>
-            <View style={styles.doc_upload}>
-              {selectedFilename ? (
-                <View style={styles.selectedfilecontainer}>
-                  <Text style={styles.selectedFileInfo}>
-                    {selectedFilename}
-                  </Text>
-                  <TouchableOpacity onPress={handleClearFile}>
-                    <Icon
-                      name="delete"
-                      size={moderateScale(20)}
-                      color={CUSTOMCOLOR.delete}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <HButton label="Upload Document" 
-                onPress={pickSingleFile} 
-                btnstyles={{backgroundColor:CUSTOMCOLOR.white,
-                  borderColor:CUSTOMCOLOR.primary,
-                  borderWidth:0.5,
-                  borderRadius:4,
-                }}
-                textStyle={{color:CUSTOMCOLOR.primary}}
-                />
-              )}
-            </View>
+            <View style={{alignSelf: 'flex-start'}}>
+              <Text style={styles.medtext}>Medical Document</Text>
+              <View style={styles.doc_upload}>
+                {selectedFilename ? (
+                  <View style={styles.selectedfilecontainer}>
+                    <Text style={styles.selectedFileInfo}>
+                      {selectedFilename}
+                    </Text>
+                    <TouchableOpacity onPress={handleClearFile}>
+                      <Icon
+                        name="delete"
+                        size={moderateScale(20)}
+                        color={CUSTOMCOLOR.delete}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <HButton
+                    label="Upload Document"
+                    onPress={pickSingleFile}
+                    btnstyles={{
+                      backgroundColor: CUSTOMCOLOR.white,
+                      borderColor: CUSTOMCOLOR.primary,
+                      borderWidth: 0.5,
+                      borderRadius: 4,
+                    }}
+                    textStyle={{color: CUSTOMCOLOR.primary}}
+                  />
+                )}
+              </View>
             </View>
            
           </View>
@@ -572,7 +585,7 @@ const ProfileCreate = ({navigation}) => {
                 key={index}
                 onPress={() => handleSpecialitySelection(speciality)}
                 // style={{height: verticalScale(30)}}
-                >
+              >
                 <Text
                   style={[
                     styles.modalfields,
@@ -611,7 +624,7 @@ const ProfileCreate = ({navigation}) => {
 const styles = StyleSheet.create({
   radiogroup: {
     paddingHorizontal: moderateScale(8),
-    paddingVertical:moderateScale(6),
+    paddingVertical: moderateScale(6),
     flexDirection: 'row',
     gap: moderateScale(48),
     // borderWidth:1,
@@ -625,7 +638,7 @@ const styles = StyleSheet.create({
     // gap:moderateScale(0),
     paddingHorizontal: horizontalScale(8),
     // borderWidth:1,
-    paddingVertical:moderateScale(0),
+    paddingVertical: moderateScale(0),
   },
   alignchild1: {
     // justifyContent: 'center',
@@ -635,7 +648,7 @@ const styles = StyleSheet.create({
     // gap:moderateScale(0),
     // paddingHorizontal: horizontalScale(8),
     // borderWidth:1,
-    paddingVertical:moderateScale(0),
+    paddingVertical: moderateScale(0),
   },
   modalContainer: {
     height: '100%',
@@ -647,9 +660,9 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     gap: moderateScale(16),
     padding: moderateScale(10),
-    borderWidth:1
+    borderWidth: 1,
   },
-  statecontainer:{
+  statecontainer: {
     height: moderateScale(250),
     // width: '100%',
     // justifyContent: 'flex-start',
@@ -659,7 +672,6 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     gap: moderateScale(6),
     // padding: moderateScale(4),
-
   },
   content: {
     paddingHorizontal: 24,
@@ -668,16 +680,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // gap: moderateScale(4),
     // borderWidth:1,
-    height:'100%'
+    height: '100%',
   },
   modalfields: {
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
     paddingHorizontal: moderateScale(32),
-    paddingVertical:moderateScale(12)
+    paddingVertical: moderateScale(12),
   },
-  statefields:{
+  statefields: {
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
@@ -726,7 +738,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     fontSize: CUSTOMFONTSIZE.h4,
-    paddingHorizontal:horizontalScale(8)
+    paddingHorizontal: horizontalScale(8),
   },
   btn: {
     flexDirection:'row',
@@ -758,7 +770,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
-    marginBottom:moderateScale(4)
+    marginBottom: moderateScale(4),
   },
   bottext: {
     fontFamily: CUSTOMFONTFAMILY.heading,
