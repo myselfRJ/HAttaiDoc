@@ -55,6 +55,7 @@ import { mode } from '../redux/features/prescription/prescribeslice';
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
   const route = useRoute();
+  const {index} = route.params;
   const [clinics, setDataClinic] = useState();
   // console.log('clinic---', clinics);
   const RoleRef = useRef(null);
@@ -64,15 +65,14 @@ const AddUser = ({navigation}) => {
   const [select,setSelect] = useState('select')
   const [show,setShow] = useState(false)
   const [showclinic,setShowclinic] = useState(false)
-  console.log();
 
-  console.log('----------------users', clinic_users);
+  // console.log('----------------users', clinic_users);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
 
   const clinicsData = useSelector(state => state.clinic?.clinic_data);
 
-  // console.log('================================+++++++++clinic', clinicsData);
+  
 
   const [loading, setLoading] = useState(false);
 
@@ -81,6 +81,7 @@ const AddUser = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  // console.log('================================+++++++++clinic', selectedImage);
   const [values, setValues] = useState({
     name: '',
     phone: '',
@@ -89,14 +90,14 @@ const AddUser = ({navigation}) => {
     clinic: '',
     slots: [],
     user_profile_pic_url: selectedImage
-      ? selectedImage
-      : CONSTANTS.default_image,
+      // ? selectedImage
+      // : CONSTANTS.default_image,
   });
   const [apiStatus, setApiStatus] = useState({});
 
   const progressData = useSelector(state => state.progress?.status);
   const {prevScrn} = route.params;
-  console.log('----prevvvv', prevScrn);
+  // console.log('----prevvvv', prevScrn);
   const [modal, setModal] = useState(false);
   const ModalVisible = () => {
     setModal(true);
@@ -121,7 +122,7 @@ const AddUser = ({navigation}) => {
   const Clinic_users = {
     clinic_user_name: values.name,
     role: select !== 'Others' ? select : otherRole,
-    user_profile_pic_url: values.user_profile_pic_url,
+    user_profile_pic_url: selectedImage,
     gender: values.gender,
     user_phone_number: values.phone,
     clinic_id: selectedClinic,
@@ -153,7 +154,7 @@ const AddUser = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
@@ -193,7 +194,13 @@ const AddUser = ({navigation}) => {
       selectedClinic &&
       select
     ) {
-      dispatch(addclinic_users(Clinic_users));
+      {
+        index !== undefined
+          ? dispatch(
+              updateclinic_users({index: index, updatedUser: Clinic_users}),
+            )
+          : dispatch(addclinic_users(Clinic_users));
+      }
       Alert.alert('Success', '"User data added successfully"');
       setShowSlotChip(true);
       setSelectedImage('');
@@ -206,7 +213,7 @@ const AddUser = ({navigation}) => {
     }
     
   };
-
+  
   const handleDeleteUser = (name, role) => {
     // Filter out the user you want to delete based on name and role
     const updatedClinicUsers = clinic_users.filter(user => user.clinic_user_name !== name || user.role !== role);
@@ -254,6 +261,7 @@ const AddUser = ({navigation}) => {
       } else {
         // console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
+
       }
     });
     setModal(false);
@@ -289,15 +297,29 @@ const AddUser = ({navigation}) => {
     setSelectedClinic(val?.clinic_name);
     setShowclinic(!showclinic)
   }
+
+  if (index !== undefined) {
+    useEffect(() => {
+      const userData = {
+        name: clinic_users[index]?.clinic_user_name,
+        phone: clinic_users[index]?.user_phone_number,
+        gender: clinic_users[index]?.gender,
+      };
+      setValues(userData);
+      setSelect(clinic_users[index]?.role);
+      setSelectedClinic(clinic_users[index]?.clinic_id)
+      setSelectedImage(clinic_users[index]?.user_profile_pic_url);
+    }, []);
+  }
   return (
     <View style={{flex: 1,padding:moderateScale(24)}}>
       {/* {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>
-      )}
+      )} */}
 
-      {prevScrn === 'account' && (
+      {/* {prevScrn === 'account' && ( */}
         <View>
           <PlusButton
             icon="close"
@@ -307,7 +329,7 @@ const AddUser = ({navigation}) => {
             onPress={() => navigation.navigate('tab')}
           />
         </View>
-      )} */}
+      {/* )} */}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
@@ -315,8 +337,7 @@ const AddUser = ({navigation}) => {
               <View style={styles.alignchild1}>
                 <Text style={commonstyles.h1}>Add User</Text>
                 <AddImage
-                 OnGallery={onImagePress}
-                 OnCamera={openCamera}
+                  onPress={() => ModalVisible()}
                   encodedBase64={selectedImage}
                 />
               </View>
@@ -536,10 +557,13 @@ const AddUser = ({navigation}) => {
                   color: CUSTOMCOLOR.primary,
                 }}
               /> */}
-              <HButton
-          
+              
+            </View>
+          </View>
+        </Keyboardhidecontainer>
+      </ScrollView>
+      <HButton
                 btnstyles={{
-                  // top:moderateScale(100),
                   backgroundColor:
                     values.name &&
                     values.gender &&
@@ -552,18 +576,9 @@ const AddUser = ({navigation}) => {
                 label="Save"
                 onPress={() => {
                    handlePlusIconClick();
-                  // if (clinic_users.length > 0) {
-                  //   fetchData();
-                  // } else {
-                  //   Alert.alert('Please Add Atleast One User');
-                  // }
                 }}
                 loading={loading}
               />
-            </View>
-          </View>
-        </Keyboardhidecontainer>
-      </ScrollView>
       {/* <BottomSheetView
         bottomSheetRef={RoleRef}
         snapPoints={'20%'}
@@ -620,7 +635,7 @@ const AddUser = ({navigation}) => {
         backgroundStyle={'#fff'}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
-      {/* {modal && (
+      {modal && (
         <View>
           <GalleryModel
             visible={modal}
@@ -629,7 +644,7 @@ const AddUser = ({navigation}) => {
             OnCamera={openCamera}
           />
         </View>
-      )} */}
+      )}
     </View>
   );
 };
