@@ -21,6 +21,7 @@ const SelectionTab = props => {
         backgroundColor: props.selected
           ? CUSTOMCOLOR.primary
           : CUSTOMCOLOR.white,
+        borderWidth: props.selected ? 0 : 0.5,
       }}>
       <Text
         style={{
@@ -34,16 +35,17 @@ const SelectionTab = props => {
 };
 const styles = StyleSheet.create({
   tabcontainer: {
-    paddingHorizontal: horizontalScale(24),
-    paddingVertical: verticalScale(12),
+    paddingHorizontal: verticalScale(24),
+    paddingVertical: verticalScale(16),
     backgroundColor: CUSTOMCOLOR.primary,
+    borderWidth: 1,
     borderRadius: 4,
   },
   tabtext: {
     fontStyle: 'normal',
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 400,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.white,
   },
 });

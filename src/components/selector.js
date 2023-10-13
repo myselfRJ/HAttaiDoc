@@ -15,7 +15,7 @@ import {
 const SelectorBtn = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <View style={[styles.selectContainer,props.selectContainer]}>
+    <View style={[styles.selectContainer, props.selectContainer]}>
       {props.label && (
         <Text style={styles.h3}>
           {props.label}{' '}
@@ -33,7 +33,6 @@ const SelectorBtn = props => {
       <Pressable
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
-     
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon
             name={props.Bname}
@@ -44,7 +43,7 @@ const SelectorBtn = props => {
         </View>
         <Icon
           name={props.name}
-          size={props.size ? props.size :moderateScale(24)}
+          size={props.size ? props.size : moderateScale(24)}
           color={CUSTOMCOLOR.primary}
         />
       </Pressable>
@@ -53,20 +52,22 @@ const SelectorBtn = props => {
 };
 
 const styles = StyleSheet.create({
-  selectContainer:{
-    gap:verticalScale(4),
-    paddingVertical:verticalScale(8)},
+  selectContainer: {
+    gap: verticalScale(4),
+    paddingVertical: verticalScale(8),
+  },
+
   select: {
     flexDirection: 'row',
+    backgroundColor: '#F4F7Fa',
     paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: CUSTOMCOLOR.white,
+    // backgroundColor: CUSTOMCOLOR.white,
     // width: horizontalScale(240),
     borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
-    borderWidth: 0.5,
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h3,

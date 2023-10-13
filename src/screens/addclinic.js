@@ -675,7 +675,11 @@ const AddClinic = ({navigation}) => {
       </View>
       {/* )} */}
 
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          margin: verticalScale(24),
+          paddingBottom: verticalScale(120),
+        }}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
             <View style={styles.alignchild}>
@@ -791,195 +795,217 @@ const AddClinic = ({navigation}) => {
                 />
               </View>
             )} */}
-            <SelectorBtn
+            <View
+              style={{
+                gap: verticalScale(8),
+                paddingHorizontal: horizontalScale(8),
+              }}>
+              <Text style={styles.labeltext}>Add Slots </Text>
+              <View
+                style={{
+                  padding: moderateScale(24),
+                  backgroundColor: CUSTOMCOLOR.white,
+
+                  borderRadius: 4,
+                  shadowColor: CUSTOMCOLOR.primary,
+                  // shadowOffset: {width: 4, height: 4},
+                }}>
+                {/* <SelectorBtn
               input={'Add Slots'}
               name={addSlots ? 'chevron-up' : 'chevron-down'}
               onPress={() => setAddSlots(!addSlots)}
-            />
-            {addSlots && (
-              <View>
-                <View style={styles.dayselector}>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="M"
-                      selected={selectedDay === 'M'}
-                      onPress={() => onDaySelectionChange('M')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="T"
-                      selected={selectedDay === 'T'}
-                      onPress={() => onDaySelectionChange('T')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="W"
-                      selected={selectedDay === 'W'}
-                      onPress={() => onDaySelectionChange('W')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="TH"
-                      selected={selectedDay === 'TH'}
-                      onPress={() => onDaySelectionChange('TH')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="F"
-                      selected={selectedDay === 'F'}
-                      onPress={() => onDaySelectionChange('F')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="Sa"
-                      selected={selectedDay === 'Sa'}
-                      onPress={() => onDaySelectionChange('Sa')}
-                    />
-                  </View>
-                  <View
-                    style={[
-                      styles.data,
-                      {
-                        backgroundColor:
-                          slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
-                      },
-                    ]}>
-                    <SelectionTab
-                      label="Su"
-                      selected={selectedDay === 'Su'}
-                      onPress={() => onDaySelectionChange('Su')}
-                    />
-                  </View>
-                </View>
-                <View style={styles.selector}>
-                  <SelectorBtn
-                    select={styles.select1}
-                    label="From"
-                    name="clock"
-                    onPress={() => setOpen('from')}
-                    input={FromformattedTime}
-                  />
-                  <SelectorBtn
-                    select={styles.select1}
-                    label="To"
-                    name="clock"
-                    onPress={() => setOpen('to')}
-                    input={ToformattedTime}
-                  />
-                  <DatePicker
-                    modal
-                    open={open !== false}
-                    date={open === 'from' ? fromTime : toTime}
-                    theme="auto"
-                    mode="time"
-                    onConfirm={handleConfirm}
-                    onCancel={handleCancel}
-                    minuteInterval={15}
-                  />
-                </View>
+            /> */}
+                {addSlots && (
+                  <View>
+                    <View style={styles.dayselector}>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="M"
+                          selected={selectedDay === 'M'}
+                          onPress={() => onDaySelectionChange('M')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="T"
+                          selected={selectedDay === 'T'}
+                          onPress={() => onDaySelectionChange('T')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="W"
+                          selected={selectedDay === 'W'}
+                          onPress={() => onDaySelectionChange('W')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="TH"
+                          selected={selectedDay === 'TH'}
+                          onPress={() => onDaySelectionChange('TH')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="F"
+                          selected={selectedDay === 'F'}
+                          onPress={() => onDaySelectionChange('F')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="Sa"
+                          selected={selectedDay === 'Sa'}
+                          onPress={() => onDaySelectionChange('Sa')}
+                        />
+                      </View>
+                      <View
+                        style={[
+                          styles.data,
+                          {
+                            backgroundColor:
+                              slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
+                          },
+                        ]}>
+                        <SelectionTab
+                          label="Su"
+                          selected={selectedDay === 'Su'}
+                          onPress={() => onDaySelectionChange('Su')}
+                        />
+                      </View>
+                    </View>
+                    <View style={styles.selector}>
+                      <SelectorBtn
+                        select={styles.select1}
+                        label="From"
+                        name="clock"
+                        onPress={() => setOpen('from')}
+                        input={FromformattedTime}
+                      />
+                      <SelectorBtn
+                        select={styles.select1}
+                        label="To"
+                        name="clock"
+                        onPress={() => setOpen('to')}
+                        input={ToformattedTime}
+                      />
+                      <DatePicker
+                        modal
+                        open={open !== false}
+                        date={open === 'from' ? fromTime : toTime}
+                        theme="auto"
+                        mode="time"
+                        onConfirm={handleConfirm}
+                        onCancel={handleCancel}
+                        minuteInterval={15}
+                      />
+                    </View>
 
-                <View style={styles.selector}>
-                  <SelectorBtn
-                    select={styles.select1}
-                    label="Type"
-                    name="alpha-t-box"
-                    onPress={() => {
-                      slotTypeRef?.current?.snapToIndex(1);
-                    }}
-                    input={selectedConsultValue}
-                  />
-                  <SelectorBtn
-                    select={styles.select1}
-                    label="Duration"
-                    name="timer-sand-full"
-                    onPress={() => {
-                      slotDurationRef?.current?.snapToIndex(1);
-                    }}
-                    input={<Text>{selectedDurationValue} Mins</Text>}
-                  />
-                </View>
-                <View style={{alignItems: 'flex-end'}}>
-                  <HButton
-                    label="Add"
-                    icon="plus"
-                    btnstyles={{marginTop: verticalScale(12)}}
-                    onPress={() => {
-                      const isOk = handlewarnings();
-                      if (isOk) {
-                        handleAddSlot();
-                      } else {
-                        Alert.alert(
-                          'Warning',
-                          '"From time" and "To time" are same',
-                        );
-                      }
-                    }}
-                  />
-                </View>
+                    <View style={styles.selector}>
+                      <SelectorBtn
+                        select={styles.select1}
+                        label="Type"
+                        name="alpha-t-box"
+                        onPress={() => {
+                          slotTypeRef?.current?.snapToIndex(1);
+                        }}
+                        input={selectedConsultValue}
+                      />
+                      <SelectorBtn
+                        select={styles.select1}
+                        label="Duration"
+                        name="timer-sand-full"
+                        onPress={() => {
+                          slotDurationRef?.current?.snapToIndex(1);
+                        }}
+                        input={<Text>{selectedDurationValue} Mins</Text>}
+                      />
+                    </View>
+                    <View style={{alignItems: 'flex-end'}}>
+                      <HButton
+                        label="Add"
+                        icon="plus"
+                        btnstyles={{marginTop: verticalScale(12)}}
+                        onPress={() => {
+                          const isOk = handlewarnings();
+                          if (isOk) {
+                            handleAddSlot();
+                          } else {
+                            Alert.alert(
+                              'Warning',
+                              '"From time" and "To time" are same',
+                            );
+                          }
+                        }}
+                      />
+                    </View>
+                  </View>
+                )}
+                {/* <SelectorBtn
+                  input={'View Slots'}
+                  name={visible ? 'chevron-up' : 'chevron-down'}
+                  onPress={() => setVisible(!visible)}
+                /> */}
               </View>
-            )}
-            <SelectorBtn
-              input={'View Slots'}
-              name={visible ? 'chevron-up' : 'chevron-down'}
-              onPress={() => setVisible(!visible)}
-            />
-            {visible && (
               <View>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-end',
+                    // borderWidth: 1,
+                    paddingVertical: verticalScale(8),
+                    paddingTop: verticalScale(8),
                   }}>
+                  <Text style={styles.labeltext}>My Slots</Text>
                   <View
-                    style={{flexDirection: 'row', alignItems: 'center'}}></View>
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}></View>
                   <View style={{flexDirection: 'row', gap: moderateScale(4)}}>
                     {slots && selectSlot.length > 1 && (
                       <HButton
@@ -1000,7 +1026,7 @@ const AddClinic = ({navigation}) => {
                     ) && (
                       <HButton
                         color={CUSTOMCOLOR.primary}
-                        label="Clear"
+                        label="Clear All"
                         onPress={handleClearAllSlots}
                         btnstyles={{
                           backgroundColor: CUSTOMCOLOR.white,
@@ -1057,20 +1083,26 @@ const AddClinic = ({navigation}) => {
                   )}
                 </View>
               </View>
-            )}
-
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <HButton
-                label="Save"
-                onPress={() => {
-                  handlePlusIconClick();
-                }}
-                loading={loading}
-              />
             </View>
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
+      <View
+        style={{
+          justifyContent: 'center',
+          position: 'absolute',
+          alignSelf: 'center',
+          alignItems: 'center',
+          bottom: verticalScale(24),
+        }}>
+        <HButton
+          label="Save"
+          onPress={() => {
+            handlePlusIconClick();
+          }}
+          loading={loading}
+        />
+      </View>
       <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
@@ -1185,7 +1217,7 @@ const styles = StyleSheet.create({
   dayselector: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     gap: moderateScale(8),
   },
   ShowSchedule: {
@@ -1195,7 +1227,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: moderateScale(64),
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   alignchild: {
     justifyContent: 'center',
@@ -1268,7 +1300,6 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   content: {
-    paddingHorizontal: 24,
     //paddingVertical: 24,
     width: '100%',
     // alignItems: 'center',
@@ -1276,7 +1307,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    paddingVertical: verticalScale(20),
   },
   addslot: {
     alignSelf: 'flex-start',

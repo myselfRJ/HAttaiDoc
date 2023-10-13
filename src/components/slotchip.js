@@ -1,6 +1,10 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY, CUSTOMFONTSIZE} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {
   verticalScale,
   horizontalScale,
@@ -15,6 +19,11 @@ const SlotChip = props => {
       <Text style={styles.text}>{props.duration}</Text>
       <Text style={styles.text}>{props.icon}</Text>
       <TouchableOpacity
+        style={{
+          position: 'absolute',
+          right: horizontalScale(8),
+          padding: moderateScale(8),
+        }}
         onPress={() => {
           props.onPress(props.index);
         }}>
@@ -26,23 +35,22 @@ const SlotChip = props => {
 
 const styles = StyleSheet.create({
   main: {
-    gap: moderateScale(64),
-
+    gap: horizontalScale(32),
     //padding: moderateScale(8),
-    paddingHorizontal:horizontalScale(24),
-    paddingVertical:verticalScale(8),
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(8),
     borderRadius: moderateScale(4),
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     borderColor: '#2CBB15',
     borderWidth: 1,
-    marginBottom:4
+    marginBottom: 4,
   },
-  text:{
-    fontFamily:CUSTOMFONTFAMILY.body,
-    fontSize:CUSTOMFONTSIZE.h3,
-    color:CUSTOMCOLOR.black
-  }
+  text: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+  },
 });
 export default SlotChip;
