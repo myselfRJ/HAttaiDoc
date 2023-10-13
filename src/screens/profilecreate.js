@@ -316,6 +316,7 @@ const ProfileCreate = ({navigation}) => {
     <View
       style={{
         flex: 1,
+        borderWidth:4,
         backgroundColor: CUSTOMCOLOR.white,
         paddingVertical: verticalScale(8),
       }}>
@@ -382,16 +383,7 @@ const ProfileCreate = ({navigation}) => {
             /> */}
 
           <View style={styles.btn}>
-            {/* <DOBselect
-                required={true}
-                label="Age/ Date of Birth"
-                name="calendar"
-                onPress={() => setOpen('to')}
-                input={value}
-                style={styles.DOBselect}
-                setValue={setValue}
-                numeric={true}
-              /> */}
+            
             <InputText
               inputContainer={{
                 flex: 5,
@@ -407,16 +399,23 @@ const ProfileCreate = ({navigation}) => {
             <View
               style={{
                 flex: 1,
+                // borderWidth:1,
+                alignSelf:"center",
                 justifyContent: 'flex-end',
                 alignItems: 'center',
               }}>
-              <Text style={{marginTop: moderateScale(20)}}>(OR)</Text>
+              <Text style={{fontSize:CUSTOMFONTSIZE.h4,
+                marginTop:verticalScale(24),
+                fontWeight:'600',
+                color:CUSTOMCOLOR.black
+                }}>(OR)</Text>
             </View>
 
             <SelectorBtn
               //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
               required={true}
-              selectContainer={{flex: 5, paddingTop: moderateScale(4)}}
+              // inputstyle={{padding:4}}
+              selectContainer={{flex: 5,gap:verticalScale(4)}}
               label={Language[language]['dob']}
               name="calendar"
               onPress={() => setOpen('to')}
@@ -444,6 +443,7 @@ const ProfileCreate = ({navigation}) => {
           <View style={styles.specialization}>
             <SelectorBtn
               required={true}
+              selectContainer={{flex: 5,gap:verticalScale(4)}}
               label={Language[language]['specialization']}
               name="chevron-down"
               // onPress={toggleModal}
@@ -462,10 +462,12 @@ const ProfileCreate = ({navigation}) => {
             numeric={true}
           />
           <View style={styles.btn}>
+            <View style={{  flex: 1}}>
             <InputText
               required={true}
               inputContainer={{
-                flex: 1,
+                // flex: 1,
+                // paddingVertical:moderateScale(0),
                 paddingHorizontal: moderateScale(0),
               }}
               label="Medical Registration Number"
@@ -473,11 +475,11 @@ const ProfileCreate = ({navigation}) => {
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
+            </View>
 
             <View style={{flex: 1}}>
               <SelectorBtn
                 required={true}
-                // selectContainer={{width: '50%', paddingTop: moderateScale(4)}}
                 label="State"
                 name="menu-down"
                 size={moderateScale(24)}
@@ -517,7 +519,7 @@ const ProfileCreate = ({navigation}) => {
               )}
             </View>
           </View>
-          <View style={{alignSelf: 'flex-start'}}>
+          <View style={{alignSelf: 'flex-start',gap:verticalScale(4),paddingVertical:verticalScale(8)}}>
             <Text style={styles.medtext}>Medical Document</Text>
             <View style={styles.doc_upload}>
               {selectedFilename ? (
@@ -742,11 +744,11 @@ const styles = StyleSheet.create({
   gender: {
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
   },
   btn: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
 
     // paddingHorizontal: horizontalScale(24),
     gap: moderateScale(8),
@@ -762,11 +764,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   medtext: {
-    fontFamily: CUSTOMFONTFAMILY.h4,
-    fontSize: 12,
+    fontFamily: CUSTOMFONTFAMILY.h3,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
 
-    paddingVertical: verticalScale(8),
+    // paddingVertical: verticalScale(8),
     alignSelf: 'flex-start',
   },
   doc_upload: {
@@ -782,6 +784,7 @@ const styles = StyleSheet.create({
   },
   container: {
     // paddingVertical: verticalScale(20),
+   
 
     margin: moderateScale(32),
   },

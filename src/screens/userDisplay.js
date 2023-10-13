@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
-import {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
 import {useSelector, dispatch, useDispatch} from 'react-redux';
 import {useRoute} from '@react-navigation/native';
@@ -24,10 +24,11 @@ import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import {updateclinic_users} from '../redux/features/profiles/ClinicUsers';
 import PrescriptionHead from '../components/prescriptionHead';
-import {err} from 'react-native-svg/lib/typescript/xml';
+import {useFocusEffect} from '@react-navigation/native';
 
 const UserDisplay = ({navigation}) => {
   const dispatch = useDispatch();
+  const {phone} = useSelector(state => state?.phone?.data);
   const SuccesRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -35,9 +36,10 @@ const UserDisplay = ({navigation}) => {
   const route = useRoute();
   const {prevScrn} = route.params;
   const [apiStatus, setApiStatus] = useState({});
+  const [users,setUsers] = useState([])
   // const route = useRoute();
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-  console.log('users===>', clinic_users);
+  console.log('users===>', users);
   const ResetClinic_Users_Redux = () => {
     const ResetClinic_users = [];
     dispatch(updateclinic_users(ResetClinic_users));
@@ -90,6 +92,31 @@ const UserDisplay = ({navigation}) => {
     }
   };
 
+  const fetchUsers = async () => {
+    const response = await fetchApi(URL.getUsers(phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      // console.log('--------------clinics', jsonData);
+      setUsers(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, [phone]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUsers();
+    }, []),
+  );
+
   return (
     <View style={styles.Main}>
       {prevScrn === 'account' && (
@@ -101,7 +128,7 @@ const UserDisplay = ({navigation}) => {
       <ScrollView>
         <View
           style={{
-            alignSelf: clinic_users?.length > 0 ? 'flex-end' : 'center',
+            alignSelf: users?.length > 0 ? 'flex-end' : 'center',
             alignItems: 'center',
             marginBottom: moderateScale(12),
             gap: moderateScale(8),
@@ -109,13 +136,13 @@ const UserDisplay = ({navigation}) => {
           <SelectorBtn
             select={styles.btn}
             inputstyle={styles.input}
-            input={clinic_users?.length > 0 ? 'Add more User' : 'Add User'}
+            input={users?.length > 0 ? 'Add more User' : 'Add User'}
             Bname={'plus'}
             onPress={() => {
               navigation.navigate('adduser', {prevScrn});
             }}
           />
-          {clinic_users?.length > 0 ? null : (
+          {users?.length > 0 ? null : (
             <HButton
               rightIcon="arrow-right-thin"
               color={CUSTOMCOLOR.primary}
@@ -130,7 +157,7 @@ const UserDisplay = ({navigation}) => {
             />
           )}
         </View>
-        {clinic_users?.map((item, index) => (
+        {users?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
             <UserCard
               index={index}
@@ -142,12 +169,12 @@ const UserDisplay = ({navigation}) => {
           </View>
         ))}
       </ScrollView>
-      {clinic_users?.length > 0 ? (
+      {users?.length > 0 ? (
         <HButton
           btnstyles={styles.btnNext}
           textStyle={styles.input}
           label={'Next'}
-          onPress={fetchData}
+          onPress={()=> navigation.navigate('tab')}
           loading={loading}
         />
       ) : null}

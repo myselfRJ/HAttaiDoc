@@ -79,7 +79,7 @@ const AddUser = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
-  // console.log('================================+++++++++clinic', selectedImage);
+  console.log('================================+++++++++clinic', selectedClinic);
   const [values, setValues] = useState({
     name: '',
     phone: '',
@@ -87,9 +87,9 @@ const AddUser = ({navigation}) => {
     role: '',
     clinic: '',
     slots: [],
-    user_profile_pic_url: selectedImage,
-    // ? selectedImage
-    // : CONSTANTS.default_image,
+    user_profile_pic_url: selectedImage
+    ? selectedImage
+    : CONSTANTS.default_image,
   });
   const [apiStatus, setApiStatus] = useState({});
 
@@ -117,16 +117,17 @@ const AddUser = ({navigation}) => {
     });
     setModal(false);
   };
-  const Clinic_users = {
+  const Clinic_users =[
+     {
     clinic_user_name: values.name,
     role: select !== 'Others' ? select : otherRole,
-    user_profile_pic_url: selectedImage,
+    user_profile_pic_url:selectedImage ? selectedImage: CONSTANTS.default_image,
     gender: values.gender,
     user_phone_number: values.phone,
     clinic_id: selectedClinic,
     doctor_phone_number: phone,
-  };
-
+  }
+];
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -152,14 +153,11 @@ const AddUser = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        // console.log(jsonData);
         if (jsonData.status === 'success') {
-          setApiStatus({status: 'success', message: jsonData.message});
+          setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus({index: 2, status: true}));
-          setTimeout(() => {
-            navigation.navigate('tab');
-          }, 1000);
+          dispatch(headerStatus({index: 1, status: true}));
+          navigation.goBack();
           setTimeout(() => {
             SuccesRef?.current?.snapToIndex(0);
           }, 2000);
@@ -168,7 +166,7 @@ const AddUser = ({navigation}) => {
           ResetClinic_Users_Redux();
           // SuccesRef?.current?.snapToIndex(0);
         } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
           console.error('API call failed:', response.status, response);
           setLoading(false);
@@ -582,7 +580,7 @@ const AddUser = ({navigation}) => {
         }}
         label="Save"
         onPress={() => {
-          handlePlusIconClick();
+          fetchData();
         }}
         loading={loading}
       />

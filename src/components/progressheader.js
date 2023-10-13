@@ -69,9 +69,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#21f345',
   },
   circle: {
-    height: moderateScale(48),
-    width: moderateScale(48),
-    borderRadius: moderateScale(32),
+    height: verticalScale(48),
+    width: verticalScale(48),
+    borderRadius: verticalScale(24),
     backgroundColor: '#aaaaaa',
     justifyContent: 'center',
     alignItems: 'center',

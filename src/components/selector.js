@@ -15,7 +15,7 @@ import {
 const SelectorBtn = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <View style={props.selectContainer}>
+    <View style={[styles.selectContainer,props.selectContainer]}>
       {props.label && (
         <Text style={styles.h3}>
           {props.label}{' '}
@@ -33,22 +33,18 @@ const SelectorBtn = props => {
       <Pressable
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
-        {/* <Icon
-          name={props.Bname}
-          size={props.size ? props.size : 24}
-          color={CUSTOMCOLOR.white}
-        /> */}
+     
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon
             name={props.Bname}
-            size={props.size ? props.size : 24}
+            size={props.size ? props.size : moderateScale(24)}
             color={CUSTOMCOLOR.white}
           />
           <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
         </View>
         <Icon
           name={props.name}
-          size={props.size ? props.size : 24}
+          size={props.size ? props.size :moderateScale(24)}
           color={CUSTOMCOLOR.primary}
         />
       </Pressable>
@@ -57,9 +53,12 @@ const SelectorBtn = props => {
 };
 
 const styles = StyleSheet.create({
+  selectContainer:{
+    gap:verticalScale(4),
+    paddingVertical:verticalScale(8)},
   select: {
     flexDirection: 'row',
-    paddingVertical: verticalScale(5),
+    paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -70,13 +69,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   h3: {
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    lineHeight: CUSTOMFONTSIZE.h3 * 1.5,
+    // lineHeight: CUSTOMFONTSIZE.h3 * 1.75,
   },
   indicator: {
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     marginRight: 5,
   },
   required: {
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: 'gray',
-    padding: moderateScale(10),
+    padding: moderateScale(8),
     flex: 1,
   },
 });

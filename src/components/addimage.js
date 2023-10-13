@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     // borderColor:CUSTOMCOLOR.primary
   },
   image: {
-    height: verticalScale(80),
+    height: horizontalScale(80),
     width: horizontalScale(80),
     borderColor: CUSTOMCOLOR.primary,
     borderWidth: 1,
