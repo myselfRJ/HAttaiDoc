@@ -1024,18 +1024,36 @@ const AddClinic = ({navigation}) => {
                     {Object.values(slots).some(
                       daySlots => daySlots.length > 0,
                     ) && (
-                      <HButton
-                        color={CUSTOMCOLOR.primary}
-                        label="Clear All"
-                        onPress={handleClearAllSlots}
-                        btnstyles={{
-                          backgroundColor: CUSTOMCOLOR.white,
-                          paddingHorizontal: horizontalScale(8),
-                        }}
-                        textStyle={{
-                          color: CUSTOMCOLOR.primary,
-                        }}
-                      />
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          gap: horizontalScale(12),
+                        }}>
+                        <HButton
+                          color={CUSTOMCOLOR.primary}
+                          label="Clear All"
+                          onPress={handleClearAllSlots}
+                          btnstyles={{
+                            backgroundColor: CUSTOMCOLOR.white,
+                            paddingHorizontal: horizontalScale(8),
+                          }}
+                          textStyle={{
+                            color: CUSTOMCOLOR.primary,
+                          }}
+                        />
+                        <HButton
+                          color={CUSTOMCOLOR.white}
+                          label="Add to All day"
+                          onPress={() => console.log('add to all day')}
+                          btnstyles={{
+                            backgroundColor: CUSTOMCOLOR.primary,
+                            paddingHorizontal: horizontalScale(8),
+                          }}
+                          textStyle={{
+                            color: CUSTOMCOLOR.white,
+                          }}
+                        />
+                      </View>
                     )}
                   </View>
                 </View>

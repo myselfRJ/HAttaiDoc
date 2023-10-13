@@ -73,8 +73,18 @@ const ClinicCard = props => {
             </Text>
           </View>
         </View>
-        <View style={{gap: moderateScale(16)}}>
-          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+        <View
+          style={{
+            position: 'absolute',
+            right: -16,
+            top: -8,
+            gap: moderateScale(16),
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: moderateScale(8),
+            }}>
             <Pressable
               style={styles.gap}
               onPress={() => navigation.navigate('addclinic', {id})}>
