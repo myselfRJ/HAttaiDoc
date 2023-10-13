@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert,Modal,TouchableWithoutFeedback} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
 import {useSelector, dispatch, useDispatch} from 'react-redux';
@@ -27,9 +27,13 @@ import PrescriptionHead from '../components/prescriptionHead';
 import {useFocusEffect} from '@react-navigation/native';
 
 const UserDisplay = ({navigation}) => {
+  const prevScrn1 = 'undefineed';
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
-  const SuccesRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const token = useSelector(state => state.authenticate.auth.access);
   const progressData = useSelector(state => state.progress?.status);
@@ -37,9 +41,9 @@ const UserDisplay = ({navigation}) => {
   const {prevScrn} = route.params;
   const [apiStatus, setApiStatus] = useState({});
   const [users,setUsers] = useState([])
+  const [visible, setVisible] = useState(false);
   // const route = useRoute();
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
-  console.log('users===>', users);
   const ResetClinic_Users_Redux = () => {
     const ResetClinic_users = [];
     dispatch(updateclinic_users(ResetClinic_users));
@@ -47,8 +51,16 @@ const UserDisplay = ({navigation}) => {
   const handleDelete = index => {
     const newUser = clinic_users?.filter((_, i) => i !== index);
     dispatch(updateclinic_users(newUser));
-    console.log('new==', newUser);
     Alert.alert('Success', 'User data deleted');
+  };
+  const handleNavigation = () => {
+    prevScrn === 'account'
+      ? setTimeout(() => {
+          navigation.navigate('tab');
+        }, 1000)
+      : setTimeout(() => {
+          navigation.navigate('userdisplay', {prevScrn1});
+        }, 1000);
   };
   const fetchData = async () => {
     try {
@@ -102,21 +114,47 @@ const UserDisplay = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       // console.log('--------------clinics', jsonData);
-      setUsers(jsonData?.data);
+      setUsers(() => jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchUsers();
-  }, [phone]);
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       fetchUsers();
     }, []),
   );
+  useEffect(() => {
+    fetchUsers();
+  }, [visible]);
 
+  const deleteUser = async id => {
+    try {
+      const response = await fetch(URL.delete_clinic_user(id), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('sucee',data)
+        if (data.status === 'success') {
+          setVisible(!visible);
+        }
+      } else {
+        console.log('Error Occured', response.status);
+      }
+    } catch (error) {
+      console.error('Error deleting clinic:', error);
+    }
+  };
+ 
   return (
     <View style={styles.Main}>
       {prevScrn === 'account' && (
@@ -125,7 +163,7 @@ const UserDisplay = ({navigation}) => {
         </View>
       )}
       <PrescriptionHead heading={'My User'} />
-      <ScrollView>
+      
         <View
           style={{
             alignSelf: users?.length > 0 ? 'flex-end' : 'center',
@@ -157,15 +195,79 @@ const UserDisplay = ({navigation}) => {
             />
           )}
         </View>
+        <ScrollView>
         {users?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
             <UserCard
-              index={index}
+              index={item.id}
               data={item}
               cancel={() => {
-                handleDelete(index);
+                setVisible(!visible);
               }}
             />
+            <Modal
+              animationType="slide"
+              visible={visible}
+              onRequestClose={() => {
+                setVisible(!visible);
+              }}
+              transparent={true}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#000000aa',
+                  width: '100%',
+                }}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setVisible(!visible);
+                  }}>
+                  <View style={styles.modalOverlay} />
+                </TouchableWithoutFeedback>
+
+                <View
+                  style={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    padding: moderateScale(40),
+                    borderRadius: moderateScale(16),
+                  }}>
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      color: CUSTOMCOLOR.black,
+                      fontWeight: '700',
+                      fontSize: CUSTOMFONTSIZE.h2,
+                    }}>
+                    Are You sure Want To Delete
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      gap: moderateScale(16),
+                      padding: moderateScale(16),
+                      borderRadius: moderateScale(16),
+                    }}>
+                    <HButton
+                      label={'No'}
+                      onPress={() => setVisible(!visible)}
+                    />
+                    <HButton
+                      textStyle={{color: CUSTOMCOLOR.primary}}
+                      label={'Yes'}
+                      btnstyles={{
+                        backgroundColor: CUSTOMCOLOR.white,
+                        borderWidth: moderateScale(2),
+                        borderColor: CUSTOMCOLOR.borderColor,
+                      }}
+                      onPress={() => deleteUser(item.id)}
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </View>
         ))}
       </ScrollView>
@@ -174,7 +276,7 @@ const UserDisplay = ({navigation}) => {
           btnstyles={styles.btnNext}
           textStyle={styles.input}
           label={'Next'}
-          onPress={()=> navigation.navigate('tab')}
+          onPress={handleNavigation}
           loading={loading}
         />
       ) : null}

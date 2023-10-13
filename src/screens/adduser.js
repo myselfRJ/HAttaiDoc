@@ -65,8 +65,8 @@ const AddUser = ({navigation}) => {
   const [select, setSelect] = useState('select');
   const [show, setShow] = useState(false);
   const [showclinic, setShowclinic] = useState(false);
-
-  // console.log('----------------users', clinic_users);
+  const {id} = route.params;
+  console.log('----------------users', id);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -184,26 +184,19 @@ const AddUser = ({navigation}) => {
 
   const handlePlusIconClick = () => {
     if (
-      values.name &&
-      values.gender &&
-      values.phone.length === 10 &&
-      selectedClinic &&
-      select
+      values.name 
     ) {
       {
-        index !== undefined
-          ? dispatch(
-              updateclinic_users({index: index, updatedUser: Clinic_users}),
-            )
-          : dispatch(addclinic_users(Clinic_users));
+        id !== undefined
+          ? UpdateUser()
+          : (fetchData(),
+            Alert.alert('Success', '"User data added successfully"'));
       }
-      Alert.alert('Success', '"User data added successfully"');
       setShowSlotChip(true);
       setSelectedImage('');
       setValues({name: '', phone: '', gender: 'male'});
       setSelectedClinic('');
       setSelect('');
-      navigation.navigate('userdisplay', {prevScrn});
     } else {
       Alert.alert('"Warning"', '"Please Enter Correct Details"');
     }
@@ -294,18 +287,82 @@ const AddUser = ({navigation}) => {
     setShowclinic(!showclinic);
   };
 
-  if (index !== undefined) {
-    useEffect(() => {
-      const userData = {
-        name: clinic_users[index]?.clinic_user_name,
-        phone: clinic_users[index]?.user_phone_number,
-        gender: clinic_users[index]?.gender,
+  // if (index !== undefined) {
+  //   useEffect(() => {
+  //     const userData = {
+  //       name: clinic_users[index]?.clinic_user_name,
+  //       phone: clinic_users[index]?.user_phone_number,
+  //       gender: clinic_users[index]?.gender,
+  //     };
+  //     setValues(userData);
+  //     setSelect(clinic_users[index]?.role);
+  //     setSelectedClinic(clinic_users[index]?.clinic_id);
+  //     setSelectedImage(clinic_users[index]?.user_profile_pic_url);
+  //   }, []);
+  // }
+
+
+  const fetchuser_id = async () => {
+    const response = await fetchApi(URL.get_clinic_user_by_id(id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      const userdata = {
+        name: jsonData.data?.clinic_user_name,
+    phone: jsonData.data?.user_phone_number,
+    gender: jsonData.data?.gender,
       };
-      setValues(userData);
-      setSelect(clinic_users[index]?.role);
-      setSelectedClinic(clinic_users[index]?.clinic_id);
-      setSelectedImage(clinic_users[index]?.user_profile_pic_url);
-    }, []);
+      setValues(userdata);
+      setSelect(jsonData.data?.role);
+      setSelectedClinic(jsonData.data?.clinic_id);
+      setSelectedImage(jsonData.data?.user_profile_pic_url);
+
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchuser_id();
+  }, []);
+
+
+  const UpdateUser = async () => {
+    const updateUser = {
+      clinic_user_name: values.name,
+    role: select,
+    user_profile_pic_url:selectedImage,
+    gender: values.gender,
+    user_phone_number: values.phone,
+    clinic_id: selectedClinic,
+    doctor_phone_number: phone,
+    };
+    try {
+      const response = await fetchApi(URL.update_clinic_user(id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(updateUser),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          Alert.alert('Success', jsonData?.message);
+        } else {
+          Alert.alert('warn', jsonData?.message);
+        }
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   }
   return (
     <View style={{flex: 1, padding: moderateScale(24)}}>
@@ -572,7 +629,7 @@ const AddUser = ({navigation}) => {
           backgroundColor:
             values.name &&
             values.gender &&
-            values.phone.length === 10 &&
+            values.phone?.length === 10 &&
             selectedClinic &&
             select
               ? CUSTOMCOLOR.primary
@@ -580,7 +637,7 @@ const AddUser = ({navigation}) => {
         }}
         label="Save"
         onPress={() => {
-          fetchData();
+          handlePlusIconClick();
         }}
         loading={loading}
       />
@@ -662,7 +719,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    paddingVertical: verticalScale(20),
+    paddingVertical: verticalScale(24),
   },
   content: {
     paddingHorizontal: horizontalScale(12),
@@ -757,8 +814,8 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
-    // borderWidth:1
-    // paddingVertical:moderateScale(4)
+    // borderWidth:1,
+    // paddingVertical:moderateScale(24)
   },
   save: {
     alignSelf: 'flex-end',
@@ -780,7 +837,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     // gap:moderateScale(4),
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(16),
+    paddingVertical: verticalScale(24),
   },
   txt: {
     color: CUSTOMCOLOR.black,

@@ -42,6 +42,9 @@ export const URL = {
   update_clinic: id => `${baseUrl}clinic/update_clinic?id=${id}`,
   update_slots: id => `${baseUrl}clinic/update_slot?id=${id}`,
   delete_clinic_slot: id => `${baseUrl}clinic/delete_clinic?id=${id}`,
+  update_clinic_user: id => `${baseUrl}customuser/update-user?id=${id}`,
+  delete_clinic_user: id => `${baseUrl}customuser/delete-user?id=${id}`,
+  get_clinic_user_by_id: id => `${baseUrl}customuser/getuser-id?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

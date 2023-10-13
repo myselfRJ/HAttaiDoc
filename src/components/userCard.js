@@ -21,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 
 const UserCard = props => {
   const userdata = props.data;
+  const id = userdata?.id;
   const navigation = useNavigation();
   const index = props.index;
   const decodedData = userdata?.user_profile_pic_url;
@@ -56,7 +57,7 @@ const UserCard = props => {
           <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
             <Pressable
               style={styles.gap}
-              onPress={() => navigation.navigate('adduser', {index})}>
+              onPress={() => navigation.navigate('adduser', {id})}>
               <Icon
                 name={'pencil'}
                 size={moderateScale(24)}
