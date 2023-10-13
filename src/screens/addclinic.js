@@ -815,175 +815,175 @@ const AddClinic = ({navigation}) => {
               name={addSlots ? 'chevron-up' : 'chevron-down'}
               onPress={() => setAddSlots(!addSlots)}
             /> */}
-                {addSlots && (
-                  <View>
-                    <View style={styles.dayselector}>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="M"
-                          selected={selectedDay === 'M'}
-                          onPress={() => onDaySelectionChange('M')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="T"
-                          selected={selectedDay === 'T'}
-                          onPress={() => onDaySelectionChange('T')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="W"
-                          selected={selectedDay === 'W'}
-                          onPress={() => onDaySelectionChange('W')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="TH"
-                          selected={selectedDay === 'TH'}
-                          onPress={() => onDaySelectionChange('TH')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="F"
-                          selected={selectedDay === 'F'}
-                          onPress={() => onDaySelectionChange('F')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="Sa"
-                          selected={selectedDay === 'Sa'}
-                          onPress={() => onDaySelectionChange('Sa')}
-                        />
-                      </View>
-                      <View
-                        style={[
-                          styles.data,
-                          {
-                            backgroundColor:
-                              slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
-                          },
-                        ]}>
-                        <SelectionTab
-                          label="Su"
-                          selected={selectedDay === 'Su'}
-                          onPress={() => onDaySelectionChange('Su')}
-                        />
-                      </View>
-                    </View>
-                    <View style={styles.selector}>
-                      <SelectorBtn
-                        select={styles.select1}
-                        label="From"
-                        name="clock"
-                        onPress={() => setOpen('from')}
-                        input={FromformattedTime}
-                      />
-                      <SelectorBtn
-                        select={styles.select1}
-                        label="To"
-                        name="clock"
-                        onPress={() => setOpen('to')}
-                        input={ToformattedTime}
-                      />
-                      <DatePicker
-                        modal
-                        open={open !== false}
-                        date={open === 'from' ? fromTime : toTime}
-                        theme="auto"
-                        mode="time"
-                        onConfirm={handleConfirm}
-                        onCancel={handleCancel}
-                        minuteInterval={15}
-                      />
-                    </View>
 
-                    <View style={styles.selector}>
-                      <SelectorBtn
-                        select={styles.select1}
-                        label="Type"
-                        name="alpha-t-box"
-                        onPress={() => {
-                          slotTypeRef?.current?.snapToIndex(1);
-                        }}
-                        input={selectedConsultValue}
-                      />
-                      <SelectorBtn
-                        select={styles.select1}
-                        label="Duration"
-                        name="timer-sand-full"
-                        onPress={() => {
-                          slotDurationRef?.current?.snapToIndex(1);
-                        }}
-                        input={<Text>{selectedDurationValue} Mins</Text>}
+                <View>
+                  <View style={styles.dayselector}>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="M"
+                        selected={selectedDay === 'M'}
+                        onPress={() => onDaySelectionChange('M')}
                       />
                     </View>
-                    <View style={{alignItems: 'flex-end'}}>
-                      <HButton
-                        label="Add"
-                        icon="plus"
-                        btnstyles={{marginTop: verticalScale(12)}}
-                        onPress={() => {
-                          const isOk = handlewarnings();
-                          if (isOk) {
-                            handleAddSlot();
-                          } else {
-                            Alert.alert(
-                              'Warning',
-                              '"From time" and "To time" are same',
-                            );
-                          }
-                        }}
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="T"
+                        selected={selectedDay === 'T'}
+                        onPress={() => onDaySelectionChange('T')}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="W"
+                        selected={selectedDay === 'W'}
+                        onPress={() => onDaySelectionChange('W')}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="TH"
+                        selected={selectedDay === 'TH'}
+                        onPress={() => onDaySelectionChange('TH')}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="F"
+                        selected={selectedDay === 'F'}
+                        onPress={() => onDaySelectionChange('F')}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="Sa"
+                        selected={selectedDay === 'Sa'}
+                        onPress={() => onDaySelectionChange('Sa')}
+                      />
+                    </View>
+                    <View
+                      style={[
+                        styles.data,
+                        {
+                          backgroundColor:
+                            slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
+                        },
+                      ]}>
+                      <SelectionTab
+                        label="Su"
+                        selected={selectedDay === 'Su'}
+                        onPress={() => onDaySelectionChange('Su')}
                       />
                     </View>
                   </View>
-                )}
+                  <View style={styles.selector}>
+                    <SelectorBtn
+                      select={styles.select1}
+                      label="From"
+                      name="clock"
+                      onPress={() => setOpen('from')}
+                      input={FromformattedTime}
+                    />
+                    <SelectorBtn
+                      select={styles.select1}
+                      label="To"
+                      name="clock"
+                      onPress={() => setOpen('to')}
+                      input={ToformattedTime}
+                    />
+                    <DatePicker
+                      modal
+                      open={open !== false}
+                      date={open === 'from' ? fromTime : toTime}
+                      theme="auto"
+                      mode="time"
+                      onConfirm={handleConfirm}
+                      onCancel={handleCancel}
+                      minuteInterval={15}
+                    />
+                  </View>
+
+                  <View style={styles.selector}>
+                    <SelectorBtn
+                      select={styles.select1}
+                      label="Type"
+                      name="alpha-t-box"
+                      onPress={() => {
+                        slotTypeRef?.current?.snapToIndex(1);
+                      }}
+                      input={selectedConsultValue}
+                    />
+                    <SelectorBtn
+                      select={styles.select1}
+                      label="Duration"
+                      name="timer-sand-full"
+                      onPress={() => {
+                        slotDurationRef?.current?.snapToIndex(1);
+                      }}
+                      input={<Text>{selectedDurationValue} Mins</Text>}
+                    />
+                  </View>
+                  <View style={{alignItems: 'flex-end'}}>
+                    <HButton
+                      label="Add"
+                      icon="plus"
+                      btnstyles={{marginTop: verticalScale(12)}}
+                      onPress={() => {
+                        const isOk = handlewarnings();
+                        if (isOk) {
+                          handleAddSlot();
+                        } else {
+                          Alert.alert(
+                            'Warning',
+                            '"From time" and "To time" are same',
+                          );
+                        }
+                      }}
+                    />
+                  </View>
+                </View>
+
                 {/* <SelectorBtn
                   input={'View Slots'}
                   name={visible ? 'chevron-up' : 'chevron-down'}
