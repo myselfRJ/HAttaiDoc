@@ -272,7 +272,13 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="userdisplay"
         component={UserDisplay}
-        options={{headerShown: false}}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'My Users',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
       />
       <Stack.Screen
         name="aadharverify"
