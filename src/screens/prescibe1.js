@@ -77,6 +77,9 @@ export default function Prescribe1({navigation}) {
   const prevPres = useSelector(state => state.pres.prescribeItems);
 
   const handleAddPrescribe = () => {
+    if (sug?.length > 0) {
+      UpdateAsyncData('prescribe', {medicine: setmedicine});
+    }
     dispatch(
       addPrescribe([
         ...prevPres,
@@ -100,9 +103,6 @@ export default function Prescribe1({navigation}) {
     setFrequency([]);
     setDuration('1');
     setmg('');
-    if (sug?.length > 0) {
-      UpdateAsyncData('prescribe', {medicine: setmedicine});
-    }
   };
 
   const handleDelete = index => {
