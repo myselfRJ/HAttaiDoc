@@ -442,8 +442,16 @@ const AddClinic = ({navigation}) => {
         index: `F-${index}`,
         day: 'Friday',
       })),
-      Sa: [],
-      Su: [],
+      Sa: slots.M?.map((slot, index) => ({
+        ...slot,
+        index: `Sa-${index}`,
+        day: 'Saturday',
+      })),
+      Su: slots.M?.map((slot, index) => ({
+        ...slot,
+        index: `Su-${index}`,
+        day: 'Sunday',
+      })),
     };
     setSlots(weekdaysToUpdate);
     setConsultValue(consultType[0]);
@@ -472,7 +480,7 @@ const AddClinic = ({navigation}) => {
     //   dispatch(updateslots(updatedSlots));
     // }
   };
-
+ 
   const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
@@ -1043,8 +1051,8 @@ const AddClinic = ({navigation}) => {
                         />
                         <HButton
                           color={CUSTOMCOLOR.white}
-                          label="Add to All day"
-                          onPress={() => console.log('add to all day')}
+                          label="Add to All days"
+                          onPress={() => handleAddSlotCopyMonday()}
                           btnstyles={{
                             backgroundColor: CUSTOMCOLOR.primary,
                             paddingHorizontal: horizontalScale(8),
