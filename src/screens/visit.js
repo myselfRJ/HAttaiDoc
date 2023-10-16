@@ -1296,8 +1296,8 @@ const Visit = ({navigation, route}) => {
             }}>
             <HButton
               label="Preview"
-              // onPress={handlePreview}
-              onPress={createPDF}
+              onPress={handlePreview}
+              // onPress={createPDF}
               btnstyles={{
                 backgroundColor: CUSTOMCOLOR.white,
               }}
@@ -1311,7 +1311,7 @@ const Visit = ({navigation, route}) => {
                 fetchData();
                 putVitals();
                 putComplaint();
-                createPDF();
+                // createPDF();
               }}
               loading={loading}
             />

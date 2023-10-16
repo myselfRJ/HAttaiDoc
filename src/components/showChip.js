@@ -13,7 +13,7 @@ import {
 
 const ShowChip = props => {
   return (
-    <View style={styles.main}>
+    <View style={{...styles.main, ...props.main}}>
       <View key={props.ind} style={styles.child}>
         <Icon
           name={props.nameIcon}
@@ -23,8 +23,10 @@ const ShowChip = props => {
         <View style={styles.alignchild}>
           <Text
             style={{
-              color: CUSTOMCOLOR.black,
+              color: CUSTOMCOLOR.primary,
               fontFamily: CUSTOMFONTFAMILY.body,
+              fontWeight: '700',
+              fontSize: CUSTOMFONTSIZE.h3,
             }}>
             {props.text}
           </Text>
@@ -52,6 +54,8 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(4),
     marginHorizontal: horizontalScale(8),
     borderColor: CUSTOMCOLOR.success,
+    backgroundColor: '#EAF3FC',
+    borderColor: CUSTOMCOLOR.borderColor,
   },
   child: {
     flexDirection: 'row',
