@@ -46,11 +46,13 @@ export default function Prescribe1({navigation}) {
   const [mode, setMode] = useState('');
   const [setmedicine, selectedMedicine] = useState(null);
   const [mgs, setmg] = useState('');
+  const [setmgs,setSelectedMgs] = useState(false);
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
   const [frequency, setFrequency] = useState([]);
   const [dose_number, setDose_number] = useState('1');
   const [generic, setGeneric] = useState('');
+  const [setgeneric,setselectedGeneric] = useState(false);
   const [duration, setDuration] = useState('1');
   const recommdations = CONSTANTS.medicine_recomendation;
   const mg = CONSTANTS.dose;
@@ -73,12 +75,13 @@ export default function Prescribe1({navigation}) {
   //     duration: duration,
   //     total_quantity: total_quantity,
   //   },
-  // ]);
+  // ])
   const prevPres = useSelector(state => state.pres.prescribeItems);
 
   const handleAddPrescribe = () => {
     if (sug?.length > 0) {
-      UpdateAsyncData('prescribe', {medicine: setmedicine});
+      const medicineName = `${setmedicine} ${mgs} ${mode}`
+      UpdateAsyncData('prescribe', {medicine: medicineName,mode:mode});
     }
     dispatch(
       addPrescribe([
@@ -117,7 +120,11 @@ export default function Prescribe1({navigation}) {
   const setMedicineValue = value => {
     setMedicine(value);
     selectedMedicine(value);
+    setselectedGeneric(!setgeneric);
+    setSelectedMgs(!setmgs)
   };
+  console.log('===check',setgeneric)
+  console.log('---->',newMedicine)
 
   const setMG = value => {
     setDose_quantity(value);
@@ -269,7 +276,7 @@ export default function Prescribe1({navigation}) {
     setMedicine(value);
     selectedMedicine(value);
   };
-
+  console.log('medic===',setmedicine)
   const handleBack = () => {
     if (sug?.length === 0 || !sug) {
       StoreAsyncData('prescribe', prevPres);
@@ -288,12 +295,11 @@ export default function Prescribe1({navigation}) {
   const [med_filter, setMed_filter] = useState([]);
   useEffect(() => {
     if (sug && mode) {
-      const resultArray = sug?.filter(word =>
-        word?.medicine?.includes(mode.toLowerCase()),
-      );
+      const resultArray = sug?.filter(word => word?.mode === mode);
       setMed_filter(resultArray);
     }
   }, [mode]);
+  console.log('suggg=>',sug)
   return (
     <ScrollView>
       <View style={styles.main}>
@@ -477,7 +483,7 @@ export default function Prescribe1({navigation}) {
                   </View>
                 </View>
               </View>
-              {newMedicine != null && (
+              {newMedicine != null && setgeneric === false ? (
                 <View style={{top: moderateScale(24)}}>
                   <InputText
                     lbltext={{fontSize: 14, color: CUSTOMCOLOR.black}}
@@ -487,7 +493,7 @@ export default function Prescribe1({navigation}) {
                     setValue={txt => setGeneric(txt)}
                   />
                 </View>
-              )}
+              ):null}
 
               <View style={styles.ModeContainer}>
                 <Text style={styles.DoseText}>
@@ -503,7 +509,7 @@ export default function Prescribe1({navigation}) {
                     onChangeText={value => setDose_number(value)}
                   />
                 </View>
-                {newMedicine != null && (
+                {newMedicine != null && setgeneric === false ? (
                   <>
                     <InputText
                       // inputContainer={{}}
@@ -567,7 +573,7 @@ export default function Prescribe1({navigation}) {
                           ))}
                     </View>
                   </>
-                )}
+                ):null}
               </View>
               <View
                 style={{paddingLeft: moderateScale(8), top: moderateScale(8)}}>
