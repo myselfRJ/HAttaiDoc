@@ -1308,9 +1308,9 @@ const Visit = ({navigation, route}) => {
             <HButton
               label="Save"
               onPress={() => {
-                // fetchData();
-                // putVitals();
-                // putComplaint();
+                fetchData();
+                putVitals();
+                putComplaint();
                 createPDF();
               }}
               loading={loading}

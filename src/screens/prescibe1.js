@@ -106,7 +106,6 @@ export default function Prescribe1({navigation}) {
     setFrequency([]);
     setDuration('1');
     setmg('');
-   
   };
 
   const handleDelete = index => {
