@@ -328,6 +328,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: moderateScale(24),
     paddingHorizontal: horizontalScale(8),
+    // borderWidth: 2,
   },
   clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,

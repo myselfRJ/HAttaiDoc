@@ -15,47 +15,23 @@ import Gif from '../components/gif';
 
 const Intro = ({navigation}) => {
   return (
-    // <View style={styles.container}>
-    //   <View style={styles.Top}>
-    //     <Image
-    //       style={styles.img}
-    //       source={require('../assets/images/intro.png')}
-    //     />
-    //   </View>
-    //   <View style={styles.bottom}>
-    //     <View style={styles.textcontainer}>
-    //       <Text style={styles.text}>The Easiest Way to manage your </Text>
-    //       <Text style={styles.text}>Clinic digitally</Text>
-      
-    //     </View>
-
-    //     <HButton
-    //       label="Get Started"
-    //       onPress={() => navigation.navigate('entry')}
-    //       btnstyles={styles.btn}
-    //     />
-    //   </View>
-    // </View>
     <View style={styles.container}>
-      <View style={{top:moderateScale(32)}}>
-      <Text style={styles.text}>Welcome to</Text>
-      <View style={styles.logo}>
-      <Logo imgstyle={styles.imgstyle}/>
-      </View>
-      </View>
-      <View style={{top:moderateScale(64)}}>
-      <View style={{justifyContent:'center'}}>
-                <Gif gif={require('../assets/gif/home.gif')} style={{alignSelf:'center'}} />
-            </View>
-      </View>
+      {/* <Text style={styles.text}>Welcome to</Text> */}
+
+      <Logo imgstyle={styles.imgstyle} />
+
+      <Gif
+        gif={require('../assets/gif/home.gif')}
+        style={{alignSelf: 'center'}}
+      />
+
       <View style={styles.bottom}>
-      <View style={styles.textcontainer}>
-      <Text style={styles.text}>The Easiest Way to manage your </Text>
-      <Text style={styles.text}>Clinic digitally</Text>
-      
+        <View style={styles.textcontainer}>
+          <Text style={styles.text}>The Easiest Way to manage your </Text>
+          <Text style={styles.text}>Clinic digitally</Text>
         </View>
 
-         <HButton
+        <HButton
           label="Get Started"
           onPress={() => navigation.navigate('entry')}
           btnstyles={styles.btn}
@@ -66,30 +42,30 @@ const Intro = ({navigation}) => {
 };
 const styles = StyleSheet.create({
   container: {
+    padding: moderateScale(32),
+    gap: verticalScale(64),
     flex: 1,
-    alignItems:'center',
+    alignItems: 'center',
     // top:moderateScale(64),
     // gap:moderateScale(64)
-    backgroundColor:CUSTOMCOLOR.white
-    
+    backgroundColor: CUSTOMCOLOR.white,
   },
-  text:{
-     fontSize:CUSTOMFONTSIZE.h1,
-     color:CUSTOMCOLOR.black,
-     fontWeight:'400',
-     fontFamily:CUSTOMFONTFAMILY.heading
+  text: {
+    fontSize: CUSTOMFONTSIZE.h1,
+    color: CUSTOMCOLOR.black,
+    fontWeight: '400',
+    fontFamily: CUSTOMFONTFAMILY.heading,
   },
-  imgstyle:{
-     width:moderateScale(119),
-     height:moderateScale(120),
+  imgstyle: {
+    width: horizontalScale(119),
+    height: verticalScale(120),
   },
-  logo:{
-     top:moderateScale(12)
-   
+  logo: {
+    top: moderateScale(12),
   },
-  tinyLogo:{
-    width:moderateScale(600),
-    height:moderateScale(400)
+  tinyLogo: {
+    width: moderateScale(600),
+    height: moderateScale(400),
   },
   Top: {
     height: verticalScale(503),

@@ -1,22 +1,31 @@
-import React from "react";
-import { Image, Text, View,StyleSheet } from "react-native";
-import { moderateScale } from "../utility/scaleDimension";
+import React from 'react';
+import {Image, Text, View, StyleSheet} from 'react-native';
+import {moderateScale} from '../utility/scaleDimension';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
-
-const Gif = (props) => {
-    return (
-        <View>
-          <View>
-            <Image source={props.gif} style={[styles.rec,props.style]}/>
-          </View>
-        </View>
-    );
+const Gif = props => {
+  return (
+    <View style={styles.rec}>
+      <Image
+        source={props.gif}
+        style={{
+          ...props.style,
+          resizeMode: 'center',
+          height: moderateScale(400),
+          width: moderateScale(400),
+          aspectRatio: 0.6,
+        }}
+      />
+    </View>
+  );
 };
 
-const styles=StyleSheet.create({
-  rec:{
-      width: moderateScale(899),
-      height: moderateScale(450),
+const styles = StyleSheet.create({
+  rec: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: moderateScale(899),
+    height: moderateScale(300),
   },
 });
 

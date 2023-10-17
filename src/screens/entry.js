@@ -78,8 +78,8 @@ const Entry = ({navigation}) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={{gap: moderateScale(32)}}>
         <View style={styles.Top}>
           <Image
             style={styles.image}
@@ -120,13 +120,14 @@ const Entry = ({navigation}) => {
             />
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: CUSTOMCOLOR.white,
     flex: 1,
     gap: moderateScale(48),
   },
@@ -143,7 +144,11 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: horizontalScale(24),
   },
-  image: {width: horizontalScale(297), height: verticalScale(286)},
+  image: {
+    width: horizontalScale(400),
+    height: verticalScale(400),
+    aspectRatio: 1,
+  },
 });
 
 export default Entry;

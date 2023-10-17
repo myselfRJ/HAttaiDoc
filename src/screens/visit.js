@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Platform,
+  Image,
+  Pressable,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
@@ -53,10 +55,6 @@ import {
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
-import logo from '../assets/images/logo.png';
-import footer from '../assets/images/footer.png';
-import rx from '../assets/images/RX.png';
-import RNFS from 'react-native-fs';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
@@ -101,17 +99,33 @@ const Visit = ({navigation, route}) => {
   }, [Prescribe]);
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
-  console.log('-------------logo============>', logo?.length);
 
   const [submit, setSubmit] = useState(false);
 
   const habdlePrescribe = () => {
     setSubmit(true);
   };
-
+  const [patient_data, setPatientData] = useState();
   const {name, gende, age, patient_phone, appointment_id, complaint} =
     route.params;
-
+  const fetchPatientData = async () => {
+    const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      // console.log(jsonData.data);
+      setPatientData(jsonData.data[0]);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchPatientData();
+  }, []);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
   const ResetRuduxState = () => {
@@ -170,11 +184,6 @@ const Visit = ({navigation, route}) => {
       commoribities: commorbities,
       allergies: allergies,
       pastHistory: pasthistory,
-      // reports: {
-      //   report_url: '',
-      //   type_report: '',
-      //   record_description: '',
-      // },
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -236,10 +245,8 @@ const Visit = ({navigation, route}) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    //console.log('practitioner response====', response);
     if (response.ok) {
       const jsonData = await response.json();
-      //console.log(jsonData);
       setData(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -375,14 +382,9 @@ const Visit = ({navigation, route}) => {
 
   const months = CONSTANTS.months;
 
-  const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : null;
-  const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : null;
-  const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : null;
-  console.log(
-    '----------complaintxxxxxx',
-    typeof vitalsData.LDD,
-    months[month],
-  );
+  const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : '';
+  const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : '';
+  const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : '';
 
   const isPermitted = async () => {
     if (Platform.OS === 'android') {
@@ -860,45 +862,108 @@ const Visit = ({navigation, route}) => {
     postData(apiUrl);
   };
 
-  // const readFile = async () => {
-  //   try {
-  //     const path =
-  //       RNFS.DocumentDirectoryPath +
-  //       '/storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
-  //     console.log('path---======', path);
-
-  //   } catch (error) {
-  //     console.error('Error reading file:', error);
-  //   }
-  // };
-
-  // const pdf = readFile();
-  // console.log('---------pdf', pdf);
   return (
-    <View style={{flex: 1}}>
+    <View>
       <ScrollView>
         <View style={styles.main}>
-          {/* <View style={styles.select}>
-          <HeaderAvatar />
-        </View> */}
-          {/* <View style={{alignSelf: 'flex-end',position:'absolute',padding:16}}> */}
-          {/* <PlusButton
-            icon="close"
-            style={{
-              zIndex: 4,
-              backgroundColor: 'transparent',
-              position: 'absolute',
-              alignSelf: 'flex-end',
-              padding: 16,
-            }}
-            color="#000000aa"
-            size={moderateScale(32)}
-            onPress={() => navigation.goBack()}
-          /> */}
-          {/* </View> */}
-
           <View style={styles.appointment}>
             <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+            <View
+              style={{
+                paddingHorizontal: moderateScale(24),
+                paddingVertical: verticalScale(16),
+                backgroundColor: CUSTOMCOLOR.backgroundColor,
+                gap: moderateScale(12),
+              }}>
+              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+                <Image
+                  style={{
+                    height: moderateScale(64),
+                    width: moderateScale(64),
+                    borderRadius: moderateScale(4),
+                    borderWidth: moderateScale(1),
+                    borderColor: CUSTOMCOLOR.borderColor,
+                  }}
+                  source={{
+                    uri: `data:image/jpeg;base64,${patient_data?.patient_pic_url}`,
+                  }}
+                />
+                <View>
+                  <Text
+                    style={{
+                      color: CUSTOMCOLOR.black,
+                      fontWeight: '400',
+                      fontSize: moderateScale(16),
+                    }}>
+                    {patient_data?.patient_name}
+                  </Text>
+                  <Text style={styles.patientText}>
+                    Age :{' '}
+                    {new Date().getFullYear() -
+                      parseInt(
+                        patient_data?.birth_date?.split('-')[0].toString(),
+                      )}
+                    | {patient_data?.gender}
+                  </Text>
+                  <Text style={styles.patientText}>
+                    Blood Group : {patient_data?.bloodgroup}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.line}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={styles.patientHead}>Reason For Visit</Text>
+                  <Pressable
+                    style={styles.gap}
+                    onPress={() =>
+                      navigation.navigate('complaints', {complaint})
+                    }>
+                    <Icon
+                      name={'pencil'}
+                      size={moderateScale(18)}
+                      color={CUSTOMCOLOR.primary}
+                      style={styles.pencilIcon}
+                    />
+                  </Pressable>
+                </View>
+                <Text style={styles.patientText}>{selectedComplaint}</Text>
+              </View>
+              <View style={styles.line}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={styles.patientHead}>Vitals</Text>
+                  <Pressable style={styles.gap}>
+                    <Icon
+                      name={'pencil'}
+                      size={moderateScale(18)}
+                      color={CUSTOMCOLOR.primary}
+                      style={styles.pencilIcon}
+                    />
+                  </Pressable>
+                </View>
+                <Text style={styles.patientText}>
+                  BP: {vitalsData.systolic}/{vitalsData.diastolic} SPO2:{' '}
+                  {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
+                  {vitalsData?.pulse_rate} Temp: {vitalsData?.boby_temparature}
+                </Text>
+                {patient_data?.gender === 'female' &&
+                  vitalsData?.LDD &&
+                  vitalsData?.EDD && (
+                    <Text style={styles.patientText}>
+                      Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} |
+                      EDD:
+                      {vitalsData.EDD}
+                    </Text>
+                  )}
+              </View>
+            </View>
             {CONSTANT.ConsultationList.map((value, index) => (
               <View key={index}>
                 <View style={styles.visitOpenItem}>
@@ -1357,9 +1422,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
-    borderBottomWidth: 0.4,
-    borderBottomColor: CUSTOMCOLOR.primary,
-    // height:100
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderWidth: moderateScale(2),
+    borderRadius: moderateScale(8),
   },
   basiccontainer: {
     //flexDirection:'row',
@@ -1423,6 +1488,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: moderateScale(4),
     gap: moderateScale(4),
+  },
+  patientText: {
+    color: CUSTOMCOLOR.black,
+    fontWeight: '400',
+    fontSize: moderateScale(14),
+    paddingBottom: moderateScale(4),
+  },
+  gap: {
+    height: moderateScale(32),
+
+    width: moderateScale(32),
+
+    borderWidth: moderateScale(1),
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderColor: '#C0DFFC',
+    borderRadius: moderateScale(24),
+    backgroundColor: CUSTOMCOLOR.white,
+  },
+  pencilIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  patientHead: {
+    color: CUSTOMCOLOR.black,
+    fontWeight: '700',
+    fontSize: moderateScale(16),
+  },
+  line: {
+    borderBottomWidth: moderateScale(0.5),
+    borderBottomColor: CUSTOMCOLOR.primary,
   },
 });
 export default Visit;

@@ -25,7 +25,30 @@ const VisitOpen = props => {
     <>
       <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
         <Text style={styles.text}>{props.label}</Text>
-        <Icon name={props.icon} color={CUSTOMCOLOR.primary} size={16} />
+        <View style={styles.gap}>
+          <Icon
+            name={'pencil'}
+            color={CUSTOMCOLOR.primary}
+            // style={{
+            //   borderWidth: 1,
+            //   borderColor: CUSTOMCOLOR.borderColor,
+            //   borderRadius: moderateScale(100),
+            //   // padding: moderateScale(4),
+            // }}
+            size={moderateScale(16)}
+          />
+          {/* <Icon
+            name={'pencil'}
+            color={CUSTOMCOLOR.primary}
+            style={{
+              borderWidth: 1,
+              borderColor: CUSTOMCOLOR.borderColor,
+              borderRadius: moderateScale(100),
+              padding: moderateScale(4),
+            }}
+            size={moderateScale(16)}
+          /> */}
+        </View>
       </TouchableOpacity>
     </>
   );
@@ -41,7 +64,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     gap: moderateScale(4),
     borderRadius: moderateScale(4),
-    //borderBottomWidth: 0.4,
+
     // borderBottomColor: CUSTOMCOLOR.primary,
   },
   text: {
@@ -49,6 +72,19 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
+  },
+  gap: {
+    flexDirection: 'row',
+    height: moderateScale(32),
+
+    width: moderateScale(32),
+
+    borderWidth: moderateScale(1),
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderColor: '#C0DFFC',
+    borderRadius: moderateScale(24),
   },
 });
 

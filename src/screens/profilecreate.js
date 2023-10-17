@@ -313,13 +313,7 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
   return (
-    <View
-      style={{
-        flex: 1,
-        borderWidth:4,
-        backgroundColor: CUSTOMCOLOR.white,
-        paddingVertical: verticalScale(8),
-      }}>
+    <View style={styles.main}>
       <ProgresHeader progressData={progressData} />
       {modal && (
         <GalleryModel
@@ -383,7 +377,6 @@ const ProfileCreate = ({navigation}) => {
             /> */}
 
           <View style={styles.btn}>
-            
             <InputText
               inputContainer={{
                 flex: 5,
@@ -400,22 +393,26 @@ const ProfileCreate = ({navigation}) => {
               style={{
                 flex: 1,
                 // borderWidth:1,
-                alignSelf:"center",
+                alignSelf: 'center',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize:CUSTOMFONTSIZE.h4,
-                marginTop:verticalScale(24),
-                fontWeight:'600',
-                color:CUSTOMCOLOR.black
-                }}>(OR)</Text>
+              <Text
+                style={{
+                  fontSize: CUSTOMFONTSIZE.h4,
+                  marginTop: verticalScale(24),
+                  fontWeight: '600',
+                  color: CUSTOMCOLOR.black,
+                }}>
+                (OR)
+              </Text>
             </View>
 
             <SelectorBtn
               //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
               required={true}
               // inputstyle={{padding:4}}
-              selectContainer={{flex: 5,gap:verticalScale(4)}}
+              selectContainer={{flex: 5, gap: verticalScale(4)}}
               label={Language[language]['dob']}
               name="calendar"
               onPress={() => setOpen('to')}
@@ -443,7 +440,7 @@ const ProfileCreate = ({navigation}) => {
           <View style={styles.specialization}>
             <SelectorBtn
               required={true}
-              selectContainer={{flex: 5,gap:verticalScale(4)}}
+              selectContainer={{flex: 5, gap: verticalScale(4)}}
               label={Language[language]['specialization']}
               name="chevron-down"
               // onPress={toggleModal}
@@ -462,19 +459,19 @@ const ProfileCreate = ({navigation}) => {
             numeric={true}
           />
           <View style={styles.btn}>
-            <View style={{  flex: 1}}>
-            <InputText
-              required={true}
-              inputContainer={{
-                // flex: 1,
-                // paddingVertical:moderateScale(0),
-                paddingHorizontal: moderateScale(0),
-              }}
-              label="Medical Registration Number"
-              placeholder="Medical Registration number"
-              value={values.medical_number}
-              setValue={value => handleChangeValue('medical_number', value)}
-            />
+            <View style={{flex: 1}}>
+              <InputText
+                required={true}
+                inputContainer={{
+                  // flex: 1,
+                  // paddingVertical:moderateScale(0),
+                  paddingHorizontal: moderateScale(0),
+                }}
+                label="Medical Registration Number"
+                placeholder="Medical Registration number"
+                value={values.medical_number}
+                setValue={value => handleChangeValue('medical_number', value)}
+              />
             </View>
 
             <View style={{flex: 1}}>
@@ -519,7 +516,12 @@ const ProfileCreate = ({navigation}) => {
               )}
             </View>
           </View>
-          <View style={{alignSelf: 'flex-start',gap:verticalScale(4),paddingVertical:verticalScale(8)}}>
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              gap: verticalScale(4),
+              paddingVertical: verticalScale(8),
+            }}>
             <Text style={styles.medtext}>Medical Document</Text>
             <View style={styles.doc_upload}>
               {selectedFilename ? (
@@ -554,16 +556,16 @@ const ProfileCreate = ({navigation}) => {
       </ScrollView>
       <View
         style={{
-          padding: moderateScale(32),
+          paddingVertical: moderateScale(16),
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: 'transparent',
         }}>
         <HButton
           textStyle={{fontSize: CUSTOMFONTSIZE.h2}}
           btnstyles={{
             paddingHorizontal: horizontalScale(96),
-            paddingVertical: verticalScale(16),
-            borderRadius: moderateScale(8),
+
             backgroundColor:
               values.doctor_name &&
               values.gender &&
@@ -627,6 +629,12 @@ const ProfileCreate = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: CUSTOMCOLOR.white,
+    paddingVertical: verticalScale(8),
+  },
+
   radiogroup: {
     paddingHorizontal: moderateScale(8),
     paddingVertical: moderateScale(6),
@@ -669,13 +677,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statecontainer: {
-    height: moderateScale(250),
+    height: moderateScale(400),
+    width: moderateScale(200),
+    zIndex: 5,
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
     position: 'absolute',
-    top: 72,
+    right: 0,
+    top: verticalScale(88),
     // width: '100%',
     // justifyContent: 'flex-start',
     // alignItems: 'center',
-    backgroundColor: CUSTOMCOLOR.white,
+
     // alignSelf: 'center',
     borderRadius: moderateScale(4),
     gap: moderateScale(6),
@@ -784,9 +797,9 @@ const styles = StyleSheet.create({
   },
   container: {
     // paddingVertical: verticalScale(20),
-   
 
     margin: moderateScale(32),
+    padding: moderateScale(32),
   },
 });
 

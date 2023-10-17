@@ -50,6 +50,7 @@ import ClinicAddress from '../components/clinic_address';
 import Symptoms1 from '../screens/Symptom1';
 import UserDisplay from '../screens/userDisplay';
 import MyClinics from '../screens/MyClinics';
+import PhysicalExamination from '../screens/physicalExaminations';
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -76,6 +77,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Clinics',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="examination"
+        component={PhysicalExamination}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Physical Examination',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

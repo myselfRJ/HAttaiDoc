@@ -21,7 +21,7 @@ const HButton = props => {
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon
-            style={styles.icon}
+            // style={styles.icon}
             name={props.icon}
             color={CUSTOMCOLOR.white}
             size={moderateScale(24)}
@@ -35,7 +35,7 @@ const HButton = props => {
         </Text>
         {props.rightIcon && (
           <Icon
-            style={styles.icon}
+            // style={styles.icon}
             name={props.rightIcon}
             color={props.color ? props.color : CUSTOMCOLOR.white}
             size={moderateScale(24)}
@@ -49,18 +49,18 @@ const styles = StyleSheet.create({
   btncontainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: horizontalScale(24),
-    paddingVertical: verticalScale(12),
-    fontSize: moderateScale(CUSTOMFONTSIZE.h3),
+    paddingHorizontal: horizontalScale(32),
+    paddingVertical: verticalScale(16),
+    fontSize: moderateScale(CUSTOMFONTSIZE.h2),
     fontWeight: '600',
     backgroundColor: CUSTOMCOLOR.primary,
-    borderRadius: moderateScale(4),
+    borderRadius: moderateScale(8),
     justifyContent: 'center',
-    gap: verticalScale(4),
+    gap: verticalScale(8),
   },
   btntext: {
     fontWeight: 600,
-    fontSize: moderateScale(14),
+    fontSize: CUSTOMFONTSIZE.h2,
     fontFamily: CUSTOMFONTFAMILY.body,
     color: CUSTOMCOLOR.white,
   },

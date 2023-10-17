@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     padding: moderateScale(4),
     marginBottom: moderateScale(4),
     marginHorizontal: horizontalScale(8),
-    borderColor: CUSTOMCOLOR.success,
     backgroundColor: '#EAF3FC',
     borderColor: CUSTOMCOLOR.borderColor,
   },
