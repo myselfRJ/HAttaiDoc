@@ -16,18 +16,19 @@ const SelectionTab = props => {
   return (
     <Pressable
       onPress={props?.onPress}
-      style={{
-        ...styles.tabcontainer,
+      style={[
+        {...styles.tabcontainer,
         backgroundColor: props.selected
           ? CUSTOMCOLOR.primary
           : CUSTOMCOLOR.white,
-        borderWidth: props.selected ? 0 : 0.5,
-      }}>
+        borderWidth: props.selected ? 0 : 0.5},
+        props.selectContainer
+      ]}>
       <Text
-        style={{
+        style={[{
           ...styles.tabtext,
-          color: props.selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
-        }}>
+          color: props.selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+        },props.text]}>
         {props.label}
       </Text>
     </Pressable>

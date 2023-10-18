@@ -23,15 +23,22 @@ const ShowChip = props => {
         <View style={styles.alignchild}>
           <Text
             style={{
-              color: CUSTOMCOLOR.black,
+              color: CUSTOMCOLOR.primary,
               fontFamily: CUSTOMFONTFAMILY.body,
+              fontWeight:'700',
+              fontSize:CUSTOMFONTSIZE.h3
             }}>
             {props.text}
           </Text>
 
-          <TouchableOpacity onPress={props.onPress}>
+          <TouchableOpacity  style={{
+            backgroundColor:CUSTOMCOLOR.white,
+            borderRadius:moderateScale(24),
+            alignItems:'center'
+          }}
+          onPress={props.onPress}>
             <Icon
-              name="delete"
+              name="close"
               size={moderateScale(24)}
               color={CUSTOMCOLOR.delete}
             />
@@ -46,19 +53,18 @@ export default ShowChip;
 
 const styles = StyleSheet.create({
   main: {
-    // width: '100%',
+    alignItems:'center',
     borderWidth: moderateScale(1),
     padding: moderateScale(4),
     marginBottom: moderateScale(4),
     marginHorizontal: horizontalScale(8),
-    borderColor: CUSTOMCOLOR.success,
+    borderColor: CUSTOMCOLOR.primary,
+    backgroundColor: '#EAF3FC',
+    borderRadius:moderateScale(4)
   },
   child: {
     flexDirection: 'row',
-    // flex: 1,
-    // width: '100%',
-    marginBottom: moderateScale(5),
-    //borderWidth:1,
+    paddingVertical:verticalScale(4),
   },
   alignchild: {
     width: '100%',

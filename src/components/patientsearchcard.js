@@ -29,6 +29,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import { HButton } from '.';
 
 const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
@@ -61,13 +62,14 @@ const PatientSearchCard = patient_data => {
   return (
     <>
       <View style={styles.main}>
+      <View style={styles.patientinfo}>
         <Image
           style={styles.img}
           source={{
             uri: `data:image/jpeg;base64,${patient_data?.patient_data?.patient_pic_url}`,
           }}
         />
-        <View style={styles.patientinfo}>
+        <View>
           <Text style={styles.name}>
             {patient_data?.patient_data?.patient_name}
           </Text>
@@ -80,7 +82,8 @@ const PatientSearchCard = patient_data => {
             {patient_data?.patient_data?.patient_phone_number}
           </Text>
         </View>
-        <Pressable
+        </View>
+        {/* <Pressable
           style={styles.icon}
           onPress={() => {
             patientSearchRef?.current?.snapToIndex(1);
@@ -93,8 +96,45 @@ const PatientSearchCard = patient_data => {
               size={24}
             />
           </View>
-        </Pressable>
-        <BottomSheetView
+        </Pressable> */}
+        <View style={styles.tab}>
+          {/* {meta_data && ( */}
+          <SelectionTab
+              selectContainer={{paddingHorizontal:horizontalScale(8),
+                paddingVertical:verticalScale(8),
+                borderRadius:moderateScale(8),
+                alignItems:'center',
+                backgroundColor:CUSTOMCOLOR.white,
+                borderWidth:0.5,
+                borderColor:CUSTOMCOLOR.primary
+              }}
+              text={{
+                color:CUSTOMCOLOR.primary,
+                fontSize:CUSTOMFONTSIZE.h5,
+                fontWeight:'700'
+              }}
+                label='Rx History'
+                selected={true}
+                onPress={handleOnpress}
+              />
+            {/* )} */}
+        <SelectionTab
+        text={{
+          fontSize:CUSTOMFONTSIZE.h5,
+          fontWeight:'700'
+        }}
+              selectContainer={{paddingHorizontal:horizontalScale(8),
+                paddingVertical:verticalScale(8),
+                borderRadius:moderateScale(8),
+                alignItems:'center'}}
+              label={Language[language]['book_appointment']}
+              selected={true}
+              onPress={handleOnBook}
+            />
+          
+            
+        </View>
+        {/* <BottomSheetView
           bottomSheetRef={patientSearchRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
@@ -104,10 +144,6 @@ const PatientSearchCard = patient_data => {
               selected={true}
               onPress={handleOnBook}
             />
-            {/* <SelectionTab
-              label={Language[language]['delete']}
-              selected={true}
-            /> */}
             {meta_data && (
               <SelectionTab
                 label={Language[language]['history']}
@@ -115,13 +151,6 @@ const PatientSearchCard = patient_data => {
                 onPress={handleOnpress}
               />
             )}
-            {/* <SelectionTab
-              label={Language[language]['cancel']}
-              selected={true}
-              onPress={() => {
-                patientSearchRef?.current?.snapToIndex(0);
-              }}
-            /> */}
           </View>
           <View
             style={{alignSelf: 'flex-end', paddingHorizontal: 8, bottom: 38}}>
@@ -137,27 +166,7 @@ const PatientSearchCard = patient_data => {
             />
           </View>
 
-          {/* <View style={styles.bottomView}>
-            <TouchableOpacity>
-              <Text style={styles.content}>{Language[language]['update']}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.content}>{Language[language]['delete']}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('patientrecord')}>
-              <Text style={styles.content}>
-                {Language[language]['view_more']}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                patientSearchRef?.current?.snapToIndex(0);
-              }}>
-              <Text style={styles.content}>{Language[language]['cancel']}</Text>
-            </TouchableOpacity>
-          </View> */}
-        </BottomSheetView>
+        </BottomSheetView> */}
       </View>
     </>
   );
@@ -171,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
+    justifyContent:'space-between'
   },
   name: {
     fontWeight: 600,
@@ -194,11 +204,14 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
+    width: 64,
+    height: 64,
+    borderRadius: moderateScale(8),
   },
-  patientinfo: {},
+  patientinfo: {
+   flexDirection:'row',
+   gap:moderateScale(8) 
+  },
   icon: {
     position: 'absolute',
     right: moderateScale(8),
@@ -241,10 +254,13 @@ const styles = StyleSheet.create({
   },
   tab: {
     flexDirection: 'row',
+    alignItems:'center',
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(8),
-    alignSelf: 'center',
     fontFamily: CUSTOMFONTFAMILY.body,
+    height:moderateScale(37),
+    alignSelf:'flex-end',
+    
   },
 });
 

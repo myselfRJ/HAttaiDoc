@@ -75,41 +75,44 @@ const SearchAddnew = ({navigation}) => {
 
   return (
     <View style={styles.main}>
-      <View style={styles.searchName}>
-        <InputText
-          placeholder="phone number"
-          value={phoneNumber}
-          setValue={ChangePhoneValue}
-          textStyle={styles.input}
-          keypad="numeric"
-        />
-        <Icon name="search" size={20} style={styles.searchIcon} />
-      </View>
+      <InputText
+            inputContainer={styles.inputtext}
+            label="Search"
+            placeholder="Enter Phone Number"
+            value={phoneNumber}
+            setValue={ChangePhoneValue}
+            search={true}
+            IconName='magnify'
+          />
 
       <ScrollView>
         <View style={styles.appointment}>
-          <Text style={styles.h2}>Search Results</Text>
+          <View style={styles.head}>
+          <Text style={styles.h2}>Search Results..</Text>
+          <View style={styles.btn}>
+          <HButton
+          btnstyles={{paddingVertical:verticalScale(8)}}
+          label="Add"
+          icon="plus"
+          onPress={() => navigation.navigate('patientcreate')}
+        />
+        </View>
+          </View>
           {filteredData?.length > 0 ? (
             filteredData?.map((val, ind) => (
+              <View style={{top:moderateScale(32)}}>
               <PatientSearchCard
                 key={ind}
                 patient_data={val}
                 onPress={() => navigation.navigate('visit')}
               />
+              </View>
             ))
           ) : (
             <CustomIcon label="No Patients Found" />
           )}
         </View>
       </ScrollView>
-
-      <View style={styles.btn}>
-        <HButton
-          label="Add New"
-          icon="plus"
-          onPress={() => navigation.navigate('patientcreate')}
-        />
-      </View>
     </View>
   );
 };
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: moderateScale(51),
-    top: moderateScale(30),
+    // top: moderateScale(30),
     left: moderateScale(20),
     padding: moderateScale(16),
   },
@@ -147,14 +150,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: 20 * 2,
-    color: CUSTOMCOLOR.primary,
-    top: moderateScale(16),
-    paddingVertical: verticalScale(16),
+    color: CUSTOMCOLOR.black,
+    // top: moderateScale(16),
+    // paddingVertical: verticalScale(16),
   },
   btn: {
-    gap: moderateScale(8),
-    justifyContent: 'center',
-    alignItems: 'center',
+    // gap: moderateScale(8),
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
+  head:{
+
+    flexDirection:'row',
+    justifyContent:'space-between',
+    top:moderateScale(8),
+    paddingVertical:verticalScale(8)
+    
+  }
 });
 export default SearchAddnew;
