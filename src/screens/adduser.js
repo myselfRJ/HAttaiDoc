@@ -365,14 +365,12 @@ const AddUser = ({navigation}) => {
     }
   };
   return (
-    <View style={{flex: 1, padding: moderateScale(24)}}>
-      {/* {prevScrn !== 'account' && (
-        <View>
-          <ProgresHeader progressData={progressData} />
-        </View>
-      )} */}
-
-      {/* {prevScrn === 'account' && ( */}
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: CUSTOMCOLOR.background,
+        padding: moderateScale(24),
+      }}>
       <View>
         <PlusButton
           icon="close"
@@ -382,13 +380,13 @@ const AddUser = ({navigation}) => {
           onPress={() => navigation.goBack()}
         />
       </View>
+      <Text style={commonstyles.h1}>Add User</Text>
       {/* )} */}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
             {/* <View style={styles.alignchild}> */}
             <View style={styles.alignchild1}>
-              <Text style={commonstyles.h1}>Add User</Text>
               <AddImage
                 onPress={() => ModalVisible()}
                 encodedBase64={selectedImage}
@@ -721,15 +719,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    paddingVertical: verticalScale(24),
+    borderWidth: 1,
+    gap: verticalScale(16),
   },
   content: {
-    paddingHorizontal: horizontalScale(12),
-    paddingVertical: verticalScale(32),
+    // paddingHorizontal: horizontalScale(12),
+
     width: '100%',
     //alignItems: 'center',
-    gap: moderateScale(8),
-    // borderWidth:1
+    gap: verticalScale(16),
   },
   bottom: {
     // borderWidth:1,
@@ -754,7 +752,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     // height:'20%',
-    paddingHorizontal: horizontalScale(8),
     // borderWidth:1
   },
   alignchild1: {
@@ -762,7 +759,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: '20%',
-    paddingHorizontal: horizontalScale(8),
+
     // borderWidth:1
   },
   modalContainer: {
@@ -803,7 +800,7 @@ const styles = StyleSheet.create({
   gender: {
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
   },
   btn: {
     alignSelf: 'flex-start',
@@ -815,7 +812,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     // flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
+
     // borderWidth:1,
     // paddingVertical:moderateScale(24)
   },

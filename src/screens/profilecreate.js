@@ -326,48 +326,47 @@ const ProfileCreate = ({navigation}) => {
           // dismiss={()=>setModal(false)}
         />
       )}
+      <Text style={commonstyles.h1}>Fill Profile</Text>
       <ScrollView contentContainerStyle={styles.container}>
-        <View>
-          <View style={styles.alignchild}>
-            <Text style={commonstyles.h1}>Fill Profile</Text>
-            <AddImage
-              onPress={() => ModalVisible()}
-              encodedBase64={selectedImage}
+        <View style={styles.alignchild}>
+          <AddImage
+            onPress={() => ModalVisible()}
+            encodedBase64={selectedImage}
+          />
+        </View>
+        <InputText
+          inputContainer={{paddingHorizontal: moderateScale(0)}}
+          required={true}
+          label={Language[language]['name']}
+          placeholder="Full Name"
+          value={values.doctor_name}
+          setValue={value => handleChangeValue('doctor_name', value)}
+        />
+
+        <View style={styles.alignchild1}>
+          <Text style={styles.gender}>{Language[language]['gender']}</Text>
+          <View style={styles.radiogroup}>
+            <Option
+              label="Male"
+              value="male"
+              selected={values.gender === 'male'}
+              onPress={() => handleOptions('male')}
+            />
+            <Option
+              label="Female"
+              value="female"
+              selected={values.gender === 'female'}
+              onPress={() => handleOptions('female')}
+            />
+            <Option
+              label="Others"
+              value="others"
+              selected={values.gender === 'others'}
+              onPress={() => handleOptions('others')}
             />
           </View>
-          <InputText
-            inputContainer={{paddingHorizontal: moderateScale(0)}}
-            required={true}
-            label={Language[language]['name']}
-            placeholder="Full Name"
-            value={values.doctor_name}
-            setValue={value => handleChangeValue('doctor_name', value)}
-          />
-
-          <View style={styles.alignchild1}>
-            <Text style={styles.gender}>{Language[language]['gender']}</Text>
-            <View style={styles.radiogroup}>
-              <Option
-                label="Male"
-                value="male"
-                selected={values.gender === 'male'}
-                onPress={() => handleOptions('male')}
-              />
-              <Option
-                label="Female"
-                value="female"
-                selected={values.gender === 'female'}
-                onPress={() => handleOptions('female')}
-              />
-              <Option
-                label="Others"
-                value="others"
-                selected={values.gender === 'others'}
-                onPress={() => handleOptions('others')}
-              />
-            </View>
-          </View>
-          {/* <InputText
+        </View>
+        {/* <InputText
               label="Age/DOB"
               placeholder="eg:25 / YYYY-MM-DD"
               value={age}
@@ -376,181 +375,177 @@ const ProfileCreate = ({navigation}) => {
               required={true}
             /> */}
 
-          <View style={styles.btn}>
-            <InputText
-              inputContainer={{
-                flex: 5,
-                paddingHorizontal: horizontalScale(0),
-              }}
-              label="Age"
-              placeholder="eg:25"
-              input={value}
-              setValue={setValue}
-              numeric={true}
-              required={true}
-            />
-            <View
-              style={{
-                flex: 1,
-                // borderWidth:1,
-                alignSelf: 'center',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: CUSTOMFONTSIZE.h4,
-                  marginTop: verticalScale(24),
-                  fontWeight: '600',
-                  color: CUSTOMCOLOR.black,
-                }}>
-                (OR)
-              </Text>
-            </View>
-
-            <SelectorBtn
-              //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
-              required={true}
-              // inputstyle={{padding:4}}
-              selectContainer={{flex: 5, gap: verticalScale(4)}}
-              label={Language[language]['dob']}
-              name="calendar"
-              onPress={() => setOpen('to')}
-              input={formattedDate}
-              style={styles.DOBselect}
-            />
-          </View>
-          <DatePicker
-            modal
-            open={open !== false}
-            date={DOB}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
+        <View style={styles.btn}>
+          <InputText
+            inputContainer={{
+              flex: 5,
+            }}
+            label="Age"
+            placeholder="eg:25"
+            input={value}
+            setValue={setValue}
+            numeric={true}
+            required={true}
           />
+          <View
+            style={{
+              flex: 1,
+              // borderWidth:1,
+              alignSelf: 'center',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: CUSTOMFONTSIZE.h4,
+                marginTop: verticalScale(24),
+                fontWeight: '600',
+                color: CUSTOMCOLOR.black,
+              }}>
+              (OR)
+            </Text>
+          </View>
 
-          {/* <InputText
+          <SelectorBtn
+            //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
+            required={true}
+            selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
+            label={Language[language]['dob']}
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formattedDate}
+            style={styles.DOBselect}
+          />
+        </View>
+        <DatePicker
+          modal
+          open={open !== false}
+          date={DOB}
+          theme="auto"
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+
+        {/* <InputText
               required={true}
               label="Medical Registration Number"
               placeholder="Medical Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             /> */}
-          <View style={styles.specialization}>
-            <SelectorBtn
+        <View style={styles.specialization}>
+          <SelectorBtn
+            required={true}
+            selectContainer={{flex: 5, gap: 2, paddingVertical: 0}}
+            label={Language[language]['specialization']}
+            name="chevron-down"
+            // onPress={toggleModal}
+            onPress={() => {
+              appointmentCardRef?.current?.snapToIndex(1);
+            }}
+            input={selectedSpeciality}
+          />
+        </View>
+        <InputText
+          inputContainer={{paddingHorizontal: moderateScale(0)}}
+          label={Language[language]['experience']}
+          placeholder="experience in years"
+          value={values.experience}
+          setValue={value => handleChangeValue('experience', value)}
+          numeric={true}
+        />
+        <View style={styles.btn}>
+          <View style={{flex: 1}}>
+            <InputText
               required={true}
-              selectContainer={{flex: 5, gap: verticalScale(4)}}
-              label={Language[language]['specialization']}
-              name="chevron-down"
-              // onPress={toggleModal}
-              onPress={() => {
-                appointmentCardRef?.current?.snapToIndex(1);
+              inputContainer={{
+                // flex: 1,
+                // paddingVertical:moderateScale(0),
+                paddingHorizontal: moderateScale(0),
               }}
-              input={selectedSpeciality}
+              label="Medical Registration Number"
+              placeholder="Medical Registration number"
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
             />
           </View>
-          <InputText
-            inputContainer={{paddingHorizontal: moderateScale(0)}}
-            label={Language[language]['experience']}
-            placeholder="experience in years"
-            value={values.experience}
-            setValue={value => handleChangeValue('experience', value)}
-            numeric={true}
-          />
-          <View style={styles.btn}>
-            <View style={{flex: 1}}>
-              <InputText
-                required={true}
-                inputContainer={{
-                  // flex: 1,
-                  // paddingVertical:moderateScale(0),
-                  paddingHorizontal: moderateScale(0),
-                }}
-                label="Medical Registration Number"
-                placeholder="Medical Registration number"
-                value={values.medical_number}
-                setValue={value => handleChangeValue('medical_number', value)}
-              />
-            </View>
 
-            <View style={{flex: 1}}>
-              <SelectorBtn
-                required={true}
-                label="State"
-                name="menu-down"
-                size={moderateScale(24)}
-                // onPress={toggleModal}
-                onPress={() => {
-                  setshow(!show);
-                }}
-                input={selectedState}
-              />
+          <View style={{flex: 1}}>
+            <SelectorBtn
+              required={true}
+              selectContainer={{gap: 2, paddingVertical: -1}}
+              label="State"
+              name="menu-down"
+              size={moderateScale(24)}
+              // onPress={toggleModal}
+              onPress={() => {
+                setshow(!show);
+              }}
+              input={selectedState}
+            />
 
-              {show === true && (
-                <View style={styles.statecontainer}>
-                  <ScrollView persistentScrollbar={true}>
-                    {CONSTANTS.state.map((state, index) => (
-                      <Pressable
-                        key={index}
-                        onPress={() => {
-                          handleStateSelection(state);
-                          setshow(false);
-                        }}>
-                        <Text
-                          style={[
-                            styles.statefields,
-                            {
-                              color:
-                                selectedState === state
-                                  ? CUSTOMCOLOR.primary
-                                  : CUSTOMCOLOR.black,
-                            },
-                          ]}>
-                          {state}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </ScrollView>
-                </View>
-              )}
-            </View>
+            {show === true && (
+              <View style={styles.statecontainer}>
+                <ScrollView persistentScrollbar={true}>
+                  {CONSTANTS.state.map((state, index) => (
+                    <Pressable
+                      key={index}
+                      onPress={() => {
+                        handleStateSelection(state);
+                        setshow(false);
+                      }}>
+                      <Text
+                        style={[
+                          styles.statefields,
+                          {
+                            color:
+                              selectedState === state
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.black,
+                          },
+                        ]}>
+                        {state}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
-          <View
-            style={{
-              alignSelf: 'flex-start',
-              gap: verticalScale(4),
-              paddingVertical: verticalScale(8),
-            }}>
-            <Text style={styles.medtext}>Medical Document</Text>
-            <View style={styles.doc_upload}>
-              {selectedFilename ? (
-                <View style={styles.selectedfilecontainer}>
-                  <Text style={styles.selectedFileInfo}>
-                    {selectedFilename}
-                  </Text>
-                  <TouchableOpacity onPress={handleClearFile}>
-                    <Icon
-                      name="delete"
-                      size={moderateScale(20)}
-                      color={CUSTOMCOLOR.delete}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <HButton
-                  label="Upload Document"
-                  onPress={pickSingleFile}
-                  btnstyles={{
-                    backgroundColor: CUSTOMCOLOR.white,
-                    borderColor: CUSTOMCOLOR.primary,
-                    borderWidth: 0.5,
-                    borderRadius: 4,
-                  }}
-                  textStyle={{color: CUSTOMCOLOR.primary}}
-                />
-              )}
-            </View>
+        </View>
+        <View
+          style={{
+            alignSelf: 'flex-start',
+            gap: verticalScale(4),
+            // paddingVertical: verticalScale(8),
+          }}>
+          <Text style={styles.medtext}>Medical Document</Text>
+          <View style={styles.doc_upload}>
+            {selectedFilename ? (
+              <View style={styles.selectedfilecontainer}>
+                <Text style={styles.selectedFileInfo}>{selectedFilename}</Text>
+                <TouchableOpacity onPress={handleClearFile}>
+                  <Icon
+                    name="delete"
+                    size={moderateScale(20)}
+                    color={CUSTOMCOLOR.delete}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <HButton
+                label="Upload Document"
+                onPress={pickSingleFile}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderColor: CUSTOMCOLOR.primary,
+                  borderWidth: 0.5,
+                  borderRadius: 4,
+                }}
+                textStyle={{color: CUSTOMCOLOR.primary}}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -633,6 +628,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: CUSTOMCOLOR.white,
     paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(24),
+    // borderWidth: 1,
+    gap: verticalScale(16),
   },
 
   radiogroup: {
@@ -647,23 +645,13 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    marginBottom: 24,
+
     // height: '18%',
     // gap:moderateScale(0),
 
-    // borderWidth:1,
     paddingVertical: moderateScale(0),
   },
-  alignchild1: {
-    // justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: '100%',
-    // height:'20%',
-    // gap:moderateScale(0),
-    //
-    // borderWidth:1,
-    paddingVertical: moderateScale(0),
-  },
+
   modalContainer: {
     height: '100%',
     // width: '100%',
@@ -764,7 +752,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
 
     // paddingHorizontal: horizontalScale(24),
-    gap: moderateScale(8),
+    gap: verticalScale(8),
   },
   btn1: {
     flexDirection: 'row',
@@ -798,8 +786,7 @@ const styles = StyleSheet.create({
   container: {
     // paddingVertical: verticalScale(20),
 
-    margin: moderateScale(32),
-    padding: moderateScale(32),
+    gap: verticalScale(16),
   },
 });
 
