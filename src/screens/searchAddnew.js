@@ -76,37 +76,34 @@ const SearchAddnew = ({navigation}) => {
   return (
     <View style={styles.main}>
       <InputText
-            inputContainer={styles.inputtext}
-            label="Search"
-            placeholder="Enter Phone Number"
-            value={phoneNumber}
-            setValue={ChangePhoneValue}
-            search={true}
-            IconName='magnify'
-          />
+        label="Search"
+        placeholder="Enter Phone Number"
+        value={phoneNumber}
+        setValue={ChangePhoneValue}
+        search={true}
+        IconName="magnify"
+      />
+      <HButton
+        btnstyles={{paddingVertical: verticalScale(8), alignSelf: 'flex-end'}}
+        label="Add"
+        icon="plus"
+        onPress={() => navigation.navigate('patientcreate')}
+      />
 
-      <ScrollView>
+      <Text style={styles.h2}>Search Results..</Text>
+
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: verticalScale(24),
+        }}>
         <View style={styles.appointment}>
-          <View style={styles.head}>
-          <Text style={styles.h2}>Search Results..</Text>
-          <View style={styles.btn}>
-          <HButton
-          btnstyles={{paddingVertical:verticalScale(8)}}
-          label="Add"
-          icon="plus"
-          onPress={() => navigation.navigate('patientcreate')}
-        />
-        </View>
-          </View>
           {filteredData?.length > 0 ? (
             filteredData?.map((val, ind) => (
-              <View style={{top:moderateScale(32)}}>
               <PatientSearchCard
                 key={ind}
                 patient_data={val}
                 onPress={() => navigation.navigate('visit')}
               />
-              </View>
             ))
           ) : (
             <CustomIcon label="No Patients Found" />
@@ -142,30 +139,25 @@ const styles = StyleSheet.create({
   },
   appointment: {
     gap: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(8),
+    // paddingHorizontal: horizontalScale(8),
+    // paddingVertical: verticalScale(8),
   },
   h2: {
-    fontSize: 24,
+    fontSize: CUSTOMFONTSIZE.h2,
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.heading,
-    lineHeight: 20 * 2,
+    // lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
-    // top: moderateScale(16),
-    // paddingVertical: verticalScale(16),
   },
   btn: {
     // gap: moderateScale(8),
     // justifyContent: 'center',
     // alignItems: 'center',
   },
-  head:{
-
-    flexDirection:'row',
-    justifyContent:'space-between',
-    top:moderateScale(8),
-    paddingVertical:verticalScale(8)
-    
-  }
+  head: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // paddingVertical: verticalScale(8),
+  },
 });
 export default SearchAddnew;

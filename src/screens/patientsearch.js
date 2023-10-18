@@ -112,7 +112,7 @@ const PatientSearch = ({navigation}) => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
     dispatch(addclinic_id(clinic.id));
-    
+
     setTimeout(() => {
       ClinicRef?.current?.snapToIndex(0);
     }, 1000);
@@ -135,9 +135,17 @@ const PatientSearch = ({navigation}) => {
           input={selectedClinic}
           onPress={() => ClinicRef?.current?.snapToIndex(1)}
         />
+        <InputText
+          placeholder="Search name"
+          value={name}
+          setValue={ChangeNameValue}
+          textStyle={styles.input}
+          search={true}
+          IconName="magnify"
+        />
         {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
       </View>
-      <View style={styles.searchname}>
+      {/* <View style={styles.searchname}>
         <InputText
           placeholder="Search name"
           value={name}
@@ -145,14 +153,15 @@ const PatientSearch = ({navigation}) => {
           textStyle={styles.input}
         />
         <Icon name="search" size={20} style={styles.searchIcon} />
-      </View>
-
+      </View> */}
+      <Text style={styles.h2}>My Patients</Text>
       <View style={styles.appointment}>
-        <Text style={commonstyles.h2}>My Patients</Text>
         {filteredData?.length > 0 ? (
           <ScrollView
-            contentContainerStyle={{gap: moderateScale(8)}}
-            style={styles.patientCard}>
+            contentContainerStyle={{
+              gap: moderateScale(8),
+              paddingBottom: verticalScale(24),
+            }}>
             {filteredData?.map((val, ind) => (
               <PatientSearchCard
                 meta={'value'}
@@ -175,12 +184,18 @@ const PatientSearch = ({navigation}) => {
             <Pressable
               key={index}
               onPress={() => handleClinicSelection(clinic)}>
-              <Text style={[styles.modalfields,{
-                      color:
-                        selectedClinic === clinic
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.black,
-                    },]}>{clinic.clinic_name}</Text>
+              <Text
+                style={[
+                  styles.modalfields,
+                  {
+                    color:
+                      selectedClinic === clinic
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.black,
+                  },
+                ]}>
+                {clinic.clinic_name}
+              </Text>
             </Pressable>
           ))}
         </View>
@@ -193,10 +208,11 @@ const styles = StyleSheet.create({
   main: {
     flex: moderateScale(1),
     padding: moderateScale(24),
-    gap: moderateScale(4),
+    gap: moderateScale(24),
   },
   select: {
     gap: moderateScale(8),
+    // alignItems:'center'
   },
   clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -211,11 +227,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     //marginRight:moderateScale(8)
   },
-  patientCard: {
-    height: horizontalScale(550),
-    paddingHorizontal: horizontalScale(8),
-    gap: moderateScale(16),
-  },
+  // patientCard: {
+  //   height: horizontalScale(550),
+  //   paddingHorizontal: horizontalScale(8),
+  //   gap: moderateScale(16),
+  // },
   tab: {
     flexDirection: 'row',
     gap: moderateScale(24),
@@ -224,14 +240,12 @@ const styles = StyleSheet.create({
     gap: moderateScale(4),
   },
   h2: {
-    fontSize: 24,
-    fontWeight: '700',
-    fontFamily: CUSTOMFONTFAMILY.opensans,
-    lineHeight: 20 * 2,
+    fontSize: CUSTOMFONTSIZE.h2,
+    fontWeight: '600',
+    fontFamily: CUSTOMFONTFAMILY.heading,
     color: CUSTOMCOLOR.black,
   },
   input: {
-    width: '105%',
     padding: moderateScale(16),
     gap: moderateScale(4),
     paddingHorizontal: horizontalScale(8),

@@ -10,6 +10,7 @@ import store from './src/redux/stores/store';
 import axios from 'axios';
 import {urlActions} from './src/redux/features/url/urlSlice';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {CUSTOMCOLOR} from './src/settings/styles';
 
 const Stack = createNativeStackNavigator();
 

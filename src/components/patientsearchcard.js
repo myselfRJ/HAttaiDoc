@@ -29,7 +29,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import { HButton } from '.';
+import {HButton} from '.';
 
 const PatientSearchCard = patient_data => {
   const [visible, setVisible] = useState(false);
@@ -62,26 +62,26 @@ const PatientSearchCard = patient_data => {
   return (
     <>
       <View style={styles.main}>
-      <View style={styles.patientinfo}>
-        <Image
-          style={styles.img}
-          source={{
-            uri: `data:image/jpeg;base64,${patient_data?.patient_data?.patient_pic_url}`,
-          }}
-        />
-        <View>
-          <Text style={styles.name}>
-            {patient_data?.patient_data?.patient_name}
-          </Text>
-          <Text style={styles.age}>
-            {parseInt(presentYear) - parseInt(birthYear)} |{' '}
-            {patient_data?.patient_data?.gender}
-          </Text>
-          <Text style={styles?.contact}>
-            {Language[language]['contact']}:{' '}
-            {patient_data?.patient_data?.patient_phone_number}
-          </Text>
-        </View>
+        <View style={styles.patientinfo}>
+          <Image
+            style={styles.img}
+            source={{
+              uri: `data:image/jpeg;base64,${patient_data?.patient_data?.patient_pic_url}`,
+            }}
+          />
+          <View>
+            <Text style={styles.name}>
+              {patient_data?.patient_data?.patient_name}
+            </Text>
+            <Text style={styles.age}>
+              {parseInt(presentYear) - parseInt(birthYear)} |{' '}
+              {patient_data?.patient_data?.gender}
+            </Text>
+            <Text style={styles?.contact}>
+              {Language[language]['contact']}:{' '}
+              {patient_data?.patient_data?.patient_phone_number}
+            </Text>
+          </View>
         </View>
         {/* <Pressable
           style={styles.icon}
@@ -99,40 +99,39 @@ const PatientSearchCard = patient_data => {
         </Pressable> */}
         <View style={styles.tab}>
           {/* {meta_data && ( */}
-          <SelectionTab
-              selectContainer={{paddingHorizontal:horizontalScale(8),
-                paddingVertical:verticalScale(8),
-                borderRadius:moderateScale(8),
-                alignItems:'center',
-                backgroundColor:CUSTOMCOLOR.white,
-                borderWidth:0.5,
-                borderColor:CUSTOMCOLOR.primary
-              }}
-              text={{
-                color:CUSTOMCOLOR.primary,
-                fontSize:CUSTOMFONTSIZE.h5,
-                fontWeight:'700'
-              }}
-                label='Rx History'
-                selected={true}
-                onPress={handleOnpress}
-              />
-            {/* )} */}
-        <SelectionTab
-        text={{
-          fontSize:CUSTOMFONTSIZE.h5,
-          fontWeight:'700'
-        }}
-              selectContainer={{paddingHorizontal:horizontalScale(8),
-                paddingVertical:verticalScale(8),
-                borderRadius:moderateScale(8),
-                alignItems:'center'}}
-              label={Language[language]['book_appointment']}
-              selected={true}
-              onPress={handleOnBook}
-            />
-          
-            
+          <HButton
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderWidth: moderateScale(0.5),
+              borderColor: CUSTOMCOLOR.borderColor,
+              paddingHorizontal: horizontalScale(24),
+              paddingVertical: verticalScale(8),
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.primary,
+              fontSize: CUSTOMFONTFAMILY.h3,
+            }}
+            label="Rx History"
+            selected={true}
+            onPress={handleOnpress}
+          />
+          {/* )} */}
+          <HButton
+            btnstyles={{
+              // backgroundColor: CUSTOMCOLOR.white,
+              // borderWidth: moderateScale(0.5),
+              // borderColor: CUSTOMCOLOR.borderColor,
+              paddingHorizontal: horizontalScale(24),
+              paddingVertical: verticalScale(12),
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.white,
+              fontSize: CUSTOMFONTFAMILY.h3,
+            }}
+            label={Language[language]['book_appointment']}
+            selected={true}
+            onPress={handleOnBook}
+          />
         </View>
         {/* <BottomSheetView
           bottomSheetRef={patientSearchRef}
@@ -173,6 +172,8 @@ const PatientSearchCard = patient_data => {
 };
 const styles = StyleSheet.create({
   main: {
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.borderColor,
     flexDirection: 'row',
     widthhorizontalScalelignItems: 'center',
     padding: moderateScale(12),
@@ -180,11 +181,12 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
-    justifyContent:'space-between'
+    justifyContent: 'space-between',
   },
   name: {
+    // borderWidth: 1,
     fontWeight: 600,
-    fontSize: moderateScale(14),
+    fontSize: CUSTOMFONTSIZE.h3,
     lineHeight: 20,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -209,8 +211,8 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
   },
   patientinfo: {
-   flexDirection:'row',
-   gap:moderateScale(8) 
+    flexDirection: 'row',
+    gap: moderateScale(8),
   },
   icon: {
     position: 'absolute',
@@ -254,13 +256,12 @@ const styles = StyleSheet.create({
   },
   tab: {
     flexDirection: 'row',
-    alignItems:'center',
+    alignItems: 'center',
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(8),
     fontFamily: CUSTOMFONTFAMILY.body,
-    height:moderateScale(37),
-    alignSelf:'flex-end',
-    
+    // height: moderateScale(37),
+    alignSelf: 'flex-end',
   },
 });
 

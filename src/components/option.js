@@ -1,6 +1,10 @@
 import {Text, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from '../settings/styles';
+import {
+  CUSTOMCOLOR,
+  CUSTOMFONTFAMILY,
+  CUSTOMFONTSIZE,
+} from '../settings/styles';
 import {moderateScale} from '../utility/scaleDimension';
 
 const Option = ({label, selected, onPress, value}) => {
@@ -29,14 +33,14 @@ const Option = ({label, selected, onPress, value}) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    gap: moderateScale(4),
+    gap: moderateScale(8),
     alignItems: 'center',
   },
   options: {
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize: 12,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    paddingRight: moderateScale(8),
+    // paddingRight: moderateScale(8),
   },
 });
 export default Option;

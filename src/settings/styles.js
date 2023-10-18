@@ -6,7 +6,7 @@ import {
 
 let CUSTOMCOLOR = {
   primary: '#4BA5FA',
-  background: 'grey',
+  background: '#ffffff',
   black: 'black',
   white: 'white',
   error: 'red',

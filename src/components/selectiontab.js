@@ -17,18 +17,23 @@ const SelectionTab = props => {
     <Pressable
       onPress={props?.onPress}
       style={[
-        {...styles.tabcontainer,
-        backgroundColor: props.selected
-          ? CUSTOMCOLOR.primary
-          : CUSTOMCOLOR.white,
-        borderWidth: props.selected ? 0 : 0.5},
-        props.selectContainer
+        {
+          ...styles.tabcontainer,
+          backgroundColor: props.selected
+            ? CUSTOMCOLOR.primary
+            : CUSTOMCOLOR.white,
+          borderWidth: props.selected ? 0 : 0.5,
+        },
+        props.selectContainer,
       ]}>
       <Text
-        style={[{
-          ...styles.tabtext,
-          color: props.selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-        },props.text]}>
+        style={[
+          {
+            ...styles.tabtext,
+            color: props.selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+          },
+          props.text,
+        ]}>
         {props.label}
       </Text>
     </Pressable>
@@ -36,11 +41,11 @@ const SelectionTab = props => {
 };
 const styles = StyleSheet.create({
   tabcontainer: {
-    paddingHorizontal: verticalScale(24),
-    paddingVertical: verticalScale(16),
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
     backgroundColor: CUSTOMCOLOR.primary,
-    borderWidth: 1,
-    borderRadius: 4,
+    borderWidth: 0.5,
+    borderRadius: moderateScale(4),
   },
   tabtext: {
     fontStyle: 'normal',
