@@ -308,8 +308,9 @@ const styles = StyleSheet.create({
     color: 'gray', // Color when the timer is out (timer reaches 0)
   },
   images: {
-    width: moderateScale(234),
-    height: moderateScale(288),
+    width: moderateScale(400),
+    height: moderateScale(400),
+    resizeMode: 'contain',
   },
 });
 export default OtpScreen;

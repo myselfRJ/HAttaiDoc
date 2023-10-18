@@ -28,6 +28,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import PlusButton from './plusbtn';
+import HButton from './button';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -95,13 +96,13 @@ const AppointmentCard = ({appointment, openVisit}) => {
         </View>
         <View>
           <View style={{marginLeft: moderateScale(220)}}>
-            <Pressable style={styles.icon} onPress={() => setVisible(!visible)}>
+            {/* <Pressable style={styles.icon} onPress={() => setVisible(!visible)}>
               <Icon
                 name={visible ? 'chevron-up' : 'chevron-down'}
                 size={moderateScale(24)}
                 color={CUSTOMCOLOR.primary}
               />
-            </Pressable>
+            </Pressable> */}
           </View>
           <View
             style={{
@@ -109,75 +110,94 @@ const AppointmentCard = ({appointment, openVisit}) => {
               gap: moderateScale(16),
               paddingTop: moderateScale(24),
             }}>
-            <Pressable style={styles.btn}>
-              <Text style={styles.btnText}>Reschedule</Text>
-            </Pressable>
-            <Pressable
+            <HButton
+              label={'Reschedule'}
+              btnstyles={{
+                backgroundColor: CUSTOMCOLOR.white,
+                borderWidth: moderateScale(0.5),
+                borderColor: CUSTOMCOLOR.borderColor,
+                paddingHorizontal: horizontalScale(24),
+                paddingVertical: verticalScale(8),
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+                fontSize: CUSTOMFONTFAMILY.h3,
+              }}
+            />
+            <HButton
+              btnstyles={{
+                // backgroundColor: CUSTOMCOLOR.white,
+                // borderWidth: moderateScale(0.5),
+                // borderColor: CUSTOMCOLOR.borderColor,
+                paddingHorizontal: horizontalScale(24),
+                paddingVertical: verticalScale(12),
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.white,
+                fontSize: CUSTOMFONTFAMILY.h3,
+              }}
               onPress={handleOnpress}
-              style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
-              <Text style={[styles.btnText, {color: CUSTOMCOLOR.white}]}>
-                Start Visit
-              </Text>
-            </Pressable>
+              label={'Start Visit'}
+              // style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
+            />
           </View>
         </View>
       </View>
-      {visible && (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            backgroundColor: '#ECF6FF',
-            borderWidth: moderateScale(2),
-            borderColor: '#3683CC',
-            padding: moderateScale(8),
-            marginTop: moderateScale(18),
-            borderRadius: moderateScale(12),
-          }}>
-          <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Type:</Text>
-            <Text style={styles.contact}> {appointment.appointment_type}</Text>
-          </View>
-          <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Time:</Text>
-            <Text style={styles.contact}> {appointment.appointment_slot}</Text>
-          </View>
-          <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Status:</Text>
-            <Text
-              style={[
-                styles.contact,
-                {
-                  fontWeight: '600',
-                  color:
-                    appointment?.status === 'pending'
-                      ? CUSTOMCOLOR.warn
-                      : CUSTOMCOLOR.success,
-                },
-              ]}>
-              {'  '}
-              {appointment.status}
-            </Text>
-          </View>
-          <View style={styles.statusinfo}>
-            <Text style={styles.contact}>Bill:</Text>
-            <Text
-              style={[
-                styles.contact,
-                {
-                  fontWeight: '600',
-                  color:
-                    appointment?.is_paid.toString() === 'false'
-                      ? CUSTOMCOLOR.warn
-                      : CUSTOMCOLOR.success,
-                },
-              ]}>
-              {' '}
-              {paidOpt[appointment?.is_paid.toString()]}
-            </Text>
-          </View>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          backgroundColor: '#ECF6FF',
+          borderWidth: moderateScale(0.5),
+          borderColor: '#3683CC',
+          padding: moderateScale(8),
+          marginTop: moderateScale(18),
+          borderRadius: moderateScale(12),
+        }}>
+        <View style={styles.statusinfo}>
+          <Text style={styles.contact}>Type:</Text>
+          <Text style={styles.contact}> {appointment.appointment_type}</Text>
         </View>
-      )}
+        <View style={styles.statusinfo}>
+          <Text style={styles.contact}>Time:</Text>
+          <Text style={styles.contact}> {appointment.appointment_slot}</Text>
+        </View>
+        <View style={styles.statusinfo}>
+          <Text style={styles.contact}>Status:</Text>
+          <Text
+            style={[
+              styles.contact,
+              {
+                fontWeight: '600',
+                color:
+                  appointment?.status === 'pending'
+                    ? CUSTOMCOLOR.warn
+                    : CUSTOMCOLOR.success,
+              },
+            ]}>
+            {'  '}
+            {appointment.status}
+          </Text>
+        </View>
+        <View style={styles.statusinfo}>
+          <Text style={styles.contact}>Bill:</Text>
+          <Text
+            style={[
+              styles.contact,
+              {
+                fontWeight: '600',
+                color:
+                  appointment?.is_paid.toString() === 'false'
+                    ? CUSTOMCOLOR.warn
+                    : CUSTOMCOLOR.success,
+              },
+            ]}>
+            {' '}
+            {paidOpt[appointment?.is_paid.toString()]}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -189,10 +209,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(36),
     paddingVertical: verticalScale(24),
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth: moderateScale(2),
+    borderWidth: moderateScale(0.5),
     borderColor: CUSTOMCOLOR.borderColor,
 
-    borderRadius: moderateScale(16),
+    borderRadius: moderateScale(4),
   },
   img: {
     width: moderateScale(84),

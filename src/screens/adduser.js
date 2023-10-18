@@ -79,7 +79,10 @@ const AddUser = ({navigation}) => {
   const [selectedClinic, setSelectedClinic] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
-  console.log('================================+++++++++clinic', selectedClinic);
+  console.log(
+    '================================+++++++++clinic',
+    selectedClinic,
+  );
   const [values, setValues] = useState({
     name: '',
     phone: '',
@@ -88,8 +91,8 @@ const AddUser = ({navigation}) => {
     clinic: '',
     slots: [],
     user_profile_pic_url: selectedImage
-    ? selectedImage
-    : CONSTANTS.default_image,
+      ? selectedImage
+      : CONSTANTS.default_image,
   });
   const [apiStatus, setApiStatus] = useState({});
 
@@ -117,17 +120,19 @@ const AddUser = ({navigation}) => {
     });
     setModal(false);
   };
-  const Clinic_users =[
-     {
-    clinic_user_name: values.name,
-    role: select !== 'Others' ? select : otherRole,
-    user_profile_pic_url:selectedImage ? selectedImage: CONSTANTS.default_image,
-    gender: values.gender,
-    user_phone_number: values.phone,
-    clinic_id: selectedClinic,
-    doctor_phone_number: phone,
-  }
-];
+  const Clinic_users = [
+    {
+      clinic_user_name: values.name,
+      role: select !== 'Others' ? select : otherRole,
+      user_profile_pic_url: selectedImage
+        ? selectedImage
+        : CONSTANTS.default_image,
+      gender: values.gender,
+      user_phone_number: values.phone,
+      clinic_id: selectedClinic,
+      doctor_phone_number: phone,
+    },
+  ];
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -183,9 +188,7 @@ const AddUser = ({navigation}) => {
   const [showSlotChip, setShowSlotChip] = useState(false);
 
   const handlePlusIconClick = () => {
-    if (
-      values.name 
-    ) {
+    if (values.name) {
       {
         id !== undefined
           ? UpdateUser()
@@ -301,7 +304,6 @@ const AddUser = ({navigation}) => {
   //   }, []);
   // }
 
-
   const fetchuser_id = async () => {
     const response = await fetchApi(URL.get_clinic_user_by_id(id), {
       method: 'GET',
@@ -313,14 +315,13 @@ const AddUser = ({navigation}) => {
       const jsonData = await response.json();
       const userdata = {
         name: jsonData.data?.clinic_user_name,
-    phone: jsonData.data?.user_phone_number,
-    gender: jsonData.data?.gender,
+        phone: jsonData.data?.user_phone_number,
+        gender: jsonData.data?.gender,
       };
       setValues(userdata);
       setSelect(jsonData.data?.role);
       setSelectedClinic(jsonData.data?.clinic_id);
       setSelectedImage(jsonData.data?.user_profile_pic_url);
-
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -329,16 +330,15 @@ const AddUser = ({navigation}) => {
     fetchuser_id();
   }, []);
 
-
   const UpdateUser = async () => {
     const updateUser = {
       clinic_user_name: values.name,
-    role: select,
-    user_profile_pic_url:selectedImage,
-    gender: values.gender,
-    user_phone_number: values.phone,
-    clinic_id: selectedClinic,
-    doctor_phone_number: phone,
+      role: select,
+      user_profile_pic_url: selectedImage,
+      gender: values.gender,
+      user_phone_number: values.phone,
+      clinic_id: selectedClinic,
+      doctor_phone_number: phone,
     };
     try {
       const response = await fetchApi(URL.update_clinic_user(id), {
@@ -363,7 +363,7 @@ const AddUser = ({navigation}) => {
     } catch (error) {
       console.error('An error occurred:', error);
     }
-  }
+  };
   return (
     <View style={{flex: 1, padding: moderateScale(24)}}>
       {/* {prevScrn !== 'account' && (
@@ -379,7 +379,7 @@ const AddUser = ({navigation}) => {
           style={styles.clsx}
           color={CUSTOMCOLOR.primary}
           size={moderateScale(32)}
-          onPress={() => navigation.navigate('tab')}
+          onPress={() => navigation.goBack()}
         />
       </View>
       {/* )} */}
@@ -624,23 +624,25 @@ const AddUser = ({navigation}) => {
           </View>
         </Keyboardhidecontainer>
       </ScrollView>
-      <HButton
-        btnstyles={{
-          backgroundColor:
-            values.name &&
-            values.gender &&
-            values.phone?.length === 10 &&
-            selectedClinic &&
-            select
-              ? CUSTOMCOLOR.primary
-              : CUSTOMCOLOR.disable,
-        }}
-        label="Save"
-        onPress={() => {
-          handlePlusIconClick();
-        }}
-        loading={loading}
-      />
+      <View style={{alignItems: 'center'}}>
+        <HButton
+          btnstyles={{
+            backgroundColor:
+              values.name &&
+              values.gender &&
+              values.phone?.length === 10 &&
+              selectedClinic &&
+              select
+                ? CUSTOMCOLOR.primary
+                : CUSTOMCOLOR.disable,
+          }}
+          label="Save"
+          onPress={() => {
+            handlePlusIconClick();
+          }}
+          loading={loading}
+        />
+      </View>
       {/* <BottomSheetView
         bottomSheetRef={RoleRef}
         snapPoints={'20%'}

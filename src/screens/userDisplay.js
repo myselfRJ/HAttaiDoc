@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Alert,Modal,TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
 import {useSelector, dispatch, useDispatch} from 'react-redux';
@@ -40,7 +47,7 @@ const UserDisplay = ({navigation}) => {
   const route = useRoute();
   const {prevScrn} = route.params;
   const [apiStatus, setApiStatus] = useState({});
-  const [users,setUsers] = useState([])
+  const [users, setUsers] = useState([]);
   const [visible, setVisible] = useState(false);
   // const route = useRoute();
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
@@ -57,10 +64,10 @@ const UserDisplay = ({navigation}) => {
     prevScrn === 'account'
       ? setTimeout(() => {
           navigation.navigate('tab');
-        }, 1000)
+        }, 10)
       : setTimeout(() => {
           navigation.navigate('userdisplay', {prevScrn1});
-        }, 1000);
+        }, 10);
   };
   const fetchData = async () => {
     try {
@@ -128,9 +135,14 @@ const UserDisplay = ({navigation}) => {
       fetchUsers();
     }, []),
   );
+  const [del_id, setDel_id] = useState();
   useEffect(() => {
     fetchUsers();
   }, [visible]);
+  const handleDeleteuser = value => {
+    setVisible(!visible);
+    setDel_id(value);
+  };
 
   const deleteUser = async id => {
     try {
@@ -143,7 +155,7 @@ const UserDisplay = ({navigation}) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('sucee',data)
+        console.log('sucee', data);
         if (data.status === 'success') {
           setVisible(!visible);
         }
@@ -154,120 +166,58 @@ const UserDisplay = ({navigation}) => {
       console.error('Error deleting clinic:', error);
     }
   };
- 
+
   return (
     <View style={styles.Main}>
-      {prevScrn === 'account' && (
+      {prevScrn !== 'account' && (
         <View>
           <ProgresHeader progressData={progressData} />
         </View>
       )}
       <PrescriptionHead heading={'My User'} />
-      
-        <View
-          style={{
-            alignSelf: users?.length > 0 ? 'flex-end' : 'center',
-            alignItems: 'center',
-            marginBottom: moderateScale(12),
-            gap: moderateScale(8),
-          }}>
-          <SelectorBtn
-            select={styles.btn}
-            inputstyle={styles.input}
-            input={users?.length > 0 ? 'Add more User' : 'Add User'}
-            Bname={'plus'}
-            onPress={() => {
-              navigation.navigate('adduser', {prevScrn});
+
+      <View
+        style={{
+          alignSelf: users?.length > 0 ? 'flex-end' : 'center',
+          alignItems: 'center',
+          marginBottom: moderateScale(12),
+          gap: moderateScale(16),
+        }}>
+        <HButton
+          label={users?.length > 0 ? 'Add more User' : 'Add User'}
+          icon={'plus'}
+          onPress={() => {
+            navigation.navigate('adduser', {prevScrn});
+          }}
+        />
+        {users?.length > 0 ? null : (
+          <HButton
+            rightIcon="chevron-right"
+            color={CUSTOMCOLOR.primary}
+            label="SKIP"
+            onPress={() => navigation.navigate('tab')}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderWidth: 0.5,
+              borderColor: CUSTOMCOLOR.primary,
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.primary,
             }}
           />
-          {users?.length > 0 ? null : (
-            <HButton
-              rightIcon="arrow-right-thin"
-              color={CUSTOMCOLOR.primary}
-              label="Skip"
-              onPress={() => navigation.navigate('tab')}
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-              }}
-            />
-          )}
-        </View>
-        <ScrollView>
+        )}
+      </View>
+      <ScrollView>
         {users?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
             <UserCard
               index={item.id}
               data={item}
               cancel={() => {
-                setVisible(!visible);
+                // setVisible(!visible);
+                handleDeleteuser(item?.id);
               }}
             />
-            <Modal
-              animationType="slide"
-              visible={visible}
-              onRequestClose={() => {
-                setVisible(!visible);
-              }}
-              transparent={true}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#000000aa',
-                  width: '100%',
-                }}>
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    setVisible(!visible);
-                  }}>
-                  <View style={styles.modalOverlay} />
-                </TouchableWithoutFeedback>
-
-                <View
-                  style={{
-                    backgroundColor: CUSTOMCOLOR.white,
-                    padding: moderateScale(40),
-                    borderRadius: moderateScale(16),
-                  }}>
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: CUSTOMCOLOR.black,
-                      fontWeight: '700',
-                      fontSize: CUSTOMFONTSIZE.h2,
-                    }}>
-                    Are You sure Want To Delete
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                      gap: moderateScale(16),
-                      padding: moderateScale(16),
-                      borderRadius: moderateScale(16),
-                    }}>
-                    <HButton
-                      label={'No'}
-                      onPress={() => setVisible(!visible)}
-                    />
-                    <HButton
-                      textStyle={{color: CUSTOMCOLOR.primary}}
-                      label={'Yes'}
-                      btnstyles={{
-                        backgroundColor: CUSTOMCOLOR.white,
-                        borderWidth: moderateScale(2),
-                        borderColor: CUSTOMCOLOR.borderColor,
-                      }}
-                      onPress={() => deleteUser(item.id)}
-                    />
-                  </View>
-                </View>
-              </View>
-            </Modal>
           </View>
         ))}
       </ScrollView>
@@ -276,10 +226,70 @@ const UserDisplay = ({navigation}) => {
           btnstyles={styles.btnNext}
           textStyle={styles.input}
           label={'Next'}
-          onPress={handleNavigation}
+          onPress={() => navigation.navigate('tab')}
           loading={loading}
         />
       ) : null}
+      <Modal
+        animationType="slide"
+        visible={visible}
+        onRequestClose={() => {
+          setVisible(!visible);
+        }}
+        transparent={true}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#000000aa',
+            width: '100%',
+          }}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisible(!visible);
+            }}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+
+          <View
+            style={{
+              backgroundColor: CUSTOMCOLOR.white,
+              padding: moderateScale(40),
+              borderRadius: moderateScale(16),
+            }}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: CUSTOMCOLOR.black,
+                fontWeight: '700',
+                fontSize: CUSTOMFONTSIZE.h2,
+              }}>
+              Are You sure Want To Delete
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                gap: moderateScale(16),
+                padding: moderateScale(16),
+                borderRadius: moderateScale(16),
+              }}>
+              <HButton label={'No'} onPress={() => setVisible(!visible)} />
+              <HButton
+                textStyle={{color: CUSTOMCOLOR.primary}}
+                label={'Yes'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(2),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                }}
+                onPress={() => deleteUser(del_id)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

@@ -31,10 +31,6 @@ export default function MedicalRecordPatient({route, navigation}) {
   const [data, setData] = useState([]);
   const [consultation, setConsultation] = useState([]);
 
-  // console.log('====================================');
-  // console.log('---------------data', data);
-  // console.log('====================================');
-
   const token = useSelector(state => state?.authenticate?.auth?.access);
   const {patient_phone} = route.params;
   // console.log('-------------------phone', patient_phone);
@@ -162,111 +158,28 @@ export default function MedicalRecordPatient({route, navigation}) {
             onCancel={handleCancel}
           />
         </View>
-        <View
+        <Text
           style={{
-            // paddingHorizontal: 24,
-            top: moderateScale(16),
-            width: '100%',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
+            paddingTop: moderateScale(16),
+            fontSize: CUSTOMFONTSIZE.h2,
+            fontWeight: '500',
+            color: CUSTOMCOLOR.black,
           }}>
-          {Views?.map((val, ind) => (
-            <View key={ind} style={{}}>
-              <TouchableOpacity onPress={() => handlePress(val)}>
-                <Text
-                  style={{
-                    fontSize: CUSTOMFONTSIZE.h2,
-                    color: selectedView === val ? CUSTOMCOLOR.black : '#BBBBBB',
-                    fontWeight: '500',
-                  }}>
-                  {val}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-        {selectedView === Views[0] ? (
+          Prescription
+        </Text>
+        <View>
           <View
             style={{
-              // paddingHorizontal: 32,
-              top: moderateScale(16),
+              // top: moderateScale(16),
+              gap: moderateScale(16),
+              marginBottom: moderateScale(64),
             }}>
-            <View
-              style={{
-                top: moderateScale(16),
-                gap: moderateScale(16),
-                marginBottom: moderateScale(64),
-              }}>
-              {consultation?.map((value, index) => (
-                <ConsultationCard data={value?.consultation} />
-              ))}
-              {/* <View>
-                <Text style={styles.contentHead}>Chief Complaints</Text>
-                <Text>{consultation?.chief_complaint?.complaint_message}</Text>
-              </View> */}
-              {/* <View>
-                <Text style={styles.contentHead}>Diagnosis</Text>
-                <Text>
-                  {consultation?.diagnosis?.map((item, index) => {
-                    return `${item?.diagnosis}`;
-                  })}
-
-                </Text>
-              </View> */}
-              {/* <View style={{gap: moderateScale(8)}}>
-                <Text style={styles.contentHead}>Medication</Text>
-
-                {consultation?.prescribe?.map((item, index) => {
-                  return (
-                    <Text key={index}>
-                      {item.mode} | {item?.medicine} | {item?.dose_quantity} |{' '}
-                      {item?.timing} | {item?.frequency} |{' '}
-                      {item?.total_quantity}
-                    </Text>
-                  );
-                })}
-              </View> */}
-              {/* <View>
-                <Text style={styles.contentHead}>Vitals</Text>
-                <View style={{flexDirection: 'row', gap: moderateScale(48)}}>
-                  <Text>BP</Text>
-                  <Text>PR</Text>
-                  <Text>TEMP</Text>
-                  <Text>LMP</Text>
-                  <Text style={{paddingLeft: moderateScale(4)}}>EDD</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: moderateScale(26),
-                    top: moderateScale(8),
-                  }}>
-                  <Text>
-                    {consultation?.vitals?.systolic}
-                    {'/'}
-                    {consultation?.vitals?.diastolic}
-                  </Text>
-                  <Text>{consultation?.vitals?.pulse_rate}</Text>
-                  <Text style={{paddingLeft: moderateScale(20)}}>
-                    {consultation?.vitals?.body_temperature}
-                  </Text>
-                  <Text style={{paddingLeft: moderateScale(20)}}>
-                    {consultation?.vitals?.LDD}
-                  </Text>
-                  <Text>{consultation?.vitals?.EDD}</Text>
-                </View>
-              </View> */}
-            </View>
+            {consultation?.map((value, index) => (
+              <ConsultationCard data={value?.consultation} />
+            ))}
           </View>
-        ) : null}
-        {selectedView === Views[1] ? (
-          <View
-            style={{
-              // paddingHorizontal: 32,
-              top: moderateScale(16),
-            }}></View>
-        ) : null}
-        <View
+        </View>
+        {/* <View
           style={{
             // top: 24,
             width: '100%',
@@ -276,7 +189,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             paddingHorizontal: horizontalScale(8),
           }}>
           <HButton label={'Download'} />
-        </View>
+        </View> */}
         <View
           style={{
             // top: 30,

@@ -26,6 +26,11 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'valid',
     },
+    {
+      label: 'Physical Examinations',
+      icon: 'chevron-right',
+      navigate: 'examination',
+    },
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
   test:['Lab','Radiology','Procedure'],
