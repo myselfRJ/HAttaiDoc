@@ -8,6 +8,7 @@ import {
 } from '../utility/scaleDimension';
 const AddImage = props => {
   // console.log('urel====>', props.encodedBase64);
+
   return props?.encodedBase64 ? (
     <Pressable onPress={props.onPress} style={styles.url}>
       <Image
@@ -18,7 +19,11 @@ const AddImage = props => {
     </Pressable>
   ) : (
     <Pressable onPress={props.onPress} style={styles.main}>
-      <Icon name="account-plus" size={24} color={CUSTOMCOLOR.primary} />
+      <Icon
+        name={props.name ? props.name : 'account-plus'}
+        size={24}
+        color={CUSTOMCOLOR.primary}
+      />
     </Pressable>
   );
 };
@@ -47,31 +52,6 @@ const styles = StyleSheet.create({
 });
 export default AddImage;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import {Pressable, Image, StyleSheet,View,TouchableOpacity} from 'react-native';
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import {CUSTOMCOLOR} from '../settings/styles';
@@ -86,7 +66,7 @@ export default AddImage;
 //   // console.log('urel====>', props.encodedBase64);
 //   const [show,setshow] = useState(false)
 //   console.log(show)
-  
+
 //   return props?.encodedBase64 ? (
 //     <View style={{flexDirection:'row'}}>
 //     <View><Pressable onPress={props.onPress} style={styles.url}>
@@ -99,7 +79,7 @@ export default AddImage;
 //     <View style={{bottom:moderateScale(16),left:moderateScale(10),alignSelf:'flex-end',borderRadius:moderateScale(24),backgroundColor:CUSTOMCOLOR.white}} >
 //     <Pressable onPress={() => {
 //             // props.onPress();
-//             setshow(!show); 
+//             setshow(!show);
 //           }}>
 //       {show == true ?(<View style={{paddingHorizontal:horizontalScale(4)}}><Icon name="close" size={24} color={CUSTOMCOLOR.primary}/></View>)
 //       :(<Icon name="plus" size={26} color={CUSTOMCOLOR.primary}/>)}
@@ -111,20 +91,20 @@ export default AddImage;
 //        {
 //         props.OnGallery();
 //         setshow(!show)
-      
+
 //       }}>
 //              <Icon
 //                name="image-multiple"
 //                size={moderateScale(32)}
 //                color={CUSTOMCOLOR.primary}
 //              />
-       
+
 //            </TouchableOpacity>
 //            <TouchableOpacity onPress={()=>{
 //            props.OnCamera();
 //            setshow(!show)}}>
 //              <Icon name="camera" size={moderateScale(32)} color={CUSTOMCOLOR.primary} />
-   
+
 //            </TouchableOpacity>
 //        </View>)}
 //        </View>
@@ -133,15 +113,15 @@ export default AddImage;
 //       <View>
 //     <Pressable onPress={() => {
 //             // props.onPress();
-//             setshow(true); 
+//             setshow(true);
 //           }} style={styles.main}>
 //       <Icon name="account-plus" size={24} color={CUSTOMCOLOR.primary} />
-      
+
 //     </Pressable>
 //     <View style={{bottom:moderateScale(16),left:moderateScale(10),alignSelf:'flex-end',borderRadius:moderateScale(24),backgroundColor:CUSTOMCOLOR.white}} >
 //     <Pressable onPress={() => {
 //             // props.onPress();
-//             setshow(!show); 
+//             setshow(!show);
 //           }}>
 //       {show == true ?(<View style={{paddingHorizontal:horizontalScale(4)}}><Icon name="close" size={24} color={CUSTOMCOLOR.primary}/></View>)
 //       :(<Icon name="plus" size={26} color={CUSTOMCOLOR.primary}/>)}
@@ -153,23 +133,23 @@ export default AddImage;
 //        {
 //         props.OnGallery();
 //         setshow(!show)
-      
+
 //       }}>
 //             <Icon
 //               name="image-multiple"
 //               size={moderateScale(32)}
 //               color={CUSTOMCOLOR.primary}
 //             />
-      
+
 //           </TouchableOpacity>
 //           <TouchableOpacity  onPress={()=>
 //        {
 //         props.OnCamera();
 //         setshow(!show)
-      
+
 //       }}>
 //             <Icon name="camera" size={moderateScale(32)} color={CUSTOMCOLOR.primary} />
-  
+
 //           </TouchableOpacity>
 //       </View>)}
 //     </View>
