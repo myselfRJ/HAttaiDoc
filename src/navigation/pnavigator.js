@@ -50,6 +50,7 @@ import ClinicAddress from '../components/clinic_address';
 import Symptoms1 from '../screens/Symptom1';
 import UserDisplay from '../screens/userDisplay';
 import MyClinics from '../screens/MyClinics';
+import MedicalHistory from '../screens/medicalhistory';
 import PhysicalExamination from '../screens/physicalExaminations';
 
 const ProtectedRoute = () => {
@@ -345,6 +346,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Patient History',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+        <Stack.Screen
+        name="medicalhistory"
+        component={MedicalHistory}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Medical History',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

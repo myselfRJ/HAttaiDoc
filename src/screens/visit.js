@@ -970,13 +970,27 @@ const Visit = ({navigation, route}) => {
                   <VisitOpen
                     label={value.label}
                     icon={value.icon}
-                    navigate={() =>
-                      navigation.navigate(
-                        value.navigate,
-                        value.navigate === 'complaints' ? {complaint} : null,
-                        value.navigate === 'FollowUp' ? {date} : null,
-                      )
-                    }
+                    // navigate={() =>
+                    //   navigation.navigate(
+                    //     value.navigate,
+                    //     value.navigate === 'complaints' ? {complaint} : null,
+                    //     value.navigate === 'FollowUp' ? {date} : null,
+                    //     value.navigate === 'vitalscreen' ? {date} : null,
+                    //   )
+                    // }
+                    navigate={() => {
+                      const params = {};
+                      
+                      if (value.navigate === 'complaints') {
+                        params.complaint = complaint;
+                      } else if (value.navigate === 'FollowUp') {
+                        params.date = date;
+                      } else if (value.navigate === 'vitalscreen') {
+                        params.gende = gende;
+                      }
+                    
+                      navigation.navigate(value.navigate, params);
+                    }}
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>

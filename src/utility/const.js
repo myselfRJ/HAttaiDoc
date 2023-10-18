@@ -10,7 +10,7 @@ export const CONSTANT = {
     {
       label: 'Past Hospitalization',
       icon: 'chevron-right',
-      navigate: 'pasthistory',
+      navigate: 'medicalhistory',
     },
     {label: 'Allergies', icon: 'chevron-right', navigate: 'allergies'},
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
@@ -33,4 +33,5 @@ export const CONSTANT = {
     },
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+  test:['Lab','Radiology','Procedure'],
 };

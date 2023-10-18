@@ -16,7 +16,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {URL} from '../utility/urls';
-import {InputText, HButton} from '../components';
+import {InputText, HButton, SelectionTab} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {
   CUSTOMFONTSIZE,
@@ -29,6 +29,7 @@ import {
   RetriveAsyncData,
   clearStorage,
 } from '../utility/AsyncStorage';
+import { CONSTANT } from '../utility/const';
 
 const LabReports = () => {
   const navigation = useNavigation();
@@ -41,7 +42,8 @@ const LabReports = () => {
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.labreport?.labReport);
   const [sug, setSug] = useState([]);
-
+  const [seletedType, setSelectedType] = useState();
+  console.log('type==',seletedType)
   const HandleAddValue = () => {
     if (value) {
       dispatch(addLabReport([...prev, {lab_test: value}]));
@@ -54,6 +56,9 @@ const LabReports = () => {
 
       dispatch(updateLabReport(updatedPrescriptions));
     }
+  };
+  const handleSelect = value => {
+    setSelectedType(value);
   };
 
   const term = 'test';
@@ -91,11 +96,11 @@ const LabReports = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    dispatch(addLabReport([...prev, {lab_test: value}]));
+    // dispatch(addLabReport([...prev, {lab_test: value}]));
     if (sug?.length > 0) {
       UpdateAsyncData('labs', {lab_test: value});
     }
-    setValue('');
+    // setValue('');
   };
 
   const handledata = () => {
@@ -124,22 +129,29 @@ const LabReports = () => {
 
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Test Prescribes" />
+      <ScrollView
+      contentContainerStyle={{height:'90%'}}>
+      <PrescriptionHead heading="Investigation Prescribed" />
 
-      {prev?.map((item, ind) =>
-        prev.length > 0 ? (
-          <ShowChip
-            text={item?.lab_test}
-            onPress={() => handleDelete(ind)}
-            ind={ind}
-          />
-        ) : null,
-      )}
-      <View style={{marginBottom: moderateScale(16)}}>
+      
+      <View>
+      <View style={styles.tab}>
+            {CONSTANT.test?.map((val, ind) => (
+              <SelectionTab
+              selectContainer={{paddingHorizontal:horizontalScale(64),
+                paddingVertical:verticalScale(8),
+                borderColor:CUSTOMCOLOR.primary}}
+                label={val}
+                key={ind}
+                onPress={() => handleSelect(val)}
+                selected={seletedType === val}
+              />
+            ))}
+          </View>
         <View style={styles.input}>
           <InputText
             inputContainer={styles.inputtext}
-            label="Test Prescribes"
+            label="Search"
             placeholder="Eg: blood test"
             value={value}
             setValue={setValue}
@@ -178,11 +190,13 @@ const LabReports = () => {
                 </ScrollView>
               </View>
             ))}
+           
           <View
             style={{
-              marginTop: moderateScale(16),
+              padding: moderateScale(16),
               flexDirection: 'row',
-              gap: moderateScale(12),
+              flexWrap:'wrap',
+              gap: moderateScale(8),
               paddingHorizontal: horizontalScale(8),
             }}>
             {sug?.map((item, index) => (
@@ -199,28 +213,59 @@ const LabReports = () => {
                 <Text
                   style={{
                     color:
-                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
                   }}>
                   {item?.lab_test}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
+          
           <View
+            style={{
+              alignSelf:'flex-end',
+              marginTop: moderateScale(32),
+              paddingHorizontal:horizontalScale(8)
+            }}>
+            <HButton
+            // btnstyles={{paddingHorizontal:horizontalScale(12)}}
+            icon='plus'
+              label={'Add'}
+              onPress={() => {
+                HandleAddValue();
+              }}
+            />
+          </View>
+          <View style={{top:moderateScale(32),gap:moderateScale(4)}}>
+          {prev?.map((item, ind) =>
+        prev.length > 0 ? (
+          <ShowChip
+            text={item?.lab_test}
+            onPress={() => handleDelete(ind)}
+            ind={ind}
+          />
+        ) : null,
+      )}
+      </View>
+
+          
+        </View>
+      </View>
+      </ScrollView>
+      <View
             style={{
               justifyContent: 'center',
               alignItems: 'center',
               marginTop: moderateScale(32),
             }}>
             <HButton
+            btnstyles={{width:moderateScale(380),borderRadius:moderateScale(8)}}
               label={'Save'}
               onPress={() => {
                 handledata();
               }}
             />
           </View>
-        </View>
-      </View>
     </View>
   );
 };
@@ -234,7 +279,7 @@ const styles = StyleSheet.create({
   },
   input: {
     // paddingHorizontal:24,
-    // paddingVertical:24,
+    paddingVertical:verticalScale(24),
     gap: moderateScale(0),
   },
   inputtext: {
@@ -248,7 +293,18 @@ const styles = StyleSheet.create({
   },
   recomend: {
     padding: moderateScale(8),
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(4),
     paddingHorizontal: horizontalScale(16),
+    paddingVertical:verticalScale(12),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
+  },
+  tab: {
+
+    flexDirection: 'row',
+    gap: moderateScale(8),
+    paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(12),
+    top:moderateScale(24)
   },
 });

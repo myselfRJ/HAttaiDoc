@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   search: {
     position: 'absolute',
-    top: moderateScale(8), //12+fontsize.h3/2
+    top: moderateScale(12), //12+fontsize.h3/2
     right: moderateScale(10),
   },
   indicator: {
