@@ -120,10 +120,10 @@ const MyClinics = ({navigation}) => {
     prevScrn === 'account'
       ? setTimeout(() => {
           navigation.navigate('tab');
-        }, 1000)
+        }, 10)
       : setTimeout(() => {
           navigation.navigate('userdisplay', {prevScrn1});
-        }, 1000);
+        }, 10);
   };
 
   const progressData = useSelector(state => state.progress?.status);
