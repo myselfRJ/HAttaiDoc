@@ -270,6 +270,7 @@ export default function Prescribe1({navigation}) {
       <ScrollView style={styles.prescribeConatiner}>
         {prevPres?.map((item, ind) => (
           <ShowChip
+          main={{marginHorizontal:0}}
             key={ind}
             text={`${item.mode} | ${item.medicine} | ${item.dose_quantity} | ${item.timing}|${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
             onPress={() => handleDelete(ind)}
@@ -395,7 +396,7 @@ export default function Prescribe1({navigation}) {
                 width: '24%',
               }}
               value={dose_number}
-              onChangeText={value => setDose_number(value)}
+              setValue={value => setDose_number(value)}
             />
             {newMedicine != null && setgeneric === false ? (
               <>
@@ -523,7 +524,7 @@ export default function Prescribe1({navigation}) {
               }}
               value={duration}
               placeholder="Enter Days"
-              onChangeText={value => setDuration(value)}
+              setValue={value => setDuration(value)}
             />
           </View>
           {/* <View style={styles.ModeContainer}> */}
@@ -539,20 +540,22 @@ export default function Prescribe1({navigation}) {
           </View>
           {/* </View> */}
         </View>
-      </ScrollView>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          gap: moderateScale(20),
-        }}>
         <HButton
           label={'Add'}
           icon="plus"
           size={moderateScale(32)}
           onPress={handleAddPrescribe}
+          btnstyles={{alignSelf:'flex-end'}}
         />
-      </View>
+      </ScrollView>
+      {/* <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          gap: moderateScale(20),
+        }}> */}
+        
+      {/* </View> */}
       <HButton
         label={'Save'}
         btnstyles={{
@@ -694,8 +697,12 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(16),
   },
   dropdownContainer: {
+    top:moderateScale(175),
+    position:'absolute',
+    zIndex:1,
+    width:'100%',
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
 });

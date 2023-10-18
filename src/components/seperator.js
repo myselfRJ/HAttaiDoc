@@ -1,5 +1,5 @@
 import {View,Text,StyleSheet} from 'react-native';
-import { verticalScale } from '../utility/scaleDimension';
+import { moderateScale, verticalScale } from '../utility/scaleDimension';
 import { CUSTOMCOLOR } from '../settings/styles';
 
 const Seperator=(props)=>{
@@ -9,7 +9,8 @@ const Seperator=(props)=>{
 };
 const styles = StyleSheet.create({
     separator:{
-        height:verticalScale(0.5),
+        height:verticalScale(1),
+        // borderBottomWidth:moderateScale(0.5),
         marginVertical:verticalScale(6),
     
         backgroundColor:CUSTOMCOLOR.primary,

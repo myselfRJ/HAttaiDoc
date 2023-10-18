@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         color: CUSTOMCOLOR.black,
     },
     inputContainer:{
-        width:moderateScale(80),
+        width:moderateScale(100),
         paddingHorizontal:moderateScale(8),
         paddingVertical:moderateScale(8),
         borderWidth:0.5,

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {CUSTOMCOLOR} from '../settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {
   moderateScale,
   verticalScale,
@@ -39,4 +39,9 @@ export const commonstyles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: verticalScale(64),
   },
+  subhead:{
+    color:CUSTOMCOLOR.black,
+    fontWeight:'600',
+    fontSize:16
+  }
 });
