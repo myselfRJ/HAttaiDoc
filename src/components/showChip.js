@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(4),
     marginHorizontal: horizontalScale(8),
     backgroundColor: '#EAF3FC',
+    borderRadius:moderateScale(4),
     borderColor: CUSTOMCOLOR.borderColor,
   },
   child: {

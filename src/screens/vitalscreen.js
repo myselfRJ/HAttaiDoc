@@ -31,6 +31,7 @@ import { mode } from '../redux/features/prescription/prescribeslice';
 import VitalField from '../components/vitalFields';
 import { validateInput } from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
+import { commonstyles } from '../styles/commonstyle';
 const VitalScreen =({route,props}) => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
@@ -182,14 +183,14 @@ const VitalScreen =({route,props}) => {
   };
 
   return (
-    <>
+   
       <View style={styles.main}>
         <PrescriptionHead heading={Language[language]['vitals']} />
         {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
-        <View>
+        <ScrollView>
           <View style={styles.vitalmain}>
             <View style={styles.basiccontainer}>
-              <Text style={styles.subhead}>Basic</Text>
+              <Text style={commonstyles.subhead}>Basic</Text>
               <Seperator/>
              
               <View style={styles.basicFields}>
@@ -279,7 +280,7 @@ const VitalScreen =({route,props}) => {
                 placeholder='%' 
                 />
                  <VitalField
-                name='Red_Rate'
+                name='Res_Rate'
                 placeholder='brpm' 
                 setvalue={text => rateChange(text)}
                 />
@@ -288,7 +289,7 @@ const VitalScreen =({route,props}) => {
             <View style={styles.basiccontainer}>
 
             
-            <Text style={styles.subhead}>Blood Pressure</Text>
+            <Text style={commonstyles.subhead}>Blood Pressure</Text>
            <Seperator/>
 
             <View style={styles.bloodPressureContainer}>
@@ -325,7 +326,7 @@ const VitalScreen =({route,props}) => {
             {gende === 'female' ?
              (
              <View style={styles.basiccontainer}>
-              <Text style={styles.subhead}>
+              <Text style={commonstyles.subhead}>
                 Pregnancy
               </Text>
              <Seperator/>
@@ -370,20 +371,18 @@ const VitalScreen =({route,props}) => {
                     keyboardType="numeric"
                   /> */}
                 {/* <Text></Text> */}
-                <View style={{width:moderateScale(100)}}>
+                {/* <View style={{width:moderateScale(100)}}> */}
                 <Text style={styles.EDD}>{vitals?.EDD}</Text>
-                </View>
+                {/* </View> */}
                 {/* </View> */}
               </View>
             </View>
             </View>) : null}
-            {show === true ? (<View><Text style={styles.pregText}>Others</Text>
-            <View style={{borderWidth:0.5,
-                borderColor:CUSTOMCOLOR.primary,
-                top:moderateScale(16)}}></View>
-                <View style={{
-                  padding:moderateScale(24)
-                }}><VitalField
+            {show === true ? (<View style={{gap:moderateScale(8)}}>
+              <Text style={commonstyles.subhead}>Others</Text>
+            <Seperator/>
+                <View style={styles.pregnancyFields}>
+                  <VitalField
                 name='Vital name'
                 placeholder='Enter' 
                 setValue={text => systolicChange(text)}
@@ -404,7 +403,7 @@ const VitalScreen =({route,props}) => {
           </View>
     
           
-        </View>
+        </ScrollView>
         <View style={{alignItems:'center'}}>
             <HButton
              btnstyles={{width:moderateScale(380),borderRadius:moderateScale(16)}}
@@ -415,22 +414,25 @@ const VitalScreen =({route,props}) => {
         
       </View>
       
-    </>
+
   );
 };
 const styles = StyleSheet.create({
   main: {
-    padding:moderateScale(24),
+    padding:moderateScale(12),
     gap:16
   },
   EDD: {
-    padding: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
     backgroundColor: CUSTOMCOLOR.white,
     color: CUSTOMCOLOR.primary,
     fontSize: CUSTOMFONTSIZE.h4,
-    width: moderateScale(80),
-    paddingVertical: verticalScale(16),
+    alignSelf:'center',
+    width: moderateScale(100),
+    paddingVertical: verticalScale(14),
     borderRadius: moderateScale(4),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   inpcontainer: {
     flexDirection: 'row',
@@ -637,7 +639,7 @@ const styles = StyleSheet.create({
   pregnancyFields: {
     // paddingHorizontal: horizontalScale(24),
     // paddingVertical: verticalScale(4),
-    // gap: moderateScale(48),
+    gap: moderateScale(8),
     padding:moderateScale(16),
     alignItems: 'center',
     // width: moderateScale(700),
@@ -666,7 +668,8 @@ const styles = StyleSheet.create({
     // paddingVertical: verticalScale(4,)
     gap: moderateScale(8),
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
+    
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,

@@ -138,7 +138,7 @@ const Diagnosis = ({navigation}) => {
   const ProvisionalData = prev.filter(item => item.type === 'Provisional');
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Diagnosis" />
+      <PrescriptionHead heading="Diagnosis" head={{paddingHorizontal:0}} />
       <ScrollView>
         <View style={{flexDirection: 'row', gap: moderateScale(32)}}>
           {dia_types?.map((value, ind) => (
@@ -260,7 +260,8 @@ const Diagnosis = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-      <HButton
+     <View style={{justifyContent:'flex-end',flex:1}}>
+     <HButton
         label={'Save'}
         btnstyles={{
           backgroundColor:
@@ -275,6 +276,7 @@ const Diagnosis = ({navigation}) => {
           }
         }}
       />
+     </View>
     </View>
   );
 };
@@ -282,6 +284,7 @@ export default Diagnosis;
 
 const styles = StyleSheet.create({
   main: {
+    flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
@@ -301,10 +304,10 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
   },
   inputtext: {
     paddingVertical: verticalScale(0),
+    paddingHorizontal:0
     // borderWidth:1
   },
   recomend: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from '../components/option';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import {HButton, PlusButton} from '../components';
-import {useSelector, useDispatch} from 'react-redux';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
+import { HButton, PlusButton } from '../components';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   addSymptom,
   updateSymptom,
@@ -29,10 +29,10 @@ import {
   moderateScale,
   verticalScale,
 } from '../utility/scaleDimension';
-import {URL} from '../utility/urls';
-import {fetchApi} from '../api/fetchApi';
+import { URL } from '../utility/urls';
+import { fetchApi } from '../api/fetchApi';
 import InputText from '../components/inputext';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   StoreAsyncData,
   UpdateAsyncData,
@@ -40,15 +40,18 @@ import {
 } from '../utility/AsyncStorage';
 import { pastHistoryReducer } from '../redux/features/prescription/pastHistory';
 import CustomCalendar from '../components/calendar';
+import { mode } from '../redux/features/prescription/prescribeslice';
+import Seperator from '../components/seperator';
+import { commonstyles } from '../styles/commonstyle';
 
-const Symptoms = ({navigation}) => {
+const Symptoms = ({ navigation }) => {
   const symptomsData = useSelector(state => state.symptoms.symptom);
-  console.log('symptommmm',symptomsData)
+  console.log('symptommmm', symptom)
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
-  const [hr,setHr] = useState('')
+  const [hr, setHr] = useState('')
   const [selected, setSelected] = useState('');
-  const [sevSelected,setSevSelected] = useState('')
+  const [sevSelected, setSevSelected] = useState('')
   const option = 'finding';
   // const [selected, setSelected] = useState('');
   const [icon, setIcon] = useState('magnify');
@@ -59,7 +62,7 @@ const Symptoms = ({navigation}) => {
   const dispatch = useDispatch();
 
   const handleAddSymptoms = () => {
-    if(symptom && sevSelected && days){
+    if (symptom && sevSelected && days) {
       dispatch(
         addSymptom([
           ...symptomsData,
@@ -71,8 +74,8 @@ const Symptoms = ({navigation}) => {
         ]),
       );
     }
-    else{
-      Alert.alert('Warning','Enter all Fields')
+    else {
+      Alert.alert('Warning', 'Enter all Fields')
     }
     setDays(null);
     setSymptom(null);
@@ -124,7 +127,7 @@ const Symptoms = ({navigation}) => {
           item?.term &&
           item?.term.toLowerCase().startsWith(symptom.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: symptom}]);
+      setFilteredData([...filtered, { term: symptom }]);
     } else {
       setFilteredData(data);
     }
@@ -134,7 +137,7 @@ const Symptoms = ({navigation}) => {
     setSelected(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', {symptom: value});
+      UpdateAsyncData('symptom', { symptom: value });
     }
   };
 
@@ -151,7 +154,7 @@ const Symptoms = ({navigation}) => {
     setSymptom(value)
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', {symptom: value});
+      UpdateAsyncData('symptom', { symptom: value });
     }
   };
   useEffect(() => {
@@ -166,145 +169,94 @@ const Symptoms = ({navigation}) => {
   }, []);
 
   return (
-    
-      <View style={styles.mainContainer}>
-        <ScrollView  contentContainerStyle={{
-          // margin: verticalScale(24),
-          paddingBottom: verticalScale(120),
-        }}>
-        <View>
-          <PrescriptionHead heading={Language[language]['symptoms']} />
-        </View>
 
-        {/* {symptomsData?.map((item, ind) => (
-          
-          <View key={ind} style={styles.reduxData}>
-            <View style={styles.reduxData1}>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
-                <Icon
-                  name="emoticon-sick"
-                  size={moderateScale(16)}
-                  color={CUSTOMCOLOR.primary}
-                />
-                <Text style={styles.reduxText}>
-                  {item.symptom} | {item.days} | {item.severity}
-                </Text>
-              </View>
-              <TouchableOpacity onPress={() => handleDeleteSymptom(ind)}>
-                <Icon
-                  name="delete"
-                  size={moderateScale(24)}
-                  color={CUSTOMCOLOR.delete}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))} */}
-
-        <View>
-          <View>
+    <View style={styles.mainContainer}>
+      <ScrollView contentContainerStyle={{
+        zIndex:1,
+        paddingBottom: verticalScale(120),
+      }}>
+       
+          <PrescriptionHead heading={Language[language]['symptoms']} head={{paddingHorizontal:horizontalScale(16)}}/>
+        
+      
+        
             <View style={styles.content}>
               <View style={styles.input}>
-          <InputText
-            inputContainer={styles.inputtext}
-            placeholder="Write first three letters..."
-            value={symptom}
-            setValue={setSymptom}
-            search={true}
-            IconName={
-              (show && filtered.length > 0) ||
-              symptom === selected ||
-              symptom?.length === 0
-                ? 'magnify'
-                : 'close'
-            }
-            onPress={() => setShow(!show)}
-          />
-          {symptom?.length >= 4 &&
-            (symptom === selected || show ? null : (
-              <View style={styles.dropdownContainer}>
-                <ScrollView persistentScrollbar={true}>
-                  {filtered?.map((val, index) => (
+                <InputText
+                  inputContainer={styles.inputtext}
+                  label='Search'
+                  placeholder="Write first three letters..."
+                  value={symptom}
+                  setValue={setSymptom}
+                  search={true}
+                  IconName={
+                    (show && filtered.length > 0) ||
+                      symptom === selected ||
+                      symptom?.length === 0
+                      ? 'magnify'
+                      : 'close'
+                  }
+                  onPress={() => setShow(!show)}
+                />
+                {symptom?.length >= 4 &&
+                  (symptom === selected || show ? null : (
+                    <View style={styles.dropdownContainer}>
+                      <ScrollView persistentScrollbar={true}>
+                        {filtered?.map((val, index) => (
+                          <TouchableOpacity
+                            style={{
+                              paddingHorizontal: horizontalScale(4),
+                              paddingVertical: verticalScale(8),
+                            }}
+                            onPress={() => HandlePress(val?.term)}
+                            key={index}>
+                            <Text
+                              style={{
+                                fontSize: CUSTOMFONTSIZE.h3,
+                                padding: moderateScale(10),
+                                color: CUSTOMCOLOR.black,
+                              }}>
+                              {val?.term}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  ))}
+
+                <View
+                  style={styles.subvalues}>
+                  {sug?.map((item, index) => (
                     <TouchableOpacity
-                      style={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(8),
-                      }}
-                      onPress={() => HandlePress(val?.term)}
-                      key={index}>
+                      key={index}
+                      onPress={() => selectChange(item?.symptom)}
+                      style={[
+                        styles.recomend,
+                        {
+                          backgroundColor:
+                            item?.symptom === selected  ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                        },
+                      ]}>
                       <Text
                         style={{
-                          fontSize: CUSTOMFONTSIZE.h3,
-                          padding: moderateScale(10),
-                          color: CUSTOMCOLOR.black,
+                          color:
+                          item?.symptom === selected  ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
                         }}>
-                        {val?.term}
+                        {item?.symptom}
                       </Text>
                     </TouchableOpacity>
                   ))}
-                </ScrollView>
-              </View>
-            ))}
-            
-            <View
-            style={{
-              // marginTop: moderateScale(),
-              flexDirection: 'row',
-              flexWrap:'wrap',
-              gap: moderateScale(8),
-              paddingHorizontal: horizontalScale(16),
-              paddingVertical:verticalScale(4)
-            }}>
-            {sug?.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => selectChange(item?.symptom)}
-                style={[
-                  styles.recomend,
-                  {
-                    backgroundColor:
-                      symptom === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-                  },
-                ]}>
-                <Text
-                  style={{
-                    color:
-                      symptom === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
-                  }}>
-                  {item?.symptom}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: moderateScale(32),
-            }}>
-            <HButton
-              label={'Save'}
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
-          </View> */}
-          
-        </View>
-        <View style={styles.radiogroup}>
-          <View style={{gap:moderateScale(8)}}>
-                <Text style={styles.text}>
-                  {Language[language]['severity']}:
-                </Text>
-                <View style={{borderWidth:0.5,borderColor:CUSTOMCOLOR.primary}}></View>
                 </View>
-                <View 
-                style={{
-                flexDirection: 'row',
-                gap:moderateScale(4),
-                padding:moderateScale(8)
-                }}>
+              </View>
+              <View style={{...styles.input,zIndex:1}}>
+                <View style={{ gap: moderateScale(10) }}>
+                  <Text style={commonstyles.subhead}>
+                    {Language[language]['severity']}:
+                  </Text>
+                  <Seperator />
+                </View>
+                <View
+                  style={styles.subvalues}>
                   <Option
                     label={Language[language]['low']}
                     value="low"
@@ -325,147 +277,147 @@ const Symptoms = ({navigation}) => {
                   />
                 </View>
               </View>
-              
-              <View style={styles.DateInput}>
-              <View style={{gap:moderateScale(8)}}>
-                <Text style={styles.text}>Time Period</Text>
-                <View style={{borderWidth:0.4,borderColor:CUSTOMCOLOR.primary}}></View>
+
+              <View style={{...styles.input,zIndex:1}}>
+                <View style={{ gap: moderateScale(10) }}>
+                  <Text style={commonstyles.subhead}>Time Period</Text>
+                  <Seperator/>
                 </View>
-                <View style={{padding:moderateScale(8),
-                flexDirection:'row',
-                alignItems:'center',
-                gap:moderateScale(12),
-                paddingVertical:verticalScale(12)
-                }}>
-                  <View style={{flexDirection:'row',alignItems:'center',gap:moderateScale(8)}}>
+                <View style={styles.subvalues}>
+                  <View style={styles.timeFields}>
                     <Text style={styles.option}>Days :</Text>
-                  <TextInput
-                style={{paddingHorizontal:moderateScale(12),
-                  backgroundColor:CUSTOMCOLOR.white,
-                  borderRadius:moderateScale(4),
-                  borderWidth:0.5,
-                  borderColor:CUSTOMCOLOR.primary,
-                  paddingVertical:verticalScale(10)}}
-                  placeholder="Enter Days"
-                  value={days}
-                  onChangeText={text => setDays(text)}
-                />
-                </View>
-                <Text style={{
-                  color:CUSTOMCOLOR.black,
-                  fontWeight:'300',
-                  fontSize:CUSTOMFONTSIZE.h4
-                }}>(OR)</Text>
-                <View style={{flexDirection:'row',alignItems:'center',gap:moderateScale(8)}}>
+                    <TextInput
+                      style={styles.timeinput}
+                      placeholder="Enter Days"
+                      value={days}
+                      onChangeText={text => setDays(text)}
+                    />
+                  </View>
+                  <Text style={{
+                    color: CUSTOMCOLOR.black,
+                    fontWeight: '400',
+                    fontSize: CUSTOMFONTSIZE.h4
+                  }}>(OR)</Text>
+                  <View style={styles.timeFields}>
                     <Text style={styles.option}>Hrs :</Text>
-                  <TextInput
-                style={{paddingHorizontal:moderateScale(12),
-                  backgroundColor:CUSTOMCOLOR.white,
-                  borderRadius:moderateScale(4),
-                  borderWidth:0.5,
-                  borderColor:CUSTOMCOLOR.primary,
-                  paddingVertical:verticalScale(10)
-                }}
-                  placeholder="Enter Hrs"
-                  value={hr}
-                  onChangeText={text => setHr(text)}
-                />
-                </View>
+                    <TextInput
+                      style={styles.timeinput}
+                      placeholder="Enter Hrs"
+                      value={hr}
+                      onChangeText={text => setHr(text)}
+                    />
+                  </View>
                 </View>
               </View>
-              
-            </View>
-          </View>
-          {/* <View style={{marginTop: verticalScale(16)}}>
-            <PlusButton
-              icon="plus"
-              size={moderateScale(24)}
-              onPress={handleAddSymptoms}
-            />
-          </View> */}
-          <View style={{alignSelf:'flex-end',paddingHorizontal:horizontalScale(8)}}>
             <HButton
-            icon='plus'
-            btnstyles={{
-              backgroundColor:
-                (symptom && sevSelected && days)
-                  ? CUSTOMCOLOR.primary
-                  : CUSTOMCOLOR.disable,
-            }}
+            
+              icon='plus'
+              btnstyles={{
+                backgroundColor:
+                  (symptom && sevSelected && days)
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.disable,
+                    alignSelf: 'flex-end'
+              }}
               label='Add'
               onPress={handleAddSymptoms}
             />
-          </View>
+          
           {symptomsData?.map((item, ind) => (
-          // <ShowChip text={item.symptom} {...item?.days} {...item?.severity} />
-          <View key={ind} style={styles.reduxData}>
-            <View style={styles.reduxData1}>
-            
-                {/* <Icon
-                  name="emoticon-sick"
-                  size={moderateScale(16)}
-                  color={CUSTOMCOLOR.primary}
-                /> */}
+            <View key={ind} style={styles.reduxData}>
+              <View style={styles.reduxData1}>
                 <Text style={styles.symText}>{item.symptom}</Text>
                 <View>
                   <Text style={styles.reduxText}>
-                  Severity : {item.severity} 
-                </Text>
+                    Severity : {item.severity}
+                  </Text>
                 </View>
                 <View><Text style={styles.reduxText}>
-                   Days/Hrs : {item.days}
+                  Days/Hrs : {item.days}
                 </Text>
                 </View>
-                <View style={{flexDirection:'row',gap:moderateScale(4)}}>
-                <TouchableOpacity style={{borderRadius:moderateScale(32),
-                  backgroundColor:CUSTOMCOLOR.white,
-                  padding:moderateScale(4)}}>
-                <Icon
-                  name="pencil"
-                  size={moderateScale(20)}
-                  color={CUSTOMCOLOR.primary}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDeleteSymptom(ind)}
-              style={{borderRadius:moderateScale(24),
-                backgroundColor:CUSTOMCOLOR.white,
-                padding:moderateScale(4)}}>
-                <Icon
-                  name="close"
-                  size={moderateScale(20)}
-                  color={CUSTOMCOLOR.delete}
-                />
-              </TouchableOpacity>
+                <View style={{ flexDirection: 'row', gap: moderateScale(4) }}>
+                  <TouchableOpacity style={{
+                    borderRadius: moderateScale(32),
+                    backgroundColor: CUSTOMCOLOR.white,
+                    padding: moderateScale(4),
+                    
+                  }}>
+                    <Icon
+                      name="pencil"
+                      size={moderateScale(20)}
+                      color={CUSTOMCOLOR.primary}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDeleteSymptom(ind)}
+                    style={{
+                      borderRadius: moderateScale(24),
+                      backgroundColor: CUSTOMCOLOR.white,
+                      padding: moderateScale(4)
+                    }}>
+                    <Icon
+                      name="close"
+                      size={moderateScale(20)}
+                      color={CUSTOMCOLOR.delete}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        ))}
-  
+          ))}
+           
+            </View>
+        
           
-        </View>
-        </ScrollView>
-        <View style={styles.submit}>
-            <HButton
-            btnstyles={{width:moderateScale(380),
-              borderRadius:moderateScale(16),
-              backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable
-            }}
-              label={'Save'}
-              onPress={() => {
-                handledata();
-              }}
-            />
-          </View>
+
+
+      
+      </ScrollView>
+        <HButton
+          btnstyles={{
+            width: moderateScale(380),
+            borderRadius: moderateScale(16),
+            backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+            alignSelf:'center',
+            // bottom:moderateScale(12)
+          }}
+          label={'Save'}
+          onPress={() => {
+            handledata();
+          }}
+        />
       </View>
-    
+
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingHorizontal: verticalScale(16),
-    paddingVertical: horizontalScale(16),
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical:verticalScale(12)
+    // borderWidth: 1
+  },
+  subvalues: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: moderateScale(8),
+    padding: moderateScale(8),
+    alignItems:'center',
+  },
+  timeFields: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: moderateScale(8)
+  },
+  timeinput: {
+    paddingHorizontal: moderateScale(12),
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius: moderateScale(4),
+    // borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
+    paddingVertical: verticalScale(10)
+
   },
   mainHead: {
     color: CUSTOMCOLOR.black,
@@ -480,85 +432,85 @@ const styles = StyleSheet.create({
   },
   DateInput: {
     padding: moderateScale(8),
-    paddingHorizontal:horizontalScale(0)
+    paddingHorizontal: horizontalScale(0)
   },
   radiogroup: {
     gap: moderateScale(8),
   },
   reduxData: {
-    flex: 1,
-    marginVertical: moderateScale(4),
-    paddingHorizontal: moderateScale(8),
-    padding: moderateScale(8),
+    // flex: 1,
+    // marginVertical: moderateScale(4),
+    // paddingHorizontal: moderateScale(8),
+    paddingHorizontal:horizontalScale(16),
+    paddingVertical:verticalScale(8),
     borderColor: CUSTOMCOLOR.success,
     backgroundColor: '#EAF3FC',
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary,
-    borderRadius:moderateScale(4),
-    top:moderateScale(24),
-   
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
+    borderRadius: moderateScale(4),
+    top: moderateScale(24),
+
   },
   reduxData1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'flex-start',
-    
-  },
-  submit: {
-    width: '100%',
-    // justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal:horizontalScale(32)
+    alignItems:'center',
+
   },
   text: {
     // marginHorizontal: moderateScale(8),
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize:CUSTOMFONTSIZE.h3
-    
+    fontSize: CUSTOMFONTSIZE.h2
+
   },
   reduxText: {
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   content: {
-    // flexDirection: 'row',
-    paddingHorizontal: moderateScale(8),
-    gap:moderateScale(16)
-    // flexWrap: 'wrap',
+    paddingHorizontal: horizontalScale(16),
+    gap: moderateScale(16),
+    zIndex:2
+    // position:'absolute'
+    
   },
   dropdownContainer: {
-    height: moderateScale(300),
+    top:moderateScale(90),
+    position:'absolute',
+    zIndex:4,
+    width:'100%',
+    height: moderateScale(220),
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(8),
   },
   inputtext: {
     // paddingVertical: verticalScale(0),
-    paddingHorizontal:moderateScale(0)
+    paddingHorizontal: moderateScale(0)
   },
-    input: {
-      // paddingHorizontal:moderateScale(0),
-      // paddingVertical:24,
-      gap: moderateScale(0),
-    },
-    recomend: {
-      padding: moderateScale(12),
-      borderRadius: moderateScale(4),
-      borderWidth:0.5,
-      borderColor:CUSTOMCOLOR.primary
-    },
-    option:{
-      color:CUSTOMCOLOR.black,
-      fontWeight:'400',
-      fontSize:CUSTOMFONTSIZE.h3
-    },
-    symText:{
-      fontWeight:'500',
-      fontSize:CUSTOMFONTSIZE.h2,
-      color:CUSTOMCOLOR.primary,
-      width:moderateScale(200)
-    }
+  input: {
+    // borderWidth: 1,
+    gap: moderateScale(0),
+    zIndex:3,
+  },
+  recomend: {
+    padding: moderateScale(12),
+    borderRadius: moderateScale(4),
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary
+  },
+  option: {
+    color: CUSTOMCOLOR.black,
+    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h3
+  },
+  symText: {
+    fontWeight: '500',
+    fontSize: CUSTOMFONTSIZE.h2,
+    color: CUSTOMCOLOR.primary,
+    width: moderateScale(200)
+  }
 });
 
 export default Symptoms;

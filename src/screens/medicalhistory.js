@@ -81,7 +81,7 @@ const MedicalHistory =({navigation})=>{
         <View style={styles.main}>
         <PrescriptionHead heading="Medical History" />
   
-        <ScrollView>
+        <ScrollView contentContainerStyle={{paddingBottom:moderateScale(100)}}>
         <View style={styles.input}>
           <InputText
             inputContainer={styles.inputtext}
@@ -90,7 +90,7 @@ const MedicalHistory =({navigation})=>{
             value={comorbidities}
             setValue={(txt)=> setComorbidities(txt)}
           />
-          <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
+         {data?.lenght>0? <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
            {data?.map((item,ind)=>(
             <TouchableOpacity
             style={[styles.sug,
@@ -104,7 +104,7 @@ const MedicalHistory =({navigation})=>{
                 ]}>{item?.comorbidities}</Text>
             </TouchableOpacity>
            ))}
-          </View>
+          </View>:null}
           <InputText
             inputContainer={styles.inputtext}
             label="Past Hospitalization"
@@ -119,7 +119,7 @@ const MedicalHistory =({navigation})=>{
             value={social}
             setValue={(txt)=>setSocial(txt)}
           />
-          <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
+          {data?.length > 0 ? <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
            {data?.map((item,ind)=>(
             <TouchableOpacity
             style={[styles.sug,
@@ -133,7 +133,7 @@ const MedicalHistory =({navigation})=>{
                 ]}>{item?.social}</Text>
             </TouchableOpacity>
            ))}
-          </View>
+          </View>:null }
           <InputText
             inputContainer={styles.inputtext}
             label="Family History"
@@ -141,7 +141,7 @@ const MedicalHistory =({navigation})=>{
             value={family}
             setValue={(txt)=> setFamily(txt)}
           />
-          <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
+          {data?.length>0?<View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
            {data?.map((item,ind)=>(
             <TouchableOpacity
             style={[styles.sug,
@@ -155,7 +155,7 @@ const MedicalHistory =({navigation})=>{
                 ]}>{item?.family}</Text>
             </TouchableOpacity>
            ))}
-          </View>
+          </View>:null}
           <InputText
             inputContainer={styles.inputtext}
             label="Medical History"
@@ -163,7 +163,7 @@ const MedicalHistory =({navigation})=>{
             value={medical}
             setValue={(txt)=> setMedical(txt)}
           />
-          <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
+          {data?.length>0 ? <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
            {data?.map((item,ind)=>(
             <TouchableOpacity
             style={[styles.sug,
@@ -177,13 +177,15 @@ const MedicalHistory =({navigation})=>{
                 ]}>{item?.medical}</Text>
             </TouchableOpacity>
            ))}
-          </View>
+          </View>:null}
           <Text style={styles.prev}>Previous Prescription</Text>
           <HButton
           btnstyles={{alignSelf:'flex-start',
           marginHorizontal:horizontalScale(8),
           bottom:moderateScale(8)
+         
         }}
+        textStyle={{fontSize:moderateScale(14)}}
           icon='prescription'
           label='View'
           />
@@ -222,9 +224,9 @@ const MedicalHistory =({navigation})=>{
 };
 const styles = StyleSheet.create({
     main: {
+      gap:moderateScale(16),
       paddingHorizontal: horizontalScale(24),
       paddingVertical: verticalScale(16),
-      gap: moderateScale(8),
     },
     recomend: {
       padding: moderateScale(8),
@@ -238,11 +240,12 @@ const styles = StyleSheet.create({
     },
     inputtext: {
       paddingVertical: verticalScale(0),
-      // borderWidth:1
+    
     },
     input: {
-      paddingVertical:24,
-      gap:moderateScale(16)
+      // paddingVertical:24,
+      gap:moderateScale(16),
+     
     },
     touch: {
       paddingHorizontal: horizontalScale(8),

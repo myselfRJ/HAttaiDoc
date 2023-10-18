@@ -43,9 +43,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderColor: '#2CBB15',
+    borderColor: CUSTOMCOLOR.borderColor,
     borderWidth: 1,
     marginBottom: 4,
+    
   },
   text: {
     fontFamily: CUSTOMFONTFAMILY.body,
