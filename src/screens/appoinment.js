@@ -223,6 +223,10 @@ const Appointment = ({navigation}) => {
       <View>
         <View style={styles.select}>
           <SelectorBtn
+            selectContainer={{
+              gap: verticalScale(4),
+              paddingVertical: verticalScale(0),
+            }}
             //label={Language[language]['clinic']}
             name="chevron-down"
             onPress={() => {
@@ -231,6 +235,10 @@ const Appointment = ({navigation}) => {
             input={selectedClinic}
           />
           <SelectorBtn
+            selectContainer={{
+              gap: verticalScale(4),
+              paddingVertical: verticalScale(0),
+            }}
             //label={Language[language]['dob']}
             name="calendar"
             onPress={() => setOpen('to')}
@@ -246,15 +254,18 @@ const Appointment = ({navigation}) => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
-          <View style={styles.searchname}>
-            <InputText
-              placeholder="Search name"
-              value={name}
-              setValue={ChangeNameValue}
-              textStyle={styles.input}
-            />
-            <Icon name="search" size={16} style={styles.searchIcon} />
-          </View>
+
+          <InputText
+            input
+            placeholder="Search name"
+            value={name}
+            setValue={ChangeNameValue}
+            textStyle={styles.input}
+            search={true}
+            IconName="magnify"
+          />
+          {/* <Icon name="search" size={16} style={styles.searchIcon} /> */}
+
           <View style={styles.tab}>
             {selections?.map((val, ind) => (
               <SelectionTab
@@ -290,7 +301,7 @@ const Appointment = ({navigation}) => {
       <View>
         <HButton
           label="Book Appointment"
-          btnstyles={{alignSelf: 'center', marginTop: moderateScale(54)}}
+          btnstyles={{alignSelf: 'center'}}
           onPress={handlePlusBUtton}
         />
       </View>
@@ -315,19 +326,15 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
-    flex: moderateScale(1),
+    flex: 1,
+    backgroundColor: CUSTOMCOLOR.background,
   },
-  searchname: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    bottom: moderateScale(24),
-    width: '103%',
-  },
+
   appointmentCard: {
     height: moderateScale(400),
-    paddingHorizontal: horizontalScale(8),
+    marginHorizontal: horizontalScale(8),
     gap: moderateScale(16),
+    // borderWidth: 1,
   },
   clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -341,13 +348,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   select: {
-    gap: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
+    justifyContent: 'flex-start',
+    // alignItems: 'flex-start',
+    // paddingHorizontal: horizontalScale(8),
+    // borderWidth: 1,
   },
   tab: {
-    bottom: moderateScale(16),
     flexDirection: 'row',
     gap: moderateScale(16),
+
     //paddingHorizontal: horizontalScale(4),
   },
   // appointment: {
@@ -362,12 +372,7 @@ const styles = StyleSheet.create({
     lineHeight: 20 * 2,
     color: CUSTOMCOLOR.black,
   },
-  input: {
-    gap: moderateScale(4),
-    paddingVertical: verticalScale(10),
-    left: moderateScale(4),
-    marginRight: moderateScale(4),
-  },
+
   searchIcon: {
     top: moderateScale(10),
     height: moderateScale(51),
@@ -400,8 +405,8 @@ const styles = StyleSheet.create({
   },
   appointment: {
     gap: moderateScale(4),
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(8),
+    // paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(16),
   },
 });
 export default Appointment;

@@ -172,7 +172,7 @@ const PatientCreate = ({navigation}) => {
   }, []);
 
   const patient_phone = patient_phone_number;
-
+  // console.log('==========>formatteddata', formatDate);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -226,10 +226,10 @@ const PatientCreate = ({navigation}) => {
     setModal(true);
   };
   return (
-    <View style={{flex: moderateScale(1)}}>
+    <View style={styles.main}>
       <ScrollView>
         <Keyboardhidecontainer>
-          <View style={commonstyles.content}>
+          <View style={{gap: verticalScale(16)}}>
             <View style={styles.alignchild}>
               <AddImage onPress={ModalVisible} encodedBase64={selectedImage} />
             </View>
@@ -292,6 +292,60 @@ const PatientCreate = ({navigation}) => {
               required={true}
             /> */}
             <View style={styles.btn}>
+              <InputText
+                inputContainer={{
+                  flex: 5,
+                  paddingHorizontal: horizontalScale(0),
+                }}
+                label="Age"
+                placeholder="eg:25"
+                input={value}
+                setValue={setValue}
+                maxLength={4}
+                numeric={true}
+                required={true}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  // borderWidth:1,
+                  alignSelf: 'center',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontSize: CUSTOMFONTSIZE.h4,
+                    marginTop: verticalScale(24),
+                    fontWeight: '600',
+                    color: CUSTOMCOLOR.black,
+                  }}>
+                  (OR)
+                </Text>
+              </View>
+
+              <SelectorBtn
+                //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
+                required={true}
+                // inputstyle={{padding:4}}
+                selectContainer={{flex: 5, gap: verticalScale(4)}}
+                label={Language[language]['dob']}
+                name="calendar"
+                onPress={() => setOpen('to')}
+                input={formattedDate}
+                style={styles.DOBselect}
+              />
+            </View>
+            <DatePicker
+              modal
+              open={open !== false}
+              date={date}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+            {/* <View style={styles.btn}>
               <DOBselect
                 required={true}
                 label="Age/ Date of Birth"
@@ -310,7 +364,7 @@ const PatientCreate = ({navigation}) => {
               mode="date"
               onConfirm={handleConfirm}
               onCancel={handleCancel}
-            />
+            /> */}
 
             <View style={styles.alignchild}>
               <Text style={styles.genderText}>Gender</Text>
@@ -379,14 +433,13 @@ const PatientCreate = ({navigation}) => {
             <View
               style={{
                 alignSelf: 'flex-start',
-                paddingLeft: moderateScale(8),
-                gap: moderateScale(8),
+                gap: verticalScale(4),
               }}>
               <Text
                 style={{
                   alignSelf: 'flex-start',
                   color: CUSTOMCOLOR.black,
-                  fontSize: CUSTOMFONTSIZE.h4,
+                  fontSize: CUSTOMFONTSIZE.h3,
                 }}>
                 Blood Group
               </Text>
@@ -398,6 +451,10 @@ const PatientCreate = ({navigation}) => {
                 }}>
                 {CONSTANTS.blood_Groups?.map((bld_grp, index) => (
                   <SelectorBtn
+                    selectContainer={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                    }}
                     select={{
                       backgroundColor:
                         blood_group === bld_grp
@@ -438,12 +495,17 @@ const PatientCreate = ({navigation}) => {
             />
             <HButton
               label="Save"
+              btnstyles={{
+                alignSelf: 'center',
+                backgroundColor:
+                  name && patient_phone_number && address
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.disable,
+              }}
               loading={loading}
               onPress={() => {
                 if (patient_phone_number.length === 10 && formattedDate) {
                   fetchData();
-                } else {
-                  Alert.alert('"Warning"', '"Please Enter Correct Details"');
                 }
               }}
             />
@@ -494,19 +556,24 @@ const PatientCreate = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(24),
+  },
   radiogroup: {
-    padding: moderateScale(16),
+    padding: moderateScale(8),
     flexDirection: 'row',
     gap: moderateScale(48),
 
     justifyContent: 'flex-start',
   },
   alignchild: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'flex-start',
-    width: '100%',
-    paddingHorizontal: horizontalScale(8),
-    paddingTop: moderateScale(16),
+    // width: '100%',
+    // paddingHorizontal: horizontalScale(8),
+    // paddingTop: moderateScale(16),
   },
   genderText: {
     fontFamily: CUSTOMFONTFAMILY.body,
@@ -529,12 +596,14 @@ const styles = StyleSheet.create({
   },
   DOBselect: {
     width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    // gap: moderateScale(8),
+    // paddingHorizontal:horizontalScale(16)
   },
   btn: {
-    alignSelf: 'flex-start',
-    width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: moderateScale(8),
   },
 });
 export default PatientCreate;

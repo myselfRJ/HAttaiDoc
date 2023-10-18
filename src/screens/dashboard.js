@@ -207,7 +207,8 @@ const Dashboard = ({navigation, route}) => {
   }, []);
 
   return (
-    <View style={{flex: moderateScale(1)}}>
+    <View
+      style={{flex: moderateScale(1), backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
         <View style={styles.main}>
           <View>

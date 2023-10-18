@@ -53,18 +53,20 @@ const InputText = props => {
   return (
     <>
       <View style={[styles.inpcontainer, props.inputContainer]}>
-        <Text style={[styles.labeltext, props.lbltext]}>
-          {props.label}{' '}
-          {props.required ? (
-            <Text
-              style={[
-                styles.indicator,
-                props.required && visible && styles.required,
-              ]}>
-              *
-            </Text>
-          ) : null}
-        </Text>
+        {props.label ? (
+          <Text style={[styles.labeltext, props.lbltext]}>
+            {props.label}{' '}
+            {props.required ? (
+              <Text
+                style={[
+                  styles.indicator,
+                  props.required && visible && styles.required,
+                ]}>
+                *
+              </Text>
+            ) : null}
+          </Text>
+        ) : null}
         <View>
           <TextInput
             style={[
@@ -116,8 +118,6 @@ const InputText = props => {
 };
 const styles = StyleSheet.create({
   inpcontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(8),
     width: '100%',
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     borderBottomWidth: 0.8,
-    elevation: 2,
+
     borderBottomColor: '#A9A9A9',
   },
 });

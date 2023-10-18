@@ -206,7 +206,7 @@ const SlotBook = ({navigation, route}) => {
 
   const renderItems = ({item}) => {
     return (
-      <View style={styles.item}>
+      <View key={item.id} style={styles.item}>
         <SelectionTab
           label={item?.slot}
           onPress={() => handleSelectSlot(item)}
@@ -344,24 +344,22 @@ const SlotBook = ({navigation, route}) => {
     <View style={styles.main}>
       <ScrollView>
         <View style={styles.child}>
-          <View style={styles.date}>
-            <SelectorBtn
-              label="Date"
-              name="calendar"
-              onPress={() => setOpen('to')}
-              input={formatDate}
-            />
-            <DatePicker
-              modal
-              open={open !== false}
-              date={date}
-              theme="auto"
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-            />
-          </View>
-          <View style={{gap: moderateScale(0)}}>
+          <SelectorBtn
+            label="Date"
+            name="calendar"
+            onPress={() => setOpen('to')}
+            input={formatDate}
+          />
+          <DatePicker
+            modal
+            open={open !== false}
+            date={date}
+            theme="auto"
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+          <View style={{zIndex: 2}}>
             <InputText
               required={true}
               label="Reason for Visit"
@@ -402,34 +400,35 @@ const SlotBook = ({navigation, route}) => {
                 </View>
               ))}
           </View>
-          <View style={styles.child}>
-            <View style={styles.type}>
-              <Option
-                label="Offline"
-                value="Offline"
-                selected={selectedMode === 'offline'}
-                onPress={() => handleOptions('offline')}
-              />
-              <Option
-                label="TelePhonic"
-                value="TelePhonic"
-                selected={selectedMode === 'TelePhonic'}
-                onPress={() => handleOptions('TelePhonic')}
-              />
-            </View>
-            <View style={styles.selection}>
-              {selections?.map((val, ind) => (
-                <View key={ind}>
-                  <SelectionTab
-                    label={val}
-                    onPress={() => handleSelectType(val)}
-                    selected={selectedTypeAppointment === val}
-                  />
-                </View>
-              ))}
-            </View>
+
+          <View style={styles.type}>
+            <Option
+              label="Offline"
+              value="Offline"
+              selected={selectedMode === 'offline'}
+              onPress={() => handleOptions('offline')}
+            />
+            <Option
+              label="TelePhonic"
+              value="TelePhonic"
+              selected={selectedMode === 'TelePhonic'}
+              onPress={() => handleOptions('TelePhonic')}
+            />
+          </View>
+          <View style={styles.selection}>
+            {selections?.map((val, ind) => (
+              <View key={ind}>
+                <SelectionTab
+                  label={val}
+                  onPress={() => handleSelectType(val)}
+                  selected={selectedTypeAppointment === val}
+                />
+              </View>
+            ))}
+          </View>
+          <View>
             <Text
-              style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h4}}>
+              style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
               Fees
             </Text>
             <View style={styles.type}>
@@ -446,7 +445,9 @@ const SlotBook = ({navigation, route}) => {
                 onPress={() => handleFee(true)}
               />
             </View>
+          </View>
 
+          <View style={styles.child}>
             {list.length > 0 ? (
               <>
                 <View>
@@ -487,22 +488,15 @@ const SlotBook = ({navigation, route}) => {
 const styles = StyleSheet.create({
   main: {
     gap: moderateScale(16),
-    flex: moderateScale(1),
-    //backgroundColor:CUSTOMCOLOR.primary,
-    // paddingHorizontal:24,
-    // paddingVertical:24
+    flex: 1,
+    padding: moderateScale(24),
+    zIndex: 1,
   },
-  date: {
-    gap: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(8),
-    // height: moderateScale(70),
-  },
+  //
   type: {
     flexDirection: 'row',
-    width: '100%',
-    // justifyContent: 'space-around',
-    gap: moderateScale(56),
+    alignItems: 'center',
+    gap: moderateScale(88),
   },
   MainHeadContainer: {
     backgroundColor: CUSTOMCOLOR.primary,
@@ -528,14 +522,16 @@ const styles = StyleSheet.create({
     gap: moderateScale(56),
   },
   child: {
-    padding: moderateScale(16),
+    zIndex: 1,
+    // paddingVertical: moderateScale(16),
     gap: moderateScale(16),
   },
   h2: {
-    fontSize: 24,
+    marginVertical: verticalScale(16),
+    fontSize: CUSTOMFONTSIZE.h2,
     fontWeight: '600',
     fontFamily: CUSTOMFONTFAMILY.heading,
-    lineHeight: 20 * 2,
+
     color: CUSTOMCOLOR.black,
   },
   item: {
@@ -547,9 +543,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownContainer: {
-    height: moderateScale(300),
+    position: 'absolute',
+
+    left: 0,
+    top: verticalScale(80),
+    width: '100%',
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
   },
   touch: {
     paddingHorizontal: horizontalScale(8),
