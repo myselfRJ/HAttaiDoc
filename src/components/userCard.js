@@ -26,94 +26,96 @@ const UserCard = props => {
   const index = props.index;
   const decodedData = userdata?.user_profile_pic_url;
   return (
-    <View style={styles.Main}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={{flexDirection: 'row', gap: moderateScale(12)}}>
-          <Image
-            source={{
-              uri: `data:image/jpeg;base64,${decodedData}`,
-            }}
-            onError={error => console.error('Image load error:', error)}
-            style={{
-              height: moderateScale(65),
-              width: moderateScale(65),
-              borderRadius: 65 / 2,
-            }}
-          />
-          <View>
+    <View style={styles.shadowBox}>
+      <View style={styles.Main}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', gap: moderateScale(12)}}>
+            <Image
+              source={{
+                uri: `data:image/jpeg;base64,${decodedData}`,
+              }}
+              onError={error => console.error('Image load error:', error)}
+              style={{
+                height: moderateScale(65),
+                width: moderateScale(65),
+                borderRadius: 65 / 2,
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h2,
+                  fontWeight: '600',
+                }}>
+                {userdata?.clinic_user_name}
+              </Text>
+              <Text style={styles.text}>{userdata?.clinic_id}</Text>
+              <Text style={styles.text}>{userdata?.role}</Text>
+            </View>
+          </View>
+          <View style={{gap: moderateScale(16)}}>
+            <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+              <Pressable
+                style={styles.gap}
+                onPress={() => navigation.navigate('adduser', {id})}>
+                <Icon
+                  name={'pencil'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.primary}
+                />
+              </Pressable>
+              <Pressable
+                style={styles.gap}
+                // onPress={() => navigation.navigate('adduser', { index })}
+              >
+                <Icon
+                  name={'share-variant'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.primary}
+                />
+              </Pressable>
+              <Pressable style={styles.gap} onPress={props.cancel}>
+                <Icon
+                  name={'close'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.error}
+                />
+              </Pressable>
+            </View>
             <Text
               style={{
+                fontSize: CUSTOMFONTSIZE.h4,
                 color: CUSTOMCOLOR.black,
-                fontSize: CUSTOMFONTSIZE.h2,
-                fontWeight: '600',
+                fontWeight: '400',
               }}>
-              {userdata?.clinic_user_name}
+              Visiting Hrs : 9:00-5:00
             </Text>
-            <Text style={styles.text}>{userdata?.clinic_id}</Text>
-            <Text style={styles.text}>{userdata?.role}</Text>
           </View>
-        </View>
-        <View style={{gap: moderateScale(16)}}>
-          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
-            <Pressable
-              style={styles.gap}
-              onPress={() => navigation.navigate('adduser', {id})}>
-              <Icon
-                name={'pencil'}
-                size={moderateScale(24)}
-                color={CUSTOMCOLOR.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={styles.gap}
-              // onPress={() => navigation.navigate('adduser', { index })}
-            >
-              <Icon
-                name={'share-variant'}
-                size={moderateScale(24)}
-                color={CUSTOMCOLOR.primary}
-              />
-            </Pressable>
-            <Pressable style={styles.gap} onPress={props.cancel}>
-              <Icon
-                name={'close'}
-                size={moderateScale(24)}
-                color={CUSTOMCOLOR.error}
-              />
-            </Pressable>
-            {/* <Pressable
-            style={styles.gap}
-            onPress={() => {
-              setShow(!show);
-            }}>
-            <Icon
-              name={show ? 'chevron-up' : 'chevron-down'}
-              size={24}
-              color={CUSTOMCOLOR.primary}
-            />
-          </Pressable> */}
-          </View>
-          <Text
-            style={{
-              fontSize: CUSTOMFONTSIZE.h4,
-              color: CUSTOMCOLOR.black,
-              fontWeight: '400',
-            }}>
-            Visiting Hrs : 9:00-5:00
-          </Text>
         </View>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  shadowBox: {
+    backgroundColor: CUSTOMCOLOR.white,
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderWidth: 0.75,
+    borderRadius: 4,
+  },
   Main: {
-    paddingHorizontal: horizontalScale(32),
-    paddingVertical: verticalScale(24),
+    marginHorizontal: horizontalScale(32),
+    marginVertical: verticalScale(24),
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(8),
-    borderWidth: moderateScale(2),
-    borderColor: CUSTOMCOLOR.borderColor,
+    zIndex: 2,
+
+    // borderWidth: moderateScale(2),
+    shadowColor: CUSTOMCOLOR.primary,
+
+    shadowOffset: {width: 4, height: 4},
+    // borderColor: CUSTOMCOLOR.borderColor,
   },
   text: {
     color: CUSTOMCOLOR.black,
@@ -121,10 +123,16 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   gap: {
-    padding: moderateScale(4),
-    borderWidth: moderateScale(2),
+    height: moderateScale(40),
+
+    width: moderateScale(40),
+
+    borderWidth: moderateScale(1),
+    justifyContent: 'center',
+    alignItems: 'center',
+
     borderColor: '#C0DFFC',
-    borderRadius: moderateScale(100),
+    borderRadius: moderateScale(24),
   },
   slot: {
     padding: moderateScale(12),

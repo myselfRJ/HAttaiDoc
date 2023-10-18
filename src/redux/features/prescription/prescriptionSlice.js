@@ -22,6 +22,7 @@ const initialState = {
   ],
   selectedDoctor: [],
   vitalsData: {},
+  physicalExamination: {},
 };
 
 const prescriptionSlice = createSlice({
@@ -52,6 +53,12 @@ const prescriptionSlice = createSlice({
     addVitals: (state, action) => {
       state.vitalsData = action.payload;
     },
+    UpadteExamination: (state, action) => {
+      state.physicalExamination = action.payload;
+    },
+    addExamination: (state, action) => {
+      state.physicalExamination = action.payload;
+    },
   },
 });
 export const {
@@ -63,5 +70,7 @@ export const {
   UpdateDoctorRefer,
   UpdateNote,
   UpadteVitals,
+  UpadteExamination,
+  addExamination,
 } = prescriptionSlice.actions;
 export default prescriptionSlice.reducer;

@@ -29,6 +29,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import HButton from './button';
 
 const ConsultationCard = ({data}) => {
   const [visible, setVisible] = useState(false);
@@ -56,72 +57,75 @@ const ConsultationCard = ({data}) => {
     patientSearchRef?.current?.snapToIndex(0);
     navigation.navigate('patienthistory', {id});
   };
-
+  const date = data?.chief_complaint?.created_at?.split('T')[0]?.split('-');
   return (
     <>
       <View style={styles.main}>
-        <Image style={styles.img} source={require('../assets/images/RX.png')} />
-        <View style={styles.patientinfo}>
-          <Text style={styles?.contact}>
-            {data?.chief_complaint?.appointment_id}
-          </Text>
-          <Text style={styles.name}>
-            {data?.chief_complaint?.complaint_message} |{' '}
-            {data?.chief_complaint?.appointment_id}
-          </Text>
-          <Text style={styles.age}>{}</Text>
-          {/* <Text style={styles?.contact}>
-            {data?.chief_complaint?.appointment_id}
-          </Text> */}
+        <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+          <Image
+            style={styles.img}
+            source={require('../assets/images/RX.png')}
+          />
+          <View style={styles.patientinfo}>
+            <Text style={styles?.contact}>
+              Date: {data ? `${date[2]}/${date[1]}/${date[0]}` : null}
+            </Text>
+            <Text style={styles.name}>
+              {data?.chief_complaint?.complaint_message} |{' '}
+              {data?.chief_complaint?.appointment_id}
+            </Text>
+            <Text style={styles.age}>{}</Text>
+          </View>
         </View>
-        <Pressable
-          style={styles.icon}
-          onPress={() => {
-            patientSearchRef?.current?.snapToIndex(1);
+        <View
+          style={{
+            position: 'absolute',
+            right: moderateScale(16),
+            top: moderateScale(16),
+            gap: moderateScale(16),
           }}>
-          <View>
-            <Icon
-              style={styles.icon}
-              name="dots-horizontal"
-              color={CUSTOMCOLOR.primary}
-              size={24}
-            />
-          </View>
-        </Pressable>
-        <BottomSheetView
-          bottomSheetRef={patientSearchRef}
-          snapPoints={'100%'}
-          backgroundStyle="#000000aa">
-          <View style={styles.tab}>
-            <SelectionTab
-              label={'View'}
-              selected={true}
-              onPress={handleOnBook}
-            />
-            {/* <SelectionTab
-                label={Language[language]['delete']}
-                selected={true}
-              /> */}
-            <SelectionTab
-              label={'Upload Report'}
-              selected={true}
-              onPress={handleOnpress}
-            />
-          </View>
           <View
-            style={{alignSelf: 'flex-end', paddingHorizontal: 8, bottom: 38}}>
-            <PlusButton
-              icon="close"
-              size={20}
-              style={{
-                backgroundColor: '#000000aa',
+            style={{
+              flexDirection: 'row',
+              gap: moderateScale(8),
+              alignSelf: 'flex-end',
+            }}>
+            <Pressable>
+              <Icon
+                name={'download'}
+                size={moderateScale(16)}
+                color={CUSTOMCOLOR.primary}
+                style={styles.icon}
+              />
+            </Pressable>
+            <Pressable>
+              <Icon
+                name={'share-variant'}
+                size={moderateScale(16)}
+                color={CUSTOMCOLOR.primary}
+                style={styles.icon}
+              />
+            </Pressable>
+          </View>
+          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+            <HButton
+              onPress={handleOnBook}
+              label={'View'}
+              btnstyles={{
+                borderWidth: 2,
+                backgroundColor: CUSTOMCOLOR.white,
+                borderColor: CUSTOMCOLOR.borderColor,
+                paddingHorizontal: horizontalScale(64),
               }}
-              onPress={() => {
-                patientSearchRef?.current?.snapToIndex(0);
-              }}
+              textStyle={{color: CUSTOMCOLOR.primary, fontWeight: '700'}}
+            />
+            <HButton
+              onPress={handleOnpress}
+              label={'Upload Record'}
+              textStyle={{color: CUSTOMCOLOR.white, fontWeight: '700'}}
             />
           </View>
-        </BottomSheetView>
+        </View>
       </View>
     </>
   );
@@ -129,44 +133,49 @@ const ConsultationCard = ({data}) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    widthhorizontalScalelignItems: 'center',
-    padding: moderateScale(12),
+    padding: moderateScale(24),
+    // paddingVertical: verticalScale(24),
     fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
+    justifyContent: 'space-between',
   },
   name: {
-    fontWeight: 600,
+    fontWeight: '600',
     fontSize: moderateScale(14),
-    lineHeight: 20,
+    // lineHeight: 20,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   age: {
     fontWeight: 400,
     fontSize: moderateScale(10),
-    lineHeight: 20,
+    // lineHeight: 20,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   contact: {
-    fontWeight: 600,
-    fontSize: 10,
-    lineHeight: 12.5,
+    fontWeight: '600',
+    fontSize: 16,
+    // lineHeight: 12.5,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
-    width: 60,
-    height: 60,
-    borderRadius: 30 / 2,
+    width: moderateScale(80),
+    height: moderateScale(80),
+    borderRadius: moderateScale(8),
+    // aspectRatio: 0.95,
+    // borderWidth: 1,
+    // borderColor: '#000',
   },
   patientinfo: {},
   icon: {
-    position: 'absolute',
-    right: moderateScale(8),
-    top: moderateScale(8),
+    borderWidth: moderateScale(1),
+    padding: moderateScale(4),
+    borderRadius: moderateScale(100),
+    borderColor: CUSTOMCOLOR.borderColor,
   },
   option: {
     position: 'absolute',

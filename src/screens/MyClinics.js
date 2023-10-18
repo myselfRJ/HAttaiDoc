@@ -125,7 +125,7 @@ const MyClinics = ({navigation}) => {
           navigation.navigate('userdisplay', {prevScrn1});
         }, 10);
   };
-
+  const [del_id, setDel_id] = useState();
   const progressData = useSelector(state => state.progress?.status);
   const {phone} = useSelector(state => state?.phone?.data);
   const [clinicData, setClinicData] = useState([]);
@@ -172,7 +172,10 @@ const MyClinics = ({navigation}) => {
       fetchClinics();
     }, []),
   );
-
+  const handleDelete = value => {
+    setVisible(!visible);
+    setDel_id(value);
+  };
   useEffect(() => {
     fetchClinics();
   }, [visible]);
@@ -193,11 +196,11 @@ const MyClinics = ({navigation}) => {
             alignItems: 'center',
             marginBottom: moderateScale(12),
           }}>
-          <SelectorBtn
-            select={styles.btn}
-            inputstyle={styles.input}
-            input={clinicData?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
-            Bname={'plus'}
+          <HButton
+            // btnstyles={styles.btn}
+            // inputstyle={styles.input}
+            label={clinicData?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
+            icon={'plus'}
             onPress={() => {
               navigation.navigate('addclinic', {prevScrn});
             }}
@@ -209,73 +212,8 @@ const MyClinics = ({navigation}) => {
               <ClinicCard
                 index={item.id}
                 data={item}
-                cancel={() => {
-                  setVisible(!visible);
-                }}
+                cancel={() => handleDelete(item?.id)}
               />
-              <Modal
-                animationType="slide"
-                visible={visible}
-                onRequestClose={() => {
-                  setVisible(!visible);
-                }}
-                transparent={true}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: '#000000aa',
-                    width: '100%',
-                  }}>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setVisible(!visible);
-                    }}>
-                    <View style={styles.modalOverlay} />
-                  </TouchableWithoutFeedback>
-
-                  <View
-                    style={{
-                      backgroundColor: CUSTOMCOLOR.white,
-                      padding: moderateScale(40),
-                      borderRadius: moderateScale(16),
-                    }}>
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: CUSTOMCOLOR.black,
-                        fontWeight: '700',
-                        fontSize: CUSTOMFONTSIZE.h2,
-                      }}>
-                      Are You sure Want To Delete
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        gap: moderateScale(16),
-                        padding: moderateScale(16),
-                        borderRadius: moderateScale(16),
-                      }}>
-                      <HButton
-                        label={'No'}
-                        onPress={() => setVisible(!visible)}
-                      />
-                      <HButton
-                        textStyle={{color: CUSTOMCOLOR.primary}}
-                        label={'Yes'}
-                        btnstyles={{
-                          backgroundColor: CUSTOMCOLOR.white,
-                          borderWidth: moderateScale(2),
-                          borderColor: CUSTOMCOLOR.borderColor,
-                        }}
-                        onPress={() => deleteClinic(item.id)}
-                      />
-                    </View>
-                  </View>
-                </View>
-              </Modal>
             </View>
           ))}
         </ScrollView>
@@ -289,6 +227,66 @@ const MyClinics = ({navigation}) => {
           />
         ) : null}
       </View>
+      <Modal
+        animationType="slide"
+        visible={visible}
+        onRequestClose={() => {
+          setVisible(!visible);
+        }}
+        transparent={true}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#000000aa',
+            width: '100%',
+          }}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisible(!visible);
+            }}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+
+          <View
+            style={{
+              backgroundColor: CUSTOMCOLOR.white,
+              padding: moderateScale(40),
+              borderRadius: moderateScale(16),
+            }}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: CUSTOMCOLOR.black,
+                fontWeight: '700',
+                fontSize: CUSTOMFONTSIZE.h2,
+              }}>
+              Are You sure Want To Delete
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                gap: moderateScale(16),
+                padding: moderateScale(16),
+                borderRadius: moderateScale(16),
+              }}>
+              <HButton label={'No'} onPress={() => setVisible(!visible)} />
+              <HButton
+                textStyle={{color: CUSTOMCOLOR.primary}}
+                label={'Yes'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(2),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                }}
+                onPress={() => deleteClinic(del_id)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -298,6 +296,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
+    backgroundColor: CUSTOMCOLOR.white,
   },
   input: {
     fontSize: CUSTOMFONTSIZE.h2,
