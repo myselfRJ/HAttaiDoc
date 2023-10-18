@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Alert,Modal,TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import ProgresHeader from '../components/progressheader';
 import {useSelector, dispatch, useDispatch} from 'react-redux';
@@ -40,7 +47,7 @@ const UserDisplay = ({navigation}) => {
   const route = useRoute();
   const {prevScrn} = route.params;
   const [apiStatus, setApiStatus] = useState({});
-  const [users,setUsers] = useState([])
+  const [users, setUsers] = useState([]);
   const [visible, setVisible] = useState(false);
   // const route = useRoute();
   const clinic_users = useSelector(state => state.clinic_users?.clinic_users);
@@ -53,15 +60,15 @@ const UserDisplay = ({navigation}) => {
     dispatch(updateclinic_users(newUser));
     Alert.alert('Success', 'User data deleted');
   };
-  const handleNavigation = () => {
-    prevScrn === 'account'
-      ? setTimeout(() => {
-          navigation.navigate('tab');
-        }, 1000)
-      : setTimeout(() => {
-          navigation.navigate('userdisplay', {prevScrn1});
-        }, 1000);
-  };
+  // const handleNavigation = () => {
+  //   prevScrn === 'account'
+  //     ? setTimeout(() => {
+  //         navigation.navigate('tab');
+  //       }, 1000)
+  //     : setTimeout(() => {
+  //         navigation.navigate('userdisplay', {prevScrn1});
+  //       }, 1000);
+  // };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -143,7 +150,7 @@ const UserDisplay = ({navigation}) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('sucee',data)
+        console.log('sucee', data);
         if (data.status === 'success') {
           setVisible(!visible);
         }
@@ -154,7 +161,7 @@ const UserDisplay = ({navigation}) => {
       console.error('Error deleting clinic:', error);
     }
   };
- 
+
   return (
     <View style={styles.Main}>
       {prevScrn === 'account' && (
@@ -163,39 +170,39 @@ const UserDisplay = ({navigation}) => {
         </View>
       )}
       <PrescriptionHead heading={'My User'} />
-      
-        <View
-          style={{
-            alignSelf: users?.length > 0 ? 'flex-end' : 'center',
-            alignItems: 'center',
-            marginBottom: moderateScale(12),
-            gap: moderateScale(8),
-          }}>
-          <SelectorBtn
-            select={styles.btn}
-            inputstyle={styles.input}
-            input={users?.length > 0 ? 'Add more User' : 'Add User'}
-            Bname={'plus'}
-            onPress={() => {
-              navigation.navigate('adduser', {prevScrn});
+
+      <View
+        style={{
+          alignSelf: users?.length > 0 ? 'flex-end' : 'center',
+          alignItems: 'center',
+          marginBottom: moderateScale(12),
+          gap: moderateScale(8),
+        }}>
+        <SelectorBtn
+          select={styles.btn}
+          inputstyle={styles.input}
+          input={users?.length > 0 ? 'Add more User' : 'Add User'}
+          Bname={'plus'}
+          onPress={() => {
+            navigation.navigate('adduser', {prevScrn});
+          }}
+        />
+        {users?.length > 0 ? null : (
+          <HButton
+            rightIcon="arrow-right-thin"
+            color={CUSTOMCOLOR.primary}
+            label="Skip"
+            onPress={() => navigation.navigate('tab')}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.primary,
             }}
           />
-          {users?.length > 0 ? null : (
-            <HButton
-              rightIcon="arrow-right-thin"
-              color={CUSTOMCOLOR.primary}
-              label="Skip"
-              onPress={() => navigation.navigate('tab')}
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-              }}
-            />
-          )}
-        </View>
-        <ScrollView>
+        )}
+      </View>
+      <ScrollView>
         {users?.map((item, index) => (
           <View key={index} style={{marginBottom: moderateScale(8)}}>
             <UserCard
@@ -276,7 +283,7 @@ const UserDisplay = ({navigation}) => {
           btnstyles={styles.btnNext}
           textStyle={styles.input}
           label={'Next'}
-          onPress={handleNavigation}
+          onPress={() => navigation.navigate('tab')}
           loading={loading}
         />
       ) : null}
