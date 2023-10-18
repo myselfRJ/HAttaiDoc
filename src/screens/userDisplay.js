@@ -226,7 +226,7 @@ const UserDisplay = ({navigation}) => {
           btnstyles={styles.btnNext}
           textStyle={styles.input}
           label={'Next'}
-          onPress={handleNavigation}
+          onPress={() => navigation.navigate('tab')}
           loading={loading}
         />
       ) : null}
