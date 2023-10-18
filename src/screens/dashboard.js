@@ -208,7 +208,7 @@ const Dashboard = ({navigation, route}) => {
 
   return (
     <View
-      style={{flex: moderateScale(1), backgroundColor: CUSTOMCOLOR.background}}>
+      style={{flex:1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
         <View style={styles.main}>
           <View>
@@ -301,7 +301,7 @@ const Dashboard = ({navigation, route}) => {
 
       {/* </View> */}
 
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'} backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     height: verticalScale(1000),
-    width: '100%',
+    width: '50%',
     //justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,

@@ -298,7 +298,7 @@ const Appointment = ({navigation}) => {
           )}
         </ScrollView>
       </View>
-      <View>
+      <View style={{justifyContent:'flex-end',flex:1}}>
         <HButton
           label="Book Appointment"
           btnstyles={{alignSelf: 'center'}}

@@ -671,7 +671,7 @@ const AddClinic = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1,paddingHorizontal:horizontalScale(24),paddingVertical:verticalScale(12)}}>
       <View>
         <PlusButton
           icon="close"
@@ -692,7 +692,7 @@ const AddClinic = ({navigation}) => {
           <View style={styles.content}>
             <View style={styles.alignchild}>
               <View style={styles.alignchild}>
-                <Text style={commonstyles.h1}>Add Clinic</Text>
+              <Text style={commonstyles.h1}>{id !== undefined ? 'Update Clinic' : 'Add Clinic'}</Text>
               </View>
             </View>
             <InputText
@@ -707,7 +707,7 @@ const AddClinic = ({navigation}) => {
               style={{
                 alignSelf: 'flex-start',
                 width: '100%',
-                paddingHorizontal: horizontalScale(8),
+                // paddingHorizontal: horizontalScale(8),
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
@@ -761,7 +761,7 @@ const AddClinic = ({navigation}) => {
                 // flexDirection: 'row',
                 gap: moderateScale(8),
                 alignSelf: 'flex-start',
-                paddingHorizontal: horizontalScale(8),
+                // paddingHorizontal: horizontalScale(8),
               }}>
               <Text style={styles.labeltext}>{Language[language]['fees']}</Text>
               <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
@@ -806,7 +806,7 @@ const AddClinic = ({navigation}) => {
             <View
               style={{
                 gap: verticalScale(8),
-                paddingHorizontal: horizontalScale(8),
+                // paddingHorizontal: horizontalScale(8),
               }}>
               <Text style={styles.labeltext}>Add Slots </Text>
               <View
@@ -1260,7 +1260,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     gap: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
+    // paddingHorizontal: horizontalScale(8),
   },
   bottomSheet: {
     flex: 1,
@@ -1278,8 +1278,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     //flexDirection:'row',
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(8),
+    // paddingHorizontal: horizontalScale(16),
+    // paddingVertical: verticalScale(8),
     borderRadius: 4,
     backgroundColor: '#C6E3FF',
   },
@@ -1292,14 +1292,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: horizontalScale(16),
+    // paddingHorizontal: horizontalScale(16),
   },
   deletedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(16),
+    // paddingHorizontal: horizontalScale(16),
+    // paddingVertical: verticalScale(16),
   },
   select1: {
     width: horizontalScale(240),
@@ -1321,7 +1321,7 @@ const styles = StyleSheet.create({
   },
   labeltext: {
     fontWeight: '400',
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
   },
@@ -1349,12 +1349,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     // width: '100%',
-    paddingHorizontal: horizontalScale(8),
+    // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(12),
   },
   clinic: {
     alignSelf: 'flex-start',
-    paddingVertical: verticalScale(16),
+    // paddingVertical: verticalScale(16),
     //width:"100%"
   },
   modalcontainer: {
@@ -1372,14 +1372,14 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(5),
     borderColor: CUSTOMCOLOR.primary,
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: horizontalScale(16),
+    // paddingHorizontal: horizontalScale(16),
   },
   addedText: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(16),
+    // paddingHorizontal: horizontalScale(16),
+    // paddingVertical: verticalScale(16),
   },
   clsbtn: {
     zIndex: moderateScale(4),
@@ -1392,7 +1392,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     bottom: 0,
     paddingVertical: verticalScale(8),
-    paddingHorizontal: horizontalScale(8),
+    // paddingHorizontal: horizontalScale(8),
     top: 0,
   },
   clinicText: {
@@ -1403,7 +1403,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     color: CUSTOMCOLOR.black,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     marginBottom: moderateScale(4),
   },
