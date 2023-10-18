@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    borderWidth: 1,
+
     gap: verticalScale(16),
   },
   content: {

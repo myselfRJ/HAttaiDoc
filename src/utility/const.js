@@ -1,8 +1,12 @@
 export const CONSTANT = {
   DoctorRefer: ['Dr.Raju', 'Dr.Muthu', 'Dr.Chitti'],
   ConsultationList: [
-    {label: 'Reason for visit', icon: 'chevron-right', navigate: 'complaints'},
-    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
+    // {label: 'Reason for visit', icon: 'chevron-right', navigate: 'complaints'},
+    {
+      label: 'Medical History',
+      icon: 'chevron-right',
+      navigate: 'medicalhistory',
+    },
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Diagnosis', icon: 'chevron-right', navigate: 'diagnosis'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
@@ -33,5 +37,5 @@ export const CONSTANT = {
     },
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
-  test:['Lab','Radiology','Procedure'],
+  test: ['Lab', 'Radiology', 'Procedure'],
 };

@@ -26,24 +26,24 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import { ScrollView } from 'react-native-gesture-handler';
-import { mode } from '../redux/features/prescription/prescribeslice';
+import {ScrollView} from 'react-native-gesture-handler';
+import {mode} from '../redux/features/prescription/prescribeslice';
 import VitalField from '../components/vitalFields';
-import { validateInput } from '../utils/FormUtils/Validators';
+import {validateInput} from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
-import { commonstyles } from '../styles/commonstyle';
-const VitalScreen =({route,props}) => {
+import {commonstyles} from '../styles/commonstyle';
+const VitalScreen = ({route, props}) => {
   const months = CONSTANTS.months;
   const nav = useNavigation();
   const dispatch = useDispatch();
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [edd, setEdd] = useState();
-  const [show,setShow] = useState(false)
+  const [show, setShow] = useState(false);
   const navigation = useNavigation();
   // const route = useRoute();
-  const { gende } = route.params;
-  console.log('gender=',gende)
+  const {gende} = route.params;
+  console.log('gender=', gende);
   const handleDate = () => {
     setOpen(!open);
   };
@@ -81,35 +81,35 @@ const VitalScreen =({route,props}) => {
     LDD: '',
     EDD: '',
   });
-  console.log('====>dias',vitals)
+  console.log('====>dias', vitals);
 
   const handlePress = () => {
-    console.log('=vitals',vitals);
+    console.log('=vitals', vitals);
     dispatch(addVitals(vitals));
     nav.goBack();
   };
-  const PulseChange = (text) => {
+  const PulseChange = text => {
     const updatedVitals = {...vitals, pulse_rate: text};
     // console.log(updatedVitals);
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  const weightChange = (text) => {
+  const weightChange = text => {
     const updatedVitals = {...vitals, weight: text};
     setVitals(updatedVitals);
     /// dispatch(addVitals({ index, text }));
   };
-  const heightChange = (text) => {
+  const heightChange = text => {
     const updatedVitals = {...vitals, height: text};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  const tempChange = (text) => {
+  const tempChange = text => {
     const updatedVitals = {...vitals, body_temperature: text};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  const rateChange = (text) => {
+  const rateChange = text => {
     const updatedVitals = {...vitals, rate: text};
     setVitals(updatedVitals);
   };
@@ -140,13 +140,13 @@ const VitalScreen =({route,props}) => {
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  const diastolicChange = (text) => {
+  const diastolicChange = text => {
     const updatedVitals = {...vitals, diastolic: text};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
   };
-  const systolicChange = (text) => {
-    console.log('=========>textr',text);
+  const systolicChange = text => {
+    console.log('=========>textr', text);
     const updatedVitals = {...vitals, systolic: text};
     setVitals(updatedVitals);
     // dispatch(addVitals({ index, text }));
@@ -183,18 +183,17 @@ const VitalScreen =({route,props}) => {
   };
 
   return (
-   
-      <View style={styles.main}>
-        <PrescriptionHead heading={Language[language]['vitals']} />
-        {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
-        <ScrollView>
-          <View style={styles.vitalmain}>
-            <View style={styles.basiccontainer}>
-              <Text style={commonstyles.subhead}>Basic</Text>
-              <Seperator/>
-             
-              <View style={styles.basicFields}>
-                {/* <View style={styles.pulsecontainer}>
+    <View style={styles.main}>
+      <PrescriptionHead heading={Language[language]['vitals']} />
+      {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
+      <ScrollView>
+        <View style={styles.vitalmain}>
+          <View style={styles.basiccontainer}>
+            <Text style={commonstyles.subhead}>Basic</Text>
+            <Seperator />
+
+            <View style={styles.basicFields}>
+              {/* <View style={styles.pulsecontainer}>
                  
                   <InputText
                     label="Pulse"
@@ -203,7 +202,7 @@ const VitalScreen =({route,props}) => {
                     numeric={true}
                   />
                 </View> */}
-                {/* <View style={styles.weightcontainer}>
+              {/* <View style={styles.weightcontainer}>
                   <InputText
                     label={Language[language]['weight']}
                     placeholder="kg"
@@ -211,7 +210,7 @@ const VitalScreen =({route,props}) => {
                     numeric={true}
                   />
                 </View> */}
-                {/* <View style={styles.heightcontainer}>
+              {/* <View style={styles.heightcontainer}>
                   <InputText
                     label={Language[language]['height']}
                     placeholder="cm"
@@ -219,7 +218,7 @@ const VitalScreen =({route,props}) => {
                     numeric={true}
                   />
                 </View> */}
-                {/* {bmi !== 'NaN' ? (
+              {/* {bmi !== 'NaN' ? (
                   <View style={styles.bmicontainer}>
                     <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
                     <Text style={styles.bmitext}>{bmi}</Text>
@@ -230,7 +229,7 @@ const VitalScreen =({route,props}) => {
                     <Text style={styles.bmitext}>{'00'}</Text>
                   </View>
                 )} */}
-                {/* <View style={styles.tempcontainer}>
+              {/* <View style={styles.tempcontainer}>
                   <InputText
                     label={Language[language]['temp']}
                     placeholder="°C"
@@ -247,54 +246,44 @@ const VitalScreen =({route,props}) => {
                     numeric={true}
                   />
                 </View> */}
-                <VitalField
-                name='Height'
-                placeholder='cm'
-                setvalue={text => heightChange(text)} 
-                />
-                <VitalField
-                name='Weight'
-                placeholder='kg'
-                setvalue={text => weightChange(text)} 
-                />
-                {bmi !== 'NaN' ?(
-                <VitalField
-                name='BMI'
-                value={bmi} 
-                />):(<VitalField
-                  name='BMI'
-                  value='00' 
-                  />)}
-                <VitalField
-                name='Pulse'
-                placeholder='bpm' 
+              <VitalField
+                name="Height"
+                placeholder="cm"
+                setvalue={text => heightChange(text)}
+              />
+              <VitalField
+                name="Weight"
+                placeholder="kg"
+                setvalue={text => weightChange(text)}
+              />
+              {bmi !== 'NaN' ? (
+                <VitalField name="BMI" value={bmi} />
+              ) : (
+                <VitalField name="BMI" value="00" />
+              )}
+              <VitalField
+                name="Pulse"
+                placeholder="bpm"
                 setvalue={text => PulseChange(text)}
-                />
-                 <VitalField
-                name='Temp'
-                placeholder='°C'
-                setvalue={text => tempChange(text)} 
-                />
-                 <VitalField
-                name='SPO2'
-                placeholder='%' 
-                />
-                 <VitalField
-                name='Res_Rate'
-                placeholder='brpm' 
+              />
+              <VitalField
+                name="Temp"
+                placeholder="°C"
+                setvalue={text => tempChange(text)}
+              />
+              <VitalField name="SPO2" placeholder="%" />
+              <VitalField
+                name="Res_Rate"
+                placeholder="brpm"
                 setvalue={text => rateChange(text)}
-                />
-              </View>
+              />
             </View>
-            <View style={styles.basiccontainer}>
-
-            
+          </View>
+          <View style={styles.basiccontainer}>
             <Text style={commonstyles.subhead}>Blood Pressure</Text>
-           <Seperator/>
+            <Seperator />
 
             <View style={styles.bloodPressureContainer}>
-             
-
               {/* <View style={styles.syscontainer}>
                 <InputText
                   label={Language[language]['systolic_bp']}
@@ -312,127 +301,122 @@ const VitalScreen =({route,props}) => {
                 />
               </View> */}
               <VitalField
-                name='Systolic BP'
-                placeholder='mmhg' 
+                name="Systolic BP"
+                placeholder="mmhg"
                 setvalue={text => systolicChange(text)}
-                />
-                <VitalField
-                name='Diastolic BP'
-                placeholder='mmhg' 
+              />
+              <VitalField
+                name="Diastolic BP"
+                placeholder="mmhg"
                 setvalue={text => diastolicChange(text)}
-                />
+              />
             </View>
-            </View>
-            {gende === 'female' ?
-             (
-             <View style={styles.basiccontainer}>
-              <Text style={commonstyles.subhead}>
-                Pregnancy
-              </Text>
-             <Seperator/>
+          </View>
+          {gende === ('Female' || 'female') ? (
+            <View style={styles.basiccontainer}>
+              <Text style={commonstyles.subhead}>Pregnancy</Text>
+              <Seperator />
 
-            <View style={styles.pregnancyFields}>
-              <View style={styles.lmpcontainer}>
-                <Text style={styles.lmp}>LMP</Text>
-                <View style={styles.hardText}>
-                  <SelectorBtn
-                  size={20}
-                  inputstyle={{fontSize:10}}
-                    onPress={() => {
-                      handleDate();
-                    }}
-                    name={'calendar'}
-                    input={lmpdates}
-                  />
-                  {open && (
-                    <DatePicker
-                      modal
-                      open={open}
-                      date={date}
-                      theme="auto"
-                      mode="date"
-                      onConfirm={handleConfirm}
-                      onCancel={handleCancel}
+              <View style={styles.pregnancyFields}>
+                <View style={styles.lmpcontainer}>
+                  <Text style={styles.lmp}>LMP</Text>
+                  <View style={styles.hardText}>
+                    <SelectorBtn
+                      size={20}
+                      inputstyle={{fontSize: 10}}
+                      onPress={() => {
+                        handleDate();
+                      }}
+                      name={'calendar'}
+                      input={lmpdates}
                     />
-                  )}
-                  {/* <Text
+                    {open && (
+                      <DatePicker
+                        modal
+                        open={open}
+                        date={date}
+                        theme="auto"
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={handleCancel}
+                      />
+                    )}
+                    {/* <Text
                     style={{padding: moderateScale(21), backgroundColor: CUSTOMCOLOR.white}}>
                     week
                   </Text> */}
+                  </View>
                 </View>
-              </View>
-              <View style={styles.uscontainer}>
-                <Text style={styles.us}>EDD</Text>
-                {/* <View style={styles.hardText}> */}
-                {/* <TextInput
+                <View style={styles.uscontainer}>
+                  <Text style={styles.us}>EDD</Text>
+                  {/* <View style={styles.hardText}> */}
+                  {/* <TextInput
                     value={handleedd}
                     onChangeText={usChange}
                     style={styles.ustext}
                     keyboardType="numeric"
                   /> */}
-                {/* <Text></Text> */}
-                {/* <View style={{width:moderateScale(100)}}> */}
-                <Text style={styles.EDD}>{vitals?.EDD}</Text>
-                {/* </View> */}
-                {/* </View> */}
+                  {/* <Text></Text> */}
+                  {/* <View style={{width:moderateScale(100)}}> */}
+                  <Text style={styles.EDD}>{vitals?.EDD}</Text>
+                  {/* </View> */}
+                  {/* </View> */}
+                </View>
               </View>
             </View>
-            </View>) : null}
-            {show === true ? (<View style={{gap:moderateScale(8)}}>
+          ) : null}
+          {show === true ? (
+            <View style={{gap: moderateScale(8)}}>
               <Text style={commonstyles.subhead}>Others</Text>
-            <Seperator/>
-                <View style={styles.pregnancyFields}>
-                  <VitalField
-                name='Vital name'
-                placeholder='Enter' 
-                setValue={text => systolicChange(text)}
+              <Seperator />
+              <View style={styles.pregnancyFields}>
+                <VitalField
+                  name="Vital name"
+                  placeholder="Enter"
+                  setValue={text => systolicChange(text)}
                 />
-                </View>
-                </View>) : null}
-          </View>
-          <View style={{
-            alignSelf:'flex-end',
-            paddingHorizontal:horizontalScale(8),
-            padding:moderateScale(8)
+              </View>
+            </View>
+          ) : null}
+        </View>
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            paddingHorizontal: horizontalScale(8),
+            padding: moderateScale(8),
           }}>
-            <HButton
-            icon='plus'
-            label='Others'
-            onPress={()=> setShow(!show)}
-            />
-          </View>
-    
-          
-        </ScrollView>
-        <View style={{alignItems:'center'}}>
-            <HButton
-             btnstyles={{width:moderateScale(380),borderRadius:moderateScale(16)}}
-              label={Language[language]['submit']}
-              onPress={handlePress}
-            />
-          </View>
-        
+          <HButton icon="plus" label="Others" onPress={() => setShow(!show)} />
+        </View>
+      </ScrollView>
+      <View style={{alignItems: 'center'}}>
+        <HButton
+          btnstyles={{
+            width: moderateScale(380),
+            borderRadius: moderateScale(16),
+          }}
+          label={Language[language]['submit']}
+          onPress={handlePress}
+        />
       </View>
-      
-
+    </View>
   );
 };
 const styles = StyleSheet.create({
   main: {
-    padding:moderateScale(12),
-    gap:16
+    padding: moderateScale(12),
+    gap: 16,
   },
   EDD: {
     paddingHorizontal: horizontalScale(8),
     backgroundColor: CUSTOMCOLOR.white,
     color: CUSTOMCOLOR.primary,
     fontSize: CUSTOMFONTSIZE.h4,
-    alignSelf:'center',
+    alignSelf: 'center',
     width: moderateScale(100),
     paddingVertical: verticalScale(14),
     borderRadius: moderateScale(4),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   inpcontainer: {
     flexDirection: 'row',
@@ -451,11 +435,10 @@ const styles = StyleSheet.create({
     // height: 309,
     // gap: moderateScale(8),
     padding: moderateScale(8),
-
   },
   basiccontainer: {
-    gap:verticalScale(4),
-    marginBottom:verticalScale(16),
+    gap: verticalScale(4),
+    marginBottom: verticalScale(16),
     // borderWidth:1,
   },
   basic: {
@@ -470,12 +453,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     gap: moderateScale(8),
-    padding:moderateScale(16),
- 
+    padding: moderateScale(16),
   },
   pulsecontainer: {
-    width:moderateScale(100),  
-    
+    width: moderateScale(100),
   },
   pulse: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -488,7 +469,7 @@ const styles = StyleSheet.create({
     //paddingHorizontal:horizontalScale(12)
   },
   weightcontainer: {
-    width:moderateScale(100),  
+    width: moderateScale(100),
     // borderWidth:1,
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
@@ -516,9 +497,8 @@ const styles = StyleSheet.create({
   heightcontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
-    width:moderateScale(100),  
+    width: moderateScale(100),
     // borderWidth:1,
-
   },
   height: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -532,7 +512,7 @@ const styles = StyleSheet.create({
   tempcontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
-    width:moderateScale(100),  
+    width: moderateScale(100),
     // borderWidth:1,
   },
   temp: {
@@ -545,9 +525,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
   },
   ratecontainer: {
- 
-    width:moderateScale(100),  
-  
+    width: moderateScale(100),
   },
   rate: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -561,16 +539,15 @@ const styles = StyleSheet.create({
   bmicontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(8),
-    width:moderateScale(100),  
+    width: moderateScale(100),
     // borderWidth:1,
-    height:moderateScale(85),
-    padding:moderateScale(8)
-  
+    height: moderateScale(85),
+    padding: moderateScale(8),
   },
   bmi: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    fontWeight:400
+    fontWeight: 400,
   },
   bmitext: {
     paddingVertical: verticalScale(12),
@@ -584,7 +561,7 @@ const styles = StyleSheet.create({
   bloodPressureContainer: {
     flexDirection: 'row',
     gap: moderateScale(16),
-    padding:moderateScale(16),
+    padding: moderateScale(16),
     alignItems: 'center',
   },
   subhead: {
@@ -592,12 +569,11 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.body,
     fontWeight: 600,
     fontSize: CUSTOMFONTSIZE.h2,
-    
   },
   diascontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
-    // width:moderateScale(100),  
+    // width:moderateScale(100),
     // borderWidth:1,
   },
   diastolic: {
@@ -614,8 +590,7 @@ const styles = StyleSheet.create({
   syscontainer: {
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4),
-    width:moderateScale(100),  
-  
+    width: moderateScale(100),
   },
   systolic: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -640,23 +615,23 @@ const styles = StyleSheet.create({
     // paddingHorizontal: horizontalScale(24),
     // paddingVertical: verticalScale(4),
     gap: moderateScale(8),
-    padding:moderateScale(16),
+    padding: moderateScale(16),
     alignItems: 'center',
     // width: moderateScale(700),
-    flexDirection:'row',
+    flexDirection: 'row',
     // top: moderateScale(16),
   },
   lmpcontainer: {
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(4),
     gap: moderateScale(4),
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   lmp: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
-    width:moderateScale(65)
+    width: moderateScale(65),
   },
   lmptext: {
     // paddingVertical: verticalScale(16),
@@ -667,15 +642,14 @@ const styles = StyleSheet.create({
     // paddingHorizontal: horizontalScale(8),
     // paddingVertical: verticalScale(4,)
     gap: moderateScale(8),
-    flexDirection:'row',
-    alignItems:'center',
-    
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   us: {
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     // top:moderateScale(4),
-    width: moderateScale(60)
+    width: moderateScale(60),
   },
   ustext: {
     // paddingVertical: verticalScale(16),

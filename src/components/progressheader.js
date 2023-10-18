@@ -15,9 +15,9 @@ const ProgresHeader = props => {
             key={index}
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
 
               // width:horizontalScale           justifyContent: 'center',
-              alignItems: 'center',
             }}>
             <View style={styles.progress}>
               <View
@@ -25,18 +25,27 @@ const ProgresHeader = props => {
                   ...styles.circle,
                   backgroundColor: item.status ? '#2CBB15' : '#bbbaaa',
                 }}>
-                <Icon name={'check'} size={32} color="#ffffff" />
+                <Icon name={'check'} size={moderateScale(32)} color="#ffffff" />
               </View>
               <Text>{item.progressname}</Text>
             </View>
 
-            {index !== 2 ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: horizontalScale(16),
+              }}>
               <View
-                style={{
-                  ...styles.seperator,
-                  backgroundColor: item.status ? '#2CBB15' : '#bbbbbb',
-                }}></View>
-            ) : null}
+                style={
+                  index !== 2
+                    ? {
+                        ...styles.seperator,
+                        backgroundColor: item.status ? '#2CBB15' : '#bbbbbb',
+                      }
+                    : null
+                }></View>
+            </View>
           </View>
         );
       })}
@@ -46,32 +55,30 @@ const ProgresHeader = props => {
 
 const styles = StyleSheet.create({
   main: {
-    justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    widthhorizontalScalelignSelf: 'center',
+    justifyContent: 'center',
+
     paddingHorizontal: horizontalScale(64),
     paddingVertical: verticalScale(24),
   },
   progress: {
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
   },
   seperator: {
-    paddingHorizontal: horizontalScale(24),
+    // paddingHorizontal: horizontalScale(24),
     height: verticalScale(4),
-    width: horizontalScale(200),
-    marginBottom: 16,
-    marginHorizontal: horizontalScale(16),
+    alignSelf: 'center',
+    width: horizontalScale(160),
+    marginBottom: verticalScale(14),
     borderRadius: moderateScale(4),
-
     backgroundColor: '#21f345',
   },
   circle: {
-    height: verticalScale(48),
-    width: verticalScale(48),
-    borderRadius: verticalScale(24),
+    height: moderateScale(48),
+    width: moderateScale(48),
+    borderRadius: moderateScale(24),
     backgroundColor: '#aaaaaa',
     justifyContent: 'center',
     alignItems: 'center',

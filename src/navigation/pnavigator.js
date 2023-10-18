@@ -40,8 +40,6 @@ import PastHistory from '../screens/pasthistory';
 import {CUSTOMCOLOR} from '../settings/styles';
 import Valid from '../screens/consultationValid';
 import Uploadrecord from '../screens/UploadRecord';
-
-const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
 import PatientHistory from '../screens/patientHistory';
 import ReferToDoctor from '../screens/Refer';
@@ -52,6 +50,8 @@ import UserDisplay from '../screens/userDisplay';
 import MyClinics from '../screens/MyClinics';
 import MedicalHistory from '../screens/medicalhistory';
 import PhysicalExamination from '../screens/physicalExaminations';
+
+const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
   console.log(getAccessToken(state => state));
@@ -94,6 +94,7 @@ const ProtectedRoute = () => {
           },
         }}
       />
+
       <Stack.Screen
         name="profilecreate"
         component={ProfileCreate}
@@ -351,7 +352,7 @@ const ProtectedRoute = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="medicalhistory"
         component={MedicalHistory}
         options={{

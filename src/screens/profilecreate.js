@@ -665,14 +665,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statecontainer: {
-    height: moderateScale(400),
+    height: moderateScale(200),
     width: moderateScale(200),
     zIndex: 5,
     borderWidth: 1,
     borderColor: CUSTOMCOLOR.borderColor,
     position: 'absolute',
     right: 0,
-    top: verticalScale(88),
+    // bottom: 0,
+    top: verticalScale(72),
     // width: '100%',
     // justifyContent: 'flex-start',
     // alignItems: 'center',
@@ -784,7 +785,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   container: {
-    // paddingVertical: verticalScale(20),
+    paddingBottom: verticalScale(120),
 
     gap: verticalScale(16),
   },

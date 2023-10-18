@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   inpcontainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(8),

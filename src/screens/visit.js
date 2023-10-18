@@ -939,7 +939,9 @@ const Visit = ({navigation, route}) => {
                     justifyContent: 'space-between',
                   }}>
                   <Text style={styles.patientHead}>Vitals</Text>
-                  <Pressable style={styles.gap}>
+                  <Pressable
+                    style={styles.gap}
+                    onPress={() => navigation.navigate('vitalscreen', {gende})}>
                     <Icon
                       name={'pencil'}
                       size={moderateScale(18)}
@@ -953,15 +955,14 @@ const Visit = ({navigation, route}) => {
                   {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
                   {vitalsData?.pulse_rate} Temp: {vitalsData?.boby_temparature}
                 </Text>
-                {patient_data?.gender === 'female' &&
-                  vitalsData?.LDD &&
-                  vitalsData?.EDD && (
-                    <Text style={styles.patientText}>
-                      Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} |
-                      EDD:
-                      {vitalsData.EDD}
-                    </Text>
-                  )}
+                {patient_data?.gender === ('Female' || 'female') &&
+                vitalsData?.LDD &&
+                vitalsData?.EDD ? (
+                  <Text style={styles.patientText}>
+                    Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} | EDD:
+                    {vitalsData.EDD}
+                  </Text>
+                ) : null}
               </View>
             </View>
             {CONSTANT.ConsultationList.map((value, index) => (
@@ -980,7 +981,7 @@ const Visit = ({navigation, route}) => {
                     // }
                     navigate={() => {
                       const params = {};
-                      
+
                       if (value.navigate === 'complaints') {
                         params.complaint = complaint;
                       } else if (value.navigate === 'FollowUp') {
@@ -988,7 +989,7 @@ const Visit = ({navigation, route}) => {
                       } else if (value.navigate === 'vitalscreen') {
                         params.gende = gende;
                       }
-                    
+
                       navigation.navigate(value.navigate, params);
                     }}
                   />
@@ -1437,11 +1438,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     borderColor: CUSTOMCOLOR.borderColor,
-    borderWidth: moderateScale(2),
+    borderWidth: moderateScale(1),
     borderRadius: moderateScale(8),
   },
   basiccontainer: {
-    //flexDirection:'row',
     width: '100%',
     borderRadius: moderateScale(4),
     paddingVertical: verticalScale(8),
