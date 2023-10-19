@@ -222,7 +222,7 @@ const VitalScreen = ({route, props}) => {
                           setvalue={text => diastolicChange(text)}
                       />
                   </View>
-                  {gende === 'female' ? 
+                  {(gende === 'Female' || gende === 'female') ? 
                   (<View style={{gap:moderateScale(8)}}>
                      <Text style={commonstyles.subhead}>Pregnancy</Text>
                   <Seperator />

@@ -955,7 +955,7 @@ const Visit = ({navigation, route}) => {
                   {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
                   {vitalsData?.pulse_rate} Temp: {vitalsData?.boby_temparature}
                 </Text>
-                {patient_data?.gender === ('Female' || 'female') &&
+                {(patient_data?.gender === 'Female' || patient_data?.gender === 'Female') &&
                 vitalsData?.LDD &&
                 vitalsData?.EDD ? (
                   <Text style={styles.patientText}>
