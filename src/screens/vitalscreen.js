@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
       flexWrap: 'wrap'
   },
   name: {
-      width: moderateScale(65),
+      width: moderateScale(70),
       fontWeight: '400',
       fontSize: CUSTOMFONTSIZE.h3,
       color: CUSTOMCOLOR.black,
