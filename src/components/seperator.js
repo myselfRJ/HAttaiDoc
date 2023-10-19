@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     separator:{
         height:verticalScale(1),
         // borderBottomWidth:moderateScale(0.5),
-        marginVertical:verticalScale(6),
+        marginVertical:verticalScale(4),
     
         backgroundColor:CUSTOMCOLOR.primary,
     }
