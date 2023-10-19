@@ -39,633 +39,280 @@ const VitalScreen = ({route, props}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [edd, setEdd] = useState();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false)
   const navigation = useNavigation();
-  // const route = useRoute();
-  const {gende} = route.params;
-  console.log('gender=', gende);
+  const { gende } = route.params;
+  console.log('gender=', gende)
   const handleDate = () => {
-    setOpen(!open);
+      setOpen(!open);
   };
 
   const handleConfirm = selectedDate => {
-    setDate(selectedDate);
-    const updateLDD = selectedDate?.toISOString().split('T')[0];
-    console.log('date formate', updateLDD);
-    lmpChange(updateLDD);
+      setDate(selectedDate);
+      const updateLDD = selectedDate?.toISOString().split('T')[0];
+      console.log('date formate', updateLDD);
+      lmpChange(updateLDD);
   };
-  console.log(
-    '-------------------',
-    date.toISOString().split('T')[0],
-    '------------------------',
-  );
-
   const handleCancel = () => {
-    setOpen(open);
+      setOpen(open);
   };
 
   const lmpdate = date.toISOString().split('T')[0];
-  const lmpdates = `${lmpdate.split('-')[2]}-${months[lmpdate.split('-')[1]]}-${
-    lmpdate.split('-')[0]
-  }`;
+  const lmpdates = `${lmpdate.split('-')[2]}-${months[lmpdate.split('-')[1]]}-${lmpdate.split('-')[0]
+      }`;
 
   const [vitals, setVitals] = useState({
-    pulse_rate: '',
-    weight: '',
-    height: '',
-    body_temperature: '',
-    rate: '',
-    bmi: '',
-    diastolic: '',
-    systolic: '',
-    LDD: '',
-    EDD: '',
+      pulse_rate: '',
+      weight: '',
+      height: '',
+      body_temperature: '',
+      rate: '',
+      bmi: '',
+      diastolic: '',
+      systolic: '',
+      LDD: '',
+      EDD: '',
   });
-  console.log('====>dias', vitals);
+  console.log('====>dias', vitals)
 
   const handlePress = () => {
-    console.log('=vitals', vitals);
-    dispatch(addVitals(vitals));
-    nav.goBack();
+      console.log('=vitals', vitals);
+      dispatch(addVitals(vitals));
+      nav.goBack();
   };
-  const PulseChange = text => {
-    const updatedVitals = {...vitals, pulse_rate: text};
-    // console.log(updatedVitals);
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+  const PulseChange = (text) => {
+      const updatedVitals = { ...vitals, pulse_rate: text };
+      setVitals(updatedVitals);
   };
-  const weightChange = text => {
-    const updatedVitals = {...vitals, weight: text};
-    setVitals(updatedVitals);
-    /// dispatch(addVitals({ index, text }));
+  const weightChange = (text) => {
+      const updatedVitals = { ...vitals, weight: text };
+      setVitals(updatedVitals);
   };
-  const heightChange = text => {
-    const updatedVitals = {...vitals, height: text};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+  const heightChange = (text) => {
+      const updatedVitals = { ...vitals, height: text };
+      setVitals(updatedVitals);
   };
-  const tempChange = text => {
-    const updatedVitals = {...vitals, body_temperature: text};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+  const tempChange = (text) => {
+      const updatedVitals = { ...vitals, body_temperature: text };
+      setVitals(updatedVitals);
   };
-  const rateChange = text => {
-    const updatedVitals = {...vitals, rate: text};
-    setVitals(updatedVitals);
+  const rateChange = (text) => {
+      const updatedVitals = { ...vitals, rate: text };
+      setVitals(updatedVitals);
   };
   const handleBMI = () => {
-    const height = (parseInt(vitals.height) / 100) ** 2;
-    const weight = parseFloat(vitals.weight);
-    const BMI = (weight / height).toString().slice(0, 5);
+      const height = (parseInt(vitals.height) / 100) ** 2;
+      const weight = parseFloat(vitals.weight);
+      const BMI = (weight / height).toString().slice(0, 5);
 
-    if (BMI !== NaN) {
-      bmiChange(BMI);
-      setBmi(BMI);
-    } else {
-      bmiChange(null);
-      setBmi(null);
-    }
-
-    // return BMI;
+      if (BMI !== NaN) {
+          bmiChange(BMI);
+          setBmi(BMI);
+      } else {
+          bmiChange(null);
+          setBmi(null);
+      }
   };
 
   useEffect(() => {
-    handleBMI();
+      handleBMI();
   }, [vitals.height, vitals.weight]);
 
   const [bmi, setBmi] = useState();
 
   const bmiChange = bmi => {
-    const updatedVitals = {...vitals, bmi: bmi};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+      const updatedVitals = { ...vitals, bmi: bmi };
+      setVitals(updatedVitals);
   };
-  const diastolicChange = text => {
-    const updatedVitals = {...vitals, diastolic: text};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+  const diastolicChange = (text) => {
+      const updatedVitals = { ...vitals, diastolic: text };
+      setVitals(updatedVitals);
   };
-  const systolicChange = text => {
-    console.log('=========>textr', text);
-    const updatedVitals = {...vitals, systolic: text};
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+  const systolicChange = (text) => {
+      console.log('=========>textr', text);
+      const updatedVitals = { ...vitals, systolic: text };
+      setVitals(updatedVitals);
   };
 
   const lmpChange = lmpdate => {
-    console.log('updatedLMMP', updatedVitals);
-    const EDD = handleEdd(lmpdate);
-    usChange(EDD);
-    const updatedVitals = {...vitals, LDD: lmpdate, EDD: EDD};
-    setEdd(EDD);
-    setVitals(updatedVitals);
-    // dispatch(addVitals({ index, text }));
+      console.log('updatedLMMP', updatedVitals);
+      const EDD = handleEdd(lmpdate);
+      usChange(EDD);
+      const updatedVitals = { ...vitals, LDD: lmpdate, EDD: EDD };
+      setEdd(EDD);
+      setVitals(updatedVitals);
   };
   const usChange = formatedDate => {
-    const updatedVitals = {...vitals, EDD: formatedDate};
-    console.log('updateValues.......', updatedVitals);
-    setVitals(updatedVitals);
+      const updatedVitals = { ...vitals, EDD: formatedDate };
+      console.log('updateValues.......', updatedVitals);
+      setVitals(updatedVitals);
   };
 
   const handleEdd = selectedDate => {
-    let startDate = new Date(selectedDate);
+      let startDate = new Date(selectedDate);
 
-    let numberOfDaysToAdd = 280;
-    let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
-    let formattedEndDate = endDate.toISOString().substring(0, 10);
-    const day = formattedEndDate.split('-')[2];
-    const year = formattedEndDate.split('-')[0];
-    const month = months[`${formattedEndDate.split('-')[1]}`];
-    const EDD = `${day}-${month}-${year}`;
-    // usChange(EDD);
-    return EDD;
+      let numberOfDaysToAdd = 280;
+      let endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
+      let formattedEndDate = endDate.toISOString().substring(0, 10);
+      const day = formattedEndDate.split('-')[2];
+      const year = formattedEndDate.split('-')[0];
+      const month = months[`${formattedEndDate.split('-')[1]}`];
+      const EDD = `${day}-${month}-${year}`;
+      return EDD;
   };
-
   return (
-    <View style={styles.main}>
-      <PrescriptionHead heading={Language[language]['vitals']} />
-      {/* <Text style={styles.h3}>{Language[language]['vitals']}</Text> */}
-      <ScrollView>
-        <View style={styles.vitalmain}>
-          <View style={styles.basiccontainer}>
-            <Text style={commonstyles.subhead}>Basic</Text>
-            <Seperator />
-
-            <View style={styles.basicFields}>
-              {/* <View style={styles.pulsecontainer}>
-                 
-                  <InputText
-                    label="Pulse"
-                    placeholder="bpm"
-                    setValue={text => PulseChange(text)}
-                    numeric={true}
-                  />
-                </View> */}
-              {/* <View style={styles.weightcontainer}>
-                  <InputText
-                    label={Language[language]['weight']}
-                    placeholder="kg"
-                    setValue={text => weightChange(text, props.index)}
-                    numeric={true}
-                  />
-                </View> */}
-              {/* <View style={styles.heightcontainer}>
-                  <InputText
-                    label={Language[language]['height']}
-                    placeholder="cm"
-                    setValue={text => heightChange(text, props.index)}
-                    numeric={true}
-                  />
-                </View> */}
-              {/* {bmi !== 'NaN' ? (
-                  <View style={styles.bmicontainer}>
-                    <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
-                    <Text style={styles.bmitext}>{bmi}</Text>
-                  </View>
-                ) : (
-                  <View style={styles.bmicontainer}>
-                    <Text style={styles.bmi}>{Language[language]['bmi']}</Text>
-                    <Text style={styles.bmitext}>{'00'}</Text>
-                  </View>
-                )} */}
-              {/* <View style={styles.tempcontainer}>
-                  <InputText
-                    label={Language[language]['temp']}
-                    placeholder="°C"
-                    setValue={text => tempChange(text, props.index)}
-                    numeric={true}
-                  />
-                  
-                </View>
-                <View style={styles.ratecontainer}>
-                  <InputText
-                    label={Language[language]['rate']}
-                    placeholder="brpm"
-                    setValue={text => rateChange(text, props.index)}
-                    numeric={true}
-                  />
-                </View> */}
-              <VitalField
-                name="Height"
-                placeholder="cm"
-                setvalue={text => heightChange(text)}
-              />
-              <VitalField
-                name="Weight"
-                placeholder="kg"
-                setvalue={text => weightChange(text)}
-              />
-              {bmi !== 'NaN' ? (
-                <VitalField name="BMI" value={bmi} />
-              ) : (
-                <VitalField name="BMI" value="00" />
-              )}
-              <VitalField
-                name="Pulse"
-                placeholder="bpm"
-                setvalue={text => PulseChange(text)}
-              />
-              <VitalField
-                name="Temp"
-                placeholder="°C"
-                setvalue={text => tempChange(text)}
-              />
-              <VitalField name="SPO2" placeholder="%" />
-              <VitalField
-                name="Res_Rate"
-                placeholder="brpm"
-                setvalue={text => rateChange(text)}
-              />
-            </View>
-          </View>
-          <View style={styles.basiccontainer}>
-            <Text style={commonstyles.subhead}>Blood Pressure</Text>
-            <Seperator />
-
-            <View style={styles.bloodPressureContainer}>
-              {/* <View style={styles.syscontainer}>
-                <InputText
-                  label={Language[language]['systolic_bp']}
-                  placeholder='mmHg'
-                  setValue={text => systolicChange(text)}
-                  numeric={true}
-                />
-              </View>
-             <View style={styles.diascontainer}>
-                <InputText
-                  label={Language[language]['diastolic_bp']}
-                  placeholder='mmHg'
-                  setValue={text => diastolicChange(text)}
-                  numeric={true}
-                />
-              </View> */}
-              <VitalField
-                name="Systolic BP"
-                placeholder="mmhg"
-                setvalue={text => systolicChange(text)}
-              />
-              <VitalField
-                name="Diastolic BP"
-                placeholder="mmhg"
-                setvalue={text => diastolicChange(text)}
-              />
-            </View>
-          </View>
-          {gende === ('Female' || 'female') ? (
-            <View style={styles.basiccontainer}>
-              <Text style={commonstyles.subhead}>Pregnancy</Text>
-              <Seperator />
-
-              <View style={styles.pregnancyFields}>
-                <View style={styles.lmpcontainer}>
-                  <Text style={styles.lmp}>LMP</Text>
-                  <View style={styles.hardText}>
-                    <SelectorBtn
-                      size={20}
-                      inputstyle={{fontSize: 10}}
-                      onPress={() => {
-                        handleDate();
-                      }}
-                      name={'calendar'}
-                      input={lmpdates}
-                    />
-                    {open && (
-                      <DatePicker
-                        modal
-                        open={open}
-                        date={date}
-                        theme="auto"
-                        mode="date"
-                        onConfirm={handleConfirm}
-                        onCancel={handleCancel}
+      <View style={styles.main}>
+          <PrescriptionHead heading='Vitals' />
+          <ScrollView contentContainerStyle={{ paddingBottom: moderateScale(100) }}>
+              <View style={styles.container}>
+                  <Text style={commonstyles.subhead}>Basic</Text>
+                  <Seperator />
+                  <View style={styles.fields}>
+                      <VitalField
+                          name='Height'
+                          placeholder='Cm'
+                          setvalue={text => heightChange(text)}
                       />
-                    )}
-                    {/* <Text
-                    style={{padding: moderateScale(21), backgroundColor: CUSTOMCOLOR.white}}>
-                    week
-                  </Text> */}
+                      <VitalField
+                          name='Weight'
+                          placeholder='Kg'
+                          setvalue={text => weightChange(text)}
+                      />
+                      {bmi !== 'NaN' ? (
+                          <VitalField
+                              name='BMI'
+                              value={bmi}
+                          />) : (<VitalField
+                              name='BMI'
+                              value='00'
+                          />)}
+                      <VitalField
+                          name='Pulse'
+                          placeholder='bpm'
+                          setvalue={text => PulseChange(text)}
+                      />
+                      <VitalField
+                          name='Temp'
+                          placeholder='°C'
+                          setvalue={text => tempChange(text)}
+                      />
+                      <VitalField
+                          name='SPO2'
+                          placeholder='%'
+                      />
+                      <VitalField
+                          name='Res_Rate'
+                          placeholder='brpm'
+                          setvalue={text => rateChange(text)}
+                      />
+
                   </View>
-                </View>
-                <View style={styles.uscontainer}>
-                  <Text style={styles.us}>EDD</Text>
-                  {/* <View style={styles.hardText}> */}
-                  {/* <TextInput
-                    value={handleedd}
-                    onChangeText={usChange}
-                    style={styles.ustext}
-                    keyboardType="numeric"
-                  /> */}
-                  {/* <Text></Text> */}
-                  {/* <View style={{width:moderateScale(100)}}> */}
-                  <Text style={styles.EDD}>{vitals?.EDD}</Text>
-                  {/* </View> */}
-                  {/* </View> */}
-                </View>
+                  <Text style={commonstyles.subhead}>Blood Pressure</Text>
+                  <Seperator />
+                  <View style={styles.fields}>
+                      <VitalField
+                          name='Systolic BP'
+                          placeholder='mmhg'
+                          setvalue={text => systolicChange(text)}
+                      />
+                      <VitalField
+                          name='Diastolic BP'
+                          placeholder='mmhg'
+                          setvalue={text => diastolicChange(text)}
+                      />
+                  </View>
+                  {gende === 'female' ? 
+                  (<View style={{gap:moderateScale(8)}}>
+                     <Text style={commonstyles.subhead}>Pregnancy</Text>
+                  <Seperator />
+                  <View style={styles.fields}>
+                      <View style={styles.preg}>
+                          <Text style={styles.name}>LMP</Text>
+                          <SelectorBtn
+                              size={20}
+                              inputstyle={{ fontSize: 10 }}
+                              onPress={() => {
+                                  handleDate();
+                              }}
+                              name={'calendar'}
+                              input={lmpdates}
+                          />
+                          {open && (
+                              <DatePicker
+                                  modal
+                                  open={open}
+                                  date={date}
+                                  theme="auto"
+                                  mode="date"
+                                  onConfirm={handleConfirm}
+                                  onCancel={handleCancel}
+                              />
+                          )}
+                      </View> 
+                 
+                      <VitalField
+                          name='EDD'
+                          setvalue={vitals?.EDD}
+                      />
+                  </View>
+                  </View>):null}
+                  {show == true ? (
+                      <View style={{gap:moderateScale(8)}}>
+                          <Text style={commonstyles.subhead}>Others</Text>
+                  <Seperator />
+                  <VitalField
+                      name='Vital name'
+                      placeholder='Enter'
+                      setValue={text => systolicChange(text)}
+                  />
+                      </View>
+                  ): null}
+                  <HButton
+                      btnstyles={{ alignSelf: 'flex-end' }}
+                      icon='plus'
+                      label='Others'
+                      onPress={()=> setShow(!show)}
+                  />
               </View>
-            </View>
-          ) : null}
-          {show === true ? (
-            <View style={{gap: moderateScale(8)}}>
-              <Text style={commonstyles.subhead}>Others</Text>
-              <Seperator />
-              <View style={styles.pregnancyFields}>
-                <VitalField
-                  name="Vital name"
-                  placeholder="Enter"
-                  setValue={text => systolicChange(text)}
-                />
-              </View>
-            </View>
-          ) : null}
-        </View>
-        <View
-          style={{
-            alignSelf: 'flex-end',
-            paddingHorizontal: horizontalScale(8),
-            padding: moderateScale(8),
-          }}>
-          <HButton icon="plus" label="Others" onPress={() => setShow(!show)} />
-        </View>
-      </ScrollView>
-      <View style={{alignItems: 'center'}}>
-        <HButton
-          btnstyles={{
-            width: moderateScale(380),
-            borderRadius: moderateScale(16),
-          }}
-          label={Language[language]['submit']}
-          onPress={handlePress}
-        />
+          </ScrollView>
+          <HButton
+                btnstyles={{width:moderateScale(380),borderRadius:moderateScale(16),alignSelf:'center'}}
+                label={Language[language]['submit']}
+                onPress={handlePress}
+          />
+
       </View>
-    </View>
-  );
+  )
 };
 const styles = StyleSheet.create({
   main: {
-    padding: moderateScale(12),
-    gap: 16,
+      flex: 1,
+      paddingHorizontal: horizontalScale(24),
+      paddingVertical: verticalScale(12),
+      gap: moderateScale(8)
   },
-  EDD: {
-    paddingHorizontal: horizontalScale(8),
-    backgroundColor: CUSTOMCOLOR.white,
-    color: CUSTOMCOLOR.primary,
-    fontSize: CUSTOMFONTSIZE.h4,
-    alignSelf: 'center',
-    width: moderateScale(100),
-    paddingVertical: verticalScale(14),
-    borderRadius: moderateScale(4),
-    borderWidth: 0.5,
-    borderColor: CUSTOMCOLOR.primary,
+  container: {
+      gap: moderateScale(12),
   },
-  inpcontainer: {
-    flexDirection: 'row',
-    width: '100%',
-    //paddingHorizontal: horizontalScale(4),
-    paddingVertical: verticalScale(8),
-    fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '700',
-    gap: moderateScale(4),
-    borderRadius: moderateScale(4),
-    paddingHorizontal: horizontalScale(8),
+  fields: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap'
   },
-  vitalmain: {
-    // borderWidth:1,
-    width: '100%',
-    // height: 309,
-    // gap: moderateScale(8),
-    padding: moderateScale(8),
+  name: {
+      width: moderateScale(65),
+      fontWeight: '400',
+      fontSize: CUSTOMFONTSIZE.h3,
+      color: CUSTOMCOLOR.black,
+      paddingHorizontal:horizontalScale(8)
   },
-  basiccontainer: {
-    gap: verticalScale(4),
-    marginBottom: verticalScale(16),
-    // borderWidth:1,
-  },
-  basic: {
-    fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: '600',
-    paddingHorizontal: horizontalScale(8),
-    color: CUSTOMCOLOR.black,
-    fontSize: CUSTOMFONTSIZE.h2,
-  },
-  basicFields: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: moderateScale(8),
-    padding: moderateScale(16),
-  },
-  pulsecontainer: {
-    width: moderateScale(100),
-  },
-  pulse: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  pulsetext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-    //paddingHorizontal:horizontalScale(12)
-  },
-  weightcontainer: {
-    width: moderateScale(100),
-    // borderWidth:1,
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4),
-  },
-  weight: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  hardText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  // text: {
-  //   fontSize: CUSTOMFONTSIZE.h4,
-  //   color: CUSTOMCOLOR.black,
-  //   backgroundColor: CUSTOMCOLOR.white,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  weighttext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  heightcontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4),
-    width: moderateScale(100),
-    // borderWidth:1,
-  },
-  height: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  heighttext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  tempcontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4),
-    width: moderateScale(100),
-    // borderWidth:1,
-  },
-  temp: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  temptext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  ratecontainer: {
-    width: moderateScale(100),
-  },
-  rate: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  ratetext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  bmicontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(8),
-    width: moderateScale(100),
-    // borderWidth:1,
-    height: moderateScale(85),
-    padding: moderateScale(8),
-  },
-  bmi: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-    fontWeight: 400,
-  },
-  bmitext: {
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: horizontalScale(8),
-    top: moderateScale(4),
-    gap: moderateScale(8),
-    backgroundColor: CUSTOMCOLOR.white,
-    borderRadius: moderateScale(4),
-    color: CUSTOMCOLOR.primary,
-  },
-  bloodPressureContainer: {
-    flexDirection: 'row',
-    gap: moderateScale(16),
-    padding: moderateScale(16),
-    alignItems: 'center',
-  },
-  subhead: {
-    color: CUSTOMCOLOR.black,
-    fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 600,
-    fontSize: CUSTOMFONTSIZE.h2,
-  },
-  diascontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4),
-    // width:moderateScale(100),
-    // borderWidth:1,
-  },
-  diastolic: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-    lineHeight: 16.34,
-  },
-  diatext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  syscontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4),
-    width: moderateScale(100),
-  },
-  systolic: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-  },
-  systext: {
-    paddingVertical: verticalScale(16),
-    gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  pregText: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
-    //gap: 10,
-    color: CUSTOMCOLOR.black,
-    top: moderateScale(16),
-    fontFamily: CUSTOMFONTFAMILY.body,
-    fontWeight: 600,
-    fontSize: CUSTOMFONTSIZE.h2,
-  },
-  pregnancyFields: {
-    // paddingHorizontal: horizontalScale(24),
-    // paddingVertical: verticalScale(4),
-    gap: moderateScale(8),
-    padding: moderateScale(16),
-    alignItems: 'center',
-    // width: moderateScale(700),
-    flexDirection: 'row',
-    // top: moderateScale(16),
-  },
-  lmpcontainer: {
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
-    gap: moderateScale(4),
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  lmp: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-    width: moderateScale(65),
-  },
-  lmptext: {
-    // paddingVertical: verticalScale(16),
-    // gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  uscontainer: {
-    // paddingHorizontal: horizontalScale(8),
-    // paddingVertical: verticalScale(4,)
-    gap: moderateScale(8),
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  us: {
-    fontSize: CUSTOMFONTSIZE.h4,
-    color: CUSTOMCOLOR.black,
-    // top:moderateScale(4),
-    width: moderateScale(60),
-  },
-  ustext: {
-    // paddingVertical: verticalScale(16),
-    // gap: moderateScale(4),
-    backgroundColor: CUSTOMCOLOR.white,
-  },
-  submitbtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: horizontalScale(8),
-    alignSelf: 'center',
-    margin: moderateScale(100),
-    // borderWidth: 1,
-    borderColor: CUSTOMCOLOR.primary,
-    borderRadius: moderateScale(4),
-  },
-});
+  preg: {
+      // gap:moderateScale(2),
+      alignItems:'center',
+      flexDirection: 'row',
+      marginHorizontal: horizontalScale(4)
+  }
+})
 
 export default VitalScreen;
