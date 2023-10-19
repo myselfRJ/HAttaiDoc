@@ -14,7 +14,7 @@ import Prescribe from '../screens/prescribe';
 import Date from '../screens/Follow-up';
 import Symptoms from '../screens/symptoms';
 import CheifComplaints from '../screens/cheif_complaint';
-import {Vitals} from '../components';
+// import {Vitals} from '../components';
 import NoteScreen from '../screens/notescreen';
 // import ReferDoctorScreen from '../screens/referdoctorscreen';
 import VitalScreen from '../screens/vitalscreen';
@@ -40,6 +40,7 @@ import PastHistory from '../screens/pasthistory';
 import {CUSTOMCOLOR} from '../settings/styles';
 import Valid from '../screens/consultationValid';
 import Uploadrecord from '../screens/UploadRecord';
+import Vitals from '../screens/vitals';
 
 const Stack = createNativeStackNavigator();
 import ProgresHeader from '../components/progressheader';
@@ -231,6 +232,17 @@ const ProtectedRoute = () => {
       <Stack.Screen
         name="vitalscreen"
         component={VitalScreen}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Vitals',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+       <Stack.Screen
+        name="vitals"
+        component={Vitals}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Vitals',

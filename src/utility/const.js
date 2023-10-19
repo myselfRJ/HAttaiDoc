@@ -2,7 +2,7 @@ export const CONSTANT = {
   DoctorRefer: ['Dr.Raju', 'Dr.Muthu', 'Dr.Chitti'],
   ConsultationList: [
     {label: 'Reason for visit', icon: 'chevron-right', navigate: 'complaints'},
-    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitalscreen'},
+    {label: 'Vitals', icon: 'chevron-right', navigate: 'vitals'},
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
     {label: 'Diagnosis', icon: 'chevron-right', navigate: 'diagnosis'},
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},

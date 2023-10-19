@@ -985,7 +985,7 @@ const Visit = ({navigation, route}) => {
                         params.complaint = complaint;
                       } else if (value.navigate === 'FollowUp') {
                         params.date = date;
-                      } else if (value.navigate === 'vitalscreen') {
+                      } else if (value.navigate === 'vitals') {
                         params.gende = gende;
                       }
                     
