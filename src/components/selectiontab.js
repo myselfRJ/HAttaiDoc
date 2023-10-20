@@ -23,6 +23,7 @@ const SelectionTab = props => {
             ? CUSTOMCOLOR.primary
             : CUSTOMCOLOR.white,
           borderWidth: props.selected ? 0 : 0.5,
+          // borderColor:CUSTOMCOLOR.primary
         },
         props.selectContainer,
       ]}>

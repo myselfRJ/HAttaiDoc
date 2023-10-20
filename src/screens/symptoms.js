@@ -171,12 +171,13 @@ const Symptoms = ({ navigation }) => {
   return (
 
     <View style={styles.mainContainer}>
+       <PrescriptionHead heading={Language[language]['symptoms']}/>
       <ScrollView contentContainerStyle={{
         zIndex:1,
         paddingBottom: verticalScale(120),
       }}>
        
-          <PrescriptionHead heading={Language[language]['symptoms']} head={{paddingHorizontal:horizontalScale(16)}}/>
+         
         
       
         
@@ -185,7 +186,7 @@ const Symptoms = ({ navigation }) => {
                 <InputText
                   inputContainer={styles.inputtext}
                   label='Search'
-                  placeholder="Write first three letters..."
+                  placeholder="Write first four letters..."
                   value={symptom}
                   setValue={setSymptom}
                   search={true}
@@ -312,7 +313,10 @@ const Symptoms = ({ navigation }) => {
             <HButton
             
               icon='plus'
+              type='addtype'
+
               btnstyles={{
+                
                 backgroundColor:
                   (symptom && sevSelected && days)
                     ? CUSTOMCOLOR.primary
@@ -394,7 +398,8 @@ const Symptoms = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingHorizontal: horizontalScale(16),
+    paddingHorizontal: horizontalScale(24),
+    borderWidth:1,
     paddingVertical:verticalScale(12)
     // borderWidth: 1
   },
@@ -470,7 +475,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   content: {
-    paddingHorizontal: horizontalScale(16),
+    // paddingHorizontal: horizontalScale(16),
     gap: moderateScale(16),
     zIndex:2
     // position:'absolute'

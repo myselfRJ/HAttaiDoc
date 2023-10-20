@@ -79,9 +79,9 @@ const ReferToDoctor = () => {
     }
   };
   return (
-    <View style={styles.maincontnet}>
+    <View style={styles.main}>
       <PrescriptionHead
-        head={{padding: 0, paddingBottom: moderateScale(12)}}
+        head={{padding: 0}}
         heading="Referral"
       />
       {doctor?.map((item, ind) =>
@@ -161,34 +161,46 @@ const ReferToDoctor = () => {
         />
       </View>
       <View style={{marginTop: verticalScale(64), alignSelf: 'flex-end'}}>
-        <PlusButton
+        <HButton
           icon="plus"
+          label='Add'
+          type='addtype'
           size={moderateScale(24)}
           onPress={handleAddDoctors}
         />
       </View>
-      <View style={{top: moderateScale(64), alignItems: 'center'}}>
-        <HButton
-          label={Language[language]['submit']}
-          btnstyles={{
-            backgroundColor:
-              doctor?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-          }}
-          onPress={onPress}
-        />
-      </View>
+      <View
+            style={{
+              position:'absolute',
+              bottom:"5%",
+              alignSelf:'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              // marginTop: moderateScale(32),
+            }}>
+            <HButton
+           
+           label={Language[language]['save']}
+           btnstyles={{
+             backgroundColor:
+               doctor?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+           }}
+           onPress={onPress}
+            />
+          </View>
+     
     </View>
   );
 };
 const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'space-between',
-    padding: moderateScale(8),
-  },
+
   head: {
     color: CUSTOMCOLOR.black,
     fontSize: moderateScale(14),
     fontWeight: '600',
+  },
+  container:{
+gap:verticalScale(16)
   },
   fields: {
     height: verticalScale(14),
@@ -200,9 +212,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     alignSelf: 'center',
   },
-  maincontnet: {
+  main: {
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
+    gap:verticalScale(16),
+    flex:1,
   },
   child: {
     gap: moderateScale(16),

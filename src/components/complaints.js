@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   dropdownContainer:{
     height:moderateScale(300),
     backgroundColor:CUSTOMCOLOR.white,
-    marginHorizontal:horizontalScale(8),
+    // marginHorizontal:horizontalScale(8),
   },
   touch:{
     paddingHorizontal:horizontalScale(8),

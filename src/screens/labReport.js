@@ -129,9 +129,10 @@ const LabReports = () => {
 
   return (
     <View style={styles.main}>
-      <ScrollView
-      contentContainerStyle={{height:'90%'}}>
       <PrescriptionHead heading="Investigation Prescribed" />
+      <ScrollView
+      contentContainerStyle={{height:'50%'}}>
+      
 
       
       <View>
@@ -229,6 +230,7 @@ const LabReports = () => {
             }}>
             <HButton
             // btnstyles={{paddingHorizontal:horizontalScale(12)}}
+            type='addtype'
             icon='plus'
               label={'Add'}
               onPress={() => {
@@ -254,12 +256,15 @@ const LabReports = () => {
       </ScrollView>
       <View
             style={{
+              position:'absolute',
+              bottom:"5%",
+              alignSelf:'center',
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: moderateScale(32),
+              // marginTop: moderateScale(32),
             }}>
             <HButton
-            btnstyles={{width:moderateScale(380),borderRadius:moderateScale(8)}}
+           
               label={'Save'}
               onPress={() => {
                 handledata();
@@ -273,15 +278,12 @@ export default LabReports;
 
 const styles = StyleSheet.create({
   main: {
+    flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
   },
-  input: {
-    // paddingHorizontal:24,
-    paddingVertical:verticalScale(24),
-    gap: moderateScale(0),
-  },
+
   inputtext: {
     paddingVertical: verticalScale(0),
     // borderWidth:1
@@ -289,12 +291,13 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
+    // marginHorizontal: horizontalScale(8),
   },
   recomend: {
     padding: moderateScale(8),
     borderRadius: moderateScale(4),
-    paddingHorizontal: horizontalScale(16),
+    // paddingHorizontal: horizontalScale(16),
+   
     paddingVertical:verticalScale(12),
     borderWidth:0.5,
     borderColor:CUSTOMCOLOR.primary
@@ -303,8 +306,8 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     gap: moderateScale(8),
-    paddingHorizontal:horizontalScale(8),
-    paddingVertical:verticalScale(12),
-    top:moderateScale(24)
+    // paddingHorizontal:horizontalScale(8),
+    paddingVertical:verticalScale(16),
+    // top:moderateScale(24)
   },
 });

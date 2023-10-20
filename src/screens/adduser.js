@@ -440,7 +440,7 @@ const AddUser = ({navigation}) => {
               <SelectorBtn
                 required={true}
                 label="Role"
-                name="chevron-down"
+                name= {show == true ? "chevron-up" :"chevron-down"}
                 // onPress={toggleModal}
                 onPress={() => {
                   setShow(!show);
@@ -502,10 +502,10 @@ const AddUser = ({navigation}) => {
               <SelectorBtn
                 required={true}
                 label="Clinic"
-                name="chevron-down"
+                name= {showclinic == true ? "chevron-up" :"chevron-down"} 
                 // onPress={toggleModal}
                 onPress={() => {
-                  setShowclinic(!show);
+                  setShowclinic(!showclinic);
                 }}
                 input={selectedClinic}
               />
@@ -757,10 +757,6 @@ const styles = StyleSheet.create({
   alignchild1: {
     justifyContent: 'center',
     alignItems: 'flex-start',
-    width: '100%',
-    height: '20%',
-
-    // borderWidth:1
   },
   modalContainer: {
     // height: '100%',
@@ -808,7 +804,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(6),
   },
   clinicselect: {
-    // gap: moderateScale(16),
+    gap: moderateScale(0),
     alignSelf: 'flex-start',
     // flexDirection: 'row',
     width: '100%',
@@ -834,9 +830,11 @@ const styles = StyleSheet.create({
   },
   rolemenu: {
     backgroundColor: CUSTOMCOLOR.white,
-    // gap:moderateScale(4),
+    gap:moderateScale(0),
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(24),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   txt: {
     color: CUSTOMCOLOR.black,

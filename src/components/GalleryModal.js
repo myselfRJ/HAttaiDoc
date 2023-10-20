@@ -118,6 +118,10 @@ const GalleryModel = props => {
             <Icon name="camera" size={moderateScale(48)} style={styles.icon} color={CUSTOMCOLOR.primary} />
             <Text style={styles.text}>CAMERA</Text>
           </TouchableOpacity>
+          {props.delete == true ? (<TouchableOpacity onPress={props.OnDelete}>
+            <Icon name="delete" size={moderateScale(48)} style={styles.icon} color={CUSTOMCOLOR.delete} />
+            <Text style={styles.text}>Delete</Text>
+          </TouchableOpacity>) : null}
         </View>
       </View>
     </Modal>

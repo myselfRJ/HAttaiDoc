@@ -158,7 +158,7 @@ const MedicalHistory =({navigation})=>{
           </View>:null}
           <InputText
             inputContainer={styles.inputtext}
-            label="Medical History"
+            label="Medication History"
             placeholder="medicine name, dose, quantity, days,reason for medication"
             value={medical}
             setValue={(txt)=> setMedical(txt)}
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     
     },
     input: {
-      // paddingVertical:24,
+      // paddingHorizontal:horizontalScale(8),
       gap:moderateScale(16),
      
     },

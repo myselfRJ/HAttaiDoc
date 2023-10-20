@@ -294,11 +294,13 @@ const styles = StyleSheet.create({
   },
   container: {
       gap: moderateScale(12),
+      paddingHorizontal:horizontalScale(12)
   },
   fields: {
       flexDirection: 'row',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      
   },
   name: {
       width: moderateScale(70),

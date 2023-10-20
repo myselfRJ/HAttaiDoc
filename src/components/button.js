@@ -17,14 +17,14 @@ const HButton = props => {
   return (
     <>
       <Pressable
-        style={{...styles?.btncontainer, ...props.btnstyles}}
+        style={props.type=='addtype'?{...styles.btncontainer,...{paddingHorizontal:horizontalScale(24),paddingVertical:verticalScale(12),...props.btnstyles}}:{...styles?.btncontainer, ...props.btnstyles}}
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon
             // style={styles.icon}
             name={props.icon}
             color={CUSTOMCOLOR.white}
-            size={moderateScale(24)}
+            size={props.size ? props.size : moderateScale(24)}
           />
         )}
         {props.loading && (
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(8),
     justifyContent: 'center',
-    gap: verticalScale(8),
+    gap: horizontalScale(4),
   },
   btntext: {
     fontWeight: 600,

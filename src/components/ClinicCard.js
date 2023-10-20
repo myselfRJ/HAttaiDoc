@@ -40,7 +40,7 @@ const ClinicCard = props => {
   const Clinic_details = props.data;
   const navigation = useNavigation();
   const id = Clinic_details?.id;
-  const [slots] = useState(JSON.parse(Clinic_details?.slot_data?.slot));
+  let slots =(JSON.parse(Clinic_details?.slot_data?.slot))
 
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -105,7 +105,7 @@ const ClinicCard = props => {
                   color={CUSTOMCOLOR.error}
                 />
               </Pressable>
-              <Pressable
+              {/* <Pressable
                 style={styles.gap}
                 onPress={() => {
                   setShow(!show);
@@ -115,36 +115,34 @@ const ClinicCard = props => {
                   size={16}
                   color={CUSTOMCOLOR.primary}
                 />
-              </Pressable>
+              </Pressable> */}
             </View>
-            <Text
+            {/* <Text
               style={{
                 fontSize: CUSTOMFONTSIZE.h4,
                 color: CUSTOMCOLOR.black,
                 fontWeight: '400',
               }}>
               Visiting Hrs : 9:00-5:00
-            </Text>
+            </Text> */}
           </View>
         </View>
-        {show && (
-          <View
-            style={{
-              paddingTop: moderateScale(24),
-              // paddingHorizontal: horizontalScale(144),
-            }}>
-            <View style={styles.slot}>
-              <Text
+        <Text
                 style={{
                   color: CUSTOMCOLOR.primary,
                   fontSize: CUSTOMFONTSIZE.h3,
                   fontWeight: '700',
+                  alignSelf:'center'
                 }}>
-                Slots :
+                Slots
               </Text>
+       
+         
+            <View style={styles.slot}>
+             
 
               <View>
-                <Text style={styles.slotTime}>M</Text>
+                <Text style={styles.daytime}>M</Text>
                 {slots?.M?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -152,7 +150,7 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>T</Text>
+                <Text style={styles.daytime}>T</Text>
                 {slots?.T?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -160,7 +158,7 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>W</Text>
+                <Text style={styles.daytime}>W</Text>
                 {slots?.W?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -168,7 +166,7 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>Th</Text>
+                <Text style={styles.daytime}>Th</Text>
                 {slots?.TH?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -176,7 +174,7 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>F</Text>
+                <Text style={styles.daytime}>F</Text>
                 {slots?.F?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -184,7 +182,7 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>Sa</Text>
+                <Text style={styles.daytime}>Sa</Text>
                 {slots?.Sa?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
@@ -192,16 +190,16 @@ const ClinicCard = props => {
                 ))}
               </View>
               <View>
-                <Text style={styles.slotTime}>S</Text>
+                <Text style={styles.daytime}>S</Text>
                 {slots?.Su?.map((item, ind) => (
                   <Text style={styles.slotTime}>
                     {item?.fromTime}-{item?.toTime}
                   </Text>
                 ))}
-              </View>
+              
             </View>
           </View>
-        )}
+        
       </View>
     </View>
   );
@@ -230,8 +228,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: CUSTOMCOLOR.black,
-    fontSize: CUSTOMFONTSIZE.h3,
-    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h4,
+    
   },
   gap: {
     height: moderateScale(40),
@@ -247,6 +245,7 @@ const styles = StyleSheet.create({
   },
   slot: {
     padding: moderateScale(12),
+    marginTop:verticalScale(8),
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderWidth: moderateScale(1),
@@ -256,7 +255,14 @@ const styles = StyleSheet.create({
   },
   slotTime: {
     color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h5,
+    fontWeight: '400',
+    alignSelf: 'center',
+  },
+  daytime: {
+    color: CUSTOMCOLOR.black,
     fontSize: CUSTOMFONTSIZE.h4,
+    fontFamily:CUSTOMFONTFAMILY.heading,
     fontWeight: '400',
     alignSelf: 'center',
   },

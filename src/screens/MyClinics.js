@@ -138,11 +138,13 @@ const MyClinics = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setClinicData(() => jsonData?.data);
+      setClinicData(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
+
+  console.log('=======>',clinicData);
   const deleteClinic = async id => {
     try {
       const response = await fetch(URL.delete_clinic_slot(id), {
@@ -170,7 +172,7 @@ const MyClinics = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchClinics();
-    }, []),
+    }, [phone]),
   );
   const handleDelete = value => {
     setVisible(!visible);
@@ -214,7 +216,7 @@ const MyClinics = ({navigation}) => {
                 data={item}
                 cancel={() => handleDelete(item?.id)}
               />
-            </View>
+            </View> 
           ))}
         </ScrollView>
         {clinicData?.length > 0 ? (

@@ -4,7 +4,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {moderateScale} from '../utility/scaleDimension';
+import {moderateScale, verticalScale} from '../utility/scaleDimension';
 
 export default PrescribeHead = props => {
   return (
@@ -16,8 +16,8 @@ export default PrescribeHead = props => {
 
 const styles = StyleSheet.create({
   main: {
-    padding: moderateScale(8),
-    marginBottom: moderateScale(12),
+    marginBottom: verticalScale(16),
+    // borderWidth:1,
   },
   text: {
     fontFamily: CUSTOMFONTFAMILY.heading,

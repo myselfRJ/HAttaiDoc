@@ -170,13 +170,12 @@ export default function DateTime() {
 const styles = StyleSheet.create({
   MainContainer: {
     paddingHorizontal: horizontalScale(24),
-    paddingVertical: verticalScale(24),
+    paddingVertical: verticalScale(16),
     gap: moderateScale(12),
   },
   DateContainer: {
     borderRadius: moderateScale(4),
-    paddingHorizontal: horizontalScale(16),
-    backgroundColor: CUSTOMCOLOR.white,
+  
     justifyContent: 'space-between',
   },
   radiogroup: {

@@ -241,7 +241,7 @@ const Dashboard = ({navigation, route}) => {
         <View style={styles.select}>
           <SelectorBtn
             label={'Clinic :'}
-            name="chevron-down"
+            name={open == true ? "chevron-up" :"chevron-down" }
             onPress={() => {
               ClinicRef?.current?.snapToIndex(1);
             }}

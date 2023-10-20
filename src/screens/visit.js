@@ -892,7 +892,7 @@ const Visit = ({navigation, route}) => {
                   <Text
                     style={{
                       color: CUSTOMCOLOR.black,
-                      fontWeight: '400',
+                      fontWeight: 400,
                       fontSize: moderateScale(16),
                     }}>
                     {patient_data?.patient_name}
@@ -1349,7 +1349,7 @@ const Visit = ({navigation, route}) => {
                   )}
 
                   {value.label === 'Refer to Doctor' && (
-                    <View style={styles.basiccontainer}>
+                    selectedDoctor?.length> 0 ? (<View style={styles.basiccontainer}>
                       {selectedDoctor?.map((item, ind) => (
                         <View style={{flexDirection: 'row'}} key={ind}>
                           <Icon
@@ -1362,7 +1362,7 @@ const Visit = ({navigation, route}) => {
                           </Text>
                         </View>
                       ))}
-                    </View>
+                    </View>):null
                   )}
                 </View>
               </View>
@@ -1427,7 +1427,7 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: moderateScale(24),
-    fontWeight: '600',
+    fontWeight: 600,
     fontFamily: CUSTOMFONTFAMILY.heading,
     lineHeight: moderateScale(20 * 2),
     color: CUSTOMCOLOR.black,
@@ -1505,7 +1505,7 @@ const styles = StyleSheet.create({
   },
   patientText: {
     color: CUSTOMCOLOR.black,
-    fontWeight: '400',
+    fontWeight: 400,
     fontSize: moderateScale(14),
     paddingBottom: moderateScale(4),
   },
@@ -1528,7 +1528,7 @@ const styles = StyleSheet.create({
   },
   patientHead: {
     color: CUSTOMCOLOR.black,
-    fontWeight: '700',
+    fontWeight: 700,
     fontSize: moderateScale(16),
   },
   line: {

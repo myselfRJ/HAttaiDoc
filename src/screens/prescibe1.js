@@ -541,9 +541,10 @@ export default function Prescribe1({navigation}) {
           {/* </View> */}
         </View>
         <HButton
+        type='addtype'
           label={'Add'}
           icon="plus"
-          size={moderateScale(32)}
+          // size={moderateScale(16)}
           onPress={handleAddPrescribe}
           btnstyles={{alignSelf:'flex-end'}}
         />
@@ -677,8 +678,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   main: {
-    paddingHorizontal: moderateScale(24),
-    paddingVertical: moderateScale(12),
+    paddingHorizontal: horizontalScale(24),
+    paddingVertical: verticalScale(12),
     flex: 1,
     // gap: moderateScale(24),
   },

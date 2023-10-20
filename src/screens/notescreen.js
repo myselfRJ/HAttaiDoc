@@ -31,7 +31,7 @@ const NoteScreen = () => {
     <View
       style={{
         paddingHorizontal: horizontalScale(24),
-        paddingVertical: verticalScale(24),
+        paddingVertical: verticalScale(16),
       }}>
       <View style={styles.main}>
         <PrescriptionHead heading={Language[language]['notes']} />

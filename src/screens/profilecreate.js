@@ -52,6 +52,7 @@ import GalleryModel from '../components/GalleryModal';
 import RNFS, {stat} from 'react-native-fs';
 import Modal from 'react-native-modal';
 import {mode} from '../redux/features/prescription/prescribeslice';
+import CustomCalendar from '../components/calendar';
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -61,12 +62,18 @@ const ProfileCreate = ({navigation}) => {
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
   const [show, setshow] = useState(false);
+  const [del,setDel] = useState(false)
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
   const [loading, setLoading] = useState(false);
+  const onDelete=()=>{
+    setSelectedImage('')
+    setDel(false)
+    setModal(false)
+  }
 
   const progressData = useSelector(state => state.progress?.status);
   const dispatch = useDispatch();
@@ -180,6 +187,7 @@ const ProfileCreate = ({navigation}) => {
       } else if (response.error) {
       } else {
         setSelectedImage(response?.assets?.[0]?.base64);
+        setDel(!del)
       }
     });
     setModal(false);
@@ -322,11 +330,13 @@ const ProfileCreate = ({navigation}) => {
           // closeModal={()=> setModal(false)}
           OnGallery={onImagePress}
           OnCamera={openCamera}
+          delete={del}
+          OnDelete={onDelete}
           // onPress={()=>setModal(false)}
           // dismiss={()=>setModal(false)}
         />
       )}
-      <Text style={commonstyles.h1}>Fill Profile</Text>
+      <Text style={commonstyles.h1}>Doctor Profile</Text>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.alignchild}>
           <AddImage
@@ -385,7 +395,7 @@ const ProfileCreate = ({navigation}) => {
             input={value}
             setValue={setValue}
             numeric={true}
-            required={true}
+            // required={true}
           />
           <View
             style={{
@@ -408,7 +418,7 @@ const ProfileCreate = ({navigation}) => {
 
           <SelectorBtn
             //  select={{paddingVertical:verticalScale(4),borderWidth:1}}
-            required={true}
+            // required={true}
             selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
             label={Language[language]['dob']}
             name="calendar"
@@ -476,7 +486,7 @@ const ProfileCreate = ({navigation}) => {
               required={true}
               selectContainer={{gap: 2, paddingVertical: -1}}
               label="State"
-              name="menu-down"
+              name={show == true ?"chevron-up" : "chevron-down"}
               size={moderateScale(24)}
               // onPress={toggleModal}
               onPress={() => {
@@ -516,7 +526,7 @@ const ProfileCreate = ({navigation}) => {
         </View>
         <View
           style={{
-            alignSelf: 'flex-start',
+            // alignSelf: 'flex-start',
             gap: verticalScale(4),
             // paddingVertical: verticalScale(8),
           }}>
@@ -525,10 +535,14 @@ const ProfileCreate = ({navigation}) => {
             {selectedFilename ? (
               <View style={styles.selectedfilecontainer}>
                 <Text style={styles.selectedFileInfo}>{selectedFilename}</Text>
-                <TouchableOpacity onPress={handleClearFile}>
+                <TouchableOpacity onPress={handleClearFile} 
+                style={{
+                    backgroundColor:CUSTOMCOLOR.white,
+                    borderRadius:moderateScale(24),
+                }}>
                   <Icon
-                    name="delete"
-                    size={moderateScale(20)}
+                    name="close"
+                    size={moderateScale(24)}
                     color={CUSTOMCOLOR.delete}
                   />
                 </TouchableOpacity>
@@ -542,8 +556,9 @@ const ProfileCreate = ({navigation}) => {
                   borderColor: CUSTOMCOLOR.primary,
                   borderWidth: 0.5,
                   borderRadius: 4,
+                  alignSelf:'flex-start'
                 }}
-                textStyle={{color: CUSTOMCOLOR.primary}}
+                textStyle={{color: CUSTOMCOLOR.primary,fontSize:12}}
               />
             )}
           </View>
@@ -666,14 +681,14 @@ const styles = StyleSheet.create({
   },
   statecontainer: {
     height: moderateScale(200),
-    width: moderateScale(200),
-    zIndex: 5,
+    paddingHorizontal:horizontalScale(66),
+    zIndex: 1,
     borderWidth: 1,
     borderColor: CUSTOMCOLOR.borderColor,
     position: 'absolute',
     right: 0,
     // bottom: 0,
-    top: verticalScale(72),
+    top: verticalScale(78),
     // width: '100%',
     // justifyContent: 'flex-start',
     // alignItems: 'center',
@@ -711,19 +726,22 @@ const styles = StyleSheet.create({
     // paddingHorizontal:horizontalScale(16)
   },
   selectedfilecontainer: {
+    paddingVertical:verticalScale(8),
+    paddingHorizontal:horizontalScale(8),
+    justifyContent:'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    //borderWidth:1,
+    borderWidth:1,
     borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
-    backgroundColor: CUSTOMCOLOR.white,
+    backgroundColor:'#EAF3FC',
   },
   selectedFileInfo: {
     fontFamily: CUSTOMFONTFAMILY.h4,
     fontSize: CUSTOMFONTSIZE.h3,
-    color: CUSTOMCOLOR.black,
+    color: CUSTOMCOLOR.primary,
     paddingRight: moderateScale(8),
-
+    fontWeight:'500',
     paddingVertical: verticalScale(4),
   },
   contact: {
@@ -751,7 +769,7 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-
+    // borderWidth:1,
     // paddingHorizontal: horizontalScale(24),
     gap: verticalScale(8),
   },
@@ -770,12 +788,14 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
 
-    // paddingVertical: verticalScale(8),
+    paddingVertical: verticalScale(8),
     alignSelf: 'flex-start',
   },
   doc_upload: {
-    alignSelf: 'flex-start',
-
+    zIndex:1,
+    // alignSelf: 'flex-start',
+    // width:'100%',
+    // borderWidth:1,
     // paddingVertical: verticalScale(4),
     marginBottom: moderateScale(4),
   },

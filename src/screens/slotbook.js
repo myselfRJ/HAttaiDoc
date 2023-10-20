@@ -49,7 +49,7 @@ const SlotBook = ({navigation, route}) => {
   const selections = CONSTANTS.selections;
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
-    selections[0],
+  
   );
 
   const [selectedMode, setSelectedMode] = useState('offline');

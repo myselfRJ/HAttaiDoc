@@ -75,7 +75,8 @@ const AddClinic = ({navigation}) => {
   // const {prevScrn} = route.params;
   const [cnFess, setCnFees] = useState('');
   const clinics = useSelector(state => state.clinic?.clinics);
-
+  const [show,setShow] = useState(false)
+  const [logoShow,setLogoShow] = useState(false)
   const dispatch = useDispatch();
 
   const [slots, setSlots] = useState({
@@ -87,7 +88,7 @@ const AddClinic = ({navigation}) => {
     Sa: [],
     Su: [],
   });
-
+ console.log('slo====',slots)
   const ResetReduxSlots = () => {
     const newSlotsss = {
       slots: {
@@ -150,8 +151,8 @@ const AddClinic = ({navigation}) => {
 
   const [status, setStatus] = useState(false);
 
-  const [selectedImage, setSelectedImage] = useState('');
-  const [selectedLogo, setSelectedLogo] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedLogo, setSelectedLogo] = useState(null);
   const [value, setValue] = useState({
     clinic: '',
     address: '',
@@ -239,6 +240,7 @@ const AddClinic = ({navigation}) => {
       } else if (response.error) {
       } else {
         setSelectedImage(response?.assets?.[0]?.base64);
+        setShow(!show)
       }
     });
     setModal(false);
@@ -272,6 +274,7 @@ const AddClinic = ({navigation}) => {
       } else if (response.error) {
       } else {
         setSelectedLogo(response?.assets?.[0]?.base64);
+        
       }
     });
     setlogo(false);
@@ -287,6 +290,7 @@ const AddClinic = ({navigation}) => {
       } else if (response.error) {
       } else {
         setSelectedLogo(response?.assets?.[0]?.base64);
+        setLogoShow(!logoShow)
       }
     });
     setlogo(false);
@@ -484,6 +488,16 @@ const AddClinic = ({navigation}) => {
   const onDaySelectionChange = value => {
     setSelectedDay(value);
   };
+  const onDeleteImage=()=>{
+    setSelectedImage('')
+    setModal(false)
+    setShow(false)
+  }
+  const onDeleteLogo =()=>{
+    setSelectedLogo('')
+    setlogo(false)
+    setLogoShow(false)
+  }
 
   const handlewarnings = () => {
     const TimeCheck = fromTime !== toTime;
@@ -671,7 +685,10 @@ const AddClinic = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1,paddingHorizontal:horizontalScale(24),paddingVertical:verticalScale(12)}}>
+    <View style={{flex: 1,
+    paddingHorizontal:horizontalScale(24),
+    paddingVertical:verticalScale(12),
+    backgroundColor:CUSTOMCOLOR.white}}>
       <View>
         <PlusButton
           icon="close"
@@ -682,35 +699,42 @@ const AddClinic = ({navigation}) => {
         />
       </View>
       {/* )} */}
+      <View style={styles.alignchild}>
+            
+              <Text style={commonstyles.h1}>{id !== undefined ? 'Update Clinic' : 'Add Clinic'}</Text>
+             
+            </View>
 
       <ScrollView
         contentContainerStyle={{
-          margin: verticalScale(24),
+         
+          // borderWidth:1,
+          // gap:verticalScale(16),
           paddingBottom: verticalScale(120),
         }}>
         <Keyboardhidecontainer>
           <View style={styles.content}>
-            <View style={styles.alignchild}>
-              <View style={styles.alignchild}>
-              <Text style={commonstyles.h1}>{id !== undefined ? 'Update Clinic' : 'Add Clinic'}</Text>
-              </View>
-            </View>
+          
             <InputText
               required={true}
               label={Language[language]['clinic']}
-              maxLength={30}
+              maxLength={20}
               placeholder="Clinic"
               value={value.clinic}
               setValue={value => handleChangeValue('clinic', value)}
             />
             <View
               style={{
-                alignSelf: 'flex-start',
+                // alignSelf: 'flex-start',
                 width: '100%',
+                // borderWidth:1,
+                
                 // paddingHorizontal: horizontalScale(8),
               }}>
               <SelectorBtn
                 label={Language[language]['address']}
+                selectContainer={{paddingVertical:0}}
+                
                 name="map-marker"
                 input={address}
                 onPress={() => {
@@ -721,8 +745,9 @@ const AddClinic = ({navigation}) => {
             </View>
             <View
               style={{
+                // borderWidth:1,
                 flexDirection: 'row',
-                gap: moderateScale(16),
+                gap: horizontalScale(64),
                 alignSelf: 'flex-start',
               }}>
               <View style={styles.alignchild}>
@@ -759,7 +784,7 @@ const AddClinic = ({navigation}) => {
             <View
               style={{
                 // flexDirection: 'row',
-                gap: moderateScale(8),
+             
                 alignSelf: 'flex-start',
                 // paddingHorizontal: horizontalScale(8),
               }}>
@@ -808,12 +833,13 @@ const AddClinic = ({navigation}) => {
                 gap: verticalScale(8),
                 // paddingHorizontal: horizontalScale(8),
               }}>
-              <Text style={styles.labeltext}>Add Slots </Text>
+              <Text style={[styles.labeltext,{fontWeight:'700'}]}>Add Slots </Text>
               <View
                 style={{
                   padding: moderateScale(24),
                   backgroundColor: CUSTOMCOLOR.white,
-
+                  borderWidth:0.5,
+                  borderColor:CUSTOMCOLOR.primary,
                   borderRadius: 4,
                   shadowColor: CUSTOMCOLOR.primary,
                   // shadowOffset: {width: 4, height: 4},
@@ -824,7 +850,7 @@ const AddClinic = ({navigation}) => {
               onPress={() => setAddSlots(!addSlots)}
             /> */}
 
-                <View>
+                <View style={{gap:verticalScale(8)}}>
                   <View style={styles.dayselector}>
                     <View
                       style={[
@@ -974,9 +1000,13 @@ const AddClinic = ({navigation}) => {
                   </View>
                   <View style={{alignItems: 'flex-end'}}>
                     <HButton
+                    size={16}
                       label="Add"
                       icon="plus"
-                      btnstyles={{marginTop: verticalScale(12)}}
+                      textStyle={{fontSize:CUSTOMFONTSIZE.h3}}
+                      btnstyles={{
+                        paddingHorizontal:horizontalScale(12),
+                        paddingVertical:verticalScale(8)}}
                       onPress={() => {
                         const isOk = handlewarnings();
                         if (isOk) {
@@ -1008,7 +1038,7 @@ const AddClinic = ({navigation}) => {
                     paddingVertical: verticalScale(8),
                     paddingTop: verticalScale(8),
                   }}>
-                  <Text style={styles.labeltext}>My Slots</Text>
+                  {slots ? <Text style={[styles.labeltext,{fontWeight:'700'}]}>My Slots</Text> : null}
                   <View
                     style={{
                       flexDirection: 'row',
@@ -1043,10 +1073,12 @@ const AddClinic = ({navigation}) => {
                           onPress={handleClearAllSlots}
                           btnstyles={{
                             backgroundColor: CUSTOMCOLOR.white,
-                            paddingHorizontal: horizontalScale(8),
+                            paddingHorizontal:horizontalScale(12),
+                        paddingVertical:verticalScale(8)
                           }}
                           textStyle={{
                             color: CUSTOMCOLOR.primary,
+                            fontSize:CUSTOMFONTSIZE.h4
                           }}
                         />
                         <HButton
@@ -1055,10 +1087,12 @@ const AddClinic = ({navigation}) => {
                           onPress={() => handleAddSlotCopyMonday()}
                           btnstyles={{
                             backgroundColor: CUSTOMCOLOR.primary,
-                            paddingHorizontal: horizontalScale(8),
+                            paddingHorizontal:horizontalScale(12),
+                        paddingVertical:verticalScale(8)
                           }}
                           textStyle={{
                             color: CUSTOMCOLOR.white,
+                            fontSize:CUSTOMFONTSIZE.h4
                           }}
                         />
                       </View>
@@ -1101,7 +1135,7 @@ const AddClinic = ({navigation}) => {
                           style={{
                             backgroundColor: selectSlot.includes(slot.index)
                               ? '#C5FFBC'
-                              : 'white',
+                              : CUSTOMCOLOR.backgroundColor,
                           }}
                         />
                       </Pressable>
@@ -1202,6 +1236,8 @@ const AddClinic = ({navigation}) => {
             Close={setModal}
             OnGallery={onImagePress}
             OnCamera={openCamera}
+            delete ={show}
+            OnDelete ={onDeleteImage}
           />
         </View>
       )}
@@ -1212,6 +1248,8 @@ const AddClinic = ({navigation}) => {
             Close={setlogo}
             OnGallery={onLogoPress}
             OnCamera={LogoCamera}
+            delete={logoShow}
+            OnDelete={onDeleteLogo}
           />
         </View>
       )}
@@ -1259,7 +1297,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
-    gap: moderateScale(8),
+    // gap: moderateScale(8),
+    borderWidth:1
     // paddingHorizontal: horizontalScale(8),
   },
   bottomSheet: {
@@ -1320,7 +1359,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   labeltext: {
-    fontWeight: '400',
+    // fontWeight: '600',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
@@ -1329,7 +1368,7 @@ const styles = StyleSheet.create({
     //paddingVertical: 24,
     width: '100%',
     // alignItems: 'center',
-    gap: moderateScale(8),
+    gap: verticalScale(16),
   },
   container: {
     flexGrow: 1,

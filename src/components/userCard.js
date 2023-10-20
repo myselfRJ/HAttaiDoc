@@ -83,14 +83,14 @@ const UserCard = props => {
                 />
               </Pressable>
             </View>
-            <Text
+            {/* <Text
               style={{
                 fontSize: CUSTOMFONTSIZE.h4,
                 color: CUSTOMCOLOR.black,
                 fontWeight: '400',
               }}>
               Visiting Hrs : 9:00-5:00
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>

@@ -138,7 +138,7 @@ const Diagnosis = ({navigation}) => {
   const ProvisionalData = prev.filter(item => item.type === 'Provisional');
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Diagnosis" head={{paddingHorizontal:0}} />
+      <PrescriptionHead heading="Diagnosis" />
       <ScrollView>
         <View style={{flexDirection: 'row', gap: moderateScale(32)}}>
           {dia_types?.map((value, ind) => (
