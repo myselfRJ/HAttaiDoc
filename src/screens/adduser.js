@@ -57,7 +57,6 @@ const AddUser = ({navigation}) => {
   const route = useRoute();
   const {index} = route.params;
   const [clinics, setDataClinic] = useState();
-  // console.log('clinic---', clinics);
   const RoleRef = useRef(null);
   const ClinicRef = useState(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -76,7 +75,9 @@ const AddUser = ({navigation}) => {
 
   const roles = CONSTANTS.role;
   const [selectedRole, setSelectedRole] = useState();
+
   const [selectedClinic, setSelectedClinic] = useState();
+  const [clinic_ID, setClinic_Id] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   console.log(
@@ -129,7 +130,8 @@ const AddUser = ({navigation}) => {
         : CONSTANTS.default_image,
       gender: values.gender,
       user_phone_number: values.phone,
-      clinic_id: selectedClinic,
+      clinic_id: clinic_ID,
+      clinic_name: selectedClinic,
       doctor_phone_number: phone,
     },
   ];
@@ -287,22 +289,9 @@ const AddUser = ({navigation}) => {
   };
   const handleClinicSelect = val => {
     setSelectedClinic(val?.clinic_name);
+    setClinic_Id(val?.id);
     setShowclinic(!showclinic);
   };
-
-  // if (index !== undefined) {
-  //   useEffect(() => {
-  //     const userData = {
-  //       name: clinic_users[index]?.clinic_user_name,
-  //       phone: clinic_users[index]?.user_phone_number,
-  //       gender: clinic_users[index]?.gender,
-  //     };
-  //     setValues(userData);
-  //     setSelect(clinic_users[index]?.role);
-  //     setSelectedClinic(clinic_users[index]?.clinic_id);
-  //     setSelectedImage(clinic_users[index]?.user_profile_pic_url);
-  //   }, []);
-  // }
 
   const fetchuser_id = async () => {
     const response = await fetchApi(URL.get_clinic_user_by_id(id), {
@@ -320,7 +309,7 @@ const AddUser = ({navigation}) => {
       };
       setValues(userdata);
       setSelect(jsonData.data?.role);
-      setSelectedClinic(jsonData.data?.clinic_id);
+      setSelectedClinic(jsonData.data?.clinic_name);
       setSelectedImage(jsonData.data?.user_profile_pic_url);
     } else {
       console.error('API call failed:', response.status, response);
@@ -337,7 +326,8 @@ const AddUser = ({navigation}) => {
       user_profile_pic_url: selectedImage,
       gender: values.gender,
       user_phone_number: values.phone,
-      clinic_id: selectedClinic,
+      clinic_id: clinic_ID,
+      clinic_name: selectedClinic,
       doctor_phone_number: phone,
     };
     try {
@@ -354,6 +344,7 @@ const AddUser = ({navigation}) => {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
           Alert.alert('Success', jsonData?.message);
+          navigation.goBack();
         } else {
           Alert.alert('warn', jsonData?.message);
         }
