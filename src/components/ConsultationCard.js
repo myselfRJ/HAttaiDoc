@@ -57,7 +57,9 @@ const ConsultationCard = ({data}) => {
     patientSearchRef?.current?.snapToIndex(0);
     navigation.navigate('patienthistory', {id});
   };
-  const date = data?.chief_complaint?.created_at?.split('T')[0]?.split('-');
+  const date = data
+    ? data?.chief_complaint?.created_at?.split('T')[0]?.split('-')
+    : null;
   return (
     <>
       <View style={styles.main}>
@@ -68,7 +70,7 @@ const ConsultationCard = ({data}) => {
           />
           <View style={styles.patientinfo}>
             <Text style={styles?.contact}>
-              Date: {data ? `${date[2]}/${date[1]}/${date[0]}` : null}
+              Date: {date ? `${date[2]}/${date[1]}/${date[0]}` : null}
             </Text>
             <Text style={styles.name}>
               {data?.chief_complaint?.complaint_message} |{' '}
@@ -132,10 +134,10 @@ const ConsultationCard = ({data}) => {
 };
 const styles = StyleSheet.create({
   main: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     padding: moderateScale(24),
     // paddingVertical: verticalScale(24),
-    fontSize: CUSTOMFONTSIZE.h3,
+    // fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
