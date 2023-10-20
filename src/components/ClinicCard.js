@@ -40,7 +40,7 @@ const ClinicCard = props => {
   const Clinic_details = props.data;
   const navigation = useNavigation();
   const id = Clinic_details?.id;
-  let slots =(JSON.parse(Clinic_details?.slot_data?.slot))
+  let slots = JSON.parse(Clinic_details?.slot_data?.slot);
 
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -128,78 +128,73 @@ const ClinicCard = props => {
           </View>
         </View>
         <Text
-                style={{
-                  color: CUSTOMCOLOR.primary,
-                  fontSize: CUSTOMFONTSIZE.h3,
-                  fontWeight: '700',
-                  alignSelf:'center'
-                }}>
-                Slots
-              </Text>
-       
-         
-            <View style={styles.slot}>
-             
+          style={{
+            color: CUSTOMCOLOR.primary,
+            fontSize: CUSTOMFONTSIZE.h3,
+            fontWeight: '700',
+            alignSelf: 'center',
+          }}>
+          Slots
+        </Text>
 
-              <View>
-                <Text style={styles.daytime}>M</Text>
-                {slots?.M?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>T</Text>
-                {slots?.T?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>W</Text>
-                {slots?.W?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>Th</Text>
-                {slots?.TH?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>F</Text>
-                {slots?.F?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>Sa</Text>
-                {slots?.Sa?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              </View>
-              <View>
-                <Text style={styles.daytime}>S</Text>
-                {slots?.Su?.map((item, ind) => (
-                  <Text style={styles.slotTime}>
-                    {item?.fromTime}-{item?.toTime}
-                  </Text>
-                ))}
-              
-            </View>
+        <View style={styles.slot}>
+          <View>
+            <Text style={styles.daytime}>M</Text>
+            {slots?.M?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
           </View>
-        
+          <View>
+            <Text style={styles.daytime}>T</Text>
+            {slots?.T?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <Text style={styles.daytime}>W</Text>
+            {slots?.W?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <Text style={styles.daytime}>Th</Text>
+            {slots?.TH?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <Text style={styles.daytime}>F</Text>
+            {slots?.F?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <Text style={styles.daytime}>Sa</Text>
+            {slots?.Sa?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <Text style={styles.daytime}>S</Text>
+            {slots?.Su?.map((item, ind) => (
+              <Text style={styles.slotTime}>
+                {item?.fromTime}-{item?.toTime}
+              </Text>
+            ))}
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -229,7 +224,6 @@ const styles = StyleSheet.create({
   text: {
     color: CUSTOMCOLOR.black,
     fontSize: CUSTOMFONTSIZE.h4,
-    
   },
   gap: {
     height: moderateScale(40),
@@ -245,7 +239,7 @@ const styles = StyleSheet.create({
   },
   slot: {
     padding: moderateScale(12),
-    marginTop:verticalScale(8),
+    marginTop: verticalScale(8),
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderWidth: moderateScale(1),
@@ -262,7 +256,7 @@ const styles = StyleSheet.create({
   daytime: {
     color: CUSTOMCOLOR.black,
     fontSize: CUSTOMFONTSIZE.h4,
-    fontFamily:CUSTOMFONTFAMILY.heading,
+    fontFamily: CUSTOMFONTFAMILY.heading,
     fontWeight: '400',
     alignSelf: 'center',
   },

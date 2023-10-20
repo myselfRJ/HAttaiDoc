@@ -143,8 +143,6 @@ const MyClinics = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-
-  console.log('=======>',clinicData);
   const deleteClinic = async id => {
     try {
       const response = await fetch(URL.delete_clinic_slot(id), {
@@ -216,7 +214,7 @@ const MyClinics = ({navigation}) => {
                 data={item}
                 cancel={() => handleDelete(item?.id)}
               />
-            </View> 
+            </View>
           ))}
         </ScrollView>
         {clinicData?.length > 0 ? (

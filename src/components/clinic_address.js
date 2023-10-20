@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Dimensions} from 'react-native';
+
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -11,7 +12,11 @@ import {Language} from '../settings/customlanguage';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  AnimatedRegion,
+} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {useDispatch} from 'react-redux';
@@ -22,44 +27,30 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
+const {height, width} = Dimensions.get('screen');
 const ClinicAddress = ({navigation}) => {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    ref.current?.setAddressText('Some Text');
-  }, []);
+  const ref = useRef('Search here');
+  const mapRef = useRef();
+  const markerRef = useRef();
 
   const dispatch = useDispatch();
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [initialLatitude, setInitialLatitude] = useState(13.0827); // Chennai's latitude
-  const [initialLongitude, setInitialLongitude] = useState(80.2707);
+
   const [markerCoordinates, setMarkerCoordinates] = useState({
     latitude: 13.08,
     longitude: 80.02,
   });
   const [formattedAddress, setFormattedAddress] = useState('');
-  const [region, setRegion] = useState({region: {}, markeradta: {}});
-  // console.log('current location===>',currentLocation)
-  const [input, setInput] = useState({
-    buildingno: '',
-    street: '',
-  });
+
   const [regionData, setRegiondata] = useState({
     latitude: 13.0827,
     longitude: 80.2707,
     latitudeDelta: 0.015,
     longitudeDelta: 0.0121,
   });
-  // const handleChangeValue = (field, value) => {
-  //     setInput(prevValues => ({
-  //         ...prevValues,
-  //         [field]: value,
-  //     }));
-  // };
-
-  // navigator.geolocation = require(GEOLOCATION_PACKAGE);
+  console.log('regionData====>......', regionData);
 
   useEffect(() => {
     const checkLocationPermission = async () => {
@@ -83,14 +74,10 @@ const ClinicAddress = ({navigation}) => {
           const {latitude, longitude} = position.coords;
           setCurrentLocation({latitude, longitude});
           setMarkerCoordinates({latitude, longitude});
-          // console.log('current location===', currentLocation);
-          // console.log('marker==', markerCoordinates);
           setRegiondata({...regionData, latitude, longitude});
         },
 
-        error => {
-          // console.log('Error getting location:', error);
-        },
+        error => {},
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     };
@@ -98,9 +85,7 @@ const ClinicAddress = ({navigation}) => {
     checkLocationPermission();
   }, []);
 
-  useEffect(() => {}, [markerCoordinates.latitude]);
-
-  const onRegionChangeComplete = () => console.log('chnage region');
+  const onRegionChangeComplete = e => console.log('region Change');
 
   useEffect(() => {
     if (currentLocation) {
@@ -131,118 +116,133 @@ const ClinicAddress = ({navigation}) => {
   useEffect(() => {
     HandleAddress();
   }, [formattedAddress]);
-  // const handleRegionChangeComplete = newRegion => {};
   return (
-    <>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.top}>
-            <View style={styles.Mapcontainer}>
-              <MapView
-                ref={ref}
-                zoomEnabled={true}
-                provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                region={regionData}
-                onRegionChangeComplete={onRegionChangeComplete}
-                onPress={event => {
-                  const {latitude, longitude} = event.nativeEvent.coordinate;
-                  setCurrentLocation({latitude, longitude});
-                  setMarkerCoordinates({latitude, longitude});
-                }}>
-                <Marker
-                  title="current place"
-                  draggable
-                  coordinate={markerCoordinates}
-                  onDragEnd={e => {
-                    setMarkerCoordinates(e.nativeEvent.coordinate);
-                    setCurrentLocation(e.nativeEvent.coordinate);
-                    fetchFormattedAddress(
-                      e.nativeEvent.coordinate.latitude,
-                      e.nativeEvent.coordinate.longitude,
-                    );
-                  }}
-                />
-              </MapView>
-            </View>
-          </View>
-          <View style={styles.bottom}>
-            {/* <InputText
+    <View style={styles.container}>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 2,
+          width: '100%',
+        }}>
+        <GooglePlacesAutocomplete
+          ref={ref}
+          placeholder="Search here"
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            const latitude = details?.geometry?.location?.lat;
+            const longitude = details?.geometry?.location?.lng;
+            setMarkerCoordinates({latitude, longitude});
+            setCurrentLocation({latitude, longitude});
+            setRegiondata({...regionData, latitude, longitude});
+          }}
+          query={{
+            key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+            language: 'en',
+          }}
+          // currentLocation={true}
+          // currentLocationLabel="Current location"
+          styles={{
+            textInputContainer: {
+              // backgroundColor: CUSTOMCOLOR.primary,
+            },
+            textInput: {
+              // height: moderateScale(38),
+              color: '#5d5d5d',
+              height: verticalScale(60),
+              fontSize: moderateScale(16),
+
+              marginVertical: verticalScale(8),
+              marginHorizontal: horizontalScale(16),
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb',
+            },
+          }}
+        />
+      </View>
+      <View style={{height: height}}>
+        <View style={styles.Mapcontainer}>
+          <MapView
+            ref={mapRef}
+            maxZoomLevel={16}
+            minZoomLevel={4}
+            zoomEnabled={true}
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            region={regionData}
+            onRegionChangeComplete={onRegionChangeComplete}
+            onPress={event => {
+              const {latitude, longitude} = event.nativeEvent.coordinate;
+              setCurrentLocation({latitude, longitude});
+              setMarkerCoordinates({latitude, longitude});
+            }}>
+            <Marker.Animated
+              ref={markerRef}
+              title="current place"
+              tracksViewChanges={true}
+              draggable
+              coordinate={markerCoordinates}
+              onDragEnd={e => {
+                setMarkerCoordinates(e.nativeEvent.coordinate);
+                setCurrentLocation(e.nativeEvent.coordinate);
+                setRegiondata({
+                  ...regionData,
+                  latitude: e.nativeEvent.coordinate.latitude,
+                  longitude: e.nativeEvent.coordinate.longitude,
+                });
+                fetchFormattedAddress(
+                  e.nativeEvent.coordinate.latitude,
+                  e.nativeEvent.coordinate.longitude,
+                );
+              }}
+            />
+          </MapView>
+        </View>
+      </View>
+
+      <View style={styles.bottom}>
+        {/* <InputText
                         label={Language[language]['buildingno']}
                         placeholder="Building No"
                         value={input.buildingno}
                         setValue={value => handleChangeValue('buildingno', value)}
                     /> */}
-            <InputText
-              label="Address"
-              placeholder="Street Address"
-              value={formattedAddress}
-              setValue={setFormattedAddress}
-              multiline={true}
-            />
-            <View style={{alignSelf: 'center'}}>
-              <HButton
-                label="Save"
-                onPress={() => {
-                  navigation.goBack();
-                }}
-              />
-            </View>
-            <GooglePlacesAutocomplete
-              ref={ref}
-              placeholder="Search"
-              fetchDetails={true}
-              onPress={(data, details = null) => {
-                const latitude = details?.geometry?.location?.lat;
-                const longitude = details?.geometry?.location?.lng;
-                // ref.current.animateToRegion({
-                //   latitude: latitude,
-                //   longitude: longitude,
-                // });
-                setMarkerCoordinates({latitude, longitude});
-                setCurrentLocation({latitude, longitude});
-                // fetchFormattedAddress(latitude, longitude);
-              }}
-              query={{
-                key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
-                language: 'en',
-              }}
-              // currentLocation={true}
-              // currentLocationLabel="Current location"
-              styles={{
-                textInputContainer: {
-                  // backgroundColor: 'g,
-                },
-                textInput: {
-                  height: moderateScale(38),
-                  color: '#5d5d5d',
-                  fontSize: moderateScale(16),
-                },
-                predefinedPlacesDescription: {
-                  color: '#1faadb',
-                },
-              }}
-            />
-          </View>
+        <InputText
+          label="Address"
+          placeholder="Street Address"
+          value={formattedAddress}
+          setValue={setFormattedAddress}
+          multiline={true}
+        />
+        <View style={{alignSelf: 'center'}}>
+          <HButton
+            label="Save"
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
         </View>
-      </ScrollView>
-    </>
+      </View>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(8),
   },
-  top: {
-    height: moderateScale(600),
-    backgroundColor: CUSTOMCOLOR.primary,
-  },
+
   bottom: {
     //height: 300,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
     paddingHorizontal: horizontalScale(16),
+    backgroundColor: CUSTOMCOLOR.background,
     paddingVertical: verticalScale(16),
+    gap: verticalScale(16),
+    borderRadius: 8,
   },
   addressContainer: {
     borderWidth: moderateScale(1),
@@ -256,8 +256,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     height: '100%',
     width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    // justifyContent: 'flex-end',
+    // alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
