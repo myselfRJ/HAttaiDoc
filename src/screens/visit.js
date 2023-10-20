@@ -106,8 +106,15 @@ const Visit = ({navigation, route}) => {
     setSubmit(true);
   };
   const [patient_data, setPatientData] = useState();
-  const {name, gende, age, patient_phone, appointment_id, complaint} =
-    route.params;
+  const {
+    consultation_fees,
+    name,
+    gende,
+    age,
+    patient_phone,
+    appointment_id,
+    complaint,
+  } = route.params;
   const fetchPatientData = async () => {
     const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
       method: 'GET',
@@ -872,15 +879,13 @@ const Visit = ({navigation, route}) => {
               style={{
                 paddingHorizontal: moderateScale(24),
                 paddingVertical: verticalScale(16),
-                borderRadius:moderateScale(8),
+                borderRadius: moderateScale(8),
                 gap: moderateScale(12),
-                borderColor:CUSTOMCOLOR.primary,
-                borderWidth:0.5,
+                borderColor: CUSTOMCOLOR.primary,
+                borderWidth: 0.5,
                 backgroundColor: CUSTOMCOLOR.backgroundColor,
-                              }}>
-              <View style={{flexDirection: 'row',
-               gap: moderateScale(8),
-               }}>
+              }}>
+              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
                 <Image
                   style={{
                     height: moderateScale(64),
@@ -960,7 +965,8 @@ const Visit = ({navigation, route}) => {
                   {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
                   {vitalsData?.pulse_rate} Temp: {vitalsData?.boby_temparature}
                 </Text>
-                {(patient_data?.gender === 'Female' || patient_data?.gender === 'Female') &&
+                {(patient_data?.gender === 'Female' ||
+                  patient_data?.gender === 'Female') &&
                 vitalsData?.LDD &&
                 vitalsData?.EDD ? (
                   <Text style={styles.patientText}>
@@ -993,6 +999,8 @@ const Visit = ({navigation, route}) => {
                         params.date = date;
                       } else if (value.navigate === 'vitalscreen') {
                         params.gende = gende;
+                      } else if (value.navigate === 'service_fees') {
+                        params.consultation_fees = consultation_fees;
                       }
 
                       navigation.navigate(value.navigate, params);
@@ -1353,22 +1361,23 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Refer to Doctor' && (
-                    selectedDoctor?.length> 0 ? (<View style={styles.basiccontainer}>
-                      {selectedDoctor?.map((item, ind) => (
-                        <View style={{flexDirection: 'row'}} key={ind}>
-                          <Icon
-                            name="doctor"
-                            color={CUSTOMCOLOR.primary}
-                            size={moderateScale(16)}
-                          />
-                          <Text style={styles.pulse}>
-                            Refer to {item?.doctor_name}{' '}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>):null
-                  )}
+                  {value.label === 'Refer to Doctor' &&
+                    (selectedDoctor?.length > 0 ? (
+                      <View style={styles.basiccontainer}>
+                        {selectedDoctor?.map((item, ind) => (
+                          <View style={{flexDirection: 'row'}} key={ind}>
+                            <Icon
+                              name="doctor"
+                              color={CUSTOMCOLOR.primary}
+                              size={moderateScale(16)}
+                            />
+                            <Text style={styles.pulse}>
+                              Refer to {item?.doctor_name}{' '}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : null)}
                 </View>
               </View>
             ))}

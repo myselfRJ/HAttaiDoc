@@ -22,7 +22,7 @@ import {
 } from '../settings/styles';
 import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 export default function DateTime() {
   const months = CONSTANTS.months;
@@ -158,7 +158,7 @@ export default function DateTime() {
       </View>
       <View style={styles.submit}>
         <HButton
-        btnstyles={commonstyles.activebtn}
+          btnstyles={commonstyles.activebtn}
           label={'submit'}
           onPress={() => {
             handlePress();
@@ -171,15 +171,15 @@ export default function DateTime() {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(12),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   DateContainer: {
     borderRadius: moderateScale(4),
-  
+
     justifyContent: 'space-between',
   },
   radiogroup: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   submit: {
-    justifyContent:'flex-end',
-    flex:1
+    justifyContent: 'flex-end',
+    flex: 1,
   },
 });

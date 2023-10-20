@@ -52,6 +52,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
     const gende = patient_gender;
     const age = patient_age;
     const complaint = appointment.complaint;
+    const consultation_fees = appointment?.clinic_data?.fees;
     navigation.navigate('visit', {
       name,
       gende,
@@ -59,6 +60,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
       patient_phone,
       appointment_id,
       complaint,
+      consultation_fees,
     });
     appointmentCardRef?.current?.snapToIndex(0);
   };

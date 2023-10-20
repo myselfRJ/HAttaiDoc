@@ -10,7 +10,9 @@ import store from './src/redux/stores/store';
 import axios from 'axios';
 import {urlActions} from './src/redux/features/url/urlSlice';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {CUSTOMCOLOR} from './src/settings/styles';
+import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
+import {useNetInfo} from '@react-native-community/netinfo';
+import {moderateScale} from './src/utility/scaleDimension';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,12 +28,29 @@ function App() {
       // handle error
       console.log(error);
     });
-  // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);//for notification permisiion
-  // const routeNameRef = React.useRef();
-  // const navigationRef = React.useRef();
+  const netInfo = useNetInfo();
+
+  let netConnection = netInfo.isConnected;
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>
+        {!netConnection ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: moderateScale(4),
+              backgroundColor: CUSTOMCOLOR.delete,
+            }}>
+            <Text
+              style={{
+                color: CUSTOMCOLOR.white,
+                fontFamily: CUSTOMFONTFAMILY.body,
+              }}>
+              Please Check Your Connection .....
+            </Text>
+          </View>
+        ) : null}
         <NavigationContainer
         // ref={navigationRef}
         // onReady={() => {

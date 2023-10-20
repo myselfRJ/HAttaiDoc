@@ -35,6 +35,16 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'examination',
     },
+    {
+      label: 'Examination Findings',
+      icon: 'chevron-right',
+      navigate: 'findings',
+    },
+    {
+      label: 'Service Charges',
+      icon: 'chevron-right',
+      navigate: 'service_fees',
+    },
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
   test: ['Lab', 'Radiology', 'Procedure'],
