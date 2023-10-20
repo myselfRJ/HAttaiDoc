@@ -23,6 +23,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -42,9 +43,7 @@ const Entry = ({navigation}) => {
   //     fetchtrace();
   //   }
   // }, []);
-  console.log('====================================');
-  console.log(OtpEncryption(), '---------------------------------------');
-  console.log('====================================');
+
   const fetchData = async () => {
     try {
       setLoading(!loading);

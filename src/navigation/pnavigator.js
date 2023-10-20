@@ -50,7 +50,8 @@ import UserDisplay from '../screens/userDisplay';
 import MyClinics from '../screens/MyClinics';
 import MedicalHistory from '../screens/medicalhistory';
 import PhysicalExamination from '../screens/physicalExaminations';
-
+import ExaminationFindings from '../screens/Examinationfindings';
+import OthersFees from '../screens/OthersFees';
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
@@ -78,6 +79,28 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Clinics',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="service_fees"
+        component={OthersFees}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Service Charges',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="findings"
+        component={ExaminationFindings}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Examination Findings',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
