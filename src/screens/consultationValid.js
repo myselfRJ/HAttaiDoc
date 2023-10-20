@@ -30,6 +30,7 @@ import {
 import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
 import {addSign} from '../redux/features/prescription/sign';
+import { commonstyles } from '../styles/commonstyle';
 
 export default function Valid() {
   const months = CONSTANTS.months;
@@ -188,22 +189,24 @@ export default function Valid() {
           onPress={() => handleOptions('90')}
         />
       </View>
-      <View>
+      <View style={{gap:verticalScale(8)}}>
         <Text
           style={{
             fontWeight: 600,
-            fontSize: 20,
+            fontSize: CUSTOMFONTSIZE.h1,
             color: CUSTOMCOLOR.black,
             fontFamily: CUSTOMFONTFAMILY.heading,
-            paddingBottom: 16,
+            paddingBottom: moderateScale(16),
           }}>
           Doctor Signature
         </Text>
         <View
           style={{
             height: moderateScale(200),
-            width: moderateScale(700),
+            width: moderateScale(600),
             alignSelf: 'center',
+            borderWidth:0.5,
+            borderColor:CUSTOMCOLOR.primary
           }}>
           <SignatureCapture
             style={styles.signature}
@@ -220,9 +223,9 @@ export default function Valid() {
         <View
           style={{
             flexDirection: 'row',
-            width: moderateScale(235),
+            // width: moderateScale(235),
             alignSelf: 'center',
-            top: moderateScale(8),
+            top: moderateScale(24),
           }}>
           <TouchableHighlight
             style={[
@@ -252,11 +255,11 @@ export default function Valid() {
       </View>
       <View
         style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          top: '24%',
+          justifyContent:'flex-end',
+          flex:1
         }}>
         <HButton
+          btnstyles={commonstyles.activebtn}
           label={'submit'}
           onPress={() => {
             handlePress();
@@ -269,14 +272,16 @@ export default function Valid() {
 
 const styles = StyleSheet.create({
   MainContainer: {
+    flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
     gap: moderateScale(12),
+    backgroundColor:CUSTOMCOLOR.background
   },
   DateContainer: {
     borderRadius: moderateScale(4),
-    paddingHorizontal: horizontalScale(16),
-    backgroundColor: CUSTOMCOLOR.white,
+    // paddingHorizontal: horizontalScale(16),
+    // backgroundColor: CUSTOMCOLOR.white,
     justifyContent: 'space-between',
   },
   radiogroup: {

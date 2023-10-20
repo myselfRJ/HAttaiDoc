@@ -29,6 +29,7 @@ import {
   RetriveAsyncData,
   UpdateAsyncData,
 } from '../utility/AsyncStorage';
+import { commonstyles } from '../styles/commonstyle';
 
 const Allergies = () => {
   const navigation = useNavigation();
@@ -209,11 +210,7 @@ const Allergies = () => {
           </View>
 
           <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: moderateScale(32),
-            }}>
+            style={commonstyles.activebtn}>
             <HButton label={'Save'} onPress={handleBack} />
           </View>
         </View>
@@ -225,9 +222,11 @@ export default Allergies;
 
 const styles = StyleSheet.create({
   main: {
+    flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
+    backgroundColor:CUSTOMCOLOR.background
   },
   recomend: {
     padding: moderateScale(8),

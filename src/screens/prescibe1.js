@@ -40,6 +40,7 @@ import {
 } from '../utility/AsyncStorage';
 import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
+import { commonstyles } from '../styles/commonstyle';
 
 export default function Prescribe1({navigation}) {
   const [data, setData] = useState([]);
@@ -559,12 +560,9 @@ export default function Prescribe1({navigation}) {
       {/* </View> */}
       <HButton
         label={'Save'}
-        btnstyles={{
+        btnstyles={{...commonstyles.activebtn,
           backgroundColor:
             prevPres?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-          justifyContent: 'center',
-          marginHorizontal: moderateScale(144),
-          borderRadius: moderateScale(10),
         }}
         onPress={() => {
           if (prevPres?.length > 0) {
@@ -580,7 +578,6 @@ export default function Prescribe1({navigation}) {
 const styles = StyleSheet.create({
   prescribeConatiner: {
     gap: moderateScale(8),
-    // paddingTop: moderateScale(16),
   },
   ModeContainer: {
     gap: moderateScale(8),
@@ -681,6 +678,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
+    backgroundColor:CUSTOMCOLOR.background
     // gap: moderateScale(24),
   },
   total_quantity: {

@@ -166,8 +166,12 @@ const VitalScreen = ({route, props}) => {
           <PrescriptionHead heading='Vitals' />
           <ScrollView contentContainerStyle={{ paddingBottom: moderateScale(100) }}>
               <View style={styles.container}>
+                <View style={styles.section}>
+
+               <View >
                   <Text style={commonstyles.subhead}>Basic</Text>
                   <Seperator />
+                  </View>
                   <View style={styles.fields}>
                       <VitalField
                           name='Height'
@@ -208,8 +212,14 @@ const VitalScreen = ({route, props}) => {
                       />
 
                   </View>
+                </View>
+               
+                  <View style={styles.section}>
+                    <View>
                   <Text style={commonstyles.subhead}>Blood Pressure</Text>
                   <Seperator />
+                  </View>
+                 
                   <View style={styles.fields}>
                       <VitalField
                           name='Systolic BP'
@@ -222,16 +232,20 @@ const VitalScreen = ({route, props}) => {
                           setvalue={text => diastolicChange(text)}
                       />
                   </View>
+                  </View>
                   {(gende === 'Female' || gende === 'female') ? 
-                  (<View style={{gap:moderateScale(8)}}>
+                   (<View style={styles.section}>
+                <View>
                      <Text style={commonstyles.subhead}>Pregnancy</Text>
                   <Seperator />
+                  </View>
+                 
                   <View style={styles.fields}>
                       <View style={styles.preg}>
                           <Text style={styles.name}>LMP</Text>
                           <SelectorBtn
                               size={20}
-                              inputstyle={{ fontSize: 10 }}
+                              inputstyle={{ fontSize: CUSTOMFONTSIZE.h4}}
                               onPress={() => {
                                   handleDate();
                               }}
@@ -249,35 +263,50 @@ const VitalScreen = ({route, props}) => {
                                   onCancel={handleCancel}
                               />
                           )}
-                      </View> 
-                 
+                      
+                 {/* <View style={{borderWidth:1,alignItems:'center'}}> */}
                       <VitalField
                           name='EDD'
                           setvalue={vitals?.EDD}
                       />
+                      {/* </View> */}
+                      </View> 
                   </View>
                   </View>):null}
                   {show == true ? (
-                      <View style={{gap:moderateScale(8)}}>
+                      <View style={styles.section}>
+                        <View>
                           <Text style={commonstyles.subhead}>Others</Text>
                   <Seperator />
+                  </View>
+                 
+                  <View style={styles.fields}>
                   <VitalField
                       name='Vital name'
                       placeholder='Enter'
-                      setValue={text => systolicChange(text)}
+                    //   setValue={text => systolicChange(text)}
                   />
+                  <VitalField
+                      name='Value'
+                      placeholder='Enter'
+                    //   setValue={text => systolicChange(text)}
+                  />
+                  </View>
+                      
                       </View>
                   ): null}
                   <HButton
+                      type='addtype'
                       btnstyles={{ alignSelf: 'flex-end' }}
                       icon='plus'
                       label='Others'
                       onPress={()=> setShow(!show)}
                   />
               </View>
+              
           </ScrollView>
           <HButton
-                btnstyles={{width:moderateScale(380),borderRadius:moderateScale(16),alignSelf:'center'}}
+                btnstyles={commonstyles.activebtn}
                 label={Language[language]['submit']}
                 onPress={handlePress}
           />
@@ -290,16 +319,18 @@ const styles = StyleSheet.create({
       flex: 1,
       paddingHorizontal: horizontalScale(24),
       paddingVertical: verticalScale(12),
-      gap: moderateScale(8)
+      gap: moderateScale(8),
+      backgroundColor:CUSTOMCOLOR.background
   },
   container: {
-      gap: moderateScale(12),
-      paddingHorizontal:horizontalScale(12)
+      gap: verticalScale(16),
+    //   paddingHorizontal:horizontalScale(12)
   },
   fields: {
       flexDirection: 'row',
       alignItems: 'center',
       flexWrap: 'wrap',
+      gap:horizontalScale(12)
       
   },
   name: {
@@ -307,13 +338,16 @@ const styles = StyleSheet.create({
       fontWeight: '400',
       fontSize: CUSTOMFONTSIZE.h3,
       color: CUSTOMCOLOR.black,
-      paddingHorizontal:horizontalScale(8)
+    //   paddingHorizontal:horizontalScale(8)
   },
   preg: {
       // gap:moderateScale(2),
       alignItems:'center',
       flexDirection: 'row',
-      marginHorizontal: horizontalScale(4)
+      paddingHorizontal:horizontalScale(8)
+  },
+  section:{
+    gap:verticalScale(4)
   }
 })
 

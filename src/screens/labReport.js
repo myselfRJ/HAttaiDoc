@@ -30,6 +30,7 @@ import {
   clearStorage,
 } from '../utility/AsyncStorage';
 import { CONSTANT } from '../utility/const';
+import { commonstyles } from '../styles/commonstyle';
 
 const LabReports = () => {
   const navigation = useNavigation();
@@ -256,15 +257,12 @@ const LabReports = () => {
       </ScrollView>
       <View
             style={{
-              position:'absolute',
-              bottom:"5%",
-              alignSelf:'center',
-              justifyContent: 'center',
-              alignItems: 'center',
+             justifyContent:'flex-end',
+             flex:1,
               // marginTop: moderateScale(32),
             }}>
             <HButton
-           
+              btnstyles={commonstyles.activebtn}
               label={'Save'}
               onPress={() => {
                 handledata();
@@ -282,6 +280,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
+    backgroundColor:CUSTOMCOLOR.background
   },
 
   inputtext: {

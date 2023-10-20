@@ -29,6 +29,7 @@ import {
 import PrescriptionHead from '../components/prescriptionHead';
 import {CONSTANTS} from '../utility/constant';
 import ShowChip from '../components/showChip';
+import { commonstyles } from '../styles/commonstyle';
 
 const ReferToDoctor = () => {
   const nav = useNavigation();
@@ -171,17 +172,13 @@ const ReferToDoctor = () => {
       </View>
       <View
             style={{
-              position:'absolute',
-              bottom:"5%",
-              alignSelf:'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              // marginTop: moderateScale(32),
+             justifyContent:'flex-end',
+             flex:1
             }}>
             <HButton
            
            label={Language[language]['save']}
-           btnstyles={{
+           btnstyles={{...commonstyles.activebtn,
              backgroundColor:
                doctor?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
            }}
@@ -217,6 +214,7 @@ gap:verticalScale(16)
     paddingVertical: verticalScale(12),
     gap:verticalScale(16),
     flex:1,
+    backgroundColor:CUSTOMCOLOR.background
   },
   child: {
     gap: moderateScale(16),

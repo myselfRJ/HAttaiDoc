@@ -38,6 +38,7 @@ import {
   addExamination,
   UpadteExamination,
 } from '../redux/features/prescription/prescriptionSlice';
+import { commonstyles } from '../styles/commonstyle';
 
 const PhysicalExamination = () => {
   const [value, setValue] = useState();
@@ -66,11 +67,11 @@ const PhysicalExamination = () => {
         style={{
           justifyContent: 'flex-end',
           flex: 1,
-          marginHorizontal: horizontalScale(80),
+         
         }}>
         <HButton
+        btnstyles={commonstyles.activebtn}
           onPress={handlePress}
-          btnstyles={{borderRadius: moderateScale(16)}}
           label={'Save'}
         />
       </View>
@@ -85,5 +86,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
+    backgroundColor:CUSTOMCOLOR.background
   },
 });

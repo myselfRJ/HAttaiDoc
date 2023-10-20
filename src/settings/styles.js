@@ -18,6 +18,7 @@ let CUSTOMCOLOR = {
   disable: '#A9A9A9',
   borderColor: '#C0DFFC',
   backgroundColor: '#D0E8FF',
+  background:'#ffffff'
   
 };
 const DARKCOLOR = {

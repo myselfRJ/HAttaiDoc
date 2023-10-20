@@ -30,6 +30,7 @@ import InputText from './inputext';
 import { URL } from '../utility/urls';
 import { fetchApi } from '../api/fetchApi';
 import { ScrollView } from 'react-native-gesture-handler';
+import { commonstyles } from '../styles/commonstyle';
 const ComplaintsCard = props => {
   // const {complaint} = route.params
   // console.log('com1111====',complaint)
@@ -100,16 +101,8 @@ const [show,setShow] = useState(false)
   return (
     <View style={styles.main}>
       <PrescriptionHead heading='Reason for Visit' />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="write complaints"
-        multiline={true}
-        value={selectedComplaint}
-        onChangeText={text => {
-          dispatch(addCheifComplaint(text));
-        }}
-      /> */}
-      <View style={{gap:moderateScale(0)}}>
+      
+      
        <InputText
       inputContainer={styles.inputtext}
         // label="Diagnosis"
@@ -136,8 +129,7 @@ const [show,setShow] = useState(false)
         </ScrollView>
       </View>)
      )}
-     </View>
-      <View>
+     
         <Text style={styles.h3}>{Language[language]['suggestions']}</Text>
         <View style={styles.sugg}>
           {props.cheifcomplaints.map((value, index) => (
@@ -169,10 +161,14 @@ const [show,setShow] = useState(false)
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+      
       </View>
-      <View style={{alignItems: 'center', padding: moderateScale(16)}}>
-        <HButton label={Language[language]['save']} onPress={onPress} />
+     
+      <View style={{padding: moderateScale(16),justifyContent:'flex-end',flex:1}}>
+        <HButton 
+        btnstyles ={commonstyles.activebtn}
+        label={Language[language]['save']}
+         onPress={onPress} />
       </View>
     </View>
   );
@@ -180,8 +176,12 @@ const [show,setShow] = useState(false)
 
 const styles = StyleSheet.create({
   main: {
+    backgroundColor:CUSTOMCOLOR.background,
     paddingHorizontal: horizontalScale(24),
-    paddingVertical: verticalScale(24),
+    paddingVertical: verticalScale(16),
+    // borderWidth:1,
+    // height:'100%',
+    flex:1
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
   sugg: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+   
   },
   sugText: {
     color: CUSTOMCOLOR.primary,
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
   dropdownContainer:{
     height:moderateScale(300),
     backgroundColor:CUSTOMCOLOR.white,
+    // flex:1
     // marginHorizontal:horizontalScale(8),
   },
   touch:{

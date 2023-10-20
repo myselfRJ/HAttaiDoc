@@ -21,6 +21,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import { commonstyles } from '../styles/commonstyle';
 
 const Notes = ({note, onChangeText, onPress}) => {
   return (
@@ -34,8 +35,11 @@ const Notes = ({note, onChangeText, onPress}) => {
           onChangeText={onChangeText}
         />
       </View>
-      <View style={{alignItems: 'center', padding: moderateScale(16)}}>
-        <HButton label={Language[language]['save']} onPress={onPress} />
+      <View style={{justifyContent:'flex-end',flex:1}}>
+        <HButton label={Language[language]['save']} 
+        onPress={onPress} 
+        btnstyles={commonstyles.activebtn}
+        />
       </View>
     </>
   );
@@ -43,10 +47,15 @@ const Notes = ({note, onChangeText, onPress}) => {
 
 const styles = StyleSheet.create({
   inputbox: {
+    // flex:1,
     width: '100%',
-    height: moderateScale(60),
-    padding: moderateScale(8),
-    gap: moderateScale(4),
+    // height: moderateScale(60),
+    // padding: moderateScale(8),
+    // gap: moderateScale(4),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary,
+    paddingHorizontal:horizontalScale(8),
+    borderRadius:moderateScale(4)
   },
   notes: {
     borderRadius: moderateScale(4),

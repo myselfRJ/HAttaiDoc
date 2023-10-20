@@ -32,10 +32,11 @@ const NoteScreen = () => {
       style={{
         paddingHorizontal: horizontalScale(24),
         paddingVertical: verticalScale(16),
+        flex:1,
+        backgroundColor:CUSTOMCOLOR.background
       }}>
-      <View style={styles.main}>
         <PrescriptionHead heading={Language[language]['notes']} />
-      </View>
+   
       <Notes
         note={note}
         onChangeText={handleNoteChange}
@@ -46,9 +47,11 @@ const NoteScreen = () => {
 };
 const styles = StyleSheet.create({
   main: {
+    // flex:1,
     justifyContent: 'space-around',
     padding: moderateScale(8),
     gap: moderateScale(8),
+    // backgroundColor:CUSTOMCOLOR.background
   },
 });
 export default NoteScreen;
