@@ -164,6 +164,7 @@ const PatientSearch = ({navigation}) => {
             }}>
             {filteredData?.map((val, ind) => (
               <PatientSearchCard
+              doctor={true}
                 meta={'value'}
                 key={ind}
                 patient_data={val}

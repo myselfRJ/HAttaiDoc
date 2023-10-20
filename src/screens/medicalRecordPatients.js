@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  ScrollView,
   Touchable,
   TouchableOpacity,
 } from 'react-native';
@@ -24,6 +23,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import ConsultationCard from '../components/ConsultationCard';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -119,8 +119,8 @@ export default function MedicalRecordPatient({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={{top: moderateScale(32)}}>
-        <View style={{height: 100}}>
+      <View style={{top: moderateScale(32),gap:moderateScale(8)}}>
+        <View>
           <View style={styles.main}>
             <Image
               style={styles.img}
@@ -140,8 +140,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             </View>
           </View>
         </View>
-        <View
-          style={{height: moderateScale(60), marginBottom: moderateScale(8)}}>
+        <View>
           <SelectorBtn
             label="Date"
             name="calendar"
@@ -167,18 +166,26 @@ export default function MedicalRecordPatient({route, navigation}) {
           }}>
           Prescription
         </Text>
-        <View>
+
+          
           <View
             style={{
               // top: moderateScale(16),
-              gap: moderateScale(16),
-              marginBottom: moderateScale(64),
+              gap: moderateScale(8),
+              // marginBottom: moderateScale(64),
+              height:verticalScale(750)
             }}>
+              <ScrollView>
+              
             {consultation?.map((value, index) => (
+              <View style={{marginBottom:verticalScale(8)}}>
               <ConsultationCard data={value?.consultation} />
+              </View>
             ))}
+            </ScrollView>
           </View>
-        </View>
+          
+
         {/* <View
           style={{
             // top: 24,
@@ -248,5 +255,6 @@ const styles = StyleSheet.create({
     borderRadius: 60 / 2,
   },
   patientinfo: {},
-  container: {gap: moderateScale(32), paddingHorizontal: horizontalScale(24)},
+  container: {gap: moderateScale(16),
+     paddingHorizontal: horizontalScale(24)},
 });

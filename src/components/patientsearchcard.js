@@ -59,6 +59,7 @@ const PatientSearchCard = patient_data => {
     patientSearchRef?.current?.snapToIndex(0);
   };
   const meta_data = patient_data.meta;
+  const doctor = patient_data.doctor
   return (
     <>
       <View style={styles.main}>
@@ -99,7 +100,7 @@ const PatientSearchCard = patient_data => {
         </Pressable> */}
         <View style={styles.tab}>
           {/* {meta_data && ( */}
-          <HButton
+          {doctor ? (<HButton
             btnstyles={{
               backgroundColor: CUSTOMCOLOR.white,
               borderWidth: moderateScale(0.5),
@@ -114,7 +115,7 @@ const PatientSearchCard = patient_data => {
             label="Rx History"
             selected={true}
             onPress={handleOnpress}
-          />
+          />):null}
           {/* )} */}
           <HButton
             btnstyles={{
@@ -122,7 +123,7 @@ const PatientSearchCard = patient_data => {
               // borderWidth: moderateScale(0.5),
               // borderColor: CUSTOMCOLOR.borderColor,
               paddingHorizontal: horizontalScale(24),
-              paddingVertical: verticalScale(12),
+              paddingVertical: verticalScale(8),
             }}
             textStyle={{
               color: CUSTOMCOLOR.white,

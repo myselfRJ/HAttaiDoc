@@ -30,6 +30,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import HButton from './button';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const ConsultationCard = ({data}) => {
   const [visible, setVisible] = useState(false);
@@ -63,7 +64,7 @@ const ConsultationCard = ({data}) => {
   return (
     <>
       <View style={styles.main}>
-        <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+        <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
           <Image
             style={styles.img}
             source={require('../assets/images/RX.png')}
@@ -73,31 +74,33 @@ const ConsultationCard = ({data}) => {
               Date: {date ? `${date[2]}/${date[1]}/${date[0]}` : null}
             </Text>
             <Text style={styles.name}>
-              {data?.chief_complaint?.complaint_message} |{' '}
-              {data?.chief_complaint?.appointment_id}
+              {data?.chief_complaint?.complaint_message}
+               {/* |{' '}
+              {data?.chief_complaint?.appointment_id} */}
             </Text>
             <Text style={styles.age}>{}</Text>
           </View>
         </View>
         <View
           style={{
+            alignItems:'flex-end',
             position: 'absolute',
             right: moderateScale(16),
             top: moderateScale(16),
-            gap: moderateScale(16),
+            gap: moderateScale(12),
           }}>
           <View
             style={{
               flexDirection: 'row',
-              gap: moderateScale(8),
-              alignSelf: 'flex-end',
+              gap: moderateScale(4),
+              padding:moderateScale(4),
             }}>
-            <Pressable>
+            <Pressable style={styles.icon}>
               <Icon
                 name={'download'}
                 size={moderateScale(16)}
                 color={CUSTOMCOLOR.primary}
-                style={styles.icon}
+                
               />
             </Pressable>
             <Pressable>
@@ -114,17 +117,28 @@ const ConsultationCard = ({data}) => {
               onPress={handleOnBook}
               label={'View'}
               btnstyles={{
-                borderWidth: 2,
                 backgroundColor: CUSTOMCOLOR.white,
+                borderWidth: moderateScale(0.5),
                 borderColor: CUSTOMCOLOR.borderColor,
-                paddingHorizontal: horizontalScale(64),
+                paddingHorizontal: horizontalScale(24),
+                paddingVertical: verticalScale(8),
               }}
-              textStyle={{color: CUSTOMCOLOR.primary, fontWeight: '700'}}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+                fontSize: CUSTOMFONTFAMILY.h3,
+              }}
             />
             <HButton
               onPress={handleOnpress}
               label={'Upload Record'}
-              textStyle={{color: CUSTOMCOLOR.white, fontWeight: '700'}}
+              btnstyles={{
+                paddingHorizontal: horizontalScale(24),
+                paddingVertical: verticalScale(8),
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.white,
+                fontSize: CUSTOMFONTFAMILY.h3,
+              }}
             />
           </View>
         </View>
@@ -135,17 +149,19 @@ const ConsultationCard = ({data}) => {
 const styles = StyleSheet.create({
   main: {
     // flexDirection: 'row',
-    padding: moderateScale(24),
+    paddingHorizontal: moderateScale(24),
+    paddingVertical:verticalScale(20),
     // paddingVertical: verticalScale(24),
     // fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
-    gap: moderateScale(8),
     justifyContent: 'space-between',
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   name: {
-    fontWeight: '600',
-    fontSize: moderateScale(14),
+    fontWeight: 400,
+    fontSize:CUSTOMFONTSIZE.h4,
     // lineHeight: 20,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -158,21 +174,25 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.body,
   },
   contact: {
-    fontWeight: '600',
-    fontSize: 16,
+    fontWeight: '400',
+    fontSize: moderateScale(16),
     // lineHeight: 12.5,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   img: {
-    width: moderateScale(80),
-    height: moderateScale(80),
+    width: moderateScale(56),
+    height: moderateScale(56),
     borderRadius: moderateScale(8),
     // aspectRatio: 0.95,
     // borderWidth: 1,
     // borderColor: '#000',
   },
-  patientinfo: {},
+  patientinfo: {
+    // borderWidth:1,
+    justifyContent:'center',
+    gap:verticalScale(4)
+  },
   icon: {
     borderWidth: moderateScale(1),
     padding: moderateScale(4),

@@ -481,7 +481,7 @@ const ProfileCreate = ({navigation}) => {
             />
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{flex: 1,zIndex:2}}>
             <SelectorBtn
               required={true}
               selectContainer={{gap: 2, paddingVertical: -1}}
@@ -497,14 +497,15 @@ const ProfileCreate = ({navigation}) => {
 
             {show === true && (
               <View style={styles.statecontainer}>
-                <ScrollView persistentScrollbar={true}>
+                <ScrollView persistentScrollbar={true} contentContainerStyle={{zIndex:4}}>
                   {CONSTANTS.state.map((state, index) => (
-                    <Pressable
+                    <TouchableOpacity
                       key={index}
                       onPress={() => {
                         handleStateSelection(state);
                         setshow(false);
-                      }}>
+                      }}
+                      style={{paddingHorizontal:horizontalScale(4),paddingVertical:verticalScale(4),borderWidth:1,zIndex:10}}>
                       <Text
                         style={[
                           styles.statefields,
@@ -517,7 +518,7 @@ const ProfileCreate = ({navigation}) => {
                         ]}>
                         {state}
                       </Text>
-                    </Pressable>
+                    </TouchableOpacity>
                   ))}
                 </ScrollView>
               </View>
@@ -528,6 +529,7 @@ const ProfileCreate = ({navigation}) => {
           style={{
             // alignSelf: 'flex-start',
             gap: verticalScale(4),
+            zIndex:1
             // paddingVertical: verticalScale(8),
           }}>
           <Text style={styles.medtext}>Medical Document</Text>
@@ -646,6 +648,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     // borderWidth: 1,
     gap: verticalScale(16),
+    zIndex:1
   },
 
   radiogroup: {
@@ -680,20 +683,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statecontainer: {
+    zIndex:3,
+    width:'100%',
     height: moderateScale(200),
-    paddingHorizontal:horizontalScale(66),
-    zIndex: 1,
+    // paddingHorizontal:horizontalScale(66),
+    zIndex: 2,
     borderWidth: 1,
     borderColor: CUSTOMCOLOR.borderColor,
     position: 'absolute',
     right: 0,
     // bottom: 0,
     top: verticalScale(78),
-    // width: '100%',
-    // justifyContent: 'flex-start',
-    // alignItems: 'center',
-
-    // alignSelf: 'center',
     borderRadius: moderateScale(4),
     gap: moderateScale(6),
     // padding: moderateScale(4),
@@ -792,12 +792,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   doc_upload: {
-    zIndex:1,
+    // zIndex:1,
     // alignSelf: 'flex-start',
     // width:'100%',
     // borderWidth:1,
     // paddingVertical: verticalScale(4),
     marginBottom: moderateScale(4),
+    zIndex:1 
   },
   bottext: {
     fontFamily: CUSTOMFONTFAMILY.heading,
