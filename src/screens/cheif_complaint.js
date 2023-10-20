@@ -16,9 +16,9 @@ const CheifComplaints = ({route}) => {
   console.log('com====', complaint);
   return (
     <Provider store={store}>
-      <View>
+     
         <ComplaintsCard cheifcomplaints={data} complaint={complaint} />
-      </View>
+      
     </Provider>
   );
 };

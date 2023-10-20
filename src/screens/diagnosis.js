@@ -32,6 +32,7 @@ import {
   UpdateAsyncData,
   RetriveAsyncData,
 } from '../utility/AsyncStorage';
+import { commonstyles } from '../styles/commonstyle';
 
 // import PlusButton from '../components';
 
@@ -263,12 +264,9 @@ const Diagnosis = ({navigation}) => {
      <View style={{justifyContent:'flex-end',flex:1}}>
      <HButton
         label={'Save'}
-        btnstyles={{
+        btnstyles={{...commonstyles.activebtn,
           backgroundColor:
             prev?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-          justifyContent: 'center',
-          marginHorizontal: moderateScale(144),
-          borderRadius: moderateScale(10),
         }}
         onPress={() => {
           if (prev?.length > 0) {
@@ -288,6 +286,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
+    backgroundColor:CUSTOMCOLOR.background
   },
   input: {
     // paddingHorizontal:24,

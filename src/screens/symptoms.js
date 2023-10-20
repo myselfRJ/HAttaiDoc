@@ -378,11 +378,9 @@ const Symptoms = ({ navigation }) => {
       
       </ScrollView>
         <HButton
-          btnstyles={{
-            width: moderateScale(380),
-            borderRadius: moderateScale(16),
+          btnstyles={{...commonstyles.activebtn,
             backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-            alignSelf:'center',
+           
             // bottom:moderateScale(12)
           }}
           label={'Save'}
@@ -399,9 +397,9 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingHorizontal: horizontalScale(24),
-    borderWidth:1,
-    paddingVertical:verticalScale(12)
-    // borderWidth: 1
+    
+    paddingVertical:verticalScale(12),
+    backgroundColor:CUSTOMCOLOR.background
   },
   subvalues: {
     flexDirection: 'row',

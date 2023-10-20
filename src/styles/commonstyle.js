@@ -43,5 +43,8 @@ export const commonstyles = StyleSheet.create({
     color:CUSTOMCOLOR.black,
     fontWeight:'600',
     fontSize:16
+  },
+  activebtn:{
+    alignSelf:'center'
   }
 });

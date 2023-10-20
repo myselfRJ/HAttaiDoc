@@ -872,10 +872,15 @@ const Visit = ({navigation, route}) => {
               style={{
                 paddingHorizontal: moderateScale(24),
                 paddingVertical: verticalScale(16),
-                backgroundColor: CUSTOMCOLOR.backgroundColor,
+                borderRadius:moderateScale(8),
                 gap: moderateScale(12),
-              }}>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+                borderColor:CUSTOMCOLOR.primary,
+                borderWidth:0.5,
+                backgroundColor: CUSTOMCOLOR.backgroundColor,
+                              }}>
+              <View style={{flexDirection: 'row',
+               gap: moderateScale(8),
+               }}>
                 <Image
                   style={{
                     height: moderateScale(64),

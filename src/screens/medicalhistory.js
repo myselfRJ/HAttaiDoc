@@ -207,10 +207,7 @@ const MedicalHistory =({navigation})=>{
     </View>
     </ScrollView>
           <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            style={commonstyles.activebtn}>
             <HButton
               label={'Save'}
               onPress={() => {
@@ -227,6 +224,7 @@ const styles = StyleSheet.create({
       gap:moderateScale(16),
       paddingHorizontal: horizontalScale(24),
       paddingVertical: verticalScale(16),
+      backgroundColor:CUSTOMCOLOR.background
     },
     recomend: {
       padding: moderateScale(8),
