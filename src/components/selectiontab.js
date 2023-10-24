@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet, Text,View} from 'react-native';
 import {
   CUSTOMFONTSIZE,
   CUSTOMCOLOR,
@@ -27,6 +27,9 @@ const SelectionTab = props => {
         },
         props.selectContainer,
       ]}>
+        {props.id ? (<View style={{position:'absolute',left:0,top:0}}>
+          <Text>{props.id}</Text>
+        </View>):null}
       <Text
         style={[
           {

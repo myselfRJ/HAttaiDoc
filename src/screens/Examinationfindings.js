@@ -73,6 +73,7 @@ const ExaminationFindings = () => {
           fontSize: CUSTOMFONTSIZE.h3,
         }}
       />
+      <HButton btnstyles={{alignSelf:'flex-end'}}/>
       <View
         style={{
           justifyContent: 'flex-end',
