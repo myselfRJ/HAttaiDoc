@@ -18,7 +18,7 @@ const DropdownComponent = props => {
 
   return (
     <Dropdown
-      style={styles.dropdown}
+      style={{...styles.dropdown, ...props.style}}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
