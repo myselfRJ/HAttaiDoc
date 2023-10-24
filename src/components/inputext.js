@@ -23,7 +23,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = props => {
   //props-> check, label, placeholder , action, secure, padtype
   const [visible, setVisible] = React.useState(props.secure || true);
-  const [errorStyles, setErrorStyle] = React.useState({});
+  const [errorStyles, setErrorStyle] = React.useState({borderColor:CUSTOMCOLOR.primary});
   const toggleVisible = () => {
     setVisible(!visible);
   };
@@ -74,7 +74,7 @@ const InputText = props => {
               errorStyles,
               props.textStyle,
               props.search ? styles.bottom : styles.textinput,
-              props.doubleCheck ? styles.numStyle : styles.textinput
+              // (props.doubleCheck && props.check) ? styles.numStyle : styles.textinput
             ]}
             textAlign={props.textAlign ?? 'left'}
             // underlineColorAndroid="transparent"
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
-    borderColor: CUSTOMCOLOR.primary,
+    // borderColor: CUSTOMCOLOR.primary,
     borderWidth: 0.5,
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(9.5),

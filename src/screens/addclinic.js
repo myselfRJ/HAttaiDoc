@@ -61,6 +61,7 @@ import {updateAddress} from '../redux/features/profiles/clinicAddress';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
+import { checkNumber } from '../utility/checks';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -78,7 +79,7 @@ const AddClinic = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
-
+  console.log('check===',visibleSlot)
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -711,7 +712,7 @@ const AddClinic = ({navigation}) => {
             <InputText
               required={true}
               label={Language[language]['clinic']}
-              maxLength={20}
+              maxLength={50}
               placeholder="Clinic"
               value={value.clinic}
               setValue={value => handleChangeValue('clinic', value)}
@@ -765,15 +766,17 @@ const AddClinic = ({navigation}) => {
               value={value.phone}
               setValue={value => handleChangeValue('phone', value)}
               doubleCheck={[true, false]}
+              maxLength={10}
               numeric={true}
-              check={e => {
-                var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
+              check={checkNumber}
+              // check={e => {
+              //   var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
+              //   if (format.test(e)) {
+              //     return false;
+              //   } else {
+              //     return true;
+              //   }
+              // }}
             />
             <View
               style={{
@@ -1157,6 +1160,11 @@ const AddClinic = ({navigation}) => {
           bottom: verticalScale(24),
         }}>
         <HButton
+        btnstyles={{
+          backgroundColor: value.clinic && value.phone && address && !visibleSlot
+            ? CUSTOMCOLOR.primary
+            : CUSTOMCOLOR.disable,
+        }}
           label="Save"
           onPress={() => {
             handlePlusIconClick();

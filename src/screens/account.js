@@ -205,7 +205,7 @@ const Account = () => {
           </View>
         </View>
       </View>
-      <View style={styles.HPID}>
+      {/* <View style={styles.HPID}>
         <Text style={styles.HPIDText}>Healthcare Professional ID</Text>
         <Text style={styles.HPIDcontent}>
           The Healthcare Professional ID allows healthcare profession to connect
@@ -219,7 +219,7 @@ const Account = () => {
             </Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View>
         <View style={styles.clinicCard}>
           <ManageCard

@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     // backgroundColor: CUSTOMCOLOR.white,
     // width: horizontalScale(240),
-    borderRadius: moderateScale(6),
+    borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
-    borderWidth: moderateScale(1),
+    borderWidth: moderateScale(0.5),
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h3,
