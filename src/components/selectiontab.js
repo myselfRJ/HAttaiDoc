@@ -1,11 +1,11 @@
-import {Pressable, StyleSheet, Text} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   CUSTOMFONTSIZE,
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
+import { language } from '../settings/userpreferences';
+import { Language } from '../settings/customlanguage';
 import {
   horizontalScale,
   verticalScale,
@@ -27,8 +27,22 @@ const SelectionTab = props => {
         },
         props.selectContainer,
       ]}>
+      {props.id ? (<View style={[
+        {
+          ...styles.tokenContainer,
+          backgroundColor: props.selected ? CUSTOMCOLOR.white :CUSTOMCOLOR.primary
+        }
+      ]}>
+        <Text style={[
+          {
+            ...styles.token,
+            color: props.selected ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+          }
+        ]}>{props.id}</Text>
+      </View>) : null}
       <Text
         style={[
+          
           {
             ...styles.tabtext,
             color: props.selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
@@ -55,6 +69,19 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.white,
   },
+  token: {
+    color: CUSTOMCOLOR.white
+  },
+  tokenContainer: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    borderWidth: 0.5,
+    padding: moderateScale(3),
+    borderBottomRightRadius: moderateScale(10),
+    borderColor: CUSTOMCOLOR.black,
+    backgroundColor:CUSTOMCOLOR.primary
+  }
 });
 
 export default SelectionTab;

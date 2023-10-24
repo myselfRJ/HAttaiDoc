@@ -38,7 +38,7 @@ const InputText = props => {
     if (props?.doubleCheck?.[1]) {
       !props?.check2?.[0](props?.check2[1], e)
         ? setErrorStyle({borderColor: CUSTOMCOLOR.error, borderWidth: 1})
-        : setErrorStyle({});
+        : setErrorStyle({borderColor: CUSTOMCOLOR.primary, borderWidth: 1});
     }
   };
 
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   numStyle: {
     backgroundColor: CUSTOMCOLOR.white,
-    // borderColor: CUSTOMCOLOR.primary,
+    // borderColor: CUSTOMCOLOR.error,
     borderWidth: 0.5,
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(8),

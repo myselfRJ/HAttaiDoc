@@ -40,6 +40,7 @@ const SlotBook = ({navigation, route}) => {
   const [selected, setSelected] = useState('');
   const [show, setShow] = useState(false);
   const [complaint, setComplaint] = useState('');
+  const [token_id,setTokenID] = useState('')
 
   const [bookedSlots, setData] = useState([]);
 
@@ -62,8 +63,9 @@ const SlotBook = ({navigation, route}) => {
     setFee(value);
   };
 
-  const handleSelectSlot = value => {
+  const handleSelectSlot = (value,id) => {
     setSelectedSlot(value);
+    setTokenID(id)
   };
 
   const handleSelectType = value => {
@@ -182,36 +184,50 @@ const SlotBook = ({navigation, route}) => {
         const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
         const slot = startTime + '-' + endTime;
         const bookedSlot = bookedSlots;
-        if (!bookedSlot.includes(slot)) {
-          if (formatDate === Today) {
-            if (startTime >= PresentTime) {
+        // if (!bookedSlot.includes(slot)) {
+        //   if (formatDate === Today) {
+        //     if (startTime >= PresentTime) {
               timeList.push({
                 slot: slot,
                 duration: item.duration,
               });
-            }
-          } else {
-            timeList.push({
-              slot: slot,
-              duration: item.duration,
-            });
-          }
-        }
-      }
-    });
+            // }
+      //     } else {
+      //       timeList.push({
+      //         slot: slot,
+      //         duration: item.duration,
+      //       });
+      //     }
+      //   }
+      // }
+            }}
+    );
     return timeList;
   };
   let list = getTimeList(slotDetails?.[Day]);
   const token = useSelector(state => state.authenticate.auth.access);
 
-  const renderItems = ({item}) => {
+  const renderItems = ({item,index}) => {
+    const Today = moment(new Date()).format('YYYY-MM-DD');
+        const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
+        const startTime = item?.slot?.split("-")[0]?.toString()
+    const bookedSlot = bookedSlots;
+
     return (
       <View key={item.id} style={styles.item}>
-        <SelectionTab
+        {!bookedSlot?.includes(item?.slot) && (formatDate !== Today || startTime>= PresentTime) ? <SelectionTab
+        id = {(parseInt(index)+1).toString().padStart(0,0)}
           label={item?.slot}
-          onPress={() => handleSelectSlot(item)}
+          onPress={() => handleSelectSlot(item,parseInt(index)+1)}
           selected={selectedSlot?.slot === item?.slot}
-        />
+        />:<SelectionTab
+        selectContainer={{backgroundColor:CUSTOMCOLOR.disable}}
+        text={{color:CUSTOMCOLOR.white}}
+        id = {parseInt(index)+1}
+          label={item?.slot}
+          // onPress={() => handleSelectSlot(item)}
+          // selected={selectedSlot?.slot === item?.slot}
+        />}
       </View>
     );
   };
@@ -242,6 +258,7 @@ const SlotBook = ({navigation, route}) => {
           appointment_date: formatDate,
           mode_of_consultation: selectedMode,
           appointment_type: selectedTypeAppointment,
+          appointment_token:token_id.toString(),
           appointment_slot: selectedSlot?.slot,
           clinic_id: Clinic_id,
           complaint: complaint,

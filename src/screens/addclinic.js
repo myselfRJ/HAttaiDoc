@@ -746,6 +746,7 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Photo</Text>
                 <AddImage
+                  name={'home-plus'}
                   onPress={() => ModalVisible()}
                   encodedBase64={selectedImage}
                 />
@@ -753,6 +754,7 @@ const AddClinic = ({navigation}) => {
               <View style={styles.alignchild}>
                 <Text style={styles.logo}>Clinic Logo</Text>
                 <AddImage
+                  name={'star-box'}
                   onPress={() => setlogo(!logo)}
                   encodedBase64={selectedLogo}
                 />
