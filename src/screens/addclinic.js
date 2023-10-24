@@ -61,7 +61,7 @@ import {updateAddress} from '../redux/features/profiles/clinicAddress';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
-import { checkNumber } from '../utility/checks';
+import {checkNumber} from '../utility/checks';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -79,7 +79,7 @@ const AddClinic = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
-  console.log('check===',visibleSlot)
+  console.log('check===', visibleSlot);
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -843,112 +843,56 @@ const AddClinic = ({navigation}) => {
                   shadowColor: CUSTOMCOLOR.primary,
                   // shadowOffset: {width: 4, height: 4},
                 }}>
-                {/* <SelectorBtn
-              input={'Add Slots'}
-              name={addSlots ? 'chevron-up' : 'chevron-down'}
-              onPress={() => setAddSlots(!addSlots)}
-            /> */}
-
                 <View style={{gap: verticalScale(8)}}>
                   <View style={styles.dayselector}>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.M?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="M"
-                        selected={selectedDay === 'M'}
-                        onPress={() => onDaySelectionChange('M')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.T?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="T"
-                        selected={selectedDay === 'T'}
-                        onPress={() => onDaySelectionChange('T')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.W?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="W"
-                        selected={selectedDay === 'W'}
-                        onPress={() => onDaySelectionChange('W')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.TH?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="TH"
-                        selected={selectedDay === 'TH'}
-                        onPress={() => onDaySelectionChange('TH')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.F?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="F"
-                        selected={selectedDay === 'F'}
-                        onPress={() => onDaySelectionChange('F')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.Sa?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="Sa"
-                        selected={selectedDay === 'Sa'}
-                        onPress={() => onDaySelectionChange('Sa')}
-                      />
-                    </View>
-                    <View
-                      style={[
-                        styles.data,
-                        {
-                          backgroundColor:
-                            slots.Su?.length > 0 ? CUSTOMCOLOR.success : null,
-                        },
-                      ]}>
-                      <SelectionTab
-                        label="Su"
-                        selected={selectedDay === 'Su'}
-                        onPress={() => onDaySelectionChange('Su')}
-                      />
-                    </View>
+                    <SelectionTab
+                      slots={slots?.M?.length > 0}
+                      label="M"
+                      selected={selectedDay === 'M'}
+                      onPress={() => onDaySelectionChange('M')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.T?.length > 0}
+                      label="T"
+                      selected={selectedDay === 'T'}
+                      onPress={() => onDaySelectionChange('T')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.W?.length > 0}
+                      label="W"
+                      selected={selectedDay === 'W'}
+                      onPress={() => onDaySelectionChange('W')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.TH?.length > 0}
+                      label="TH"
+                      selected={selectedDay === 'TH'}
+                      onPress={() => onDaySelectionChange('TH')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.F?.length > 0}
+                      label="F"
+                      selected={selectedDay === 'F'}
+                      onPress={() => onDaySelectionChange('F')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.Sa?.length > 0}
+                      label="Sa"
+                      selected={selectedDay === 'Sa'}
+                      onPress={() => onDaySelectionChange('Sa')}
+                    />
+
+                    <SelectionTab
+                      slots={slots?.Su?.length > 0}
+                      label="Su"
+                      selected={selectedDay === 'Su'}
+                      onPress={() => onDaySelectionChange('Su')}
+                    />
                   </View>
                   <View style={styles.selector}>
                     <SelectorBtn
@@ -1160,11 +1104,12 @@ const AddClinic = ({navigation}) => {
           bottom: verticalScale(24),
         }}>
         <HButton
-        btnstyles={{
-          backgroundColor: value.clinic && value.phone && address && !visibleSlot
-            ? CUSTOMCOLOR.primary
-            : CUSTOMCOLOR.disable,
-        }}
+          btnstyles={{
+            backgroundColor:
+              value.clinic && value.phone && address && !visibleSlot
+                ? CUSTOMCOLOR.primary
+                : CUSTOMCOLOR.disable,
+          }}
           label="Save"
           onPress={() => {
             handlePlusIconClick();

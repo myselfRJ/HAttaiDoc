@@ -47,7 +47,7 @@ const PatientSearchCard = patient_data => {
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
-    console.log(patient_data.data);
+    // console.log(patient_data.data);
     navigation.navigate('patientrecord', {patient_phone});
     patientSearchRef?.current?.snapToIndex(0);
   };
@@ -59,7 +59,7 @@ const PatientSearchCard = patient_data => {
     patientSearchRef?.current?.snapToIndex(0);
   };
   const meta_data = patient_data.meta;
-  const doctor = patient_data.doctor
+  const doctor = patient_data.doctor;
   return (
     <>
       <View style={styles.main}>
@@ -100,22 +100,24 @@ const PatientSearchCard = patient_data => {
         </Pressable> */}
         <View style={styles.tab}>
           {/* {meta_data && ( */}
-          {doctor ? (<HButton
-            btnstyles={{
-              backgroundColor: CUSTOMCOLOR.white,
-              borderWidth: moderateScale(0.5),
-              borderColor: CUSTOMCOLOR.borderColor,
-              paddingHorizontal: horizontalScale(24),
-              paddingVertical: verticalScale(8),
-            }}
-            textStyle={{
-              color: CUSTOMCOLOR.primary,
-              fontSize: CUSTOMFONTFAMILY.h3,
-            }}
-            label="Rx History"
-            selected={true}
-            onPress={handleOnpress}
-          />):null}
+          {doctor ? (
+            <HButton
+              btnstyles={{
+                backgroundColor: CUSTOMCOLOR.white,
+                borderWidth: moderateScale(0.5),
+                borderColor: CUSTOMCOLOR.borderColor,
+                paddingHorizontal: horizontalScale(24),
+                paddingVertical: verticalScale(8),
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+                fontSize: CUSTOMFONTFAMILY.h3,
+              }}
+              label="Rx History"
+              selected={true}
+              onPress={handleOnpress}
+            />
+          ) : null}
           {/* )} */}
           <HButton
             btnstyles={{

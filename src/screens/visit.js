@@ -874,7 +874,25 @@ const Visit = ({navigation, route}) => {
       <ScrollView>
         <View style={styles.main}>
           <View style={styles.appointment}>
-            <Text style={styles.h2}>{Language[language]['consultation']}</Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.h2}>
+                {Language[language]['consultation']}
+              </Text>
+              <HButton
+                type={'addtype'}
+                label={'Rx History'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: 0.5,
+                  borderColor: CUSTOMCOLOR.borderColor,
+                }}
+                textStyle={{color: CUSTOMCOLOR.primary}}
+                onPress={() => {
+                  navigation.navigate('patientrecord', {patient_phone});
+                }}
+              />
+            </View>
             <View
               style={{
                 paddingHorizontal: moderateScale(24),
@@ -974,6 +992,35 @@ const Visit = ({navigation, route}) => {
                     {vitalsData.EDD}
                   </Text>
                 ) : null}
+              </View>
+              <View style={styles.line}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={styles.patientHead}>Allergies</Text>
+                  <Pressable
+                    style={styles.gap}
+                    onPress={() => navigation.navigate('allergies')}>
+                    <Icon
+                      name={'pencil'}
+                      size={moderateScale(18)}
+                      color={CUSTOMCOLOR.primary}
+                      style={styles.pencilIcon}
+                    />
+                  </Pressable>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  {allergies?.length > 0
+                    ? allergies?.map((item, index) => (
+                        <Text style={styles.patientText}>
+                          {item?.allergies}
+                          {' , '}
+                        </Text>
+                      ))
+                    : null}
+                </View>
               </View>
             </View>
             {CONSTANT.ConsultationList.map((value, index) => (
@@ -1206,7 +1253,7 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'Notes' && note !== '' && (
+                  {value.label === 'Present Illness' && note !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"

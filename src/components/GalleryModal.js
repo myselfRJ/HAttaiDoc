@@ -1,5 +1,11 @@
-import {useState,useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity,TouchableWithoutFeedback} from 'react-native';
+import {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {
   moderateScale,
   verticalScale,
@@ -7,7 +13,7 @@ import {
 } from '../utility/scaleDimension';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
 const GalleryModel = props => {
   const setVisible = props.Close;
   // useEffect(()=>{
@@ -16,17 +22,15 @@ const GalleryModel = props => {
   //   }
   // })
   return (
-    
     // <Modal
     //   animationType="slide"
     //   // transparent={true}
     //   visible={props.visible}
-    
+
     //   onRequestClose={() => {
     //     setVisible(!props.visible);
     //   }}
     //   transparent={true}>
-       
 
     //   <View
     //     style={{
@@ -37,7 +41,7 @@ const GalleryModel = props => {
     //       // borderWidth:1,
     //       width:'100%',
     //       // paddingHorizontal:horizontalScale(4)
-          
+
     //     }}>
     //        <TouchableWithoutFeedback onPress={() => {
     //     setVisible(!props.visible);
@@ -88,22 +92,23 @@ const GalleryModel = props => {
           flex: 1,
           justifyContent: 'flex-end',
           alignItems: 'center',
-          backgroundColor:'#000000aa'
+          backgroundColor: '#000000aa',
         }}>
-           <TouchableWithoutFeedback onPress={() => {
-        setVisible(!props.visible);
-      }}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setVisible(!props.visible);
+          }}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View
           style={{
             flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    backgroundColor: CUSTOMCOLOR.white,
-                    width: '100%',
-                    padding: moderateScale(40),
-                    borderTopEndRadius: moderateScale(16),
-                    borderTopLeftRadius: moderateScale(16),
+            justifyContent: 'space-around',
+            backgroundColor: CUSTOMCOLOR.white,
+            width: '100%',
+            padding: moderateScale(40),
+            borderTopEndRadius: moderateScale(16),
+            borderTopLeftRadius: moderateScale(16),
           }}>
           <TouchableOpacity onPress={props.OnGallery}>
             <Icon
@@ -115,17 +120,28 @@ const GalleryModel = props => {
             <Text style={styles.text}>GALLERY</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={props.OnCamera}>
-            <Icon name="camera" size={moderateScale(48)} style={styles.icon} color={CUSTOMCOLOR.primary} />
+            <Icon
+              name="camera"
+              size={moderateScale(48)}
+              style={styles.icon}
+              color={CUSTOMCOLOR.primary}
+            />
             <Text style={styles.text}>CAMERA</Text>
           </TouchableOpacity>
-          {props.delete == true ? (<TouchableOpacity onPress={props.OnDelete}>
-            <Icon name="delete" size={moderateScale(48)} style={styles.icon} color={CUSTOMCOLOR.delete} />
-            <Text style={styles.text}>Delete</Text>
-          </TouchableOpacity>) : null}
+          {props.document == true ? (
+            <TouchableOpacity onPress={props.onDocument}>
+              <Icon
+                name="file-document-multiple"
+                size={moderateScale(48)}
+                style={styles.icon}
+                color={CUSTOMCOLOR.primary}
+              />
+              <Text style={styles.text}>Files</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </Modal>
-   
   );
 };
 // camera - plus;
@@ -136,6 +152,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 'bold',
     color: CUSTOMCOLOR.primary,
+    alignSelf: 'center',
   },
   icon: {alignSelf: 'center', marginBottom: moderateScale(8)},
   modalOverlay: {
