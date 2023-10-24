@@ -216,12 +216,13 @@ const SlotBook = ({navigation, route}) => {
     return (
       <View key={item.id} style={styles.item}>
         {!bookedSlot?.includes(item?.slot) && (formatDate !== Today || startTime>= PresentTime) ? <SelectionTab
-        id = {parseInt(index)+1}
+        id = {(parseInt(index)+1).toString().padStart(0,0)}
           label={item?.slot}
           onPress={() => handleSelectSlot(item,parseInt(index)+1)}
           selected={selectedSlot?.slot === item?.slot}
         />:<SelectionTab
-        selectContainer={{backgroundColor:'#000000aa'}}
+        selectContainer={{backgroundColor:CUSTOMCOLOR.disable}}
+        text={{color:CUSTOMCOLOR.white}}
         id = {parseInt(index)+1}
           label={item?.slot}
           // onPress={() => handleSelectSlot(item)}
