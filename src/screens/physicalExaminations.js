@@ -43,13 +43,12 @@ import {commonstyles} from '../styles/commonstyle';
 import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-// import PlusButton from '../components/plusbtn';
 
 const PhysicalExamination = () => {
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
-  const [selectedFilename, setSelectedFilename] = useState([]);
+  // const [selectedFilename, setSelectedFilename] = useState([]);
 
   const onImagePress = () => {
     const options = {
@@ -62,8 +61,8 @@ const PhysicalExamination = () => {
       if (response.didCancel) {
       } else if (response.error) {
       } else {
-        console.log('=======>', response?.assets);
-        // setSelectedImage(response?.assets?.[0]?.base64);
+        // console.log('=======>', response?.assets);
+        SetUploadDocument([...uploaddocument,{name:response?.assets?.[0]?.fileName,type:response?.assets?.[0]?.type,uri:response?.assets?.[0]?.uri}])
       }
     });
     setModal(!modal);
@@ -81,7 +80,7 @@ const PhysicalExamination = () => {
       } else if (response.error) {
       } else {
         // console.log("=======>",response?.assets);
-        // setSelectedImage(response?.assets?.[0]?.base64);
+        SetUploadDocument([...uploaddocument,{name:response?.assets?.[0]?.fileName,type:response?.assets?.[0]?.type,uri:response?.assets?.[0]?.uri}])
       }
     });
     setModal(!modal);
@@ -93,8 +92,9 @@ const PhysicalExamination = () => {
         type: [DocumentPicker.types.pdf],
         allowMultiSelection: true,
       });
-      setSelectedFilename(result[0]?.name);
-      SetUploadDocument(result[0]?.uri);
+      // setSelectedFilename(result[0]?.name);
+      // SetUploadDocument(result[0]?.uri);
+      SetUploadDocument([...uploaddocument,{name:result[0]?.name,type:result[0]?.type,uri:result[0]?.uri}])
       console.log('result===', result[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -103,12 +103,21 @@ const PhysicalExamination = () => {
         // Handle other errors
       }
     }
+    setModal(!modal);
   };
   const dispatch = useDispatch();
   //   const exam = useSelector(state => state.prescription?.physicalExamination);
   const handlePress = () => {
     dispatch(addExamination(value));
     setValue('');
+  };
+  const handleDelete = index => {
+    if (uploaddocument?.length > 0) {
+      const updatedfiles = uploaddocument?.filter(
+        (item, ind) => ind !== index,
+      );
+      SetUploadDocument(updatedfiles)
+    }
   };
   return (
     <View style={styles.main}>
@@ -125,6 +134,19 @@ const PhysicalExamination = () => {
           fontWeight: '700',
         }}
       />
+      {uploaddocument?.length>0 ? (
+        <View style={{marginTop:verticalScale(16)}}>
+          {uploaddocument?.map((item,index)=>(
+          <ShowChip 
+          key={index} 
+          onPress={()=>handleDelete(index)} 
+          text={<><Icon color={CUSTOMCOLOR.error} size={moderateScale(20)} name={item?.type === "application/pdf" ? 'file-pdf-box':'image'} /> {item?.name?.includes('temp')?item?.name?.split('temp_')[1]?.toString():item?.name}</>} 
+         main={{marginHorizontal:0}}
+          />
+   
+         ))}
+        </View>
+      ):null}
       <PlusButton
         size={moderateScale(40)}
         style={{alignSelf: 'flex-end', marginTop: verticalScale(48)}}
