@@ -289,7 +289,7 @@ const Dashboard = ({navigation, route}) => {
             <CustomIcon label="Add Your Appointments" />
           )}
         </ScrollView>
-        <View style={{justifyContent:'flex-end',flex:1}}>
+        <View>
         <HButton
         type='addtype'
           label="Book Appointment"

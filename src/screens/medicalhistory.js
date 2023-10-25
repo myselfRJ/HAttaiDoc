@@ -5,10 +5,11 @@ import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
-import {
-  addCommorbities,
-  updateCommorbities,
-} from '../redux/features/prescription/commorbities';
+// import {
+//   addCommorbities,
+//   updateCommorbities,
+// } from '../redux/features/prescription/commorbities';
+import { addcommorbiditis,addmedicationHistory,addmenstrualHistory,addobstericHistory,addpastHospitalization,updatecommorbidities } from '../redux/features/prescription/pastHistory';
 import {CONSTANTS} from '../utility/constant';
 import {
   CUSTOMCOLOR,
@@ -36,9 +37,14 @@ import { addpastHistory } from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
 
 const MedicalHistory =({navigation})=>{
-    const data = useSelector(state=> state?.pasthistory?.pasthistory);
-    const commor = useSelector(state => state?.commorbities?.commorbitiesItems);
-    // console.log('====data',commor);
+  const data = useSelector(state=>state?.pasthistory?.pasthistory)
+    const commorbities = useSelector(state=> state?.pasthistory?.commorbidities);
+    const hospitalization = useSelector(state=> state?.pasthistory?.hospitalization);
+    const socialHistory = useSelector(state=> state?.pasthistory?.socialHistory);
+    const familyHistory = useSelector(state=> state?.pasthistory?.familyHistory);
+    const medicationHistory = useSelector(state=> state?.pasthistory?.medicationHistory);
+    const menstrualHistory = useSelector(state=> state?.pasthistory?.menstrualHistory);
+    const obstericHistory = useSelector(state=> state?.pasthistory?.obstericHistory);
     const dispatch = useDispatch();
     const nav = useNavigation();
     const [comorbidities,setComorbidities] = useState('');
@@ -74,28 +80,37 @@ const MedicalHistory =({navigation})=>{
     }
     const handleAddReceiver = (value) => {
       if (comorbidities.trim() !== '') {
-        dispatch(addCommorbities([...commor,{commorbities:comorbidities}]))
+        dispatch(addcommorbiditis([...commorbities,{commorbidities:comorbidities}]))
         setComorbidities('')
       }
     }
+    const handleDelete = index => {
+      if (commorbities) {
+        const updatedcommor = commorbities?.filter((item, ind) => ind !== index);
+  
+        dispatch(updatecommorbidities(updatedcommor));
+      }
+    };
     const handledata=()=>{
-        dispatch(addpastHistory([...data,{
-            comorbidities: comorbidities,
-            past: past,
-            social:social,
-            family:family,
-            medical:medical,
-            menstrual:menstrual,
-            obstetric:obstetric
-        }]));
-        nav.goBack();
+      dispatch(addpastHospitalization({ ...hospitalization, past }));
+      dispatch(addmedicationHistory({ ...medicationHistory, medical }));
+      dispatch(addmenstrualHistory({...menstrualHistory,menstrual}))
+      dispatch(addobstericHistory({...obstericHistory,obstetric}))
+        // nav.goBack();
     }
     return(
         <View style={styles.main}>
         <PrescriptionHead heading="Medical History" />
-        <ChipInput item={'commorbities'} label={'Commorbities'} data={commor} value={comorbidities} setValue={setComorbidities} onSubmit={handleAddReceiver}/>
+        <ChipInput 
+        item={'commorbidities'} 
+        label={'Commorbidities'} 
+        data={commorbities} 
+        value={comorbidities} 
+        setValue={setComorbidities} 
+        onSubmit={handleAddReceiver}
+        delete={handleDelete}/>
   
-        <ScrollView contentContainerStyle={{paddingBottom:moderateScale(100)}}>
+        <ScrollView>
         <View style={styles.input}>
           {/* <InputText
             inputContainer={styles.inputtext}
@@ -122,7 +137,7 @@ const MedicalHistory =({navigation})=>{
           <InputText
             inputContainer={styles.inputtext}
             label="Past Hospitalization"
-            placeholder="Past History"
+            placeholder="Reason for hospitalization"
             value={past}
             setValue={(txt)=> setPast(txt)}
           />
@@ -192,17 +207,6 @@ const MedicalHistory =({navigation})=>{
             </TouchableOpacity>
            ))}
           </View>:null}
-          <Text style={styles.prev}>Previous Prescription</Text>
-          <HButton
-          btnstyles={{alignSelf:'flex-start',
-          marginHorizontal:horizontalScale(8),
-          bottom:moderateScale(8)
-         
-        }}
-        textStyle={{fontSize:moderateScale(14)}}
-          icon='prescription'
-          label='View'
-          />
            <InputText
             inputContainer={styles.inputtext}
             label="Menstrual History"
@@ -221,8 +225,9 @@ const MedicalHistory =({navigation})=>{
     </View>
     </ScrollView>
           <View
-            style={commonstyles.activebtn}>
+            style={{flex:1,justifyContent:'flex-end'}}>
             <HButton
+            btnstyles={commonstyles.activebtn}
               label={'Save'}
               onPress={() => {
                 handledata();
@@ -235,6 +240,7 @@ const MedicalHistory =({navigation})=>{
 };
 const styles = StyleSheet.create({
     main: {
+      flex:1,
       gap:moderateScale(16),
       paddingHorizontal: horizontalScale(24),
       paddingVertical: verticalScale(16),
