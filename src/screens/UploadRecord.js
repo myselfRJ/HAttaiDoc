@@ -33,7 +33,7 @@ const Uploadrecord = () => {
   ];
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [selectedFilename, setSelectedFilename] = useState({});
+  const [selectedFilename, setSelectedFilename] = useState();
   const [uploaddocument, SetUploadDocument] = useState({});
 
   const pickSingleFile = async () => {

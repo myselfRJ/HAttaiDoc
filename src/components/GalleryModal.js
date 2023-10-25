@@ -110,7 +110,28 @@ const GalleryModel = props => {
             borderTopEndRadius: moderateScale(16),
             borderTopLeftRadius: moderateScale(16),
           }}>
-          <TouchableOpacity onPress={props.OnGallery}>
+          {props.share ? (
+            <TouchableOpacity onPress={props.OnPress1}>
+              <Icon
+                name={props.IconName1}
+                size={moderateScale(48)}
+                style={styles.icon}
+                color={CUSTOMCOLOR.primary}
+              />
+              <Text style={styles.text}>{props.Label1}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={props.OnGallery}>
+              <Icon
+                name="image-multiple"
+                size={moderateScale(48)}
+                style={styles.icon}
+                color={CUSTOMCOLOR.primary}
+              />
+              <Text style={styles.text}>GALLERY</Text>
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity onPress={props.OnGallery}>
             <Icon
               name="image-multiple"
               size={moderateScale(48)}
@@ -118,8 +139,29 @@ const GalleryModel = props => {
               color={CUSTOMCOLOR.primary}
             />
             <Text style={styles.text}>GALLERY</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={props.OnCamera}>
+          </TouchableOpacity> */}
+          {props.share ? (
+            <TouchableOpacity onPress={props.OnPress2}>
+              <Icon
+                name={props.IconName2}
+                size={moderateScale(48)}
+                style={styles.icon}
+                color={CUSTOMCOLOR.primary}
+              />
+              <Text style={styles.text}>{props.Label2}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={props.OnCamera}>
+              <Icon
+                name="camera"
+                size={moderateScale(48)}
+                style={styles.icon}
+                color={CUSTOMCOLOR.primary}
+              />
+              <Text style={styles.text}>CAMERA</Text>
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity onPress={props.OnCamera}>
             <Icon
               name="camera"
               size={moderateScale(48)}
@@ -127,7 +169,7 @@ const GalleryModel = props => {
               color={CUSTOMCOLOR.primary}
             />
             <Text style={styles.text}>CAMERA</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {props.document == true ? (
             <TouchableOpacity onPress={props.onDocument}>
               <Icon

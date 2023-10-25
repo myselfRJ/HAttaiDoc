@@ -33,7 +33,7 @@ export const CONSTANT = {
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
 
     {
-      label: 'Refer to Doctor',
+      label: 'Referall',
       icon: 'chevron-right',
       navigate: 'refer',
     },

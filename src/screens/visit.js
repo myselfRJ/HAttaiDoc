@@ -1408,7 +1408,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Refer to Doctor' &&
+                  {value.label === 'Referall' &&
                     (selectedDoctor?.length > 0 ? (
                       <View style={styles.basiccontainer}>
                         {selectedDoctor?.map((item, ind) => (

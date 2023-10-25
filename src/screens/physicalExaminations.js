@@ -62,7 +62,14 @@ const PhysicalExamination = () => {
       } else if (response.error) {
       } else {
         // console.log('=======>', response?.assets);
-        SetUploadDocument([...uploaddocument,{name:response?.assets?.[0]?.fileName,type:response?.assets?.[0]?.type,uri:response?.assets?.[0]?.uri}])
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: response?.assets?.[0]?.fileName,
+            type: response?.assets?.[0]?.type,
+            uri: response?.assets?.[0]?.uri,
+          },
+        ]);
       }
     });
     setModal(!modal);
@@ -80,7 +87,14 @@ const PhysicalExamination = () => {
       } else if (response.error) {
       } else {
         // console.log("=======>",response?.assets);
-        SetUploadDocument([...uploaddocument,{name:response?.assets?.[0]?.fileName,type:response?.assets?.[0]?.type,uri:response?.assets?.[0]?.uri}])
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: response?.assets?.[0]?.fileName,
+            type: response?.assets?.[0]?.type,
+            uri: response?.assets?.[0]?.uri,
+          },
+        ]);
       }
     });
     setModal(!modal);
@@ -94,7 +108,10 @@ const PhysicalExamination = () => {
       });
       // setSelectedFilename(result[0]?.name);
       // SetUploadDocument(result[0]?.uri);
-      SetUploadDocument([...uploaddocument,{name:result[0]?.name,type:result[0]?.type,uri:result[0]?.uri}])
+      SetUploadDocument([
+        ...uploaddocument,
+        {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
+      ]);
       console.log('result===', result[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -113,10 +130,8 @@ const PhysicalExamination = () => {
   };
   const handleDelete = index => {
     if (uploaddocument?.length > 0) {
-      const updatedfiles = uploaddocument?.filter(
-        (item, ind) => ind !== index,
-      );
-      SetUploadDocument(updatedfiles)
+      const updatedfiles = uploaddocument?.filter((item, ind) => ind !== index);
+      SetUploadDocument(updatedfiles);
     }
   };
   return (
@@ -134,19 +149,33 @@ const PhysicalExamination = () => {
           fontWeight: '700',
         }}
       />
-      {uploaddocument?.length>0 ? (
-        <View style={{marginTop:verticalScale(16)}}>
-          {uploaddocument?.map((item,index)=>(
-          <ShowChip 
-          key={index} 
-          onPress={()=>handleDelete(index)} 
-          text={<><Icon color={CUSTOMCOLOR.error} size={moderateScale(20)} name={item?.type === "application/pdf" ? 'file-pdf-box':'image'} /> {item?.name?.includes('temp')?item?.name?.split('temp_')[1]?.toString():item?.name}</>} 
-         main={{marginHorizontal:0}}
-          />
-   
-         ))}
+      {uploaddocument?.length > 0 ? (
+        <View style={{marginTop: verticalScale(16)}}>
+          {uploaddocument?.map((item, index) => (
+            <ShowChip
+              key={index}
+              onPress={() => handleDelete(index)}
+              text={
+                <>
+                  <Icon
+                    color={CUSTOMCOLOR.error}
+                    size={moderateScale(20)}
+                    name={
+                      item?.type === 'application/pdf'
+                        ? 'file-pdf-box'
+                        : 'image'
+                    }
+                  />{' '}
+                  {item?.name?.includes('temp')
+                    ? item?.name?.split('temp_')[1]?.toString()
+                    : item?.name}
+                </>
+              }
+              main={{marginHorizontal: 0}}
+            />
+          ))}
         </View>
-      ):null}
+      ) : null}
       <PlusButton
         size={moderateScale(40)}
         style={{alignSelf: 'flex-end', marginTop: verticalScale(48)}}
