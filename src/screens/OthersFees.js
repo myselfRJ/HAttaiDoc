@@ -20,6 +20,7 @@ import {Screen} from 'react-native-screens';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useRoute} from '@react-navigation/native';
+import { commonstyles } from '../styles/commonstyle';
 
 const OthersFees = () => {
   const route = useRoute();
@@ -112,6 +113,7 @@ const OthersFees = () => {
             setValue={setFees}
           />
           <HButton
+            type='addtype'
             btnstyles={{alignSelf: 'flex-end'}}
             label={'Add'}
             icon="plus"
@@ -119,7 +121,7 @@ const OthersFees = () => {
           />
         </View>
       </ScrollView>
-      <HButton label={'Paid'} />
+      <HButton label={'Paid'} btnstyles={commonstyles.activebtn} />
     </View>
   );
 };

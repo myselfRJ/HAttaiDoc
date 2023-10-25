@@ -49,6 +49,7 @@ const Symptoms = ({ navigation }) => {
   console.log('symptommmm', symptom)
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
+  console.log('days', days);
   const [hr, setHr] = useState('')
   const [selected, setSelected] = useState('');
   const [sevSelected, setSevSelected] = useState('')
@@ -62,13 +63,14 @@ const Symptoms = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handleAddSymptoms = () => {
-    if (symptom && sevSelected && days) {
+    if (symptom && sevSelected && (days || hr)) {
       dispatch(
         addSymptom([
           ...symptomsData,
           {
             symptom: symptom,
-            days: days ? days : hr,
+            // days: days ? days : hr,
+            days: days > 1 ? `${days} days` : days === 1 ? `${days} day` : `${hr} hr`,
             severity: sevSelected,
           },
         ]),
@@ -80,6 +82,7 @@ const Symptoms = ({ navigation }) => {
     setDays(null);
     setSymptom(null);
     setSevSelected(null)
+    setHr(null)
   };
 
   const handleSymptomSubmit = () => {
@@ -171,162 +174,162 @@ const Symptoms = ({ navigation }) => {
   return (
 
     <View style={styles.mainContainer}>
-       <PrescriptionHead heading={Language[language]['symptoms']}/>
+      <PrescriptionHead heading={Language[language]['symptoms']} />
       <ScrollView contentContainerStyle={{
-        zIndex:1,
+        zIndex: 1,
         paddingBottom: verticalScale(120),
       }}>
-       
-         
-        
-      
-        
-            <View style={styles.content}>
-              <View style={styles.input}>
-                <InputText
-                  inputContainer={styles.inputtext}
-                  label='Search'
-                  placeholder="Write first four letters..."
-                  value={symptom}
-                  setValue={setSymptom}
-                  search={true}
-                  IconName={
-                    (show && filtered.length > 0) ||
-                      symptom === selected ||
-                      symptom?.length === 0
-                      ? 'magnify'
-                      : 'close'
-                  }
-                  onPress={() => setShow(!show)}
-                />
-                {symptom?.length >= 4 &&
-                  (symptom === selected || show ? null : (
-                    <View style={styles.dropdownContainer}>
-                      <ScrollView persistentScrollbar={true}>
-                        {filtered?.map((val, index) => (
-                          <TouchableOpacity
-                            style={{
-                              paddingHorizontal: horizontalScale(4),
-                              paddingVertical: verticalScale(8),
-                            }}
-                            onPress={() => HandlePress(val?.term)}
-                            key={index}>
-                            <Text
-                              style={{
-                                fontSize: CUSTOMFONTSIZE.h3,
-                                padding: moderateScale(10),
-                                color: CUSTOMCOLOR.black,
-                              }}>
-                              {val?.term}
-                            </Text>
-                          </TouchableOpacity>
-                        ))}
-                      </ScrollView>
-                    </View>
-                  ))}
 
-                <View
-                  style={styles.subvalues}>
-                  {sug?.map((item, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => selectChange(item?.symptom)}
-                      style={[
-                        styles.recomend,
-                        {
-                          backgroundColor:
-                            item?.symptom === selected  ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-                        },
-                      ]}>
-                      <Text
-                        style={{
-                          color:
-                          item?.symptom === selected  ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-                        }}>
-                        {item?.symptom}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-              <View style={{...styles.input,zIndex:1}}>
-                <View style={{ gap: moderateScale(10) }}>
-                  <Text style={commonstyles.subhead}>
-                    {Language[language]['severity']}:
-                  </Text>
-                  <Seperator />
-                </View>
-                <View
-                  style={styles.subvalues}>
-                  <Option
-                    label={Language[language]['low']}
-                    value="low"
-                    selected={sevSelected === 'low'}
-                    onPress={() => setSevSelected('low')}
-                  />
-                  <Option
-                    label={Language[language]['medium']}
-                    value="medium"
-                    selected={sevSelected === 'medium'}
-                    onPress={() => setSevSelected('medium')}
-                  />
-                  <Option
-                    label={Language[language]['high']}
-                    value="high"
-                    selected={sevSelected === 'high'}
-                    onPress={() => setSevSelected('high')}
-                  />
-                </View>
-              </View>
 
-              <View style={{...styles.input,zIndex:1}}>
-                <View style={{ gap: moderateScale(10) }}>
-                  <Text style={commonstyles.subhead}>Time Period</Text>
-                  <Seperator/>
-                </View>
-                <View style={styles.subvalues}>
-                  <View style={styles.timeFields}>
-                    <Text style={styles.option}>Days :</Text>
-                    <TextInput
-                      style={styles.timeinput}
-                      placeholder="Enter Days"
-                      value={days}
-                      onChangeText={text => setDays(text)}
-                    />
-                  </View>
-                  <Text style={{
-                    color: CUSTOMCOLOR.black,
-                    fontWeight: '400',
-                    fontSize: CUSTOMFONTSIZE.h4
-                  }}>(OR)</Text>
-                  <View style={styles.timeFields}>
-                    <Text style={styles.option}>Hrs :</Text>
-                    <TextInput
-                      style={styles.timeinput}
-                      placeholder="Enter Hrs"
-                      value={hr}
-                      onChangeText={text => setHr(text)}
-                    />
-                  </View>
-                </View>
-              </View>
-            <HButton
-            
-              icon='plus'
-              type='addtype'
 
-              btnstyles={{
-                
-                backgroundColor:
-                  (symptom && sevSelected && days)
-                    ? CUSTOMCOLOR.primary
-                    : CUSTOMCOLOR.disable,
-                    alignSelf: 'flex-end'
-              }}
-              label='Add'
-              onPress={handleAddSymptoms}
+
+
+        <View style={styles.content}>
+          <View style={styles.input}>
+            <InputText
+              inputContainer={styles.inputtext}
+              label='Search'
+              placeholder="Write first four letters..."
+              value={symptom}
+              setValue={setSymptom}
+              search={true}
+              IconName={
+                (show && filtered.length > 0) ||
+                  symptom === selected ||
+                  symptom?.length === 0
+                  ? 'magnify'
+                  : 'close'
+              }
+              onPress={() => setShow(!show)}
             />
-          
+            {symptom?.length >= 4 &&
+              (symptom === selected || show ? null : (
+                <View style={styles.dropdownContainer}>
+                  <ScrollView persistentScrollbar={true}>
+                    {filtered?.map((val, index) => (
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: horizontalScale(4),
+                          paddingVertical: verticalScale(8),
+                        }}
+                        onPress={() => HandlePress(val?.term)}
+                        key={index}>
+                        <Text
+                          style={{
+                            fontSize: CUSTOMFONTSIZE.h3,
+                            padding: moderateScale(10),
+                            color: CUSTOMCOLOR.black,
+                          }}>
+                          {val?.term}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ))}
+
+            <View
+              style={styles.subvalues}>
+              {sug?.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => selectChange(item?.symptom)}
+                  style={[
+                    styles.recomend,
+                    {
+                      backgroundColor:
+                        item?.symptom === selected ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      color:
+                        item?.symptom === selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+                    }}>
+                    {item?.symptom}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={{ ...styles.input, zIndex: 1 }}>
+            <View style={{ gap: moderateScale(10) }}>
+              <Text style={commonstyles.subhead}>
+                {Language[language]['severity']}:
+              </Text>
+              <Seperator />
+            </View>
+            <View
+              style={styles.subvalues}>
+              <Option
+                label={Language[language]['low']}
+                value="low"
+                selected={sevSelected === 'low'}
+                onPress={() => setSevSelected('low')}
+              />
+              <Option
+                label={Language[language]['medium']}
+                value="medium"
+                selected={sevSelected === 'medium'}
+                onPress={() => setSevSelected('medium')}
+              />
+              <Option
+                label={Language[language]['high']}
+                value="high"
+                selected={sevSelected === 'high'}
+                onPress={() => setSevSelected('high')}
+              />
+            </View>
+          </View>
+
+          <View style={{ ...styles.input, zIndex: 1 }}>
+            <View style={{ gap: moderateScale(10) }}>
+              <Text style={commonstyles.subhead}>Time Period</Text>
+              <Seperator />
+            </View>
+            <View style={styles.subvalues}>
+              <View style={styles.timeFields}>
+                <Text style={styles.option}>Days :</Text>
+                <TextInput
+                  style={styles.timeinput}
+                  placeholder="Enter Days"
+                  value={days}
+                  onChangeText={text => setDays(text)}
+                />
+              </View>
+              <Text style={{
+                color: CUSTOMCOLOR.black,
+                fontWeight: '400',
+                fontSize: CUSTOMFONTSIZE.h3
+              }}>(OR)</Text>
+              <View style={styles.timeFields}>
+                <Text style={styles.option}>Hr :</Text>
+                <TextInput
+                  style={styles.timeinput}
+                  placeholder="Enter Hr"
+                  value={hr}
+                  onChangeText={text => setHr(text)}
+                />
+              </View>
+            </View>
+          </View>
+          <HButton
+
+            icon='plus'
+            type='addtype'
+
+            btnstyles={{
+
+              backgroundColor:
+                (symptom && sevSelected && (days || hr))
+                  ? CUSTOMCOLOR.primary
+                  : CUSTOMCOLOR.disable,
+              alignSelf: 'flex-end'
+            }}
+            label='Add'
+            onPress={handleAddSymptoms}
+          />
+
           {symptomsData?.map((item, ind) => (
             <View key={ind} style={styles.reduxData}>
               <View style={styles.reduxData1}>
@@ -336,16 +339,26 @@ const Symptoms = ({ navigation }) => {
                     Severity : {item.severity}
                   </Text>
                 </View>
-                <View><Text style={styles.reduxText}>
-                  Days/Hrs : {item.days}
-                </Text>
-                </View>
+                {item.days && (item.days.includes('days') || item.days.includes('day')) ? (
+                  <View>
+                    <Text style={styles.reduxText}>
+                      Time Period: {item.days}
+                    </Text>
+                  </View>
+                ) : null}
+                {item.days && (item.days.includes('hr'))?(
+                   <View>
+                   <Text style={styles.reduxText}>
+                     Time Period: {item.days}
+                   </Text>
+                 </View>
+                ): null }
                 <View style={{ flexDirection: 'row', gap: moderateScale(4) }}>
                   <TouchableOpacity style={{
                     borderRadius: moderateScale(32),
                     backgroundColor: CUSTOMCOLOR.white,
                     padding: moderateScale(4),
-                    
+
                   }}>
                     <Icon
                       name="pencil"
@@ -369,26 +382,27 @@ const Symptoms = ({ navigation }) => {
               </View>
             </View>
           ))}
-           
-            </View>
-        
-          
+
+        </View>
 
 
-      
+
+
+
       </ScrollView>
-        <HButton
-          btnstyles={{...commonstyles.activebtn,
-            backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-           
-            // bottom:moderateScale(12)
-          }}
-          label={'Save'}
-          onPress={() => {
-            handledata();
-          }}
-        />
-      </View>
+      <HButton
+        btnstyles={{
+          ...commonstyles.activebtn,
+          backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+
+          // bottom:moderateScale(12)
+        }}
+        label={'Save'}
+        onPress={() => {
+          handledata();
+        }}
+      />
+    </View>
 
   );
 };
@@ -397,16 +411,16 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingHorizontal: horizontalScale(24),
-    
-    paddingVertical:verticalScale(12),
-    backgroundColor:CUSTOMCOLOR.background
+
+    paddingVertical: verticalScale(12),
+    backgroundColor: CUSTOMCOLOR.background
   },
   subvalues: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: moderateScale(8),
     padding: moderateScale(8),
-    alignItems:'center',
+    alignItems: 'center',
   },
   timeFields: {
     flexDirection: 'row',
@@ -417,7 +431,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(12),
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
-    // borderWidth: 0.5,
+    borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
     paddingVertical: verticalScale(10)
 
@@ -444,8 +458,8 @@ const styles = StyleSheet.create({
     // flex: 1,
     // marginVertical: moderateScale(4),
     // paddingHorizontal: moderateScale(8),
-    paddingHorizontal:horizontalScale(16),
-    paddingVertical:verticalScale(8),
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(8),
     borderColor: CUSTOMCOLOR.success,
     backgroundColor: '#EAF3FC',
     borderWidth: 0.5,
@@ -457,7 +471,7 @@ const styles = StyleSheet.create({
   reduxData1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
 
   },
   text: {
@@ -475,15 +489,15 @@ const styles = StyleSheet.create({
   content: {
     // paddingHorizontal: horizontalScale(16),
     gap: moderateScale(16),
-    zIndex:2
+    zIndex: 2
     // position:'absolute'
-    
+
   },
   dropdownContainer: {
-    top:moderateScale(90),
-    position:'absolute',
-    zIndex:4,
-    width:'100%',
+    top: moderateScale(90),
+    position: 'absolute',
+    zIndex: 4,
+    width: '100%',
     height: moderateScale(220),
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),
@@ -495,7 +509,7 @@ const styles = StyleSheet.create({
   input: {
     // borderWidth: 1,
     gap: moderateScale(0),
-    zIndex:3,
+    zIndex: 3,
   },
   recomend: {
     padding: moderateScale(12),

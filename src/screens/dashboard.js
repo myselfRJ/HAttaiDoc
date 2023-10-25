@@ -70,6 +70,7 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const [setAppointment, setDataAppointment] = useState([]);
+  // console.log('appoooo==',setAppointment)
   const {phone} = useSelector(state => state?.phone?.data);
 
   const dispatch = useDispatch();
@@ -285,18 +286,18 @@ const Dashboard = ({navigation, route}) => {
               );
             })
           ) : (
-            <CustomIcon label="No Appointments" />
+            <CustomIcon label="Add Your Appointments" />
           )}
         </ScrollView>
-
-        <View>
-          <HButton
-            label="Book Appointment"
-            btnstyles={{alignSelf: 'center', marginTop: moderateScale(16)}}
-            // textStyle={{color: CUSTOMCOLOR.primary}}
-            onPress={() => navigation.navigate('addnew')}
-          />
-        </View>
+        <View style={{justifyContent:'flex-end',flex:1}}>
+        <HButton
+        type='addtype'
+          label="Book Appointment"
+          btnstyles={commonstyles.activebtn}
+          // textStyle={{bottom:verticalScale(4),borderWidth:1}}
+          onPress={() => navigation.navigate('addnew')}
+        />
+      </View>
       </View>
 
       {/* </View> */}
@@ -319,7 +320,7 @@ const Dashboard = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: moderateScale(1),
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
   },

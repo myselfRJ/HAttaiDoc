@@ -85,6 +85,9 @@ const InputText = props => {
             onChangeText={numeric ? handleNumericInput : passtoParent}
             value={props.value}
             multiline={props.multiline}
+            onSubmitEditing={props.onSubmit}
+            blurOnSubmit={props.blur}
+
           />
           {props.secure !== undefined ? (
             visible ? (

@@ -1038,9 +1038,9 @@ const AddClinic = ({navigation}) => {
                     paddingVertical: verticalScale(8),
                     paddingTop: verticalScale(8),
                   }}>
-                  {slots ? (
+                  {!visibleSlot ? (
                     <Text style={[styles.labeltext, {fontWeight: '700'}]}>
-                      My Slots
+                      View Slots
                     </Text>
                   ) : null}
                   <View
@@ -1056,10 +1056,12 @@ const AddClinic = ({navigation}) => {
                         onPress={() => handleSelectedDelete(selectSlot)}
                         btnstyles={{
                           backgroundColor: CUSTOMCOLOR.delete,
-                          paddingHorizontal: horizontalScale(4),
+                          paddingHorizontal: horizontalScale(12),
+                          paddingVertical: verticalScale(8),
                         }}
                         textStyle={{
                           color: CUSTOMCOLOR.white,
+                          fontSize: CUSTOMFONTSIZE.h4,
                         }}
                       />
                     )}
@@ -1076,6 +1078,8 @@ const AddClinic = ({navigation}) => {
                           label="Clear All"
                           onPress={handleClearAllSlots}
                           btnstyles={{
+                            // borderWidth:0.5,
+                            // borderColor:CUSTOMCOLOR.primary,
                             backgroundColor: CUSTOMCOLOR.white,
                             paddingHorizontal: horizontalScale(12),
                             paddingVertical: verticalScale(8),
@@ -1085,20 +1089,22 @@ const AddClinic = ({navigation}) => {
                             fontSize: CUSTOMFONTSIZE.h4,
                           }}
                         />
-                        <HButton
-                          color={CUSTOMCOLOR.white}
-                          label="Add to All days"
-                          onPress={() => handleAddSlotCopyMonday()}
-                          btnstyles={{
-                            backgroundColor: CUSTOMCOLOR.primary,
-                            paddingHorizontal: horizontalScale(12),
-                            paddingVertical: verticalScale(8),
-                          }}
-                          textStyle={{
-                            color: CUSTOMCOLOR.white,
-                            fontSize: CUSTOMFONTSIZE.h4,
-                          }}
-                        />
+                       {slots.M.length > 0 ?(
+                         <HButton
+                         color={CUSTOMCOLOR.white}
+                         label="Add to All days"
+                         onPress={() => handleAddSlotCopyMonday()}
+                         btnstyles={{
+                           backgroundColor: CUSTOMCOLOR.primary,
+                           paddingHorizontal: horizontalScale(12),
+                           paddingVertical: verticalScale(8),
+                         }}
+                         textStyle={{
+                           color: CUSTOMCOLOR.white,
+                           fontSize: CUSTOMFONTSIZE.h4,
+                         }}
+                       />
+                       ):null}
                       </View>
                     )}
                   </View>
@@ -1245,8 +1251,8 @@ const AddClinic = ({navigation}) => {
             Close={setModal}
             OnGallery={onImagePress}
             OnCamera={openCamera}
-            delete={show}
-            OnDelete={onDeleteImage}
+            // delete={show}
+            // OnDelete={onDeleteImage}
           />
         </View>
       )}
@@ -1257,8 +1263,8 @@ const AddClinic = ({navigation}) => {
             Close={setlogo}
             OnGallery={onLogoPress}
             OnCamera={LogoCamera}
-            delete={logoShow}
-            OnDelete={onDeleteLogo}
+            // delete={logoShow}
+            // OnDelete={onDeleteLogo}
           />
         </View>
       )}

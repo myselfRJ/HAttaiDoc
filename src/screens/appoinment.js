@@ -305,7 +305,7 @@ const Appointment = ({navigation}) => {
           onPress={handlePlusBUtton}
         />
       </View>
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'} backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&
@@ -386,12 +386,12 @@ const styles = StyleSheet.create({
     //paddingHorizontal: 2,
   },
   modalContainer: {
-    height: moderateScale(400),
-    width: '100%',
+    height: verticalScale(1000),
+    width: '50%',
     //justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    //alignSelf: 'center',
+    alignSelf: 'center',
     borderRadius: moderateScale(10),
     padding: moderateScale(32),
     gap: moderateScale(16),

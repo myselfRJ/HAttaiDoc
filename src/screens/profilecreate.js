@@ -330,10 +330,9 @@ const ProfileCreate = ({navigation}) => {
           // closeModal={()=> setModal(false)}
           OnGallery={onImagePress}
           OnCamera={openCamera}
-          delete={del}
-          OnDelete={onDelete}
-          // onPress={()=>setModal(false)}
-          // dismiss={()=>setModal(false)}
+          // delete={del}
+          // OnDelete={onDelete}
+          
         />
       )}
       <Text style={commonstyles.h1}>Doctor Profile</Text>
@@ -395,6 +394,7 @@ const ProfileCreate = ({navigation}) => {
             input={value}
             setValue={setValue}
             numeric={true}
+            keypad='numeric'
             // required={true}
           />
           <View
@@ -464,6 +464,7 @@ const ProfileCreate = ({navigation}) => {
           value={values.experience}
           setValue={value => handleChangeValue('experience', value)}
           numeric={true}
+          keypad='numeric'
         />
         <View style={styles.btn}>
           <View style={{flex: 1}}>
@@ -768,7 +769,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     // borderWidth:1,
     // paddingHorizontal: horizontalScale(24),
     gap: verticalScale(8),

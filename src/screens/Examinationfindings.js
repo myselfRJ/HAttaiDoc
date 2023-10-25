@@ -18,6 +18,7 @@ import {
   CUSTOMFONTSIZE,
   CUSTOMFONTFAMILY,
 } from '../settings/styles';
+import { commonstyles } from '../styles/commonstyle';
 
 const ExaminationFindings = () => {
   const [value, setValue] = useState('');
@@ -73,16 +74,17 @@ const ExaminationFindings = () => {
           fontSize: CUSTOMFONTSIZE.h3,
         }}
       />
-      <HButton btnstyles={{alignSelf:'flex-end'}}/>
+      <HButton btnstyles={{alignSelf:'flex-end'}} label={'Add'}/>
       <View
         style={{
           justifyContent: 'flex-end',
           flex: 1,
-          marginHorizontal: horizontalScale(80),
+          // marginHorizontal: horizontalScale(80),
         }}>
         <HButton
+        btnstyles={commonstyles.activebtn}
           onPress={handlePress}
-          btnstyles={{borderRadius: moderateScale(16)}}
+          // btnstyles={{borderRadius: moderateScale(16)}}
           label={'Save'}
         />
       </View>

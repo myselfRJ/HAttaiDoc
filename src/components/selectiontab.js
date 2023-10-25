@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.white,
+    paddingHorizontal:horizontalScale(6)
   },
   token: {
     color: CUSTOMCOLOR.white
@@ -77,8 +78,8 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     borderWidth: 0.5,
-    padding: moderateScale(3),
-    borderBottomRightRadius: moderateScale(10),
+    padding: moderateScale(2),
+    borderBottomRightRadius: moderateScale(8),
     borderColor: CUSTOMCOLOR.black,
     backgroundColor:CUSTOMCOLOR.primary
   }

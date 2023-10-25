@@ -1,3 +1,4 @@
+import React,{forwardRef} from 'react';
 import {View,Text,StyleSheet,TextInput} from 'react-native';
 import InputText from './inputext';
 // import { TextInput } from 'react-native-gesture-handler';
@@ -5,15 +6,21 @@ import style from './Searchbar/style';
 import { horizontalScale, moderateScale } from '../utility/scaleDimension';
 import { CUSTOMCOLOR, CUSTOMFONTSIZE } from '../settings/styles';
 
-const VitalField  = props =>{
+const VitalField  = (props) => {
     return(
      <View style={styles.main}>
         <Text style={styles.name}>{props.name}</Text>
         <TextInput
+
+        ref={props.point}
+        returnKeyType={'next'}
+        onSubmitEditing={()=> props?.re?.current?.focus()}
         style={styles.inputContainer}
           placeholder={props.placeholder}
           value={props.value}
           onChangeText={props.setvalue}
+          keyboardType='numeric'
+          blurOnSubmit={false}
         />
      </View>
     )

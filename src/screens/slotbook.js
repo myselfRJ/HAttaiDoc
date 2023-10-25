@@ -215,15 +215,16 @@ const SlotBook = ({navigation, route}) => {
 
     return (
       <View key={item.id} style={styles.item}>
-        {!bookedSlot?.includes(item?.slot) && (formatDate !== Today || startTime>= PresentTime) ? <SelectionTab
-        id = {(parseInt(index)+1).toString().padStart(0,0)}
+        {!bookedSlot?.includes(item?.slot) && (formatDate !== Today || startTime>= PresentTime) ? 
+        <SelectionTab
+       id={(parseInt(index) + 1).toString().padStart(2, '0')}
           label={item?.slot}
           onPress={() => handleSelectSlot(item,parseInt(index)+1)}
           selected={selectedSlot?.slot === item?.slot}
         />:<SelectionTab
         selectContainer={{backgroundColor:CUSTOMCOLOR.disable}}
         text={{color:CUSTOMCOLOR.white}}
-        id = {parseInt(index)+1}
+        id={(parseInt(index) + 1).toString().padStart(2, '0')}
           label={item?.slot}
           // onPress={() => handleSelectSlot(item)}
           // selected={selectedSlot?.slot === item?.slot}
@@ -470,6 +471,7 @@ const SlotBook = ({navigation, route}) => {
                 <View>
                   <Text style={styles.h2}>Available Slots</Text>
                   <FlatList
+                   
                     data={list}
                     renderItem={renderItems}
                     numColumns={4}
@@ -541,7 +543,8 @@ const styles = StyleSheet.create({
   child: {
     zIndex: 1,
     // paddingVertical: moderateScale(16),
-    gap: moderateScale(16),
+    gap: moderateScale(8),
+    // borderWidth:1,
   },
   h2: {
     marginVertical: verticalScale(16),
@@ -552,8 +555,9 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   item: {
+    // borderWidth:1,
     margin: moderateScale(8),
-    paddingHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(4),
   },
   btn: {
     height: moderateScale(400),
@@ -561,11 +565,13 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     position: 'absolute',
-
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary,
     left: 0,
     top: verticalScale(80),
     width: '100%',
     backgroundColor: CUSTOMCOLOR.white,
+    height:verticalScale(300)
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

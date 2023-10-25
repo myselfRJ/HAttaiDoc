@@ -33,10 +33,12 @@ import {
 } from '../utility/AsyncStorage';
 import { commonstyles } from '../styles/commonstyle';
 import { addpastHistory } from '../redux/features/prescription/pastHistory';
+import ChipInput from '../components/ChipInput';
 
 const MedicalHistory =({navigation})=>{
     const data = useSelector(state=> state?.pasthistory?.pasthistory);
-    console.log('====da',data);
+    const commor = useSelector(state => state?.commorbities?.commorbitiesItems);
+    // console.log('====data',commor);
     const dispatch = useDispatch();
     const nav = useNavigation();
     const [comorbidities,setComorbidities] = useState('');
@@ -48,7 +50,12 @@ const MedicalHistory =({navigation})=>{
     const [menstrual,setMenstrual] = useState('')
     const [obstetric,setObstetric] = useState('')
     const [select,setSelect] = useState('')
-
+    // const handleAddReceiver = () => {
+    //   if (inputText.trim() !== '') {
+    //     setReceivers([...receivers, inputText]);
+    //     setInputText('');
+    //   }
+    // }
     const handleSelectComorbidities=(value)=>{
        setSelect(value);
        setComorbidities(value)   
@@ -65,6 +72,12 @@ const MedicalHistory =({navigation})=>{
         setSelect(val);
         setMedical(val)
     }
+    const handleAddReceiver = (value) => {
+      if (comorbidities.trim() !== '') {
+        dispatch(addCommorbities([...commor,{commorbities:comorbidities}]))
+        setComorbidities('')
+      }
+    }
     const handledata=()=>{
         dispatch(addpastHistory([...data,{
             comorbidities: comorbidities,
@@ -80,6 +93,7 @@ const MedicalHistory =({navigation})=>{
     return(
         <View style={styles.main}>
         <PrescriptionHead heading="Medical History" />
+        <ChipInput item={'commorbities'} label={'Commorbities'} data={commor} value={comorbidities} setValue={setComorbidities} onSubmit={handleAddReceiver}/>
   
         <ScrollView contentContainerStyle={{paddingBottom:moderateScale(100)}}>
         <View style={styles.input}>
