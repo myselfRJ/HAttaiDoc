@@ -97,13 +97,13 @@ const MedicalHistory =({navigation})=>{
   
         <ScrollView contentContainerStyle={{paddingBottom:moderateScale(100)}}>
         <View style={styles.input}>
-          <InputText
+          {/* <InputText
             inputContainer={styles.inputtext}
             label="Comorbidities"
             placeholder="Enter comorbidities"
             value={comorbidities}
             setValue={(txt)=> setComorbidities(txt)}
-          />
+          /> */}
          {data?.lenght>0? <View style={{flexDirection:'row',gap:moderateScale(8),marginHorizontal:horizontalScale(8)}}>
            {data?.map((item,ind)=>(
             <TouchableOpacity
