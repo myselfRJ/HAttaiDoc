@@ -16,7 +16,6 @@ async function RetriveAsyncData(key) {
 
     if (session !== undefined) {
       const data = JSON.parse(session);
-      console.log('dataadata:', data);
       return data;
     }
   } catch (error) {

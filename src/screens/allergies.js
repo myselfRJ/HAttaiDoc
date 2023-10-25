@@ -29,7 +29,7 @@ import {
   RetriveAsyncData,
   UpdateAsyncData,
 } from '../utility/AsyncStorage';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 const Allergies = () => {
   const navigation = useNavigation();
@@ -119,7 +119,6 @@ const Allergies = () => {
       setSug(uniqueArray);
     });
   }, []);
-  // console.log(sug.length);
 
   return (
     <View style={styles.main}>
@@ -209,8 +208,7 @@ const Allergies = () => {
             ))}
           </View>
 
-          <View
-            style={commonstyles.activebtn}>
+          <View style={commonstyles.activebtn}>
             <HButton label={'Save'} onPress={handleBack} />
           </View>
         </View>
@@ -222,11 +220,11 @@ export default Allergies;
 
 const styles = StyleSheet.create({
   main: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   recomend: {
     padding: moderateScale(8),
