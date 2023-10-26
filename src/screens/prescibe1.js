@@ -40,7 +40,7 @@ import {
 } from '../utility/AsyncStorage';
 import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 export default function Prescribe1({navigation}) {
   const [data, setData] = useState([]);
@@ -197,7 +197,7 @@ export default function Prescribe1({navigation}) {
     if (response.ok) {
       const jsonData = await response.json();
       // console.log('fetch data====>',jsonData)
-      setData(jsonData);
+      setData([...jsonData, ...CONSTANTS.medicine]);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -206,7 +206,7 @@ export default function Prescribe1({navigation}) {
     fetchMedicine();
   }, [mode, option]);
   const [newMedicine, setnewMedicine] = useState([]);
-  const [filtered, setFilteredData] = useState('');
+  const [filtered, setFilteredData] = useState([]);
   //  console.log('filter values=====>',filtered)
   useEffect(() => {
     if (medicine) {
@@ -233,11 +233,18 @@ export default function Prescribe1({navigation}) {
     } else {
       setnewMedicine(null);
     }
-  }, [medicine, data]);
+  }, [data]);
 
   const HandlePress = value => {
-    setMedicine(value);
-    selectedMedicine(value);
+    console.log('value', value);
+    setMedicine(value?.term);
+    selectedMedicine(value?.term);
+    if (value?.type === 'nsno') {
+      // console.log('geberdrt', setgeneric);
+      setselectedGeneric(false);
+      // setSelectedMgs(!setmgs);
+      setnewMedicine([]);
+    }
   };
   const handleBack = () => {
     if (sug?.length === 0 || !sug) {
@@ -261,7 +268,6 @@ export default function Prescribe1({navigation}) {
       setMed_filter(resultArray);
     }
   }, [mode]);
-  console.log('suggg=>', sug);
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -271,7 +277,7 @@ export default function Prescribe1({navigation}) {
       <ScrollView style={styles.prescribeConatiner}>
         {prevPres?.map((item, ind) => (
           <ShowChip
-          main={{marginHorizontal:0}}
+            main={{marginHorizontal: 0}}
             key={ind}
             text={`${item.mode} | ${item.medicine} | ${item.dose_quantity} | ${item.timing}|${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
             onPress={() => handleDelete(ind)}
@@ -332,7 +338,7 @@ export default function Prescribe1({navigation}) {
                         borderWidth: 0,
                         backgroundColor: null,
                       }}
-                      onPress={() => HandlePress(val?.term)}
+                      onPress={() => HandlePress(val)}
                       key={index}
                       input={val?.term}></SelectorBtn>
                   ))}
@@ -542,12 +548,12 @@ export default function Prescribe1({navigation}) {
           {/* </View> */}
         </View>
         <HButton
-        type='addtype'
+          type="addtype"
           label={'Add'}
           icon="plus"
           // size={moderateScale(16)}
           onPress={handleAddPrescribe}
-          btnstyles={{alignSelf:'flex-end'}}
+          btnstyles={{alignSelf: 'flex-end'}}
         />
       </ScrollView>
       {/* <View
@@ -556,11 +562,12 @@ export default function Prescribe1({navigation}) {
           alignItems: 'flex-end',
           gap: moderateScale(20),
         }}> */}
-        
+
       {/* </View> */}
       <HButton
         label={'Save'}
-        btnstyles={{...commonstyles.activebtn,
+        btnstyles={{
+          ...commonstyles.activebtn,
           backgroundColor:
             prevPres?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
         }}
@@ -678,7 +685,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
     // gap: moderateScale(24),
   },
   total_quantity: {
@@ -696,10 +703,10 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(16),
   },
   dropdownContainer: {
-    top:moderateScale(175),
-    position:'absolute',
-    zIndex:1,
-    width:'100%',
+    top: moderateScale(175),
+    position: 'absolute',
+    zIndex: 1,
+    width: '100%',
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),

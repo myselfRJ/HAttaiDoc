@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,6 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -32,8 +34,15 @@ import ShowChip from '../components/showChip';
 import {commonstyles} from '../styles/commonstyle';
 import {ScrollView} from 'react-native-gesture-handler';
 import GalleryModel from '../components/GalleryModal';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import {useRoute} from '@react-navigation/native';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
 
 const ReferToDoctor = () => {
+  const route = useRoute();
+  const {patient_details} = route.params;
+  console.log('=========>details', patient_details);
   const nav = useNavigation();
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
   console.log('=======>doc', doctor);
@@ -47,6 +56,167 @@ const ReferToDoctor = () => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
+  const [filePath, setFilePath] = useState('');
+  const [data, setData] = useState();
+  const token = useSelector(state => state.authenticate.auth.access);
+
+  const fetchDoctor = async () => {
+    const response = await fetchApi(
+      URL.getPractitionerByNumber(patient_details?.doc_phone),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (response.ok) {
+      const jsonData = await response.json();
+      setData(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchDoctor();
+  }, []);
+
+  const isPermitted = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs access to Storage data',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        alert('Write permission err', err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+  const contact = `${name} ${phone}`;
+  const createPDF = async () => {
+    if (await isPermitted()) {
+      let options = {
+        //Content to print
+        html: `<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Doctor Referral</title>
+        </head>
+        <body>
+            <header style="text-align: center; background-color: #4ba5fa; color: #fff; padding: 20px; margin: 0;">
+                <h1 style="margin: 0;">Doctor Referral</h1>
+            </header>
+            
+            <section id="referral-details" style="padding: 20px; margin: 0;">
+                <h2 style="margin: 0;">Referral Details</h2>
+                <p style="margin: 0;">Referring Doctor:${data?.doctor_name}</p>
+                <p style="margin: 0;">Date: ${new Date().toString()}</p>
+            </section>
+            
+            <section id="patient-details" style="padding: 20px; background-color: #f5f5f5; margin: 0;">
+                <h2 style="margin: 0;">Patient Details</h2>
+                <p style="margin: 0;">Patient Name: ${patient_details?.name}</p>
+                <p style="margin: 0;">Age: ${patient_details?.age}</p>
+                <p style="margin: 0;">Phone: ${
+                  patient_details?.patient_phone
+                }</p>
+            </section>
+            
+            <section id="referred-doctor" style="padding: 20px; margin: 0;">
+                <h2 style="margin: 0;">Referred Doctor</h2>
+                <p style="margin: 0;">Referred Doctor: Dr. ${
+                  selected === 'Clinic' || selected === 'Hospital'
+                    ? dr_name
+                    : name
+                }</p>
+                <p style="margin: 0;">Speciality:${speciality} </p>
+                <p style="margin: 0;">Contact Information:${
+                  selected === 'Clinic' || selected === 'Hospital'
+                    ? `${name} , ${phone}`
+                    : phone
+                } </p>
+            </section>
+            
+            <section id="additional-notes" style="padding: 20px; margin: 0;">
+                <h2 style="margin: 0;">Referral Notes</h2>
+                <p style="margin: 0;">${notes}</p>
+            </section>
+        
+            <footer style="text-align: center; ; color: #000; padding: 10px; margin-top:140px;">
+                <p style="margin: 0;">powered by</p>
+                <img style="height: 100px;width:200px" src="${
+                  CONSTANTS.pdf_footer
+                }" style="float: left; margin-right: 10px;" alt="Image Description">
+                <p style="margin: 0;">For questions or more information, please contact ${
+                  data?.doctor_name
+                } , ${data?.doctor_phone_number}.</p>
+            </footer>
+        </body>
+        </html>
+        
+        `,
+        //File Name
+        fileName: 'refer',
+        //File directory
+        directory: 'refer',
+      };
+      let file = await RNHTMLtoPDF.convert(options);
+      console.log(file.filePath);
+      setFilePath(file.filePath);
+      handle();
+    }
+  };
+
+  const postData = async url => {
+    const formData = new FormData();
+    formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
+    formData.append(
+      'patient_phone_number',
+      `${patient_details?.patient_phone}`,
+    );
+    formData.append('clinic_id', `${patient_details?.clinic_id}`);
+    formData.append('appointment_id', `${patient_details?.appointment_id}`);
+    formData.append('file_referral', {
+      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf`,
+      type: 'application/pdf',
+      name: `${patient_details?.patient_phone}referal.pdf`,
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+      if (responseData) {
+        console.log('API Response:', responseData);
+        Alert.alert('', 'Successfully Send to Patient');
+        nav.goBack();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('', 'Something went Wrong');
+    }
+  };
+  const apiUrl = URL.refer_doc_pdf;
+
+  const handle = () => {
+    postData(apiUrl);
+  };
 
   const handleAddDoctors = () => {
     selected && phone && name && speciality
@@ -56,7 +226,7 @@ const ReferToDoctor = () => {
             {
               refer_to: selected,
               dr_name: dr_name ? dr_name : null,
-              doctor_name: name,
+              doctor_or_name: name,
               speciality: speciality,
               phone: phone,
               notes: notes,
@@ -70,6 +240,7 @@ const ReferToDoctor = () => {
         setNotes(''),
         setDr_Name(''))
       : null;
+    nav.goBack();
   };
 
   const handleSelect = val => {
@@ -89,11 +260,7 @@ const ReferToDoctor = () => {
     }
   };
   const onPress = () => {
-    if (doctor?.length > 0) {
-      // nav.goBack();
-    } else {
-      setModal(!modal);
-    }
+    setModal(!modal);
   };
   const HandlePress = val => {
     setSpeciality(val);
@@ -104,7 +271,7 @@ const ReferToDoctor = () => {
     <View style={styles.main}>
       <ScrollView>
         <PrescriptionHead head={{padding: 0}} heading="Referral" />
-        {doctor?.map((item, ind) =>
+        {/* {doctor?.map((item, ind) =>
           doctor.length > 0 ? (
             <ShowChip
               text={`Refer To: ${item?.refer_to},Name:${item?.doctor_name} ${
@@ -114,7 +281,7 @@ const ReferToDoctor = () => {
               key={ind}
             />
           ) : null,
-        )}
+        )} */}
 
         <View style={styles.container}>
           <Text style={styles.head}>Refer To </Text>
@@ -239,18 +406,21 @@ const ReferToDoctor = () => {
                   ? CUSTOMCOLOR.primary
                   : CUSTOMCOLOR.disable,
             }}
-            icon="plus"
-            label="Add"
+            icon="share"
+            label="Share"
             type="addtype"
             size={moderateScale(24)}
-            onPress={handleAddDoctors}
+            onPress={() => {
+              handleAddDoctors();
+              // createPDF();
+            }}
           />
         </View>
       </ScrollView>
-      <View
+      {/* <View
         style={{
           justifyContent: 'flex-end',
-          // flex: 1,
+         
         }}>
         <HButton
           label={'Share'}
@@ -261,13 +431,14 @@ const ReferToDoctor = () => {
           }}
           onPress={onPress}
         />
-      </View>
+      </View> */}
       {modal && (
         <GalleryModel
           visible={modal}
           Close={setModal}
           share={true}
           Label1={'Doctor'}
+          OnPress1={createPDF}
           Label2={'Patient'}
           IconName1={'doctor'}
           IconName2={'human-child'}

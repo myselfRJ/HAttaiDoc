@@ -5,6 +5,311 @@ export const CONSTANTS = {
   dose_ml: ['5ml', '10ml', '15ml', '20ml'],
   timing: ['AF', 'BF'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
+  Lab: [
+    {
+      micro_biology: 'Culture & Sensitivity(Blood)',
+      clinical_pathology: 'CBP(Hb,TC,DC,PIt.)',
+      packages: 'Minor Surgical Profile',
+      molecular_biology: 'PCR (Please specify the test name',
+    },
+    {
+      micro_biology: 'TB Culture',
+      clinical_pathology: 'E.S.R',
+      packages: 'Major Surgical Profile',
+    },
+    {
+      micro_biology: 'Fungual Culture',
+      clinical_pathology: 'Peripheral Smear(PS)',
+      packages: 'Please specify for any other package.',
+    },
+    {
+      micro_biology: 'Gram’s Stain',
+      clinical_pathology: 'Hemogram(CBP+ESR+PS+Blood Indices',
+      packages: 'RP-1',
+    },
+    {
+      micro_biology: 'AFB Stain',
+      clinical_pathology: 'Hemoglobin',
+      packages: 'Rp-11',
+    },
+    {
+      micro_biology: 'Fungal Stain',
+      clinical_pathology: 'Blood Smear for Malarial Parasite',
+    },
+    {
+      micro_biology: 'Widal',
+      clinical_pathology: 'Blood Smear for Micro Filaria',
+    },
+    {
+      micro_biology: 'A.S.O.Titre',
+      clinical_pathology: 'Stool Reducing Substances',
+    },
+    {
+      micro_biology: 'C-Reactive Protein',
+      clinical_pathology: 'Urine Bence Jones Protein (Qualitative)',
+    },
+    {
+      micro_biology: 'Procalcitonin',
+      clinical_pathology: 'Reticulocyte Count',
+    },
+    {
+      micro_biology: 'R.A. Factor',
+      clinical_pathology: 'A.E.C',
+    },
+    {
+      micro_biology: 'ANA',
+      clinical_pathology: 'Blood Grouping &Rh.typing',
+    },
+    {
+      micro_biology: 'ANA Profile',
+      clinical_pathology: 'Coomb’s test(Direct / Indirect)',
+    },
+    {
+      micro_biology: 'TORCH (lgM &igG)',
+      clinical_pathology: 'Osmotic Fragility Screening Test',
+    },
+    {
+      micro_biology: 'HBs Ag',
+      clinical_pathology: 'Sickling Test',
+    },
+    {
+      micro_biology: 'HCV',
+      clinical_pathology: 'Urine Routine (AIB/Sugar/Microscopy)',
+    },
+    {
+      micro_biology: 'Retroviral Screening Test',
+      clinical_pathology: 'Stool Occult Blood',
+    },
+    {
+      micro_biology: 'Anti HBs Ag Titre',
+      clinical_pathology: 'Complete Urine Exmination (CUE)',
+    },
+    {
+      micro_biology: 'Leptospira IgM',
+      clinical_pathology: 'Urine Pregnancy Test',
+    },
+    {
+      micro_biology: 'Dengue Test',
+      clinical_pathology: 'Urine for Bile Salts / Bile Pigments',
+    },
+    {
+      micro_biology: 'Culture & Sensitivity',
+      clinical_pathology: 'Urine for dysmorphic RBC',
+    },
+    {
+      micro_biology: 'Anti CCP',
+      clinical_pathology: 'Urine for Chyle',
+    },
+    {
+      micro_biology: 'V.D.R.L',
+      clinical_pathology: 'Cell Count (Body Fluids / CSF)',
+    },
+    {
+      micro_biology: 'Stool routine examination',
+      clinical_pathology: 'Semen Analysis',
+    },
+    {
+      micro_biology: 'Vasculities Profile',
+    },
+  ],
+  medicine: [
+    {
+      type: 'nsno',
+      term: '6-Art',
+    },
+    {
+      type: 'nsno',
+      term: 'Abaxis 2.5',
+    },
+    {
+      type: 'nsno',
+      term: 'Abaxis 2.5',
+    },
+    {
+      type: 'nsno',
+      term: 'Aldigesic MR',
+    },
+    {
+      type: 'nsno',
+      term: 'Aldosmin 1000 mg',
+    },
+    {
+      type: 'nsno',
+      term: 'Aldosmin 1000 mg',
+    },
+    {
+      type: 'nsno',
+      term: 'Aldosmin 500 mg',
+    },
+    {
+      type: 'nsno',
+      term: 'Aldosmin 500 mg',
+    },
+    {
+      type: 'nsno',
+      term: 'Aptspase',
+    },
+    {
+      type: 'nsno',
+      term: 'Benfotime Plus',
+    },
+    {
+      type: 'nsno',
+      term: 'Bonpro K27',
+    },
+    {
+      type: 'nsno',
+      term: 'Calreal 60 K',
+    },
+    {
+      type: 'nsno',
+      term: 'Cefapime CV',
+    },
+    {
+      type: 'nsno',
+      term: 'Cefurite CV 500mg',
+    },
+    {
+      type: 'nsno',
+      term: 'Cipcal',
+    },
+    {
+      type: 'nsno',
+      term: 'Dafol 6',
+    },
+    {
+      type: 'nsno',
+      term: 'DEE 3',
+    },
+    {
+      type: 'nsno',
+      term: 'Duojoint UC',
+    },
+    {
+      type: 'nsno',
+      term: 'Gabaflex NT 40/10',
+    },
+    {
+      type: 'nsno',
+      term: 'Gabapin NT 100/1',
+    },
+    {
+      type: 'nsno',
+      term: 'Intacoxia 60',
+    },
+    {
+      type: 'nsno',
+      term: 'Intacoxia 60',
+    },
+    {
+      type: 'nsno',
+      term: 'Intacoxia MR',
+    },
+    {
+      type: 'nsno',
+      term: 'Jointace C2+',
+    },
+    {
+      type: 'nsno',
+      term: 'Lympedim',
+    },
+    {
+      type: 'nsno',
+      term: 'Montovent LC',
+    },
+    {
+      type: 'nsno',
+      term: 'Montovent LC',
+    },
+    {
+      type: 'nsno',
+      term: 'Moveflex',
+    },
+    {
+      type: 'nsno',
+      term: 'Nefrotic',
+    },
+    {
+      type: 'nsno',
+      term: 'Nefrotic',
+    },
+    {
+      type: 'nsno',
+      term: 'Neorelax M',
+    },
+    {
+      type: 'nsno',
+      term: 'Neuro stab M 75',
+    },
+    {
+      type: 'nsno',
+      term: 'Nimbcee 03',
+    },
+    {
+      type: 'nsno',
+      term: 'Novofiam plus',
+    },
+    {
+      type: 'nsno',
+      term: 'Novoflam SP',
+    },
+    {
+      type: 'nsno',
+      term: 'Prefabanyl NTM',
+    },
+    {
+      type: 'nsno',
+      term: 'Pregabanyl M',
+    },
+    {
+      type: 'nsno',
+      term: 'Rabalkem DSR',
+    },
+    {
+      type: 'nsno',
+      term: 'Salran D',
+    },
+    {
+      type: 'nsno',
+      term: 'Salvoran MR',
+    },
+    {
+      type: 'nsno',
+      term: 'Salvoran MR',
+    },
+    {
+      type: 'nsno',
+      term: 'Samflav',
+    },
+    {
+      type: 'nsno',
+      term: 'Sneptin Plus',
+    },
+    {
+      type: 'nsno',
+      term: 'Tapal ER 50',
+    },
+    {
+      type: 'nsno',
+      term: 'Tapal ER 50',
+    },
+    {
+      type: 'nsno',
+      term: 'Tendoease',
+    },
+    {
+      type: 'nsno',
+      term: 'Thera Spine',
+    },
+    {
+      type: 'nsno',
+      term: 'Titrate',
+    },
+    {
+      type: 'nsno',
+      term: 'Tocomore',
+    },
+  ],
   speciality: [
     'General physician',
     'Cardiology',

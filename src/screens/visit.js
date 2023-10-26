@@ -46,6 +46,15 @@ import {updateLabReport} from '../redux/features/prescription/labreport';
 import {updateAllergies} from '../redux/features/prescription/allergies';
 import {updateValid} from '../redux/features/prescription/valid';
 import {
+  updatecommorbidities,
+  updatefamilyHistory,
+  updatemedicationHistory,
+  updatemenstrualHistory,
+  updateobstericHistory,
+  updatepastHospitalization,
+  updatesocialHistory,
+} from '../redux/features/prescription/pastHistory';
+import {
   addVitals,
   UpdateNote,
   UpdateDoctorRefer,
@@ -93,6 +102,25 @@ const Visit = ({navigation, route}) => {
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
   const dateTimeRed = useSelector(state => state.valid?.valid);
+  const hospitalization = useSelector(
+    state => state?.pasthistory?.hospitalization,
+  );
+  console.log('======>hospitilization', hospitalization);
+  const medicationHistory = useSelector(
+    state => state?.pasthistory?.medicationHistory,
+  );
+  const menstrualHistory = useSelector(
+    state => state?.pasthistory?.menstrualHistory,
+  );
+  const obstericHistory = useSelector(
+    state => state?.pasthistory?.obstericHistory,
+  );
+
+  const commor = useSelector(state => state?.pasthistory?.commorbidities);
+
+  const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
+
+  const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -142,7 +170,15 @@ const Visit = ({navigation, route}) => {
     const newLabhistory = [];
     const newCommorbities = [];
     const newAllregies = [];
-    const newPastHistory = [];
+    const commorbidities = [];
+    const social = [];
+    const family = [];
+
+    const hospitalization = '';
+
+    const medicationHistory = '';
+    const menstrualHistory = '';
+    const obstericHistory = '';
     const newDate = {
       date: '',
     };
@@ -153,19 +189,25 @@ const Visit = ({navigation, route}) => {
     const newDoctor = [];
     const newComplaint = '';
     const newNote = '';
+    dispatch(updatesocialHistory(social));
+    dispatch(updatefamilyHistory(family));
+    dispatch(updatepastHospitalization(hospitalization));
+    dispatch(updatemedicationHistory(medicationHistory));
+    dispatch(updatemenstrualHistory(menstrualHistory));
+    dispatch(updateobstericHistory(obstericHistory));
     dispatch(updatePrescribe1(newPrescribe));
     dispatch(updateAllergies(newAllregies));
     dispatch(updateCommorbities(newCommorbities));
     dispatch(updateDiagnosis(newDiagnosis));
     dispatch(updateLabReport(newLabhistory));
     dispatch(updateSymptom(newSymptoms));
-    dispatch(updatepastHistory(newPastHistory));
     dispatch(updateDate(newDate?.date));
     dispatch(updateValid(newValid?.valid));
     dispatch(UpadteVitals(newVitals));
     dispatch(UpdateNote(newNote));
     dispatch(UpdateDoctorRefer(newDoctor));
     dispatch(UpadateCheifComplaint(newComplaint));
+    dispatch(updatecommorbidities(commorbidities));
   };
 
   useEffect(() => {
@@ -190,7 +232,15 @@ const Visit = ({navigation, route}) => {
       labReports: labreport,
       commoribities: commorbities,
       allergies: allergies,
-      pastHistory: pasthistory,
+      pastHistory: {
+        past_history: JSON.stringify(hospitalization),
+        commoribities: JSON.stringify(commor),
+        social_history: JSON.stringify(socialHistory),
+        family_history: JSON.stringify(familyHistory),
+        medication_history: JSON.stringify(medicationHistory),
+        mensutral_history: JSON.stringify(menstrualHistory),
+        obsteric_history: JSON.stringify(obstericHistory),
+      },
 
       meta_data: {
         patient_phone_number: patient_phone,
@@ -216,14 +266,15 @@ const Visit = ({navigation, route}) => {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
           // Prescribe.splice(0,Prescribe.length)
+          ResetRuduxState();
           setTimeout(() => {
             navigation.navigate('tab');
           }, 1000);
-          ResetRuduxState();
+
           setLoading(false);
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 1500);
+          // setTimeout(() => {
+          //   SuccesRef?.current?.snapToIndex(0);
+          // }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           console.error('API call failed:', response.status, response);
@@ -1048,6 +1099,26 @@ const Visit = ({navigation, route}) => {
                         params.gende = gende;
                       } else if (value.navigate === 'service_fees') {
                         params.consultation_fees = consultation_fees;
+                      } else if (value.navigate === 'refer') {
+                        params.patient_details = {
+                          doc_phone: data?.doctor_phone_number,
+                          name: name,
+                          genger: gende,
+                          patient_phone: patient_phone,
+                          age: age,
+                          appointment_id: appointment_id,
+                          clinic_id: Clinic_id,
+                        };
+                      } else if (
+                        value.navigate === 'examination' ||
+                        value.navigate === 'findings'
+                      ) {
+                        params.examinationDetails = {
+                          doc_phone: data?.doctor_phone_number,
+                          patient_phone: patient_phone,
+                          clinic_id: Clinic_id,
+                          appointment_id: appointment_id,
+                        };
                       }
 
                       navigation.navigate(value.navigate, params);
@@ -1419,7 +1490,11 @@ const Visit = ({navigation, route}) => {
                               size={moderateScale(16)}
                             />
                             <Text style={styles.pulse}>
-                              Refer to {item?.doctor_name}{' '}
+                              Refer to{' '}
+                              {item?.refer_to === 'Clinic' ||
+                              item?.refer_to === 'Hospital'
+                                ? `${item?.doctor_or_name}  Dr.${item?.dr_name}`
+                                : `Dr.${item?.doctor_or_name}`}{' '}
                             </Text>
                           </View>
                         ))}

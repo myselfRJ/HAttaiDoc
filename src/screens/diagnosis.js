@@ -32,7 +32,7 @@ import {
   UpdateAsyncData,
   RetriveAsyncData,
 } from '../utility/AsyncStorage';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 // import PlusButton from '../components';
 
@@ -104,7 +104,7 @@ const Diagnosis = ({navigation}) => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    dispatch(addDiagnosis([...prev, {diagnosis: value, type: dia_type}]));
+    dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
     if (sug?.length > 0) {
       UpdateAsyncData('diagnosis', {diagnosis: value});
     }
@@ -119,7 +119,7 @@ const Diagnosis = ({navigation}) => {
   };
   const selectChange = value => {
     setSelected(value);
-    dispatch(addDiagnosis([...prev, {diagnosis: value, type: dia_type}]));
+    dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
     if (sug?.length > 0) {
       UpdateAsyncData('diagnosis', {diagnosis: value});
     }
@@ -135,8 +135,8 @@ const Diagnosis = ({navigation}) => {
     });
   }, []);
   const [dia_type, setDiaType] = useState(dia_types[1]);
-  const ConfirmedData = prev.filter(item => item.type === 'Confirmed');
-  const ProvisionalData = prev.filter(item => item.type === 'Provisional');
+  const ConfirmedData = prev.filter(item => item.mode === 'Confirmed');
+  const ProvisionalData = prev.filter(item => item.mode === 'Provisional');
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Diagnosis" />
@@ -261,20 +261,21 @@ const Diagnosis = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-     <View style={{justifyContent:'flex-end',flex:1}}>
-     <HButton
-        label={'Save'}
-        btnstyles={{...commonstyles.activebtn,
-          backgroundColor:
-            prev?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-        }}
-        onPress={() => {
-          if (prev?.length > 0) {
-            handledata();
-          }
-        }}
-      />
-     </View>
+      <View style={{justifyContent: 'flex-end', flex: 1}}>
+        <HButton
+          label={'Save'}
+          btnstyles={{
+            ...commonstyles.activebtn,
+            backgroundColor:
+              prev?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+          }}
+          onPress={() => {
+            if (prev?.length > 0) {
+              handledata();
+            }
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -282,11 +283,11 @@ export default Diagnosis;
 
 const styles = StyleSheet.create({
   main: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   input: {
     // paddingHorizontal:24,
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
   },
   inputtext: {
     paddingVertical: verticalScale(0),
-    paddingHorizontal:0
+    paddingHorizontal: 0,
     // borderWidth:1
   },
   recomend: {

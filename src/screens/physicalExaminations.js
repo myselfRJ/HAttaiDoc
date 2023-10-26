@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Alert,
 } from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 
@@ -43,12 +44,57 @@ import {commonstyles} from '../styles/commonstyle';
 import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {useRoute} from '@react-navigation/native';
 
 const PhysicalExamination = () => {
+  const token = useSelector(state => state.authenticate.auth.access);
+  const route = useRoute();
+  const {examinationDetails} = route.params;
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
   // const [selectedFilename, setSelectedFilename] = useState([]);
+
+  const postData = async url => {
+    const formData = new FormData();
+    formData.append('notes', `${value}`);
+    formData.append('doctor_phone_number', `${examinationDetails?.doc_phone}`);
+    formData.append(
+      'patient_phone_number',
+      `${examinationDetails?.patient_phone}`,
+    );
+    formData.append('clinic_id', `${examinationDetails?.clinic_id}`);
+    formData.append('appointment_id', `${examinationDetails?.appointment_id}`);
+    for (let i = 0; i < uploaddocument.length; i++) {
+      formData.append(`file${i + 1}`, {
+        uri: `${uploaddocument[i]?.uri}`,
+        type: `${uploaddocument[i]?.type}`,
+        name: `${uploaddocument[i]?.name}`,
+      });
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+      console.log('API Response:', responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const apiUrl = URL.uploadPhysicalExamination;
+
+  const handle = () => {
+    postData(apiUrl);
+    handlePress();
+  };
 
   const onImagePress = () => {
     const options = {
@@ -123,8 +169,11 @@ const PhysicalExamination = () => {
     setModal(!modal);
   };
   const dispatch = useDispatch();
-  //   const exam = useSelector(state => state.prescription?.physicalExamination);
   const handlePress = () => {
+    const examinations = {
+      value: value,
+      documents: JSON.stringify(uploaddocument),
+    };
     dispatch(addExamination(value));
     setValue('');
   };
@@ -178,9 +227,20 @@ const PhysicalExamination = () => {
       ) : null}
       <PlusButton
         size={moderateScale(40)}
-        style={{alignSelf: 'flex-end', marginTop: verticalScale(48)}}
+        style={{
+          alignSelf: 'flex-end',
+          marginTop: verticalScale(48),
+          backgroundColor:
+            uploaddocument?.length === 5
+              ? CUSTOMCOLOR.disable
+              : CUSTOMCOLOR.primary,
+        }}
         icon={'file-document-outline'}
-        onPress={() => setModal(!modal)}
+        onPress={
+          uploaddocument?.length <= 5
+            ? () => setModal(!modal)
+            : Alert.alert('You Have Reached Maximum Limit')
+        }
       />
       {modal && (
         <GalleryModel
@@ -199,7 +259,7 @@ const PhysicalExamination = () => {
         }}>
         <HButton
           btnstyles={commonstyles.activebtn}
-          onPress={handlePress}
+          onPress={handle}
           label={'Save'}
         />
       </View>

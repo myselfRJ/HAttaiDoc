@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
 import {
   addFindings,
   UpadteFindings,
@@ -25,13 +25,59 @@ import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {URL} from '../utility/urls';
+import {useRoute} from '@react-navigation/native';
 
 const ExaminationFindings = () => {
+  const token = useSelector(state => state.authenticate.auth.access);
+  const route = useRoute();
+  const {examinationDetails} = route.params;
   const [value, setValue] = useState('');
   const [describe, setDescribe] = useState('');
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
   // const [selectedFilename, setSelectedFilename] = useState([]);
+  const postData = async url => {
+    const formData = new FormData();
+    formData.append('finding', `${value}`);
+    formData.append('description', `${describe}`);
+    formData.append('doctor_phone_number', `${examinationDetails?.doc_phone}`);
+    formData.append(
+      'patient_phone_number',
+      `${examinationDetails?.patient_phone}`,
+    );
+    formData.append('clinic_id', `${examinationDetails?.clinic_id}`);
+    formData.append('appointment_id', `${examinationDetails?.appointment_id}`);
+    for (let i = 0; i < uploaddocument.length; i++) {
+      formData.append(`file${i + 1}`, {
+        uri: `${uploaddocument[i]?.uri}`,
+        type: `${uploaddocument[i]?.type}`,
+        name: `${uploaddocument[i]?.name}`,
+      });
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+      console.log('API Response:', responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const apiUrl = URL.uploadPhysicalExamination;
+
+  const handle = () => {
+    postData(apiUrl);
+    handlePress();
+  };
 
   const onImagePress = () => {
     const options = {
@@ -44,7 +90,6 @@ const ExaminationFindings = () => {
       if (response.didCancel) {
       } else if (response.error) {
       } else {
-        // console.log('=======>', response?.assets);
         SetUploadDocument([
           ...uploaddocument,
           {
@@ -109,6 +154,7 @@ const ExaminationFindings = () => {
   const exam_findings = {
     value: value,
     describe: describe,
+    documents: JSON.stringify(uploaddocument),
   };
 
   const handlePress = () => {
@@ -191,9 +237,20 @@ const ExaminationFindings = () => {
       ) : null}
       <PlusButton
         size={moderateScale(40)}
-        style={{alignSelf: 'flex-end', marginTop: verticalScale(48)}}
+        style={{
+          alignSelf: 'flex-end',
+          marginTop: verticalScale(48),
+          backgroundColor:
+            uploaddocument?.length === 5
+              ? CUSTOMCOLOR.disable
+              : CUSTOMCOLOR.primary,
+        }}
         icon={'file-document-outline'}
-        onPress={() => setModal(!modal)}
+        onPress={
+          uploaddocument?.length <= 5
+            ? () => setModal(!modal)
+            : Alert.alert('You Have Reached Maximum Limit')
+        }
       />
       {modal && (
         <GalleryModel
@@ -214,7 +271,7 @@ const ExaminationFindings = () => {
         }}>
         <HButton
           btnstyles={commonstyles.activebtn}
-          onPress={handlePress}
+          onPress={handle}
           label={'Save'}
         />
       </View>
