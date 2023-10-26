@@ -23,7 +23,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import ConsultationCard from '../components/ConsultationCard';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -109,7 +109,7 @@ export default function MedicalRecordPatient({route, navigation}) {
   const handlePress = value => {
     setSelectedView(value);
   };
-  const birthYear = data?.birth_date?.split('-')[2];
+  const birthYear = data?.birth_date?.split('-')[0];
   const presentYear = new Date().toISOString().split('-')[0];
 
   const handleBook = () => {
@@ -119,7 +119,7 @@ export default function MedicalRecordPatient({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={{top: moderateScale(32),gap:moderateScale(8)}}>
+      <View style={{top: moderateScale(32), gap: moderateScale(8)}}>
         <View>
           <View style={styles.main}>
             <Image
@@ -167,24 +167,21 @@ export default function MedicalRecordPatient({route, navigation}) {
           Prescription
         </Text>
 
-          
-          <View
-            style={{
-              // top: moderateScale(16),
-              gap: moderateScale(8),
-              // marginBottom: moderateScale(64),
-              height:verticalScale(750)
-            }}>
-              <ScrollView>
-              
+        <View
+          style={{
+            // top: moderateScale(16),
+            gap: moderateScale(8),
+            // marginBottom: moderateScale(64),
+            height: verticalScale(750),
+          }}>
+          <ScrollView>
             {consultation?.map((value, index) => (
-              <View style={{marginBottom:verticalScale(8)}}>
-              <ConsultationCard data={value?.consultation} />
+              <View style={{marginBottom: verticalScale(8)}}>
+                <ConsultationCard data={value?.consultation} />
               </View>
             ))}
-            </ScrollView>
-          </View>
-          
+          </ScrollView>
+        </View>
 
         {/* <View
           style={{
@@ -255,6 +252,5 @@ const styles = StyleSheet.create({
     borderRadius: 60 / 2,
   },
   patientinfo: {},
-  container: {gap: moderateScale(16),
-     paddingHorizontal: horizontalScale(24)},
+  container: {gap: moderateScale(16), paddingHorizontal: horizontalScale(24)},
 });
