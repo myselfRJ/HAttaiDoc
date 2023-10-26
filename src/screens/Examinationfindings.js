@@ -213,8 +213,8 @@ const ExaminationFindings = () => {
           // marginHorizontal: horizontalScale(80),
         }}>
         <HButton
-          onPress={handlePress}
           btnstyles={commonstyles.activebtn}
+          onPress={handlePress}
           label={'Save'}
         />
       </View>

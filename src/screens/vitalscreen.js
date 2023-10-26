@@ -13,7 +13,7 @@ import {
 } from '../settings/styles';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
-import {useState, useEffect} from 'react';
+import {useState, useEffect,useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {addVitals} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -33,6 +33,16 @@ import {validateInput} from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
 const VitalScreen = ({route, props}) => {
+  const heightRef = useRef(null);
+  const weightRef = useRef(null);
+  const pulseRef = useRef(null);
+  const tempRef=useRef(null);
+  const spoRef=useRef(null);
+  const rateRef=useRef(null);
+  const sysRef=useRef(null);
+  const diaoRef=useRef(null);
+
+    
   const months = CONSTANTS.months;
   const nav = useNavigation();
   const dispatch = useDispatch();
@@ -174,11 +184,19 @@ const VitalScreen = ({route, props}) => {
                   </View>
                   <View style={styles.fields}>
                       <VitalField
+                    //   ref={heightRef}
+                    point={heightRef}
+                      re ={weightRef}
+                    //   onSubmitEditing={() => weightRef.current && weightRef.current.focus()}
                           name='Height'
                           placeholder='Cm'
                           setvalue={text => heightChange(text)}
                       />
                       <VitalField
+                      
+                    //   ref ={weightRef}
+                    point={weightRef}
+                      re={pulseRef}
                           name='Weight'
                           placeholder='Kg'
                           setvalue={text => weightChange(text)}
@@ -192,21 +210,30 @@ const VitalScreen = ({route, props}) => {
                               value='00'
                           />)}
                       <VitalField
-                          name='Pulse'
+                      point={pulseRef}
+                      re={tempRef}
+                      
+                      name='Pulse'
                           placeholder='bpm'
                           setvalue={text => PulseChange(text)}
                       />
                       <VitalField
-                          name='Temp'
+                      point={tempRef}
+                      re={spoRef}
+                      name='Temp'
                           placeholder='°C'
                           setvalue={text => tempChange(text)}
                       />
                       <VitalField
-                          name='SPO2'
+                      point={spoRef}
+                      re={rateRef}
+                      name='SPO2'
                           placeholder='%'
                       />
                       <VitalField
-                          name='Res_Rate'
+                      point={rateRef}
+                      re={sysRef}
+                      name='Res_Rate'
                           placeholder='brpm'
                           setvalue={text => rateChange(text)}
                       />
@@ -222,11 +249,15 @@ const VitalScreen = ({route, props}) => {
                  
                   <View style={styles.fields}>
                       <VitalField
+                      point={sysRef}
+                      re={diaoRef}
                           name='Systolic BP'
                           placeholder='mmhg'
                           setvalue={text => systolicChange(text)}
                       />
                       <VitalField
+                    point={diaoRef}
+                    // re={pulseRef}
                           name='Diastolic BP'
                           placeholder='mmhg'
                           setvalue={text => diastolicChange(text)}
@@ -267,7 +298,7 @@ const VitalScreen = ({route, props}) => {
                  {/* <View style={{borderWidth:1,alignItems:'center'}}> */}
                       <VitalField
                           name='EDD'
-                          setvalue={vitals?.EDD}
+                        value={vitals?.EDD}
                       />
                       {/* </View> */}
                       </View> 

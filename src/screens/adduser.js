@@ -821,7 +821,8 @@ const styles = StyleSheet.create({
   },
   rolemenu: {
     backgroundColor: CUSTOMCOLOR.white,
-    gap:moderateScale(0),
+    borderRadius:moderateScale(4),
+    bottom:verticalScale(8),
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(24),
     borderWidth:0.5,

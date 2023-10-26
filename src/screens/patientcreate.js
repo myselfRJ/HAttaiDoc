@@ -304,6 +304,7 @@ const PatientCreate = ({navigation}) => {
                 maxLength={4}
                 numeric={true}
                 required={true}
+                keypad='numeric'
               />
               <View
                 style={{
@@ -410,7 +411,7 @@ const PatientCreate = ({navigation}) => {
               )}
             </View> */}
             <InputText
-              label="Father/Husband Name"
+              label="Father / Husband Name"
               placeholder="Enter Father/husband Name"
               value={spouse_name}
               setValue={setSpouse_nmae}
@@ -471,13 +472,14 @@ const PatientCreate = ({navigation}) => {
             </View>
             <InputText
               required={true}
-              label="Address"
+              label="Address / Locality"
               placeholder="Address or locality"
               value={address}
               setValue={setAddress}
             />
 
             <InputText
+            keypad='numeric'
               label="Aadhar Number"
               placeholder="12-digit Aadhar Number"
               value={aadhar_no}
@@ -601,9 +603,10 @@ const styles = StyleSheet.create({
   },
   btn: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     gap: moderateScale(8),
+    // borderWidth:1
   },
 });
 export default PatientCreate;
