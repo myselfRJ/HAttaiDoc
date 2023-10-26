@@ -35,7 +35,7 @@ const NoteScreen = () => {
         flex:1,
         backgroundColor:CUSTOMCOLOR.background
       }}>
-        <PrescriptionHead heading={Language[language]['notes']} />
+        <PrescriptionHead heading={'Present Illness'} />
    
       <Notes
         note={note}

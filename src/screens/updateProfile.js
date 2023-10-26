@@ -14,6 +14,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
+
 import DocumentPicker from 'react-native-document-picker';
 import {language} from '../settings/userpreferences';
 import {Language} from '../settings/customlanguage';
@@ -54,6 +55,8 @@ import { useNavigation } from '@react-navigation/native';
 const UpdateProfile = ({navigation})=>{
   const nav = useNavigation;
     const GlRef = useRef(null);
+    const [show, setshow] = useState(false);
+    const [selectedState, setState] = useState('Select');
     const [getDoctor,setGetDoctor] = useState('')
     // console.log('dob=====>',getDoctor?.DOB)
     const [apiStatus, setApiStatus] = useState({});
@@ -376,6 +379,10 @@ const UpdateProfile = ({navigation})=>{
   //     // console.log('==============>',getDoctor?.medical_doc_url?.filename);
   //   }
   // }, [getDoctor]);
+  const handleStateSelection = state => {
+    setState(state);
+    handleChangeValue('state', state);
+  };
 
   const putProfile = async () => {
     const updateData = {
@@ -443,10 +450,10 @@ const UpdateProfile = ({navigation})=>{
     return(
         <View style={{flex: 1}}>
       {/* <ProgresHeader progressData={progressData} /> */}
-      <ScrollView>
+      
         <Keyboardhidecontainer>
-          <View>
-          <View style={commonstyles.content}>
+          <View style={styles.content}>
+          <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.alignchild}>
               <Text style={commonstyles.h1}>Update Profile</Text>
               <AddImage
@@ -514,7 +521,7 @@ const UpdateProfile = ({navigation})=>{
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             /> */}
-              <View style={styles.specialization}>
+              
               <SelectorBtn
                 required={true}
                 label={Language[language]['specialization']}
@@ -525,42 +532,137 @@ const UpdateProfile = ({navigation})=>{
                 }}
                 input={selectedSpeciality}
               />
-            </View>
+            
             <InputText
               label={Language[language]['experience']}
               placeholder="experience in years"
               value={values.experience}
               setValue={value => handleChangeValue('experience', value)}
             />
-            <InputText
+            {/* <InputText
               required={true}
               label='Medical Council Registration Number'
               placeholder="Medical Council Registration Number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
+            /> */}
+             <View style={styles.btn}>
+          <View style={{flex: 1}}>
+            <InputText
+              required={true}
+              inputContainer={{
+                // flex: 1,
+                // paddingVertical:moderateScale(0),
+                paddingHorizontal: moderateScale(0),
+              }}
+              label="Medical Registration Number"
+              placeholder="Medical Registration number"
+              value={values.medical_number}
+              setValue={value => handleChangeValue('medical_number', value)}
             />
+          </View>
+
+          <View style={{flex: 1}}>
+            <SelectorBtn
+              required={true}
+              selectContainer={{gap: 2, paddingVertical: -1}}
+              label="State"
+              name={show == true ?"chevron-up" : "chevron-down"}
+              size={moderateScale(24)}
+              // onPress={toggleModal}
+              onPress={() => {
+                setshow(!show);
+              }}
+              input={selectedState}
+            />
+
+            {show === true && (
+              <View style={styles.statecontainer}>
+ 
+
+                <ScrollView persistentScrollbar={true} contentContainerStyle={{zIndex:4,backgroundColor:CUSTOMCOLOR.white}}>
+             
+
+{/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
+
+
+                  {CONSTANTS.state.map((state, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        handleStateSelection(state);
+                        setshow(false);
+                      }}
+                      style={{paddingHorizontal:horizontalScale(4),paddingVertical:verticalScale(4)}}>
+                      <Text
+                        style={[
+                          styles.statefields,
+                          {
+                            color:
+                              selectedState === state
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.black,
+                          },
+                        ]}>
+                        {state}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+               {/* </View>  */}
+                </ScrollView>
+              </View>
+            )}
+          </View>
+        </View>
           
-           
-            <Text style={styles.medtext}>Medical Document</Text>
-            <View style={styles.doc_upload}>
-              {selectedFilename ? (
-                <View style={styles.selectedfilecontainer}>
-                  <Text style={styles.selectedFileInfo}>
-                    {selectedFilename}
-                  </Text>
-                  <TouchableOpacity onPress={handleClearFile}>
-                    <Icon
-                      name="delete"
-                      size={moderateScale(20)}
-                      color={CUSTOMCOLOR.delete}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <HButton  label="Upload Document" onPress={pickSingleFile} />
-              )}
-            </View>
+        <View
+          style={{
+            // alignSelf: 'flex-start',
+            gap: verticalScale(4),
+            // borderWidth:1,
+            zIndex:-1
+          }}>
+          <Text style={styles.medtext}>Medical Document</Text>
+          <View style={styles.doc_upload}>
+            {selectedFilename ? (
+              <View style={styles.selectedfilecontainer}>
+                <Text style={styles.selectedFileInfo}>{selectedFilename}</Text>
+                <TouchableOpacity onPress={handleClearFile} 
+                style={{
+                    backgroundColor:CUSTOMCOLOR.white,
+                    borderRadius:moderateScale(24),
+                }}>
+                  <Icon
+                    name="close"
+                    size={moderateScale(24)}
+                    color={CUSTOMCOLOR.delete}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <HButton
+                label="Upload Document"
+                onPress={pickSingleFile}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderColor: CUSTOMCOLOR.primary,
+                  borderWidth: 0.5,
+                  borderRadius: 4,
+                  alignSelf:'flex-start'
+                }}
+                textStyle={{color: CUSTOMCOLOR.primary,fontSize:12}}
+              />
+            )}
+          </View>
+        </View>
+        </ScrollView>
+          </View>
+         
+        </Keyboardhidecontainer>
+      
+      <View style={{flex:1,justifyContent:'flex-end',bottom:verticalScale(8)}}>
             <HButton
+            btnstyles = {commonstyles.activebtn}
               label={Language[language]['save']}
               loading={loading}
               onPress={() => {
@@ -568,10 +670,7 @@ const UpdateProfile = ({navigation})=>{
                 putProfile();
               }}
             />
-          </View>
-          </View>
-        </Keyboardhidecontainer>
-      </ScrollView>
+            </View>
       <BottomSheetView
         bottomSheetRef={appointmentCardRef}
         snapPoints={'50%'}
@@ -629,110 +728,324 @@ const UpdateProfile = ({navigation})=>{
     )
 }
 const styles = StyleSheet.create({
-    radiogroup: {
-      padding: moderateScale(16),
-      flexDirection: 'row',
-      gap: moderateScale(48),
+  main: {
+    flex: 1,
+    zIndex:1,
+    backgroundColor:CUSTOMCOLOR.white,
+    //  CUSTOMCOLOR.white,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(24),
+    // borderWidth: 1,
+    gap: verticalScale(16),
+    zIndex:1
+  },
+
+  radiogroup: {
+    paddingHorizontal: moderateScale(8),
+    paddingVertical: moderateScale(6),
+    flexDirection: 'row',
+    gap: moderateScale(48),
+    // borderWidth:1,
+    justifyContent: 'flex-start',
+  },
+  alignchild: {
+    // justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
+
+    // height: '18%',
+    // gap:moderateScale(0),
+
+    paddingVertical: moderateScale(0),
+  },
+
+  modalContainer: {
+    height: '100%',
+    // width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: CUSTOMCOLOR.white,
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
+    gap: moderateScale(16),
+    padding: moderateScale(10),
+    borderWidth: 1,
+  },
+  statecontainer: {
+    zIndex:14,
+    width:'100%',
+    height: moderateScale(200),
+    // paddingHorizontal:horizontalScale(66),
+    // zIndex: 10,
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.primary,
+    position: 'absolute',
+    right: 0,
+    // bottom: 0,
+    top: verticalScale(78),
+    borderRadius: moderateScale(4),
+    gap: moderateScale(6),
+    // padding: moderateScale(4),
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+
+    // alignItems: 'center',
+    gap: moderateScale(16),
+    // borderWidth:1,
+  },
+  modalfields: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: 400,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    paddingHorizontal: moderateScale(32),
+    paddingVertical: moderateScale(12),
+  },
+  statefields: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: 400,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    paddingHorizontal: moderateScale(32),
+    paddingVertical: moderateScale(10),
+  },
+  DOBselect: {
+    width: '100%',
+    gap: moderateScale(8),
+    // paddingHorizontal:horizontalScale(16)
+  },
+  selectedfilecontainer: {
+    zIndex:0,
+    paddingVertical:verticalScale(8),
+    paddingHorizontal:horizontalScale(8),
+    justifyContent:'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth:1,
+    borderRadius: moderateScale(4),
+    borderColor: CUSTOMCOLOR.primary,
+    // backgroundColor:'#000000',
+  },
+  selectedFileInfo: {
+    fontFamily: CUSTOMFONTFAMILY.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.primary,
+    paddingRight: moderateScale(8),
+    fontWeight:'500',
+    paddingVertical: verticalScale(4),
+  },
+  contact: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+  },
+  mail: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.primary,
+  },
+  ContactMail: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: CUSTOMCOLOR.white,
+    alignSelf: 'center',
+    borderRadius: moderateScale(10),
+    // padding: moderateScale(10),
+    bottom: moderateScale(20),
+  },
+  gender: {
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    fontSize: CUSTOMFONTSIZE.h3,
+  },
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor:"white",
+    // borderWidth:1,
+    // paddingHorizontal: horizontalScale(24),
+    gap: verticalScale(8),
+  },
+  btn1: {
+    flexDirection: 'row',
+    width: '100%',
+
+    gap: moderateScale(8),
+  },
+  specialization: {
+    alignSelf: 'flex-start',
+    width: '100%',
+  },
+  medtext: {
+    fontFamily: CUSTOMFONTFAMILY.h3,
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+
+    paddingVertical: verticalScale(8),
+    alignSelf: 'flex-start',
+  },
+  doc_upload: {
+    // zIndex:1,
+    // alignSelf: 'flex-start',
+    // width:'100%',
+    // borderWidth:1,
+    // paddingVertical: verticalScale(4),
+    marginBottom: moderateScale(4),
+    zIndex:1 
+  },
+  bottext: {
+    fontFamily: CUSTOMFONTFAMILY.heading,
+    fontSize: 18,
+    color: CUSTOMCOLOR.black,
+  },
+  container: {
+    paddingBottom: verticalScale(120),
+    zIndex:2,
+    gap: verticalScale(16),
+  },
+    // radiogroup: {
+    //   padding: moderateScale(8),
+    //   flexDirection: 'row',
+    //   gap: moderateScale(32),
   
-      justifyContent: 'flex-start',
-    },
-    alignchild: {
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      width: '100%',
-      paddingHorizontal: horizontalScale(8),
-      paddingVertical:verticalScale(8),
-      gap:moderateScale(8)
-    },
-    modalContainer: {
-      height: '100%',
-      // width: '100%',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      backgroundColor: CUSTOMCOLOR.white,
-      alignSelf: 'center',
-      borderRadius: moderateScale(10),
-      gap: moderateScale(16),
-      padding: moderateScale(10),
-    },
-    modalfields: {
-      fontSize: CUSTOMFONTSIZE.h3,
-      fontWeight: 400,
-      fontFamily: CUSTOMFONTFAMILY.body,
-      paddingHorizontal:horizontalScale(32),
-      paddingVertical:verticalScale(12),
-      // gap:moderateScale(8)
-    },
-    DOBselect: {
-      width: '100%',
-      paddingHorizontal: horizontalScale(8),
-    },
-    selectedfilecontainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      //borderWidth:1,
-      borderRadius: moderateScale(5),
-      borderColor: CUSTOMCOLOR.primary,
-      backgroundColor: CUSTOMCOLOR.white,
-    },
-    selectedFileInfo: {
-      fontFamily: CUSTOMFONTFAMILY.h4,
-      fontSize: CUSTOMFONTSIZE.h3,
-      color: CUSTOMCOLOR.black,
-      paddingRight: moderateScale(8),
-      paddingHorizontal: horizontalScale(8),
-      paddingVertical: verticalScale(4),
-    },
-    contact: {
-      fontSize: CUSTOMFONTSIZE.h3,
-      color: CUSTOMCOLOR.black,
-    },
-    mail: {
-      fontSize: CUSTOMFONTSIZE.h3,
-      color: CUSTOMCOLOR.primary,
-    },
-    ContactMail: {
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      backgroundColor: CUSTOMCOLOR.white,
-      alignSelf: 'center',
-      borderRadius: moderateScale(10),
-      padding: moderateScale(10),
-      bottom: moderateScale(20),
-    },
-    gender: {
-      color: CUSTOMCOLOR.black,
-      fontFamily: CUSTOMFONTFAMILY.body,
-      fontSize: CUSTOMFONTSIZE.h4,
-    },
-    btn: {
-      alignSelf: 'flex-start',
-      width: '100%',
-      paddingHorizontal: horizontalScale(8),
-    },
-    specialization: {
-      alignSelf: 'flex-start',
-      width: '100%',
-      paddingHorizontal: horizontalScale(8),
-    },
-    medtext: {
-      fontFamily: CUSTOMFONTFAMILY.h4,
-      fontSize: 12,
-      color: CUSTOMCOLOR.black,
-      paddingHorizontal: horizontalScale(8),
-      paddingVertical: verticalScale(8),
-      alignSelf: 'flex-start',
-    },
-    doc_upload: {
-      alignSelf: 'flex-start',
-      paddingHorizontal: horizontalScale(8),
-      paddingVertical: verticalScale(8),
-    },
-    bottext: {
-      fontFamily: CUSTOMFONTFAMILY.heading,
-      fontSize: 18,
-      color: CUSTOMCOLOR.black,
-    },
+    //   justifyContent: 'flex-start',
+    // },
+    // btn: {
+    //   flexDirection: 'row',
+    //   alignItems: 'center',
+    //   backgroundColor:"white",
+    //   // borderWidth:1,
+    //   // paddingHorizontal: horizontalScale(24),
+    //   gap: verticalScale(8),
+    // },
+    // content:{
+    //   flex:1,
+    //   paddingHorizontal: horizontalScale(24),
+    //   //paddingVertical: 24,
+    //   // alignItems: 'center',
+    //   gap: moderateScale(12),
+    // },
+    //    alignchild: {
+    //   justifyContent: 'center',
+    //   alignItems: 'flex-start',
+    //   width: '100%',
+    //   // paddingHorizontal: horizontalScale(8),
+    //   // paddingVertical:verticalScale(8),
+    //   gap:moderateScale(4)
+    // },
+    // modalContainer: {
+    //   height: '100%',
+    //   // width: '100%',
+    //   justifyContent: 'flex-start',
+    //   alignItems: 'center',
+    //   backgroundColor: CUSTOMCOLOR.white,
+    //   alignSelf: 'center',
+    //   borderRadius: moderateScale(10),
+    //   gap: moderateScale(16),
+    //   padding: moderateScale(10),
+    // },
+    // modalfields: {
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    //   fontWeight: 400,
+    //   fontFamily: CUSTOMFONTFAMILY.body,
+    //   paddingHorizontal:horizontalScale(32),
+    //   paddingVertical:verticalScale(12),
+    //   // gap:moderateScale(8)
+    // },
+    // DOBselect: {
+    //   width: '100%',
+    //   paddingHorizontal: horizontalScale(8),
+    // },
+    // selectedfilecontainer: {
+    //   flexDirection: 'row',
+    //   alignItems: 'center',
+    //   //borderWidth:1,
+    //   borderRadius: moderateScale(5),
+    //   borderColor: CUSTOMCOLOR.primary,
+    //   backgroundColor: CUSTOMCOLOR.white,
+    // },
+    // selectedFileInfo: {
+    //   fontFamily: CUSTOMFONTFAMILY.h4,
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    //   color: CUSTOMCOLOR.black,
+    //   paddingRight: moderateScale(8),
+    //   paddingHorizontal: horizontalScale(8),
+    //   paddingVertical: verticalScale(4),
+    // },
+    // contact: {
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    //   color: CUSTOMCOLOR.black,
+    // },
+    // mail: {
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    //   color: CUSTOMCOLOR.primary,
+    // },
+    // ContactMail: {
+    //   justifyContent: 'flex-start',
+    //   alignItems: 'center',
+    //   backgroundColor: CUSTOMCOLOR.white,
+    //   alignSelf: 'center',
+    //   borderRadius: moderateScale(10),
+    //   padding: moderateScale(10),
+    //   bottom: moderateScale(20),
+    // },
+    // gender: {
+    //   color: CUSTOMCOLOR.black,
+    //   fontFamily: CUSTOMFONTFAMILY.body,
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    // },
+    // btn: {
+    //   alignSelf: 'flex-start',
+    //   width: '100%',
+    //   paddingHorizontal: horizontalScale(8),
+    // },
+    // specialization: {
+    //   borderWidth:1,
+    //   paddingVertical:verticalScale(0)
+
+    //   // width:'100%',
+    //   // alignSelf: 'flex-start',
+    //   // paddingHorizontal: horizontalScale(4),
+    // },
+    // medtext: {
+    //   fontFamily: CUSTOMFONTFAMILY.h4,
+    //   fontSize: 12,
+    //   color: CUSTOMCOLOR.black,
+    //   paddingHorizontal: horizontalScale(8),
+    //   // paddingVertical: verticalScale(8),
+    //   alignSelf: 'flex-start',
+    // },
+    // doc_upload: {
+    //   alignSelf: 'flex-start',
+    //   // paddingHorizontal: horizontalScale(8),
+    //   // paddingVertical: verticalScale(8),
+    // },
+    // bottext: {
+    //   fontFamily: CUSTOMFONTFAMILY.heading,
+    //   fontSize: 18,
+    //   color: CUSTOMCOLOR.black,
+    // },
+    // statecontainer: {
+    //   zIndex:14,
+    //   width:'100%',
+    //   height: moderateScale(200),
+    //   // paddingHorizontal:horizontalScale(66),
+    //   // zIndex: 10,
+    //   borderWidth: 1,
+    //   borderColor: CUSTOMCOLOR.primary,
+    //   position: 'absolute',
+    //   right: 0,
+    //   // bottom: 0,
+    //   top: verticalScale(78),
+    //   borderRadius: moderateScale(4),
+    //   gap: moderateScale(6),
+    //   // padding: moderateScale(4),
+    // },
+    // statefields: {
+    //   fontSize: CUSTOMFONTSIZE.h3,
+    //   fontWeight: 400,
+    //   fontFamily: CUSTOMFONTFAMILY.body,
+    //   paddingHorizontal: moderateScale(32),
+    //   paddingVertical: moderateScale(10),
+    // },
   });
   
 export default UpdateProfile;

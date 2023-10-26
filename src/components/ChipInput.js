@@ -32,7 +32,7 @@ const ChipInput = props => {
         ))}
 
         <InputText
-          placeholder="Input something"
+          placeholder={props.placeholder}
           inputContainer={{paddingHorizontal: 0, paddingVertical: 0}}
           textStyle={{borderWidth: 0, borderColor: CUSTOMCOLOR.white}}
           value={props.value}

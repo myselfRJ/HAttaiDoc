@@ -215,6 +215,7 @@ const ReferToDoctor = () => {
             value={phone}
             inputContainer={{paddingHorizontal: 0}}
             setValue={val => setPhone(val)}
+            numeric={true}
           />
           <InputText
             label={'Referal Notes'}

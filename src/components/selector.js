@@ -54,13 +54,13 @@ const SelectorBtn = props => {
 const styles = StyleSheet.create({
   selectContainer: {
     gap: verticalScale(4),
-    paddingVertical: verticalScale(8),
+    // paddingVertical: verticalScale(4),
   },
 
   select: {
     flexDirection: 'row',
     backgroundColor: '#F4F7Fa',
-    paddingVertical: verticalScale(8),
+    paddingVertical: verticalScale(6),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'space-between',

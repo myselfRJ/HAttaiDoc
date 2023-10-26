@@ -268,7 +268,7 @@ const ProtectedRoute = () => {
         component={NoteScreen}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Notes',
+          title: 'Present Illness',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

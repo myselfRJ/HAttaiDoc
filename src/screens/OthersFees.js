@@ -111,6 +111,7 @@ const OthersFees = () => {
             placeholder={'Enter Fees'}
             required={true}
             setValue={setFees}
+            keypad ='numeric'
           />
           <HButton
             type='addtype'
@@ -121,7 +122,7 @@ const OthersFees = () => {
           />
         </View>
       </ScrollView>
-      <HButton label={'Paid'} btnstyles={commonstyles.activebtn} />
+      <HButton label={'Save'} btnstyles={commonstyles.activebtn} />
     </View>
   );
 };

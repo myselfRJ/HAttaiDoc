@@ -86,7 +86,7 @@ const ConsultationCard = ({data}) => {
             alignItems:'flex-end',
             position: 'absolute',
             right: moderateScale(16),
-            top: moderateScale(16),
+            top: moderateScale(8),
             gap: moderateScale(12),
           }}>
           <View
