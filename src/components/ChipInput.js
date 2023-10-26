@@ -25,6 +25,7 @@ const ChipInput = props => {
       <View style={styles.child}>
         {data?.map((value, index) => (
           <ShowChip
+            key={index}
             text={`${value?.[item]}`}
             onPress={() => props.delete(index)}
           />

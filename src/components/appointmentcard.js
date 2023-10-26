@@ -72,7 +72,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
   return (
     <View style={styles.main}>
        <View style={styles.tokenContainer}>
-          <Text style={{paddingBottom:moderateScale(8),
+          <Text style={{paddingBottom:moderateScale(4),
             color:CUSTOMCOLOR.primary,
             fontSize:CUSTOMFONTSIZE.h2,
             fontWeight:'700'}}>
@@ -86,7 +86,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
             flexDirection: 'row',
             gap: moderateScale(16),
             // borderWidth:1
-            paddingLeft: moderateScale(20),
+            paddingLeft: moderateScale(26),
           }}>
           <View>
             <Image

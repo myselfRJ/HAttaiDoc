@@ -12,7 +12,16 @@ import {
   updatefamilyHistory,
   addsocialHistory,
   updatesocialHistory,
+  addmedicationHistory,
+  addmenstrualHistory,
+  addobstericHistory,
+  addpastHospitalization,
 } from '../redux/features/prescription/pastHistory';
+// import {
+//   addCommorbities,
+//   updateCommorbities,
+// } from '../redux/features/prescription/commorbities';
+// import { ,updatecommorbidities } from '../redux/features/prescription/pastHistory';
 import {CONSTANTS} from '../utility/constant';
 import {
   CUSTOMCOLOR,
@@ -58,7 +67,6 @@ const MedicalHistory = ({navigation}) => {
   const [family, setFamily] = useState('');
   const [family_sug, setFamily_Sug] = useState([]);
   const [medical, setMedical] = useState('');
-  const [previous, setPrevious] = useState('');
   const [menstrual, setMenstrual] = useState('');
   const [obstetric, setObstetric] = useState('');
   const [select, setSelect] = useState('');
@@ -67,21 +75,21 @@ const MedicalHistory = ({navigation}) => {
     setSelect(value);
     setComorbidities(value);
     dispatch(addcommorbiditis([...commor, {commorbities: value}]));
-    UpdateAsyncData('commorbidities', {commorbities: value});
+    // UpdateAsyncData('commorbidities', {commorbities: value});
     setComorbidities('');
   };
   const handleSelectSocial = value => {
     setSelect(value);
     setSocial(value);
     dispatch(addsocialHistory([...socialHistory, {social: value}]));
-    UpdateAsyncData('socialHistory', {social: value});
+    // UpdateAsyncData('socialHistory', {social: value});
     setSocial('');
   };
   const handleSelectFamily = value => {
     setSelect(value);
     setFamily(value);
     dispatch(addfamilyHistory([...familyHistory, {family: value}]));
-    UpdateAsyncData('familyHistory', {family: value});
+    // UpdateAsyncData('familyHistory', {family: value});
     setFamily('');
   };
   const handleSelectMedical = val => {
@@ -96,6 +104,19 @@ const MedicalHistory = ({navigation}) => {
       dispatch(updatecommorbidities(updatedcommor));
     }
   };
+  const hospitalization = useSelector(
+    state => state?.pasthistory?.hospitalization,
+  );
+  const medicationHistory = useSelector(
+    state => state?.pasthistory?.medicationHistory,
+  );
+  const menstrualHistory = useSelector(
+    state => state?.pasthistory?.menstrualHistory,
+  );
+  const obstericHistory = useSelector(
+    state => state?.pasthistory?.obstericHistory,
+  );
+
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -115,33 +136,33 @@ const MedicalHistory = ({navigation}) => {
   const handleAddReceiver = () => {
     if (comorbidities.trim() !== '') {
       dispatch(addcommorbiditis([...commor, {commorbities: comorbidities}]));
-      if (commor?.length === 0 || commor == undefined) {
-        StoreAsyncData('commorbidities', commor);
-      } else {
-        UpdateAsyncData('commorbidities', {commorbities: comorbidities});
-      }
+      // if (commor?.length === 0 || commor == undefined) {
+      //   StoreAsyncData('commorbidities', commor);
+      // } else {
+      UpdateAsyncData('commorbidities', {commorbities: comorbidities});
+      // }
       setComorbidities('');
     }
   };
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
-      if (socialHistory?.length === 0 || socialHistory == undefined) {
-        StoreAsyncData('socialHistory', socialHistory);
-      } else {
-        UpdateAsyncData('socialHistory', {social: social});
-      }
+      // if (socialHistory?.length === 0 || socialHistory == undefined) {
+      //   StoreAsyncData('socialHistory', socialHistory);
+      // } else {
+      UpdateAsyncData('socialHistory', {social: social});
+      // }
       setSocial('');
     }
   };
   const handleFamily = () => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
-      if (familyHistory?.length === 0 || familyHistory == undefined) {
-        StoreAsyncData('familyHistory', familyHistory);
-      } else {
-        UpdateAsyncData('familyHistory', {family: family});
-      }
+      // if (familyHistory?.length === 0 || familyHistory == undefined) {
+      //   StoreAsyncData('familyHistory', familyHistory);
+      // } else {
+      UpdateAsyncData('familyHistory', {family: family});
+      // }
       setFamily('');
     }
   };
@@ -173,38 +194,40 @@ const MedicalHistory = ({navigation}) => {
     handleAsyncStorage();
   }, []);
 
+  useEffect(() => {
+    if (commor_sug?.length === 0 || commor_sug == undefined) {
+      StoreAsyncData('commorbidities', commor);
+    }
+    if (social_sug?.length === 0 || social_sug == undefined) {
+      StoreAsyncData('socialHistory', socialHistory);
+    }
+    if (family_sug?.length === 0 || family_sug == undefined) {
+      StoreAsyncData('familyHistory', familyHistory);
+    }
+  }, []);
+
   const handledata = () => {
-    dispatch(
-      addpastHistory([
-        ...data,
-        {
-          comorbidities: comorbidities,
-          past: past,
-          social: social,
-          family: family,
-          medical: medical,
-          menstrual: menstrual,
-          obstetric: obstetric,
-        },
-      ]),
-    );
+    dispatch(addpastHospitalization({...hospitalization, past}));
+    dispatch(addmedicationHistory({...medicationHistory, medical}));
+    dispatch(addmenstrualHistory({...menstrualHistory, menstrual}));
+    dispatch(addobstericHistory({...obstericHistory, obstetric}));
     nav.goBack();
   };
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
-      <ChipInput
-        item={'commorbities'}
-        label={'Commorbities'}
-        data={commor}
-        value={comorbidities}
-        setValue={setComorbidities}
-        onSubmit={handleAddReceiver}
-        delete={handleDeleteCommorbities}
-      />
 
-      <ScrollView contentContainerStyle={{paddingBottom: moderateScale(100)}}>
+      <ScrollView>
         <View style={styles.input}>
+          <ChipInput
+            item={'commorbities'}
+            label={'Commorbities'}
+            data={commor}
+            value={comorbidities}
+            setValue={setComorbidities}
+            onSubmit={handleAddReceiver}
+            delete={handleDeleteCommorbities}
+          />
           {commor_sug?.length > 0 ? (
             <View
               style={{
@@ -238,9 +261,10 @@ const MedicalHistory = ({navigation}) => {
           <InputText
             inputContainer={styles.inputtext}
             label="Past Hospitalization"
-            placeholder="Past History"
+            placeholder="Reason for hospitalization"
             value={past}
             setValue={txt => setPast(txt)}
+            blur={false}
           />
           <ChipInput
             item={'social'}
@@ -326,24 +350,45 @@ const MedicalHistory = ({navigation}) => {
             placeholder="medicine name, dose, quantity, days,reason for medication"
             value={medical}
             setValue={txt => setMedical(txt)}
+            blur={false}
           />
-          <Text style={styles.prev}>Previous Prescription</Text>
-          <HButton
-            btnstyles={{
-              alignSelf: 'flex-start',
-              marginHorizontal: horizontalScale(8),
-              bottom: moderateScale(8),
-            }}
-            textStyle={{fontSize: moderateScale(14)}}
-            icon="prescription"
-            label="View"
-          />
+          {data?.length > 0 ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(8),
+                marginHorizontal: horizontalScale(8),
+              }}>
+              {data?.map((item, ind) => (
+                <TouchableOpacity
+                  key={ind}
+                  style={[
+                    styles.sug,
+                    item?.medical == select
+                      ? {backgroundColor: CUSTOMCOLOR.primary}
+                      : {backgroundColor: CUSTOMCOLOR.white},
+                  ]}
+                  onPress={() => handleSelectMedical(item?.medical)}>
+                  <Text
+                    style={[
+                      styles.sugtxt,
+                      item?.medical == select
+                        ? {color: CUSTOMCOLOR.white}
+                        : {color: CUSTOMCOLOR.primary},
+                    ]}>
+                    {item?.medical}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : null}
           <InputText
             inputContainer={styles.inputtext}
             label="Menstrual History"
             placeholder="Menstrual history"
             value={menstrual}
             setValue={txt => setMenstrual(txt)}
+            blur={false}
           />
           <InputText
             inputContainer={styles.inputtext}
@@ -351,11 +396,13 @@ const MedicalHistory = ({navigation}) => {
             placeholder="Obstetric history"
             value={obstetric}
             setValue={txt => setObstetric(txt)}
+            blur={false}
           />
         </View>
       </ScrollView>
-      <View style={commonstyles.activebtn}>
+      <View style={{justifyContent: 'flex-end'}}>
         <HButton
+          btnstyles={commonstyles.activebtn}
           label={'Save'}
           onPress={() => {
             handledata();
@@ -363,10 +410,12 @@ const MedicalHistory = ({navigation}) => {
         />
       </View>
     </View>
+    // </View>
   );
 };
 const styles = StyleSheet.create({
   main: {
+    flex: 1,
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
