@@ -34,12 +34,13 @@ import { commonstyles } from '../styles/commonstyle';
 
 export default function Valid() {
   const months = CONSTANTS.months;
+  const signature = useSelector(state=>state?.sign)
   const [saveSelected, setIsSaveSelected] = useState(false);
   const [resetSelected, setIsResetSelected] = useState(false);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('0');
-
+  const [doctorSign,setSign] = useState(false)
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -94,6 +95,7 @@ export default function Valid() {
 
   const saveSign = () => {
     sign.current.saveImage();
+    // console.log('save====',sign.current.saveImage())
   };
   // useEffect(()=>{
   //   saveSign();
@@ -101,6 +103,7 @@ export default function Valid() {
 
   const resetSign = () => {
     sign.current.resetImage();
+    setSign(false)
   };
 
   const _onSaveEvent = result => {
@@ -108,12 +111,12 @@ export default function Valid() {
     //result.pathName - for the file path name
 
     alert('Signature Captured Successfully');
-    console.log(result.encoded);
     dispatch(addSign(result.encoded));
-    console.log(result.pathName);
+    setSign(result.encoded)
   };
 
   const _onDragEvent = () => {
+    setSign(!doctorSign)
     // This callback will be called when the user enters signature
     console.log('dragged');
   };
@@ -121,7 +124,6 @@ export default function Valid() {
   return (
     <View style={styles.MainContainer}>
       <PrescriptionHead heading={'Validity Up To'} />
-      {/* <Text style={styles.FUP}>{Language[language]['follow_up']}</Text> */}
       <View style={styles.DateContainer}>
         <SelectorBtn
           onPress={handleDate}
@@ -146,8 +148,8 @@ export default function Valid() {
           top: moderateScale(12),
           fontFamily: CUSTOMFONTFAMILY.body,
           color: CUSTOMCOLOR.black,
-          fontSize: CUSTOMFONTSIZE.h4,
-          fontWeight: '400',
+          fontSize: CUSTOMFONTSIZE.h3,
+          fontWeight: '700',
         }}>
         Days:
       </Text>
@@ -203,7 +205,7 @@ export default function Valid() {
         <View
           style={{
             height: moderateScale(200),
-            width: moderateScale(600),
+            width:'100%',
             alignSelf: 'center',
             borderWidth:0.5,
             borderColor:CUSTOMCOLOR.primary
@@ -218,6 +220,7 @@ export default function Valid() {
             viewMode={'portrait'}
             minStrokeWidth={4}
             maxStrokeWidth={4}
+            backgroundColor={'#FFFFFF'}
           />
         </View>
         <View
@@ -230,26 +233,40 @@ export default function Valid() {
           <TouchableHighlight
             style={[
               styles.buttonStyle,
-              saveSelected ? {backgroundColor: '#2CBB15'} : null,
+              doctorSign == true ? {backgroundColor: CUSTOMCOLOR.primary} : {backgroundColor:CUSTOMCOLOR.white},
             ]}
             onPress={() => {
               saveSign();
               setIsSaveSelected(true);
               setIsResetSelected(false);
             }}>
-            <Text>Save</Text>
+            <Text style={
+            doctorSign ==  true ? {color: CUSTOMCOLOR.white} : {color:CUSTOMCOLOR.primary}}>Save</Text>
           </TouchableHighlight>
+          {/* <HButton label='Save'
+          type='addtype'
+          btnstyles={[{...commonstyles.activebtn,
+            alignSelf:'center'},
+            saveSelected ? {backgroundColor:CUSTOMCOLOR.primary}:{backgroundColor:CUSTOMCOLOR.disable}
+ 
+          ]}
+          onPress={() => {
+            saveSign();
+            setIsSaveSelected(true);
+            setIsResetSelected(false);
+          }}
+          /> */}
           <TouchableHighlight
             style={[
               styles.buttonStyle,
-              resetSelected ? {backgroundColor: CUSTOMCOLOR.delete} : null,
+              // resetSelected ? {backgroundColor: CUSTOMCOLOR.delete} : null,
             ]}
             onPress={() => {
               resetSign();
               setIsResetSelected(true);
               setIsSaveSelected(false);
             }}>
-            <Text>Reset</Text>
+            <Text style={{color:CUSTOMCOLOR.primary}}>Reset</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -275,7 +292,7 @@ const styles = StyleSheet.create({
     flex:1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
-    gap: moderateScale(12),
+    gap: moderateScale(8),
     backgroundColor:CUSTOMCOLOR.background
   },
   DateContainer: {
@@ -287,7 +304,7 @@ const styles = StyleSheet.create({
   radiogroup: {
     padding: moderateScale(8),
     flexDirection: 'row',
-    gap: moderateScale(48),
+    gap: moderateScale(24),
 
     // justifyContent: 'flex-start',
     flexWrap: 'wrap',
@@ -320,11 +337,12 @@ const styles = StyleSheet.create({
     //flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
+    // height: 50,
     borderColor: CUSTOMCOLOR.primary,
     borderWidth: 1,
     borderRadius: 4,
     margin: 10,
     width: 100,
+    paddingVertical:verticalScale(8)
   },
 });
