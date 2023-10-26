@@ -106,7 +106,7 @@ const Visit = ({navigation, route}) => {
   const hospitalization = useSelector(
     state => state?.pasthistory?.hospitalization,
   );
-  console.log('======>hospitilization', hospitalization);
+  // console.log('======>hospitilization', hospitalization);
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
@@ -231,7 +231,7 @@ const Visit = ({navigation, route}) => {
       note: note,
       diagnosis: diagnosis,
       labReports: labreport,
-      commoribities: commorbities,
+      // commoribities: commorbities,
       allergies: allergies,
       pastHistory: {
         past_history: JSON.stringify(hospitalization),
@@ -263,6 +263,7 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
+        console.log("json",jsonData);
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
@@ -358,7 +359,7 @@ const Visit = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         // Handle successful response data
-        console.log('Complaint updated successfully:', jsonData);
+        // console.log('Complaint updated successfully:', jsonData);
       } else {
         console.error('API call failed:', response.status);
       }
@@ -388,7 +389,7 @@ const Visit = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         // Handle successful response data
-        console.log('Complaint updated successfully:', jsonData);
+        // console.log('Complaint updated successfully:', jsonData);
       } else {
         console.error('API call failed:', response.status);
       }
@@ -430,7 +431,7 @@ const Visit = ({navigation, route}) => {
       const jsonData = await response.json();
       setVitals(jsonData?.data);
       dispatch(UpadteVitals(jsonData?.data));
-      console.log('-----------------js', jsonData);
+      // console.log('-----------------js', jsonData);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -469,7 +470,7 @@ const Visit = ({navigation, route}) => {
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   const logo_url = `data:image/png;base64,${logo}`;
   const sign = useSelector(state => state?.sign?.sign);
-  console.log('---------sign=========>', sign);
+  // console.log('---------sign=========>', sign);
   const Sign_base64 = sign
     ? `data:image/jpeg;base64,${sign}`
     : data?.doctor_name;
@@ -880,7 +881,7 @@ const Visit = ({navigation, route}) => {
         directory: 'docs',
       };
       let file = await RNHTMLtoPDF.convert(options);
-      console.log(file.filePath);
+      // console.log(file.filePath);
       setFilePath(file.filePath);
       handle();
       // readFile();
@@ -1539,8 +1540,8 @@ const Visit = ({navigation, route}) => {
               label="Save"
               onPress={() => {
                 fetchData();
-                putVitals();
-                putComplaint();
+                // putVitals();
+                // putComplaint();
                 // createPDF();
               }}
               loading={loading}

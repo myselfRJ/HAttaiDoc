@@ -28,7 +28,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {URL} from '../utility/urls';
 import {useRoute} from '@react-navigation/native';
 
-const ExaminationFindings = () => {
+const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
   const {examinationDetails} = route.params;
@@ -67,7 +67,10 @@ const ExaminationFindings = () => {
     try {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
-      console.log('API Response:', responseData);
+      if (responseData){
+        navigation.goBack()
+        console.log('API Response:', responseData);
+      }
     } catch (error) {
       console.error('Error:', error);
     }

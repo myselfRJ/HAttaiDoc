@@ -204,6 +204,7 @@ const ReferToDoctor = () => {
       const responseData = await response.json();
       if (responseData) {
         console.log('API Response:', responseData);
+        handleAddDoctors();
         Alert.alert('', 'Successfully Send to Patient');
         nav.goBack();
       }
@@ -240,7 +241,7 @@ const ReferToDoctor = () => {
         setNotes(''),
         setDr_Name(''))
       : null;
-    nav.goBack();
+    // nav.goBack();
   };
 
   const handleSelect = val => {
@@ -411,10 +412,7 @@ const ReferToDoctor = () => {
             label="Share"
             type="addtype"
             size={moderateScale(24)}
-            onPress={() => {
-              handleAddDoctors();
-              // createPDF();
-            }}
+            onPress={createPDF}
           />
         </View>
       </ScrollView>
