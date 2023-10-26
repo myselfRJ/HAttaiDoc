@@ -81,8 +81,9 @@ const Symptoms = ({ navigation }) => {
     }
     setDays(null);
     setSymptom(null);
-    setSevSelected(null)
-    setHr(null)
+    setSevSelected(null);
+    setHr(null);
+    setSelected(null);
   };
 
   const handleSymptomSubmit = () => {
@@ -179,11 +180,6 @@ const Symptoms = ({ navigation }) => {
         zIndex: 1,
         paddingBottom: verticalScale(120),
       }}>
-
-
-
-
-
         <View style={styles.content}>
           <View style={styles.input}>
             <InputText
@@ -295,6 +291,7 @@ const Symptoms = ({ navigation }) => {
                   placeholder="Enter Days"
                   value={days}
                   onChangeText={text => setDays(text)}
+                  keyboardType='numeric'
                 />
               </View>
               <Text style={{
@@ -309,17 +306,15 @@ const Symptoms = ({ navigation }) => {
                   placeholder="Enter Hr"
                   value={hr}
                   onChangeText={text => setHr(text)}
+                  keyboardType='numeric'
                 />
               </View>
             </View>
           </View>
           <HButton
-
             icon='plus'
             type='addtype'
-
             btnstyles={{
-
               backgroundColor:
                 (symptom && sevSelected && (days || hr))
                   ? CUSTOMCOLOR.primary

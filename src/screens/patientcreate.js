@@ -61,6 +61,8 @@ const PatientCreate = ({navigation}) => {
   const [birth_date, setBirth_date] = useState('');
   const [age, setAge] = useState('');
   const [blood_group, setBlood_group] = useState('');
+  const [find,Setfind] = useState('')
+  const [refer,setRefer] = useState('')
   const [spouse_name, setSpouse_nmae] = useState('');
   const [ABHA_ID, setABHA_ID] = useState('');
   const [aadhar_no, setAadhar_no] = useState('');
@@ -462,6 +464,12 @@ const PatientCreate = ({navigation}) => {
                           ? CUSTOMCOLOR.primary
                           : CUSTOMCOLOR.white,
                     }}
+                    inputstyle={{
+                      color:
+                      blood_group === bld_grp
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary
+                    }}
                     // label="Blood Group"
                     key={index}
                     input={bld_grp}
@@ -495,6 +503,74 @@ const PatientCreate = ({navigation}) => {
                 }
               }}
             />
+            <View style={{gap:moderateScale(8)}}>
+              <Text style={styles.genderText}>How did you find us?</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  alignSelf: 'flex-start',
+                }}>
+                {CONSTANTS.find_us?.map((finds, index) => (
+                  <SelectorBtn
+                    selectContainer={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                    }}
+                    select={{
+                      backgroundColor:
+                        find === finds
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                      find === finds
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary
+                    }}
+                    // label="Blood Group"
+                    key={index}
+                    input={finds}
+                    onPress={() => Setfind(finds)}
+                  />
+                ))}
+              </View>
+            </View>
+            <View style={{gap:moderateScale(8)}}>
+              <Text style={styles.genderText}>Reffered by</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  alignSelf: 'flex-start',
+                }}>
+                {CONSTANTS.refer?.map((item, index) => (
+                  <SelectorBtn
+                    selectContainer={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                    }}
+                    select={{
+                      backgroundColor:
+                        refer === item
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                      refer === item
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary
+                    }}
+                    // label="Blood Group"
+                    key={index}
+                    input={item}
+                    onPress={() => setRefer(item)}
+                  />
+                ))}
+              </View>
+            </View>
             <HButton
               label="Save"
               btnstyles={{
@@ -580,7 +656,7 @@ const styles = StyleSheet.create({
   genderText: {
     fontFamily: CUSTOMFONTFAMILY.body,
     color: CUSTOMCOLOR.black,
-    fontSize: CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
   },
   CnfAbhaView: {

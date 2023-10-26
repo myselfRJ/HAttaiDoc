@@ -22,7 +22,7 @@ export const commonstyles = StyleSheet.create({
     //paddingVertical: 24,
     width: '100%',
     alignItems: 'center',
-    gap: moderateScale(4),
+    gap: moderateScale(6),
     // borderWidth:1
   },
   h1: {

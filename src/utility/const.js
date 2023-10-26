@@ -33,7 +33,7 @@ export const CONSTANT = {
     {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
 
     {
-      label: 'Referall',
+      label: 'Referral',
       icon: 'chevron-right',
       navigate: 'refer',
     },
@@ -44,7 +44,7 @@ export const CONSTANT = {
     },
 
     {
-      label: 'Service Charges',
+      label: 'Additional Fees',
       icon: 'chevron-right',
       navigate: 'service_fees',
     },

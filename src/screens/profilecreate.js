@@ -482,7 +482,7 @@ const ProfileCreate = ({navigation}) => {
             />
           </View>
 
-          <View style={{flex: 1,zIndex:2}}>
+          <View style={{flex: 1}}>
             <SelectorBtn
               required={true}
               selectContainer={{gap: 2, paddingVertical: -1}}
@@ -498,7 +498,14 @@ const ProfileCreate = ({navigation}) => {
 
             {show === true && (
               <View style={styles.statecontainer}>
-                <ScrollView persistentScrollbar={true} contentContainerStyle={{zIndex:4}}>
+ 
+
+                <ScrollView persistentScrollbar={true} contentContainerStyle={{zIndex:4,backgroundColor:CUSTOMCOLOR.white}}>
+             
+
+{/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
+
+
                   {CONSTANTS.state.map((state, index) => (
                     <TouchableOpacity
                       key={index}
@@ -506,7 +513,7 @@ const ProfileCreate = ({navigation}) => {
                         handleStateSelection(state);
                         setshow(false);
                       }}
-                      style={{paddingHorizontal:horizontalScale(4),paddingVertical:verticalScale(4),borderWidth:1,zIndex:10}}>
+                      style={{paddingHorizontal:horizontalScale(4),paddingVertical:verticalScale(4)}}>
                       <Text
                         style={[
                           styles.statefields,
@@ -521,6 +528,7 @@ const ProfileCreate = ({navigation}) => {
                       </Text>
                     </TouchableOpacity>
                   ))}
+               {/* </View>  */}
                 </ScrollView>
               </View>
             )}
@@ -530,8 +538,8 @@ const ProfileCreate = ({navigation}) => {
           style={{
             // alignSelf: 'flex-start',
             gap: verticalScale(4),
-            zIndex:1
-            // paddingVertical: verticalScale(8),
+            // borderWidth:1,
+            zIndex:-1
           }}>
           <Text style={styles.medtext}>Medical Document</Text>
           <View style={styles.doc_upload}>
@@ -567,6 +575,7 @@ const ProfileCreate = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+     
       <View
         style={{
           paddingVertical: moderateScale(16),
@@ -644,7 +653,9 @@ const ProfileCreate = ({navigation}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: CUSTOMCOLOR.white,
+    zIndex:1,
+    backgroundColor:CUSTOMCOLOR.white,
+    //  CUSTOMCOLOR.white,
     paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(24),
     // borderWidth: 1,
@@ -684,13 +695,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statecontainer: {
-    zIndex:3,
+    zIndex:14,
     width:'100%',
     height: moderateScale(200),
     // paddingHorizontal:horizontalScale(66),
-    zIndex: 2,
+    // zIndex: 10,
     borderWidth: 1,
-    borderColor: CUSTOMCOLOR.borderColor,
+    borderColor: CUSTOMCOLOR.primary,
     position: 'absolute',
     right: 0,
     // bottom: 0,
@@ -727,6 +738,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal:horizontalScale(16)
   },
   selectedfilecontainer: {
+    zIndex:0,
     paddingVertical:verticalScale(8),
     paddingHorizontal:horizontalScale(8),
     justifyContent:'space-between',
@@ -735,7 +747,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
-    backgroundColor:'#EAF3FC',
+    // backgroundColor:'#000000',
   },
   selectedFileInfo: {
     fontFamily: CUSTOMFONTFAMILY.h4,
@@ -770,6 +782,7 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor:"white",
     // borderWidth:1,
     // paddingHorizontal: horizontalScale(24),
     gap: verticalScale(8),
@@ -808,7 +821,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingBottom: verticalScale(120),
-
+    zIndex:2,
     gap: verticalScale(16),
   },
 });

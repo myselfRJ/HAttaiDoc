@@ -153,6 +153,7 @@ export default function DateTime() {
             value={customDays}
             placeholder={'Enter Days'}
             setValue={val => handelvalue(val)}
+            keypad ='numeric'
           />
         </View>
       </View>

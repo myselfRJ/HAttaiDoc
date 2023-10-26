@@ -49,7 +49,8 @@ import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
-const MedicalHistory = ({navigation}) => {
+const MedicalHistory = ({navigation,route}) => {
+  const {gende} = route.params;
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
@@ -220,8 +221,9 @@ const MedicalHistory = ({navigation}) => {
       <ScrollView>
         <View style={styles.input}>
           <ChipInput
+          placeholder={'Enter Co-morbidities'}
             item={'commorbities'}
-            label={'Commorbities'}
+            label={'Co-morbidities'}
             data={commor}
             value={comorbidities}
             setValue={setComorbidities}
@@ -267,6 +269,7 @@ const MedicalHistory = ({navigation}) => {
             blur={false}
           />
           <ChipInput
+          placeholder={'Eg : smoking, drinking'}
             item={'social'}
             label={'Social History'}
             data={socialHistory}
@@ -306,6 +309,7 @@ const MedicalHistory = ({navigation}) => {
             </View>
           ) : null}
           <ChipInput
+          placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
             data={familyHistory}
@@ -382,14 +386,17 @@ const MedicalHistory = ({navigation}) => {
               ))}
             </View>
           ) : null}
-          <InputText
-            inputContainer={styles.inputtext}
-            label="Menstrual History"
-            placeholder="Menstrual history"
-            value={menstrual}
-            setValue={txt => setMenstrual(txt)}
-            blur={false}
-          />
+         {(gende == 'Female' || gende == 'female' ) &&(
+           <InputText
+           inputContainer={styles.inputtext}
+           label="Menstrual History"
+           placeholder="Menstrual history"
+           value={menstrual}
+           setValue={txt => setMenstrual(txt)}
+           blur={false}
+         />
+         )}
+          {(gende == 'Female' || gende == 'female' ) &&(
           <InputText
             inputContainer={styles.inputtext}
             label="Obstetric History"
@@ -398,6 +405,7 @@ const MedicalHistory = ({navigation}) => {
             setValue={txt => setObstetric(txt)}
             blur={false}
           />
+          )}
         </View>
       </ScrollView>
       <View style={{justifyContent: 'flex-end'}}>

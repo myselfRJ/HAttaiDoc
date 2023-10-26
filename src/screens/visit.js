@@ -64,6 +64,7 @@ import {
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
+import Seperator from '../components/seperator';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
@@ -946,15 +947,22 @@ const Visit = ({navigation, route}) => {
             </View>
             <View
               style={{
-                paddingHorizontal: moderateScale(24),
-                paddingVertical: verticalScale(16),
+                // paddingHorizontal: moderateScale(24),
+                // paddingVertical: verticalScale(16),
                 borderRadius: moderateScale(8),
                 gap: moderateScale(12),
                 borderColor: CUSTOMCOLOR.primary,
                 borderWidth: 0.5,
-                backgroundColor: CUSTOMCOLOR.backgroundColor,
+                paddingBottom: verticalScale(16),
               }}>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(8),
+                  backgroundColor: CUSTOMCOLOR.backgroundColor,
+                  padding: horizontalScale(8),
+                  borderRadius: moderateScale(8),
+                }}>
                 <Image
                   style={{
                     height: moderateScale(64),
@@ -1010,6 +1018,7 @@ const Visit = ({navigation, route}) => {
                   </Pressable>
                 </View>
                 <Text style={styles.patientText}>{selectedComplaint}</Text>
+                <Seperator />
               </View>
               <View style={styles.line}>
                 <View
@@ -1043,12 +1052,14 @@ const Visit = ({navigation, route}) => {
                     {vitalsData.EDD}
                   </Text>
                 ) : null}
+                <Seperator />
               </View>
               <View style={styles.line}>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
                   <Text style={styles.patientHead}>Allergies</Text>
                   <Pressable
@@ -1062,6 +1073,7 @@ const Visit = ({navigation, route}) => {
                     />
                   </Pressable>
                 </View>
+
                 <View style={{flexDirection: 'row'}}>
                   {allergies?.length > 0
                     ? allergies?.map((item, index) => (
@@ -1119,6 +1131,8 @@ const Visit = ({navigation, route}) => {
                           clinic_id: Clinic_id,
                           appointment_id: appointment_id,
                         };
+                      } else if (value.navigate === 'medicalhistory') {
+                        params.gende = gende;
                       }
 
                       navigation.navigate(value.navigate, params);
@@ -1479,7 +1493,7 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Referall' &&
+                  {value.label === 'Referral' &&
                     (selectedDoctor?.length > 0 ? (
                       <View style={styles.basiccontainer}>
                         {selectedDoctor?.map((item, ind) => (
@@ -1668,8 +1682,10 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   line: {
-    borderBottomWidth: moderateScale(0.5),
-    borderBottomColor: CUSTOMCOLOR.primary,
+    // borderWidth:1,
+    // borderBottomWidth: moderateScale(0.5),
+    // borderBottomColor: CUSTOMCOLOR.primary,
+    paddingHorizontal: horizontalScale(8),
   },
 });
 export default Visit;

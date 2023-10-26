@@ -82,6 +82,7 @@ const VitalScreen = ({route, props}) => {
       systolic: '',
       LDD: '',
       EDD: '',
+      oxygen_level:''
   });
   console.log('====>dias', vitals)
 
@@ -106,6 +107,10 @@ const VitalScreen = ({route, props}) => {
       const updatedVitals = { ...vitals, body_temperature: text };
       setVitals(updatedVitals);
   };
+  const spo2Change = (text) => {
+    const updatedVitals = { ...vitals, oxygen_level: text };
+    setVitals(updatedVitals);
+};
   const rateChange = (text) => {
       const updatedVitals = { ...vitals, rate: text };
       setVitals(updatedVitals);
@@ -229,6 +234,7 @@ const VitalScreen = ({route, props}) => {
                       re={rateRef}
                       name='SPO2'
                           placeholder='%'
+                          setvalue={text => spo2Change(text)}
                       />
                       <VitalField
                       point={rateRef}

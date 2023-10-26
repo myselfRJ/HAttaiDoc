@@ -44,6 +44,7 @@ import {commonstyles} from '../styles/commonstyle';
 
 export default function Prescribe1({navigation}) {
   const [data, setData] = useState([]);
+  
   const option = 'product';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
@@ -81,7 +82,6 @@ export default function Prescribe1({navigation}) {
   //   },
   // ])
   const prevPres = useSelector(state => state.pres.prescribeItems);
-
   const handleAddPrescribe = () => {
     if (sug?.length > 0) {
       const medicineName = `${setmedicine} ${mgs}`;
@@ -395,6 +395,7 @@ export default function Prescribe1({navigation}) {
 
           <View style={styles.ModeContainer}>
             <InputText
+            keypad ='numeric'
               // style={styles.durationInput}
               label={Language[language]['number']}
               inputContainer={{
@@ -522,6 +523,7 @@ export default function Prescribe1({navigation}) {
                 </Text> */}
 
             <InputText
+            keypad ='numeric'
               // style={styles.durationInput}
               label={Language[language]['duration']}
               inputContainer={{

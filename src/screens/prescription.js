@@ -24,7 +24,6 @@ const Prescription = ({route}) => {
   const doctor_profile = useSelector(state => state.doctor_profile);
   const patient = useSelector(state => state?.patient);
   const vitals = useSelector(state => state?.prescription?.vitalsData);
-  console.log('vitals', vitals);
   const cheif_complaint = useSelector(
     state => state?.prescription?.selectedComplaint,
   );
@@ -135,7 +134,7 @@ const Prescription = ({route}) => {
             {name} | {gender} | {patient_age} | {patient_phone_number}
           </Text>
         </View>
-        <View>
+       {vitals && ( <View>
           <Text style={styles.head}>{Language[language]['vitals']}:</Text>
           <View style={styles.commonstyle}>
             <Text style={styles.values}>
@@ -157,14 +156,14 @@ const Prescription = ({route}) => {
               {Language[language]['bmi']}: {vitals.bmi}
             </Text>
           </View>
-        </View>
+        </View>)}
         <View>
           <Text style={styles.head}>
             {Language[language]['cheif_complaints']} :{' '}
             <Text style={styles.values}>{cheif_complaint}</Text>
           </Text>
         </View>
-        <View>
+        {diagnosis.length>0 && (<View>
           <Text style={styles.head}>
             {Language[language]['diagnosis']} :{' '}
             {diagnosis.map((item, index) => (
@@ -173,17 +172,19 @@ const Prescription = ({route}) => {
               </Text>
             ))}
           </Text>
-        </View>
-        <View>
-          <Text style={styles.head}>
-            {Language[language]['symptoms']} :{' '}
-            {symptom?.map((item, index) => (
-              <Text key={index} style={styles.values}>
-                {item?.symptom}{' '}
-              </Text>
-            ))}
-          </Text>
-        </View>
+        </View>)}
+       {symptom.length >0 && (
+         <View>
+         <Text style={styles.head}>
+           {Language[language]['symptoms']} :{' '}
+           {symptom?.map((item, index) => (
+             <Text key={index} style={styles.values}>
+               {item?.symptom}{' '}
+             </Text>
+           ))}
+         </Text>
+       </View>
+       )}
         <View>
           <Text style={styles.head}>{Language[language]['prescribe']} :</Text>
         </View>
@@ -244,7 +245,8 @@ const Prescription = ({route}) => {
             </View>
           </View>
         )}
-        <View>
+        {test.length > 0 &&(
+          <View>
           <Text style={styles.head}>
             {Language[language]['test']} :{' '}
             {test.map((item, index) => (
@@ -252,6 +254,7 @@ const Prescription = ({route}) => {
             ))}
           </Text>
         </View>
+        )}
         {followup && (
           <View>
             <Text style={styles.head}>
@@ -299,6 +302,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
     backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:1
   },
   title: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: moderateScale(12),
     color: CUSTOMCOLOR.primary,
-    width: moderateScale(150),
+    width: moderateScale(200),
     paddingLeft: moderateScale(4),
     //paddingHorizontal:8
   },
@@ -381,7 +385,7 @@ const styles = StyleSheet.create({
   },
   sign: {
     alignSelf: 'flex-end',
-    width: moderateScale(300),
+    // width: moderateScale(300),
     paddingVertical: verticalScale(64),
     // justifyContent:'flex-end'
   },
