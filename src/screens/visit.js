@@ -1540,8 +1540,8 @@ const Visit = ({navigation, route}) => {
               label="Save"
               onPress={() => {
                 fetchData();
-                // putVitals();
-                // putComplaint();
+                putVitals();
+                putComplaint();
                 // createPDF();
               }}
               loading={loading}
