@@ -263,7 +263,7 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log("json",jsonData);
+        console.log('json', jsonData);
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
@@ -1042,7 +1042,7 @@ const Visit = ({navigation, route}) => {
                 <Text style={styles.patientText}>
                   BP: {vitalsData.systolic}/{vitalsData.diastolic} SPO2:{' '}
                   {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
-                  {vitalsData?.pulse_rate} Temp: {vitalsData?.boby_temparature}
+                  {vitalsData?.pulse_rate} Temp: {vitalsData?.body_temperature}
                 </Text>
                 {(patient_data?.gender === 'Female' ||
                   patient_data?.gender === 'Female') &&
@@ -1542,7 +1542,7 @@ const Visit = ({navigation, route}) => {
                 fetchData();
                 putVitals();
                 putComplaint();
-                // createPDF();
+                createPDF();
               }}
               loading={loading}
             />

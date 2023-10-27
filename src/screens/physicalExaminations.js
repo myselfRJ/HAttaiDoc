@@ -84,11 +84,10 @@ const PhysicalExamination = ({navigation}) => {
     try {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
-      if (responseData){
-        navigation.goBack()
+      if (responseData) {
+        navigation.goBack();
         console.log('API Response:', responseData);
       }
-      
     } catch (error) {
       console.error('Error:', error);
     }
@@ -187,6 +186,12 @@ const PhysicalExamination = ({navigation}) => {
       SetUploadDocument(updatedfiles);
     }
   };
+  const handleModal = () => {
+    if (uploaddocument?.length >= 5) {
+    } else {
+      setModal(!modal);
+    }
+  };
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Physical Examination'} />
@@ -240,11 +245,7 @@ const PhysicalExamination = ({navigation}) => {
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
-        onPress={
-          uploaddocument?.length <= 5
-            ? () => setModal(!modal)
-            : Alert.alert('You Have Reached Maximum Limit')
-        }
+        onPress={handleModal}
       />
       {modal && (
         <GalleryModel

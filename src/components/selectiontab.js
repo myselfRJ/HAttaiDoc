@@ -30,12 +30,6 @@ const SelectionTab = props => {
       });
     }
   }, [props.selected, props.slots]);
-  console.log(
-    '==========slect',
-    props.selected,
-    '============slots',
-    props.slots,
-  );
 
   return (
     <Pressable
@@ -106,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.white,
-    paddingHorizontal:horizontalScale(6)
+    paddingHorizontal: horizontalScale(6),
   },
   token: {
     color: CUSTOMCOLOR.white,

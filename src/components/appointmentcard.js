@@ -43,7 +43,6 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const patient_gender = appointment?.patient_data?.gender;
   const birth_date = appointment?.patient_data?.birth_date;
   const appointment_token = appointment?.appointment_token;
-  console.log('toke',appointment_token);
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
@@ -71,16 +70,18 @@ const AppointmentCard = ({appointment, openVisit}) => {
   };
   return (
     <View style={styles.main}>
-       <View style={styles.tokenContainer}>
-          <Text style={{paddingBottom:moderateScale(4),
-            color:CUSTOMCOLOR.primary,
-            fontSize:CUSTOMFONTSIZE.h2,
-            fontWeight:'700'}}>
-              {appointment_token}
-              </Text>
-        </View>
+      <View style={styles.tokenContainer}>
+        <Text
+          style={{
+            paddingBottom: moderateScale(4),
+            color: CUSTOMCOLOR.primary,
+            fontSize: CUSTOMFONTSIZE.h2,
+            fontWeight: '700',
+          }}>
+          {appointment_token}
+        </Text>
+      </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-       
         <View
           style={{
             flexDirection: 'row',
@@ -274,9 +275,9 @@ const styles = StyleSheet.create({
     top: 0,
     // borderWidth: 0.5,
     paddingHorizontal: horizontalScale(24),
-    paddingVertical:verticalScale(16),
+    paddingVertical: verticalScale(16),
     borderBottomRightRadius: moderateScale(64),
     borderColor: CUSTOMCOLOR.black,
-    backgroundColor:"#CAE5FF",
-  }
+    backgroundColor: '#CAE5FF',
+  },
 });
