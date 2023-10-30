@@ -581,7 +581,7 @@ const AddClinic = ({navigation}) => {
   const Update_Clinic_slots = async () => {
     const updateClinic = {
       clinic_name: value.clinic,
-      clinic_Address: value.address,
+      clinic_Address: address,
       doctor_phone_number: phone,
       clinic_phone_number: value.phone,
       clinic_photo_url: selectedImage,

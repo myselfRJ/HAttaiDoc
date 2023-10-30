@@ -325,7 +325,6 @@ const Visit = ({navigation, route}) => {
   // useEffect(() => {
   //   createPDF();
   // });
-  console.log('name==>', Sign_base64);
   const createPDF = async () => {
     if (await isPermitted()) {
       // setPrevLoad(!prevLoad)
@@ -344,10 +343,10 @@ const Visit = ({navigation, route}) => {
             <body>
                 <div class='maincontaioner' style=" width: 95%;
                 height: 100%;
-                padding: 2.5%;
+              
                 background-color: #ffffff;">
                     <div class='head'>
-                        <div class='first' style="  padding: 8px;
+                        <div class='first' style=";
                         display: flex;
                         flex-direction: row;
                         border-bottom:1px #4ba5fa solid;">
@@ -356,16 +355,15 @@ const Visit = ({navigation, route}) => {
                                 ? CONSTANTS.default_clinic_logo
                                 : logo_url
                             } style="width: 52px;height: 58px;" alt="Sample Image"/>
-                            <div class='address' style="   display: flex;
-                            margin-right: 0px;
+                            <div class='address' style="display: flex;width:100%;
                             flex-direction: row;
-                            justify-content: space-between;
-                            width:500px">
-                                <div class='namecontaioner' style="padding: 4px;">
+                            justify-content: space-between;">
+                                <div class='namecontaioner'>
                                     <p id='docname' style=" font-weight: 600px;
                                     font-size: 16px;
                                     margin-left: 8px ;
                                     color: #4ba5fa;
+                                    line-heigh:0px;
                                     ">Dr.${data.doctor_name}</p>
                                     <p id='spec' style="font-weight: 400px;
                                     font-size: 16px;
@@ -373,20 +371,17 @@ const Visit = ({navigation, route}) => {
                                     
                                     color: #4ba5fa;">${data.specialization}</p>
                                 </div>
-                                <div class='namecontaioner' style="  padding: 4px;">
+                                <div class='namecontaioner' >
                                     <p id='docname' style="font-weight: 600px;
                                     font-size: 16px;
-                                    margin-left: 8px ;
+                                    margin-left: 80px ;
                                     color: #4ba5fa;
-                                    ">
-                                    <p id='docname' style="font-weight: 600px;
-                                    font-size: 16px;
-                                    margin-left: 8px ;
-                                    color: #4ba5fa;
+                                    text-align: right
                                     ">${clinic_name}</p>
                                     <p id='spec' style="font-weight: 400px;
                                     font-size: 16px;
-                                    margin-left: 8px ;
+                                    padding-left: 300px ;
+                                    text-align: justify;
                                     color: #4ba5fa;">${clinic_Address}</p>
                                 </div>
                             </div>
