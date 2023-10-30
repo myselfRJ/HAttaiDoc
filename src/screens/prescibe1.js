@@ -83,10 +83,6 @@ export default function Prescribe1({navigation}) {
   // ])
   const prevPres = useSelector(state => state.pres.prescribeItems);
   const handleAddPrescribe = () => {
-    if (sug?.length > 0) {
-      const medicineName = `${setmedicine} ${mgs}`;
-      UpdateAsyncData('prescribe', {medicine: medicineName, mode: mode});
-    }
     dispatch(
       addPrescribe([
         ...prevPres,
@@ -102,6 +98,10 @@ export default function Prescribe1({navigation}) {
         },
       ]),
     );
+    if (sug?.length > 0) {
+      const medicineName = `${medicine} ${mgs}`;
+      UpdateAsyncData('prescribe', {medicine: setmedicine?setmedicine:medicineName, mode: mode});
+    }
     setMedicine('');
     setMode('');
     setDose_number('1');
@@ -216,7 +216,7 @@ export default function Prescribe1({navigation}) {
           item?.term.toLowerCase().startsWith(medicine.toLowerCase()),
       );
 
-      setFilteredData([...filtered, {term: medicine}]);
+      setFilteredData([...filtered, {term: medicine,type:'nsno'}]);
       // setnewMedicine([...filtered, {term: medicine}])
     } else {
       setFilteredData(data);
@@ -240,27 +240,34 @@ export default function Prescribe1({navigation}) {
     setMedicine(value?.term);
     selectedMedicine(value?.term);
     if (value?.type === 'nsno') {
-      // console.log('geberdrt', setgeneric);
       setselectedGeneric(false);
-      // setSelectedMgs(!setmgs);
       setnewMedicine([]);
     }
   };
   const handleBack = () => {
-    if (sug?.length === 0 || !sug) {
+    if (sug?.length === 0 || sug === undefined) {
       StoreAsyncData('prescribe', prevPres);
     }
   };
+  console.log("=======.prv",sug);
   useEffect(() => {
-    RetriveAsyncData('prescribe').then(array => {
-      const uniqueArray = array?.filter((item, index) => {
-        return (
-          index === array?.findIndex(obj => obj.medicine === item?.medicine)
-        );
+    // clearStorage()
+    RetriveAsyncData('prescribe')
+      .then(array => {
+        const uniqueArray = array?.filter((item, index) => {
+          const currentMedicine = item?.medicine.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+          return (
+            index === array.findIndex(obj => obj.medicine.toLowerCase() === currentMedicine)
+          );
+        });
+        setSug(uniqueArray);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
       });
-      setSug(uniqueArray);
-    });
   }, []);
+  
+
   const [med_filter, setMed_filter] = useState([]);
   useEffect(() => {
     if (sug && mode) {
@@ -309,7 +316,7 @@ export default function Prescribe1({navigation}) {
             </View>
           </View>
           <InputText
-            lbltext={{fontSize: 14}}
+            lbltext={{fontSize: moderateScale(14)}}
             inputContainer={{paddingHorizontal: 0}}
             label={Language[language]['medicine']}
             placeholder="Enter Medicine"
@@ -383,7 +390,7 @@ export default function Prescribe1({navigation}) {
           {newMedicine != null && setgeneric === false ? (
             <View>
               <InputText
-                lbltext={{fontSize: 14, color: CUSTOMCOLOR.black}}
+                lbltext={{fontSize: moderateScale(14), color: CUSTOMCOLOR.black}}
                 inputContainer={{paddingHorizontal: moderateScale(0)}}
                 label="Generic Name"
                 placeholder="Medicine generic name"

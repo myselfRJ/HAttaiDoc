@@ -42,10 +42,8 @@ import {URL} from '../utility/urls';
 const ReferToDoctor = () => {
   const route = useRoute();
   const {patient_details} = route.params;
-  console.log('=========>details', patient_details);
   const nav = useNavigation();
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
-  console.log('=======>doc', doctor);
 
   const [selected, setSelected] = useState('');
   const [name, setName] = useState('');
@@ -57,6 +55,8 @@ const ReferToDoctor = () => {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [filePath, setFilePath] = useState('');
+  const [loadind,setLoading] = useState(false)
+  const [prevLoad,setPrevLoad] = useState(false)
   const [data, setData] = useState();
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -171,7 +171,7 @@ const ReferToDoctor = () => {
       let file = await RNHTMLtoPDF.convert(options);
       console.log(file.filePath);
       setFilePath(file.filePath);
-      handle();
+      // handle();
     }
   };
 
@@ -200,17 +200,20 @@ const ReferToDoctor = () => {
     };
 
     try {
+      setLoading(true)
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
         console.log('API Response:', responseData);
         handleAddDoctors();
         Alert.alert('', 'Successfully Send to Patient');
+        setLoading(false)
         nav.goBack();
       }
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('', 'Something went Wrong');
+      setLoading(false)
     }
   };
   const apiUrl = URL.refer_doc_pdf;
@@ -267,6 +270,30 @@ const ReferToDoctor = () => {
     setSpeciality(val);
     setShow(!show);
   };
+
+  const handlePreview = async () => {
+    setPrevLoad(true)
+    console.log("========>",await isPermitted());
+   const path= "file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf"
+    createPDF()
+    if (await isPermitted()){
+      setTimeout(()=>{
+        nav.navigate('pdf', {path
+        });
+        setPrevLoad(false)
+      },3000)
+    }
+    
+  };
+
+  const handlePDf = async() => {
+    createPDF()
+   if (await isPermitted()){
+    setTimeout(()=>{
+      handle()
+     },1100)
+   }
+  }
 
   return (
     <View style={styles.main}>
@@ -400,7 +427,22 @@ const ReferToDoctor = () => {
             }}
           />
         </View>
-        <View style={{marginTop: verticalScale(64), alignSelf: 'flex-end'}}>
+        <View style={{flexDirection:'row',marginTop: verticalScale(64), justifyContent:'space-between'}}>
+        <HButton
+              label="Preview"
+              loading={prevLoad}
+              loadColor={CUSTOMCOLOR.primary}
+              onPress={handlePreview}
+              // onPress={createPDF}
+              btnstyles={{
+                backgroundColor: CUSTOMCOLOR.white,
+                borderWidth:0.5,
+                borderColor:CUSTOMCOLOR.borderColor
+              }}
+              textStyle={{
+                color: CUSTOMCOLOR.primary,
+              }}
+            />
           <HButton
             btnstyles={{
               backgroundColor:
@@ -412,7 +454,8 @@ const ReferToDoctor = () => {
             label="Share"
             type="addtype"
             size={moderateScale(24)}
-            onPress={createPDF}
+            loading = {loadind}
+            onPress={handlePDf}
           />
         </View>
       </ScrollView>

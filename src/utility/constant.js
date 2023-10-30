@@ -5,6 +5,9 @@ export const CONSTANTS = {
   dose_ml: ['5ml', '10ml', '15ml', '20ml'],
   timing: ['AF', 'BF'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
+  commoribities : [{commorbities:"sleep apnea"},{commorbities:"obesity"},{commorbities:"asthma"},{commorbities:"high blood pressure."}],
+  social:[{social:"smoking"},{social:"Drinking"}],
+  family:[{family:"Diabetics"},{family:"Cancer"},{family:"Arthritis"},{family:"Heart attack"}],
   Lab: [
     {
       micro_biology: 'Culture & Sensitivity(Blood)',

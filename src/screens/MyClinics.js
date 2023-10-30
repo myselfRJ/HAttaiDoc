@@ -310,7 +310,8 @@ const styles = StyleSheet.create({
   btnNext: {
     backgroundColor: CUSTOMCOLOR.primary,
     justifyContent: 'center',
-    marginHorizontal: moderateScale(56),
+    alignSelf:'center',
+    // marginHorizontal: moderateScale(56),
     borderRadius: moderateScale(10),
   },
   modalOverlay: {

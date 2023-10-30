@@ -764,11 +764,12 @@ const AddClinic = ({navigation}) => {
               label={Language[language]['phone_number']}
               placeholder="Enter clinic phone number"
               value={value.phone}
+              required={true}
               setValue={value => handleChangeValue('phone', value)}
-              doubleCheck={[true, false]}
-              maxLength={10}
+              // doubleCheck={[true, false]}
+              maxLength={15}
               numeric={true}
-              check={checkNumber}
+              // check={checkNumber}
               // check={e => {
               //   var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
               //   if (format.test(e)) {

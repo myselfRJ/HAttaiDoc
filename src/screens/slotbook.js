@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, FlatList, TouchableOpacity,Alert} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -482,7 +482,7 @@ const SlotBook = ({navigation, route}) => {
                     label="Book Slot"
                     //onPress={() => navigation.navigate('dashboard')}
                     onPress={() => {
-                      Appointment_Booking();
+                     selectedTypeAppointment ?  Appointment_Booking() : Alert.alert("Warn","Please Select Type Of Appointment")
                     }}
                     loading={loading}
                   />

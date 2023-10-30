@@ -108,24 +108,23 @@ const PatientCreate = ({navigation}) => {
     setModal(false);
   };
   const [value, setValue] = useState('');
-  const HandleInput = () => {
-    if (age) {
-      setValue(age);
-      setAge(age);
-    } else {
-      {
-        open && setValue(formattedDate);
-      }
-    }
-  };
-  useEffect(() => {
-    HandleInput();
-  }, [date, age]);
+  // const HandleInput = () => {
+  //   if (age) {
+  //     setValue(age);
+  //     setAge(age);
+  //   } else {
+  //     {
+  //       open && setValue(formattedDate);
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   HandleInput();
+  // }, [date, age]);
 
   const HandleCheck = () => {
-    if (value.length <= 3) {
+    if (value?.length>0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      console.log('current====>', `${current}-${'01'}-${'01'}`);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
       setFormatDate(formattedDate);
@@ -133,19 +132,22 @@ const PatientCreate = ({navigation}) => {
   };
   useEffect(() => {
     HandleCheck();
-  }, [value]);
+  }, [value,formattedDate]);
 
   const handleDate = () => {
-    setOpen(!open);
+    if (value?.length === 0){
+      setOpen(true);
+    }
   };
 
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
-    setValue(selectedDate);
+    setOpen(false)
+    // setValue(selectedDate);
   };
 
   const handleCancel = () => {
-    setOpen(open);
+    setOpen(false);
   };
   const dayOfBirth = date.toISOString().split('T')[0].split('-')[2];
   const dayOfMonth = date.toISOString().split('T')[0].split('-')[1];
@@ -227,6 +229,10 @@ const PatientCreate = ({navigation}) => {
   const ModalVisible = () => {
     setModal(true);
   };
+
+  // console.log("=====val",formattedDate,formatDate);
+
+  
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -334,14 +340,14 @@ const PatientCreate = ({navigation}) => {
                 selectContainer={{flex: 5, gap: verticalScale(4)}}
                 label={Language[language]['dob']}
                 name="calendar"
-                onPress={() => setOpen('to')}
-                input={formattedDate}
+                onPress={handleDate}
+                input={value ? "" : formattedDate}
                 style={styles.DOBselect}
               />
             </View>
             <DatePicker
               modal
-              open={open !== false}
+              open={open}
               date={date}
               theme="auto"
               mode="date"
@@ -480,8 +486,8 @@ const PatientCreate = ({navigation}) => {
             </View>
             <InputText
               required={true}
-              label="Address / Locality"
-              placeholder="Address or locality"
+              label="Address / Locality / Pincode"
+              placeholder="Address or locality or Pincode"
               value={address}
               setValue={setAddress}
             />

@@ -52,6 +52,7 @@ import MedicalHistory from '../screens/medicalhistory';
 import PhysicalExamination from '../screens/physicalExaminations';
 import ExaminationFindings from '../screens/Examinationfindings';
 import OthersFees from '../screens/OthersFees';
+import PdfView from '../screens/PdfPreview';
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
@@ -79,6 +80,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Clinics',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="pdf"
+        component={PdfView}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Preview',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

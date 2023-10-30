@@ -135,23 +135,23 @@ const ProfileCreate = ({navigation}) => {
     setValue(age);
   };
   const [value, setValue] = useState('');
-  const HandleInput = () => {
-    if (age) {
-      setValue(age);
-      setAge(age);
-    } else {
-      {
-        open && setValue(formattedDate);
-      }
-    }
-  };
-  useEffect(() => {
-    HandleInput();
-  }, [DOB, age]);
-  console.log('age===', formatDate);
+  // const HandleInput = () => {
+  //   if (age) {
+  //     // setValue(age);
+  //     setAge(age);
+  //   } else {
+  //     // {
+  //     //   open && setValue(formattedDate);
+  //     // }
+  //   }
+  // };
+  // useEffect(() => {
+  //   HandleInput();
+  // }, [DOB, age]);
+  console.log('age===', formatDate,formattedDate);
 
   const HandleCheck = () => {
-    if (value.length <= 3) {
+    if (value?.length>0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
@@ -160,9 +160,9 @@ const ProfileCreate = ({navigation}) => {
   };
   useEffect(() => {
     HandleCheck();
-  }, [value]);
+  }, [value,formattedDate]);
   const handleConfirm = date => {
-    setValue(date);
+    // setValue(date);
     setDOB(date);
     setOpen(false);
   };
@@ -320,6 +320,8 @@ const ProfileCreate = ({navigation}) => {
     disableBackButton();
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
+
+  console.log("======>value",value);
   return (
     <View style={styles.main}>
       <ProgresHeader progressData={progressData} />
@@ -422,14 +424,14 @@ const ProfileCreate = ({navigation}) => {
             selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
             label={Language[language]['dob']}
             name="calendar"
-            onPress={() => setOpen('to')}
-            input={formattedDate}
+            onPress={() => value ? null : setOpen(true)}
+            input={value ? "" : formattedDate}
             style={styles.DOBselect}
           />
         </View>
         <DatePicker
           modal
-          open={open !== false}
+          open={open}
           date={DOB}
           theme="auto"
           mode="date"
@@ -541,7 +543,7 @@ const ProfileCreate = ({navigation}) => {
             // borderWidth:1,
             zIndex:-1
           }}>
-          <Text style={styles.medtext}>Medical Document</Text>
+          <Text style={styles.medtext}>Medical Registration Document</Text>
           <View style={styles.doc_upload}>
             {selectedFilename ? (
               <View style={styles.selectedfilecontainer}>

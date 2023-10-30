@@ -15,6 +15,7 @@ import {
   moderateScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import PDFViewer from '../components/PdfViewer';
 
 const Tab = createBottomTabNavigator();
 

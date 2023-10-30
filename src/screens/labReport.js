@@ -131,8 +131,8 @@ const LabReports = () => {
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
-      <ScrollView
-      contentContainerStyle={{height:'50%'}}>
+      <ScrollView contentContainerStyle={{flex:1}}
+>
       
 
       
@@ -259,10 +259,11 @@ const LabReports = () => {
             style={{
              justifyContent:'flex-end',
              flex:1,
+             alignItems:'center'
               // marginTop: moderateScale(32),
             }}>
             <HButton
-              btnstyles={commonstyles.activebtn}
+              // btnstyles={commonstyles.activebtn}
               label={'Save'}
               onPress={() => {
                 handledata();
