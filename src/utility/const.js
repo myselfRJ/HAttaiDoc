@@ -2,9 +2,13 @@ export const CONSTANT = {
   DoctorRefer: ['Dr.Raju', 'Dr.Muthu', 'Dr.Chitti'],
   ConsultationList: [
     // {label: 'Reason for visit', icon: 'chevron-right', navigate: 'complaints'},
-   
+
     {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
-    {label: 'History Present Illness', icon: 'chevron-right', navigate: 'notescreen'},
+    {
+      label: 'History Present Illness',
+      icon: 'chevron-right',
+      navigate: 'notescreen',
+    },
     {
       label: 'Physical Examinations',
       icon: 'chevron-right',
@@ -20,7 +24,7 @@ export const CONSTANT = {
     {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
     {label: 'Test Prescribe', icon: 'chevron-right', navigate: 'labreport'},
     {
-      label: 'Examination Findings',
+      label: 'Report Findings',
       icon: 'chevron-right',
       navigate: 'findings',
     },
@@ -38,11 +42,11 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'refer',
     },
-    {
-      label: 'Doctor Signature',
-      icon: 'chevron-right',
-      navigate: 'valid',
-    },
+    // {
+    //   label: 'Doctor Signature',
+    //   icon: 'chevron-right',
+    //   navigate: 'valid',
+    // },
 
     {
       label: 'Additional Fees',

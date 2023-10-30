@@ -53,6 +53,7 @@ import PhysicalExamination from '../screens/physicalExaminations';
 import ExaminationFindings from '../screens/Examinationfindings';
 import OthersFees from '../screens/OthersFees';
 import PdfView from '../screens/PdfPreview';
+import PatientHistoryPdf from '../screens/PdfHistory';
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
@@ -108,11 +109,22 @@ const ProtectedRoute = () => {
         }}
       />
       <Stack.Screen
+        name="pdfhistory"
+        component={PatientHistoryPdf}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'History',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
         name="findings"
         component={ExaminationFindings}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Examination Findings',
+          title: 'Report Findings',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

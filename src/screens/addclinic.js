@@ -926,7 +926,7 @@ const AddClinic = ({navigation}) => {
                     <SelectorBtn
                       select={styles.select1}
                       label="Type"
-                      name="alpha-t-box"
+                      name="chevron-down"
                       onPress={() => {
                         slotTypeRef?.current?.snapToIndex(1);
                       }}
@@ -1034,22 +1034,22 @@ const AddClinic = ({navigation}) => {
                             fontSize: CUSTOMFONTSIZE.h4,
                           }}
                         />
-                       {slots.M.length > 0 ?(
-                         <HButton
-                         color={CUSTOMCOLOR.white}
-                         label="Add to All days"
-                         onPress={() => handleAddSlotCopyMonday()}
-                         btnstyles={{
-                           backgroundColor: CUSTOMCOLOR.primary,
-                           paddingHorizontal: horizontalScale(12),
-                           paddingVertical: verticalScale(8),
-                         }}
-                         textStyle={{
-                           color: CUSTOMCOLOR.white,
-                           fontSize: CUSTOMFONTSIZE.h4,
-                         }}
-                       />
-                       ):null}
+                        {slots.M.length > 0 ? (
+                          <HButton
+                            color={CUSTOMCOLOR.white}
+                            label="Add to All days"
+                            onPress={() => handleAddSlotCopyMonday()}
+                            btnstyles={{
+                              backgroundColor: CUSTOMCOLOR.primary,
+                              paddingHorizontal: horizontalScale(12),
+                              paddingVertical: verticalScale(8),
+                            }}
+                            textStyle={{
+                              color: CUSTOMCOLOR.white,
+                              fontSize: CUSTOMFONTSIZE.h4,
+                            }}
+                          />
+                        ) : null}
                       </View>
                     )}
                   </View>

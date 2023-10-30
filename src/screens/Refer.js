@@ -55,8 +55,8 @@ const ReferToDoctor = () => {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [filePath, setFilePath] = useState('');
-  const [loadind,setLoading] = useState(false)
-  const [prevLoad,setPrevLoad] = useState(false)
+  const [loadind, setLoading] = useState(false);
+  const [prevLoad, setPrevLoad] = useState(false);
   const [data, setData] = useState();
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -200,20 +200,20 @@ const ReferToDoctor = () => {
     };
 
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
         console.log('API Response:', responseData);
         handleAddDoctors();
         Alert.alert('', 'Successfully Send to Patient');
-        setLoading(false)
+        setLoading(false);
         nav.goBack();
       }
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('', 'Something went Wrong');
-      setLoading(false)
+      setLoading(false);
     }
   };
   const apiUrl = URL.refer_doc_pdf;
@@ -272,28 +272,27 @@ const ReferToDoctor = () => {
   };
 
   const handlePreview = async () => {
-    setPrevLoad(true)
-    console.log("========>",await isPermitted());
-   const path= "file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf"
-    createPDF()
-    if (await isPermitted()){
-      setTimeout(()=>{
-        nav.navigate('pdf', {path
+    setPrevLoad(true);
+    const doc_phone = data?.doctor_phone_number;
+    const appointment_id = patient_details?.appointment_id;
+    const patient_phone = patient_details?.patient_phone;
+    const prevScreen = 'refer';
+    const path =
+      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf';
+    createPDF();
+    if (await isPermitted()) {
+      setTimeout(() => {
+        nav.navigate('pdf', {
+          path,
+          doc_phone,
+          appointment_id,
+          patient_phone,
+          prevScreen,
         });
-        setPrevLoad(false)
-      },3000)
+        setPrevLoad(false);
+      }, 1500);
     }
-    
   };
-
-  const handlePDf = async() => {
-    createPDF()
-   if (await isPermitted()){
-    setTimeout(()=>{
-      handle()
-     },1100)
-   }
-  }
 
   return (
     <View style={styles.main}>
@@ -427,22 +426,27 @@ const ReferToDoctor = () => {
             }}
           />
         </View>
-        <View style={{flexDirection:'row',marginTop: verticalScale(64), justifyContent:'space-between'}}>
-        <HButton
-              label="Preview"
-              loading={prevLoad}
-              loadColor={CUSTOMCOLOR.primary}
-              onPress={handlePreview}
-              // onPress={createPDF}
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-                borderWidth:0.5,
-                borderColor:CUSTOMCOLOR.borderColor
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-              }}
-            />
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: verticalScale(64),
+            justifyContent: 'flex-end',
+          }}>
+          {/* <HButton
+            label="Preview"
+            loading={prevLoad}
+            loadColor={CUSTOMCOLOR.primary}
+            onPress={handlePreview}
+            // onPress={createPDF}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderWidth: 0.5,
+              borderColor: CUSTOMCOLOR.borderColor,
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.primary,
+            }}
+          /> */}
           <HButton
             btnstyles={{
               backgroundColor:
@@ -454,8 +458,10 @@ const ReferToDoctor = () => {
             label="Share"
             type="addtype"
             size={moderateScale(24)}
-            loading = {loadind}
-            onPress={handlePDf}
+            loading={prevLoad}
+            onPress={
+              selected && name && speciality && phone ? handlePreview : null
+            }
           />
         </View>
       </ScrollView>

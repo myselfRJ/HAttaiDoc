@@ -371,7 +371,9 @@ const AddUser = ({navigation}) => {
           onPress={() => navigation.goBack()}
         />
       </View>
-      <Text style={commonstyles.h1}>Add User</Text>
+      <Text style={commonstyles.h1}>
+        {id !== undefined ? 'Update Admin' : 'Add Admin'}
+      </Text>
       {/* )} */}
       <ScrollView contentContainerStyle={styles.container}>
         <Keyboardhidecontainer>
@@ -431,7 +433,7 @@ const AddUser = ({navigation}) => {
               <SelectorBtn
                 required={true}
                 label="Role"
-                name= {show == true ? "chevron-up" :"chevron-down"}
+                name={show == true ? 'chevron-up' : 'chevron-down'}
                 // onPress={toggleModal}
                 onPress={() => {
                   setShow(!show);
@@ -493,7 +495,7 @@ const AddUser = ({navigation}) => {
               <SelectorBtn
                 required={true}
                 label="Clinic"
-                name= {showclinic == true ? "chevron-up" :"chevron-down"} 
+                name={showclinic == true ? 'chevron-up' : 'chevron-down'}
                 // onPress={toggleModal}
                 onPress={() => {
                   setShowclinic(!showclinic);
@@ -821,12 +823,12 @@ const styles = StyleSheet.create({
   },
   rolemenu: {
     backgroundColor: CUSTOMCOLOR.white,
-    borderRadius:moderateScale(4),
-    bottom:verticalScale(8),
+    borderRadius: moderateScale(4),
+    bottom: verticalScale(8),
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(24),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   txt: {
     color: CUSTOMCOLOR.black,

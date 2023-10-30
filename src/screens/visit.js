@@ -36,28 +36,8 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import Prescribe1 from './prescibe1';
-import {updatePrescribe1} from '../redux/features/prescription/prescr';
-import {updateSymptom} from '../redux/features/prescription/symptomslice';
-import {updateDate} from '../redux/features/prescription/Followupslice';
-import {updateCommorbities} from '../redux/features/prescription/commorbities';
-import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
-import {updatepastHistory} from '../redux/features/prescription/pastHistory';
-import {updateLabReport} from '../redux/features/prescription/labreport';
-import {updateAllergies} from '../redux/features/prescription/allergies';
-import {updateValid} from '../redux/features/prescription/valid';
+
 import {
-  updatecommorbidities,
-  updatefamilyHistory,
-  updatemedicationHistory,
-  updatemenstrualHistory,
-  updateobstericHistory,
-  updatepastHospitalization,
-  updatesocialHistory,
-} from '../redux/features/prescription/pastHistory';
-import {
-  addVitals,
-  UpdateNote,
-  UpdateDoctorRefer,
   UpadteVitals,
   UpadateCheifComplaint,
   addCheifComplaint,
@@ -69,8 +49,8 @@ import PDFViewer from '../components/PdfViewer';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
-  const [show,setShow] = useState(false)
-const [prevLoad,setPrevLoad] = useState(false)
+  const [show, setShow] = useState(false);
+  const [prevLoad, setPrevLoad] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -94,7 +74,6 @@ const [prevLoad,setPrevLoad] = useState(false)
 
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
-  const [apiStatus, setApiStatus] = useState({});
 
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
@@ -129,8 +108,6 @@ const [prevLoad,setPrevLoad] = useState(false)
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
 
-
-  
   const [patient_data, setPatientData] = useState();
   const {
     consultation_fees,
@@ -160,137 +137,44 @@ const [prevLoad,setPrevLoad] = useState(false)
   }, []);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
-  const ResetRuduxState = () => {
-    const newPrescribe = [];
-    const newSymptoms = [];
-    const newDiagnosis = [];
-    const newLabhistory = [];
-    const newCommorbities = [];
-    const newAllregies = [];
-    const commorbidities = [];
-    const social = [];
-    const family = [];
-
-    const hospitalization = '';
-
-    const medicationHistory = '';
-    const menstrualHistory = '';
-    const obstericHistory = '';
-    const newDate = {
-      date: '',
-    };
-    const newValid = {
-      valid: '',
-    };
-    const newVitals = {};
-    const newDoctor = [];
-    const newComplaint = '';
-    const newNote = '';
-    dispatch(updatesocialHistory(social));
-    dispatch(updatefamilyHistory(family));
-    dispatch(updatepastHospitalization(hospitalization));
-    dispatch(updatemedicationHistory(medicationHistory));
-    dispatch(updatemenstrualHistory(menstrualHistory));
-    dispatch(updateobstericHistory(obstericHistory));
-    dispatch(updatePrescribe1(newPrescribe));
-    dispatch(updateAllergies(newAllregies));
-    dispatch(updateCommorbities(newCommorbities));
-    dispatch(updateDiagnosis(newDiagnosis));
-    dispatch(updateLabReport(newLabhistory));
-    dispatch(updateSymptom(newSymptoms));
-    dispatch(updateDate(newDate?.date));
-    dispatch(updateValid(newValid?.valid));
-    dispatch(UpadteVitals(newVitals));
-    dispatch(UpdateNote(newNote));
-    dispatch(UpdateDoctorRefer(newDoctor));
-    dispatch(UpadateCheifComplaint(newComplaint));
-    dispatch(updatecommorbidities(commorbidities));
-  };
-
   useEffect(() => {
     dispatch(addCheifComplaint(complaint));
   }, []);
 
   const [chief_complaint, setComplaint] = useState('');
   const [vitals, setVitals] = useState({});
-  const fetchData = async () => {
-    const consultationData = {
-      prescribe: Prescribe,
+  const consultationData = {
+    prescribe: Prescribe,
 
-      symptoms: Symptom,
+    symptoms: Symptom,
 
-      chief_complaint: chief_complaint ? {} : selectedComplaint,
-      vitals: vitals ? {} : vitalsData,
-      refer_to_doctor: selectedDoctor,
-      // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
-      follow_up: date,
-      note: note,
-      diagnosis: diagnosis,
-      labReports: labreport,
-      // commoribities: commorbities,
-      allergies: allergies,
-      pastHistory: {
-        past_history: JSON.stringify(hospitalization),
-        commoribities: JSON.stringify(commor),
-        social_history: JSON.stringify(socialHistory),
-        family_history: JSON.stringify(familyHistory),
-        medication_history: JSON.stringify(medicationHistory),
-        mensutral_history: JSON.stringify(menstrualHistory),
-        obsteric_history: JSON.stringify(obstericHistory),
-      },
+    chief_complaint: chief_complaint ? {} : selectedComplaint,
+    vitals: vitals ? {} : vitalsData,
+    refer_to_doctor: selectedDoctor,
+    // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
+    follow_up: date,
+    note: note,
+    diagnosis: diagnosis,
+    labReports: labreport,
+    // commoribities: commorbities,
+    allergies: allergies,
+    pastHistory: {
+      past_history: JSON.stringify(hospitalization),
+      commoribities: JSON.stringify(commor),
+      social_history: JSON.stringify(socialHistory),
+      family_history: JSON.stringify(familyHistory),
+      medication_history: JSON.stringify(medicationHistory),
+      mensutral_history: JSON.stringify(menstrualHistory),
+      obsteric_history: JSON.stringify(obstericHistory),
+    },
 
-      meta_data: {
-        patient_phone_number: patient_phone,
-        doctor_phone_number: phone,
-        clinic_id: Clinic_id,
-        appointment_id: appointment_id,
-      },
-    };
-    try {
-      setLoading(true);
-      const response = await fetchApi(URL.savePrescription, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-        if (jsonData?.status === 'success') {
-          setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
-          
-          // Prescribe.splice(0,Prescribe.length)
-          ResetRuduxState();
-          setTimeout(() => {
-            navigation.navigate('tab');
-          }, 1000);
-
-          setLoading(false);
-          // setTimeout(() => {
-          //   SuccesRef?.current?.snapToIndex(0);
-          // }, 1500);
-        } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
-          console.error('API call failed:', response.status, response);
-          setLoading(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
-      setLoading(false);
-    }
+    meta_data: {
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
+    },
   };
-
-  const SuccesRef = useRef(null);
-
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
 
   const [data, setData] = useState();
 
@@ -313,91 +197,55 @@ const [prevLoad,setPrevLoad] = useState(false)
   }, []);
 
   const handlePreview = async () => {
-    setPrevLoad(true)
-    const patient_phone_number = patient_phone;
-    const patient_name = patient_name;
-    const gender = gende;
-    const patient_age = age;
-   const path= "file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf"
-    // navigation.navigate('prescription', {
-    //   name,
-    //   gender,
-    //   patient_age,
-    //   patient_phone_number,
-    // });
-    createPDF()
-    if(await isPermitted()){
-      setTimeout(()=>{
-        navigation.navigate('pdf', {path
+    const prevScreen = 'visit';
+    const doc_phone = data?.doctor_phone_number;
+    setPrevLoad(true);
+    const path =
+      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
+    createPDF();
+    if (await isPermitted()) {
+      setTimeout(() => {
+        navigation.navigate('pdf', {
+          path,
+          consultationData,
+          UpdateVitals,
+          UpdateComplaint,
+          appointment_id,
+          doc_phone,
+          patient_phone,
+          prevScreen,
         });
-        setPrevLoad(false)
-      },3000)
+        setPrevLoad(false);
+      }, 1000);
     }
   };
 
-  const putVitals = async () => {
-    const consultationData = {
-      pulse_rate: vitalsData?.pulse_rate,
-      weight: vitalsData?.weight,
-      height: vitalsData?.height,
-      body_temperature: vitalsData?.body_temperature,
-      rate: vitalsData?.rate,
-      diastolic: vitalsData?.diastolic,
-      systolic: vitalsData?.systolic,
-      EDD: vitalsData?.EDD,
-      LDD: vitalsData?.LDD,
-      bmi: vitalsData?.bmi,
-      patient_phone_number: patient_phone,
-      doctor_phone_number: phone,
-      clinic_id: Clinic_id,
-      appointment_id: appointment_id,
-    };
-    try {
-      const response = await fetchApi(URL.updatevitlas(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
+  useEffect(() => {
+    isPermitted();
+  }, []);
+  const UpdateVitals = {
+    pulse_rate: vitalsData?.pulse_rate,
+    weight: vitalsData?.weight,
+    height: vitalsData?.height,
+    body_temperature: vitalsData?.body_temperature,
+    rate: vitalsData?.rate,
+    diastolic: vitalsData?.diastolic,
+    systolic: vitalsData?.systolic,
+    EDD: vitalsData?.EDD,
+    LDD: vitalsData?.LDD,
+    bmi: vitalsData?.bmi,
+    patient_phone_number: patient_phone,
+    doctor_phone_number: phone,
+    clinic_id: Clinic_id,
+    appointment_id: appointment_id,
   };
 
-  const putComplaint = async () => {
-    const consultationData = {
-      complaint_message: selectedComplaint,
-      patient_phone_number: patient_phone,
-      doctor_phone_number: phone,
-      clinic_id: Clinic_id,
-      appointment_id: appointment_id,
-    };
-    try {
-      const response = await fetchApi(URL.updateComplaints(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
+  const UpdateComplaint = {
+    complaint_message: selectedComplaint,
+    patient_phone_number: patient_phone,
+    doctor_phone_number: phone,
+    clinic_id: Clinic_id,
+    appointment_id: appointment_id,
   };
 
   const fetchComplaint = async () => {
@@ -470,10 +318,14 @@ const [prevLoad,setPrevLoad] = useState(false)
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   const logo_url = `data:image/png;base64,${logo}`;
   const sign = useSelector(state => state?.sign?.sign);
-  const Sign_base64 = sign
-    ? `data:image/jpeg;base64,${sign}`
-    : data?.doctor_name;
-
+  // const Sign_base64 = sign
+  //   ? `data:image/jpeg;base64,${sign}`
+  //   : data?.doctor_name;
+  const Sign_base64 = `${data?.doctor_name}`;
+  // useEffect(() => {
+  //   createPDF();
+  // });
+  console.log('name==>', Sign_base64);
   const createPDF = async () => {
     if (await isPermitted()) {
       // setPrevLoad(!prevLoad)
@@ -500,7 +352,9 @@ const [prevLoad,setPrevLoad] = useState(false)
                         flex-direction: row;
                         border-bottom:1px #4ba5fa solid;">
                             <img id='img' src=${
-                              logo === CONSTANTS.default_image ? CONSTANTS.default_clinic_logo : logo_url
+                              logo === CONSTANTS.default_image
+                                ? CONSTANTS.default_clinic_logo
+                                : logo_url
                             } style="width: 52px;height: 58px;" alt="Sample Image"/>
                             <div class='address' style="   display: flex;
                             margin-right: 0px;
@@ -564,8 +418,9 @@ const [prevLoad,setPrevLoad] = useState(false)
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
                         </div>
-                        ${Symptom?.length>0 ? (
-                          `<div class='subContaioner'  style="  display: flex;
+                        ${
+                          Symptom?.length > 0
+                            ? `<div class='subContaioner'  style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -578,8 +433,16 @@ const [prevLoad,setPrevLoad] = useState(false)
                                 item => item?.symptom,
                               )}</p>
                           </div>`
-                        ):""}
-                        ${(vitalsData?.pulse_rate || vitalsData?.weight || vitalsData?.height || vitalsData?.body_temperature || vitalsData?.rate || vitalsData?.bmi)? (`
+                            : ''
+                        }
+                        ${
+                          vitalsData?.pulse_rate ||
+                          vitalsData?.weight ||
+                          vitalsData?.height ||
+                          vitalsData?.body_temperature ||
+                          vitalsData?.rate ||
+                          vitalsData?.bmi
+                            ? `
                         <div >
                         <p id='subhead' style="font-weight: 400px;
                         font-size: 16px;
@@ -643,10 +506,13 @@ const [prevLoad,setPrevLoad] = useState(false)
                             }</p>
                         </div>
                     </div>
-                        `):""}
+                        `
+                            : ''
+                        }
                        
-                       ${diagnosis?.length>0 ? (
-                        ` <div class='subContaioner' style="  display: flex;
+                       ${
+                         diagnosis?.length > 0
+                           ? ` <div class='subContaioner' style="  display: flex;
                         flex-direction: row;
                         gap: 8px;
                         line-height:4px;">
@@ -659,7 +525,8 @@ const [prevLoad,setPrevLoad] = useState(false)
                               item => item?.diagnosis,
                             )}</p>
                         </div>`
-                       ):""}
+                           : ''
+                       }
                     </div>
                     <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
@@ -675,21 +542,39 @@ const [prevLoad,setPrevLoad] = useState(false)
                     <th style=" padding: 8px; text-align: center;">Duration</th>
                     <th style=" padding: 8px; text-align: center;">Quantity</th>
                 </tr>
-                ${prescribe?.map((item,index)=>(
-                  `<tr>
-                  <td style="padding: 8px; text-align: center;font-size:16x;">${parseInt(index) + 1}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x;">${item.mode}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${item?.medicine}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.dose_quantity ? item?.dose_quantity : "-"}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.timing}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.frequency}</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.duration} days</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.total_quantity}</td>
-              </tr>`
-                ))}
+                ${prescribe?.map(
+                  (item, index) =>
+                    `<tr>
+                  <td style="padding: 8px; text-align: center;font-size:16x;">${
+                    parseInt(index) + 1
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x;">${
+                    item.mode
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
+                    item?.medicine
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.dose_quantity ? item?.dose_quantity : '-'
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.timing
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.frequency
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.duration
+                  } days</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.total_quantity
+                  }</td>
+              </tr>`,
+                )}
             </table>
-                   ${note?.length>0 ? (
-                    ` <div class='subContaioner' style="  display: flex;
+                   ${
+                     note?.length > 0
+                       ? ` <div class='subContaioner' style="  display: flex;
                     flex-direction: row;
                     gap: 8px;
                     line-height:4px;">
@@ -700,10 +585,12 @@ const [prevLoad,setPrevLoad] = useState(false)
                             font-size: 16px;
                             color:#000000;">${note}</p>
                         </div>`
-                   ):""}
+                       : ''
+                   }
         
-                       ${selectedDoctor?.length ? (
-                        ` <div >
+                       ${
+                         selectedDoctor?.length
+                           ? ` <div >
                         <p id='subhead' style="font-weight: 400px;
                         font-size: 16px;
                         color:#4ba5fa;">Refer a Doctor:</p>
@@ -721,7 +608,11 @@ const [prevLoad,setPrevLoad] = useState(false)
                             color:#000000;">Name:</p>
                             <p id='values' style="  font-weight: 500;
                             font-size: 16px;
-                            color:#000000;">${item?.dr_name?.length>0? `Dr.${item?.dr_name},${item?.doctor_or_name}`: `Dr.${item?.doctor_or_name}`}</p>
+                            color:#000000;">${
+                              item?.dr_name?.length > 0
+                                ? `Dr.${item?.dr_name},${item?.doctor_or_name}`
+                                : `Dr.${item?.doctor_or_name}`
+                            }</p>
                             <p id='values1' style="  font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Specialist:</p>
@@ -734,12 +625,14 @@ const [prevLoad,setPrevLoad] = useState(false)
                             <p id='values' style="  font-weight: 500;
                             font-size: 16px;
                             color:#000000;">${item?.phone}</p>
-                        </div>`
+                        </div>`,
                         )}
                     </div>`
-                       ):""}
-                        ${labreport?.length >0 ? (
-                          `<div class='subContaioner' style="  display: flex;
+                           : ''
+                       }
+                        ${
+                          labreport?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -752,9 +645,11 @@ const [prevLoad,setPrevLoad] = useState(false)
                                 (item, ind) => item?.lab_test,
                               )}</p>
                           </div>`
-                        ):""}
-                        ${date?.length >0 ? (
-                          `<div class='subContaioner' style="  display: flex;
+                            : ''
+                        }
+                        ${
+                          date?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -765,24 +660,11 @@ const [prevLoad,setPrevLoad] = useState(false)
                               font-size: 16px;
                               color:#000000;">${date}</p>
                           </div>`
-                        ):""}
-                        <div class='sign' style="  display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                line-height: 4px;">
-                    <div>
-                    <p id='values1' style="  font-weight: 500;
-                    font-size: 16px;
-                    color:#000000;margin: 0px;">Signature</p>
-                    <img  id='foot' src=${
-                      Sign_base64
-                    } style="margin-top: 6px;
-                    width: 87px;
-                    height: 20px;"/>
-                    </div>
-                </div>
-                        ${dateTimeRed?.length>0 ? (
-                          `<div class='subContaioner' style="  display: flex;
+                            : ''
+                        }
+                        ${
+                          dateTimeRed?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -793,8 +675,9 @@ const [prevLoad,setPrevLoad] = useState(false)
                               font-size: 16px;
                               color:#000000;">${dateTimeRed}</p>
                           </div>`
-                        ):""}
-                        <div class='desc' style=" display: flex;
+                            : ''
+                        }
+                        <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
                         margin-top: 84px;">
@@ -821,7 +704,7 @@ const [prevLoad,setPrevLoad] = useState(false)
                             justify-content: center;
                             line-height: 4px;">immediately and consult your doctor or nearest hospital</p>
                         </div>
-                        </div>
+                        </footer>
                     <div>
                         <img  id='foot' src=${
                           CONSTANTS.pdf_footer
@@ -843,47 +726,13 @@ const [prevLoad,setPrevLoad] = useState(false)
     }
   };
 
-  const handlePDf = async() => {
-    createPDF()
-   if (await isPermitted()){
-    setTimeout(()=>{
-      handle()
-     },1100)
-   }
-  }
-  const postData = async url => {
-    const formData = new FormData();
-    formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
-    formData.append('patient_phone_number', `${patient_phone}`);
-    formData.append('clinic_id', `${Clinic_id}`);
-    formData.append('appointment_id', `${appointment_id}`);
-    formData.append('file_url', {
-      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
-      type: 'application/pdf',
-      name: `${patient_phone}.pdf`,
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    };
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.json();
-      console.log('API Response:', responseData);
-    } catch (error) {
-      console.error('Error:', error);
+  const handlePDf = async () => {
+    createPDF();
+    if (await isPermitted()) {
+      setTimeout(() => {
+        handle();
+      }, 3000);
     }
-  };
-  const apiUrl = URL.uploadPDF;
-
-  const handle = () => {
-    postData(apiUrl);
   };
 
   return (
@@ -1486,10 +1335,10 @@ const [prevLoad,setPrevLoad] = useState(false)
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
               paddingHorizontal: horizontalScale(24),
             }}>
-            <HButton
+            {/* <HButton
               label="Preview"
               loading={prevLoad}
               loadColor={CUSTOMCOLOR.primary}
@@ -1501,28 +1350,17 @@ const [prevLoad,setPrevLoad] = useState(false)
               textStyle={{
                 color: CUSTOMCOLOR.primary,
               }}
-            />
+            /> */}
             <HButton
               label="Save"
               onPress={() => {
-                handlePDf()
-                putVitals();
-                putComplaint();
-                fetchData();
-                
-                
+                handlePreview();
               }}
-              loading={loading}
+              loading={prevLoad}
             />
           </View>
         </View>
       </ScrollView>
-      <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
     </View>
   );
 };

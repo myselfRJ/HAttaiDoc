@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, FlatList, TouchableOpacity,Alert} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -40,7 +47,7 @@ const SlotBook = ({navigation, route}) => {
   const [selected, setSelected] = useState('');
   const [show, setShow] = useState(false);
   const [complaint, setComplaint] = useState('');
-  const [token_id,setTokenID] = useState('')
+  const [token_id, setTokenID] = useState('');
 
   const [bookedSlots, setData] = useState([]);
 
@@ -49,9 +56,7 @@ const SlotBook = ({navigation, route}) => {
 
   const selections = CONSTANTS.selections;
 
-  const [selectedTypeAppointment, setSelectedTypeAppointment] = useState(
-  
-  );
+  const [selectedTypeAppointment, setSelectedTypeAppointment] = useState();
 
   const [selectedMode, setSelectedMode] = useState('offline');
 
@@ -63,9 +68,9 @@ const SlotBook = ({navigation, route}) => {
     setFee(value);
   };
 
-  const handleSelectSlot = (value,id) => {
+  const handleSelectSlot = (value, id) => {
     setSelectedSlot(value);
-    setTokenID(id)
+    setTokenID(id);
   };
 
   const handleSelectType = value => {
@@ -187,48 +192,52 @@ const SlotBook = ({navigation, route}) => {
         // if (!bookedSlot.includes(slot)) {
         //   if (formatDate === Today) {
         //     if (startTime >= PresentTime) {
-              timeList.push({
-                slot: slot,
-                duration: item.duration,
-              });
-            // }
-      //     } else {
-      //       timeList.push({
-      //         slot: slot,
-      //         duration: item.duration,
-      //       });
-      //     }
-      //   }
-      // }
-            }}
-    );
+        timeList.push({
+          slot: slot,
+          duration: item.duration,
+        });
+        // }
+        //     } else {
+        //       timeList.push({
+        //         slot: slot,
+        //         duration: item.duration,
+        //       });
+        //     }
+        //   }
+        // }
+      }
+    });
     return timeList;
   };
   let list = getTimeList(slotDetails?.[Day]);
   const token = useSelector(state => state.authenticate.auth.access);
 
-  const renderItems = ({item,index}) => {
+  const renderItems = ({item, index}) => {
     const Today = moment(new Date()).format('YYYY-MM-DD');
-        const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
-        const startTime = item?.slot?.split("-")[0]?.toString()
+    const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
+    const startTime = item?.slot?.split('-')[0]?.toString();
     const bookedSlot = bookedSlots;
 
     return (
       <View key={item.id} style={styles.item}>
-        {!bookedSlot?.includes(item?.slot) && (formatDate !== Today || startTime>= PresentTime) ? 
-        <SelectionTab
-       id={(parseInt(index) + 1).toString().padStart(2, '0')}
-          label={item?.slot}
-          onPress={() => handleSelectSlot(item,parseInt(index)+1)}
-          selected={selectedSlot?.slot === item?.slot}
-        />:<SelectionTab
-        selectContainer={{backgroundColor:CUSTOMCOLOR.disable}}
-        text={{color:CUSTOMCOLOR.white}}
-        id={(parseInt(index) + 1).toString().padStart(2, '0')}
-          label={item?.slot}
-          // onPress={() => handleSelectSlot(item)}
-          // selected={selectedSlot?.slot === item?.slot}
-        />}
+        {!bookedSlot?.includes(item?.slot) &&
+        (formatDate !== Today || startTime >= PresentTime) ? (
+          <SelectionTab
+            id={(parseInt(index) + 1).toString().padStart(2, '0')}
+            label={item?.slot}
+            onPress={() => handleSelectSlot(item, parseInt(index) + 1)}
+            selected={selectedSlot?.slot === item?.slot}
+          />
+        ) : (
+          <SelectionTab
+            selectContainer={{backgroundColor: CUSTOMCOLOR.disable}}
+            text={{color: CUSTOMCOLOR.white}}
+            id={(parseInt(index) + 1).toString().padStart(2, '0')}
+            label={item?.slot}
+            // onPress={() => handleSelectSlot(item)}
+            // selected={selectedSlot?.slot === item?.slot}
+          />
+        )}
       </View>
     );
   };
@@ -258,8 +267,8 @@ const SlotBook = ({navigation, route}) => {
         body: JSON.stringify({
           appointment_date: formatDate,
           mode_of_consultation: selectedMode,
-          appointment_type: selectedTypeAppointment,
-          appointment_token:token_id.toString(),
+          appointment_type: selectedTypeAppointment?.toLowerCase(),
+          appointment_token: token_id.toString(),
           appointment_slot: selectedSlot?.slot,
           clinic_id: Clinic_id,
           complaint: complaint,
@@ -274,7 +283,7 @@ const SlotBook = ({navigation, route}) => {
             start: today + selectedSlot?.slot.split('-')[0] + ':00Z',
             end: today + selectedSlot?.slot.split('-')[1] + ':00Z',
             speciality: speciality,
-            type: selectedTypeAppointment,
+            type: selectedTypeAppointment?.toLowerCase(),
           },
         }),
       });
@@ -360,140 +369,142 @@ const SlotBook = ({navigation, route}) => {
 
   return (
     <View style={styles.main}>
-      <ScrollView>
-        <View style={styles.child}>
-          <SelectorBtn
-            label="Date"
-            name="calendar"
-            onPress={() => setOpen('to')}
-            input={formatDate}
+      <View style={{gap: verticalScale(8)}}>
+        <SelectorBtn
+          label="Date"
+          name="calendar"
+          onPress={() => setOpen('to')}
+          input={formatDate}
+        />
+        <DatePicker
+          modal
+          open={open !== false}
+          date={date}
+          theme="auto"
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+        <View style={{zIndex: 2}}>
+          <InputText
+            required={true}
+            label="Reason for Visit"
+            placeholder="Chief complaint / Purpose"
+            value={complaint}
+            setValue={setComplaint}
+            multiline={true}
+            search={true}
+            IconName={
+              (show && filtered.length > 0) ||
+              complaint === selected ||
+              complaint.length === 0
+                ? 'magnify'
+                : 'close'
+            }
+            onPress={() => setShow(!show)}
           />
-          <DatePicker
-            modal
-            open={open !== false}
-            date={date}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-          />
-          <View style={{zIndex: 2}}>
-            <InputText
-              required={true}
-              label="Reason for Visit"
-              placeholder="Chief complaint / Purpose"
-              value={complaint}
-              setValue={setComplaint}
-              multiline={true}
-              search={true}
-              IconName={
-                (show && filtered.length > 0) ||
-                complaint === selected ||
-                complaint.length === 0
-                  ? 'magnify'
-                  : 'close'
-              }
-              onPress={() => setShow(!show)}
-            />
-            {complaint.length >= 4 &&
-              (complaint === selected || show ? null : (
-                <View style={styles.dropdownContainer}>
-                  <ScrollView>
-                    {filtered?.map((val, index) => (
-                      <TouchableOpacity
-                        style={styles.touch}
-                        onPress={() => HandlePress(val?.term)}>
-                        <Text
-                          style={{
-                            fontSize: CUSTOMFONTSIZE.h3,
-                            padding: moderateScale(10),
-                            color: CUSTOMCOLOR.black,
-                          }}
-                          key={index}>
-                          {val.term}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              ))}
-          </View>
-
-          <View style={styles.type}>
-            <Option
-              label="Offline"
-              value="Offline"
-              selected={selectedMode === 'offline'}
-              onPress={() => handleOptions('offline')}
-            />
-            <Option
-              label="TelePhonic"
-              value="TelePhonic"
-              selected={selectedMode === 'TelePhonic'}
-              onPress={() => handleOptions('TelePhonic')}
-            />
-          </View>
-          <View style={styles.selection}>
-            {selections?.map((val, ind) => (
-              <View key={ind}>
-                <SelectionTab
-                  label={val}
-                  onPress={() => handleSelectType(val)}
-                  selected={selectedTypeAppointment === val}
-                />
+          {complaint.length >= 4 &&
+            (complaint === selected || show ? null : (
+              <View style={styles.dropdownContainer}>
+                <ScrollView>
+                  {filtered?.map((val, index) => (
+                    <TouchableOpacity
+                      style={styles.touch}
+                      onPress={() => HandlePress(val?.term)}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h3,
+                          padding: moderateScale(10),
+                          color: CUSTOMCOLOR.black,
+                        }}
+                        key={index}>
+                        {val.term}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </View>
             ))}
-          </View>
-          <View>
-            <Text
-              style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
-              Fees
-            </Text>
-            <View style={styles.type}>
-              <Option
-                label="UnPaid"
-                value={false}
-                selected={fee === false}
-                onPress={() => handleFee(false)}
-              />
-              <Option
-                label="Paid"
-                value={true}
-                selected={fee === true}
-                onPress={() => handleFee(true)}
+        </View>
+
+        <View style={styles.type}>
+          <Option
+            label="Offline"
+            value="Offline"
+            selected={selectedMode === 'offline'}
+            onPress={() => handleOptions('offline')}
+          />
+          <Option
+            label="TelePhonic"
+            value="TelePhonic"
+            selected={selectedMode === 'TelePhonic'}
+            onPress={() => handleOptions('TelePhonic')}
+          />
+        </View>
+        <View style={styles.selection}>
+          {selections?.map((val, ind) => (
+            <View key={ind}>
+              <SelectionTab
+                label={val}
+                onPress={() => handleSelectType(val)}
+                selected={selectedTypeAppointment === val}
               />
             </View>
-          </View>
-
-          <View style={styles.child}>
-            {list.length > 0 ? (
-              <>
-                <View>
-                  <Text style={styles.h2}>Available Slots</Text>
-                  <FlatList
-                   
-                    data={list}
-                    renderItem={renderItems}
-                    numColumns={4}
-                  />
-                </View>
-                <View style={styles.btn}>
-                  <HButton
-                    label="Book Slot"
-                    //onPress={() => navigation.navigate('dashboard')}
-                    onPress={() => {
-                     selectedTypeAppointment ?  Appointment_Booking() : Alert.alert("Warn","Please Select Type Of Appointment")
-                    }}
-                    loading={loading}
-                  />
-                </View>
-              </>
-            ) : (
-              <CustomIcon label="No Slots Available" />
-            )}
+          ))}
+        </View>
+        <View>
+          <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
+            Fees
+          </Text>
+          <View style={styles.type}>
+            <Option
+              label="UnPaid"
+              value={false}
+              selected={fee === false}
+              onPress={() => handleFee(false)}
+            />
+            <Option
+              label="Paid"
+              value={true}
+              selected={fee === true}
+              onPress={() => handleFee(true)}
+            />
           </View>
         </View>
-      </ScrollView>
+
+        <View style={styles.child}>
+          {list.length > 0 ? (
+            <>
+              <View>
+                <Text style={styles.h2}>Available Slots</Text>
+                <FlatList
+                  style={{height: verticalScale(500)}}
+                  data={list}
+                  renderItem={renderItems}
+                  numColumns={4}
+                />
+              </View>
+              <View style={styles.btn}>
+                <HButton
+                  label="Book Slot"
+                  //onPress={() => navigation.navigate('dashboard')}
+                  onPress={() => {
+                    selectedTypeAppointment
+                      ? Appointment_Booking()
+                      : Alert.alert(
+                          'Warn',
+                          'Please Select Type Of Appointment',
+                        );
+                  }}
+                  loading={loading}
+                />
+              </View>
+            </>
+          ) : (
+            <CustomIcon label="No Slots Available" />
+          )}
+        </View>
+      </View>
       <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
@@ -565,13 +576,13 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     position: 'absolute',
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary,
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
     left: 0,
     top: verticalScale(80),
     width: '100%',
     backgroundColor: CUSTOMCOLOR.white,
-    height:verticalScale(300)
+    height: verticalScale(300),
   },
   touch: {
     paddingHorizontal: horizontalScale(8),
