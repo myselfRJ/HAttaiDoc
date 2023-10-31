@@ -61,8 +61,8 @@ const PatientCreate = ({navigation}) => {
   const [birth_date, setBirth_date] = useState('');
   const [age, setAge] = useState('');
   const [blood_group, setBlood_group] = useState('');
-  const [find,Setfind] = useState('')
-  const [refer,setRefer] = useState('')
+  const [find, Setfind] = useState('');
+  const [refer, setRefer] = useState('');
   const [spouse_name, setSpouse_nmae] = useState('');
   const [ABHA_ID, setABHA_ID] = useState('');
   const [aadhar_no, setAadhar_no] = useState('');
@@ -123,7 +123,7 @@ const PatientCreate = ({navigation}) => {
   // }, [date, age]);
 
   const HandleCheck = () => {
-    if (value?.length>0 && value.length <= 3) {
+    if (value?.length > 0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
@@ -132,17 +132,18 @@ const PatientCreate = ({navigation}) => {
   };
   useEffect(() => {
     HandleCheck();
-  }, [value,formattedDate]);
+  }, [value, formattedDate]);
 
   const handleDate = () => {
-    if (value?.length === 0){
+    if (value?.length === 0) {
       setOpen(true);
     }
   };
-
+  const [hide, setHide] = useState(false);
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
-    setOpen(false)
+    setOpen(false);
+    setHide(true);
     // setValue(selectedDate);
   };
 
@@ -232,7 +233,6 @@ const PatientCreate = ({navigation}) => {
 
   // console.log("=====val",formattedDate,formatDate);
 
-  
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -300,20 +300,25 @@ const PatientCreate = ({navigation}) => {
               required={true}
             /> */}
             <View style={styles.btn}>
-              <InputText
-                inputContainer={{
-                  flex: 5,
-                  paddingHorizontal: horizontalScale(0),
-                }}
-                label="Age"
-                placeholder="eg:25"
-                input={value}
-                setValue={setValue}
-                maxLength={4}
-                numeric={true}
-                required={true}
-                keypad='numeric'
-              />
+              {!hide ? (
+                <InputText
+                  inputContainer={{
+                    flex: 5,
+                  }}
+                  label="Age"
+                  placeholder="eg:25"
+                  input={value}
+                  setValue={setValue}
+                  numeric={true}
+                  keypad="numeric"
+                  // required={true}
+                />
+              ) : (
+                <SelectorBtn
+                  label={'Age'}
+                  selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
+                />
+              )}
               <View
                 style={{
                   flex: 1,
@@ -341,7 +346,7 @@ const PatientCreate = ({navigation}) => {
                 label={Language[language]['dob']}
                 name="calendar"
                 onPress={handleDate}
-                input={value ? "" : formattedDate}
+                input={value ? '' : formattedDate}
                 style={styles.DOBselect}
               />
             </View>
@@ -472,9 +477,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      blood_group === bld_grp
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        blood_group === bld_grp
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}
@@ -493,7 +498,7 @@ const PatientCreate = ({navigation}) => {
             />
 
             <InputText
-            keypad='numeric'
+              keypad="numeric"
               label="Aadhar Number"
               placeholder="12-digit Aadhar Number"
               value={aadhar_no}
@@ -509,7 +514,7 @@ const PatientCreate = ({navigation}) => {
                 }
               }}
             />
-            <View style={{gap:moderateScale(8)}}>
+            <View style={{gap: moderateScale(8)}}>
               <Text style={styles.genderText}>How did you find us?</Text>
               <View
                 style={{
@@ -531,9 +536,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      find === finds
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        find === finds
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}
@@ -543,7 +548,7 @@ const PatientCreate = ({navigation}) => {
                 ))}
               </View>
             </View>
-            <View style={{gap:moderateScale(8)}}>
+            <View style={{gap: moderateScale(8)}}>
               <Text style={styles.genderText}>Reffered by</Text>
               <View
                 style={{
@@ -565,9 +570,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      refer === item
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        refer === item
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}

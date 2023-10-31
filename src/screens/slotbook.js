@@ -39,9 +39,11 @@ import {
 } from '../utility/scaleDimension';
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
+import {capitalizeWord} from '../utility/const';
 
 const SlotBook = ({navigation, route}) => {
   const option = 'finding';
+  const {id} = route.params;
   const [data, SetData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
   const [selected, setSelected] = useState('');
@@ -80,10 +82,11 @@ const SlotBook = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
-  const formatDate = moment(date).format('YYYY-MM-DD');
+  const [formatDate, setFormatDate] = useState('');
 
   const handleConfirm = date => {
     setDate(date);
+    setFormatDate(moment(date).format('YYYY-MM-DD').toString());
     setOpen(false);
   };
 
@@ -251,10 +254,97 @@ const SlotBook = ({navigation, route}) => {
     phone,
     speciality,
   );
+
   let today = moment().toISOString().split('T')[0] + 'T';
 
   const [apiStatus, setApiStatus] = useState({});
 
+  const getApoointment = async () => {
+    const response = await fetchApi(URL.reschedule_appointment(id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.data) {
+        setFormatDate(jsonData?.data?.appointment_date);
+        setComplaint(jsonData?.data?.complaint);
+        setSelectedMode(jsonData?.data?.mode_of_consultation);
+        setSelectedTypeAppointment(
+          capitalizeWord(jsonData?.data?.appointment_type),
+        );
+      }
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    getApoointment();
+  }, []);
+
+  const updateAppointment = async () => {
+    try {
+      const response = await fetchApi(URL.reschedule_appointment(id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          appointment_date: formatDate,
+          mode_of_consultation: selectedMode,
+          appointment_type: selectedTypeAppointment?.toLowerCase(),
+          appointment_token: token_id.toString(),
+          appointment_slot: selectedSlot?.slot,
+          clinic_id: Clinic_id,
+          complaint: complaint,
+          patient_phone_number: patient_phone,
+          doctor_phone_number: phone,
+          is_paid: fee,
+          // complaint: complaint,
+          patient_reference: patient_phone,
+          practitioner_reference: phone,
+          start: today + selectedSlot?.slot.split('-')[0] + ':00Z',
+          end: today + selectedSlot?.slot.split('-')[1] + ':00Z',
+          speciality: speciality,
+          type: selectedTypeAppointment?.toLowerCase(),
+        }),
+      });
+      if (response.status === HttpStatusCode.Ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          setApiStatus({
+            status: 'success',
+            message: jsonData.mesaage,
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          setTimeout(() => {
+            navigation.navigate('dashboard');
+          }, 1000);
+          setLoading(false);
+        } else {
+          setApiStatus({
+            status: 'warning',
+            message: 'Please Enter Complaint and Slot Timings',
+          });
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({
+        status: 'error',
+        message: 'Something Went Wrong Please Try After Sometime',
+      });
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('API call failed:', response.status);
+    }
+  };
   const Appointment_Booking = async () => {
     try {
       setLoading(true);
@@ -489,12 +579,16 @@ const SlotBook = ({navigation, route}) => {
                   label="Book Slot"
                   //onPress={() => navigation.navigate('dashboard')}
                   onPress={() => {
-                    selectedTypeAppointment
-                      ? Appointment_Booking()
-                      : Alert.alert(
-                          'Warn',
-                          'Please Select Type Of Appointment',
-                        );
+                    if (id === undefined) {
+                      selectedTypeAppointment
+                        ? Appointment_Booking()
+                        : Alert.alert(
+                            'Warn',
+                            'Please Select Type Of Appointment',
+                          );
+                    } else {
+                      updateAppointment();
+                    }
                   }}
                   loading={loading}
                 />

@@ -46,6 +46,7 @@ import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
 import Seperator from '../components/seperator';
 import PDFViewer from '../components/PdfViewer';
+import {PermmisionStorage} from '../utility/permissions';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
@@ -203,7 +204,7 @@ const Visit = ({navigation, route}) => {
     const path =
       'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
     createPDF();
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
       setTimeout(() => {
         navigation.navigate('pdf', {
           path,
@@ -220,9 +221,6 @@ const Visit = ({navigation, route}) => {
     }
   };
 
-  useEffect(() => {
-    isPermitted();
-  }, []);
   const UpdateVitals = {
     pulse_rate: vitalsData?.pulse_rate,
     weight: vitalsData?.weight,
@@ -294,26 +292,6 @@ const Visit = ({navigation, route}) => {
   const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : '';
   const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : '';
 
-  const isPermitted = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs access to Storage data',
-          },
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        alert('Write permission err', err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
-
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   const logo_url = `data:image/png;base64,${logo}`;
@@ -326,7 +304,7 @@ const Visit = ({navigation, route}) => {
   //   createPDF();
   // });
   const createPDF = async () => {
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
       let options = {
         //Content to print

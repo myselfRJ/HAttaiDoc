@@ -62,18 +62,18 @@ const ProfileCreate = ({navigation}) => {
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
   const [show, setshow] = useState(false);
-  const [del,setDel] = useState(false)
+  const [del, setDel] = useState(false);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
   const [loading, setLoading] = useState(false);
-  const onDelete=()=>{
-    setSelectedImage('')
-    setDel(false)
-    setModal(false)
-  }
+  const onDelete = () => {
+    setSelectedImage('');
+    setDel(false);
+    setModal(false);
+  };
 
   const progressData = useSelector(state => state.progress?.status);
   const dispatch = useDispatch();
@@ -123,35 +123,17 @@ const ProfileCreate = ({navigation}) => {
   const [age, setAge] = useState('');
 
   const [DOB, setDOB] = useState(new Date());
+  const [hide, setHide] = useState(false);
   const [formatDate, setFormatDate] = useState('');
   const [open, setOpen] = useState(false);
-  // const formattedDate = DOB.toLocaleDateString('en-US', {
-  //   day: 'numeric',
-  //   month: 'long',
-  //   year: 'numeric',
-  // });
   const formattedDate = DOB.toISOString().split('T')[0];
   const handleAge = age => {
     setValue(age);
   };
   const [value, setValue] = useState('');
-  // const HandleInput = () => {
-  //   if (age) {
-  //     // setValue(age);
-  //     setAge(age);
-  //   } else {
-  //     // {
-  //     //   open && setValue(formattedDate);
-  //     // }
-  //   }
-  // };
-  // useEffect(() => {
-  //   HandleInput();
-  // }, [DOB, age]);
-  console.log('age===', formatDate,formattedDate);
 
   const HandleCheck = () => {
-    if (value?.length>0 && value.length <= 3) {
+    if (value?.length > 0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
@@ -160,11 +142,11 @@ const ProfileCreate = ({navigation}) => {
   };
   useEffect(() => {
     HandleCheck();
-  }, [value,formattedDate]);
+  }, [value, formattedDate]);
   const handleConfirm = date => {
-    // setValue(date);
     setDOB(date);
     setOpen(false);
+    setHide(!hide);
   };
 
   const handleCancel = () => {
@@ -187,7 +169,7 @@ const ProfileCreate = ({navigation}) => {
       } else if (response.error) {
       } else {
         setSelectedImage(response?.assets?.[0]?.base64);
-        setDel(!del)
+        setDel(!del);
       }
     });
     setModal(false);
@@ -231,28 +213,6 @@ const ProfileCreate = ({navigation}) => {
     handleChangeValue('state', state);
   };
 
-  const handlePressIn = () => {
-    setIsHovered(true);
-  };
-
-  const handlePressOut = () => {
-    setIsHovered(false);
-  };
-
-  // const handleOptions = value => {
-  //   handleChangeValue('gender', value);
-  // };
-  // const handleCheck=()=>{
-  //   if(value == age){
-  //     const current = parseInt(new Date().getFullYear()) - parseInt(age);
-  //     console.log('year===>',current)
-  //   }
-  // }
-  // useEffect(()=>{
-  //   handleCheck()
-  // },[age])
-
-  // const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
@@ -321,7 +281,7 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
 
-  console.log("======>value",value);
+  console.log('======>value', value);
   return (
     <View style={styles.main}>
       <ProgresHeader progressData={progressData} />
@@ -334,7 +294,6 @@ const ProfileCreate = ({navigation}) => {
           OnCamera={openCamera}
           // delete={del}
           // OnDelete={onDelete}
-          
         />
       )}
       <Text style={commonstyles.h1}>Doctor Profile</Text>
@@ -387,18 +346,37 @@ const ProfileCreate = ({navigation}) => {
             /> */}
 
         <View style={styles.btn}>
-          <InputText
-            inputContainer={{
-              flex: 5,
-            }}
-            label="Age"
-            placeholder="eg:25"
-            input={value}
-            setValue={setValue}
-            numeric={true}
-            keypad='numeric'
-            // required={true}
-          />
+          {!hide ? (
+            <InputText
+              inputContainer={{
+                flex: 5,
+              }}
+              label="Age"
+              placeholder="eg:25"
+              input={value}
+              setValue={setValue}
+              numeric={true}
+              keypad="numeric"
+              // required={true}
+            />
+          ) : (
+            <SelectorBtn
+              label={'Age'}
+              selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
+            />
+            // <InputText
+            //   inputContainer={{
+            //     flex: 5,
+            //   }}
+            //   textStyle={{backgroundColor: CUSTOMCOLOR.backgroundColor}}
+            //   label="Age"
+            //   // placeholder="eg:25"
+            //   // input={value}
+            //   setValue={setValue}
+            //   numeric={true}
+            //   keypad="numeric"
+            // />
+          )}
           <View
             style={{
               flex: 1,
@@ -424,8 +402,8 @@ const ProfileCreate = ({navigation}) => {
             selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
             label={Language[language]['dob']}
             name="calendar"
-            onPress={() => value ? null : setOpen(true)}
-            input={value ? "" : formattedDate}
+            onPress={() => (value ? null : setOpen(true))}
+            input={value ? '' : formattedDate}
             style={styles.DOBselect}
           />
         </View>
@@ -466,7 +444,7 @@ const ProfileCreate = ({navigation}) => {
           value={values.experience}
           setValue={value => handleChangeValue('experience', value)}
           numeric={true}
-          keypad='numeric'
+          keypad="numeric"
         />
         <View style={styles.btn}>
           <View style={{flex: 1}}>
@@ -489,7 +467,7 @@ const ProfileCreate = ({navigation}) => {
               required={true}
               selectContainer={{gap: 2, paddingVertical: -1}}
               label="State"
-              name={show == true ?"chevron-up" : "chevron-down"}
+              name={show == true ? 'chevron-up' : 'chevron-down'}
               size={moderateScale(24)}
               // onPress={toggleModal}
               onPress={() => {
@@ -500,13 +478,13 @@ const ProfileCreate = ({navigation}) => {
 
             {show === true && (
               <View style={styles.statecontainer}>
- 
-
-                <ScrollView persistentScrollbar={true} contentContainerStyle={{zIndex:4,backgroundColor:CUSTOMCOLOR.white}}>
-             
-
-{/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
-
+                <ScrollView
+                  persistentScrollbar={true}
+                  contentContainerStyle={{
+                    zIndex: 4,
+                    backgroundColor: CUSTOMCOLOR.white,
+                  }}>
+                  {/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
 
                   {CONSTANTS.state.map((state, index) => (
                     <TouchableOpacity
@@ -515,7 +493,10 @@ const ProfileCreate = ({navigation}) => {
                         handleStateSelection(state);
                         setshow(false);
                       }}
-                      style={{paddingHorizontal:horizontalScale(4),paddingVertical:verticalScale(4)}}>
+                      style={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(4),
+                      }}>
                       <Text
                         style={[
                           styles.statefields,
@@ -530,7 +511,7 @@ const ProfileCreate = ({navigation}) => {
                       </Text>
                     </TouchableOpacity>
                   ))}
-               {/* </View>  */}
+                  {/* </View>  */}
                 </ScrollView>
               </View>
             )}
@@ -541,18 +522,19 @@ const ProfileCreate = ({navigation}) => {
             // alignSelf: 'flex-start',
             gap: verticalScale(4),
             // borderWidth:1,
-            zIndex:-1
+            zIndex: -1,
           }}>
           <Text style={styles.medtext}>Medical Registration Document</Text>
           <View style={styles.doc_upload}>
             {selectedFilename ? (
               <View style={styles.selectedfilecontainer}>
                 <Text style={styles.selectedFileInfo}>{selectedFilename}</Text>
-                <TouchableOpacity onPress={handleClearFile} 
-                style={{
-                    backgroundColor:CUSTOMCOLOR.white,
-                    borderRadius:moderateScale(24),
-                }}>
+                <TouchableOpacity
+                  onPress={handleClearFile}
+                  style={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderRadius: moderateScale(24),
+                  }}>
                   <Icon
                     name="close"
                     size={moderateScale(24)}
@@ -569,15 +551,15 @@ const ProfileCreate = ({navigation}) => {
                   borderColor: CUSTOMCOLOR.primary,
                   borderWidth: 0.5,
                   borderRadius: 4,
-                  alignSelf:'flex-start'
+                  alignSelf: 'flex-start',
                 }}
-                textStyle={{color: CUSTOMCOLOR.primary,fontSize:12}}
+                textStyle={{color: CUSTOMCOLOR.primary, fontSize: 12}}
               />
             )}
           </View>
         </View>
       </ScrollView>
-     
+
       <View
         style={{
           paddingVertical: moderateScale(16),
@@ -655,14 +637,14 @@ const ProfileCreate = ({navigation}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    zIndex:1,
-    backgroundColor:CUSTOMCOLOR.white,
+    zIndex: 1,
+    backgroundColor: CUSTOMCOLOR.white,
     //  CUSTOMCOLOR.white,
     paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(24),
     // borderWidth: 1,
     gap: verticalScale(16),
-    zIndex:1
+    zIndex: 1,
   },
 
   radiogroup: {
@@ -697,8 +679,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statecontainer: {
-    zIndex:14,
-    width:'100%',
+    zIndex: 14,
+    width: '100%',
     height: moderateScale(200),
     // paddingHorizontal:horizontalScale(66),
     // zIndex: 10,
@@ -740,13 +722,13 @@ const styles = StyleSheet.create({
     // paddingHorizontal:horizontalScale(16)
   },
   selectedfilecontainer: {
-    zIndex:0,
-    paddingVertical:verticalScale(8),
-    paddingHorizontal:horizontalScale(8),
-    justifyContent:'space-between',
+    zIndex: 0,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth:1,
+    borderWidth: 1,
     borderRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.primary,
     // backgroundColor:'#000000',
@@ -756,7 +738,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.primary,
     paddingRight: moderateScale(8),
-    fontWeight:'500',
+    fontWeight: '500',
     paddingVertical: verticalScale(4),
   },
   contact: {
@@ -784,7 +766,7 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:"white",
+    backgroundColor: 'white',
     // borderWidth:1,
     // paddingHorizontal: horizontalScale(24),
     gap: verticalScale(8),
@@ -814,7 +796,7 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     // paddingVertical: verticalScale(4),
     marginBottom: moderateScale(4),
-    zIndex:1 
+    zIndex: 1,
   },
   bottext: {
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -823,7 +805,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingBottom: verticalScale(120),
-    zIndex:2,
+    zIndex: 2,
     gap: verticalScale(16),
   },
 });

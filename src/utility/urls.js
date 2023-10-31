@@ -3,8 +3,8 @@ const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.23:8000/api/v1/';
 // const baseUrl = 'http://34.205.77.155/api/v1/';
 const snomedUrl = 'http://34.205.77.155/';
-export const fileurl = `http://34.205.77.155`;
-// export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://34.205.77.155`;
+export const fileurl = `http://10.9.64.61:8000`;
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
@@ -52,6 +52,8 @@ export const URL = {
   refer_doc_pdf: `${baseUrl}consult/refer`,
   upload_reports: `${baseUrl}consult/upload_document`,
   get_consultationPDF: id => `${baseUrl}consult/pdfbyId?id=${id}`,
+  reschedule_appointment: id =>
+    `${baseUrl}customappointment/reschedule_appointment?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

@@ -38,6 +38,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {useRoute} from '@react-navigation/native';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
+import {PermmisionStorage} from '../utility/permissions';
 
 const ReferToDoctor = () => {
   const route = useRoute();
@@ -80,29 +81,9 @@ const ReferToDoctor = () => {
   useEffect(() => {
     fetchDoctor();
   }, []);
-
-  const isPermitted = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs access to Storage data',
-          },
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        alert('Write permission err', err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
   const contact = `${name} ${phone}`;
   const createPDF = async () => {
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
       let options = {
         //Content to print
         html: `<!DOCTYPE html>
@@ -280,7 +261,7 @@ const ReferToDoctor = () => {
     const path =
       'file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf';
     createPDF();
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
       setTimeout(() => {
         nav.navigate('pdf', {
           path,
