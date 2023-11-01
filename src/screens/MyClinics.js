@@ -140,7 +140,7 @@ const MyClinics = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setClinicData(jsonData?.data);
-      dispatch(addclinic_data(jsonData?.data));
+      dispatch(addclinic_data([...clinics, ...jsonData?.data]));
     } else {
       console.error('API call failed:', response.status, response);
     }
