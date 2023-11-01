@@ -190,7 +190,7 @@ const Uploadrecord = ({navigation}) => {
         gap: moderateScale(8),
         paddingVertical: verticalScale(16),
       }}>
-      <PrescribeHead heading={'Upload Records'} />
+      <PrescribeHead heading={'Upload Reports'} />
       <DropdownComponent
         style={{paddingHorizontal: 0}}
         value={recordstype}

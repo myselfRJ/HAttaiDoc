@@ -62,6 +62,7 @@ const MedicalHistory = ({navigation,route}) => {
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
   const [commor_sug, setCommor_Sug] = useState([]);
+  // console.log('sugg',commor_sug);
   const [past, setPast] = useState('');
   const [social, setSocial] = useState('');
   const [social_sug, setSocial_Sug] = useState([]);
@@ -221,9 +222,9 @@ const MedicalHistory = ({navigation,route}) => {
       <ScrollView>
         <View style={styles.input}>
           <ChipInput
-          placeholder={'Enter Co-morbidities'}
+          placeholder={'Enter new comorbidities'}
             item={'commorbities'}
-            label={'Co-morbidities'}
+            label={'Comorbidities'}
             data={commor}
             value={comorbidities}
             setValue={setComorbidities}

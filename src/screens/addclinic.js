@@ -75,11 +75,12 @@ const AddClinic = ({navigation}) => {
   const address = useSelector(state => state?.address?.address);
   // const {prevScrn} = route.params;
   const [cnFess, setCnFees] = useState('');
+  console.log('cnfees=======',cnFess);
   const clinics = useSelector(state => state.clinic?.clinics);
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
-  console.log('check===', visibleSlot);
+  // console.log('check===', visibleSlot);
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -90,6 +91,7 @@ const AddClinic = ({navigation}) => {
     Su: [],
   });
   console.log('slo====', slots);
+
   const ResetReduxSlots = () => {
     const newSlotsss = {
       slots: {
@@ -161,6 +163,7 @@ const AddClinic = ({navigation}) => {
     fees: '',
     // slots: [],
   });
+  console.log('set===',value.fees)
   const prevScrn = 'account';
   const Clinic_Data = [
     {
@@ -559,6 +562,7 @@ const AddClinic = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
+     
       setSlots(JSON.parse(jsonData.data?.slot));
       const clinicdata = {
         clinic: jsonData.data?.clinic_name,
@@ -566,6 +570,7 @@ const AddClinic = ({navigation}) => {
         phone: jsonData.data?.clinic_phone_number,
         fees: jsonData.data?.fees,
       };
+      console.log('clinic',clinicdata?.fees)
       setValue(clinicdata);
       setCnFees(jsonData.data?.fees);
       setSelectedImage(jsonData.data?.clinic_photo_url);
@@ -586,6 +591,8 @@ const AddClinic = ({navigation}) => {
       clinic_phone_number: value.phone,
       clinic_photo_url: selectedImage,
       clinic_logo_url: selectedLogo,
+      fees: cnFess === 'others' ? parseInt(value.fees) : parseInt(cnFess),
+
     };
     const slots_data = {
       slot: JSON.stringify(slots),
@@ -791,13 +798,13 @@ const AddClinic = ({navigation}) => {
                   <SelectorBtn
                     select={{
                       backgroundColor:
-                        cnFess === val
+                        cnFess == val
                           ? CUSTOMCOLOR.primary
                           : CUSTOMCOLOR.white,
                     }}
                     inputstyle={{
                       color:
-                        cnFess === val ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                        cnFess == val ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
                     }}
                     input={val}
                     key={ind}
@@ -806,7 +813,7 @@ const AddClinic = ({navigation}) => {
                 ))}
               </View>
             </View>
-            {cnFess === 'others' ? (
+            {cnFess == 'others'? (
               <InputText
                 placeholder="Enter Fees"
                 label="Fees"

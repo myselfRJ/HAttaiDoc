@@ -395,8 +395,7 @@ export const CONSTANTS = {
   ],
   ReferTypes: ['Clinic', 'Hospital', 'Doctor'],
   blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'],
-  find_us:['Newspaper','TV','Facebook','Instagram','Social Media'],
-  refer:['Friends','Doctors','Family','Old Patient'],
+  find_us:['Newspaper','TV','Facebook','Instagram','Social Media','Friends','Doctors','Family','Old Patient'],
   clinic_fees: ['100', '200', '300', '400', '500', '1000', '2000', 'others'],
   state: [
     'Andhra Pradesh',

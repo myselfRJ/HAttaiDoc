@@ -28,7 +28,7 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-import {HButton, InputText, PlusButton} from '../components';
+import {HButton, InputText, Option, PlusButton} from '../components';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -68,6 +68,7 @@ export default function Prescribe1({navigation}) {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const [sug, setSug] = useState([]);
+  const [durationSelect,setDurationSelect] = useState('days')
   // console.log('suggggggg',sug)
   // const prescribe = useState([
   //   {
@@ -82,6 +83,7 @@ export default function Prescribe1({navigation}) {
   //   },
   // ])
   const prevPres = useSelector(state => state.pres.prescribeItems);
+  console.log('duration',prevPres);
   const handleAddPrescribe = () => {
     if (sug?.length > 0) {
       const medicineName = `${setmedicine} ${mgs}`;
@@ -97,7 +99,7 @@ export default function Prescribe1({navigation}) {
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
-          duration: duration,
+          duration: durationSelect ==='days' ? `${duration} days`: `${duration} weeks`,
           total_quantity: total_quantity,
         },
       ]),
@@ -268,6 +270,10 @@ export default function Prescribe1({navigation}) {
       setMed_filter(resultArray);
     }
   }, [mode]);
+
+  const handleOptions = value => {
+    setDurationSelect(value);
+  };
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -521,18 +527,33 @@ export default function Prescribe1({navigation}) {
             {/* <Text style={styles.ModeText}>
                   {Language[language]['duration']}(inDays)
                 </Text> */}
-
+          <Text style={styles.ModeText}>{'Duration'}</Text>
+          <View style={styles.radiogroup}>
+            <Option
+              label="Days"
+              value="days"
+              selected={durationSelect === 'days'}
+              onPress={() => handleOptions('days')}
+            />
+            <Option
+              label="Weeks"
+              value="weeks"
+              selected={durationSelect === 'weeks'}
+              onPress={() => handleOptions('weeks')}
+          />
+          </View>
             <InputText
+            placeholder={'Enter value'}
             keypad ='numeric'
               // style={styles.durationInput}
-              label={Language[language]['duration']}
+              // label={'Duration(Days)'}
               inputContainer={{
                 paddingHorizontal: moderateScale(0),
                 paddingVertical: moderateScale(0),
                 width: '24%',
               }}
               value={duration}
-              placeholder="Enter Days"
+          
               setValue={value => setDuration(value)}
             />
           </View>
@@ -590,10 +611,11 @@ const styles = StyleSheet.create({
   },
   ModeContainer: {
     gap: moderateScale(8),
+  
   },
   ModeText: {
     fontWeight: '400',
-    fontFamily: CUSTOMFONTFAMILY.heading,
+    // fontFamily: CUSTOMFONTFAMILY.heading,
     fontSize: CUSTOMFONTSIZE.h3,
     // top: moderateScale(6),
     color: CUSTOMCOLOR.black,
@@ -605,6 +627,14 @@ const styles = StyleSheet.create({
     //fontWeight: '400',
     top: moderateScale(28),
     color: CUSTOMCOLOR.black,
+  },
+  radiogroup: {
+    // paddingHorizontal: moderateScale(8),
+    paddingVertical: moderateScale(0),
+    flexDirection: 'row',
+    gap: moderateScale(48),
+    // borderWidth:1,
+    justifyContent: 'flex-start',
   },
   ModesContainer: {
     gap: moderateScale(8),
@@ -665,7 +695,7 @@ const styles = StyleSheet.create({
     gap: moderateScale(8),
   },
   numText: {
-    padding: moderateScale(4),
+    padding: moderateScale(8),
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.primary,
@@ -694,10 +724,12 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(2),
     height: moderateScale(40),
     width: '25%',
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(4),
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   frequencys: {
     // paddingLeft: moderateScale(8),
@@ -705,12 +737,14 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(16),
   },
   dropdownContainer: {
-    top: moderateScale(175),
+    top: moderateScale(130),
     position: 'absolute',
     zIndex: 1,
     width: '100%',
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
 });

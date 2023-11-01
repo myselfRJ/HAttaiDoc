@@ -510,6 +510,7 @@ const PatientCreate = ({navigation}) => {
                   flexDirection: 'row',
                   gap: moderateScale(16),
                   alignSelf: 'flex-start',
+                  flexWrap:'wrap'
                 }}>
                 {CONSTANTS.find_us?.map((finds, index) => (
                   <SelectorBtn
@@ -537,7 +538,7 @@ const PatientCreate = ({navigation}) => {
                 ))}
               </View>
             </View>
-            <View style={{gap:moderateScale(8)}}>
+            {/* <View style={{gap:moderateScale(8)}}>
               <Text style={styles.genderText}>Reffered by</Text>
               <View
                 style={{
@@ -570,7 +571,7 @@ const PatientCreate = ({navigation}) => {
                   />
                 ))}
               </View>
-            </View>
+            </View> */}
             <HButton
               label="Save"
               btnstyles={{

@@ -353,8 +353,8 @@ const ReferToDoctor = () => {
                 {
                   top:
                     selected === 'Clinic' || selected === 'Hospital'
-                      ? verticalScale(404)
-                      : verticalScale(310),
+                      ? verticalScale(360)
+                      : verticalScale(270),
                 },
               ]}>
               <ScrollView>
@@ -486,8 +486,9 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     width: '100%',
-    height: verticalScale(400),
+    height: verticalScale(300),
     backgroundColor: CUSTOMCOLOR.white,
+    borderColor:CUSTOMCOLOR.primary
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

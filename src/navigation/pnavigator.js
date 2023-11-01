@@ -165,7 +165,7 @@ const ProtectedRoute = () => {
         component={Uploadrecord}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Records',
+          title: 'Reports',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

@@ -489,13 +489,15 @@ const styles = StyleSheet.create({
 
   },
   dropdownContainer: {
-    top: moderateScale(90),
+    top: moderateScale(70),
     position: 'absolute',
     zIndex: 4,
     width: '100%',
     height: moderateScale(220),
     backgroundColor: CUSTOMCOLOR.white,
-    paddingHorizontal: horizontalScale(8),
+    // paddingHorizontal: horizontalScale(8),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   inputtext: {
     // paddingVertical: verticalScale(0),
