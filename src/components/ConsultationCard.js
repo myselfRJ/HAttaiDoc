@@ -30,7 +30,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import HButton from './button';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 const ConsultationCard = ({data}) => {
   const [visible, setVisible] = useState(false);
@@ -55,8 +55,9 @@ const ConsultationCard = ({data}) => {
   };
 
   const handleOnBook = () => {
+    const appointment_id = data?.chief_complaint?.appointment_id;
     patientSearchRef?.current?.snapToIndex(0);
-    navigation.navigate('patienthistory', {id});
+    navigation.navigate('pdfhistory', {appointment_id});
   };
   const date = data
     ? data?.chief_complaint?.created_at?.split('T')[0]?.split('-')
@@ -75,7 +76,7 @@ const ConsultationCard = ({data}) => {
             </Text>
             <Text style={styles.name}>
               {data?.chief_complaint?.complaint_message}
-               {/* |{' '}
+              {/* |{' '}
               {data?.chief_complaint?.appointment_id} */}
             </Text>
             <Text style={styles.age}>{}</Text>
@@ -83,7 +84,7 @@ const ConsultationCard = ({data}) => {
         </View>
         <View
           style={{
-            alignItems:'flex-end',
+            alignItems: 'flex-end',
             position: 'absolute',
             right: moderateScale(16),
             top: moderateScale(8),
@@ -93,14 +94,13 @@ const ConsultationCard = ({data}) => {
             style={{
               flexDirection: 'row',
               gap: moderateScale(4),
-              padding:moderateScale(4),
+              padding: moderateScale(4),
             }}>
             <Pressable style={styles.icon}>
               <Icon
                 name={'download'}
                 size={moderateScale(16)}
                 color={CUSTOMCOLOR.primary}
-                
               />
             </Pressable>
             <Pressable>
@@ -150,18 +150,18 @@ const styles = StyleSheet.create({
   main: {
     // flexDirection: 'row',
     paddingHorizontal: moderateScale(24),
-    paddingVertical:verticalScale(20),
+    paddingVertical: verticalScale(20),
     // paddingVertical: verticalScale(24),
     // fontSize: CUSTOMFONTSIZE.h3,
     backgroundColor: CUSTOMCOLOR.white,
     borderRadius: moderateScale(4),
     justifyContent: 'space-between',
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   name: {
     fontWeight: 400,
-    fontSize:CUSTOMFONTSIZE.h4,
+    fontSize: CUSTOMFONTSIZE.h4,
     // lineHeight: 20,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.heading,
@@ -190,8 +190,8 @@ const styles = StyleSheet.create({
   },
   patientinfo: {
     // borderWidth:1,
-    justifyContent:'center',
-    gap:verticalScale(4)
+    justifyContent: 'center',
+    gap: verticalScale(4),
   },
   icon: {
     borderWidth: moderateScale(1),

@@ -28,7 +28,7 @@ const HButton = props => {
           />
         )}
         {props.loading && (
-          <ActivityIndicator size="small" color={CUSTOMCOLOR.white} />
+          <ActivityIndicator size="small" color={props.loadColor?props.loadColor:CUSTOMCOLOR.white} />
         )}
         <Text style={{...styles.btntext, ...props.textStyle}}>
           {props.label}

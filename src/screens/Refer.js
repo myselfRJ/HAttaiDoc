@@ -38,14 +38,13 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {useRoute} from '@react-navigation/native';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
+import {PermmisionStorage} from '../utility/permissions';
 
 const ReferToDoctor = () => {
   const route = useRoute();
   const {patient_details} = route.params;
-  console.log('=========>details', patient_details);
   const nav = useNavigation();
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
-  console.log('=======>doc', doctor);
 
   const [selected, setSelected] = useState('');
   const [name, setName] = useState('');
@@ -57,6 +56,8 @@ const ReferToDoctor = () => {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
   const [filePath, setFilePath] = useState('');
+  const [loadind, setLoading] = useState(false);
+  const [prevLoad, setPrevLoad] = useState(false);
   const [data, setData] = useState();
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -80,29 +81,9 @@ const ReferToDoctor = () => {
   useEffect(() => {
     fetchDoctor();
   }, []);
-
-  const isPermitted = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs access to Storage data',
-          },
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        alert('Write permission err', err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
   const contact = `${name} ${phone}`;
   const createPDF = async () => {
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
       let options = {
         //Content to print
         html: `<!DOCTYPE html>
@@ -171,7 +152,7 @@ const ReferToDoctor = () => {
       let file = await RNHTMLtoPDF.convert(options);
       console.log(file.filePath);
       setFilePath(file.filePath);
-      handle();
+      // handle();
     }
   };
 
@@ -200,17 +181,20 @@ const ReferToDoctor = () => {
     };
 
     try {
+      setLoading(true);
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
         console.log('API Response:', responseData);
         handleAddDoctors();
         Alert.alert('', 'Successfully Send to Patient');
+        setLoading(false);
         nav.goBack();
       }
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('', 'Something went Wrong');
+      setLoading(false);
     }
   };
   const apiUrl = URL.refer_doc_pdf;
@@ -266,6 +250,29 @@ const ReferToDoctor = () => {
   const HandlePress = val => {
     setSpeciality(val);
     setShow(!show);
+  };
+
+  const handlePreview = async () => {
+    setPrevLoad(true);
+    const doc_phone = data?.doctor_phone_number;
+    const appointment_id = patient_details?.appointment_id;
+    const patient_phone = patient_details?.patient_phone;
+    const prevScreen = 'refer';
+    const path =
+      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf';
+    createPDF();
+    if (await PermmisionStorage()) {
+      setTimeout(() => {
+        nav.navigate('pdf', {
+          path,
+          doc_phone,
+          appointment_id,
+          patient_phone,
+          prevScreen,
+        });
+        setPrevLoad(false);
+      }, 1500);
+    }
   };
 
   return (
@@ -400,7 +407,27 @@ const ReferToDoctor = () => {
             }}
           />
         </View>
-        <View style={{marginTop: verticalScale(64), alignSelf: 'flex-end'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: verticalScale(64),
+            justifyContent: 'flex-end',
+          }}>
+          {/* <HButton
+            label="Preview"
+            loading={prevLoad}
+            loadColor={CUSTOMCOLOR.primary}
+            onPress={handlePreview}
+            // onPress={createPDF}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderWidth: 0.5,
+              borderColor: CUSTOMCOLOR.borderColor,
+            }}
+            textStyle={{
+              color: CUSTOMCOLOR.primary,
+            }}
+          /> */}
           <HButton
             btnstyles={{
               backgroundColor:
@@ -412,7 +439,10 @@ const ReferToDoctor = () => {
             label="Share"
             type="addtype"
             size={moderateScale(24)}
-            onPress={createPDF}
+            loading={prevLoad}
+            onPress={
+              selected && name && speciality && phone ? handlePreview : null
+            }
           />
         </View>
       </ScrollView>

@@ -161,7 +161,8 @@ const Appointment = ({navigation}) => {
       } else if (seletedType && seletedType !== 'All') {
         const filtered = setAppointment?.filter(
           item =>
-            item?.appointment_type && item?.appointment_type === seletedType,
+            item?.appointment_type &&
+            item?.appointment_type?.toLowerCase() === seletedType.toLowerCase(),
         );
         setFilteredData(filtered);
       } else {
@@ -298,14 +299,17 @@ const Appointment = ({navigation}) => {
           )}
         </ScrollView>
       </View>
-      <View style={{justifyContent:'flex-end',flex:1}}>
+      <View style={{justifyContent: 'flex-end', flex: 1}}>
         <HButton
           label="Book Appointment"
           btnstyles={{alignSelf: 'center'}}
           onPress={handlePlusBUtton}
         />
       </View>
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'} backgroundStyle={'#000000aa'}>
+      <BottomSheetView
+        bottomSheetRef={ClinicRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&

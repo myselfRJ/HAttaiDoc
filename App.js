@@ -13,6 +13,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {moderateScale} from './src/utility/scaleDimension';
+import {PermmisionStorage} from './src/utility/permissions';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,10 @@ function App() {
   const netInfo = useNetInfo();
 
   let netConnection = netInfo.isConnected;
+  React.useEffect(() => {
+    console.log('indaaaaa');
+    PermmisionStorage();
+  });
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>

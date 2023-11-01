@@ -79,7 +79,6 @@ const AddClinic = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
-  console.log('check===', visibleSlot);
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -89,7 +88,6 @@ const AddClinic = ({navigation}) => {
     Sa: [],
     Su: [],
   });
-  console.log('slo====', slots);
   const ResetReduxSlots = () => {
     const newSlotsss = {
       slots: {
@@ -392,6 +390,19 @@ const AddClinic = ({navigation}) => {
     Su: 'Sunday',
   });
 
+  const [errorSlots, setErrorSlots] = useState();
+  useEffect(() => {
+    clinics?.map((item, index) => {
+      if (item[0]?.slot_data?.slot) {
+        try {
+          const parsedSlot = JSON.parse(item[0]?.slot_data?.slot);
+          setErrorSlots(parsedSlot);
+        } catch (error) {
+          console.error('JSON parsing error:', error);
+        }
+      }
+    });
+  }, []);
   const handleAddSlot = () => {
     if (selectedConsultValue && selectedDurationValue) {
       const newSlot = {
@@ -402,13 +413,22 @@ const AddClinic = ({navigation}) => {
         duration: selectedDurationValue,
         day: weekdays[selectedDay],
       };
-      const conflictingSlotExists = slots[selectedDay].some(
-        slot =>
-          (newSlot.fromTime >= slot.fromTime &&
-            newSlot.fromTime < slot.toTime) ||
-          (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime),
-      );
-
+      const conflictingSlotExists =
+        errorSlots[selectedDay].some(slot => {
+          // console.log('=========>', slot?.fromTime); // Correct placement of console.log
+          return (
+            (newSlot.fromTime >= slot.fromTime &&
+              newSlot.fromTime < slot.toTime) ||
+            (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime)
+          );
+        }) &&
+        slots[selectedDay].some(
+          slot =>
+            (newSlot.fromTime >= slot.fromTime &&
+              newSlot.fromTime < slot.toTime) ||
+            (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime),
+        );
+      console.log('======conflict', conflictingSlotExists);
       if (!conflictingSlotExists) {
         setAllSlots(prev => [...prev, newSlot]);
         setSlots(prevSlots => ({
@@ -549,7 +569,6 @@ const AddClinic = ({navigation}) => {
   };
 
   const {id} = route.params;
-  console.log('==========>index', id);
   const fetchClinic_slots = async () => {
     const response = await fetchApi(URL.get_clinic_slots_by_id(id), {
       method: 'GET',
@@ -581,7 +600,7 @@ const AddClinic = ({navigation}) => {
   const Update_Clinic_slots = async () => {
     const updateClinic = {
       clinic_name: value.clinic,
-      clinic_Address: value.address,
+      clinic_Address: address,
       doctor_phone_number: phone,
       clinic_phone_number: value.phone,
       clinic_photo_url: selectedImage,
@@ -764,11 +783,12 @@ const AddClinic = ({navigation}) => {
               label={Language[language]['phone_number']}
               placeholder="Enter clinic phone number"
               value={value.phone}
+              required={true}
               setValue={value => handleChangeValue('phone', value)}
-              doubleCheck={[true, false]}
-              maxLength={10}
+              // doubleCheck={[true, false]}
+              maxLength={15}
               numeric={true}
-              check={checkNumber}
+              // check={checkNumber}
               // check={e => {
               //   var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-zA-Z]/;
               //   if (format.test(e)) {
@@ -815,16 +835,6 @@ const AddClinic = ({navigation}) => {
                 // keypad="numeric"
               />
             ) : null}
-            {/* {!visibleSlot && (
-              <View style={styles.slotadded}>
-                <Text style={styles.addedText}>Slots are added!!!</Text>
-                <PlusButton
-                  icon="close"
-                  size={moderateScale(12)}
-                  onPress={handleClear}
-                />
-              </View>
-            )} */}
             <View
               style={{
                 gap: verticalScale(8),
@@ -925,7 +935,7 @@ const AddClinic = ({navigation}) => {
                     <SelectorBtn
                       select={styles.select1}
                       label="Type"
-                      name="alpha-t-box"
+                      name="chevron-down"
                       onPress={() => {
                         slotTypeRef?.current?.snapToIndex(1);
                       }}
@@ -934,7 +944,7 @@ const AddClinic = ({navigation}) => {
                     <SelectorBtn
                       select={styles.select1}
                       label="Duration"
-                      name="timer-sand-full"
+                      name="chevron-down"
                       onPress={() => {
                         slotDurationRef?.current?.snapToIndex(1);
                       }}
@@ -1033,22 +1043,22 @@ const AddClinic = ({navigation}) => {
                             fontSize: CUSTOMFONTSIZE.h4,
                           }}
                         />
-                       {slots.M.length > 0 ?(
-                         <HButton
-                         color={CUSTOMCOLOR.white}
-                         label="Add to All days"
-                         onPress={() => handleAddSlotCopyMonday()}
-                         btnstyles={{
-                           backgroundColor: CUSTOMCOLOR.primary,
-                           paddingHorizontal: horizontalScale(12),
-                           paddingVertical: verticalScale(8),
-                         }}
-                         textStyle={{
-                           color: CUSTOMCOLOR.white,
-                           fontSize: CUSTOMFONTSIZE.h4,
-                         }}
-                       />
-                       ):null}
+                        {slots.M.length > 0 ? (
+                          <HButton
+                            color={CUSTOMCOLOR.white}
+                            label="Add to All days"
+                            onPress={() => handleAddSlotCopyMonday()}
+                            btnstyles={{
+                              backgroundColor: CUSTOMCOLOR.primary,
+                              paddingHorizontal: horizontalScale(12),
+                              paddingVertical: verticalScale(8),
+                            }}
+                            textStyle={{
+                              color: CUSTOMCOLOR.white,
+                              fontSize: CUSTOMFONTSIZE.h4,
+                            }}
+                          />
+                        ) : null}
                       </View>
                     )}
                   </View>

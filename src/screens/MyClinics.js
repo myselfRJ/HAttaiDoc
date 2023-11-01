@@ -44,6 +44,7 @@ import {HttpStatusCode} from 'axios';
 import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import ProgresHeader from '../components/progressheader';
 import {useFocusEffect} from '@react-navigation/native';
+import {addclinic_data} from '../redux/features/profiles/clinicData';
 
 const MyClinics = ({navigation}) => {
   const prevScrn1 = 'undefineed';
@@ -139,6 +140,7 @@ const MyClinics = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setClinicData(jsonData?.data);
+      dispatch(addclinic_data([...clinics, ...jsonData?.data]));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -310,7 +312,8 @@ const styles = StyleSheet.create({
   btnNext: {
     backgroundColor: CUSTOMCOLOR.primary,
     justifyContent: 'center',
-    marginHorizontal: moderateScale(56),
+    alignSelf: 'center',
+    // marginHorizontal: moderateScale(56),
     borderRadius: moderateScale(10),
   },
   modalOverlay: {

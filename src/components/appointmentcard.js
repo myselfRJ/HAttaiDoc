@@ -68,6 +68,12 @@ const AppointmentCard = ({appointment, openVisit}) => {
     false: 'UnPaid',
     true: 'Paid',
   };
+
+  const handleReschedule = () => {
+    const id = appointment?.id;
+    const patient_phone = appointment?.patient_data?.patient_phone_number;
+    navigation.navigate('bookslot', {id, patient_phone});
+  };
   return (
     <View style={styles.main}>
       <View style={styles.tokenContainer}>
@@ -137,6 +143,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
                 color: CUSTOMCOLOR.primary,
                 fontSize: CUSTOMFONTFAMILY.h3,
               }}
+              onPress={handleReschedule}
             />
             <HButton
               btnstyles={{

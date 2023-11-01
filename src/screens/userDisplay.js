@@ -174,7 +174,7 @@ const UserDisplay = ({navigation}) => {
           <ProgresHeader progressData={progressData} />
         </View>
       )}
-      <PrescriptionHead heading={'My User'} />
+      <PrescriptionHead heading={'My Admin'} />
 
       <View
         style={{
@@ -184,7 +184,7 @@ const UserDisplay = ({navigation}) => {
           gap: moderateScale(16),
         }}>
         <HButton
-          label={users?.length > 0 ? 'Add more User' : 'Add User'}
+          label={users?.length > 0 ? 'Add more Admins' : 'Add Admin'}
           icon={'plus'}
           onPress={() => {
             navigation.navigate('adduser', {prevScrn});
@@ -311,7 +311,8 @@ const styles = StyleSheet.create({
   btnNext: {
     backgroundColor: CUSTOMCOLOR.primary,
     justifyContent: 'center',
-    marginHorizontal: moderateScale(56),
+    // marginHorizontal: moderateScale(56),
+    alignSelf:'center',
     borderRadius: moderateScale(10),
   },
 });

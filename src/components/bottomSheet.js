@@ -19,7 +19,6 @@ const BottomSheetView = ({
       enableOverDrag={false}>
       {children}
     </BottomSheet>
-
   );
 };
 
