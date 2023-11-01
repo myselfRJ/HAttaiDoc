@@ -82,7 +82,9 @@ const SlotBook = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
-  const [formatDate, setFormatDate] = useState('');
+  const [formatDate, setFormatDate] = useState(
+    moment(new Date()).format('YYYY-MM-DD'),
+  );
 
   const handleConfirm = date => {
     setDate(date);
@@ -273,7 +275,9 @@ const SlotBook = ({navigation, route}) => {
         setComplaint(jsonData?.data?.complaint);
         setSelectedMode(jsonData?.data?.mode_of_consultation);
         setSelectedTypeAppointment(
-          capitalizeWord(jsonData?.data?.appointment_type),
+          jsonData?.data?.appointment_type === 'walkin'
+            ? 'New'
+            : capitalizeWord(jsonData?.data?.appointment_type),
         );
       }
     } else {
@@ -281,7 +285,9 @@ const SlotBook = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    getApoointment();
+    if (id) {
+      getApoointment();
+    }
   }, []);
 
   const updateAppointment = async () => {
@@ -296,7 +302,10 @@ const SlotBook = ({navigation, route}) => {
         body: JSON.stringify({
           appointment_date: formatDate,
           mode_of_consultation: selectedMode,
-          appointment_type: selectedTypeAppointment?.toLowerCase(),
+          appointment_type:
+            selectedTypeAppointment === 'New'
+              ? 'walkin'
+              : selectedTypeAppointment?.toLowerCase(),
           appointment_token: token_id.toString(),
           appointment_slot: selectedSlot?.slot,
           clinic_id: Clinic_id,
@@ -310,7 +319,10 @@ const SlotBook = ({navigation, route}) => {
           start: today + selectedSlot?.slot.split('-')[0] + ':00Z',
           end: today + selectedSlot?.slot.split('-')[1] + ':00Z',
           speciality: speciality,
-          type: selectedTypeAppointment?.toLowerCase(),
+          type:
+            selectedTypeAppointment === 'New'
+              ? 'walkin'
+              : selectedTypeAppointment?.toLowerCase(),
         }),
       });
       if (response.status === HttpStatusCode.Ok) {
@@ -357,7 +369,10 @@ const SlotBook = ({navigation, route}) => {
         body: JSON.stringify({
           appointment_date: formatDate,
           mode_of_consultation: selectedMode,
-          appointment_type: selectedTypeAppointment?.toLowerCase(),
+          appointment_type:
+            selectedTypeAppointment === 'New'
+              ? 'walkin'
+              : selectedTypeAppointment?.toLowerCase(),
           appointment_token: token_id.toString(),
           appointment_slot: selectedSlot?.slot,
           clinic_id: Clinic_id,
@@ -373,7 +388,10 @@ const SlotBook = ({navigation, route}) => {
             start: today + selectedSlot?.slot.split('-')[0] + ':00Z',
             end: today + selectedSlot?.slot.split('-')[1] + ':00Z',
             speciality: speciality,
-            type: selectedTypeAppointment?.toLowerCase(),
+            type:
+              selectedTypeAppointment === 'New'
+                ? 'walkin'
+                : selectedTypeAppointment?.toLowerCase(),
           },
         }),
       });

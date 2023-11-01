@@ -42,6 +42,7 @@ import {
   addclinic_name,
   addclinic_Address,
   addclinic_logo,
+  addclinic_phone,
 } from '../redux/features/profiles/clinicId';
 import {
   horizontalScale,
@@ -109,6 +110,7 @@ const Dashboard = ({navigation, route}) => {
       dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
       dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
       dispatch(addclinic_logo(jsonData?.data[0]?.clinic_logo_url));
+      dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -189,6 +191,7 @@ const Dashboard = ({navigation, route}) => {
     dispatch(addclinic_name(clinic?.clinic_name));
     dispatch(addclinic_Address(clinic?.clinic_Address));
     dispatch(addclinic_logo(clinic?.clinic_logo_url));
+    dispatch(addclinic_phone(clinic?.clinic_phone_number));
 
     ClinicRef?.current?.snapToIndex(0);
   };
@@ -208,8 +211,7 @@ const Dashboard = ({navigation, route}) => {
   }, []);
 
   return (
-    <View
-      style={{flex:1, backgroundColor: CUSTOMCOLOR.background}}>
+    <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
         <View style={styles.main}>
           <View>
@@ -242,7 +244,7 @@ const Dashboard = ({navigation, route}) => {
         <View style={styles.select}>
           <SelectorBtn
             label={'Clinic :'}
-            name={open == true ? "chevron-up" :"chevron-down" }
+            name={open == true ? 'chevron-up' : 'chevron-down'}
             onPress={() => {
               ClinicRef?.current?.snapToIndex(1);
             }}
@@ -290,19 +292,22 @@ const Dashboard = ({navigation, route}) => {
           )}
         </ScrollView>
         <View>
-        <HButton
-        type='addtype'
-          label="Book Appointment"
-          btnstyles={commonstyles.activebtn}
-          // textStyle={{bottom:verticalScale(4),borderWidth:1}}
-          onPress={() => navigation.navigate('addnew')}
-        />
-      </View>
+          <HButton
+            type="addtype"
+            label="Book Appointment"
+            btnstyles={commonstyles.activebtn}
+            // textStyle={{bottom:verticalScale(4),borderWidth:1}}
+            onPress={() => navigation.navigate('addnew')}
+          />
+        </View>
       </View>
 
       {/* </View> */}
 
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'} backgroundStyle={'#000000aa'}>
+      <BottomSheetView
+        bottomSheetRef={ClinicRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics &&

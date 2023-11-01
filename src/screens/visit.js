@@ -217,7 +217,7 @@ const Visit = ({navigation, route}) => {
           prevScreen,
         });
         setPrevLoad(false);
-      }, 1000);
+      }, 2000);
     }
   };
 
@@ -294,6 +294,7 @@ const Visit = ({navigation, route}) => {
 
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
+  const clinic_phone = useSelector(state => state?.clinicid?.clinic_phone);
   const logo_url = `data:image/png;base64,${logo}`;
   const sign = useSelector(state => state?.sign?.sign);
   // const Sign_base64 = sign
@@ -321,7 +322,7 @@ const Visit = ({navigation, route}) => {
             <body>
                 <div class='maincontaioner' style=" width: 95%;
                 height: 100%;
-              
+              padding:2%;
                 background-color: #ffffff;">
                     <div class='head'>
                         <div class='first' style=";
@@ -341,13 +342,20 @@ const Visit = ({navigation, route}) => {
                                     font-size: 16px;
                                     margin-left: 8px ;
                                     color: #4ba5fa;
-                                    line-heigh:0px;
+                                    
                                     ">Dr.${data.doctor_name}</p>
                                     <p id='spec' style="font-weight: 400px;
                                     font-size: 16px;
                                     margin-left: 8px ;
                                     
                                     color: #4ba5fa;">${data.specialization}</p>
+                                    <p id='spec' style="font-weight: 400px;
+                                    font-size: 16px;
+                                    margin-left: 8px ;
+                                    
+                                    color: #4ba5fa;">Regd No:${
+                                      data.medical_number
+                                    }</p>
                                 </div>
                                 <div class='namecontaioner' >
                                     <p id='docname' style="font-weight: 600px;
@@ -355,12 +363,14 @@ const Visit = ({navigation, route}) => {
                                     margin-left: 80px ;
                                     color: #4ba5fa;
                                     text-align: right
+                                    
                                     ">${clinic_name}</p>
                                     <p id='spec' style="font-weight: 400px;
+                                    
                                     font-size: 16px;
                                     padding-left: 300px ;
                                     text-align: justify;
-                                    color: #4ba5fa;">${clinic_Address}</p>
+                                    color: #4ba5fa;">${clinic_phone} | ${clinic_Address}</p>
                                 </div>
                             </div>
                         </div>
@@ -419,6 +429,7 @@ const Visit = ({navigation, route}) => {
                         <div >
                         <p id='subhead' style="font-weight: 400px;
                         font-size: 16px;
+                        margin:0;
                         color:#4ba5fa;">Vitals:</p>
                         <div class='vitalscontaioner' style="display: flex;
                         flex-direction: row;
@@ -503,6 +514,7 @@ const Visit = ({navigation, route}) => {
                     </div>
                     <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
+                            margin-top:4px;
                             color:#4ba5fa; margin: 0;" >Prescribe:</p>
                     <table style="border-collapse: collapse;margin-bottom: 48px;">
                 <tr>
@@ -655,13 +667,6 @@ const Visit = ({navigation, route}) => {
                         justify-content: center;
                         margin-top: 84px;">
                             <div>
-                            <p id='values2' style="  font-weight: 300;
-                            font-size: 14px;
-                            color:#000000;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            line-height: 4px;">Not valid for Medical Legal Purpose</p>
                             <p id='values2'  style="  font-weight: 300;
                             font-size: 14px;
                             color:#000000;
@@ -679,11 +684,14 @@ const Visit = ({navigation, route}) => {
                         </div>
                         </footer>
                     <div>
-                        <img  id='foot' src=${
-                          CONSTANTS.pdf_footer
-                        } style="margin-top: 32px;
-                        width: 87px;
-                        height: 45px;"/>
+                    <p id='values2'  style="  font-weight: 300;
+                            font-size: 10px;
+                            color:#000000;
+                            line-height: 0px;
+                            ">Powered By</p>
+                        <img  id='foot' src=${CONSTANTS.pdf_footer} style="
+                        width: 98px;
+                        height: 40px;"/>
                     </div>
                 </div>
             </body>

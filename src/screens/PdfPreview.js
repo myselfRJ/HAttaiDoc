@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import PDFViewer from '../components/PdfViewer';
 import {useRoute} from '@react-navigation/native';
 import {fetchApi} from '../api/fetchApi';
@@ -248,10 +248,10 @@ const PdfView = ({navigation}) => {
       const responseData = await response.json();
       if (responseData) {
         console.log('API Response:', responseData);
-        handleAddDoctors();
-        Alert.alert('', 'Successfully Send to Patient');
+        // handleAddDoctors();
+        Alert.alert('Success', 'Successfully Send To Patient');
         setLoading(false);
-        nav.goBack();
+        navigation.goBack();
       }
     } catch (error) {
       console.error('Error:', error);

@@ -160,11 +160,11 @@ const PatientSearch = ({navigation}) => {
           <ScrollView
             contentContainerStyle={{
               gap: moderateScale(8),
-              paddingBottom: verticalScale(24),
+              paddingBottom: verticalScale(180),
             }}>
             {filteredData?.map((val, ind) => (
               <PatientSearchCard
-              doctor={true}
+                doctor={true}
                 meta={'value'}
                 key={ind}
                 patient_data={val}

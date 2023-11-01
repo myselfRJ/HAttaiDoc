@@ -178,7 +178,12 @@ const AppointmentCard = ({appointment, openVisit}) => {
         }}>
         <View style={styles.statusinfo}>
           <Text style={styles.contact}>Type:</Text>
-          <Text style={styles.contact}> {appointment.appointment_type}</Text>
+          <Text style={styles.contact}>
+            {' '}
+            {appointment.appointment_type === 'walkin'
+              ? 'New'
+              : appointment.appointment_type}
+          </Text>
         </View>
         <View style={styles.statusinfo}>
           <Text style={styles.contact}>Time:</Text>

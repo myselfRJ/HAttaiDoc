@@ -49,7 +49,7 @@ import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
-const MedicalHistory = ({navigation,route}) => {
+const MedicalHistory = ({navigation, route}) => {
   const {gende} = route.params;
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
@@ -145,7 +145,7 @@ const MedicalHistory = ({navigation,route}) => {
       setComorbidities('');
     }
   };
-  console.log("commor",commor_sug);
+  console.log('commor', commor_sug);
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
@@ -170,25 +170,25 @@ const MedicalHistory = ({navigation,route}) => {
   };
   const handleAsyncStorage = () => {
     RetriveAsyncData('commorbidities').then(array => {
-      const uniqueArray = [...commor_sug,...array]?.filter((item, index) => {
+      const uniqueArray = [...commor_sug, ...array]?.filter((item, index) => {
         return (
           index ===
           array?.findIndex(obj => obj.commorbities === item?.commorbities)
         );
       });
-      setCommor_Sug([...commor_sug,...uniqueArray]);
+      setCommor_Sug([...commor_sug, ...uniqueArray]);
     });
     RetriveAsyncData('socialHistory').then(array => {
-      const uniqueArray = [...social_sug,...array]?.filter((item, index) => {
+      const uniqueArray = [...social_sug, ...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.social === item?.social);
       });
-      setSocial_Sug([...social_sug,...uniqueArray]);
+      setSocial_Sug([...social_sug, ...uniqueArray]);
     });
     RetriveAsyncData('familyHistory').then(array => {
-      const uniqueArray = [...family_sug,...array]?.filter((item, index) => {
+      const uniqueArray = [...family_sug, ...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.family === item?.family);
       });
-      setFamily_Sug([...family_sug,...uniqueArray]);
+      setFamily_Sug([...family_sug, ...uniqueArray]);
     });
   };
   useEffect(() => {
@@ -222,7 +222,7 @@ const MedicalHistory = ({navigation,route}) => {
       <ScrollView>
         <View style={styles.input}>
           <ChipInput
-          placeholder={'Enter new comorbidities'}
+            placeholder={'Enter new comorbidities'}
             item={'commorbities'}
             label={'Comorbidities'}
             data={commor}
@@ -232,28 +232,23 @@ const MedicalHistory = ({navigation,route}) => {
             delete={handleDeleteCommorbities}
           />
           {commor_sug?.length > 0 ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: moderateScale(8),
-                marginHorizontal: horizontalScale(8),
-              }}>
+            <View style={styles.suggestion}>
               {commor_sug?.map((item, ind) => (
                 <TouchableOpacity
                   key={ind}
                   style={[
                     styles.sug,
-                    item?.commorbities == select
-                      ? {backgroundColor: CUSTOMCOLOR.primary}
-                      : {backgroundColor: CUSTOMCOLOR.white},
+                    // item?.commorbities == select
+                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
+                    //   : {backgroundColor: CUSTOMCOLOR.white},
                   ]}
                   onPress={() => handleSelectComorbidities(item?.commorbities)}>
                   <Text
                     style={[
                       styles.sugtxt,
-                      item?.commorbities == select
-                        ? {color: CUSTOMCOLOR.white}
-                        : {color: CUSTOMCOLOR.primary},
+                      // item?.commorbities == select
+                      //   ? {color: CUSTOMCOLOR.white}
+                      //   : {color: CUSTOMCOLOR.primary},
                     ]}>
                     {item?.commorbities}
                   </Text>
@@ -261,9 +256,9 @@ const MedicalHistory = ({navigation,route}) => {
               ))}
             </View>
           ) : null}
-          
+
           <ChipInput
-          placeholder={'Eg : smoking, drinking'}
+            placeholder={'Eg : smoking, drinking'}
             item={'social'}
             label={'Social History'}
             data={socialHistory}
@@ -273,20 +268,15 @@ const MedicalHistory = ({navigation,route}) => {
             delete={handleDeleteSocial}
           />
           {social_sug?.length > 0 ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: moderateScale(8),
-                marginHorizontal: horizontalScale(8),
-              }}>
+            <View style={styles.suggestion}>
               {social_sug?.map((item, ind) => (
                 <TouchableOpacity
                   key={ind}
                   style={[
                     styles.sug,
-                    item?.social == select
-                      ? {backgroundColor: CUSTOMCOLOR.primary}
-                      : {backgroundColor: CUSTOMCOLOR.white},
+                    item?.social == select,
+                    // ? {backgroundColor: CUSTOMCOLOR.primary}
+                    // : {backgroundColor: CUSTOMCOLOR.white},
                   ]}
                   onPress={() => handleSelectSocial(item?.social)}>
                   <Text
@@ -303,7 +293,7 @@ const MedicalHistory = ({navigation,route}) => {
             </View>
           ) : null}
           <ChipInput
-          placeholder={'Eg : Heart diseases, sugar'}
+            placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
             data={familyHistory}
@@ -313,28 +303,23 @@ const MedicalHistory = ({navigation,route}) => {
             delete={handleDeleteFamliy}
           />
           {family_sug?.length > 0 ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: moderateScale(8),
-                marginHorizontal: horizontalScale(8),
-              }}>
+            <View style={styles.suggestion}>
               {family_sug?.map((item, ind) => (
                 <TouchableOpacity
                   key={ind}
                   style={[
                     styles.sug,
-                    item?.family == select
-                      ? {backgroundColor: CUSTOMCOLOR.primary}
-                      : {backgroundColor: CUSTOMCOLOR.white},
+                    // item?.family == select
+                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
+                    //   : {backgroundColor: CUSTOMCOLOR.white},
                   ]}
                   onPress={() => handleSelectFamily(item?.family)}>
                   <Text
                     style={[
                       styles.sugtxt,
-                      item?.family == select
-                        ? {color: CUSTOMCOLOR.white}
-                        : {color: CUSTOMCOLOR.primary},
+                      item?.family == select,
+                      // ? {color: CUSTOMCOLOR.white}
+                      // : {color: CUSTOMCOLOR.primary},
                     ]}>
                     {item?.family}
                   </Text>
@@ -351,12 +336,7 @@ const MedicalHistory = ({navigation,route}) => {
             blur={false}
           />
           {data?.length > 0 ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: moderateScale(8),
-                marginHorizontal: horizontalScale(8),
-              }}>
+            <View style={styles.suggestion}>
               {data?.map((item, ind) => (
                 <TouchableOpacity
                   key={ind}
@@ -388,25 +368,25 @@ const MedicalHistory = ({navigation,route}) => {
             setValue={txt => setPast(txt)}
             blur={false}
           />
-         {(gende == 'Female' || gende == 'female' ) &&(
-           <InputText
-           inputContainer={styles.inputtext}
-           label="Menstrual History"
-           placeholder="Menstrual history"
-           value={menstrual}
-           setValue={txt => setMenstrual(txt)}
-           blur={false}
-         />
-         )}
-          {(gende == 'Female' || gende == 'female' ) &&(
-          <InputText
-            inputContainer={styles.inputtext}
-            label="Obstetric History"
-            placeholder="Obstetric history"
-            value={obstetric}
-            setValue={txt => setObstetric(txt)}
-            blur={false}
-          />
+          {(gende == 'Female' || gende == 'female') && (
+            <InputText
+              inputContainer={styles.inputtext}
+              label="Menstrual History"
+              placeholder="Menstrual history"
+              value={menstrual}
+              setValue={txt => setMenstrual(txt)}
+              blur={false}
+            />
+          )}
+          {(gende == 'Female' || gende == 'female') && (
+            <InputText
+              inputContainer={styles.inputtext}
+              label="Obstetric History"
+              placeholder="Obstetric history"
+              value={obstetric}
+              setValue={txt => setObstetric(txt)}
+              blur={false}
+            />
           )}
         </View>
       </ScrollView>
@@ -469,6 +449,12 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h4,
     fontWeight: '400',
     color: CUSTOMCOLOR.primary,
+  },
+  suggestion: {
+    flexDirection: 'row',
+    gap: moderateScale(8),
+    marginHorizontal: horizontalScale(8),
+    flexWrap: 'wrap',
   },
 });
 export default MedicalHistory;

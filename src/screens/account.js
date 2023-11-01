@@ -111,11 +111,7 @@ const Account = () => {
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
-    }, [cliniId]),
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
+      fetchDoctor();
       fetchUsers();
     }, [cliniId]),
   );
@@ -161,6 +157,7 @@ const Account = () => {
                 Age:{age} | {data?.gender}
               </Text>
               <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
+              <Text style={styles.subinfo}>{data?.specialization}</Text>
             </View>
             <TouchableOpacity
               onPress={() => navigation.navigate('updateprofile')}>
@@ -228,7 +225,7 @@ const Account = () => {
             dta={'clinic_name'}
             nameIcon={'hospital'}
             Dataname={'Clinics'}
-            name={'plus'}
+            name={'pencil'}
             onPress={() => {
               // navigation.navigate('addclinic', {prevScrn});
               navigation.navigate('clinic', {prevScrn});
@@ -240,7 +237,7 @@ const Account = () => {
             dta={'clinic_user_name'}
             nameIcon={'account-group'}
             Dataname={'Users'}
-            name={'plus'}
+            name={'pencil'}
             onPress={() => navigation.navigate('userdisplay', {prevScrn})}
           />
         </View>

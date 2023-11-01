@@ -27,6 +27,7 @@ import {
   addclinic_id,
   addclinic_name,
   addclinic_Address,
+  addclinic_phone,
 } from '../redux/features/profiles/clinicId';
 import Logo from '../components/logo';
 import {commonstyles} from '../styles/commonstyle';
@@ -79,6 +80,7 @@ const Appointment = ({navigation}) => {
     dispatch(addclinic_id(clinic.id));
     dispatch(addclinic_name(clinic.clinic_name));
     dispatch(addclinic_Address(clinic.clinic_Address));
+    dispatch(addclinic_phone(clinic?.clinic_phone_number));
     ClinicRef?.current?.snapToIndex(0);
   };
   const ChangeNameValue = e => {
@@ -114,6 +116,7 @@ const Appointment = ({navigation}) => {
       dispatch(addclinic_id(jsonData?.data[0]?.id));
       dispatch(addclinic_name(jsonData?.data[0]?.clinic_name));
       dispatch(addclinic_Address(jsonData?.data[0]?.clinic_Address));
+      dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
     } else {
       console.error('API call failed:', response.status, response);
     }
