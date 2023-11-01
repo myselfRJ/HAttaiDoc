@@ -29,8 +29,8 @@ import {
   RetriveAsyncData,
   clearStorage,
 } from '../utility/AsyncStorage';
-import { CONSTANT } from '../utility/const';
-import { commonstyles } from '../styles/commonstyle';
+import {CONSTANT} from '../utility/const';
+import {commonstyles} from '../styles/commonstyle';
 
 const LabReports = () => {
   const navigation = useNavigation();
@@ -44,7 +44,7 @@ const LabReports = () => {
   const prev = useSelector(state => state?.labreport?.labReport);
   const [sug, setSug] = useState([]);
   const [seletedType, setSelectedType] = useState();
-  console.log('type==',seletedType)
+
   const HandleAddValue = () => {
     if (value) {
       dispatch(addLabReport([...prev, {lab_test: value}]));
@@ -82,15 +82,20 @@ const LabReports = () => {
   }, [term, option]);
 
   useEffect(() => {
+    const filtering_data = [
+      ...data,
+      ...CONSTANT?.micro_biology,
+      ...CONSTANT?.clinical_pathology,
+    ];
     if (value) {
-      const filtered = data?.filter(
+      const filtered = filtering_data?.filter(
         item =>
           item?.term &&
           item?.term.toLowerCase().startsWith(value.toLowerCase()),
       );
       setFilteredData([...filtered, {term: value}]);
     } else {
-      setFilteredData(data);
+      setFilteredData(filtering_data);
     }
   }, [data, value]);
 
@@ -131,18 +136,16 @@ const LabReports = () => {
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
-      <ScrollView
-      contentContainerStyle={{height:'50%'}}>
-      
-
-      
-      <View>
-      <View style={styles.tab}>
+      <ScrollView contentContainerStyle={{flex: 1}}>
+        <View>
+          <View style={styles.tab}>
             {CONSTANT.test?.map((val, ind) => (
               <SelectionTab
-              selectContainer={{paddingHorizontal:horizontalScale(64),
-                paddingVertical:verticalScale(8),
-                borderColor:CUSTOMCOLOR.primary}}
+                selectContainer={{
+                  paddingHorizontal: horizontalScale(64),
+                  paddingVertical: verticalScale(8),
+                  borderColor: CUSTOMCOLOR.primary,
+                }}
                 label={val}
                 key={ind}
                 onPress={() => handleSelect(val)}
@@ -150,125 +153,128 @@ const LabReports = () => {
               />
             ))}
           </View>
-        <View style={styles.input}>
-          <InputText
-            inputContainer={styles.inputtext}
-            label="Search"
-            placeholder="Eg: blood test"
-            value={value}
-            setValue={setValue}
-            search={true}
-            IconName={
-              (show && filtered.length > 0) ||
-              value === selected ||
-              value.length === 0
-                ? 'magnify'
-                : 'close'
-            }
-            onPress={() => setShow(!show)}
-          />
-          {value.length >= 3 &&
-            (value === selected || show ? null : (
-              <View style={styles.dropdownContainer}>
-                <ScrollView persistentScrollbar={true}>
-                  {filtered?.map((val, index) => (
-                    <TouchableOpacity
-                      style={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(8),
-                      }}
-                      onPress={() => HandlePress(val?.term)}
-                      key={index}>
-                      <Text
-                        style={{
-                          fontSize: CUSTOMFONTSIZE.h3,
-                          padding: moderateScale(10),
-                          color: CUSTOMCOLOR.black,
-                        }}>
-                        {val.term}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            ))}
-           
-          <View
-            style={{
-              padding: moderateScale(16),
-              flexDirection: 'row',
-              flexWrap:'wrap',
-              gap: moderateScale(8),
-              paddingHorizontal: horizontalScale(8),
-            }}>
-            {sug?.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => selectChange(item?.lab_test)}
-                style={[
-                  styles.recomend,
-                  {
-                    backgroundColor:
-                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-                  },
-                ]}>
-                <Text
-                  style={{
-                    color:
-                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-                  }}>
-                  {item?.lab_test}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          
-          <View
-            style={{
-              alignSelf:'flex-end',
-              marginTop: moderateScale(32),
-              paddingHorizontal:horizontalScale(8)
-            }}>
-            <HButton
-            // btnstyles={{paddingHorizontal:horizontalScale(12)}}
-            type='addtype'
-            icon='plus'
-              label={'Add'}
-              onPress={() => {
-                HandleAddValue();
-              }}
+          <View style={styles.input}>
+            <InputText
+              inputContainer={styles.inputtext}
+              label="Search"
+              placeholder="Eg: blood test"
+              value={value}
+              setValue={setValue}
+              search={true}
+              IconName={
+                (show && filtered.length > 0) ||
+                value === selected ||
+                value.length === 0
+                  ? 'magnify'
+                  : 'close'
+              }
+              onPress={() => setShow(!show)}
             />
-          </View>
-          <View style={{top:moderateScale(32),gap:moderateScale(4)}}>
-          {prev?.map((item, ind) =>
-        prev.length > 0 ? (
-          <ShowChip
-            text={item?.lab_test}
-            onPress={() => handleDelete(ind)}
-            ind={ind}
-          />
-        ) : null,
-      )}
-      </View>
+            {value.length >= 3 &&
+              (value === selected || show ? null : (
+                <View style={styles.dropdownContainer}>
+                  <ScrollView persistentScrollbar={true}>
+                    {filtered?.map((val, index) => (
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: horizontalScale(4),
+                          paddingVertical: verticalScale(8),
+                        }}
+                        onPress={() => HandlePress(val?.term)}
+                        key={index}>
+                        <Text
+                          style={{
+                            fontSize: CUSTOMFONTSIZE.h3,
+                            padding: moderateScale(10),
+                            color: CUSTOMCOLOR.black,
+                          }}>
+                          {val.term}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ))}
 
-          
+            <View
+              style={{
+                padding: moderateScale(16),
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: moderateScale(8),
+                paddingHorizontal: horizontalScale(8),
+              }}>
+              {sug?.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => selectChange(item?.lab_test)}
+                  style={[
+                    styles.recomend,
+                    {
+                      backgroundColor:
+                        value === item
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      color:
+                        value === item
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
+                    }}>
+                    {item?.lab_test}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                marginTop: moderateScale(32),
+                paddingHorizontal: horizontalScale(8),
+              }}>
+              <HButton
+                // btnstyles={{paddingHorizontal:horizontalScale(12)}}
+                type="addtype"
+                icon="plus"
+                label={'Add'}
+                onPress={() => {
+                  HandleAddValue();
+                }}
+              />
+            </View>
+            <View style={{top: moderateScale(32), gap: moderateScale(4)}}>
+              {prev?.map((item, ind) =>
+                prev.length > 0 ? (
+                  <ShowChip
+                    text={item?.lab_test}
+                    onPress={() => handleDelete(ind)}
+                    ind={ind}
+                  />
+                ) : null,
+              )}
+            </View>
+          </View>
         </View>
-      </View>
       </ScrollView>
       <View
-            style={{
-             justifyContent:'flex-end',
-             flex:1,
-              // marginTop: moderateScale(32),
-            }}>
-            <HButton
-              btnstyles={commonstyles.activebtn}
-              label={'Save'}
-              onPress={() => {
-                handledata();
-              }}
-            />
-          </View>
+        style={{
+          justifyContent: 'flex-end',
+          flex: 1,
+          alignItems: 'center',
+          // marginTop: moderateScale(32),
+        }}>
+        <HButton
+          // btnstyles={commonstyles.activebtn}
+          label={'Save'}
+          onPress={() => {
+            handledata();
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -276,11 +282,11 @@ export default LabReports;
 
 const styles = StyleSheet.create({
   main: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: moderateScale(8),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
 
   inputtext: {
@@ -296,17 +302,16 @@ const styles = StyleSheet.create({
     padding: moderateScale(8),
     borderRadius: moderateScale(4),
     // paddingHorizontal: horizontalScale(16),
-   
-    paddingVertical:verticalScale(12),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+
+    paddingVertical: verticalScale(12),
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   tab: {
-
     flexDirection: 'row',
     gap: moderateScale(8),
     // paddingHorizontal:horizontalScale(8),
-    paddingVertical:verticalScale(16),
+    paddingVertical: verticalScale(16),
     // top:moderateScale(24)
   },
 });

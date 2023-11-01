@@ -61,8 +61,8 @@ const PatientCreate = ({navigation}) => {
   const [birth_date, setBirth_date] = useState('');
   const [age, setAge] = useState('');
   const [blood_group, setBlood_group] = useState('');
-  const [find,Setfind] = useState('')
-  const [refer,setRefer] = useState('')
+  const [find, Setfind] = useState('');
+  const [refer, setRefer] = useState('');
   const [spouse_name, setSpouse_nmae] = useState('');
   const [ABHA_ID, setABHA_ID] = useState('');
   const [aadhar_no, setAadhar_no] = useState('');
@@ -108,24 +108,23 @@ const PatientCreate = ({navigation}) => {
     setModal(false);
   };
   const [value, setValue] = useState('');
-  const HandleInput = () => {
-    if (age) {
-      setValue(age);
-      setAge(age);
-    } else {
-      {
-        open && setValue(formattedDate);
-      }
-    }
-  };
-  useEffect(() => {
-    HandleInput();
-  }, [date, age]);
+  // const HandleInput = () => {
+  //   if (age) {
+  //     setValue(age);
+  //     setAge(age);
+  //   } else {
+  //     {
+  //       open && setValue(formattedDate);
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   HandleInput();
+  // }, [date, age]);
 
   const HandleCheck = () => {
-    if (value.length <= 3) {
+    if (value?.length > 0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      console.log('current====>', `${current}-${'01'}-${'01'}`);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
       setFormatDate(formattedDate);
@@ -133,19 +132,23 @@ const PatientCreate = ({navigation}) => {
   };
   useEffect(() => {
     HandleCheck();
-  }, [value]);
+  }, [value, formattedDate]);
 
   const handleDate = () => {
-    setOpen(!open);
+    if (value?.length === 0) {
+      setOpen(true);
+    }
   };
-
+  const [hide, setHide] = useState(false);
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
-    setValue(selectedDate);
+    setOpen(false);
+    setHide(true);
+    // setValue(selectedDate);
   };
 
   const handleCancel = () => {
-    setOpen(open);
+    setOpen(false);
   };
   const dayOfBirth = date.toISOString().split('T')[0].split('-')[2];
   const dayOfMonth = date.toISOString().split('T')[0].split('-')[1];
@@ -227,6 +230,9 @@ const PatientCreate = ({navigation}) => {
   const ModalVisible = () => {
     setModal(true);
   };
+
+  // console.log("=====val",formattedDate,formatDate);
+
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -294,20 +300,25 @@ const PatientCreate = ({navigation}) => {
               required={true}
             /> */}
             <View style={styles.btn}>
-              <InputText
-                inputContainer={{
-                  flex: 5,
-                  paddingHorizontal: horizontalScale(0),
-                }}
-                label="Age"
-                placeholder="eg:25"
-                input={value}
-                setValue={setValue}
-                maxLength={4}
-                numeric={true}
-                required={true}
-                keypad='numeric'
-              />
+              {!hide ? (
+                <InputText
+                  inputContainer={{
+                    flex: 5,
+                  }}
+                  label="Age"
+                  placeholder="eg:25"
+                  input={value}
+                  setValue={setValue}
+                  numeric={true}
+                  keypad="numeric"
+                  // required={true}
+                />
+              ) : (
+                <SelectorBtn
+                  label={'Age'}
+                  selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
+                />
+              )}
               <View
                 style={{
                   flex: 1,
@@ -334,14 +345,14 @@ const PatientCreate = ({navigation}) => {
                 selectContainer={{flex: 5, gap: verticalScale(4)}}
                 label={Language[language]['dob']}
                 name="calendar"
-                onPress={() => setOpen('to')}
-                input={formattedDate}
+                onPress={handleDate}
+                input={value ? '' : formattedDate}
                 style={styles.DOBselect}
               />
             </View>
             <DatePicker
               modal
-              open={open !== false}
+              open={open}
               date={date}
               theme="auto"
               mode="date"
@@ -466,9 +477,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      blood_group === bld_grp
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        blood_group === bld_grp
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}
@@ -480,14 +491,14 @@ const PatientCreate = ({navigation}) => {
             </View>
             <InputText
               required={true}
-              label="Address / Locality"
-              placeholder="Address or locality"
+              label="Address / Locality / Pincode"
+              placeholder="Address or locality or Pincode"
               value={address}
               setValue={setAddress}
             />
 
             <InputText
-            keypad='numeric'
+              keypad="numeric"
               label="Aadhar Number"
               placeholder="12-digit Aadhar Number"
               value={aadhar_no}
@@ -503,7 +514,7 @@ const PatientCreate = ({navigation}) => {
                 }
               }}
             />
-            <View style={{gap:moderateScale(8)}}>
+            <View style={{gap: moderateScale(8)}}>
               <Text style={styles.genderText}>How did you find us?</Text>
               <View
                 style={{
@@ -526,9 +537,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      find === finds
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        find === finds
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}
@@ -539,6 +550,7 @@ const PatientCreate = ({navigation}) => {
               </View>
             </View>
             {/* <View style={{gap:moderateScale(8)}}>
+            <View style={{gap: moderateScale(8)}}>
               <Text style={styles.genderText}>Reffered by</Text>
               <View
                 style={{
@@ -560,9 +572,9 @@ const PatientCreate = ({navigation}) => {
                     }}
                     inputstyle={{
                       color:
-                      refer === item
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary
+                        refer === item
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}

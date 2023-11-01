@@ -36,28 +36,8 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import Prescribe1 from './prescibe1';
-import {updatePrescribe1} from '../redux/features/prescription/prescr';
-import {updateSymptom} from '../redux/features/prescription/symptomslice';
-import {updateDate} from '../redux/features/prescription/Followupslice';
-import {updateCommorbities} from '../redux/features/prescription/commorbities';
-import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
-import {updatepastHistory} from '../redux/features/prescription/pastHistory';
-import {updateLabReport} from '../redux/features/prescription/labreport';
-import {updateAllergies} from '../redux/features/prescription/allergies';
-import {updateValid} from '../redux/features/prescription/valid';
+
 import {
-  updatecommorbidities,
-  updatefamilyHistory,
-  updatemedicationHistory,
-  updatemenstrualHistory,
-  updateobstericHistory,
-  updatepastHospitalization,
-  updatesocialHistory,
-} from '../redux/features/prescription/pastHistory';
-import {
-  addVitals,
-  UpdateNote,
-  UpdateDoctorRefer,
   UpadteVitals,
   UpadateCheifComplaint,
   addCheifComplaint,
@@ -65,16 +45,18 @@ import {
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
 import Seperator from '../components/seperator';
+import PDFViewer from '../components/PdfViewer';
+import {PermmisionStorage} from '../utility/permissions';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
-
+  const [show, setShow] = useState(false);
+  const [prevLoad, setPrevLoad] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
   const date = useSelector(state => state?.dateTime?.date);
-  //console.log('date=======', typeof date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
@@ -93,7 +75,6 @@ const Visit = ({navigation, route}) => {
 
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
-  const [apiStatus, setApiStatus] = useState({});
 
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
@@ -106,7 +87,6 @@ const Visit = ({navigation, route}) => {
   const hospitalization = useSelector(
     state => state?.pasthistory?.hospitalization,
   );
-  // console.log('======>hospitilization', hospitalization);
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
@@ -129,11 +109,6 @@ const Visit = ({navigation, route}) => {
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
 
-  const [submit, setSubmit] = useState(false);
-
-  const habdlePrescribe = () => {
-    setSubmit(true);
-  };
   const [patient_data, setPatientData] = useState();
   const {
     consultation_fees,
@@ -153,7 +128,6 @@ const Visit = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log(jsonData.data);
       setPatientData(jsonData.data[0]);
     } else {
       console.error('API call failed:', response.status, response);
@@ -164,137 +138,44 @@ const Visit = ({navigation, route}) => {
   }, []);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
-  const ResetRuduxState = () => {
-    const newPrescribe = [];
-    const newSymptoms = [];
-    const newDiagnosis = [];
-    const newLabhistory = [];
-    const newCommorbities = [];
-    const newAllregies = [];
-    const commorbidities = [];
-    const social = [];
-    const family = [];
-
-    const hospitalization = '';
-
-    const medicationHistory = '';
-    const menstrualHistory = '';
-    const obstericHistory = '';
-    const newDate = {
-      date: '',
-    };
-    const newValid = {
-      valid: '',
-    };
-    const newVitals = {};
-    const newDoctor = [];
-    const newComplaint = '';
-    const newNote = '';
-    dispatch(updatesocialHistory(social));
-    dispatch(updatefamilyHistory(family));
-    dispatch(updatepastHospitalization(hospitalization));
-    dispatch(updatemedicationHistory(medicationHistory));
-    dispatch(updatemenstrualHistory(menstrualHistory));
-    dispatch(updateobstericHistory(obstericHistory));
-    dispatch(updatePrescribe1(newPrescribe));
-    dispatch(updateAllergies(newAllregies));
-    dispatch(updateCommorbities(newCommorbities));
-    dispatch(updateDiagnosis(newDiagnosis));
-    dispatch(updateLabReport(newLabhistory));
-    dispatch(updateSymptom(newSymptoms));
-    dispatch(updateDate(newDate?.date));
-    dispatch(updateValid(newValid?.valid));
-    dispatch(UpadteVitals(newVitals));
-    dispatch(UpdateNote(newNote));
-    dispatch(UpdateDoctorRefer(newDoctor));
-    dispatch(UpadateCheifComplaint(newComplaint));
-    dispatch(updatecommorbidities(commorbidities));
-  };
-
   useEffect(() => {
     dispatch(addCheifComplaint(complaint));
   }, []);
 
   const [chief_complaint, setComplaint] = useState('');
   const [vitals, setVitals] = useState({});
-  const fetchData = async () => {
-    const consultationData = {
-      prescribe: Prescribe,
+  const consultationData = {
+    prescribe: Prescribe,
 
-      symptoms: Symptom,
+    symptoms: Symptom,
 
-      chief_complaint: chief_complaint ? {} : selectedComplaint,
-      vitals: vitals ? {} : vitalsData,
-      refer_to_doctor: selectedDoctor,
-      // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
-      follow_up: date,
-      note: note,
-      diagnosis: diagnosis,
-      labReports: labreport,
-      // commoribities: commorbities,
-      allergies: allergies,
-      pastHistory: {
-        past_history: JSON.stringify(hospitalization),
-        commoribities: JSON.stringify(commor),
-        social_history: JSON.stringify(socialHistory),
-        family_history: JSON.stringify(familyHistory),
-        medication_history: JSON.stringify(medicationHistory),
-        mensutral_history: JSON.stringify(menstrualHistory),
-        obsteric_history: JSON.stringify(obstericHistory),
-      },
+    chief_complaint: chief_complaint ? {} : selectedComplaint,
+    vitals: vitals ? {} : vitalsData,
+    refer_to_doctor: selectedDoctor,
+    // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
+    follow_up: date,
+    note: note,
+    diagnosis: diagnosis,
+    labReports: labreport,
+    // commoribities: commorbities,
+    allergies: allergies,
+    pastHistory: {
+      past_history: JSON.stringify(hospitalization),
+      commoribities: JSON.stringify(commor),
+      social_history: JSON.stringify(socialHistory),
+      family_history: JSON.stringify(familyHistory),
+      medication_history: JSON.stringify(medicationHistory),
+      mensutral_history: JSON.stringify(menstrualHistory),
+      obsteric_history: JSON.stringify(obstericHistory),
+    },
 
-      meta_data: {
-        patient_phone_number: patient_phone,
-        doctor_phone_number: phone,
-        clinic_id: Clinic_id,
-        appointment_id: appointment_id,
-      },
-    };
-    try {
-      setLoading(true);
-      const response = await fetchApi(URL.savePrescription, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-        console.log('json', jsonData);
-        if (jsonData?.status === 'success') {
-          setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
-          // Prescribe.splice(0,Prescribe.length)
-          ResetRuduxState();
-          setTimeout(() => {
-            navigation.navigate('tab');
-          }, 1000);
-
-          setLoading(false);
-          // setTimeout(() => {
-          //   SuccesRef?.current?.snapToIndex(0);
-          // }, 1500);
-        } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
-          console.error('API call failed:', response.status, response);
-          setLoading(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error occurred:', error);
-      setApiStatus({status: 'error', message: 'Please try again'});
-      setLoading(false);
-    }
+    meta_data: {
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
+    },
   };
-
-  const SuccesRef = useRef(null);
-
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
 
   const [data, setData] = useState();
 
@@ -316,86 +197,53 @@ const Visit = ({navigation, route}) => {
     fetchDoctor();
   }, []);
 
-  const handlePreview = () => {
-    const patient_phone_number = patient_phone;
-    const patient_name = patient_name;
-    const gender = gende;
-    const patient_age = age;
-    navigation.navigate('prescription', {
-      name,
-      gender,
-      patient_age,
-      patient_phone_number,
-    });
-  };
-
-  const putVitals = async () => {
-    const consultationData = {
-      pulse_rate: vitalsData?.pulse_rate,
-      weight: vitalsData?.weight,
-      height: vitalsData?.height,
-      body_temperature: vitalsData?.body_temperature,
-      rate: vitalsData?.rate,
-      diastolic: vitalsData?.diastolic,
-      systolic: vitalsData?.systolic,
-      EDD: vitalsData?.EDD,
-      LDD: vitalsData?.LDD,
-      bmi: vitalsData?.bmi,
-      patient_phone_number: patient_phone,
-      doctor_phone_number: phone,
-      clinic_id: Clinic_id,
-      appointment_id: appointment_id,
-    };
-    try {
-      const response = await fetchApi(URL.updatevitlas(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-        // Handle successful response data
-        // console.log('Complaint updated successfully:', jsonData);
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
+  const handlePreview = async () => {
+    const prevScreen = 'visit';
+    const doc_phone = data?.doctor_phone_number;
+    setPrevLoad(true);
+    const path =
+      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
+    createPDF();
+    if (await PermmisionStorage()) {
+      setTimeout(() => {
+        navigation.navigate('pdf', {
+          path,
+          consultationData,
+          UpdateVitals,
+          UpdateComplaint,
+          appointment_id,
+          doc_phone,
+          patient_phone,
+          prevScreen,
+        });
+        setPrevLoad(false);
+      }, 1000);
     }
   };
 
-  const putComplaint = async () => {
-    const consultationData = {
-      complaint_message: selectedComplaint,
-      patient_phone_number: patient_phone,
-      doctor_phone_number: phone,
-      clinic_id: Clinic_id,
-      appointment_id: appointment_id,
-    };
-    try {
-      const response = await fetchApi(URL.updateComplaints(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-        // Handle successful response data
-        // console.log('Complaint updated successfully:', jsonData);
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
+  const UpdateVitals = {
+    pulse_rate: vitalsData?.pulse_rate,
+    weight: vitalsData?.weight,
+    height: vitalsData?.height,
+    body_temperature: vitalsData?.body_temperature,
+    rate: vitalsData?.rate,
+    diastolic: vitalsData?.diastolic,
+    systolic: vitalsData?.systolic,
+    EDD: vitalsData?.EDD,
+    LDD: vitalsData?.LDD,
+    bmi: vitalsData?.bmi,
+    patient_phone_number: patient_phone,
+    doctor_phone_number: phone,
+    clinic_id: Clinic_id,
+    appointment_id: appointment_id,
+  };
+
+  const UpdateComplaint = {
+    complaint_message: selectedComplaint,
+    patient_phone_number: patient_phone,
+    doctor_phone_number: phone,
+    clinic_id: Clinic_id,
+    appointment_id: appointment_id,
   };
 
   const fetchComplaint = async () => {
@@ -431,7 +279,6 @@ const Visit = ({navigation, route}) => {
       const jsonData = await response.json();
       setVitals(jsonData?.data);
       dispatch(UpadteVitals(jsonData?.data));
-      // console.log('-----------------js', jsonData);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -439,44 +286,26 @@ const Visit = ({navigation, route}) => {
   useEffect(() => {
     fetchVitals();
   }, []);
-
   const months = CONSTANTS.months;
 
   const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : '';
   const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : '';
   const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : '';
 
-  const isPermitted = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs access to Storage data',
-          },
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        alert('Write permission err', err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
-
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   const logo_url = `data:image/png;base64,${logo}`;
   const sign = useSelector(state => state?.sign?.sign);
-  // console.log('---------sign=========>', sign);
-  const Sign_base64 = sign
-    ? `data:image/jpeg;base64,${sign}`
-    : data?.doctor_name;
-
+  // const Sign_base64 = sign
+  //   ? `data:image/jpeg;base64,${sign}`
+  //   : data?.doctor_name;
+  const Sign_base64 = `${data?.doctor_name}`;
+  // useEffect(() => {
+  //   createPDF();
+  // });
   const createPDF = async () => {
-    if (await isPermitted()) {
+    if (await PermmisionStorage()) {
+      // setPrevLoad(!prevLoad)
       let options = {
         //Content to print
         html: `<!DOCTYPE html>
@@ -490,50 +319,47 @@ const Visit = ({navigation, route}) => {
                 </title>
             </head>
             <body>
-                <div class='maincontaioner' style=" width: 650px;
-                height: 842px;
-                background-color: #ffffff;
-                padding: 24px;">
+                <div class='maincontaioner' style=" width: 95%;
+                height: 100%;
+              
+                background-color: #ffffff;">
                     <div class='head'>
-                        <div class='first' style="  padding: 8px;
+                        <div class='first' style=";
                         display: flex;
                         flex-direction: row;
                         border-bottom:1px #4ba5fa solid;">
                             <img id='img' src=${
-                              logo ? logo_url : CONSTANTS.default_clinic_logo
+                              logo === CONSTANTS.default_image
+                                ? CONSTANTS.default_clinic_logo
+                                : logo_url
                             } style="width: 52px;height: 58px;" alt="Sample Image"/>
-                            <div class='address' style="   display: flex;
-                            margin-right: 0px;
+                            <div class='address' style="display: flex;width:100%;
                             flex-direction: row;
-                            justify-content: space-between;
-                            width:500px">
-                                <div class='namecontaioner' style="padding: 4px;">
+                            justify-content: space-between;">
+                                <div class='namecontaioner'>
                                     <p id='docname' style=" font-weight: 600px;
-                                    font-size: 14px;
+                                    font-size: 16px;
                                     margin-left: 8px ;
                                     color: #4ba5fa;
-                                    line-height: 8px;">${data.doctor_name}</p>
+                                    line-heigh:0px;
+                                    ">Dr.${data.doctor_name}</p>
                                     <p id='spec' style="font-weight: 400px;
-                                    font-size: 12px;
+                                    font-size: 16px;
                                     margin-left: 8px ;
-                                    line-height: 0px;
+                                    
                                     color: #4ba5fa;">${data.specialization}</p>
                                 </div>
-                                <div class='namecontaioner' style="  padding: 4px;">
+                                <div class='namecontaioner' >
                                     <p id='docname' style="font-weight: 600px;
-                                    font-size: 14px;
-                                    margin-left: 8px ;
+                                    font-size: 16px;
+                                    margin-left: 80px ;
                                     color: #4ba5fa;
-                                    line-height: 8px;">
-                                    <p id='docname' style="font-weight: 600px;
-                                    font-size: 14px;
-                                    margin-left: 8px ;
-                                    color: #4ba5fa;
-                                    line-height: 8px;">${clinic_name}</p>
+                                    text-align: right
+                                    ">${clinic_name}</p>
                                     <p id='spec' style="font-weight: 400px;
-                                    font-size: 12px;
-                                    margin-left: 8px ;
-                                    line-height: 0px;
+                                    font-size: 16px;
+                                    padding-left: 300px ;
+                                    text-align: justify;
                                     color: #4ba5fa;">${clinic_Address}</p>
                                 </div>
                             </div>
@@ -545,326 +371,313 @@ const Visit = ({navigation, route}) => {
                               CONSTANTS.prescription_logo
                             } style="width:28px;
                             height: 43px;"/>
-                            <p id='date' style="font-size: 14px;
+                            <p id='date' style="font-size: 16px;
                             font-weight: 400px;">Date:${
                               new Date().toISOString().split('T')[0]
                             },Time:${new Date().toString().split(' ')[4]}</p>
                         </div>
                     </div>
                     <div class='third' >
-                        <p id='patientDetails' style=" font-size: 12px;
+                        <p id='patientDetails' style=" font-size: 16px;
                         font-weight: 400px;">${name} | ${gende} | ${age} | ${patient_phone}</p>
                         <div class='subContaioner' style="  display: flex;
                         flex-direction: row;
                         gap: 8px;
                         line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#4ba5fa;">Cheif Complaint:</p>
                             <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
                         </div>
-                        <div class='subContaioner'  style="  display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Symptoms:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
-                            color:#000000;">${Symptom?.map(
-                              item => item?.symptom,
-                            )}</p>
-                        </div>
+                        ${
+                          Symptom?.length > 0
+                            ? `<div class='subContaioner'  style="  display: flex;
+                          flex-direction: row;
+                          gap: 8px;
+                          line-height:4px;">
+                              <p id='subhead' style="font-weight: 400px;
+                              font-size: 16px;
+                              color:#4ba5fa;">Symptoms:</p>
+                              <p id='values' style=" font-weight: 300px;
+                              font-size: 16px;
+                              color:#000000;">${Symptom?.map(
+                                item => item?.symptom,
+                              )}</p>
+                          </div>`
+                            : ''
+                        }
+                        ${
+                          vitalsData?.pulse_rate ||
+                          vitalsData?.weight ||
+                          vitalsData?.height ||
+                          vitalsData?.body_temperature ||
+                          vitalsData?.rate ||
+                          vitalsData?.bmi
+                            ? `
                         <div >
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Vitals:</p>
-                            <div class='vitalscontaioner' style="display: flex;
-                            flex-direction: row;
-                            gap: 8px;
-                            margin-left: 8px;
-                            line-height: 2px;">
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Pulse rate:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.pulse_rate
-                                    ? vitalsData?.pulse_rate
-                                    : ''
-                                }</p>
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Weight:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.weight ? vitalsData?.weight : ''
-                                }</p>
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Height:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.height ? vitalsData?.height : ''
-                                }</p>
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Temp:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.body_temperature
-                                    ? vitalsData?.body_temperature
-                                    : ''
-                                }</p>
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Res.rate:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.rate ? vitalsData?.rate : ''
-                                }</p>
-                                <p id='values1' style="font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">BMI:</p>
-                                <p id='values' style="font-weight: 300px;
-                                font-size: 12px;
-                                color:#000000;">${
-                                  vitalsData?.bmi ? vitalsData?.bmi : ''
-                                }</p>
-                            </div>
+                        <p id='subhead' style="font-weight: 400px;
+                        font-size: 16px;
+                        color:#4ba5fa;">Vitals:</p>
+                        <div class='vitalscontaioner' style="display: flex;
+                        flex-direction: row;
+                        gap: 8px;
+                        margin-left: 8px;
+                        line-height: 2px;">
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Pulse rate:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.pulse_rate
+                                ? vitalsData?.pulse_rate
+                                : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Weight:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.weight ? vitalsData?.weight : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Height:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.height ? vitalsData?.height : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Temp:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.body_temperature
+                                ? vitalsData?.body_temperature
+                                : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Res.rate:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.rate ? vitalsData?.rate : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">BMI:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.bmi ? vitalsData?.bmi : ''
+                            }</p>
                         </div>
-                        <div class='subContaioner' style="  display: flex;
+                    </div>
+                        `
+                            : ''
+                        }
+                       
+                       ${
+                         diagnosis?.length > 0
+                           ? ` <div class='subContaioner' style="  display: flex;
                         flex-direction: row;
                         gap: 8px;
                         line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#4ba5fa;">Diagnosis:</p>
                             <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#000000;">${diagnosis?.map(
                               item => item?.diagnosis,
                             )}</p>
-                        </div>
+                        </div>`
+                           : ''
+                       }
                     </div>
-                    <div class='presContaioner' style=" display: flex;
-                    justify-content: space-between;
-                    background-color: #DFF0FF;
-                    padding: 2px;
-                    line-height: 4px;
-                    flex-direction: row;">
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">S.No</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Mode</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Medicine</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Dose</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Timing</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Frequency</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Duration</p>
-                        <p id='values3' style="font-weight: 500;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;">Quantity</p>
-                    </div>
-                   ${prescribe?.map(
-                     (item, ind) =>
-                       `<div class='presContaioner1' style="display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    padding: 2px;
-                    line-height: 4px;">
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${parseInt(ind) + 1}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item.mode}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:300px;
-                        padding-left: 4px;">${item?.medicine}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item?.dose_quantity}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item?.timing}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item?.frequency}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item?.duration}</p>
-                        <p id='values4' style="  font-weight: 400;
-                        font-size: 12px;
-                        color:#000000;
-                        width:130px;
-                        padding-left: 4px;">${item?.total_quantity}</p>
-                    </div>`,
-                   )}
-                    <div class='subContaioner' style="  display: flex;
+                    <p id='subhead' style="font-weight: 400px;
+                            font-size: 16px;
+                            color:#4ba5fa; margin: 0;" >Prescribe:</p>
+                    <table style="border-collapse: collapse;margin-bottom: 48px;">
+                <tr>
+                    <th style=" padding: 8px; text-align: center;">S.No</th>
+                    <th style=" padding: 8px; text-align: center;">Mode</th>
+                    <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
+                    <th style=" padding: 8px; text-align: center;">Dose</th>
+                    <th style=" padding: 8px; text-align: center;">Timing</th>
+                    <th style=" padding: 8px; text-align: center;">Frequency</th>
+                    <th style=" padding: 8px; text-align: center;">Duration</th>
+                    <th style=" padding: 8px; text-align: center;">Quantity</th>
+                </tr>
+                ${prescribe?.map(
+                  (item, index) =>
+                    `<tr>
+                  <td style="padding: 8px; text-align: center;font-size:16x;">${
+                    parseInt(index) + 1
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x;">${
+                    item.mode
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
+                    item?.medicine
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.dose_quantity ? item?.dose_quantity : '-'
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.timing
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.frequency
+                  }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.duration
+                  } days</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${
+                    item?.total_quantity
+                  }</td>
+              </tr>`,
+                )}
+            </table>
+                   ${
+                     note?.length > 0
+                       ? ` <div class='subContaioner' style="  display: flex;
                     flex-direction: row;
                     gap: 8px;
                     line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#4ba5fa;">Notes:</p>
                             <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
+                            font-size: 16px;
                             color:#000000;">${note}</p>
-                        </div>
+                        </div>`
+                       : ''
+                   }
         
-                        <div >
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Refer a Doctor:</p>
-                            ${selectedDoctor?.map(
-                              (
-                                item,
-                                ind,
-                              ) => `<div class='vitalscontaioner' style=" display: flex;
-                            flex-direction: row;
-                            gap: 8px;
-                            margin-left: 8px;
-                            line-height: 2px;">
-                                <p id='values1' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Name:</p>
-                                <p id='values' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">${item?.doctor_name}</p>
-                                <p id='values1' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Specialist:</p>
-                                <p id='values' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">${item?.speciality}</p>
-                                <p id='values1' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">Ph:</p>
-                                <p id='values' style="  font-weight: 500;
-                                font-size: 12px;
-                                color:#000000;">${item?.phone}</p>
-                            </div>`,
-                            )}
-                        </div>
-                        <div class='subContaioner' style="  display: flex;
+                       ${
+                         selectedDoctor?.length
+                           ? ` <div >
+                        <p id='subhead' style="font-weight: 400px;
+                        font-size: 16px;
+                        color:#4ba5fa;">Refer a Doctor:</p>
+                        ${selectedDoctor?.map(
+                          (
+                            item,
+                            ind,
+                          ) => `<div class='vitalscontaioner' style=" display: flex;
                         flex-direction: row;
                         gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Test Prescribed:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
-                            color:#000000;">${labreport?.map(
-                              (item, ind) => item?.lab_test,
-                            )}</p>
-                        </div>
-                        <div class='subContaioner' style="  display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Follow Up:</p>
-                            <p id='values'  style=" font-weight: 300px;
-                            font-size: 12px;
-                            color:#000000;">${date}</p>
-                        </div>
-                        <div class='sign' style="  display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                line-height: 4px;">
-                    <div>
-                    <p id='values1' style="  font-weight: 500;
-                    font-size: 12px;
-                    color:#000000;">Signature</p>
-                    <p id='values'  style=" font-weight: 300px;
-                    font-size: 12px;
-                    color:#000000;">Dr.name</p>
-                    </div>
-                </div>
-                        <div class='subContaioner' style="  display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 12px;
-                            color:#4ba5fa;">Validity Upto:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 12px;
-                            color:#000000;">${dateTimeRed}</p>
-                        </div>
-                        <div class='desc' style=" display: flex;
+                        margin-left: 8px;
+                        line-height: 2px;">
+                            <p id='values1' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Name:</p>
+                            <p id='values' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">${
+                              item?.dr_name?.length > 0
+                                ? `Dr.${item?.dr_name},${item?.doctor_or_name}`
+                                : `Dr.${item?.doctor_or_name}`
+                            }</p>
+                            <p id='values1' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Specialist:</p>
+                            <p id='values' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">${item?.speciality}</p>
+                            <p id='values1' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">Ph:</p>
+                            <p id='values' style="  font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">${item?.phone}</p>
+                        </div>`,
+                        )}
+                    </div>`
+                           : ''
+                       }
+                        ${
+                          labreport?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
+                          flex-direction: row;
+                          gap: 8px;
+                          line-height:4px;">
+                              <p id='subhead' style="font-weight: 400px;
+                              font-size: 16px;
+                              color:#4ba5fa;">Test Prescribed:</p>
+                              <p id='values' style=" font-weight: 300px;
+                              font-size: 16px;
+                              color:#000000;">${labreport?.map(
+                                (item, ind) => item?.lab_test,
+                              )}</p>
+                          </div>`
+                            : ''
+                        }
+                        ${
+                          date?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
+                          flex-direction: row;
+                          gap: 8px;
+                          line-height:4px;">
+                              <p id='subhead' style="font-weight: 400px;
+                              font-size: 16px;
+                              color:#4ba5fa;">Follow Up:</p>
+                              <p id='values'  style=" font-weight: 300px;
+                              font-size: 16px;
+                              color:#000000;">${date}</p>
+                          </div>`
+                            : ''
+                        }
+                        ${
+                          dateTimeRed?.length > 0
+                            ? `<div class='subContaioner' style="  display: flex;
+                          flex-direction: row;
+                          gap: 8px;
+                          line-height:4px;">
+                              <p id='subhead' style="font-weight: 400px;
+                              font-size: 16px;
+                              color:#4ba5fa;">Validity Upto:</p>
+                              <p id='values' style=" font-weight: 300px;
+                              font-size: 16px;
+                              color:#000000;">${dateTimeRed}</p>
+                          </div>`
+                            : ''
+                        }
+                        <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
                         margin-top: 84px;">
                             <div>
                             <p id='values2' style="  font-weight: 300;
-                            font-size: 12px;
+                            font-size: 14px;
                             color:#000000;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             line-height: 4px;">Not valid for Medical Legal Purpose</p>
                             <p id='values2'  style="  font-weight: 300;
-                            font-size: 12px;
+                            font-size: 14px;
                             color:#000000;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             line-height: 4px;">In case of any drug interactions or side effects STOP all medicines</p>
                             <p id='values2'  style="  font-weight: 300;
-                            font-size: 12px;
+                            font-size: 14px;
                             color:#000000;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             line-height: 4px;">immediately and consult your doctor or nearest hospital</p>
                         </div>
-                        </div>
+                        </footer>
                     <div>
                         <img  id='foot' src=${
                           CONSTANTS.pdf_footer
@@ -881,45 +694,18 @@ const Visit = ({navigation, route}) => {
         directory: 'docs',
       };
       let file = await RNHTMLtoPDF.convert(options);
-      // console.log(file.filePath);
+      console.log(file.filePath);
       setFilePath(file.filePath);
-      handle();
-      // readFile();
     }
   };
-  const postData = async url => {
-    const formData = new FormData();
-    formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
-    formData.append('patient_phone_number', `${patient_phone}`);
-    formData.append('clinic_id', `${Clinic_id}`);
-    formData.append('appointment_id', `${appointment_id}`);
-    formData.append('file_url', {
-      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
-      type: 'application/pdf',
-      name: `${patient_phone}.pdf`,
-    });
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    };
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.json();
-      console.log('API Response:', responseData);
-    } catch (error) {
-      console.error('Error:', error);
+  const handlePDf = async () => {
+    createPDF();
+    if (await isPermitted()) {
+      setTimeout(() => {
+        handle();
+      }, 3000);
     }
-  };
-  const apiUrl = URL.uploadPDF;
-
-  const handle = () => {
-    postData(apiUrl);
   };
 
   return (
@@ -1339,7 +1125,7 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'Present Illness' && note !== '' && (
+                  {value.label === 'History Present Illness' && note !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"
@@ -1522,11 +1308,13 @@ const Visit = ({navigation, route}) => {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
               paddingHorizontal: horizontalScale(24),
             }}>
-            <HButton
+            {/* <HButton
               label="Preview"
+              loading={prevLoad}
+              loadColor={CUSTOMCOLOR.primary}
               onPress={handlePreview}
               // onPress={createPDF}
               btnstyles={{
@@ -1535,26 +1323,17 @@ const Visit = ({navigation, route}) => {
               textStyle={{
                 color: CUSTOMCOLOR.primary,
               }}
-            />
+            /> */}
             <HButton
               label="Save"
               onPress={() => {
-                fetchData();
-                putVitals();
-                putComplaint();
-                createPDF();
+                handlePreview();
               }}
-              loading={loading}
+              loading={prevLoad}
             />
           </View>
         </View>
       </ScrollView>
-      <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
     </View>
   );
 };

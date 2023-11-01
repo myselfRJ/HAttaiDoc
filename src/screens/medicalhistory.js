@@ -61,13 +61,12 @@ const MedicalHistory = ({navigation,route}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
-  const [commor_sug, setCommor_Sug] = useState([]);
-  // console.log('sugg',commor_sug);
+  const [commor_sug, setCommor_Sug] = useState([...CONSTANTS.commoribities]);
   const [past, setPast] = useState('');
   const [social, setSocial] = useState('');
-  const [social_sug, setSocial_Sug] = useState([]);
+  const [social_sug, setSocial_Sug] = useState([...CONSTANTS.social]);
   const [family, setFamily] = useState('');
-  const [family_sug, setFamily_Sug] = useState([]);
+  const [family_sug, setFamily_Sug] = useState([...CONSTANTS.family]);
   const [medical, setMedical] = useState('');
   const [menstrual, setMenstrual] = useState('');
   const [obstetric, setObstetric] = useState('');
@@ -146,6 +145,7 @@ const MedicalHistory = ({navigation,route}) => {
       setComorbidities('');
     }
   };
+  console.log("commor",commor_sug);
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
@@ -170,25 +170,25 @@ const MedicalHistory = ({navigation,route}) => {
   };
   const handleAsyncStorage = () => {
     RetriveAsyncData('commorbidities').then(array => {
-      const uniqueArray = array?.filter((item, index) => {
+      const uniqueArray = [...commor_sug,...array]?.filter((item, index) => {
         return (
           index ===
           array?.findIndex(obj => obj.commorbities === item?.commorbities)
         );
       });
-      setCommor_Sug(uniqueArray);
+      setCommor_Sug([...commor_sug,...uniqueArray]);
     });
     RetriveAsyncData('socialHistory').then(array => {
-      const uniqueArray = array?.filter((item, index) => {
+      const uniqueArray = [...social_sug,...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.social === item?.social);
       });
-      setSocial_Sug(uniqueArray);
+      setSocial_Sug([...social_sug,...uniqueArray]);
     });
     RetriveAsyncData('familyHistory').then(array => {
-      const uniqueArray = array?.filter((item, index) => {
+      const uniqueArray = [...family_sug,...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.family === item?.family);
       });
-      setFamily_Sug(uniqueArray);
+      setFamily_Sug([...family_sug,...uniqueArray]);
     });
   };
   useEffect(() => {
@@ -261,14 +261,7 @@ const MedicalHistory = ({navigation,route}) => {
               ))}
             </View>
           ) : null}
-          <InputText
-            inputContainer={styles.inputtext}
-            label="Past Hospitalization"
-            placeholder="Reason for hospitalization"
-            value={past}
-            setValue={txt => setPast(txt)}
-            blur={false}
-          />
+          
           <ChipInput
           placeholder={'Eg : smoking, drinking'}
             item={'social'}
@@ -387,6 +380,14 @@ const MedicalHistory = ({navigation,route}) => {
               ))}
             </View>
           ) : null}
+          <InputText
+            inputContainer={styles.inputtext}
+            label="Past Hospitalization"
+            placeholder="Reason for hospitalization"
+            value={past}
+            setValue={txt => setPast(txt)}
+            blur={false}
+          />
          {(gende == 'Female' || gende == 'female' ) &&(
            <InputText
            inputContainer={styles.inputtext}

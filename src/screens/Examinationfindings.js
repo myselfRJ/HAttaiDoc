@@ -181,13 +181,13 @@ const ExaminationFindings = ({navigation}) => {
   return (
     <View style={styles.main}>
       <PrescriptionHead
-        heading={'Examination Findings'}
+        heading={'Report Findings'}
         headtext={{fontWeight: 'bold'}}
         head={{paddingHorizontal: 0}}
       />
       <InputText
         value={value}
-        label={'Examination Finding'}
+        label={'Report Finding'}
         setValue={setValue}
         multiline={true}
         placeholder={'Write Your Notes.......'}

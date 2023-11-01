@@ -50,7 +50,6 @@ const ClinicAddress = ({navigation}) => {
     latitudeDelta: 0.015,
     longitudeDelta: 0.0121,
   });
-  console.log('regionData====>......', regionData);
 
   useEffect(() => {
     const checkLocationPermission = async () => {
