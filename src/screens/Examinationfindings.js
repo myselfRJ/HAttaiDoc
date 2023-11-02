@@ -101,7 +101,7 @@ const ExaminationFindings = ({navigation}) => {
   };
   useEffect(() => {
     fetchReport();
-    SetUploadDocument(report_findings)
+    // SetUploadDocument(report_findings)
   }, []);
 
   const report_findings = [{name:report?.file1 ? report?.file1 : null},
