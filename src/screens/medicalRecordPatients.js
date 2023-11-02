@@ -24,6 +24,7 @@ import {
 } from '../utility/scaleDimension';
 import ConsultationCard from '../components/ConsultationCard';
 import {ScrollView} from 'react-native-gesture-handler';
+import CustomIcon from '../components/icon';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -175,11 +176,15 @@ export default function MedicalRecordPatient({route, navigation}) {
             height: verticalScale(750),
           }}>
           <ScrollView>
-            {consultation?.map((value, index) => (
-              <View style={{marginBottom: verticalScale(8)}}>
-                <ConsultationCard data={value?.consultation} />
-              </View>
-            ))}
+            {consultation?.length > 0 ? (
+              consultation?.map((value, index) => (
+                <View style={{marginBottom: verticalScale(8)}}>
+                  <ConsultationCard data={value?.consultation} />
+                </View>
+              ))
+            ) : (
+              <CustomIcon label={'No History'} />
+            )}
           </ScrollView>
         </View>
 

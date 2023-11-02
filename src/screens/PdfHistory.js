@@ -10,7 +10,7 @@ const PatientHistoryPdf = () => {
   const [consultationData, setConsultationData] = useState({});
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
-  const {appointment_id} = route.params;
+  const {path} = route.params;
   const fetchConsultationPdf = async () => {
     const response = await fetchApi(URL.get_consultationPDF(appointment_id), {
       headers: {
@@ -20,26 +20,19 @@ const PatientHistoryPdf = () => {
     if (response.ok) {
       const jsonData = await response.json();
       setConsultationData(jsonData?.data?.file_url);
-      if (jsonData?.data){
-          setShow(true);
+      if (jsonData?.data) {
+        setShow(true);
       }
     }
   };
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    fetchConsultationPdf();
-   
-  }, []);
+  // const [show, setShow] = useState(false);
+  // useEffect(() => {
+  //   fetchConsultationPdf();
 
-  const path = `${fileurl}${consultationData}`;
-  return (
-    <>
-      {show && (
-        <PDFViewer
-            path={path}
-        />
-      )}
-    </>
-  );
+  // }, []);
+
+  const path_source = `${fileurl}${path}`;
+  console.log('====path', path);
+  return <PDFViewer path={path_source} />;
 };
 export default PatientHistoryPdf;

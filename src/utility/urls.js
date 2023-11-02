@@ -53,6 +53,9 @@ export const URL = {
   refer_doc_pdf: `${baseUrl}consult/refer`,
   upload_reports: `${baseUrl}consult/upload_document`,
   get_consultationPDF: id => `${baseUrl}consult/pdfbyId?id=${id}`,
+  get_refer_pdf: id => `${baseUrl}consult/get-refer?id=${id}`,
+  get_reports: id => `${baseUrl}consult/get-examination?id=${id}`,
+  get_physical: id => `${baseUrl}consult/get-physical?id=${id}`,
   reschedule_appointment: id =>
     `${baseUrl}customappointment/reschedule_appointment?id=${id}`,
   get_reports: id => `${baseUrl}consult/get-examination?id=${id}`,

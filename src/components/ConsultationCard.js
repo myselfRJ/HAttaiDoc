@@ -57,93 +57,96 @@ const ConsultationCard = ({data}) => {
   const handleOnBook = () => {
     const appointment_id = data?.chief_complaint?.appointment_id;
     patientSearchRef?.current?.snapToIndex(0);
-    navigation.navigate('pdfhistory', {appointment_id});
+    // navigation.navigate('pdfhistory', {appointment_id});
+    navigation.navigate('history', {appointment_id});
   };
   const date = data
     ? data?.chief_complaint?.created_at?.split('T')[0]?.split('-')
     : null;
   return (
-    <>
-      <View style={styles.main}>
-        <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
-          <Image
-            style={styles.img}
-            source={require('../assets/images/RX.png')}
-          />
-          <View style={styles.patientinfo}>
-            <Text style={styles?.contact}>
-              Date: {date ? `${date[2]}/${date[1]}/${date[0]}` : null}
-            </Text>
-            <Text style={styles.name}>
-              {data?.chief_complaint?.complaint_message}
-              {/* |{' '}
-              {data?.chief_complaint?.appointment_id} */}
-            </Text>
-            <Text style={styles.age}>{}</Text>
+    <View>
+      {data?.chief_complaint?.complaint_message && (
+        <View style={styles.main}>
+          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+            <Image
+              style={styles.img}
+              source={require('../assets/images/RX.png')}
+            />
+            <View style={styles.patientinfo}>
+              <Text style={styles?.contact}>
+                Date: {date ? `${date[2]}/${date[1]}/${date[0]}` : null}
+              </Text>
+              <Text style={styles.name}>
+                {data?.chief_complaint?.complaint_message}
+                {/* |{' '}
+         {data?.chief_complaint?.appointment_id} */}
+              </Text>
+              <Text style={styles.age}>{}</Text>
+            </View>
           </View>
-        </View>
-        <View
-          style={{
-            alignItems: 'flex-end',
-            position: 'absolute',
-            right: moderateScale(16),
-            top: moderateScale(8),
-            gap: moderateScale(12),
-          }}>
           <View
             style={{
-              flexDirection: 'row',
-              gap: moderateScale(4),
-              padding: moderateScale(4),
+              alignItems: 'flex-end',
+              position: 'absolute',
+              right: moderateScale(16),
+              top: moderateScale(8),
+              gap: moderateScale(12),
             }}>
-            <Pressable style={styles.icon}>
-              <Icon
-                name={'download'}
-                size={moderateScale(16)}
-                color={CUSTOMCOLOR.primary}
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(4),
+                padding: moderateScale(4),
+              }}>
+              <Pressable style={styles.icon}>
+                <Icon
+                  name={'download'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.primary}
+                />
+              </Pressable>
+              <Pressable>
+                <Icon
+                  name={'share-variant'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.primary}
+                  style={styles.icon}
+                />
+              </Pressable>
+            </View>
+            <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+              <HButton
+                onPress={handleOnBook}
+                label={'View'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(0.5),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                  paddingHorizontal: horizontalScale(24),
+                  paddingVertical: verticalScale(8),
+                }}
+                textStyle={{
+                  color: CUSTOMCOLOR.primary,
+                  fontSize: CUSTOMFONTFAMILY.h3,
+                }}
               />
-            </Pressable>
-            <Pressable>
-              <Icon
-                name={'share-variant'}
-                size={moderateScale(16)}
-                color={CUSTOMCOLOR.primary}
-                style={styles.icon}
+              <HButton
+                onPress={handleOnpress}
+                label={'Upload Record'}
+                btnstyles={{
+                  paddingHorizontal: horizontalScale(24),
+                  paddingVertical: verticalScale(8),
+                }}
+                textStyle={{
+                  color: CUSTOMCOLOR.white,
+                  fontSize: CUSTOMFONTFAMILY.h3,
+                }}
               />
-            </Pressable>
-          </View>
-          <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
-            <HButton
-              onPress={handleOnBook}
-              label={'View'}
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-                borderWidth: moderateScale(0.5),
-                borderColor: CUSTOMCOLOR.borderColor,
-                paddingHorizontal: horizontalScale(24),
-                paddingVertical: verticalScale(8),
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-                fontSize: CUSTOMFONTFAMILY.h3,
-              }}
-            />
-            <HButton
-              onPress={handleOnpress}
-              label={'Upload Record'}
-              btnstyles={{
-                paddingHorizontal: horizontalScale(24),
-                paddingVertical: verticalScale(8),
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.white,
-                fontSize: CUSTOMFONTFAMILY.h3,
-              }}
-            />
+            </View>
           </View>
         </View>
-      </View>
-    </>
+      )}
+    </View>
   );
 };
 const styles = StyleSheet.create({

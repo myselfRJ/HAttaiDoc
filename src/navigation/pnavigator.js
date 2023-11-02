@@ -54,6 +54,9 @@ import ExaminationFindings from '../screens/Examinationfindings';
 import OthersFees from '../screens/OthersFees';
 import PdfView from '../screens/PdfPreview';
 import PatientHistoryPdf from '../screens/PdfHistory';
+import History from '../screens/History';
+import ImageViewer from '../screens/imageViewer';
+
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
@@ -87,11 +90,33 @@ const ProtectedRoute = () => {
         }}
       />
       <Stack.Screen
+        name="img"
+        component={ImageViewer}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Image Viewer',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
         name="pdf"
         component={PdfView}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Preview',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="history"
+        component={History}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Rx History',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
