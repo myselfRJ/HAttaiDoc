@@ -165,7 +165,8 @@ const Appointment = ({navigation}) => {
         const filtered = setAppointment?.filter(
           item =>
             item?.appointment_type &&
-            item?.appointment_type?.toLowerCase() === seletedType.toLowerCase(),
+            item?.appointment_type?.toLowerCase() ===
+              (seletedType === 'New' ? 'walkin' : seletedType.toLowerCase()),
         );
         setFilteredData(filtered);
       } else {

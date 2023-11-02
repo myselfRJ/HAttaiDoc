@@ -213,6 +213,12 @@ export const CONSTANT = {
       term: 'Inj dolokind aqua',
     },
   ],
+  HistoryTypes: [
+    'Prescription',
+    'Referral',
+    'Report Finding',
+    'Physical Examination',
+  ],
 };
 
 export const capitalizeWord = word => {
