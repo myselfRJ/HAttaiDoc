@@ -50,7 +50,7 @@ const History = ({route, navigation}) => {
   console.log('=======id', appointment_id);
   const [selectedType, setSelectedType] = useState();
   const images_path = [
-    {image: require('../assets/images/rx.png'), text: 'Prescription'},
+    {image: require('../assets/images/rxhistory.png'), text: 'Prescription'},
     {image: require('../assets/images/report.png'), text: 'Referral'},
     {image: require('../assets/images/refr.png'), text: 'Report finding'},
     {
