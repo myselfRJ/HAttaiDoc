@@ -55,6 +55,7 @@ export const URL = {
   get_consultationPDF: id => `${baseUrl}consult/pdfbyId?id=${id}`,
   reschedule_appointment: id =>
     `${baseUrl}customappointment/reschedule_appointment?id=${id}`,
+  get_reports: id => `${baseUrl}consult/get-examination?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

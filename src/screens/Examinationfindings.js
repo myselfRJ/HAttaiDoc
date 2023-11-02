@@ -26,7 +26,10 @@ import DocumentPicker from 'react-native-document-picker';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {URL} from '../utility/urls';
+import { fetchApi } from '../api/fetchApi';
 import {useRoute} from '@react-navigation/native';
+import { stopUpload } from 'react-native-fs';
+import CustomIcon from '../components/icon';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -36,6 +39,8 @@ const ExaminationFindings = ({navigation}) => {
   const [describe, setDescribe] = useState('');
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
+  const [report,setreport] = useState()
+  const appointment_id = examinationDetails?.appointment_id; 
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const postData = async url => {
     const formData = new FormData();
@@ -75,6 +80,35 @@ const ExaminationFindings = ({navigation}) => {
       console.error('Error:', error);
     }
   };
+
+  const fetchReport= async () => {
+    const response = await fetchApi(URL.get_reports(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('report===',jsonData)
+      setValue(jsonData?.data?.finding);
+      setDescribe(jsonData?.data?.description)
+      setreport(jsonData?.data)
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchReport();
+    SetUploadDocument(report_findings)
+  }, []);
+
+  const report_findings = [{name:report?.file1 ? report?.file1 : null},
+     {name:report?.file2 ? report?.file2 : null},
+     {name:report?.file3 ? report?.file3 : null},
+    {name:report?.file4 ? report?.file4 : null},
+     {name:report?.file5 ? report?.file5 : null}]
+
   const apiUrl = URL.uploadPhysicalExamination;
 
   const handle = () => {
@@ -218,33 +252,64 @@ const ExaminationFindings = ({navigation}) => {
           fontSize: CUSTOMFONTSIZE.h3,
         }}
       />
-      {uploaddocument?.length > 0 ? (
-        <View style={{marginTop: verticalScale(16)}}>
-          {uploaddocument?.map((item, index) => (
+      {
+        !report ? (
+          uploaddocument?.length > 0 ? (
+            <View style={{marginTop: verticalScale(16)}}>
+              {uploaddocument?.map((item, index) => (
+                <ShowChip
+                  key={index}
+                  onPress={() => handleDelete(index)}
+                  text={
+                    <>
+                      <Icon
+                        color={CUSTOMCOLOR.error}
+                        size={moderateScale(20)}
+                        name={
+                          item?.type === 'application/pdf'
+                            ? 'file-pdf-box'
+                            : 'image'
+                        }
+                      />{' '}
+                      {item?.name?.includes('temp')
+                        ? item?.name?.split('temp_')[1]?.toString()
+                        : item?.name}
+                    </>
+                  }
+                  main={{marginHorizontal: 0}}
+                />
+              ))}
+            </View>
+          ) : null
+        )
+     :report_findings?.length > 0 ? (
+      <View style={{marginTop: verticalScale(16)}}>
+        {report_findings?.map((item, index) => (
+          item?.name !== null && (
             <ShowChip
-              key={index}
-              onPress={() => handleDelete(index)}
-              text={
-                <>
-                  <Icon
-                    color={CUSTOMCOLOR.error}
-                    size={moderateScale(20)}
-                    name={
-                      item?.type === 'application/pdf'
-                        ? 'file-pdf-box'
-                        : 'image'
-                    }
-                  />{' '}
-                  {item?.name?.includes('temp')
-                    ? item?.name?.split('temp_')[1]?.toString()
-                    : item?.name}
-                </>
-              }
-              main={{marginHorizontal: 0}}
-            />
-          ))}
-        </View>
-      ) : null}
+            key={index}
+            onPress={() => handleDelete(index)}
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={
+                    item?.name?.includes('pdf')
+                      ? 'file-pdf-box'
+                      : 'image'
+                  }
+                />{' '}
+                
+                { item?.name}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+          )
+        ))}
+      </View>
+    ) : null }
       <PlusButton
         size={moderateScale(40)}
         style={{
