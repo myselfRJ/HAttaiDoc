@@ -47,7 +47,6 @@ const History = ({route, navigation}) => {
   const [referral, setReferral] = useState([]);
   const [reports, setReports] = useState();
   const [physical, setPhysical] = useState();
-  console.log('=======id', appointment_id);
   const [selectedType, setSelectedType] = useState();
   const images_path = [
     {image: require('../assets/images/rxhistory.png'), text: 'Prescription'},
@@ -204,9 +203,10 @@ const History = ({route, navigation}) => {
           <Text style={styles.subhead}>{selectedType}</Text>
           {referral?.length > 0 ? (
             referral?.map((item, index) => (
-              <ShowChip
+              <TouchableOpacity onPress={() => handleReferral(item?.file_referral)} key = {index}>
+                <ShowChip
                 key={index}
-                onPress={() => handleReferral(item?.file_referral)}
+                
                 text={
                   <>
                     <Icon
@@ -219,6 +219,7 @@ const History = ({route, navigation}) => {
                 }
                 main={{marginHorizontal: 0}}
               />
+              </TouchableOpacity>
             ))
           ) : (
             <CustomIcon label={'No Referrals avaiable'} />

@@ -25,6 +25,7 @@ import {
 import ConsultationCard from '../components/ConsultationCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomIcon from '../components/icon';
+import { commonstyles } from '../styles/commonstyle';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -168,25 +169,18 @@ export default function MedicalRecordPatient({route, navigation}) {
           Prescription
         </Text>
 
-        <View
-          style={{
-            // top: moderateScale(16),
-            gap: moderateScale(8),
-            // marginBottom: moderateScale(64),
-            height: verticalScale(750),
-          }}>
-          <ScrollView>
+          <ScrollView  style={styles.appointmentcard}
+          contentContainerStyle={{gap: moderateScale(8)}}>
             {consultation?.length > 0 ? (
               consultation?.map((value, index) => (
-                <View style={{marginBottom: verticalScale(8)}}>
+                
                   <ConsultationCard data={value?.consultation} />
-                </View>
+               
               ))
             ) : (
               <CustomIcon label={'No History'} />
             )}
           </ScrollView>
-        </View>
 
         {/* <View
           style={{
@@ -202,11 +196,12 @@ export default function MedicalRecordPatient({route, navigation}) {
         <View
           style={{
             // top: 30,
-            width: '100%',
-            justifyContent: 'center',
+            // flex:1,
+            justifyContent: "flex-end",
             alignItems: 'center',
-          }}>
-          <HButton label={'BookAppointment'} onPress={handleBook} />
+          }}
+          >
+          <HButton btnstyles = {commonstyles.activebtn} label={'BookAppointment'} onPress={handleBook} />
         </View>
       </View>
     </View>
@@ -257,5 +252,11 @@ const styles = StyleSheet.create({
     borderRadius: 60 / 2,
   },
   patientinfo: {},
-  container: {gap: moderateScale(16), paddingHorizontal: horizontalScale(24)},
+  appointmentcard: {
+    height: moderateScale(400),
+    paddingHorizontal: horizontalScale(8),
+    borderWidth:1
+    // gap: moderateScale(16),
+  },
+  container: {gap: moderateScale(16),flex:1, paddingHorizontal: horizontalScale(24)},
 });

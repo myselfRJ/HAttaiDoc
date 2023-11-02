@@ -30,6 +30,7 @@ import { fetchApi } from '../api/fetchApi';
 import {useRoute} from '@react-navigation/native';
 import { stopUpload } from 'react-native-fs';
 import CustomIcon from '../components/icon';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -212,6 +213,15 @@ const ExaminationFindings = ({navigation}) => {
       setModal(!modal);
     }
   };
+
+  const handleReports_Physical = path => {
+    if (path?.includes('pdf')) {
+      navigation.navigate('pdfhistory', {path});
+    } else {
+      navigation.navigate('img', {path});
+    }
+  };
+
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -286,9 +296,10 @@ const ExaminationFindings = ({navigation}) => {
       <View style={{marginTop: verticalScale(16)}}>
         {report_findings?.map((item, index) => (
           item?.name !== null && (
-            <ShowChip
+           <TouchableOpacity key = {index}  onPress={() => handleReports_Physical(item?.name)}>
+             <ShowChip
             key={index}
-            onPress={() => handleDelete(index)}
+           
             text={
               <>
                 <Icon
@@ -306,6 +317,7 @@ const ExaminationFindings = ({navigation}) => {
             }
             main={{marginHorizontal: 0}}
           />
+           </TouchableOpacity>
           )
         ))}
       </View>
