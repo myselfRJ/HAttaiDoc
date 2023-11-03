@@ -67,7 +67,7 @@ const Diagnosis = ({navigation}) => {
     }
   };
   const fetchDiagnosis = async () => {
-    const response = await fetchApi(URL.snomed(term, option), {
+    const response = await fetchApi(URL.snomed(value, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -75,8 +75,8 @@ const Diagnosis = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData);
-      jsonData?.map(item => console.log('========>', item?.term));
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      setData(snomed_data);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
@@ -84,14 +84,13 @@ const Diagnosis = ({navigation}) => {
   };
   useEffect(() => {
     fetchDiagnosis();
-  }, [term, option]);
+  }, [value, term, option]);
 
   useEffect(() => {
     if (value) {
       const filtered = data?.filter(
         item =>
-          item?.term &&
-          item?.term.toLowerCase().startsWith(value.toLowerCase()),
+          item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
       setFilteredData([...filtered, {term: value}]);
     } else {
@@ -178,7 +177,7 @@ const Diagnosis = ({navigation}) => {
               }
               onPress={() => setShow(!show)}
             />
-            {value.length >= 4 &&
+            {value.length > 1 &&
               (value === selected || show ? null : (
                 <View style={styles.dropdownContainer}>
                   <ScrollView persistentScrollbar={true}>

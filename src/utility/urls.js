@@ -1,12 +1,14 @@
-// const baseUrl = 'http://10.9.64.61:8000/api/v1/';
+const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.17:8000/api/v1/';
 // const baseUrl = 'http://34.205.77.155/api/v1/';
-const baseUrl = 'http://13.200.15.208/api/v1/';
+// const baseUrl = 'http://13.200.15.208/api/v1/';
 // const snomedUrl = 'http://34.205.77.155/';
 const snomedUrl = 'http://13.200.15.208/';
-// export const fileurl = `http://10.9.64.61:8000`;
-export const fileurl = `http://13.200.15.208`;
+export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://13.200.15.208`;
 // export const fileurl = `http://192.168.1.17:8000`;
+
+export const Host = '13.200.15.208';
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
@@ -39,7 +41,9 @@ export const URL = {
   updateDoctorProfile: phoneId =>
     `${baseUrl}practioner/change?doctor_phone_number=${phoneId}`,
   snomed: (term, option) =>
-    `${snomedUrl}snomed/searchbyterm/?term=${term}&option=${option}`,
+    `http://13.200.15.208/csnoserv/api/search/suggest?term=${term}&state=active&semantictag=${encodeURIComponent(
+      option,
+    )}&acceptability=preferred&returnlimit=80`,
   get_clinics_slots: phoneId =>
     `${baseUrl}clinic/Clinic_slots?doctor_phone_number=${phoneId}`,
   get_clinic_slots_by_id: id => `${baseUrl}clinic/clinic_id?id=${id}`,

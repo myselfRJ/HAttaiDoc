@@ -1,10 +1,10 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import PrescriptionHead from '../components/prescriptionHead';
-import {HButton, InputText} from '../components';
+import {HButton, InputText, SelectorBtn} from '../components';
 import {
   moderateScale,
   verticalScale,
@@ -20,18 +20,24 @@ import {Screen} from 'react-native-screens';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useRoute} from '@react-navigation/native';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
+import {
+  addfees,
+  updatefees,
+} from '../redux/features/prescription/prescriptionSlice';
+import ShowChip from '../components/showChip';
+// import {Icon} from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OthersFees = () => {
+  const dispatch = useDispatch();
+  const service_fees = useSelector(state => state.prescription.fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
-  const [submittedFees, setSubmiitedFees] = useState([
-    {service_name: 'Consultation Fees', charge: parseInt(consultation_fees)},
-  ]);
+  const [submittedFees, setSubmiitedFees] = useState([]);
   const [name, setName] = useState('');
   const [fees, setFees] = useState('');
 
-  let totalFees = 0;
+  let totalFees = parseInt(consultation_fees);
 
   submittedFees?.forEach(item => {
     totalFees += parseInt(item.charge);
@@ -40,12 +46,30 @@ const OthersFees = () => {
   const handleAdd = () => {
     setSubmiitedFees([
       ...submittedFees,
+
       {service_name: name, charge: parseInt(fees)},
     ]);
     setName('');
     setFees('');
   };
+  const handleDispatch = () => {
+    dispatch(
+      addfees([
+        ...submittedFees,
+        {
+          service_name: `Consultation Fees`,
+          charge: parseInt(consultation_fees),
+        },
+        {totalFees: totalFees},
+      ]),
+    );
+  };
 
+  const handleDelete = ind => {
+    const updatefees = submittedFees?.filter((_, index) => index !== ind);
+    setSubmiitedFees(updatefees);
+  };
+  console.log('=========fees', service_fees);
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={{gap: moderateScale(16)}}>
@@ -77,9 +101,19 @@ const OthersFees = () => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               paddingLeft: moderateScale(12),
+              alignItems: 'center',
             }}>
             <Text style={styles.text}>{item?.service_name}</Text>
-            <Text style={styles.text}>{item?.charge}</Text>
+            <Text style={styles.text}>
+              {item?.charge}{' '}
+              <TouchableOpacity onPress={() => handleDelete(index)}>
+                <Icon
+                  name={'close'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.error}
+                />
+              </TouchableOpacity>
+            </Text>
           </View>
         ))}
         <Seperator />
@@ -111,10 +145,10 @@ const OthersFees = () => {
             placeholder={'Enter Fees'}
             required={true}
             setValue={setFees}
-            keypad ='numeric'
+            keypad="numeric"
           />
           <HButton
-            type='addtype'
+            type="addtype"
             btnstyles={{alignSelf: 'flex-end'}}
             label={'Add'}
             icon="plus"
@@ -122,7 +156,11 @@ const OthersFees = () => {
           />
         </View>
       </ScrollView>
-      <HButton label={'Save'} btnstyles={commonstyles.activebtn} />
+      <HButton
+        label={'Save'}
+        onPress={handleDispatch}
+        btnstyles={commonstyles.activebtn}
+      />
     </View>
   );
 };
@@ -137,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
+    // alignItems: 'center',
   },
 });
 

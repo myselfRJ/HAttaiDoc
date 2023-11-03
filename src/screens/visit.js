@@ -102,6 +102,7 @@ const Visit = ({navigation, route}) => {
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
 
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
+  const service_fees = useSelector(state => state.prescription.fees);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -662,6 +663,32 @@ const Visit = ({navigation, route}) => {
                           </div>`
                             : ''
                         }
+                        <table style="border-collapse: collapse;margin-bottom: 48px;">
+                        <tr>
+                            <th style=" padding: 8px; text-align: center;">S.No</th>
+                            <th style=" padding: 8px; text-align: center; width: 18%;">Service Name</th>
+                            <th style=" padding: 8px; text-align: center;">Amount</th>
+                        </tr>
+                        ${service_fees?.map((item, index) =>
+                          item?.service_name
+                            ? `<tr>
+                          <td style="padding: 8px; text-align: center;font-size:16x;">${
+                            parseInt(index) + 1
+                          }</td>
+                          <td style="padding: 8px; text-align: center;font-size:16x;">${
+                            item?.service_name
+                          }</td>
+                          <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
+                            item?.charge
+                          }</td>
+                          
+                      </tr>`
+                            : '',
+                        )}
+                        <td style="padding: 8px; text-align: right;font-size:16x">Total : ${service_fees?.map(
+                          item => item?.totalFees,
+                        )}</td>
+                    </table>
                         <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;

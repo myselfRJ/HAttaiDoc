@@ -65,7 +65,7 @@ const Allergies = () => {
 
   const term = 'allergy';
   const fetchAllergies = async () => {
-    const response = await fetchApi(URL.snomed(term, option), {
+    const response = await fetchApi(URL.snomed(value, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -73,21 +73,21 @@ const Allergies = () => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData);
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      setData(snomed_data);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchAllergies();
-  }, [term, option]);
+  }, [term, option, value]);
 
   useEffect(() => {
     if (value) {
       const filtered = data?.filter(
         item =>
-          item?.term &&
-          item?.term.toLowerCase().startsWith(value.toLowerCase()),
+          item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
       setFilteredData([...filtered, {term: value}]);
     } else {
