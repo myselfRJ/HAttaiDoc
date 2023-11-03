@@ -121,7 +121,7 @@ const ComplaintsCard = props => {
         }
         onPress={() => setShow(!show)}
       />
-      {selectedComplaint.length >= 4 &&
+      {selectedComplaint.length > 1 &&
         (selectedComplaint === selected || show ? null : (
           <View style={styles.dropdownContainer}>
             <ScrollView>
@@ -144,8 +144,8 @@ const ComplaintsCard = props => {
           </View>
         ))}
 
-      <Text style={styles.h3}>{Language[language]['suggestions']}</Text>
-      <View style={styles.sugg}>
+      {/* <Text style={styles.h3}>{Language[language]['suggestions']}</Text> */}
+      {/* <View style={styles.sugg}>
         {props.cheifcomplaints.map((value, index) => (
           <TouchableOpacity
             style={[
@@ -175,7 +175,7 @@ const ComplaintsCard = props => {
             </View>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
 
       <View
         style={{

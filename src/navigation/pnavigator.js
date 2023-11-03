@@ -360,7 +360,7 @@ const ProtectedRoute = () => {
         component={UserDisplay}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'My Users',
+          title: 'My Admin',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

@@ -774,7 +774,7 @@ const Visit = ({navigation, route}) => {
                 borderRadius: moderateScale(8),
                 gap: moderateScale(12),
                 borderColor: CUSTOMCOLOR.primary,
-                borderWidth: 0.5,
+                borderWidth: 1,
                 paddingBottom: verticalScale(16),
               }}>
               <View
@@ -804,7 +804,8 @@ const Visit = ({navigation, route}) => {
                       fontWeight: 400,
                       fontSize: moderateScale(16),
                     }}>
-                    {patient_data?.patient_name}
+                    {patient_data?.patient_name} | {patient_data?.bloodgroup} |{' '}
+                    {patient_data?.patient_phone_number}
                   </Text>
                   <Text style={styles.patientText}>
                     Age :{' '}
@@ -814,9 +815,9 @@ const Visit = ({navigation, route}) => {
                       )}
                     | {patient_data?.gender}
                   </Text>
-                  <Text style={styles.patientText}>
+                  {/* <Text style={styles.patientText}>
                     Blood Group : {patient_data?.bloodgroup}
-                  </Text>
+                  </Text> */}
                 </View>
               </View>
               <View style={styles.line}>
@@ -900,8 +901,7 @@ const Visit = ({navigation, route}) => {
                   {allergies?.length > 0
                     ? allergies?.map((item, index) => (
                         <Text style={styles.patientText}>
-                          {item?.allergies}
-                          {' , '}
+                          {item?.allergies}{' '}
                         </Text>
                       ))
                     : null}
@@ -1485,7 +1485,7 @@ const styles = StyleSheet.create({
 
     borderColor: '#C0DFFC',
     borderRadius: moderateScale(24),
-    backgroundColor: CUSTOMCOLOR.white,
+    // backgroundColor: CUSTOMCOLOR.white,
   },
   pencilIcon: {
     justifyContent: 'center',

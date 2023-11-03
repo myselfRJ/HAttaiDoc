@@ -57,7 +57,10 @@ import {
 import {updateslots, addslots} from '../redux/features/slots/slotData';
 // import {updateAddress} from '../redux/features/profiles/clinicAddress';
 import GalleryModel from '../components/GalleryModal';
-import {updateAddress} from '../redux/features/profiles/clinicAddress';
+import {
+  addAddress,
+  updateAddress,
+} from '../redux/features/profiles/clinicAddress';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
@@ -583,6 +586,7 @@ const AddClinic = ({navigation}) => {
       setCnFees(jsonData.data?.fees);
       setSelectedImage(jsonData.data?.clinic_photo_url);
       setSelectedLogo(jsonData.data?.clinic_logo_url);
+      dispatch(addAddress(jsonData?.data?.clinic_Address));
     } else {
       console.error('API call failed:', response.status, response);
     }

@@ -157,7 +157,9 @@ const Account = () => {
                 Age:{age} | {data?.gender}
               </Text>
               <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
-              <Text style={styles.subinfo}>{data?.specialization}</Text>
+              <Text style={styles.subinfo}>
+                Specialization:{data?.specialization}
+              </Text>
             </View>
             <TouchableOpacity
               onPress={() => navigation.navigate('updateprofile')}>
@@ -191,6 +193,24 @@ const Account = () => {
                 />
                 <Text style={styles.subhead}>Medical Number</Text>
                 <Text style={styles.subvalue}>{data?.medical_number}</Text>
+              </View>
+              <View style={styles.profCard}>
+                <Icon
+                  name="medical-bag"
+                  size={16}
+                  color={CUSTOMCOLOR.primary}
+                />
+                <Text style={styles.subhead}>State</Text>
+                <Text style={styles.subvalue}>{data?.state}</Text>
+              </View>
+              <View style={styles.profCard}>
+                <Icon
+                  name="medical-bag"
+                  size={16}
+                  color={CUSTOMCOLOR.primary}
+                />
+                <Text style={styles.subhead}>Phone</Text>
+                <Text style={styles.subvalue}>{data?.doctor_phone_number}</Text>
               </View>
             </View>
             {/* <TouchableOpacity>
