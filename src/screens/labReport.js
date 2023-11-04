@@ -34,7 +34,7 @@ import {commonstyles} from '../styles/commonstyle';
 
 const LabReports = () => {
   const navigation = useNavigation();
-  const option = 'procedure,finding';
+  const option = 'procedure';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
@@ -64,7 +64,7 @@ const LabReports = () => {
 
   const term = 'test';
   const fetchTests = async () => {
-    const response = await fetchApi(URL.snomed(term, option), {
+    const response = await fetchApi(URL.snomed(value, option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -72,14 +72,15 @@ const LabReports = () => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData);
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      setData(snomed_data);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchTests();
-  }, [term, option]);
+  }, [value, term, option]);
 
   useEffect(() => {
     const filtering_data = [
@@ -90,14 +91,14 @@ const LabReports = () => {
     if (value) {
       const filtered = filtering_data?.filter(
         item =>
-          item?.term &&
-          item?.term.toLowerCase().startsWith(value.toLowerCase()),
+          item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
       setFilteredData([...filtered, {term: value}]);
     } else {
       setFilteredData(filtering_data);
     }
   }, [data, value]);
+  console.log('==========>filtering', filtered);
 
   const HandlePress = value => {
     setValue(value);
@@ -170,7 +171,7 @@ const LabReports = () => {
               }
               onPress={() => setShow(!show)}
             />
-            {value.length >= 3 &&
+            {value.length > 1 &&
               (value === selected || show ? null : (
                 <View style={styles.dropdownContainer}>
                   <ScrollView persistentScrollbar={true}>
@@ -260,15 +261,9 @@ const LabReports = () => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          justifyContent: 'flex-end',
-          flex: 1,
-          alignItems: 'center',
-          // marginTop: moderateScale(32),
-        }}>
+      <View>
         <HButton
-          // btnstyles={commonstyles.activebtn}
+          btnstyles={commonstyles.activebtn}
           label={'Save'}
           onPress={() => {
             handledata();

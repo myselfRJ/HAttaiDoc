@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     // bottom: 0,
-    top: verticalScale(78),
+    top: verticalScale(75),
     borderRadius: moderateScale(4),
     gap: moderateScale(6),
     // padding: moderateScale(4),

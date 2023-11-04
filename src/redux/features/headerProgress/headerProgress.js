@@ -3,7 +3,7 @@ const initialState = {
   status: [
     {progressname: 'Profile', status: false},
     {progressname: 'Add Clinic', status: false},
-    {progressname: 'Add User', status: false},
+    {progressname: 'Add Admin', status: false},
   ],
 };
 

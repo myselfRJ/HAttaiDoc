@@ -9,6 +9,14 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'notescreen',
     },
+    {label: 'Diagnosis', icon: 'chevron-right', navigate: 'diagnosis'},
+    {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
+    {label: 'Test Prescribe', icon: 'chevron-right', navigate: 'labreport'},
+    {
+      label: 'Report Findings',
+      icon: 'chevron-right',
+      navigate: 'findings',
+    },
     {
       label: 'Physical Examinations',
       icon: 'chevron-right',
@@ -20,14 +28,6 @@ export const CONSTANT = {
       navigate: 'medicalhistory',
     },
 
-    {label: 'Diagnosis', icon: 'chevron-right', navigate: 'diagnosis'},
-    {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
-    {label: 'Test Prescribe', icon: 'chevron-right', navigate: 'labreport'},
-    {
-      label: 'Report Findings',
-      icon: 'chevron-right',
-      navigate: 'findings',
-    },
     // {label: 'Comorbidities', icon: 'chevron-right', navigate: 'commorbities'},
     // {
     //   label: 'Past Hospitalization',

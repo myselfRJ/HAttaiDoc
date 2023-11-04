@@ -331,7 +331,7 @@ const VitalScreen = ({route, props}) => {
                 />
                 <VitalField
                   name="Value"
-                  placeholder="Enter"
+                  placeholder="Value,Unit"
                   value={othersValue}
                   setvalue={text => setOthersValue(text)}
                 />

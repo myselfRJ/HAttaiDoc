@@ -449,7 +449,7 @@ const UpdateProfile = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.white}}>
       {/* <ProgresHeader progressData={progressData} /> */}
 
       <Keyboardhidecontainer>
@@ -745,6 +745,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     gap: verticalScale(16),
     zIndex: 1,
+    // backgroundColor: CUSTOMCOLOR.white,
   },
 
   radiogroup: {

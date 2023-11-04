@@ -22,7 +22,7 @@ import {useState, useEffect, useRef, version} from 'react';
 import moment, {min} from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {CONSTANTS} from '../utility/constant';
-import {URL} from '../utility/urls';
+import {Host, URL} from '../utility/urls';
 import {Icon, BottomSheetView, StatusMessage} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {HttpStatusCode} from 'axios';
@@ -44,14 +44,14 @@ import {capitalizeWord} from '../utility/const';
 const SlotBook = ({navigation, route}) => {
   const option = 'finding';
   const {id} = route.params;
-  const [data, SetData] = useState([]);
+  const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
   const [selected, setSelected] = useState('');
   const [show, setShow] = useState(false);
   const [complaint, setComplaint] = useState('');
   const [token_id, setTokenID] = useState('');
 
-  const [bookedSlots, setData] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState([]);
 
   const [slotDetails, setSlotDetails] = useState({});
   const [selectedSlot, setSelectedSlot] = useState();
@@ -131,7 +131,9 @@ const SlotBook = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData.data?.map((item, index) => item?.appointment_slot));
+      setBookedSlots(
+        jsonData.data?.map((item, index) => item?.appointment_slot),
+      );
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -440,34 +442,36 @@ const SlotBook = ({navigation, route}) => {
     const response = await fetchApi(URL.snomed(complaint, option), {
       method: 'GET',
       headers: {
-        // Authorization: `Bearer ${token}`,
+        // Host: Host,
       },
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('complaints====>', jsonData);
-      SetData(jsonData);
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      // console.log('======>', snomed_data);
+      setData([...snomed_data, {term: complaint}]);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
+    // console.log('======>data', data);
   };
   useEffect(() => {
     fetchComplaints();
-  }, [complaint, option]);
+  }, [complaint]);
 
-  useEffect(() => {
-    if (complaint) {
-      const filtered = data?.filter(
-        item =>
-          item?.term &&
-          item?.term.toLowerCase().startsWith(complaint.toLowerCase()),
-      );
-      setFilteredData([...filtered, {term: complaint}]);
-    } else {
-      setFilteredData(data);
-    }
-  }, [data, complaint]);
+  // useEffect(() => {
+  //   if (complaint) {
+  //     const filtered = data?.filter(
+  //       item =>
+  //         item?.term &&
+  //         item?.term.toLowerCase().startsWith(complaint.toLowerCase()),
+  //     );
+  //     setFilteredData([...filtered, {term: complaint}]);
+  //   } else {
+  //     setFilteredData(data);
+  //   }
+  // }, [complaint]);
   const HandlePress = value => {
     setComplaint(value);
     setSelected(value);
@@ -511,12 +515,13 @@ const SlotBook = ({navigation, route}) => {
             }
             onPress={() => setShow(!show)}
           />
-          {complaint.length >= 4 &&
+          {complaint.length > 1 &&
             (complaint === selected || show ? null : (
               <View style={styles.dropdownContainer}>
                 <ScrollView>
-                  {filtered?.map((val, index) => (
+                  {data?.map((val, index) => (
                     <TouchableOpacity
+                      key={index}
                       style={styles.touch}
                       onPress={() => HandlePress(val?.term)}>
                       <Text

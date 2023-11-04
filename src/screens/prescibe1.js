@@ -29,7 +29,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {HButton, InputText, Option, PlusButton} from '../components';
-import {URL} from '../utility/urls';
+import {Host, URL, fileurl} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -45,7 +45,7 @@ import {commonstyles} from '../styles/commonstyle';
 export default function Prescribe1({navigation}) {
   const [data, setData] = useState([]);
 
-  const option = 'product';
+  const option = 'clinical drug';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
@@ -68,7 +68,7 @@ export default function Prescribe1({navigation}) {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const [sug, setSug] = useState([]);
-  const [durationSelect,setDurationSelect] = useState('days')
+  const [durationSelect, setDurationSelect] = useState('days');
   // console.log('suggggggg',sug)
   // const prescribe = useState([
   //   {
@@ -83,7 +83,7 @@ export default function Prescribe1({navigation}) {
   //   },
   // ])
   const prevPres = useSelector(state => state.pres.prescribeItems);
-  console.log('duration',prevPres);
+  console.log('duration', prevPres);
   const handleAddPrescribe = () => {
     dispatch(
       addPrescribe([
@@ -95,7 +95,10 @@ export default function Prescribe1({navigation}) {
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
-          duration: durationSelect ==='days' ? `${duration} days`: `${duration} weeks`,
+          duration:
+            durationSelect === 'days'
+              ? `${duration} days`
+              : `${duration} weeks`,
           total_quantity: total_quantity,
         },
       ]),
@@ -193,32 +196,33 @@ export default function Prescribe1({navigation}) {
   };
 
   const fetchMedicine = async () => {
-    const response = await fetchApi(URL.snomed(mode, option), {
+    const response = await fetchApi(URL.snomed(medicine, option), {
       method: 'GET',
       headers: {
-        // Authorization: `Bearer ${token}`,
+        // Host: Host,
       },
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('fetch data====>',jsonData)
-      setData([...jsonData, ...CONSTANTS.medicine]);
+      // console.log('fetch data====>', jsonData);
+      const snomed_data = jsonData?.map(item => ({type: 'sno', term: item}));
+      setData([...snomed_data, ...CONSTANTS.medicine]);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchMedicine();
-  }, [mode, option]);
+  }, [medicine]);
   const [newMedicine, setnewMedicine] = useState([]);
   const [filtered, setFilteredData] = useState([]);
-  //  console.log('filter values=====>',filtered)
+  console.log('filter values=====>', filtered);
   useEffect(() => {
     if (medicine) {
       const filtered = data?.filter(
         item =>
           item?.term &&
-          item?.term.toLowerCase().startsWith(medicine.toLowerCase()),
+          item?.term.toLowerCase().includes(medicine.toLowerCase()),
       );
 
       setFilteredData([...filtered, {term: medicine, type: 'nsno'}]);
@@ -345,7 +349,7 @@ export default function Prescribe1({navigation}) {
           }
           onPress={() => setShow(!show)}
         />
-        {medicine.length >= 4 &&
+        {medicine?.length > 1 &&
           (medicine === setmedicine || show ? null : (
             <View style={styles.dropdownContainer}>
               <ScrollView persistentScrollbar={true}>
@@ -601,7 +605,6 @@ const styles = StyleSheet.create({
   },
   ModeContainer: {
     gap: moderateScale(8),
-  
   },
   ModeText: {
     fontWeight: '400',
@@ -719,8 +722,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   frequencys: {
     // paddingLeft: moderateScale(8),
@@ -736,7 +739,7 @@ const styles = StyleSheet.create({
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
 });

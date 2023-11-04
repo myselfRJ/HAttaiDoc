@@ -240,9 +240,9 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
   },
   img: {
-    width: moderateScale(84),
+    width: moderateScale(82),
     height: moderateScale(84),
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(16),
   },
   name: {
     fontSize: CUSTOMFONTSIZE.h3,

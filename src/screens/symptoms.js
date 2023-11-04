@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Option from '../components/option';
-import { language } from '../settings/userpreferences';
-import { Language } from '../settings/customlanguage';
-import { HButton, PlusButton } from '../components';
-import { useSelector, useDispatch } from 'react-redux';
+import {language} from '../settings/userpreferences';
+import {Language} from '../settings/customlanguage';
+import {HButton, PlusButton} from '../components';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   addSymptom,
   updateSymptom,
@@ -29,30 +29,31 @@ import {
   moderateScale,
   verticalScale,
 } from '../utility/scaleDimension';
-import { URL } from '../utility/urls';
-import { fetchApi } from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
 import InputText from '../components/inputext';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {
   StoreAsyncData,
   UpdateAsyncData,
   RetriveAsyncData,
 } from '../utility/AsyncStorage';
-import { pastHistoryReducer } from '../redux/features/prescription/pastHistory';
+import {pastHistoryReducer} from '../redux/features/prescription/pastHistory';
 import CustomCalendar from '../components/calendar';
-import { mode } from '../redux/features/prescription/prescribeslice';
+import {mode} from '../redux/features/prescription/prescribeslice';
 import Seperator from '../components/seperator';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
+import {capitalizeWord} from '../utility/const';
 
-const Symptoms = ({ navigation }) => {
+const Symptoms = ({navigation}) => {
   const symptomsData = useSelector(state => state.symptoms.symptom);
-  console.log('symptommmm', symptom)
+  console.log('symptommmm', symptom);
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
   console.log('days', days);
-  const [hr, setHr] = useState('')
+  const [hr, setHr] = useState('');
   const [selected, setSelected] = useState('');
-  const [sevSelected, setSevSelected] = useState('')
+  const [sevSelected, setSevSelected] = useState('');
   const option = 'finding';
   // const [selected, setSelected] = useState('');
   const [icon, setIcon] = useState('magnify');
@@ -70,14 +71,18 @@ const Symptoms = ({ navigation }) => {
           {
             symptom: symptom,
             // days: days ? days : hr,
-            days: days > 1 ? `${days} days` : days === 1 ? `${days} day` : `${hr} hr`,
+            days:
+              days > 1
+                ? `${days} days`
+                : days === 1
+                ? `${days} day`
+                : `${hr} hr`,
             severity: sevSelected,
           },
         ]),
       );
-    }
-    else {
-      Alert.alert('Warning', 'Enter all Fields')
+    } else {
+      Alert.alert('Warning', 'Enter all Fields');
     }
     setDays(null);
     setSymptom(null);
@@ -114,8 +119,9 @@ const Symptoms = ({ navigation }) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData);
-      // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      // console.log('======>', snomed_data);
+      setData([...snomed_data, {term: symptom}]);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -129,9 +135,9 @@ const Symptoms = ({ navigation }) => {
       const filtered = data?.filter(
         item =>
           item?.term &&
-          item?.term.toLowerCase().startsWith(symptom.toLowerCase()),
+          item?.term.toLowerCase().includes(symptom.toLowerCase()),
       );
-      setFilteredData([...filtered, { term: symptom }]);
+      setFilteredData([...filtered, {term: symptom}]);
     } else {
       setFilteredData(data);
     }
@@ -141,7 +147,7 @@ const Symptoms = ({ navigation }) => {
     setSelected(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', { symptom: value });
+      UpdateAsyncData('symptom', {symptom: value});
     }
   };
 
@@ -155,50 +161,48 @@ const Symptoms = ({ navigation }) => {
   };
   const selectChange = value => {
     setSelected(value);
-    setSymptom(value)
+    setSymptom(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', { symptom: value });
+      UpdateAsyncData('symptom', {symptom: value});
     }
   };
   useEffect(() => {
     RetriveAsyncData('symptom').then(array => {
       const uniqueArray = array?.filter((item, index) => {
-        return (
-          index === array?.findIndex(obj => obj.symptom === item?.symptom)
-        );
+        return index === array?.findIndex(obj => obj.symptom === item?.symptom);
       });
       setSug(uniqueArray);
     });
   }, []);
 
   return (
-
     <View style={styles.mainContainer}>
       <PrescriptionHead heading={Language[language]['symptoms']} />
-      <ScrollView contentContainerStyle={{
-        zIndex: 1,
-        paddingBottom: verticalScale(120),
-      }}>
+      <ScrollView
+        contentContainerStyle={{
+          zIndex: 1,
+          paddingBottom: verticalScale(120),
+        }}>
         <View style={styles.content}>
           <View style={styles.input}>
             <InputText
               inputContainer={styles.inputtext}
-              label='Search'
+              label="Search"
               placeholder="Write first four letters..."
               value={symptom}
               setValue={setSymptom}
               search={true}
               IconName={
                 (show && filtered.length > 0) ||
-                  symptom === selected ||
-                  symptom?.length === 0
+                symptom === selected ||
+                symptom?.length === 0
                   ? 'magnify'
                   : 'close'
               }
               onPress={() => setShow(!show)}
             />
-            {symptom?.length >= 4 &&
+            {symptom?.length > 1 &&
               (symptom === selected || show ? null : (
                 <View style={styles.dropdownContainer}>
                   <ScrollView persistentScrollbar={true}>
@@ -224,8 +228,7 @@ const Symptoms = ({ navigation }) => {
                 </View>
               ))}
 
-            <View
-              style={styles.subvalues}>
+            <View style={styles.subvalues}>
               {sug?.map((item, index) => (
                 <TouchableOpacity
                   key={index}
@@ -234,13 +237,17 @@ const Symptoms = ({ navigation }) => {
                     styles.recomend,
                     {
                       backgroundColor:
-                        item?.symptom === selected ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+                        item?.symptom === selected
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
                     },
                   ]}>
                   <Text
                     style={{
                       color:
-                        item?.symptom === selected ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+                        item?.symptom === selected
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}>
                     {item?.symptom}
                   </Text>
@@ -248,15 +255,14 @@ const Symptoms = ({ navigation }) => {
               ))}
             </View>
           </View>
-          <View style={{ ...styles.input, zIndex: 1 }}>
-            <View style={{ gap: moderateScale(10) }}>
+          <View style={{...styles.input, zIndex: 1}}>
+            <View style={{gap: moderateScale(10)}}>
               <Text style={commonstyles.subhead}>
                 {Language[language]['severity']}:
               </Text>
               <Seperator />
             </View>
-            <View
-              style={styles.subvalues}>
+            <View style={styles.subvalues}>
               <Option
                 label={Language[language]['low']}
                 value="low"
@@ -278,8 +284,8 @@ const Symptoms = ({ navigation }) => {
             </View>
           </View>
 
-          <View style={{ ...styles.input, zIndex: 1 }}>
-            <View style={{ gap: moderateScale(10) }}>
+          <View style={{...styles.input, zIndex: 1}}>
+            <View style={{gap: moderateScale(10)}}>
               <Text style={commonstyles.subhead}>Time Period</Text>
               <Seperator />
             </View>
@@ -291,14 +297,17 @@ const Symptoms = ({ navigation }) => {
                   placeholder="Enter Days"
                   value={days}
                   onChangeText={text => setDays(text)}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                 />
               </View>
-              <Text style={{
-                color: CUSTOMCOLOR.black,
-                fontWeight: '400',
-                fontSize: CUSTOMFONTSIZE.h3
-              }}>(OR)</Text>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontWeight: '400',
+                  fontSize: CUSTOMFONTSIZE.h3,
+                }}>
+                (OR)
+              </Text>
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Hr :</Text>
                 <TextInput
@@ -306,22 +315,22 @@ const Symptoms = ({ navigation }) => {
                   placeholder="Enter Hr"
                   value={hr}
                   onChangeText={text => setHr(text)}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                 />
               </View>
             </View>
           </View>
           <HButton
-            icon='plus'
-            type='addtype'
+            icon="plus"
+            type="addtype"
             btnstyles={{
               backgroundColor:
-                (symptom && sevSelected && (days || hr))
+                symptom && sevSelected && (days || hr)
                   ? CUSTOMCOLOR.primary
                   : CUSTOMCOLOR.disable,
-              alignSelf: 'flex-end'
+              alignSelf: 'flex-end',
             }}
-            label='Add'
+            label="Add"
             onPress={handleAddSymptoms}
           />
 
@@ -331,41 +340,43 @@ const Symptoms = ({ navigation }) => {
                 <Text style={styles.symText}>{item.symptom}</Text>
                 <View>
                   <Text style={styles.reduxText}>
-                    Severity : {item.severity}
+                    Severity : {capitalizeWord(item.severity)}
                   </Text>
                 </View>
-                {item.days && (item.days.includes('days') || item.days.includes('day')) ? (
+                {item.days &&
+                (item.days.includes('days') || item.days.includes('day')) ? (
                   <View>
                     <Text style={styles.reduxText}>
                       Time Period: {item.days}
                     </Text>
                   </View>
                 ) : null}
-                {item.days && (item.days.includes('hr'))?(
-                   <View>
-                   <Text style={styles.reduxText}>
-                     Time Period: {item.days}
-                   </Text>
-                 </View>
-                ): null }
-                <View style={{ flexDirection: 'row', gap: moderateScale(4) }}>
-                  <TouchableOpacity style={{
-                    borderRadius: moderateScale(32),
-                    backgroundColor: CUSTOMCOLOR.white,
-                    padding: moderateScale(4),
-
-                  }}>
+                {item.days && item.days.includes('hr') ? (
+                  <View>
+                    <Text style={styles.reduxText}>
+                      Time Period: {item.days}
+                    </Text>
+                  </View>
+                ) : null}
+                <View style={{flexDirection: 'row', gap: moderateScale(4)}}>
+                  <TouchableOpacity
+                    style={{
+                      borderRadius: moderateScale(32),
+                      backgroundColor: CUSTOMCOLOR.white,
+                      padding: moderateScale(4),
+                    }}>
                     <Icon
                       name="pencil"
                       size={moderateScale(20)}
                       color={CUSTOMCOLOR.primary}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleDeleteSymptom(ind)}
+                  <TouchableOpacity
+                    onPress={() => handleDeleteSymptom(ind)}
                     style={{
                       borderRadius: moderateScale(24),
                       backgroundColor: CUSTOMCOLOR.white,
-                      padding: moderateScale(4)
+                      padding: moderateScale(4),
                     }}>
                     <Icon
                       name="close"
@@ -377,18 +388,13 @@ const Symptoms = ({ navigation }) => {
               </View>
             </View>
           ))}
-
         </View>
-
-
-
-
-
       </ScrollView>
       <HButton
         btnstyles={{
           ...commonstyles.activebtn,
-          backgroundColor: (symptomsData.length > 0) ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+          backgroundColor:
+            symptomsData.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
 
           // bottom:moderateScale(12)
         }}
@@ -398,7 +404,6 @@ const Symptoms = ({ navigation }) => {
         }}
       />
     </View>
-
   );
 };
 
@@ -408,7 +413,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
 
     paddingVertical: verticalScale(12),
-    backgroundColor: CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   subvalues: {
     flexDirection: 'row',
@@ -420,7 +425,7 @@ const styles = StyleSheet.create({
   timeFields: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: moderateScale(8)
+    gap: moderateScale(8),
   },
   timeinput: {
     paddingHorizontal: moderateScale(12),
@@ -428,8 +433,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
-    paddingVertical: verticalScale(10)
-
+    paddingVertical: verticalScale(10),
   },
   mainHead: {
     color: CUSTOMCOLOR.black,
@@ -444,7 +448,7 @@ const styles = StyleSheet.create({
   },
   DateInput: {
     padding: moderateScale(8),
-    paddingHorizontal: horizontalScale(0)
+    paddingHorizontal: horizontalScale(0),
   },
   radiogroup: {
     gap: moderateScale(8),
@@ -461,21 +465,18 @@ const styles = StyleSheet.create({
     borderColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),
     top: moderateScale(24),
-
   },
   reduxData1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-
   },
   text: {
     // marginHorizontal: moderateScale(8),
     fontWeight: 'bold',
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
-    fontSize: CUSTOMFONTSIZE.h2
-
+    fontSize: CUSTOMFONTSIZE.h2,
   },
   reduxText: {
     color: CUSTOMCOLOR.black,
@@ -484,9 +485,8 @@ const styles = StyleSheet.create({
   content: {
     // paddingHorizontal: horizontalScale(16),
     gap: moderateScale(16),
-    zIndex: 2
+    zIndex: 2,
     // position:'absolute'
-
   },
   dropdownContainer: {
     top: moderateScale(70),
@@ -496,12 +496,12 @@ const styles = StyleSheet.create({
     height: moderateScale(220),
     backgroundColor: CUSTOMCOLOR.white,
     // paddingHorizontal: horizontalScale(8),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   inputtext: {
     // paddingVertical: verticalScale(0),
-    paddingHorizontal: moderateScale(0)
+    paddingHorizontal: moderateScale(0),
   },
   input: {
     // borderWidth: 1,
@@ -512,19 +512,19 @@ const styles = StyleSheet.create({
     padding: moderateScale(12),
     borderRadius: moderateScale(4),
     borderWidth: 0.5,
-    borderColor: CUSTOMCOLOR.primary
+    borderColor: CUSTOMCOLOR.primary,
   },
   option: {
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
-    fontSize: CUSTOMFONTSIZE.h3
+    fontSize: CUSTOMFONTSIZE.h3,
   },
   symText: {
     fontWeight: '500',
-    fontSize: CUSTOMFONTSIZE.h2,
+    fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.primary,
-    width: moderateScale(200)
-  }
+    width: moderateScale(200),
+  },
 });
 
 export default Symptoms;
