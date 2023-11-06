@@ -29,6 +29,7 @@ import {
 } from '../utility/scaleDimension';
 import PlusButton from './plusbtn';
 import HButton from './button';
+import {capitalizeWord} from '../utility/const';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -182,7 +183,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
             {' '}
             {appointment.appointment_type === 'walkin'
               ? 'New'
-              : appointment.appointment_type}
+              : capitalizeWord(appointment.appointment_type)}
           </Text>
         </View>
         <View style={styles.statusinfo}>
@@ -203,7 +204,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
               },
             ]}>
             {'  '}
-            {appointment.status}
+            {capitalizeWord(appointment.status)}
           </Text>
         </View>
         <View style={styles.statusinfo}>
@@ -220,7 +221,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
               },
             ]}>
             {' '}
-            {paidOpt[appointment?.is_paid.toString()]}
+            {capitalizeWord(paidOpt[appointment?.is_paid.toString()])}
           </Text>
         </View>
       </View>

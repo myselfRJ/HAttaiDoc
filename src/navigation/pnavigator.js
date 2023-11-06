@@ -407,7 +407,7 @@ const ProtectedRoute = () => {
         component={MedicalRecordPatient}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Patient History',
+          title: 'Rx History',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

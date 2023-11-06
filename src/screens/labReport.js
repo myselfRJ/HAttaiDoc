@@ -103,11 +103,11 @@ const LabReports = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    // dispatch(addLabReport([...prev, {lab_test: value}]));
+    dispatch(addLabReport([...prev, {lab_test: value}]));
     if (sug?.length > 0) {
       UpdateAsyncData('labs', {lab_test: value});
     }
-    // setValue('');
+    setValue('');
   };
 
   const handledata = () => {
@@ -231,7 +231,7 @@ const LabReports = () => {
               ))}
             </View>
 
-            <View
+            {/* <View
               style={{
                 alignSelf: 'flex-end',
                 marginTop: moderateScale(32),
@@ -246,7 +246,7 @@ const LabReports = () => {
                   HandleAddValue();
                 }}
               />
-            </View>
+            </View> */}
             <View style={{top: moderateScale(32), gap: moderateScale(4)}}>
               {prev?.map((item, ind) =>
                 prev.length > 0 ? (

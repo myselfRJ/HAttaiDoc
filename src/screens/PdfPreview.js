@@ -249,7 +249,7 @@ const PdfView = ({navigation}) => {
       if (responseData) {
         console.log('API Response:', responseData);
         // handleAddDoctors();
-        Alert.alert('Success', 'Successfully Send To Patient');
+        Alert.alert('Success', 'Successfully shared to patient');
         setLoading(false);
         navigation.goBack();
       }
