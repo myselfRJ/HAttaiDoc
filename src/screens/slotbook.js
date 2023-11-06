@@ -437,7 +437,11 @@ const SlotBook = ({navigation, route}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-
+  useEffect(() => {
+    if (id) {
+      setShow(!show);
+    }
+  }, [complaint]);
   const fetchComplaints = async () => {
     const response = await fetchApi(
       URL.snomed(complaint ? complaint : 'NA', option),
@@ -641,7 +645,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: moderateScale(24),
     zIndex: 1,
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   //
   type: {
@@ -704,7 +708,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: CUSTOMCOLOR.white,
     height: verticalScale(300),
-    borderRadius:moderateScale(4)
+    borderRadius: moderateScale(4),
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

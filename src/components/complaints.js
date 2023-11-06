@@ -31,7 +31,7 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {ScrollView} from 'react-native-gesture-handler';
 import {commonstyles} from '../styles/commonstyle';
-import { clearStorage } from '../utility/AsyncStorage';
+import {clearStorage} from '../utility/AsyncStorage';
 const ComplaintsCard = props => {
   // const {complaint} = route.params
   // console.log('com1111====',complaint)
@@ -77,7 +77,9 @@ const ComplaintsCard = props => {
   useEffect(() => {
     fetchComplaints();
   }, [selectedComplaint, option]);
-
+  useEffect(() => {
+    setShow(!show);
+  }, [selectedComplaint]);
   useEffect(() => {
     if (selectedComplaint) {
       const filtered = data?.filter(
@@ -242,9 +244,9 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary,
-    borderRadius:moderateScale(4)
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
+    borderRadius: moderateScale(4),
     // flex:1
     // marginHorizontal:horizontalScale(8),
   },
