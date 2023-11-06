@@ -131,12 +131,12 @@ const ReferToDoctor = () => {
                 <p style="margin: 0;">${notes}</p>
             </section>
         
-            <footer style="text-align: center; ; color: #000; padding: 10px; margin-top:140px;">
+            <footer style="text-align: left; ; color: #000; padding: 10px; margin-top:140px;">
                 <p style="margin: 0;">powered by</p>
-                <img style="height: 100px;width:200px" src="${
+                <img style="height: 50px;width:120px" src="${
                   CONSTANTS.pdf_footer
-                }" style="float: left; margin-right: 10px;" alt="Image Description">
-                <p style="margin: 0;">For questions or more information, please contact ${
+                }" style="float: left; margin-right: 10px;margin-top: 36px" alt="Image Description">
+                <p style="text-align: center;margin: 36px;">For questions or more information, please contact ${
                   data?.doctor_name
                 } , ${data?.doctor_phone_number}.</p>
             </footer>
@@ -187,7 +187,7 @@ const ReferToDoctor = () => {
       if (responseData) {
         console.log('API Response:', responseData);
         handleAddDoctors();
-        Alert.alert('', 'Successfully Send to Patient');
+        Alert.alert('', 'Successfully Shared to Patient');
         setLoading(false);
         nav.goBack();
       }
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: verticalScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    borderColor:CUSTOMCOLOR.primary
+    borderColor: CUSTOMCOLOR.primary,
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

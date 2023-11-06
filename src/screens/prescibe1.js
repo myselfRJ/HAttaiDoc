@@ -347,7 +347,10 @@ export default function Prescribe1({navigation}) {
               ? 'magnify'
               : 'close'
           }
-          onPress={() => setShow(!show)}
+          onPress={() => {
+            setShow(!show);
+            setMedicine('');
+          }}
         />
         {medicine?.length > 1 &&
           (medicine === setmedicine || show ? null : (
@@ -732,14 +735,14 @@ const styles = StyleSheet.create({
     // paddingVertical: verticalScale(16),
   },
   dropdownContainer: {
-    top: moderateScale(130),
-    position: 'absolute',
-    zIndex: 1,
+    // top: moderateScale(130),
+    // position: 'absolute',
+    // zIndex: 1,
     width: '100%',
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: CUSTOMCOLOR.primary,
   },
 });

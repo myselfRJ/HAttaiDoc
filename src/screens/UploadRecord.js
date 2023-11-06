@@ -167,7 +167,7 @@ const Uploadrecord = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert('SuccesFully saved');
+        Alert.alert('Successfully saved');
         navigation.goBack();
         console.log('API Response:', responseData);
       }
