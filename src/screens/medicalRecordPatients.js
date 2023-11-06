@@ -25,7 +25,7 @@ import {
 import ConsultationCard from '../components/ConsultationCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomIcon from '../components/icon';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
@@ -169,18 +169,17 @@ export default function MedicalRecordPatient({route, navigation}) {
           Prescription
         </Text>
 
-          <ScrollView  style={styles.appointmentcard}
+        <ScrollView
+          style={styles.appointmentcard}
           contentContainerStyle={{gap: moderateScale(8)}}>
-            {consultation?.length > 0 ? (
-              consultation?.map((value, index) => (
-                
-                  <ConsultationCard data={value?.consultation} />
-               
-              ))
-            ) : (
-              <CustomIcon label={'No History'} />
-            )}
-          </ScrollView>
+          {consultation?.length > 0 ? (
+            consultation?.map((value, index) => (
+              <ConsultationCard data={value?.consultation} />
+            ))
+          ) : (
+            <CustomIcon label={'No History'} />
+          )}
+        </ScrollView>
 
         {/* <View
           style={{
@@ -193,16 +192,19 @@ export default function MedicalRecordPatient({route, navigation}) {
           }}>
           <HButton label={'Download'} />
         </View> */}
-        <View
+        {/* <View
           style={{
             // top: 30,
             // flex:1,
-            justifyContent: "flex-end",
+            justifyContent: 'flex-end',
             alignItems: 'center',
-          }}
-          >
-          <HButton btnstyles = {commonstyles.activebtn} label={'BookAppointment'} onPress={handleBook} />
-        </View>
+          }}>
+          <HButton
+            btnstyles={commonstyles.activebtn}
+            label={'BookAppointment'}
+            onPress={handleBook}
+          />
+        </View> */}
       </View>
     </View>
   );
@@ -255,8 +257,12 @@ const styles = StyleSheet.create({
   appointmentcard: {
     height: moderateScale(400),
     paddingHorizontal: horizontalScale(8),
-    borderWidth:1
+    // borderWidth:1
     // gap: moderateScale(16),
   },
-  container: {gap: moderateScale(16),flex:1, paddingHorizontal: horizontalScale(24)},
+  container: {
+    gap: moderateScale(16),
+    flex: 1,
+    paddingHorizontal: horizontalScale(24),
+  },
 });

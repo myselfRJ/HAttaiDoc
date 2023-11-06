@@ -25,7 +25,7 @@ import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {URL} from '../utility/urls';
+import {fileurl, URL} from '../utility/urls';
 import { fetchApi } from '../api/fetchApi';
 import {useRoute} from '@react-navigation/native';
 import { stopUpload } from 'react-native-fs';
@@ -110,7 +110,7 @@ const ExaminationFindings = ({navigation}) => {
     {name:report?.file4 ? report?.file4 : null},
      {name:report?.file5 ? report?.file5 : null}]
 
-  const apiUrl = URL.uploadPhysicalExamination;
+  const apiUrl = URL.uploadExaminations;
 
   const handle = () => {
     postData(apiUrl);
@@ -214,8 +214,10 @@ const ExaminationFindings = ({navigation}) => {
     }
   };
 
-  const handleReports_Physical = path => {
-    if (path?.includes('pdf')) {
+  const handleReports_Physical = filepath => {
+    const path = `${fileurl}${filepath}`
+    if (filepath?.includes('pdf')) {
+      
       navigation.navigate('pdfhistory', {path});
     } else {
       navigation.navigate('img', {path});

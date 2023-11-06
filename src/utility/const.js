@@ -17,15 +17,26 @@ export const CONSTANT = {
       icon: 'chevron-right',
       navigate: 'findings',
     },
+    {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
     {
-      label: 'Physical Examinations',
+      label: 'Additional Fees',
       icon: 'chevron-right',
-      navigate: 'examination',
+      navigate: 'service_fees',
+    },
+    {
+      label: 'Referral',
+      icon: 'chevron-right',
+      navigate: 'refer',
     },
     {
       label: 'Medical History',
       icon: 'chevron-right',
       navigate: 'medicalhistory',
+    },
+    {
+      label: 'Physical Examinations',
+      icon: 'chevron-right',
+      navigate: 'examination',
     },
 
     // {label: 'Comorbidities', icon: 'chevron-right', navigate: 'commorbities'},
@@ -35,24 +46,12 @@ export const CONSTANT = {
     //   navigate: 'medicalhistory',
     // },
     // {label: 'Allergies', icon: 'chevron-right', navigate: 'allergies'},
-    {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
 
-    {
-      label: 'Referral',
-      icon: 'chevron-right',
-      navigate: 'refer',
-    },
     // {
     //   label: 'Doctor Signature',
     //   icon: 'chevron-right',
     //   navigate: 'valid',
     // },
-
-    {
-      label: 'Additional Fees',
-      icon: 'chevron-right',
-      navigate: 'service_fees',
-    },
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
   test: ['Lab', 'Radiology', 'Procedure'],

@@ -6,6 +6,11 @@ const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 const snomedUrl = 'http://13.200.15.208/';
 export const fileurl = `http://10.9.64.61:8000`;
 // export const fileurl = `http://13.200.15.208`;
+
+// export const fileurl = `http://192.168.1.17:8000`;
+
+// export const Host = '13.200.15.208';
+
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
@@ -38,7 +43,7 @@ export const URL = {
   updateDoctorProfile: phoneId =>
     `${baseUrl}practioner/change?doctor_phone_number=${phoneId}`,
   snomed: (term, option) =>
-    `http://13.200.15.208/csnoserv/api/search/suggest?term=${term}&state=active&semantictag=${encodeURIComponent(
+    `${snomedUrl}csnoserv/api/search/suggest?term=${term}&state=active&semantictag=${encodeURIComponent(
       option,
     )}&acceptability=preferred&returnlimit=80`,
   get_clinics_slots: phoneId =>

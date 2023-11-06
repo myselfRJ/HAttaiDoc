@@ -28,7 +28,7 @@ import {
 import ShowChip from '../components/showChip';
 // import {Icon} from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const OthersFees = () => {
+const OthersFees = ({navigation}) => {
   const dispatch = useDispatch();
   const service_fees = useSelector(state => state.prescription.fees);
   const route = useRoute();
@@ -63,6 +63,7 @@ const OthersFees = () => {
         {totalFees: totalFees},
       ]),
     );
+    navigation.goBack();
   };
 
   const handleDelete = ind => {

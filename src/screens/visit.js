@@ -50,10 +50,10 @@ import { PermmisionStorage } from '../utility/permissions';
 
 const Visit = ({ navigation, route }) => {
   const [filePath, setFilePath] = useState('');
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
-  const [loading, setLoading] = useState(false);
-  
+  // const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const date = useSelector(state => state?.dateTime?.date);
@@ -381,7 +381,7 @@ const Visit = ({ navigation, route }) => {
                 <div class='maincontaioner'>
     
             <div class='header' >
-                <div cla ss='first' style="display: flex; flex-direction: row;">
+                <div class='first' style="display: flex; flex-direction: row;">
                     <img id='img' src=${logo === CONSTANTS.default_image ? CONSTANTS.default_clinic_logo : logo_url} style="width: 52px; height: 58px;" alt="Sample Image" />
                     <div class='address' style="flex-direction: column; margin-left: 16px;">
                        
@@ -411,7 +411,7 @@ const Visit = ({ navigation, route }) => {
                         line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
-                            color:#4ba5fa;">Cheif Complaint:</p>
+                            color:#4ba5fa;">Chief Complaint:</p>
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
@@ -811,9 +811,16 @@ const Visit = ({ navigation, route }) => {
                       )}
                     | {patient_data?.gender}
                   </Text>
-                  {/* <Text style={styles.patientText}>
-                    Blood Group : {patient_data?.bloodgroup}
-                  </Text> */}
+                  {(patient_data?.gender === 'female' ||
+                    patient_data?.gender === 'Female') &&
+                  vitalsData?.LDD &&
+                  vitalsData?.EDD ? (
+                    <Text style={styles.patientText}>
+                      Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} |
+                      EDD:
+                      {vitalsData.EDD}
+                    </Text>
+                  ) : null}
                 </View>
               </View>
               <View style={styles.line}>
@@ -857,20 +864,19 @@ const Visit = ({ navigation, route }) => {
                     />
                   </Pressable>
                 </View>
-                <Text style={styles.patientText}>
-                  BP: {vitalsData.systolic}/{vitalsData.diastolic} SPO2:{' '}
-                  {vitalsData?.rate} BMI: {vitalsData?.bmi} Pulse:{' '}
-                  {vitalsData?.pulse_rate} Temp: {vitalsData?.body_temperature}
-                </Text>
-                {(patient_data?.gender === 'Female' ||
-                  patient_data?.gender === 'Female') &&
-                  vitalsData?.LDD &&
-                  vitalsData?.EDD ? (
+                {vitalsData && (
                   <Text style={styles.patientText}>
-                    Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} | EDD:
-                    {vitalsData.EDD}
+                    {vitalsData?.systolic &&
+                      `BP : ${vitalsData.systolic}/${vitalsData.diastolic}`}{' '}
+                    {vitalsData?.rate && `SPO2: ${vitalsData?.rate}`}{' '}
+                    {vitalsData?.bmi && `BMI: ${vitalsData?.bmi}`}{' '}
+                    {vitalsData?.pulse_rate &&
+                      `Pulse: ${vitalsData?.pulse_rate}`}{' '}
+                    {vitalsData?.body_temperature &&
+                      `Temp: ${vitalsData?.body_temperature}`}
                   </Text>
-                ) : null}
+                )}
+
                 <Seperator />
               </View>
               <View style={styles.line}>

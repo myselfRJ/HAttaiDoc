@@ -439,12 +439,15 @@ const SlotBook = ({navigation, route}) => {
   }, []);
 
   const fetchComplaints = async () => {
-    const response = await fetchApi(URL.snomed(complaint, option), {
-      method: 'GET',
-      headers: {
-        // Host: Host,
+    const response = await fetchApi(
+      URL.snomed(complaint ? complaint : 'NA', option),
+      {
+        method: 'GET',
+        headers: {
+          // Host: Host,
+        },
       },
-    });
+    );
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({term: item}));

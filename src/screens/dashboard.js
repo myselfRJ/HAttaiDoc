@@ -54,6 +54,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {commonstyles} from '../styles/commonstyle';
 import {disableBackButton} from '../utility/backDisable';
 import DButton from '../components/DButton';
+import AppointmentStatusCard from '../components/appointmentStatusCard';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -210,6 +211,14 @@ const Dashboard = ({navigation, route}) => {
     disableBackButton();
   }, []);
 
+  let completedAppointments = setAppointment.filter(
+    appointment => appointment.status === 'completed',
+  );
+  let pendingAppointments = setAppointment.filter(
+    appointment => appointment.status === 'pending',
+  );
+  let totalAppointments = setAppointment.length;
+
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
@@ -266,6 +275,20 @@ const Dashboard = ({navigation, route}) => {
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
+          <View style={styles.status}>
+            <AppointmentStatusCard
+              text={'Total appointments'}
+              count={totalAppointments}
+            />
+            <AppointmentStatusCard
+              text={'Pending'}
+              count={pendingAppointments?.length}
+            />
+            <AppointmentStatusCard
+              text={'Completed'}
+              count={completedAppointments?.length}
+            />
+          </View>
 
           {/* <SearchBox label='Patient name/phone number' action={()=>console.log('clicked')}/> */}
         </View>
@@ -336,6 +359,12 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(24),
     paddingHorizontal: horizontalScale(8),
     // borderWidth: 2,
+  },
+  status: {
+    flexDirection: 'row',
+    // paddingTop:verticalScale(12),
+    // paddingHorizontal:horizontalScale(8),
+    justifyContent: 'space-between',
   },
   clinicText: {
     fontFamily: CUSTOMFONTFAMILY.heading,

@@ -194,7 +194,7 @@ const UserDisplay = ({navigation}) => {
           <HButton
             rightIcon="chevron-right"
             color={CUSTOMCOLOR.primary}
-            label="SKIP"
+            label="Skip"
             onPress={() => navigation.navigate('tab')}
             btnstyles={{
               backgroundColor: CUSTOMCOLOR.white,
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.primary,
     justifyContent: 'center',
     // marginHorizontal: moderateScale(56),
-    alignSelf:'center',
+    alignSelf: 'center',
     borderRadius: moderateScale(10),
   },
 });

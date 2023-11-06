@@ -99,7 +99,7 @@ const ProfileCreate = ({navigation}) => {
   const pickSingleFile = async () => {
     try {
       const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.pdf],
       });
       const originalFilename = result[0]?.name || '';
       setSelectedFilename(originalFilename);

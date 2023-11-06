@@ -60,7 +60,7 @@ const Commorbities = ({navigation}) => {
     }
   };
   const fetchComorbidities = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(value ? value : 'NA', option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,

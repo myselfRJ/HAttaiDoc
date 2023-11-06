@@ -31,6 +31,7 @@ import {
 } from '../utility/scaleDimension';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
+import ShowChip from '../components/showChip';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -133,6 +134,12 @@ const Account = () => {
     navigation.navigate('entry');
   };
 
+  const handlePrescription = () => {
+    const path = `data:application/pdf;base64,${data?.medical_doc_url}`;
+
+    navigation.navigate('pdfhistory', {path, prevScrn});
+  };
+  // console.log('===============>',data?.medical_doc_url);
   const prevScrn = 'account';
   return (
     <View style={styles.main}>
@@ -196,7 +203,7 @@ const Account = () => {
               </View>
               <View style={styles.profCard}>
                 <Icon
-                  name="medical-bag"
+                  name="map-marker-multiple"
                   size={16}
                   color={CUSTOMCOLOR.primary}
                 />
@@ -204,11 +211,7 @@ const Account = () => {
                 <Text style={styles.subvalue}>{data?.state}</Text>
               </View>
               <View style={styles.profCard}>
-                <Icon
-                  name="medical-bag"
-                  size={16}
-                  color={CUSTOMCOLOR.primary}
-                />
+                <Icon name="phone" size={16} color={CUSTOMCOLOR.primary} />
                 <Text style={styles.subhead}>Phone</Text>
                 <Text style={styles.subvalue}>{data?.doctor_phone_number}</Text>
               </View>
@@ -256,12 +259,31 @@ const Account = () => {
             data={users}
             dta={'clinic_user_name'}
             nameIcon={'account-group'}
-            Dataname={'Users'}
+            Dataname={'Admins'}
             name={'pencil'}
             onPress={() => navigation.navigate('userdisplay', {prevScrn})}
           />
         </View>
       </View>
+      {data?.medical_doc_url && (
+        <TouchableOpacity
+          onPress={handlePrescription}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>Registration Document.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

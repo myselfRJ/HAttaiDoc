@@ -39,6 +39,7 @@ import {SelectorBtn} from '../components';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useFocusEffect} from '@react-navigation/native';
 import CustomIcon from '../components/icon';
+import { fileurl } from '../utility/urls';
 
 const History = ({route, navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -95,7 +96,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setReports(jsonData?.data);
-      console.log('======>data', jsonData?.data);
+      // console.log('======>data', jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -110,7 +111,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setPhysical(jsonData?.data);
-      console.log('======>data', jsonData?.data);
+      // console.log('======>data', jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -122,10 +123,12 @@ const History = ({route, navigation}) => {
     fetchExamination();
   }, []);
   const handlePrescription = () => {
-    const path = prescription?.file_url;
+    const filepath = prescription?.file_url;
+    const path = `${fileurl}${filepath}`
     navigation.navigate('pdfhistory', {path});
   };
-  const handleReferral = path => {
+  const handleReferral = filepath => {
+    const path = `${fileurl}${filepath}`
     navigation.navigate('pdfhistory', {path});
   };
   const reports_finding = [
@@ -142,14 +145,15 @@ const History = ({route, navigation}) => {
     physical?.file4 ? physical?.file4 : null,
     physical?.file5 ? physical?.file5 : null,
   ];
-  const handleReports_Physical = path => {
-    if (path?.includes('pdf')) {
+  const handleReports_Physical = filepath => {
+    const path = `${fileurl}${filepath}`
+    if (filepath?.includes('pdf')) {
       navigation.navigate('pdfhistory', {path});
     } else {
       navigation.navigate('img', {path});
     }
   };
-  console.log(physical_reports);
+  // console.log(physical_reports);
   useFocusEffect(
     React.useCallback(() => {
       fetchRefferal();
@@ -242,7 +246,7 @@ const History = ({route, navigation}) => {
                           <Icon
                             color={CUSTOMCOLOR.error}
                             size={moderateScale(20)}
-                            name={'file-pdf-box'}
+                            name={item?.includes('pdf') ? 'file-pdf-box' : 'image'}
                           />
                           {<Text>{item?.split('/')[4]}</Text>}
                         </>
@@ -273,7 +277,7 @@ const History = ({route, navigation}) => {
                           <Icon
                             color={CUSTOMCOLOR.error}
                             size={moderateScale(20)}
-                            name={'file-pdf-box'}
+                            name={item?.includes('pdf') ? 'file-pdf-box' : 'image'}
                           />
                           {<Text>{item?.split('/')[4]}</Text>}
                         </>

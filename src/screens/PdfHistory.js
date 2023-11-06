@@ -25,14 +25,9 @@ const PatientHistoryPdf = () => {
       }
     }
   };
-  // const [show, setShow] = useState(false);
-  // useEffect(() => {
-  //   fetchConsultationPdf();
 
-  // }, []);
-
-  const path_source = `${fileurl}${path}`;
-  console.log('====path', path);
-  return <PDFViewer path={path_source} />;
+  // const path_source = `${fileurl}${path}`;
+  // console.log('====path', path);
+  return <PDFViewer path={path} />;
 };
 export default PatientHistoryPdf;
