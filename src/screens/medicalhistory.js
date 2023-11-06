@@ -282,9 +282,9 @@ const MedicalHistory = ({navigation, route}) => {
                   <Text
                     style={[
                       styles.sugtxt,
-                      item?.social == select
-                        ? {color: CUSTOMCOLOR.white}
-                        : {color: CUSTOMCOLOR.primary},
+                      item?.social == select,
+                      // ? {color: CUSTOMCOLOR.white}
+                      // : {color: CUSTOMCOLOR.primary},
                     ]}>
                     {item?.social}
                   </Text>

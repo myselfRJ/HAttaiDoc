@@ -349,7 +349,9 @@ const Visit = ({navigation, route}) => {
                                     font-size: 16px;
                                     margin-left: 8px ;
                                     
-                                    color: #4ba5fa;">${data.specialization}</p>
+                                    color: #4ba5fa;">Speciality : ${
+                                      data.specialization
+                                    }</p>
                                     <p id='spec' style="font-weight: 400px;
                                     font-size: 16px;
                                     margin-left: 8px ;
@@ -371,7 +373,7 @@ const Visit = ({navigation, route}) => {
                                     font-size: 16px;
                                     padding-left: 300px ;
                                     text-align: justify;
-                                    color: #4ba5fa;">${clinic_phone} | ${clinic_Address}</p>
+                                    color: #000;">${clinic_phone} | ${clinic_Address}</p>
                                 </div>
                             </div>
                         </div>
@@ -397,7 +399,7 @@ const Visit = ({navigation, route}) => {
                         line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
-                            color:#4ba5fa;">Cheif Complaint:</p>
+                            color:#4ba5fa;">Chief Complaint:</p>
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>

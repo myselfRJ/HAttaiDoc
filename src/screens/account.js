@@ -256,7 +256,7 @@ const Account = () => {
             data={users}
             dta={'clinic_user_name'}
             nameIcon={'account-group'}
-            Dataname={'Users'}
+            Dataname={'Admins'}
             name={'pencil'}
             onPress={() => navigation.navigate('userdisplay', {prevScrn})}
           />
