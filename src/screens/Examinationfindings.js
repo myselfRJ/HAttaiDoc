@@ -74,10 +74,12 @@ const ExaminationFindings = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
+        Alert.alert("Success","Succesfully Saved")
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
+      Alert.alert("Error",`${error}`)
       console.error('Error:', error);
     }
   };
@@ -91,7 +93,7 @@ const ExaminationFindings = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('report===',jsonData)
+      // console.log('report===',jsonData)
       setValue(jsonData?.data?.finding);
       setDescribe(jsonData?.data?.description)
       setreport(jsonData?.data)

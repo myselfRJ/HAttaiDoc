@@ -85,10 +85,12 @@ const PhysicalExamination = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
+        Alert.alert("Success","Succesfully saved")
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
+      Alert.alert("Error",`${error}`)
       console.error('Error:', error);
     }
   };

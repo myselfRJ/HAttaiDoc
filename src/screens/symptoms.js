@@ -175,7 +175,12 @@ const Symptoms = ({navigation}) => {
       const uniqueArray = array?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.symptom === item?.symptom);
       });
-      setSug(uniqueArray);
+      if (uniqueArray?.length>10){
+        uniqueArray?.splice(10)
+        setSug(uniqueArray);
+      }else{
+        setSug(uniqueArray);
+      }
     });
   }, []);
 

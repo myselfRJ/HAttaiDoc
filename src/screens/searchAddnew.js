@@ -53,7 +53,9 @@ const SearchAddnew = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (phoneNumber){
+      fetchData();
+    }
   }, [phoneNumber]);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ const SearchAddnew = ({navigation}) => {
           paddingBottom: verticalScale(24),
         }}>
         <View style={styles.appointment}>
-          {data?.length > 0 ? (
+          {data?.length > 0 && phoneNumber?.length>1 ? (
             data?.map((val, ind) => (
               <PatientSearchCard
                 key={ind}

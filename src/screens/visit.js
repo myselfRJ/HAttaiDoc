@@ -103,8 +103,8 @@ const Visit = ({navigation, route}) => {
 
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
   const service_fees = useSelector(state => state.prescription.fees);
-  const charge = service_fees?.[service_fees?.length - 1];
-  // console.log('charge===',charge['totalFees']);
+  const charge = service_fees?.lenght > 0 ? service_fees?.[service_fees?.length - 1] : null
+  console.log('charge===',charge ? charge[charge && 'totalFees'] : null);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -718,7 +718,7 @@ const Visit = ({navigation, route}) => {
                         )}           
                     </table>
                     <p style="margin-left: 52%;font-weight:700;font-size:16px";>Total :
-                    ${charge['totalFees']}</p>
+                    ${charge ? charge[charge && 'totalFees'] : ""}</p>
                     </div>
                     <div class ='footer'>
                         <footer class='desc' style=" display: flex;

@@ -130,8 +130,12 @@ const Diagnosis = ({navigation}) => {
           index === array?.findIndex(obj => obj.diagnosis === item?.diagnosis)
         );
       });
+      if (uniqueArray?.length>15){
+        uniqueArray?.splice(15)
+        setSug(uniqueArray)
+      }else{
       setSug(uniqueArray);
-    });
+  }});
   }, []);
   const [dia_type, setDiaType] = useState(dia_types[1]);
   const ConfirmedData = prev.filter(item => item.mode === 'Confirmed');
@@ -205,8 +209,9 @@ const Diagnosis = ({navigation}) => {
               ))}
             <View
               style={{
-                margin: moderateScale(16),
+                padding: moderateScale(16),
                 flexDirection: 'row',
+                flexWrap:'wrap',
                 gap: moderateScale(12),
                 paddingHorizontal: horizontalScale(8),
               }}>

@@ -130,7 +130,10 @@ const LabReports = () => {
           index === array?.findIndex(obj => obj.lab_test === item?.lab_test)
         );
       });
-      setSug(uniqueArray);
+      if (uniqueArray?.length>15){
+        uniqueArray?.splice(15)
+        setSug(uniqueArray);
+      }else{ setSug(uniqueArray);}
     });
   }, []);
 
