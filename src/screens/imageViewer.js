@@ -13,7 +13,7 @@ const ImageViewer = ({route}) => {
       <Image
         style={styles.img}
         source={{
-          uri: `${fileurl}${path}`,
+          uri: `${path}`,
         }}
       />
     </View>

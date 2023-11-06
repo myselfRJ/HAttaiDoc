@@ -31,6 +31,7 @@ import {
 } from '../utility/scaleDimension';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
+import ShowChip from '../components/showChip';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -132,7 +133,13 @@ const Account = () => {
     Alert.alert('Logout Sucessfull ');
     navigation.navigate('entry');
   };
+ 
+  const handlePrescription = () => {
+    const path = `data:application/pdf;base64,${data?.medical_doc_url}`;
 
+    navigation.navigate('pdfhistory', {path,prevScrn});
+  };
+  // console.log('===============>',data?.medical_doc_url);
   const prevScrn = 'account';
   return (
     <View style={styles.main}>
@@ -196,7 +203,7 @@ const Account = () => {
               </View>
               <View style={styles.profCard}>
                 <Icon
-                  name="medical-bag"
+                  name="map-marker-multiple"
                   size={16}
                   color={CUSTOMCOLOR.primary}
                 />
@@ -205,7 +212,7 @@ const Account = () => {
               </View>
               <View style={styles.profCard}>
                 <Icon
-                  name="medical-bag"
+                  name="phone"
                   size={16}
                   color={CUSTOMCOLOR.primary}
                 />
@@ -262,6 +269,21 @@ const Account = () => {
           />
         </View>
       </View>
+      <TouchableOpacity onPress={handlePrescription} style={{marginTop:verticalScale(8)}}>
+            <ShowChip
+              text={
+                <>
+                  <Icon
+                    color={CUSTOMCOLOR.error}
+                    size={moderateScale(20)}
+                    name={'file-pdf-box'}
+                  />
+                  {<Text>Registration Document.pdf</Text>}
+                </>
+              }
+              main={{marginHorizontal: 0}}
+            />
+          </TouchableOpacity>
     </View>
   );
 };
