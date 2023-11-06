@@ -247,7 +247,7 @@ const VitalScreen = ({route, props}) => {
               <VitalField
                 point={rateRef}
                 re={sysRef}
-                name="Res_Rate"
+                name="Resp.rate"
                 placeholder="brpm"
                 setvalue={text => rateChange(text)}
               />
@@ -325,15 +325,17 @@ const VitalScreen = ({route, props}) => {
               <View style={styles.fields}>
                 <VitalField
                   name="Vital name"
-                  placeholder="Enter"
+                  placeholder="Enter name"
                   value={othresKey}
                   setvalue={text => setOthersKey(text)}
+                  keypad={'default'}
                 />
                 <VitalField
                   name="Value"
                   placeholder="Value,Unit"
                   value={othersValue}
                   setvalue={text => setOthersValue(text)}
+                  keypad={'default'}
                 />
               </View>
             </View>
@@ -349,7 +351,7 @@ const VitalScreen = ({route, props}) => {
       </ScrollView>
       <HButton
         btnstyles={commonstyles.activebtn}
-        label={Language[language]['submit']}
+        label={'Save'}
         onPress={handlePress}
       />
     </View>

@@ -206,9 +206,11 @@ const PatientSearch = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: moderateScale(1),
+    flex: 1,
     padding: moderateScale(24),
     gap: moderateScale(24),
+    backgroundColor:CUSTOMCOLOR.background,
+    // borderWidth:1
   },
   select: {
     gap: moderateScale(8),

@@ -19,7 +19,7 @@ const VitalField  = (props) => {
           placeholder={props.placeholder}
           value={props.value}
           onChangeText={props.setvalue}
-          keyboardType='numeric'
+          keyboardType={props.keypad ? props.keypad : 'numeric'}
           blurOnSubmit={false}
         />
      </View>

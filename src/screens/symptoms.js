@@ -499,6 +499,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: horizontalScale(8),
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
+    borderRadius:moderateScale(4)
   },
   inputtext: {
     // paddingVertical: verticalScale(0),

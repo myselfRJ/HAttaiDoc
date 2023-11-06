@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Text,
   View,
@@ -20,16 +20,16 @@ import VisitOpen from '../components/visitopen';
 import HeaderAvatar from '../components/headeravatar';
 import PlusButton from '../components/plusbtn';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Language} from '../settings/customlanguage';
-import {language} from '../settings/userpreferences';
-import {useSelector, useDispatch} from 'react-redux';
-import {getDate} from '../redux/features/prescription/Followupslice';
-import {URL} from '../utility/urls';
-import {fetchApi} from '../api/fetchApi';
+import { Language } from '../settings/customlanguage';
+import { language } from '../settings/userpreferences';
+import { useSelector, useDispatch } from 'react-redux';
+import { getDate } from '../redux/features/prescription/Followupslice';
+import { URL } from '../utility/urls';
+import { fetchApi } from '../api/fetchApi';
 import HButton from '../components/button';
-import {ScrollView} from 'react-native-gesture-handler';
-import {BottomSheetView, StatusMessage} from '../components';
-import {CONSTANT} from '../utility/const';
+import { ScrollView } from 'react-native-gesture-handler';
+import { BottomSheetView, StatusMessage } from '../components';
+import { CONSTANT } from '../utility/const';
 import {
   moderateScale,
   verticalScale,
@@ -43,12 +43,12 @@ import {
   addCheifComplaint,
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
-import {CONSTANTS} from '../utility/constant';
+import { CONSTANTS } from '../utility/constant';
 import Seperator from '../components/seperator';
 import PDFViewer from '../components/PdfViewer';
-import {PermmisionStorage} from '../utility/permissions';
+import { PermmisionStorage } from '../utility/permissions';
 
-const Visit = ({navigation, route}) => {
+const Visit = ({ navigation, route }) => {
   const [filePath, setFilePath] = useState('');
   // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
@@ -74,7 +74,7 @@ const Visit = ({navigation, route}) => {
   const [prescribe, setPrescribe] = useState(prescribeCopy);
 
   const token = useSelector(state => state.authenticate.auth.access);
-  const {phone} = useSelector(state => state?.phone?.data);
+  const { phone } = useSelector(state => state?.phone?.data);
 
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
@@ -103,6 +103,8 @@ const Visit = ({navigation, route}) => {
 
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
   const service_fees = useSelector(state => state.prescription.fees);
+  const charge = service_fees?.[service_fees?.length - 1];
+  // console.log('charge===',charge['totalFees']);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -319,77 +321,87 @@ const Visit = ({navigation, route}) => {
                 <title>
                     Consultation Pdf
                 </title>
+                <style>
+                .header {
+                  position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    text-align: center;
+    border-bottom: 1px solid #4ba5fa;
+    padding-bottom: 8px;
+    margin: 0;
+    padding: 24px;
+    z-index: 1; 
+
+                }
+        
+                .footer {
+                  position: fixed;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  background-color: #ffffff;
+                  text-align: center;
+                  padding: 10px; 
+                  margin: 0;
+                }
+        
+                .page {
+                  max-height: calc(50vh - (header height + footer height + margins)); 
+    page-break-before: auto;
+    page-break-after: always;
+    page-break-inside: auto;
+    margin: 0;
+    padding: 24px;
+    padding-top:150px;
+                }
+                .page + .header {
+                  top: -50px; 
+                  z-index: 2;
+              }
+              .page + .header + .page {
+                
+                max-height: calc(50vh - (footer height + margins));
+            }
+        
+                .maincontainer {
+                  width: 95%; 
+                  height: 100%; 
+                  background-color: #ffffff;
+                  padding:5%;
+                }
+                .page-break-inside {
+                  page-break-inside: avoid; /* Allow automatic page breaks inside this element */
+              }
+            </style>
             </head>
             <body>
-                <div class='maincontaioner' style=" width: 95%;
-                height: 100%;
-              padding:2%;
-                background-color: #ffffff;">
-                    <div class='head'>
-                        <div class='first' style=";
-                        display: flex;
-                        flex-direction: row;
-                        border-bottom:1px #4ba5fa solid;">
-                            <img id='img' src=${
-                              logo === CONSTANTS.default_image
-                                ? CONSTANTS.default_clinic_logo
-                                : logo_url
-                            } style="width: 52px;height: 58px;" alt="Sample Image"/>
-                            <div class='address' style="display: flex;width:100%;
-                            flex-direction: row;
-                            justify-content: space-between;">
-                                <div class='namecontaioner'>
-                                    <p id='docname' style=" font-weight: 600px;
-                                    font-size: 16px;
-                                    margin-left: 8px ;
-                                    color: #4ba5fa;
-                                    
-                                    ">Dr.${data.doctor_name}</p>
-                                    <p id='spec' style="font-weight: 400px;
-                                    font-size: 16px;
-                                    margin-left: 8px ;
-                                    
-                                    color: #4ba5fa;">Speciality : ${
-                                      data.specialization
-                                    }</p>
-                                    <p id='spec' style="font-weight: 400px;
-                                    font-size: 16px;
-                                    margin-left: 8px ;
-                                    
-                                    color: #4ba5fa;">Regd No:${
-                                      data.medical_number
-                                    }</p>
-                                </div>
-                                <div class='namecontaioner' >
-                                    <p id='docname' style="font-weight: 600px;
-                                    font-size: 16px;
-                                    margin-left: 80px ;
-                                    color: #4ba5fa;
-                                    text-align: right
-                                    
-                                    ">${clinic_name}</p>
-                                    <p id='spec' style="font-weight: 400px;
-                                    
-                                    font-size: 16px;
-                                    padding-left: 300px ;
-                                    text-align: justify;
-                                    color: #000;">${clinic_phone} | ${clinic_Address}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='second' style="display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;">
-                            <img id='rximg' src=${
-                              CONSTANTS.prescription_logo
-                            } style="width:28px;
-                            height: 43px;"/>
-                            <p id='date' style="font-size: 16px;
-                            font-weight: 400px;">Date:${
-                              new Date().toISOString().split('T')[0]
-                            },Time:${new Date().toString().split(' ')[4]}</p>
+                <div class='maincontaioner'>
+    
+            <div class='header' >
+                <div class='first' style="display: flex; flex-direction: row;">
+                    <img id='img' src=${logo === CONSTANTS.default_image ? CONSTANTS.default_clinic_logo : logo_url} style="width: 52px; height: 58px;" alt="Sample Image" />
+                    <div class='address' style="flex-direction: column; margin-left: 16px;">
+                       
+                            <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">Dr.${data.doctor_name}</p>
+                            <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">${data.specialization}</p>
+                            <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">Regd No:${data.medical_number}</p>
+                      </div>
+                        <div class='namecontaioner' style="margin-left: 230px; text-align: right;">
+                            <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">${clinic_name}</p>
+                            <p id='spec' style="font-weight: 400; font-size: 14px; text-align: justify; color: #000000; margin: 0; margin-left: 16px; justify-content: flex-start;">${clinic_phone} | ${clinic_Address}</p>
                         </div>
                     </div>
+             
+            </div>
+           <div class='page page-break-inside'>
+            <div class='second' style="display: flex; flex-direction: row; justify-content: space-between;">
+                <img id='rximg' src=${CONSTANTS.prescription_logo} style="width: 28px; height: 43px;" />
+                <p id='date' style="font-size: 16px; font-weight: 400px;">Date:${new Date().toISOString().split('T')[0]}, Time:${new Date().toString().split(' ')[4]}</p>
+            </div>
+       
                     <div class='third' >
                         <p id='patientDetails' style=" font-size: 16px;
                         font-weight: 400px;">${name} | ${gende} | ${age} | ${patient_phone}</p>
@@ -404,9 +416,8 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
                         </div>
-                        ${
-                          Symptom?.length > 0
-                            ? `<div class='subContaioner'  style="  display: flex;
+                        ${Symptom?.length > 0
+            ? `<div class='subContaioner'  style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -416,19 +427,18 @@ const Visit = ({navigation, route}) => {
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${Symptom?.map(
-                                item => item?.symptom,
-                              )}</p>
+              item => item?.symptom,
+            )}</p>
                           </div>`
-                            : ''
-                        }
-                        ${
-                          vitalsData?.pulse_rate ||
-                          vitalsData?.weight ||
-                          vitalsData?.height ||
-                          vitalsData?.body_temperature ||
-                          vitalsData?.rate ||
-                          vitalsData?.bmi
-                            ? `
+            : ''
+          }
+                        ${vitalsData?.pulse_rate ||
+            vitalsData?.weight ||
+            vitalsData?.height ||
+            vitalsData?.body_temperature ||
+            vitalsData?.rate ||
+            vitalsData?.bmi
+            ? `
                         <div >
                         <p id='subhead' style="font-weight: 400px;
                         font-size: 16px;
@@ -444,62 +454,55 @@ const Visit = ({navigation, route}) => {
                             color:#000000;">Pulse rate:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.pulse_rate
-                                ? vitalsData?.pulse_rate
-                                : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.pulse_rate
+              ? vitalsData?.pulse_rate
+              : ''
+            }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Weight:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.weight ? vitalsData?.weight : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.weight ? vitalsData?.weight : ''
+            }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Height:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.height ? vitalsData?.height : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.height ? vitalsData?.height : ''
+            }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Temp:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.body_temperature
-                                ? vitalsData?.body_temperature
-                                : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.body_temperature
+              ? vitalsData?.body_temperature
+              : ''
+            }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Res.rate:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.rate ? vitalsData?.rate : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.rate ? vitalsData?.rate : ''
+            }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
                             color:#000000;">BMI:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.bmi ? vitalsData?.bmi : ''
-                            }</p>
+                            color:#000000;">${vitalsData?.bmi ? vitalsData?.bmi : ''
+            }</p>
                         </div>
                     </div>
                         `
-                            : ''
-                        }
+            : ''
+          }
                        
-                       ${
-                         diagnosis?.length > 0
-                           ? ` <div class='subContaioner' style="  display: flex;
+                       ${diagnosis?.length > 0
+            ? ` <div class='subContaioner' style="  display: flex;
                         flex-direction: row;
                         gap: 8px;
                         line-height:4px;">
@@ -509,12 +512,13 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${diagnosis?.map(
-                              item => item?.diagnosis,
-                            )}</p>
+              item => item?.diagnosis,
+            )}</p>
                         </div>`
-                           : ''
-                       }
+            : ''
+          }
                     </div>
+                   <div class='page-break-inside'> 
                     <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
                             margin-top:4px;
@@ -522,7 +526,6 @@ const Visit = ({navigation, route}) => {
                     <table style="border-collapse: collapse;margin-bottom: 48px;">
                 <tr>
                     <th style=" padding: 8px; text-align: center;">S.No</th>
-                    <th style=" padding: 8px; text-align: center;">Mode</th>
                     <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
                     <th style=" padding: 8px; text-align: center;">Dose</th>
                     <th style=" padding: 8px; text-align: center;">Timing</th>
@@ -531,38 +534,31 @@ const Visit = ({navigation, route}) => {
                     <th style=" padding: 8px; text-align: center;">Quantity</th>
                 </tr>
                 ${prescribe?.map(
-                  (item, index) =>
-                    `<tr>
-                  <td style="padding: 8px; text-align: center;font-size:16x;">${
-                    parseInt(index) + 1
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x;">${
-                    item.mode
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
-                    item?.medicine
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.dose_quantity ? item?.dose_quantity : '-'
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.timing
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.frequency
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.duration
-                  } days</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.total_quantity
-                  }</td>
-              </tr>`,
-                )}
+            (item, index) =>
+              `<tr>
+                  <td style="padding: 8px; text-align: center;font-size:16x;">${parseInt(index) + 1
+              }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${item?.medicine
+              }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.dose_quantity ? item?.dose_quantity : '-'
+              }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.timing
+              }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.frequency
+              }</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.duration
+              } days</td>
+                  <td style="padding: 8px; text-align: center;font-size:16x">${item?.total_quantity
+              }</td>
+              </tr>`
+          )}
             </table>
-                   ${
-                     note?.length > 0
-                       ? ` <div class='subContaioner' style="  display: flex;
+            </div>
+            </div>
+                    <div class ='page'>
+            
+                   ${note?.length > 0
+            ? ` <div class='subContaioner' style="  display: flex;
                     flex-direction: row;
                     gap: 8px;
                     line-height:4px;">
@@ -573,20 +569,19 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             color:#000000;">${note}</p>
                         </div>`
-                       : ''
-                   }
+            : ''
+          }
         
-                       ${
-                         selectedDoctor?.length
-                           ? ` <div >
+                       ${selectedDoctor?.length
+            ? ` <div >
                         <p id='subhead' style="font-weight: 400px;
                         font-size: 16px;
                         color:#4ba5fa;">Refer a Doctor:</p>
                         ${selectedDoctor?.map(
-                          (
-                            item,
-                            ind,
-                          ) => `<div class='vitalscontaioner' style=" display: flex;
+              (
+                item,
+                ind
+              ) => `<div class='vitalscontaioner' style=" display: flex;
                         flex-direction: row;
                         gap: 8px;
                         margin-left: 8px;
@@ -596,11 +591,10 @@ const Visit = ({navigation, route}) => {
                             color:#000000;">Name:</p>
                             <p id='values' style="  font-weight: 500;
                             font-size: 16px;
-                            color:#000000;">${
-                              item?.dr_name?.length > 0
-                                ? `Dr.${item?.dr_name},${item?.doctor_or_name}`
-                                : `Dr.${item?.doctor_or_name}`
-                            }</p>
+                            color:#000000;">${item?.dr_name?.length > 0
+                  ? `Dr.${item?.dr_name},${item?.doctor_or_name}`
+                  : `Dr.${item?.doctor_or_name}`
+                }</p>
                             <p id='values1' style="  font-weight: 500;
                             font-size: 16px;
                             color:#000000;">Specialist:</p>
@@ -613,14 +607,13 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="  font-weight: 500;
                             font-size: 16px;
                             color:#000000;">${item?.phone}</p>
-                        </div>`,
-                        )}
+                        </div>`
+            )}
                     </div>`
-                           : ''
-                       }
-                        ${
-                          labreport?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
+            : ''
+          }
+                        ${labreport?.length > 0
+            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -630,14 +623,14 @@ const Visit = ({navigation, route}) => {
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${labreport?.map(
-                                (item, ind) => item?.lab_test,
-                              )}</p>
+              (item, ind) => item?.lab_test
+            )}</p>
                           </div>`
-                            : ''
-                        }
-                        ${
-                          date?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
+            : ''
+          }
+        
+                        ${date?.length > 0
+            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
                           line-height:4px;">
@@ -648,14 +641,13 @@ const Visit = ({navigation, route}) => {
                               font-size: 16px;
                               color:#000000;">${date}</p>
                           </div>`
-                            : ''
-                        }
-                        ${
-                          dateTimeRed?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
+            : ''
+          }
+                        ${dateTimeRed?.length > 0
+            ? `<div class='subContaioner' style="  display: flex;
                           flex-direction: row;
                           gap: 8px;
-                          line-height:4px;">
+                          line-height:4px; ">
                               <p id='subhead' style="font-weight: 400px;
                               font-size: 16px;
                               color:#4ba5fa;">Validity Upto:</p>
@@ -663,34 +655,34 @@ const Visit = ({navigation, route}) => {
                               font-size: 16px;
                               color:#000000;">${dateTimeRed}</p>
                           </div>`
-                            : ''
-                        }
+            : ''
+          }
+          <p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
                         <table style="border-collapse: collapse;margin-bottom: 48px;">
                         <tr>
-                            <th style=" padding: 8px; text-align: center;">S.No</th>
-                            <th style=" padding: 8px; text-align: center; width: 18%;">Service Name</th>
-                            <th style=" padding: 8px; text-align: center;">Amount</th>
-                        </tr>
+        <th style="text-align: start; width:10%">S.No</th>
+        <th style="padding: 8px; text-align: start; width: 20%;">Service Name</th>
+        <th style="padding: 8px; text-align: start; width:20%">Amount</th>
+    </tr>
                         ${service_fees?.map((item, index) =>
-                          item?.service_name
-                            ? `<tr>
-                          <td style="padding: 8px; text-align: center;font-size:16x;">${
-                            parseInt(index) + 1
-                          }</td>
-                          <td style="padding: 8px; text-align: center;font-size:16x;">${
-                            item?.service_name
-                          }</td>
-                          <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
-                            item?.charge
-                          }</td>
+            item?.service_name
+              ? `<tr>
+                          <td style="padding: 8px; text-align: start;font-size:16x;width: 10%">${parseInt(index) + 1
+              }</td>
+                          <td style="padding: 8px; text-align: start;font-size:16x;width: 20%">${item?.service_name
+              }</td>
+                          <td style="padding: 8px; text-align: start;font-size:16x; width: 20%;">${item?.charge
+              }</td>
                           
                       </tr>`
-                            : '',
-                        )}
-                        <td style="padding: 8px; text-align: right;font-size:16x">Total : ${service_fees?.map(
-                          item => item?.totalFees,
-                        )}</td>
+              : ''
+              
+          )}           
                     </table>
+                    <p style="margin-left: 52%;font-weight:700;font-size:16px";>Total :
+                    ${charge["totalFees"]}</p>
+                    </div>
+                    <div class ='footer'>
                         <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
@@ -722,6 +714,8 @@ const Visit = ({navigation, route}) => {
                         width: 98px;
                         height: 40px;"/>
                     </div>
+                    </div>
+                </div>
                 </div>
             </body>
         </html>`,
@@ -751,7 +745,7 @@ const Visit = ({navigation, route}) => {
         <View style={styles.main}>
           <View style={styles.appointment}>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.h2}>
                 {Language[language]['consultation']}
               </Text>
@@ -763,9 +757,9 @@ const Visit = ({navigation, route}) => {
                   borderWidth: 0.5,
                   borderColor: CUSTOMCOLOR.borderColor,
                 }}
-                textStyle={{color: CUSTOMCOLOR.primary}}
+                textStyle={{ color: CUSTOMCOLOR.primary }}
                 onPress={() => {
-                  navigation.navigate('patientrecord', {patient_phone});
+                  navigation.navigate('patientrecord', { patient_phone });
                 }}
               />
             </View>
@@ -839,7 +833,7 @@ const Visit = ({navigation, route}) => {
                   <Pressable
                     style={styles.gap}
                     onPress={() =>
-                      navigation.navigate('complaints', {complaint})
+                      navigation.navigate('complaints', { complaint })
                     }>
                     <Icon
                       name={'pencil'}
@@ -861,7 +855,7 @@ const Visit = ({navigation, route}) => {
                   <Text style={styles.patientHead}>Vitals</Text>
                   <Pressable
                     style={styles.gap}
-                    onPress={() => navigation.navigate('vitalscreen', {gende})}>
+                    onPress={() => navigation.navigate('vitalscreen', { gende })}>
                     <Icon
                       name={'pencil'}
                       size={moderateScale(18)}
@@ -905,13 +899,13 @@ const Visit = ({navigation, route}) => {
                   </Pressable>
                 </View>
 
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row',flexWrap:'wrap' }}>
                   {allergies?.length > 0
                     ? allergies?.map((item, index) => (
-                        <Text style={styles.patientText}>
-                          {item?.allergies}{' '}
-                        </Text>
-                      ))
+                      <Text style={styles.patientText}>
+                        {item?.allergies}{' '}
+                      </Text>
+                    ))
                     : null}
                 </View>
               </View>
@@ -970,7 +964,7 @@ const Visit = ({navigation, route}) => {
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexWrap: 'wrap'}}>
+                      <View style={{ flexWrap: 'wrap' }}>
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (
@@ -996,7 +990,7 @@ const Visit = ({navigation, route}) => {
                   )}
                   {value.label === 'Prescribe' && prescribe.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         <View style={styles.pres}>
                           <View>
                             {prescribe?.map((item, ind) => (
@@ -1060,77 +1054,77 @@ const Visit = ({navigation, route}) => {
                         {(vitalsData?.systolic ||
                           vitalsData?.pulse_rate ||
                           vitalsData?.diastolic) && (
-                          <View style={styles.vitals}>
-                            <View key={index} style={styles.vitals1}>
-                              {vitalsData?.pulse_rate && (
-                                <>
-                                  <Icon
-                                    name="water-check"
-                                    color={CUSTOMCOLOR.primary}
-                                    size={moderateScale(16)}
-                                  />
+                            <View style={styles.vitals}>
+                              <View key={index} style={styles.vitals1}>
+                                {vitalsData?.pulse_rate && (
+                                  <>
+                                    <Icon
+                                      name="water-check"
+                                      color={CUSTOMCOLOR.primary}
+                                      size={moderateScale(16)}
+                                    />
+                                    <Text style={styles.pulse}>
+                                      pulse rate:
+                                      {vitalsData?.pulse_rate}bpm
+                                    </Text>
+                                  </>
+                                )}
+                                {vitalsData?.height && (
                                   <Text style={styles.pulse}>
-                                    pulse rate:
-                                    {vitalsData?.pulse_rate}bpm
+                                    {Language[language]['height']}:
+                                    {vitalsData.height}cm
                                   </Text>
-                                </>
-                              )}
-                              {vitalsData?.height && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['height']}:
-                                  {vitalsData.height}cm
-                                </Text>
-                              )}
-                              {vitalsData?.weight && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['weight']}:
-                                  {vitalsData.weight}kg
-                                </Text>
-                              )}
-                              {vitalsData?.bmi && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['bmi']}:{vitalsData.bmi}cm
-                                </Text>
-                              )}
-                              {vitalsData?.body_temperature && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['temp']}:
-                                  {vitalsData?.body_temperature}
-                                </Text>
-                              )}
-                              {vitalsData?.rate && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['rate']}:{vitalsData.rate}
-                                  cm
-                                </Text>
-                              )}
-                            </View>
-                            <View key={index} style={styles.common}>
-                              {vitalsData?.systolic && (
-                                <>
-                                  <Icon
-                                    name="water-check"
-                                    color={CUSTOMCOLOR.primary}
-                                    size={moderateScale(16)}
-                                  />
+                                )}
+                                {vitalsData?.weight && (
                                   <Text style={styles.pulse}>
-                                    {Language[language]['systolic_bp']}:
-                                    {vitalsData.systolic}mmHg
+                                    {Language[language]['weight']}:
+                                    {vitalsData.weight}kg
                                   </Text>
-                                </>
-                              )}
-                              {vitalsData?.diastolic && (
-                                <Text style={styles.pulse}>
-                                  {Language[language]['diastolic_bp']}:
-                                  {vitalsData.diastolic}mmHg
-                                </Text>
-                              )}
+                                )}
+                                {vitalsData?.bmi && (
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['bmi']}:{vitalsData.bmi}cm
+                                  </Text>
+                                )}
+                                {vitalsData?.body_temperature && (
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['temp']}:
+                                    {vitalsData?.body_temperature}
+                                  </Text>
+                                )}
+                                {vitalsData?.rate && (
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['rate']}:{vitalsData.rate}
+                                    cm
+                                  </Text>
+                                )}
+                              </View>
+                              <View key={index} style={styles.common}>
+                                {vitalsData?.systolic && (
+                                  <>
+                                    <Icon
+                                      name="water-check"
+                                      color={CUSTOMCOLOR.primary}
+                                      size={moderateScale(16)}
+                                    />
+                                    <Text style={styles.pulse}>
+                                      {Language[language]['systolic_bp']}:
+                                      {vitalsData.systolic}mmHg
+                                    </Text>
+                                  </>
+                                )}
+                                {vitalsData?.diastolic && (
+                                  <Text style={styles.pulse}>
+                                    {Language[language]['diastolic_bp']}:
+                                    {vitalsData.diastolic}mmHg
+                                  </Text>
+                                )}
+                              </View>
                             </View>
-                          </View>
-                        )}
+                          )}
                         {vitalsData?.LDD && (
                           <View
-                            style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                             <View key={index} style={styles.common}>
                               {vitalsData?.LDD && (
                                 <>
@@ -1193,7 +1187,7 @@ const Visit = ({navigation, route}) => {
                      })} } */}
                   {value.label === 'Diagnosis' && diagnosis.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         <View style={styles.common}>
                           <View>
                             {diagnosis?.map((item, ind) => (
@@ -1224,7 +1218,7 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Comorbidities' &&
                     commorbities.length > 0 && (
                       <View style={styles.basiccontainer}>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                           <View style={styles.common}>
                             <View>
                               {commorbities?.map((item, ind) => (
@@ -1250,7 +1244,7 @@ const Visit = ({navigation, route}) => {
                   {value.label === 'Past Hospitalization' &&
                     pasthistory.length > 0 && (
                       <View style={styles.basiccontainer}>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                           <View style={styles.common}>
                             <View>
                               {pasthistory?.map((item, ind) => (
@@ -1275,7 +1269,7 @@ const Visit = ({navigation, route}) => {
 
                   {value.label === 'Allergies' && allergies?.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         <View style={styles.common}>
                           <View>
                             {allergies?.map((item, ind) => (
@@ -1300,7 +1294,7 @@ const Visit = ({navigation, route}) => {
 
                   {value.label === 'Test Prescribe' && labreport.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         <View style={styles.common}>
                           <View>
                             {labreport?.map((item, ind) => (
@@ -1327,7 +1321,7 @@ const Visit = ({navigation, route}) => {
                     (selectedDoctor?.length > 0 ? (
                       <View style={styles.basiccontainer}>
                         {selectedDoctor?.map((item, ind) => (
-                          <View style={{flexDirection: 'row'}} key={ind}>
+                          <View style={{ flexDirection: 'row' }} key={ind}>
                             <Icon
                               name="doctor"
                               color={CUSTOMCOLOR.primary}
@@ -1336,7 +1330,7 @@ const Visit = ({navigation, route}) => {
                             <Text style={styles.pulse}>
                               Refer to{' '}
                               {item?.refer_to === 'Clinic' ||
-                              item?.refer_to === 'Hospital'
+                                item?.refer_to === 'Hospital'
                                 ? `${item?.doctor_or_name}  Dr.${item?.dr_name}`
                                 : `Dr.${item?.doctor_or_name}`}{' '}
                             </Text>
@@ -1386,6 +1380,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: moderateScale(24),
     gap: moderateScale(16),
+    backgroundColor:CUSTOMCOLOR.background
   },
   select: {
     gap: moderateScale(8),

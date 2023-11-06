@@ -175,7 +175,7 @@ const PatientSearchCard = patient_data => {
 };
 const styles = StyleSheet.create({
   main: {
-    borderWidth: 0.5,
+    borderWidth: 0.75,
     borderColor: CUSTOMCOLOR.borderColor,
     flexDirection: 'row',
     widthhorizontalScalelignItems: 'center',

@@ -30,6 +30,7 @@ import {
   UpdateAsyncData,
 } from '../utility/AsyncStorage';
 import {commonstyles} from '../styles/commonstyle';
+import CustomCalendar from '../components/calendar';
 
 const Allergies = () => {
   const navigation = useNavigation();
@@ -116,14 +117,20 @@ const Allergies = () => {
           index === array?.findIndex(obj => obj.allergies === item?.allergies)
         );
       });
-      setSug(uniqueArray);
+      if(uniqueArray?.length>20) {
+        uniqueArray?.splice(20);
+        setSug(uniqueArray);
+      }
+      else{
+      setSug(uniqueArray)
+      }
     });
   }, []);
 
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Allergies" />
-
+    <ScrollView>
       {prev?.map((item, ind) =>
         prev.length > 0 ? (
           <ShowChip
@@ -183,6 +190,7 @@ const Allergies = () => {
             style={{
               marginTop: moderateScale(16),
               flexDirection: 'row',
+              flexWrap:'wrap',
               gap: moderateScale(12),
               paddingHorizontal: horizontalScale(8),
             }}>
@@ -208,11 +216,13 @@ const Allergies = () => {
             ))}
           </View>
 
-          <View style={commonstyles.activebtn}>
-            <HButton label={'Save'} onPress={handleBack} />
-          </View>
+         
         </View>
       </View>
+      </ScrollView>
+      <View style={{flex:1,justifyContent:'flex-end'}}>
+            <HButton label={'Save'} onPress={handleBack} btnstyles={commonstyles.activebtn}/>
+          </View>
     </View>
   );
 };
@@ -228,8 +238,11 @@ const styles = StyleSheet.create({
   },
   recomend: {
     padding: moderateScale(8),
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(4),
     paddingHorizontal: horizontalScale(16),
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary,
+    
   },
   input: {
     // paddingHorizontal:24,

@@ -88,11 +88,11 @@ const OthersFees = ({navigation}) => {
             <Text style={{fontWeight: '400', color: CUSTOMCOLOR.primary}}>
               Service Fees
             </Text>
-            <Icon
+            {/* <Icon
               size={moderateScale(24)}
               color={CUSTOMCOLOR.primary}
               name={'pencil'}
-            />
+            /> */}
           </View>
         )}
         {submittedFees?.map((item, index) => (
@@ -104,16 +104,24 @@ const OthersFees = ({navigation}) => {
               paddingLeft: moderateScale(12),
               alignItems: 'center',
             }}>
+              <View style={{flexDirection:'row',gap:horizontalScale(16),alignItems:'center'}}>
             <Text style={styles.text}>{item?.service_name}</Text>
-            <Text style={styles.text}>
-              {item?.charge}{' '}
-              <TouchableOpacity onPress={() => handleDelete(index)}>
+            <TouchableOpacity onPress={() => handleDelete(index)} style={{backgroundColor:'#F8F8FF',borderRadius:moderateScale(100),
+            // borderWidth:0.25,
+            alignItems:'center',
+            // borderColor:CUSTOMCOLOR.delete,
+            padding:moderateScale(4)}}>
                 <Icon
                   name={'close'}
                   size={moderateScale(16)}
                   color={CUSTOMCOLOR.error}
                 />
               </TouchableOpacity>
+            
+            </View>
+            <Text style={styles.text}>
+              {item?.charge}{' '}
+              
             </Text>
           </View>
         ))}
@@ -171,12 +179,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(8),
+    backgroundColor:CUSTOMCOLOR.background
   },
   text: {
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
     // alignItems: 'center',
+    // gap:horizontalScale(8)
   },
 });
 

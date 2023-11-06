@@ -140,7 +140,8 @@ const Diagnosis = ({navigation}) => {
     <View style={styles.main}>
       <PrescriptionHead heading="Diagnosis" />
       <ScrollView>
-        <View style={{flexDirection: 'row', gap: moderateScale(32)}}>
+      <View style={{gap:verticalScale(12)}}>
+        <View style={{flexDirection: 'row', gap: moderateScale(24)}}>
           {dia_types?.map((value, ind) => (
             <SelectorBtn
               key={ind}
@@ -159,7 +160,7 @@ const Diagnosis = ({navigation}) => {
             />
           ))}
         </View>
-        <View style={{marginBottom: moderateScale(16)}}>
+        
           <View style={styles.input}>
             <InputText
               inputContainer={styles.inputtext}
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     // borderWidth:1
   },
   recomend: {
-    padding: moderateScale(8),
+    padding: moderateScale(4),
     borderRadius: moderateScale(8),
     paddingHorizontal: horizontalScale(16),
   },
