@@ -50,9 +50,9 @@ import {PermmisionStorage} from '../utility/permissions';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -818,16 +818,16 @@ const Visit = ({navigation, route}) => {
                     | {patient_data?.gender}
                   </Text>
                   {(patient_data?.gender === 'female' ||
-                  patient_data?.gender === 'Female') &&
-                vitalsData?.LDD &&
-                vitalsData?.EDD ? (
-                  <Text style={styles.patientText}>
-                    Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} | EDD:
-                    {vitalsData.EDD}
-                  </Text>
-                ) : null}
+                    patient_data?.gender === 'Female') &&
+                  vitalsData?.LDD &&
+                  vitalsData?.EDD ? (
+                    <Text style={styles.patientText}>
+                      Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} |
+                      EDD:
+                      {vitalsData.EDD}
+                    </Text>
+                  ) : null}
                 </View>
-
               </View>
               <View style={styles.line}>
                 <View
@@ -870,12 +870,19 @@ const Visit = ({navigation, route}) => {
                     />
                   </Pressable>
                 </View>
-                {vitalsData && <Text style={styles.patientText}>
-                 {vitalsData?.systolic &&`BP : ${vitalsData.systolic}/${vitalsData.diastolic}`} {vitalsData?.rate && `SPO2: ${vitalsData?.rate}`}{' '} 
-                  {vitalsData?.bmi && `BMI: ${vitalsData?.bmi}`}{' '} {vitalsData?.pulse_rate && `Pulse: ${vitalsData?.pulse_rate}`}{' '}
-                {vitalsData?.body_temperature && `Temp: ${vitalsData?.body_temperature}`}
-                </Text>}
-               
+                {vitalsData && (
+                  <Text style={styles.patientText}>
+                    {vitalsData?.systolic &&
+                      `BP : ${vitalsData.systolic}/${vitalsData.diastolic}`}{' '}
+                    {vitalsData?.rate && `SPO2: ${vitalsData?.rate}`}{' '}
+                    {vitalsData?.bmi && `BMI: ${vitalsData?.bmi}`}{' '}
+                    {vitalsData?.pulse_rate &&
+                      `Pulse: ${vitalsData?.pulse_rate}`}{' '}
+                    {vitalsData?.body_temperature &&
+                      `Temp: ${vitalsData?.body_temperature}`}
+                  </Text>
+                )}
+
                 <Seperator />
               </View>
               <View style={styles.line}>

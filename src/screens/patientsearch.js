@@ -87,8 +87,10 @@ const PatientSearch = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (clinicID){
-      fetchData();
+    if (clinicID) {
+      setTimeout(() => {
+        fetchData();
+      }, 80);
     }
   }, [clinicID]);
 

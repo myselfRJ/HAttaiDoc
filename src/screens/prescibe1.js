@@ -69,19 +69,7 @@ export default function Prescribe1({navigation}) {
   const dispatch = useDispatch();
   const [sug, setSug] = useState([]);
   const [durationSelect, setDurationSelect] = useState('days');
-  // console.log('suggggggg',sug)
-  // const prescribe = useState([
-  //   {
-  //     medicine: medicine,
-  //     mode: mode,
-  //     dose_quantity: dose_quantity,
-  //     timing: timing,
-  //     frequency: JSON.stringify(frequency),
-  //     dose_number: dose_number,
-  //     duration: duration,
-  //     total_quantity: total_quantity,
-  //   },
-  // ])
+
   const prevPres = useSelector(state => state.pres.prescribeItems);
   console.log('duration', prevPres);
   const handleAddPrescribe = () => {
@@ -95,10 +83,7 @@ export default function Prescribe1({navigation}) {
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
-          duration:
-            durationSelect === 'days'
-              ? `${duration} days`
-              : `${duration} weeks`,
+          duration: `${duration} ${durationSelect}`,
           total_quantity: total_quantity,
         },
       ]),
@@ -196,12 +181,15 @@ export default function Prescribe1({navigation}) {
   };
 
   const fetchMedicine = async () => {
-    const response = await fetchApi(URL.snomed(medicine, option), {
-      method: 'GET',
-      headers: {
-        // Host: Host,
+    const response = await fetchApi(
+      URL.snomed(medicine ? medicine : 'NA', option),
+      {
+        method: 'GET',
+        headers: {
+          // Host: Host,
+        },
       },
-    });
+    );
     if (response.ok) {
       const jsonData = await response.json();
       // console.log('fetch data====>', jsonData);
@@ -272,20 +260,25 @@ export default function Prescribe1({navigation}) {
             )
           );
         });
-        setSug(uniqueArray);
+        if (uniqueArray?.length > 10) {
+          uniqueArray?.splice(10);
+          setSug(uniqueArray);
+        } else {
+          setSug(uniqueArray);
+        }
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
   }, []);
 
-  const [med_filter, setMed_filter] = useState([]);
-  useEffect(() => {
-    if (sug && mode) {
-      const resultArray = sug?.filter(word => word?.mode === mode);
-      setMed_filter(resultArray);
-    }
-  }, [mode]);
+  // const [med_filter, setMed_filter] = useState([]);
+  // useEffect(() => {
+  //   if (sug && mode) {
+  //     const resultArray = sug?.filter(word => word?.mode === mode);
+  //     setMed_filter(resultArray);
+  //   }
+  // }, [mode]);
 
   const handleOptions = value => {
     setDurationSelect(value);
@@ -302,13 +295,13 @@ export default function Prescribe1({navigation}) {
             <ShowChip
               main={{marginHorizontal: 0}}
               key={ind}
-              text={`${item.mode} | ${item.medicine} | ${item.dose_quantity} | ${item.timing}|${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
+              text={`${item.medicine} | ${item.dose_quantity} | ${item.timing}|${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
               onPress={() => handleDelete(ind)}
             />
           ))}
         </View>
 
-        <View>
+        {/* <View>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes?.map(value => (
@@ -330,12 +323,12 @@ export default function Prescribe1({navigation}) {
               />
             ))}
           </View>
-        </View>
+        </View> */}
         <InputText
           lbltext={{fontSize: moderateScale(14)}}
           inputContainer={{paddingHorizontal: 0}}
           label={Language[language]['medicine']}
-          placeholder="Enter Medicine"
+          placeholder="Ex : paracetamol  oral tablet"
           multiline={true}
           value={medicine}
           setValue={val => setMedicine(val)}
@@ -371,38 +364,38 @@ export default function Prescribe1({navigation}) {
               </ScrollView>
             </View>
           ))}
-        {med_filter.length >= 1 ? (
+        {sug?.length >= 1 ? (
           <Text style={styles.RecommdationText}>Recently Used</Text>
         ) : null}
 
-        {med_filter?.length > 0 && (
-          <View style={styles.Modes}>
-            <ScrollView
-              horizontal={true}
+        {sug?.length > 0 && (
+          <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
+            {/* <ScrollView
+              // horizontal={true}
               persistentScrollbar={true}
-              contentContainerStyle={{gap: moderateScale(12)}}>
-              {med_filter?.map(value => (
-                <SelectorBtn
-                  key={value}
-                  onPress={() => setMedicineValue(value?.medicine)}
-                  input={value?.medicine}
-                  select={{
-                    backgroundColor:
-                      medicine === value?.medicine
-                        ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.white,
-                  }}
-                  inputstyle={{
-                    color:
-                      medicine === value?.medicine
-                        ? CUSTOMCOLOR.white
-                        : CUSTOMCOLOR.primary,
-                    fontSize: moderateScale(14),
-                    fontWeight: '600',
-                  }}
-                />
-              ))}
-            </ScrollView>
+              contentContainerStyle={{gap: moderateScale(12)}}> */}
+            {sug?.map(value => (
+              <SelectorBtn
+                key={value?.medicine}
+                onPress={() => setMedicineValue(value?.medicine)}
+                input={value?.medicine}
+                select={{
+                  backgroundColor:
+                    medicine === value?.medicine
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.white,
+                }}
+                inputstyle={{
+                  color:
+                    medicine === value?.medicine
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary,
+                  fontSize: moderateScale(14),
+                  fontWeight: '600',
+                }}
+              />
+            ))}
+            {/* </ScrollView> */}
           </View>
         )}
 
@@ -445,7 +438,8 @@ export default function Prescribe1({navigation}) {
                 placeholder={'Enter Dosage eg: 100mg,200mg 0r 10m1 ,20ml'}
               />
               <View style={styles.Modes}>
-                {mode === 'Injection' || mode === 'Syrup'
+                {medicine?.toLowerCase()?.includes('injection') ||
+                medicine?.toLowerCase()?.includes('syrup')
                   ? ml?.map((value, mgIndex) => (
                       <SelectorBtn
                         input={value}
@@ -540,21 +534,37 @@ export default function Prescribe1({navigation}) {
             ))}
           </View>
         </View>
-        {/* <Text style={styles.ModeText}>
-                  {Language[language]['duration']}(inDays)
-                </Text> */}
+        <View>
+          <Text style={styles.ModeText}>
+            {Language[language]['duration']}(inDays)
+          </Text>
+          <View style={styles.radiogroup}>
+            <Option
+              label="days"
+              value="days"
+              selected={durationSelect === 'days'}
+              onPress={() => handleOptions('days')}
+            />
+            <Option
+              label="week"
+              value="week"
+              selected={durationSelect === 'week'}
+              onPress={() => handleOptions('week')}
+            />
+          </View>
 
-        <InputText
-          keypad="numeric"
-          // style={styles.durationInput}
-          label={Language[language]['duration']}
-          inputContainer={{
-            width: '24%',
-          }}
-          value={duration}
-          placeholder="Enter Days"
-          setValue={value => setDuration(value)}
-        />
+          <InputText
+            keypad="numeric"
+            // style={styles.durationInput}
+            // label={Language[language]['duration']}
+            inputContainer={{
+              width: '24%',
+            }}
+            value={duration}
+            placeholder="Enter Days"
+            setValue={value => setDuration(value)}
+          />
+        </View>
         {/* <View style={styles.ModeContainer}> */}
         <Text style={[styles.ModeText, {marginTop: moderateScale(3)}]}>
           {Language[language]['quantity']}
@@ -624,14 +634,6 @@ const styles = StyleSheet.create({
     //fontWeight: '400',
     top: moderateScale(28),
     color: CUSTOMCOLOR.black,
-  },
-  radiogroup: {
-    // paddingHorizontal: moderateScale(8),
-    paddingVertical: moderateScale(0),
-    flexDirection: 'row',
-    gap: moderateScale(48),
-    // borderWidth:1,
-    justifyContent: 'flex-start',
   },
   ModesContainer: {
     gap: moderateScale(8),
@@ -733,6 +735,13 @@ const styles = StyleSheet.create({
     // top: moderateScale(8),
     paddingTop: moderateScale(12),
     // paddingVertical: verticalScale(16),
+  },
+  radiogroup: {
+    paddingVertical: moderateScale(8),
+    flexDirection: 'row',
+    gap: moderateScale(48),
+
+    justifyContent: 'flex-start',
   },
   dropdownContainer: {
     // top: moderateScale(130),

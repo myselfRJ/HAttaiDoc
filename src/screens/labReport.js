@@ -64,7 +64,7 @@ const LabReports = () => {
 
   const term = 'test';
   const fetchTests = async () => {
-    const response = await fetchApi(URL.snomed(value, option), {
+    const response = await fetchApi(URL.snomed(value ? value : 'NA', option), {
       method: 'GET',
       headers: {
         // Authorization: `Bearer ${token}`,
