@@ -72,11 +72,11 @@ const Symptoms = ({navigation}) => {
             symptom: symptom,
             // days: days ? days : hr,
             days:
-              days > 1
-                ? `${days} days`
-                : days === 1
-                ? `${days} day`
-                : `${hr} hr`,
+              days && hr 
+                ? `${days} ${parseInt(days)>1?'days':'day'} & ${hr} hr`
+                : days && !hr
+                ? `${days} ${parseInt(days)>1?'days':'day'}`
+                :hr && `${hr} hr`,
             severity: sevSelected,
           },
         ]),
@@ -343,21 +343,21 @@ const Symptoms = ({navigation}) => {
                     Severity : {capitalizeWord(item.severity)}
                   </Text>
                 </View>
-                {item.days &&
-                (item.days.includes('days') || item.days.includes('day')) ? (
+                {/* {item.days &&
+                (item.days.includes('days') || item.days.includes('day')) ? ( */}
                   <View>
                     <Text style={styles.reduxText}>
                       Time Period: {item.days}
                     </Text>
                   </View>
-                ) : null}
-                {item.days && item.days.includes('hr') ? (
+                {/* ) : null} */}
+                {/* {item.days && item.days.includes('hr') ? (
                   <View>
                     <Text style={styles.reduxText}>
                       Time Period: {item.days}
                     </Text>
                   </View>
-                ) : null}
+                ) : null} */}
                 <View style={{flexDirection: 'row', gap: moderateScale(4)}}>
                   <TouchableOpacity
                     style={{

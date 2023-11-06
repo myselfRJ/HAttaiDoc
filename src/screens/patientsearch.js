@@ -40,11 +40,6 @@ const PatientSearch = ({navigation}) => {
   const dispatch = useDispatch();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
-  // const [uniquePatient,setUniquePatient]=useState([...new Set(data)])
-
-  // console.log('====================================');
-  // console.log('-----------------id', uniquePatient);
-  // console.log('====================================');
 
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -60,7 +55,7 @@ const PatientSearch = ({navigation}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData?.data[0]?.id);
-      dispatch(addclinic_id.addclinic_id(jsonData.data[0].id));
+      dispatch(addclinic_id(jsonData.data[0].id));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -92,7 +87,9 @@ const PatientSearch = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (clinicID){
+      fetchData();
+    }
   }, [clinicID]);
 
   useEffect(() => {
