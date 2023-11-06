@@ -651,6 +651,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
+    backgroundColor:CUSTOMCOLOR.background
   },
   radiogroup: {
     padding: moderateScale(8),

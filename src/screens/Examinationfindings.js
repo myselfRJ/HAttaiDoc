@@ -370,5 +370,6 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     flex: 1,
     gap: verticalScale(16),
+    backgroundColor:CUSTOMCOLOR.background
   },
 });

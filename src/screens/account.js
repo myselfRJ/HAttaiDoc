@@ -268,9 +268,10 @@ const Account = () => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: moderateScale(1),
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
+    backgroundColor:CUSTOMCOLOR.background
   },
   doctorImg: {
     height: moderateScale(70),
@@ -331,6 +332,8 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   editBtn: {
     paddingHorizontal: horizontalScale(16),
@@ -356,6 +359,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.white,
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   HPID: {
     width: '100%',

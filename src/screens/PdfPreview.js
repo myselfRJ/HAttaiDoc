@@ -38,6 +38,8 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import {useSelector, useDispatch} from 'react-redux';
+import { ScrollView } from 'react-native-gesture-handler';
+import { commonstyles } from '../styles/commonstyle';
 
 const PdfView = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -276,19 +278,22 @@ const PdfView = ({navigation}) => {
   };
   return (
     <>
-      <View>
+      <View style={{flex:1,backgroundColor:CUSTOMCOLOR.background}}>
+        <ScrollView contentContainerStyle={{flex:1}}>
         <PDFViewer path={path} />
-      </View>
+        </ScrollView>
+      
       <View
         style={{
-          flex: 1,
+         
           //   flexDirection: 'row',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          gap: horizontalScale(48),
+          // gap: horizontalScale(48),
           marginBottom: verticalScale(8),
         }}>
-        <HButton loading={loading} onPress={handleConfirm} label={'Confirm'} />
+        <HButton loading={loading} onPress={handleConfirm} label={'Confirm'}  btnstyles={commonstyles.activebtn}/>
+      </View>
       </View>
       <BottomSheetView
         bottomSheetRef={SuccesRef}

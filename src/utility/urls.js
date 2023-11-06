@@ -1,11 +1,11 @@
-// const baseUrl = 'http://10.9.64.61:8000/api/v1/';
+const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.17:8000/api/v1/';
 // const baseUrl = 'http://34.205.77.155/api/v1/';
-const baseUrl = 'http://13.200.15.208/api/v1/';
+// const baseUrl = 'http://13.200.15.208/api/v1/';
 // const snomedUrl = 'http://34.205.77.155/';
 const snomedUrl = 'http://13.200.15.208/';
-// export const fileurl = `http://10.9.64.61:8000`;
-export const fileurl = `http://13.200.15.208`;
+export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://13.200.15.208`;
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
@@ -19,7 +19,7 @@ export const URL = {
   getPatientByClinic: clinicId =>
     `${baseUrl}customappointment/get-patients/${clinicId}/`,
   getPatientByNumber: phoneId => `${baseUrl}custompatient/${phoneId}`,
-  getPatientsAll: `${baseUrl}custompatient/allPatients`,
+  getPatientsAll: phoneId => `${baseUrl}custompatient/allPatients?phone_number=${phoneId}`,
   getClinic: phoneId =>
     `${baseUrl}clinic/get/clinic/?doctor_phone_number=${phoneId}`,
   getPractitionerByNumber: phoneId =>

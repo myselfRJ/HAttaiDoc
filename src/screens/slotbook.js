@@ -638,6 +638,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: moderateScale(24),
     zIndex: 1,
+    backgroundColor:CUSTOMCOLOR.background
   },
   //
   type: {
@@ -696,10 +697,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
     left: 0,
-    top: verticalScale(80),
+    top: verticalScale(76),
     width: '100%',
     backgroundColor: CUSTOMCOLOR.white,
     height: verticalScale(300),
+    borderRadius:moderateScale(4)
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

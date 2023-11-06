@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
+    backgroundColor:CUSTOMCOLOR.background
   },
   input: {
     fontSize: CUSTOMFONTSIZE.h2,

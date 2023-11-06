@@ -38,7 +38,7 @@ const SearchAddnew = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientsAll, {
+    const response = await fetchApi(URL.getPatientsAll(phoneNumber), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const SearchAddnew = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [phoneNumber]);
 
   useEffect(() => {
     if (phoneNumber) {
@@ -97,8 +97,8 @@ const SearchAddnew = ({navigation}) => {
           paddingBottom: verticalScale(24),
         }}>
         <View style={styles.appointment}>
-          {filteredData?.length > 0 ? (
-            filteredData?.map((val, ind) => (
+          {data?.length > 0 ? (
+            data?.map((val, ind) => (
               <PatientSearchCard
                 key={ind}
                 patient_data={val}
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     gap: 16,
+    backgroundColor:CUSTOMCOLOR.background
   },
   searchName: {
     flexDirection: 'row',

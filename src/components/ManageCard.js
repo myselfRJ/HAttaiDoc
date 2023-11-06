@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     // width: '100%',
     marginBottom: 8,
+    borderWidth:0.5,
+    borderColor:CUSTOMCOLOR.primary
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h1,
