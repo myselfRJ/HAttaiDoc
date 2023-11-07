@@ -18,7 +18,7 @@ const AppointmentStatusCard = props => {
 };
 const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(8),
     gap: moderateScale(4),
     backgroundColor: CUSTOMCOLOR.backgroundColor,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: CUSTOMFONTSIZE.h2,
-    fontWeight: '600',
+    fontWeight: '400',
     color: CUSTOMCOLOR.primary,
   },
   count: {

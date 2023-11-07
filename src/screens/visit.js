@@ -103,8 +103,9 @@ const Visit = ({navigation, route}) => {
 
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
   const service_fees = useSelector(state => state.prescription.fees);
-  const charge = service_fees?.lenght > 0 ? service_fees?.[service_fees?.length - 1] : null
-  console.log('charge===',charge ? charge[charge && 'totalFees'] : null);
+  const charge =
+    service_fees?.lenght > 0 ? service_fees?.[service_fees?.length - 1] : null;
+  console.log('charge===', charge ? charge[charge && 'totalFees'] : null);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -718,7 +719,7 @@ const Visit = ({navigation, route}) => {
                         )}           
                     </table>
                     <p style="margin-left: 52%;font-weight:700;font-size:16px";>Total :
-                    ${charge ? charge[charge && 'totalFees'] : ""}</p>
+                    ${charge ? charge[charge && 'totalFees'] : ''}</p>
                     </div>
                     <div class ='footer'>
                         <footer class='desc' style=" display: flex;
@@ -922,7 +923,9 @@ const Visit = ({navigation, route}) => {
                     {vitalsData?.pulse_rate &&
                       `Pulse: ${vitalsData?.pulse_rate}`}{' '}
                     {vitalsData?.body_temperature &&
-                      `Temp: ${vitalsData?.body_temperature}`}{' '}
+                      `Temp: ${
+                        vitalsData?.body_temperature
+                      }${String.fromCharCode(8451)}`}{' '}
                     {vitalsData?.others && `${lastKey} : ${lastValue}`}
                   </Text>
                 )}
@@ -952,9 +955,12 @@ const Visit = ({navigation, route}) => {
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   {allergies?.length > 0
                     ? allergies?.map((item, index) => (
-                        <Text style={styles.patientText}>
-                          {item?.allergies}{' '}
-                        </Text>
+                        <React.Fragment key={index}>
+                          <Text style={styles.patientText}>
+                            {item?.allergies}
+                            {index < allergies.length - 1 ? ',' : ''}
+                          </Text>
+                        </React.Fragment>
                       ))
                     : null}
                 </View>

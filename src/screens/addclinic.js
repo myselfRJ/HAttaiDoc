@@ -592,7 +592,9 @@ const AddClinic = ({navigation}) => {
     }
   };
   useEffect(() => {
-    fetchClinic_slots();
+    if (id) {
+      fetchClinic_slots();
+    }
   }, []);
 
   const Update_Clinic_slots = async () => {

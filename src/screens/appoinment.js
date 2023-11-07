@@ -73,7 +73,7 @@ const Appointment = ({navigation}) => {
     setOpen(false);
   };
   const dispatch = useDispatch();
-
+  const [show, setShow] = useState(false);
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     handleChangeValue(clinic.id);
@@ -81,7 +81,8 @@ const Appointment = ({navigation}) => {
     dispatch(addclinic_name(clinic.clinic_name));
     dispatch(addclinic_Address(clinic.clinic_Address));
     dispatch(addclinic_phone(clinic?.clinic_phone_number));
-    ClinicRef?.current?.snapToIndex(0);
+    // ClinicRef?.current?.snapToIndex(0);
+    setShow(false);
   };
   const ChangeNameValue = e => {
     setName(e);
@@ -227,18 +228,36 @@ const Appointment = ({navigation}) => {
     <View style={styles.main}>
       <View>
         <View style={styles.select}>
-          <SelectorBtn
-            selectContainer={{
-              gap: verticalScale(4),
-              paddingVertical: verticalScale(0),
-            }}
-            //label={Language[language]['clinic']}
-            name="chevron-down"
-            onPress={() => {
-              ClinicRef?.current?.snapToIndex(1);
-            }}
-            input={selectedClinic}
-          />
+          <View>
+            <SelectorBtn
+              selectContainer={{
+                // gap: verticalScale(4),
+                paddingVertical: verticalScale(0),
+              }}
+              //label={Language[language]['clinic']}
+              name="chevron-down"
+              onPress={() => {
+                // ClinicRef?.current?.snapToIndex(1);
+                setShow(!show);
+              }}
+              input={selectedClinic}
+            />
+            {show && (
+              <View style={styles.modalContainer}>
+                {/* <Text style={styles.clinicText}>{Language[language]['clinic']}</Text> */}
+                {clinics &&
+                  clinics?.map((clinic, index) => (
+                    <Pressable
+                      key={index}
+                      onPress={() => handleClinicSelection(clinic)}>
+                      <Text style={styles.modalfields}>
+                        {clinic.clinic_name}
+                      </Text>
+                    </Pressable>
+                  ))}
+              </View>
+            )}
+          </View>
           <SelectorBtn
             selectContainer={{
               gap: verticalScale(4),
@@ -394,14 +413,16 @@ const styles = StyleSheet.create({
     //paddingHorizontal: 2,
   },
   modalContainer: {
-    height: verticalScale(1000),
-    width: '50%',
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
+    // height: verticalScale(1000),
+    // width: '50%',
     //justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
+    // alignSelf: 'center',
     borderRadius: moderateScale(10),
-    padding: moderateScale(32),
+    padding: moderateScale(16),
     gap: moderateScale(16),
   },
   modalfields: {

@@ -132,13 +132,15 @@ const ReferToDoctor = () => {
             </section>
         
             <footer style="text-align: left; ; color: #000; padding: 10px; margin-top:140px;">
-                <p style="margin: 0;">powered by</p>
+                
+                
+                <p style="text-align: center;margin: 36px;">For questions or more information, please contact Dr. ${
+                  data?.doctor_name
+                } ,  ${data?.doctor_phone_number}.</p>
+                <p style="margin: 0;text-align: center">powered by</p>
                 <img style="height: 50px;width:120px" src="${
                   CONSTANTS.pdf_footer
-                }" style="float: left; margin-right: 10px;margin-top: 36px" alt="Image Description">
-                <p style="text-align: center;margin: 36px;">For questions or more information, please contact ${
-                  data?.doctor_name
-                } , ${data?.doctor_phone_number}.</p>
+                }" style="float: center; margin-right: 10px;margin-top: 36px" alt="Image Description">
             </footer>
         </body>
         </html>
@@ -204,7 +206,7 @@ const ReferToDoctor = () => {
   };
 
   const handleAddDoctors = () => {
-    selected && phone && name && speciality
+    selected && name && speciality
       ? (dispatch(
           addDoctorRefer([
             ...doctor,
@@ -345,45 +347,47 @@ const ReferToDoctor = () => {
           inputContainer={{paddingHorizontal: 0}}
           setValue={val => setSpeciality(val)}
         /> */}
-          <SelectorBtn
-            onPress={() => setShow(!show)}
-            label={'Specialization'}
-            input={
-              speciality?.length > 0 ? speciality : 'Select Specialization'
-            }
-            name={'chevron-down'}
-          />
-          {show && (
-            <View
-              style={[
-                styles.dropdownContainer,
-                {
-                  top:
-                    selected === 'Clinic' || selected === 'Hospital'
-                      ? verticalScale(360)
-                      : verticalScale(270),
-                },
-              ]}>
-              <ScrollView>
-                {CONSTANTS?.speciality?.map((val, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.touch}
-                    onPress={() => HandlePress(val)}>
-                    <Text
-                      style={{
-                        fontSize: CUSTOMFONTSIZE.h3,
-                        padding: moderateScale(10),
-                        color: CUSTOMCOLOR.black,
-                      }}
-                      key={index}>
-                      {val}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
+          <View>
+            <SelectorBtn
+              onPress={() => setShow(!show)}
+              label={'Specialization'}
+              input={
+                speciality?.length > 0 ? speciality : 'Select Specialization'
+              }
+              name={'chevron-down'}
+            />
+            {show && (
+              <View
+                style={[
+                  styles.dropdownContainer,
+                  // {
+                  //   top:
+                  //     selected === 'Clinic' || selected === 'Hospital'
+                  //       ? verticalScale(360)
+                  //       : verticalScale(270),
+                  // },
+                ]}>
+                <ScrollView>
+                  {CONSTANTS?.speciality?.map((val, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.touch}
+                      onPress={() => HandlePress(val)}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h3,
+                          padding: moderateScale(10),
+                          color: CUSTOMCOLOR.black,
+                        }}
+                        key={index}>
+                        {val}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+          </View>
           <InputText
             label={'Phone Number'}
             placeholder="Phone number"
@@ -431,7 +435,7 @@ const ReferToDoctor = () => {
           <HButton
             btnstyles={{
               backgroundColor:
-                selected && name && speciality && phone
+                selected && name && speciality
                   ? CUSTOMCOLOR.primary
                   : CUSTOMCOLOR.disable,
             }}
@@ -440,9 +444,7 @@ const ReferToDoctor = () => {
             type="addtype"
             size={moderateScale(24)}
             loading={prevLoad}
-            onPress={
-              selected && name && speciality && phone ? handlePreview : null
-            }
+            onPress={selected && name && speciality ? handlePreview : null}
           />
         </View>
       </ScrollView>
@@ -510,15 +512,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   dropdownContainer: {
-    position: 'absolute',
-    zIndex: 10,
-    left: 0,
+    // position: 'absolute',
+    // zIndex: 10,
+    // left: 0,
 
     borderWidth: 1,
     width: '100%',
     height: verticalScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    borderColor: CUSTOMCOLOR.primary,
+    borderColor: CUSTOMCOLOR.borderColor,
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

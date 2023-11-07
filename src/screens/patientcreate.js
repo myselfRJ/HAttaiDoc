@@ -38,7 +38,9 @@ import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
 
-const PatientCreate = ({navigation}) => {
+const PatientCreate = ({navigation, route}) => {
+  const {phoneRoute} = route.params;
+
   const token = useSelector(state => state.authenticate.auth.access);
   const [selected, setSelected] = useState('male');
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
@@ -61,7 +63,7 @@ const PatientCreate = ({navigation}) => {
   const [birth_date, setBirth_date] = useState('');
   const [age, setAge] = useState('');
   const [blood_group, setBlood_group] = useState('');
-  const [find, Setfind] = useState('');
+  const [find, setFind] = useState([]);
   const [refer, setRefer] = useState('');
   const [spouse_name, setSpouse_nmae] = useState('');
   const [ABHA_ID, setABHA_ID] = useState('');
@@ -212,7 +214,7 @@ const PatientCreate = ({navigation}) => {
             SuccesRef?.current?.snapToIndex(0);
           }, 1500);
         } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          setApiStatus({status: 'warning', message: jsonData?.message});
           SuccesRef?.current?.snapToIndex(1);
           console.error('API call failed:', response.status, response);
           setLoading(false);
@@ -231,7 +233,23 @@ const PatientCreate = ({navigation}) => {
     setModal(true);
   };
 
+  // useEffect(() => {
+  //   if (phoneRoute) {
+  //     setPatient_Phone_number(phoneRoute);
+  //   }
+  // }, []);
   // console.log("=====val",formattedDate,formatDate);
+  const findUsSelection = value => {
+    const isSelected = find.includes(value);
+
+    if (isSelected) {
+      setFind(find.filter(i => i !== value));
+    } else {
+      setFind([...find, value]);
+    }
+  };
+
+  console.log('=======>find', find);
 
   return (
     <View style={styles.main}>
@@ -311,7 +329,7 @@ const PatientCreate = ({navigation}) => {
                   setValue={setValue}
                   numeric={true}
                   keypad="numeric"
-                  // required={true}
+                  required={true}
                 />
               ) : (
                 <SelectorBtn
@@ -521,7 +539,7 @@ const PatientCreate = ({navigation}) => {
                   flexDirection: 'row',
                   gap: moderateScale(16),
                   alignSelf: 'flex-start',
-                  flexWrap:'wrap'
+                  flexWrap: 'wrap',
                 }}>
                 {CONSTANTS.find_us?.map((finds, index) => (
                   <SelectorBtn
@@ -530,21 +548,19 @@ const PatientCreate = ({navigation}) => {
                       paddingHorizontal: 0,
                     }}
                     select={{
-                      backgroundColor:
-                        find === finds
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.white,
+                      backgroundColor: find.includes(finds)
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.white,
                     }}
                     inputstyle={{
-                      color:
-                        find === finds
-                          ? CUSTOMCOLOR.white
-                          : CUSTOMCOLOR.primary,
+                      color: find.includes(finds)
+                        ? CUSTOMCOLOR.white
+                        : CUSTOMCOLOR.primary,
                     }}
                     // label="Blood Group"
                     key={index}
                     input={finds}
-                    onPress={() => Setfind(finds)}
+                    onPress={() => findUsSelection(finds)}
                   />
                 ))}
               </View>
@@ -589,7 +605,7 @@ const PatientCreate = ({navigation}) => {
               btnstyles={{
                 alignSelf: 'center',
                 backgroundColor:
-                  name && patient_phone_number && address
+                  name && patient_phone_number?.length === 10 && address
                     ? CUSTOMCOLOR.primary
                     : CUSTOMCOLOR.disable,
               }}
@@ -651,7 +667,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   radiogroup: {
     padding: moderateScale(8),

@@ -183,7 +183,7 @@ const Dashboard = ({navigation, route}) => {
       },
     ],
   };
-
+  const [show, setShow] = useState(false);
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     // handleChangeValue('clinic', clinic.clinic_name);
@@ -193,8 +193,8 @@ const Dashboard = ({navigation, route}) => {
     dispatch(addclinic_Address(clinic?.clinic_Address));
     dispatch(addclinic_logo(clinic?.clinic_logo_url));
     dispatch(addclinic_phone(clinic?.clinic_phone_number));
-
-    ClinicRef?.current?.snapToIndex(0);
+    setShow(false);
+    // ClinicRef?.current?.snapToIndex(0);
   };
 
   useFocusEffect(
@@ -251,14 +251,34 @@ const Dashboard = ({navigation, route}) => {
           )}
         </View>
         <View style={styles.select}>
-          <SelectorBtn
-            label={'Clinic :'}
-            name={open == true ? 'chevron-up' : 'chevron-down'}
-            onPress={() => {
-              ClinicRef?.current?.snapToIndex(1);
-            }}
-            input={selectedClinic}
-          />
+          <View>
+            <SelectorBtn
+              label={'Clinic :'}
+              name={open == true ? 'chevron-up' : 'chevron-down'}
+              onPress={() => {
+                // ClinicRef?.current?.snapToIndex(1);
+                setShow(!show);
+              }}
+              input={selectedClinic}
+            />
+            {show && (
+              <View style={styles.modalContainer}>
+                {/* <Text style={styles.clinicText}>
+                {Language[language]['clinic']}
+              </Text> */}
+                {clinics &&
+                  clinics?.map((clinic, index) => (
+                    <Pressable
+                      key={index}
+                      onPress={() => handleClinicSelection(clinic)}>
+                      <Text style={styles.modalfields}>
+                        {clinic.clinic_name}
+                      </Text>
+                    </Pressable>
+                  ))}
+              </View>
+            )}
+          </View>
           <SelectorBtn
             label={'Select Date :'}
             name="calendar"
@@ -362,7 +382,7 @@ const styles = StyleSheet.create({
   },
   status: {
     flexDirection: 'row',
-    // paddingTop:verticalScale(12),
+    paddingTop: verticalScale(12),
     // paddingHorizontal:horizontalScale(8),
     justifyContent: 'space-between',
   },
@@ -411,14 +431,16 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   modalContainer: {
-    height: verticalScale(1000),
-    width: '50%',
+    // height: verticalScale(1000),
+    // width: '50%',
     //justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
+    // alignSelf: 'center',
     borderRadius: moderateScale(10),
-    padding: moderateScale(32),
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderWidth: 1,
+    padding: moderateScale(16),
     gap: moderateScale(16),
   },
   modalfields: {

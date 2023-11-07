@@ -53,7 +53,7 @@ const SearchAddnew = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (phoneNumber){
+    if (phoneNumber) {
       fetchData();
     }
   }, [phoneNumber]);
@@ -74,6 +74,11 @@ const SearchAddnew = ({navigation}) => {
   const ChangePhoneValue = e => {
     setPhoneNumber(e);
   };
+  const handleNavigate = () => {
+    const phoneRoute = phoneNumber?.length > 7 ? phoneNumber : '';
+    navigation.navigate('patientcreate', {phoneRoute});
+    setPhoneNumber('');
+  };
 
   return (
     <View style={styles.main}>
@@ -89,7 +94,7 @@ const SearchAddnew = ({navigation}) => {
         btnstyles={{paddingVertical: verticalScale(8), alignSelf: 'flex-end'}}
         label="Add"
         icon="plus"
-        onPress={() => navigation.navigate('patientcreate')}
+        onPress={handleNavigate}
       />
 
       <Text style={styles.h2}>Search Results..</Text>
@@ -99,7 +104,7 @@ const SearchAddnew = ({navigation}) => {
           paddingBottom: verticalScale(24),
         }}>
         <View style={styles.appointment}>
-          {data?.length > 0 && phoneNumber?.length>1 ? (
+          {data?.length > 0 && phoneNumber?.length > 1 ? (
             data?.map((val, ind) => (
               <PatientSearchCard
                 key={ind}
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     gap: 16,
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   searchName: {
     flexDirection: 'row',
