@@ -6,6 +6,7 @@ const initialState = {
   clinic_Address: '',
   clinic_logo: '',
   clinic_phone: '',
+  clinic_pharmacy_phone: '',
 };
 
 const clinic_id_Slice = createSlice({
@@ -27,6 +28,9 @@ const clinic_id_Slice = createSlice({
     addclinic_phone: (state, action) => {
       state.clinic_phone = action.payload;
     },
+    addPharmaPhone: (state, action) => {
+      state.clinic_pharmacy_phone = action.payload;
+    },
   },
 });
 
@@ -36,5 +40,6 @@ export const {
   addclinic_Address,
   addclinic_logo,
   addclinic_phone,
+  addPharmaPhone,
 } = clinic_id_Slice.actions;
 export const clinic_id_Reducer = clinic_id_Slice.reducer;

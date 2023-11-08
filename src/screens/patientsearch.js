@@ -21,7 +21,14 @@ import {BottomSheetView} from '../components';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
-import {addclinic_id} from '../redux/features/profiles/clinicId';
+import {
+  addPharmaPhone,
+  addclinic_Address,
+  addclinic_id,
+  addclinic_logo,
+  addclinic_name,
+  addclinic_phone,
+} from '../redux/features/profiles/clinicId';
 import {commonstyles} from '../styles/commonstyle';
 import {
   verticalScale,
@@ -56,6 +63,11 @@ const PatientSearch = ({navigation}) => {
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData?.data[0]?.id);
       dispatch(addclinic_id(jsonData.data[0].id));
+      dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
+      dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
+      dispatch(addclinic_logo(jsonData?.data[0]?.clinic_logo_url));
+      dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
+      dispatch(addPharmaPhone(jsonData?.data[0]?.pharmacyPhone));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -111,7 +123,12 @@ const PatientSearch = ({navigation}) => {
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
-    dispatch(addclinic_id(clinic.id));
+    dispatch(addclinic_id(clinic?.id));
+    dispatch(addclinic_name(clinic?.clinic_name));
+    dispatch(addclinic_Address(clinic?.clinic_Address));
+    dispatch(addclinic_logo(clinic?.clinic_logo_url));
+    dispatch(addclinic_phone(clinic?.clinic_phone_number));
+    dispatch(addPharmaPhone(clinic.pharmacyPhone));
     setShow(false);
 
     // setTimeout(() => {

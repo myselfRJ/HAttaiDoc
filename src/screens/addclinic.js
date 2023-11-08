@@ -69,6 +69,7 @@ import {checkNumber} from '../utility/checks';
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const GlRef = useRef(null);
+  const [phramcyPhone, setPharmacyPhone] = useState('');
   const [apiStatus, setApiStatus] = useState({});
   const [visibleSlot, setVisibleSlot] = useState(true);
   const slotData = useSelector(state => state?.slotsData);
@@ -174,6 +175,7 @@ const AddClinic = ({navigation}) => {
       slot: JSON.stringify(slots),
       clinic_phone_number: value.phone,
       clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
+      phramcyPhone: phramcyPhone ? phramcyPhone : '',
     },
   ];
 
@@ -586,6 +588,7 @@ const AddClinic = ({navigation}) => {
       setCnFees(jsonData.data?.fees);
       setSelectedImage(jsonData.data?.clinic_photo_url);
       setSelectedLogo(jsonData.data?.clinic_logo_url);
+      setPharmacyPhone(jsonData.data?.pharmacyPhone);
       dispatch(addAddress(jsonData?.data?.clinic_Address));
     } else {
       console.error('API call failed:', response.status, response);
@@ -606,6 +609,7 @@ const AddClinic = ({navigation}) => {
       clinic_photo_url: selectedImage,
       clinic_logo_url: selectedLogo,
       fees: cnFess === 'others' ? parseInt(value.fees) : parseInt(cnFess),
+      pharmacyPhone: phramcyPhone ? phramcyPhone : '',
     };
     const slots_data = {
       slot: JSON.stringify(slots),
@@ -834,6 +838,13 @@ const AddClinic = ({navigation}) => {
                 // keypad="numeric"
               />
             ) : null}
+            <InputText
+              // required={true}
+              label="Pharmacy WhatsApp No"
+              placeholder="Eg : 9999999999"
+              value={phramcyPhone}
+              setValue={setPharmacyPhone}
+            />
             <View
               style={{
                 gap: verticalScale(8),

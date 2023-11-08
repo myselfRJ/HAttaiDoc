@@ -38,8 +38,8 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import {useSelector, useDispatch} from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
-import { commonstyles } from '../styles/commonstyle';
+import {ScrollView} from 'react-native-gesture-handler';
+import {commonstyles} from '../styles/commonstyle';
 
 const PdfView = ({navigation}) => {
   const [apiStatus, setApiStatus] = useState({});
@@ -63,6 +63,9 @@ const PdfView = ({navigation}) => {
   const dispatch = useDispatch();
   const token = useSelector(state => state.authenticate.auth.access);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const pharmaphone = useSelector(
+    state => state?.clinicid?.clinic_pharmacy_phone,
+  );
   const ResetRuduxState = () => {
     const newPrescribe = [];
     const newSymptoms = [];
@@ -195,6 +198,7 @@ const PdfView = ({navigation}) => {
     formData.append('patient_phone_number', `${patient_phone}`);
     formData.append('clinic_id', `${Clinic_id}`);
     formData.append('appointment_id', `${appointment_id}`);
+    formData.append('pharmacyPhone', `${pharmaphone}`);
     formData.append('file_url', {
       uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
       type: 'application/pdf',
@@ -278,22 +282,26 @@ const PdfView = ({navigation}) => {
   };
   return (
     <>
-      <View style={{flex:1,backgroundColor:CUSTOMCOLOR.background}}>
-        <ScrollView contentContainerStyle={{flex:1}}>
-        <PDFViewer path={path} />
+      <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
+        <ScrollView contentContainerStyle={{flex: 1}}>
+          <PDFViewer path={path} />
         </ScrollView>
-      
-      <View
-        style={{
-         
-          //   flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          // gap: horizontalScale(48),
-          marginBottom: verticalScale(8),
-        }}>
-        <HButton loading={loading} onPress={handleConfirm} label={'Confirm'}  btnstyles={commonstyles.activebtn}/>
-      </View>
+
+        <View
+          style={{
+            //   flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            // gap: horizontalScale(48),
+            marginBottom: verticalScale(8),
+          }}>
+          <HButton
+            loading={loading}
+            onPress={handleConfirm}
+            label={'Confirm'}
+            btnstyles={commonstyles.activebtn}
+          />
+        </View>
       </View>
       <BottomSheetView
         bottomSheetRef={SuccesRef}

@@ -134,12 +134,11 @@ const Account = () => {
     navigation.navigate('entry');
   };
 
-  const handlePrescription = () => {
-    const path = `data:application/pdf;base64,${data?.medical_doc_url}`;
+  const handleDocuments = file => {
+    const path = `data:application/pdf;base64,${file}`;
 
-    navigation.navigate('pdfhistory', {path, prevScrn});
+    navigation.navigate('pdfhistory', {path});
   };
-  // console.log('===============>',data?.medical_doc_url);
   const prevScrn = 'account';
   return (
     <View style={styles.main}>
@@ -273,7 +272,7 @@ const Account = () => {
       </View>
       {data?.medical_doc_url && (
         <TouchableOpacity
-          onPress={handlePrescription}
+          onPress={() => handleDocuments(data?.medical_doc_url)}
           style={{marginTop: verticalScale(8)}}>
           <ShowChip
             text={
@@ -284,6 +283,44 @@ const Account = () => {
                   name={'file-pdf-box'}
                 />
                 {<Text>Registration Document.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
+      {data?.pan_doc_url && (
+        <TouchableOpacity
+          onPress={() => handleDocuments(data?.pan_doc_url)}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>pan.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
+      {data?.latest_doc_url && (
+        <TouchableOpacity
+          onPress={() => handleDocuments(data?.latest_doc_url)}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>Latest Document.pdf</Text>}
               </>
             }
             main={{marginHorizontal: 0}}

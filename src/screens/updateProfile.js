@@ -58,15 +58,13 @@ const UpdateProfile = ({navigation}) => {
   const [show, setshow] = useState(false);
   const [selectedState, setState] = useState('Select');
   const [getDoctor, setGetDoctor] = useState('');
-  // console.log('dob=====>',getDoctor?.DOB)
+  // const [phramcyPhone, setPharmacyPhone] = useState('');
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
-  const [selectedFilename, setSelectedFilename] = useState('');
+  const [selectedFilename, setSelectedFilename] = useState({});
 
   const [uploaddocument, SetUploadDocument] = useState();
-  // console.log('file name=====>',uploaddocument)
-  const [isHovered, setIsHovered] = useState(false);
-  // console.log('document...', uploaddocument);
+  const [pan, setPan] = useState({});
   const {phone} = useSelector(state => state?.phone?.data);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -86,21 +84,6 @@ const UpdateProfile = ({navigation}) => {
 
   const [status, setStatus] = useState(false);
 
-  // const pickSingleFile = async () => {
-  //   try {
-  //     const result = await DocumentPicker.pick({
-  //       type: [DocumentPicker.types.allFiles],
-  //     });
-  //     setSelectedFilename(result[0]?.name || '');
-  //     SetUploadDocument(result[0]?.uri || '');
-  //     // console.log('result===', result);
-  //   } catch (err) {
-  //     if (DocumentPicker.isCancel(err)) {
-  //       // User cancelled the picker
-  //     } else {
-  //       // Handle other errors
-  //     }
-  //   }
   const convertUriToBase64 = async documentUri => {
     try {
       const base64Data = await RNFS.readFile(documentUri, 'base64');
@@ -117,18 +100,53 @@ const UpdateProfile = ({navigation}) => {
         type: [DocumentPicker.types.pdf],
       });
       const originalFilename = result[0]?.name || '';
-      setSelectedFilename(originalFilename);
       const base64Document = await convertUriToBase64(result[0]?.uri || '');
-      SetUploadDocument(base64Document);
+      let fileDetails = {
+        name: originalFilename,
+        uri: base64Document,
+      };
+      return fileDetails;
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
+        // Handle cancel event
       } else {
+        // Handle other errors
       }
     }
   };
 
+  const [latestRecord, setLatestRecord] = useState({});
+
+  const handlelatest = async () => {
+    try {
+      const file = await pickSingleFile();
+      console.log(file);
+      setLatestRecord(file ? file : {});
+    } catch (error) {}
+  };
+  const handleSelectFilename = async () => {
+    try {
+      const file = await pickSingleFile();
+      console.log(file);
+      setSelectedFilename(file ? file : {});
+    } catch (error) {}
+  };
+  const handlePan = async () => {
+    try {
+      const file = await pickSingleFile();
+      console.log(file);
+      setPan(file ? file : {});
+    } catch (error) {}
+  };
+
   const handleClearFile = () => {
     setSelectedFilename('');
+  };
+  const handleClearpan = () => {
+    setPan('');
+  };
+  const handleClearlatest = () => {
+    setLatestRecord('');
   };
   const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -136,15 +154,9 @@ const UpdateProfile = ({navigation}) => {
     CONSTANTS.speciality[0],
   );
   const [age, setAge] = useState('');
-  // console.log('age===', age);
   const [DOB, setDOB] = useState(new Date());
   const [formatDate, setFormatDate] = useState('');
   const [open, setOpen] = useState(false);
-  // const formattedDate = DOB.toLocaleDateString('en-US', {
-  //   day: 'numeric',
-  //   month: 'long',
-  //   year: 'numeric',
-  // });
   const formattedDate = DOB.toISOString().split('T')[0];
   const handleAge = age => {
     setValue(age);
@@ -155,9 +167,7 @@ const UpdateProfile = ({navigation}) => {
       setValue(age);
       setAge(age);
     } else {
-      {
-        open && setValue(formattedDate);
-      }
+      open && setValue(formattedDate);
     }
   };
   useEffect(() => {
@@ -167,7 +177,6 @@ const UpdateProfile = ({navigation}) => {
   const HandleCheck = () => {
     if (value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
-      // console.log('current====>', `${current}-${'01'}-${'01'}`);
       setFormatDate(`${current}-${'01'}-${'01'}`);
     } else {
       setFormatDate(formattedDate);
@@ -245,98 +254,10 @@ const UpdateProfile = ({navigation}) => {
     console.log(speciality);
   };
 
-  const handlePressIn = () => {
-    setIsHovered(true);
-  };
-
-  const handlePressOut = () => {
-    setIsHovered(false);
-  };
-
-  // const handleOptions = value => {
-  //   handleChangeValue('gender', value);
-  // };
-  // const handleCheck=()=>{
-  //   if(value == age){
-  //     const current = parseInt(new Date().getFullYear()) - parseInt(age);
-  //     console.log('year===>',current)
-  //   }
-  // }
-  // useEffect(()=>{
-  //   handleCheck()
-  // },[age])
-
-  const current = parseInt(new Date().getFullYear()) - parseInt(age);
-  const doctor_profile_data = {
-    doctor_name: values.doctor_name,
-    experience: values.experience,
-    gender: values.gender,
-    // DOB: `${current}-${'01'}-${'01'}`,
-    // DOB: formattedDate,
-    DOB: formatDate,
-    specialization: selectedSpeciality,
-    medical_number: values.medical_number,
-    profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
-    medical_doc_url: uploaddocument,
-  };
-
-  console.log(token);
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetchApi(URL.profileUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          Accept:
-            'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
-        },
-        body: JSON.stringify(doctor_profile_data),
-      });
-      if (response.status === HttpStatusCode.Ok) {
-        const jsonData = await response.json();
-        // console.log(jsonData);
-        if (jsonData.status === 'success') {
-          setApiStatus({
-            status: 'success',
-            message: 'Successfully created',
-          });
-          SuccesRef?.current?.snapToIndex(1);
-          dispatch(headerStatus.headerStatus({index: 0, status: true}));
-          // setStatus(!status);
-          setTimeout(() => {
-            navigation.navigate('addclinic', {prevScrn});
-          }, 1000);
-
-          setLoading(false);
-          // SuccesRef?.current?.snapToIndex(0);
-        } else {
-          setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
-          // setTimeout(() => {
-          //   navigation.navigate('pro');
-          // }, 1000)
-          console.error('API call failed:', response.status);
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    } catch (error) {
-      setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
-      console.error('Error occurred:', error);
-      setLoading(false);
-    }
-  };
-  console.log(values.formattedDate);
-
   useEffect(() => {
     disableBackButton();
   }, []);
 
-  const [file, setFile] = useState('');
   const fetchDoctors = async () => {
     const response = await fetchApi(URL.updateDoctorProfile(phone), {
       method: 'GET',
@@ -357,7 +278,6 @@ const UpdateProfile = ({navigation}) => {
       setSelectedImage(jsonData?.data?.profile_pic_url);
       SetUploadDocument(jsonData?.data?.medical_doc_url);
       setState(jsonData?.data?.state);
-      //   dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -366,19 +286,6 @@ const UpdateProfile = ({navigation}) => {
     fetchDoctors();
   }, []);
 
-  // useEffect(()=>{
-  //   const doc = getDoctor?.medical_doc_url
-  //   const url = JSON.parse(doc)
-  //   console.log('url====>',url)
-  // },[uploaddocument])
-  // console.log('name===========', SetUploadDocument(JSON.parse(getDoctor?.medical_doc_url)))
-  // useEffect(() => {
-  //   // Update selectedFilename when the doctor profile data is received
-  //   if (getDoctor?.medical_doc_url) {
-  //     setSelectedFilename(getDoctor?.medical_doc_url?.filename);
-  //     // console.log('==============>',getDoctor?.medical_doc_url?.filename);
-  //   }
-  // }, [getDoctor]);
   const handleStateSelection = state => {
     setState(state);
     handleChangeValue('state', state);
@@ -398,7 +305,11 @@ const UpdateProfile = ({navigation}) => {
       specialization: selectedSpeciality,
       medical_number: values.medical_number,
       profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
-      medical_doc_url: uploaddocument,
+      medical_doc_url: selectedFilename
+        ? selectedFilename?.uri
+        : data?.medical_doc_url,
+      pan_doc_url: pan ? pan?.uri : '',
+      latest_doc_url: latestRecord ? latestRecord?.uri : '',
     };
     try {
       setLoading(true);
@@ -420,8 +331,6 @@ const UpdateProfile = ({navigation}) => {
             message: 'Successfully created',
           });
           SuccesRef?.current?.snapToIndex(1);
-          // dispatch(headerStatus.headerStatus({index: 0, status: true}));
-          // setStatus(!status);
           setTimeout(() => {
             navigation.navigate('account');
           }, 1000);
@@ -431,9 +340,6 @@ const UpdateProfile = ({navigation}) => {
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
           SuccesRef?.current?.snapToIndex(1);
-          // setTimeout(() => {
-          //   navigation.navigate('pro');
-          // }, 1000)
           console.error('API call failed:', response.status);
           setLoading(false);
         }
@@ -447,7 +353,43 @@ const UpdateProfile = ({navigation}) => {
       setLoading(false);
     }
   };
-
+  const UploadShow = ({head, file, onUpload, onDelete, label}) => {
+    return (
+      <View style={styles.doc_upload}>
+        <Text style={styles.medtext}>{head}</Text>
+        {file ? (
+          <View style={styles.selectedfilecontainer}>
+            <Text style={styles.selectedFileInfo}>{file}</Text>
+            <TouchableOpacity
+              onPress={onDelete}
+              style={{
+                backgroundColor: CUSTOMCOLOR.white,
+                borderRadius: moderateScale(24),
+              }}>
+              <Icon
+                name="close"
+                size={moderateScale(24)}
+                color={CUSTOMCOLOR.delete}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <HButton
+            label={label}
+            onPress={onUpload}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderColor: CUSTOMCOLOR.primary,
+              borderWidth: 0.5,
+              borderRadius: 4,
+              alignSelf: 'flex-start',
+            }}
+            textStyle={{color: CUSTOMCOLOR.primary, fontSize: 12}}
+          />
+        )}
+      </View>
+    );
+  };
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.white}}>
       {/* <ProgresHeader progressData={progressData} /> */}
@@ -540,13 +482,6 @@ const UpdateProfile = ({navigation}) => {
               value={values.experience}
               setValue={value => handleChangeValue('experience', value)}
             />
-            {/* <InputText
-              required={true}
-              label='Medical Council Registration Number'
-              placeholder="Medical Council Registration Number"
-              value={values.medical_number}
-              setValue={value => handleChangeValue('medical_number', value)}
-            /> */}
             <View style={styles.btn}>
               <View style={{flex: 1}}>
                 <InputText
@@ -622,45 +557,34 @@ const UpdateProfile = ({navigation}) => {
             <View
               style={{
                 // alignSelf: 'flex-start',
-                gap: verticalScale(4),
+                gap: verticalScale(8),
                 // borderWidth:1,
-                zIndex: -1,
+                // zIndex: -1,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                // justifyContent: 'space-between',
               }}>
-              <Text style={styles.medtext}>Medical Document</Text>
-              <View style={styles.doc_upload}>
-                {selectedFilename ? (
-                  <View style={styles.selectedfilecontainer}>
-                    <Text style={styles.selectedFileInfo}>
-                      {selectedFilename}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={handleClearFile}
-                      style={{
-                        backgroundColor: CUSTOMCOLOR.white,
-                        borderRadius: moderateScale(24),
-                      }}>
-                      <Icon
-                        name="close"
-                        size={moderateScale(24)}
-                        color={CUSTOMCOLOR.delete}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <HButton
-                    label="Upload Document"
-                    onPress={pickSingleFile}
-                    btnstyles={{
-                      backgroundColor: CUSTOMCOLOR.white,
-                      borderColor: CUSTOMCOLOR.primary,
-                      borderWidth: 0.5,
-                      borderRadius: 4,
-                      alignSelf: 'flex-start',
-                    }}
-                    textStyle={{color: CUSTOMCOLOR.primary, fontSize: 12}}
-                  />
-                )}
-              </View>
+              <UploadShow
+                head={'Medical Document'}
+                file={selectedFilename && selectedFilename?.name}
+                onDelete={handleClearFile}
+                label={'upload Medical Document'}
+                onUpload={handleSelectFilename}
+              />
+              <UploadShow
+                head={'Pan'}
+                file={pan && pan?.name}
+                label={' Upload Pan'}
+                onUpload={handlePan}
+                onDelete={handleClearpan}
+              />
+              <UploadShow
+                head={'lastest Document'}
+                file={latestRecord && latestRecord?.name}
+                label={'Upload Latest Record'}
+                onUpload={handlelatest}
+                onDelete={handleClearlatest}
+              />
             </View>
           </ScrollView>
         </View>
@@ -901,7 +825,7 @@ const styles = StyleSheet.create({
   },
   bottext: {
     fontFamily: CUSTOMFONTFAMILY.heading,
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: CUSTOMCOLOR.black,
   },
   container: {
@@ -909,151 +833,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     gap: verticalScale(16),
   },
-  // radiogroup: {
-  //   padding: moderateScale(8),
-  //   flexDirection: 'row',
-  //   gap: moderateScale(32),
-
-  //   justifyContent: 'flex-start',
-  // },
-  // btn: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   backgroundColor:"white",
-  //   // borderWidth:1,
-  //   // paddingHorizontal: horizontalScale(24),
-  //   gap: verticalScale(8),
-  // },
-  // content:{
-  //   flex:1,
-  //   paddingHorizontal: horizontalScale(24),
-  //   //paddingVertical: 24,
-  //   // alignItems: 'center',
-  //   gap: moderateScale(12),
-  // },
-  //    alignchild: {
-  //   justifyContent: 'center',
-  //   alignItems: 'flex-start',
-  //   width: '100%',
-  //   // paddingHorizontal: horizontalScale(8),
-  //   // paddingVertical:verticalScale(8),
-  //   gap:moderateScale(4)
-  // },
-  // modalContainer: {
-  //   height: '100%',
-  //   // width: '100%',
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'center',
-  //   backgroundColor: CUSTOMCOLOR.white,
-  //   alignSelf: 'center',
-  //   borderRadius: moderateScale(10),
-  //   gap: moderateScale(16),
-  //   padding: moderateScale(10),
-  // },
-  // modalfields: {
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  //   fontWeight: 400,
-  //   fontFamily: CUSTOMFONTFAMILY.body,
-  //   paddingHorizontal:horizontalScale(32),
-  //   paddingVertical:verticalScale(12),
-  //   // gap:moderateScale(8)
-  // },
-  // DOBselect: {
-  //   width: '100%',
-  //   paddingHorizontal: horizontalScale(8),
-  // },
-  // selectedfilecontainer: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   //borderWidth:1,
-  //   borderRadius: moderateScale(5),
-  //   borderColor: CUSTOMCOLOR.primary,
-  //   backgroundColor: CUSTOMCOLOR.white,
-  // },
-  // selectedFileInfo: {
-  //   fontFamily: CUSTOMFONTFAMILY.h4,
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  //   color: CUSTOMCOLOR.black,
-  //   paddingRight: moderateScale(8),
-  //   paddingHorizontal: horizontalScale(8),
-  //   paddingVertical: verticalScale(4),
-  // },
-  // contact: {
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  //   color: CUSTOMCOLOR.black,
-  // },
-  // mail: {
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  //   color: CUSTOMCOLOR.primary,
-  // },
-  // ContactMail: {
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'center',
-  //   backgroundColor: CUSTOMCOLOR.white,
-  //   alignSelf: 'center',
-  //   borderRadius: moderateScale(10),
-  //   padding: moderateScale(10),
-  //   bottom: moderateScale(20),
-  // },
-  // gender: {
-  //   color: CUSTOMCOLOR.black,
-  //   fontFamily: CUSTOMFONTFAMILY.body,
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  // },
-  // btn: {
-  //   alignSelf: 'flex-start',
-  //   width: '100%',
-  //   paddingHorizontal: horizontalScale(8),
-  // },
-  // specialization: {
-  //   borderWidth:1,
-  //   paddingVertical:verticalScale(0)
-
-  //   // width:'100%',
-  //   // alignSelf: 'flex-start',
-  //   // paddingHorizontal: horizontalScale(4),
-  // },
-  // medtext: {
-  //   fontFamily: CUSTOMFONTFAMILY.h4,
-  //   fontSize: 12,
-  //   color: CUSTOMCOLOR.black,
-  //   paddingHorizontal: horizontalScale(8),
-  //   // paddingVertical: verticalScale(8),
-  //   alignSelf: 'flex-start',
-  // },
-  // doc_upload: {
-  //   alignSelf: 'flex-start',
-  //   // paddingHorizontal: horizontalScale(8),
-  //   // paddingVertical: verticalScale(8),
-  // },
-  // bottext: {
-  //   fontFamily: CUSTOMFONTFAMILY.heading,
-  //   fontSize: 18,
-  //   color: CUSTOMCOLOR.black,
-  // },
-  // statecontainer: {
-  //   zIndex:14,
-  //   width:'100%',
-  //   height: moderateScale(200),
-  //   // paddingHorizontal:horizontalScale(66),
-  //   // zIndex: 10,
-  //   borderWidth: 1,
-  //   borderColor: CUSTOMCOLOR.primary,
-  //   position: 'absolute',
-  //   right: 0,
-  //   // bottom: 0,
-  //   top: verticalScale(78),
-  //   borderRadius: moderateScale(4),
-  //   gap: moderateScale(6),
-  //   // padding: moderateScale(4),
-  // },
-  // statefields: {
-  //   fontSize: CUSTOMFONTSIZE.h3,
-  //   fontWeight: 400,
-  //   fontFamily: CUSTOMFONTFAMILY.body,
-  //   paddingHorizontal: moderateScale(32),
-  //   paddingVertical: moderateScale(10),
-  // },
 });
 
 export default UpdateProfile;

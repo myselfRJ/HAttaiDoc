@@ -39,13 +39,18 @@ import {useRoute} from '@react-navigation/native';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {PermmisionStorage} from '../utility/permissions';
+import {
+  StoreAsyncData,
+  UpdateAsyncData,
+  RetriveAsyncData,
+} from '../utility/AsyncStorage';
 
 const ReferToDoctor = () => {
   const route = useRoute();
   const {patient_details} = route.params;
   const nav = useNavigation();
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
-
+  const [sug, setSug] = useState([]);
   const [selected, setSelected] = useState('');
   const [name, setName] = useState('');
   const [speciality, setSpeciality] = useState('');
@@ -201,10 +206,6 @@ const ReferToDoctor = () => {
   };
   const apiUrl = URL.refer_doc_pdf;
 
-  const handle = () => {
-    postData(apiUrl);
-  };
-
   const handleAddDoctors = () => {
     selected && name && speciality
       ? (dispatch(
@@ -255,6 +256,27 @@ const ReferToDoctor = () => {
   };
 
   const handlePreview = async () => {
+    if (sug?.length === 0 || !sug) {
+      StoreAsyncData('referals', [
+        {
+          refer_to: selected,
+          dr_name: dr_name ? dr_name : null,
+          doctor_or_name: name,
+          speciality: speciality,
+          phone: phone,
+          notes: notes,
+        },
+      ]);
+    } else {
+      UpdateAsyncData('referals', {
+        refer_to: selected,
+        dr_name: dr_name ? dr_name : null,
+        doctor_or_name: name,
+        speciality: speciality,
+        phone: phone,
+        notes: notes,
+      });
+    }
     setPrevLoad(true);
     const doc_phone = data?.doctor_phone_number;
     const appointment_id = patient_details?.appointment_id;
@@ -272,26 +294,39 @@ const ReferToDoctor = () => {
           patient_phone,
           prevScreen,
         });
+        // handleAddDoctors();
         setPrevLoad(false);
       }, 1500);
     }
   };
-
+  useEffect(() => {
+    // clearStorage()
+    RetriveAsyncData('referals')
+      .then(array => {
+        if (array?.length > 5) {
+          array?.splice(5);
+          setSug(array);
+        } else {
+          setSug(array);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+  console.log('======>sug', sug);
+  const handlePress = value => {
+    setSelected(value?.refer_to);
+    setName(value?.doctor_or_name);
+    setDr_Name(value?.dr_name);
+    setSpeciality(value?.speciality);
+    setPhone(value?.phone);
+    setNotes(value?.notes);
+  };
   return (
     <View style={styles.main}>
       <ScrollView>
         <PrescriptionHead head={{padding: 0}} heading="Referral" />
-        {/* {doctor?.map((item, ind) =>
-          doctor.length > 0 ? (
-            <ShowChip
-              text={`Refer To: ${item?.refer_to},Name:${item?.doctor_name} ${
-                item?.dr_name ? `Dr.Name : ${item?.dr_name}` : ''
-              } Speciality: ${item?.speciality},  Phone: ${item?.phone}`}
-              onPress={() => handleDelete(ind)}
-              key={ind}
-            />
-          ) : null,
-        )} */}
 
         <View style={styles.container}>
           <Text style={styles.head}>Refer To </Text>
@@ -411,6 +446,22 @@ const ReferToDoctor = () => {
             }}
           />
         </View>
+        {sug?.length > 0 && (
+          <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
+            {/* <ScrollView
+              // horizontal={true}
+              persistentScrollbar={true}
+              contentContainerStyle={{gap: moderateScale(12)}}> */}
+            {sug?.map((item, index) => (
+              <SelectorBtn
+                key={index}
+                onPress={() => handlePress(item)}
+                input={item?.dr_name ? item?.dr_name : item?.doctor_or_name}
+              />
+            ))}
+            {/* </ScrollView> */}
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -510,6 +561,11 @@ const styles = StyleSheet.create({
   child: {
     gap: moderateScale(16),
     flexDirection: 'row',
+  },
+  Modes: {
+    // borderWidth: 1,
+    flexDirection: 'row',
+    gap: moderateScale(16),
   },
   dropdownContainer: {
     // position: 'absolute',

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
   },
   text: {
-    fontSize: CUSTOMFONTSIZE.h2,
+    fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
     color: CUSTOMCOLOR.primary,
   },

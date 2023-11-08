@@ -225,6 +225,9 @@ const ProfileCreate = ({navigation}) => {
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     medical_doc_url: uploaddocument,
     state: selectedState === 'select' ? null : selectedState,
+    pan_doc_url: '',
+    latest_doc_url: '',
+    pharmacyPhone: '',
   };
 
   const fetchData = async () => {
@@ -685,7 +688,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal:horizontalScale(66),
     // zIndex: 10,
     borderWidth: 1,
-    borderRightWidth:1.5,
+    borderRightWidth: 1.5,
     borderColor: CUSTOMCOLOR.primary,
     position: 'absolute',
     right: 0,

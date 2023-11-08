@@ -3,10 +3,6 @@ import {fileurl} from '../utility/urls';
 import {verticalScale} from '../utility/scaleDimension';
 
 const ImageViewer = ({route}) => {
-  console.log(
-    Dimensions.get('window').width,
-    Dimensions.get('window').height - verticalScale(100),
-  );
   const {path} = route.params;
   return (
     <View style={styles.main}>
