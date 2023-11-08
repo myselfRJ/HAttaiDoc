@@ -582,7 +582,7 @@ const Visit = ({navigation, route}) => {
                     item?.total_quantity
                   }</td>
               </tr>`,
-                )}
+                ).join('')}
             </table>
             </div>
             </div>
@@ -715,8 +715,8 @@ const Visit = ({navigation, route}) => {
                           }</td>
                           
                       </tr>`
-                            : '',
-                        )}           
+                            : ''
+                        ).join('')}           
                     </table>
                     <p style="margin-left: 52%;font-weight:700;font-size:16px";>Total :
                     ${charge ? charge[charge && 'totalFees'] : ''}</p>
