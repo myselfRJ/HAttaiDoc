@@ -61,7 +61,7 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
-
+ console.log('rate',vitalsData);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -105,7 +105,7 @@ const Visit = ({navigation, route}) => {
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
-    service_fees?.lenght > 0 ? service_fees?.[service_fees?.length - 1] : null;
+    service_fees?.length > 0 ? service_fees?.[service_fees?.length - 1] : null;
   console.log('charge===', charge ? charge[charge && 'totalFees'] : null);
 
   useEffect(() => {
@@ -301,8 +301,9 @@ const Visit = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      const fees = JSON.parse(jsonData?.data?.fees);
-      if (fees) {
+      
+      if (jsonData?.data?.fees) {
+        const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
       } else {
         dispatch(
@@ -583,7 +584,6 @@ const Visit = ({navigation, route}) => {
                 <tr>
                     <th style=" padding: 8px; text-align: center;">S.No</th>
                     <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
-                    <th style=" padding: 8px; text-align: center;">Dose</th>
                     <th style=" padding: 8px; text-align: center;">Timing</th>
                     <th style=" padding: 8px; text-align: center;">Frequency</th>
                     <th style=" padding: 8px; text-align: center;">Duration</th>
@@ -599,9 +599,6 @@ const Visit = ({navigation, route}) => {
                     item?.medicine
                   }</td>
                   <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.dose_quantity ? item?.dose_quantity : '-'
-                  }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
                     item?.timing
                   }</td>
                   <td style="padding: 8px; text-align: center;font-size:16x">${
@@ -609,7 +606,7 @@ const Visit = ({navigation, route}) => {
                   }</td>
                   <td style="padding: 8px; text-align: center;font-size:16x">${
                     item?.duration
-                  } days</td>
+                  } </td>
                   <td style="padding: 8px; text-align: center;font-size:16x">${
                     item?.total_quantity
                   }</td>
@@ -750,7 +747,7 @@ const Visit = ({navigation, route}) => {
                             : ''
                         ).join('')}           
                     </table>
-                    <p style="margin-left: 52%;font-weight:700;font-size:16px";>Total :
+                    <p style="margin-left: 48%;font-weight:700;font-size:16px";>Total : Rs.
                     ${charge ? charge[charge && 'totalFees'] : ''}</p>
                     </div>
                     <div class ='footer'>
@@ -958,7 +955,7 @@ const Visit = ({navigation, route}) => {
                       `Temp: ${
                         vitalsData?.body_temperature
                       }${String.fromCharCode(8451)}`}{' '}
-                    {vitalsData?.others && `${lastKey} : ${lastValue}`}
+                    {vitalsData?.others?.length>0 ? `${lastKey} : ${lastValue}` : null}
                   </Text>
                 )}
 
@@ -1096,8 +1093,7 @@ const Visit = ({navigation, route}) => {
                                 />
                                 <View>
                                   <Text style={styles.pulse}>
-                                    {item.mode} | {item.medicine} |
-                                    {item.dose_quantity} | {item.timing} |
+                                    {item.medicine} | {item.timing} |
                                     {item.frequency} | {item.duration} |{' '}
                                     {item.total_quantity}
                                   </Text>
@@ -1188,7 +1184,7 @@ const Visit = ({navigation, route}) => {
                               )}
                               {vitalsData?.rate && (
                                 <Text style={styles.pulse}>
-                                  {Language[language]['rate']}:{vitalsData.rate}
+                                  Resp.rate:{vitalsData.rate}
                                   cm
                                 </Text>
                               )}

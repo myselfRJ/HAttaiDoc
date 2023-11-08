@@ -31,6 +31,7 @@ import {
   UpadteVitals,
   UpadateCheifComplaint,
   addCheifComplaint,
+  updatefees,
 } from '../redux/features/prescription/prescriptionSlice';
 import {
   CUSTOMCOLOR,
@@ -111,6 +112,7 @@ const PdfView = ({navigation}) => {
     dispatch(UpdateDoctorRefer(newDoctor));
     dispatch(UpadateCheifComplaint(newComplaint));
     dispatch(updatecommorbidities(commorbidities));
+    dispatch(updatefees([]));
   };
   const putComplaint = async () => {
     try {
