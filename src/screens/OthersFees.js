@@ -115,19 +115,18 @@ const OthersFees = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      const fees = JSON.parse(jsonData?.data?.fees);
-      // fees?.map((item,ind)=>{
-      //   item?.service_name === 'Consultation Fees' ? fees?.shift() : ''
-      // })
-      const filtering = fees?.filter(
-        item => item?.service_name === 'Consultation Fees',
-      );
-      if (filtering?.length === 1) {
-        fees?.shift();
+      if(jsonData?.data?.fees){
+        const fees = JSON.parse(jsonData?.data?.fees);
+        const filtering = fees?.filter(
+          item => item?.service_name === 'Consultation Fees',
+        );
+        if (filtering?.length === 1) {
+          fees?.shift();
+        }
+        fees?.pop();
+        setSubmiitedFees(fees);
+        setData(JSON.parse(jsonData?.data?.fees));
       }
-      fees?.pop();
-      setSubmiitedFees(fees);
-      setData(JSON.parse(jsonData?.data?.fees));
       // dispatch(addfees([jsonData?.data?.fees,...submittedFees]))
     } else {
       console.error('API call failed:', response.status, response);
@@ -140,11 +139,12 @@ const OthersFees = ({navigation}) => {
   const UpdateFees = async () => {
     const updateFees = {
       fees: JSON.stringify([
-        ...submittedFees,
         {
           service_name: `Consultation Fees`,
           charge: parseInt(consultation_fees),
         },
+        ...submittedFees,
+       
         {totalFees: totalFees},
       ]),
       patient_phone_number: feesDetails?.patient_phone,

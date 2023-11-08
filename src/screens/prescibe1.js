@@ -69,17 +69,29 @@ export default function Prescribe1({navigation}) {
   const dispatch = useDispatch();
   const [sug, setSug] = useState([]);
   const [durationSelect, setDurationSelect] = useState('days');
+  const [newMedicine, setnewMedicine] = useState([]);
+  const [filtered, setFilteredData] = useState([]);
 
   const prevPres = useSelector(state => state.pres.prescribeItems);
-  console.log('duration', prevPres);
+  // console.log('duration', mgs);
+  // console.log('medicine111',newMedicine);
+
+    
   const handleAddPrescribe = () => {
+    if (newMedicine?.length > 1) {
+      // const new1 = newMedicine?.filter((item)=> item?.term)
+      const newmed = `${medicine} ${mgs}`;
+      console.log('medicine', newmed);
+      setMedicine(newmed);
+    }
+    
     dispatch(
       addPrescribe([
         ...prevPres,
         {
-          medicine: medicine,
+          medicine: medicine?.includes('mg' || 'ml' || 'g') ? medicine : `${medicine} ${mgs}`,
           mode: mode,
-          dose_quantity: mgs,
+          dose_quantity: "",
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
@@ -194,7 +206,7 @@ export default function Prescribe1({navigation}) {
       const jsonData = await response.json();
       // console.log('fetch data====>', jsonData);
       const snomed_data = jsonData?.map(item => ({type: 'sno', term: item}));
-      setData([...snomed_data, ...CONSTANTS.medicine]);
+      setData(snomed_data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -202,12 +214,11 @@ export default function Prescribe1({navigation}) {
   useEffect(() => {
     fetchMedicine();
   }, [medicine]);
-  const [newMedicine, setnewMedicine] = useState([]);
-  const [filtered, setFilteredData] = useState([]);
+
   // console.log('filter values=====>', filtered);
   useEffect(() => {
     if (medicine) {
-      const filtered = data?.filter(
+      const filtered = [...data,...CONSTANTS.medicine]?.filter(
         item =>
           item?.term &&
           item?.term.toLowerCase().includes(medicine.toLowerCase()),
@@ -219,7 +230,7 @@ export default function Prescribe1({navigation}) {
       setFilteredData(data);
       // setnewMedicine(data);
     }
-  }, [data, medicine]);
+  }, [medicine]);
 
   useEffect(() => {
     if (
@@ -227,18 +238,18 @@ export default function Prescribe1({navigation}) {
       !data?.find(item => item.term.toLowerCase() === medicine.toLowerCase())
     ) {
       setnewMedicine([{term: medicine}]);
+      
     } else {
       setnewMedicine(null);
     }
-  }, [data]);
+  }, [medicine]);
 
   const HandlePress = value => {
-    // console.log('value', value);
     setMedicine(value?.term);
     selectedMedicine(value?.term);
     if (value?.type === 'nsno') {
       setselectedGeneric(false);
-      setnewMedicine([]);
+      setnewMedicine([{term: value?.term}]);
     }
   };
   const handleBack = () => {
@@ -295,7 +306,7 @@ export default function Prescribe1({navigation}) {
             <ShowChip
               main={{marginHorizontal: 0}}
               key={ind}
-              text={`${item.medicine} | ${item.dose_quantity} | ${item.timing}|${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
+              text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
               onPress={() => handleDelete(ind)}
             />
           ))}
@@ -342,7 +353,7 @@ export default function Prescribe1({navigation}) {
                 : 'close'
             }
             onPress={() => {
-              setShow(!show);
+              // setShow(!show);
               setMedicine('');
             }}
           />

@@ -359,7 +359,7 @@ export const CONSTANTS = {
     'Radiology',
     'Rheumatology',
   ],
-  consultTypes: ['Physical', 'Telephonic', 'Online'],
+  consultTypes: ['In clinic', 'Telephonic'],
   duration: [10, 15, 20, 25, 30],
   abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
   role: ['Receptionist', 'Administrator', 'Others'],
