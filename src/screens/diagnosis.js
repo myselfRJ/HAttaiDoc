@@ -130,7 +130,12 @@ const Diagnosis = ({navigation}) => {
           index === array?.findIndex(obj => obj.diagnosis === item?.diagnosis)
         );
       });
-      setSug(uniqueArray);
+      if (uniqueArray?.length > 15) {
+        uniqueArray?.splice(15);
+        setSug(uniqueArray);
+      } else {
+        setSug(uniqueArray);
+      }
     });
   }, []);
   const [dia_type, setDiaType] = useState(dia_types[1]);
@@ -140,27 +145,31 @@ const Diagnosis = ({navigation}) => {
     <View style={styles.main}>
       <PrescriptionHead heading="Diagnosis" />
       <ScrollView>
-      <View style={{gap:verticalScale(12)}}>
-        <View style={{flexDirection: 'row', gap: moderateScale(24)}}>
-          {dia_types?.map((value, ind) => (
-            <SelectorBtn
-              key={ind}
-              input={value}
-              onPress={() => setDiaType(value)}
-              select={{
-                backgroundColor:
-                  dia_type === value ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-              }}
-              inputstyle={{
-                color:
-                  dia_type === value ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-                fontSize: moderateScale(14),
-                fontWeight: '600',
-              }}
-            />
-          ))}
-        </View>
-        
+        <View style={{gap: verticalScale(12)}}>
+          <View style={{flexDirection: 'row', gap: moderateScale(24)}}>
+            {dia_types?.map((value, ind) => (
+              <SelectorBtn
+                key={ind}
+                input={value}
+                onPress={() => setDiaType(value)}
+                select={{
+                  backgroundColor:
+                    dia_type === value
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.white,
+                }}
+                inputstyle={{
+                  color:
+                    dia_type === value
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary,
+                  fontSize: moderateScale(14),
+                  fontWeight: '600',
+                }}
+              />
+            ))}
+          </View>
+
           <View style={styles.input}>
             <InputText
               inputContainer={styles.inputtext}
@@ -176,7 +185,7 @@ const Diagnosis = ({navigation}) => {
                   ? 'magnify'
                   : 'close'
               }
-              onPress={() => setShow(!show)}
+              onPress={() => setValue('')}
             />
             {value.length > 1 &&
               (value === selected || show ? null : (
@@ -205,8 +214,9 @@ const Diagnosis = ({navigation}) => {
               ))}
             <View
               style={{
-                margin: moderateScale(16),
+                padding: moderateScale(16),
                 flexDirection: 'row',
+                flexWrap: 'wrap',
                 gap: moderateScale(12),
                 paddingHorizontal: horizontalScale(8),
               }}>
@@ -304,6 +314,8 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
   },
   inputtext: {
     paddingVertical: verticalScale(0),

@@ -316,7 +316,9 @@ const AddUser = ({navigation}) => {
     }
   };
   useEffect(() => {
-    fetchuser_id();
+    if (id) {
+      fetchuser_id();
+    }
   }, []);
 
   const UpdateUser = async () => {

@@ -117,12 +117,11 @@ const Allergies = () => {
           index === array?.findIndex(obj => obj.allergies === item?.allergies)
         );
       });
-      if(uniqueArray?.length>20) {
+      if (uniqueArray?.length > 20) {
         uniqueArray?.splice(20);
         setSug(uniqueArray);
-      }
-      else{
-      setSug(uniqueArray)
+      } else {
+        setSug(uniqueArray);
       }
     });
   }, []);
@@ -130,99 +129,103 @@ const Allergies = () => {
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Allergies" />
-    <ScrollView>
-      {prev?.map((item, ind) =>
-        prev.length > 0 ? (
-          <ShowChip
-            text={item?.allergies}
-            onPress={() => handleDelete(ind)}
-            ind={ind}
-          />
-        ) : null,
-      )}
-      <View style={{marginBottom: moderateScale(16)}}>
-        <View style={styles.input}>
-          <InputText
-            inputContainer={styles.inputtext}
-            label="Allergies"
-            placeholder="Enter allergies"
-            value={value}
-            setValue={setValue}
-            // value={query}
-            // setValue={setQuery}
-            search={true}
-            IconName={
-              (show && filtered.length > 0) ||
-              value === selected ||
-              value.length === 0
-                ? 'magnify'
-                : 'close'
-            }
-            onPress={() => setShow(!show)}
-          />
-          {value.length >= 3 &&
-            (value === selected || show ? null : (
-              <View style={styles.dropdownContainer}>
-                <ScrollView persistentScrollbar={true}>
-                  {filtered?.map((val, index) => (
-                    <TouchableOpacity
-                      style={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(8),
-                      }}
-                      onPress={() => HandlePress(val?.term)}
-                      key={index}>
-                      <Text
+      <ScrollView>
+        {prev?.map((item, ind) =>
+          prev.length > 0 ? (
+            <ShowChip
+              text={item?.allergies}
+              onPress={() => handleDelete(ind)}
+              ind={ind}
+            />
+          ) : null,
+        )}
+        <View style={{marginBottom: moderateScale(16)}}>
+          <View style={styles.input}>
+            <InputText
+              inputContainer={styles.inputtext}
+              label="Allergies"
+              placeholder="Enter allergies"
+              value={value}
+              setValue={setValue}
+              // value={query}
+              // setValue={setQuery}
+              search={true}
+              IconName={
+                (show && filtered.length > 0) ||
+                value === selected ||
+                value.length === 0
+                  ? 'magnify'
+                  : 'close'
+              }
+              onPress={() => setValue('')}
+            />
+            {value.length >= 3 &&
+              (value === selected || show ? null : (
+                <View style={styles.dropdownContainer}>
+                  <ScrollView persistentScrollbar={true}>
+                    {filtered?.map((val, index) => (
+                      <TouchableOpacity
                         style={{
-                          fontSize: CUSTOMFONTSIZE.h3,
-                          padding: moderateScale(10),
-                          color: CUSTOMCOLOR.black,
-                        }}>
-                        {val.term}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            ))}
+                          paddingHorizontal: horizontalScale(4),
+                          paddingVertical: verticalScale(8),
+                        }}
+                        onPress={() => HandlePress(val?.term)}
+                        key={index}>
+                        <Text
+                          style={{
+                            fontSize: CUSTOMFONTSIZE.h3,
+                            padding: moderateScale(10),
+                            color: CUSTOMCOLOR.black,
+                          }}>
+                          {val.term}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ))}
 
-          <View
-            style={{
-              marginTop: moderateScale(16),
-              flexDirection: 'row',
-              flexWrap:'wrap',
-              gap: moderateScale(12),
-              paddingHorizontal: horizontalScale(8),
-            }}>
-            {sug?.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => selectChange(item?.allergies)}
-                style={[
-                  styles.recomend,
-                  {
-                    backgroundColor:
-                      value === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-                  },
-                ]}>
-                <Text
-                  style={{
-                    color:
-                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
-                  }}>
-                  {item?.allergies}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <View
+              style={{
+                marginTop: moderateScale(16),
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: moderateScale(12),
+                paddingHorizontal: horizontalScale(8),
+              }}>
+              {sug?.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => selectChange(item?.allergies)}
+                  style={[
+                    styles.recomend,
+                    {
+                      backgroundColor:
+                        value === item
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      color:
+                        value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                    }}>
+                    {item?.allergies}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-
-         
         </View>
-      </View>
       </ScrollView>
-      <View style={{flex:1,justifyContent:'flex-end'}}>
-            <HButton label={'Save'} onPress={handleBack} btnstyles={commonstyles.activebtn}/>
-          </View>
+      <View style={{flex: 1, justifyContent: 'flex-end'}}>
+        <HButton
+          label={'Save'}
+          onPress={handleBack}
+          btnstyles={commonstyles.activebtn}
+        />
+      </View>
     </View>
   );
 };
@@ -240,9 +243,8 @@ const styles = StyleSheet.create({
     padding: moderateScale(8),
     borderRadius: moderateScale(4),
     paddingHorizontal: horizontalScale(16),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary,
-    
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   input: {
     // paddingHorizontal:24,
@@ -254,8 +256,10 @@ const styles = StyleSheet.create({
     // borderWidth:1
   },
   dropdownContainer: {
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
-    marginHorizontal: horizontalScale(8),
+    // marginHorizontal: horizontalScale(8),
   },
 });

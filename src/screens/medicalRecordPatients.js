@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   patientinfo: {},
   appointmentcard: {
     height: moderateScale(400),
-    paddingHorizontal: horizontalScale(8),
+    // paddingHorizontal: horizontalScale(8),
     // borderWidth:1
     // gap: moderateScale(16),
   },
@@ -264,5 +264,6 @@ const styles = StyleSheet.create({
     gap: moderateScale(16),
     flex: 1,
     paddingHorizontal: horizontalScale(24),
+    backgroundColor: CUSTOMCOLOR.white,
   },
 });

@@ -147,7 +147,13 @@ const Account = () => {
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
           <Text style={styles.PersonalInf}>Personal Information</Text>
           <TouchableOpacity onPress={userLogout}>
-            <Text>LOGOUT</Text>
+            <Icon
+              name={'logout'}
+              color={CUSTOMCOLOR.primary}
+              size={moderateScale(24)}
+              style={{alignSelf: 'center'}}
+            />
+            <Text style={{color: CUSTOMCOLOR.disable}}>Logout</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.pI}>
@@ -293,7 +299,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   doctorImg: {
     height: moderateScale(70),
@@ -354,8 +360,8 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.white,
     flexDirection: 'row',
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   editBtn: {
     paddingHorizontal: horizontalScale(16),
@@ -381,8 +387,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.white,
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
   },
   HPID: {
     width: '100%',

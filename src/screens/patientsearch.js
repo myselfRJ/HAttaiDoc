@@ -98,8 +98,9 @@ const PatientSearch = ({navigation}) => {
     if (name) {
       const filtered = data?.filter(
         item =>
-          item?.patient_name &&
-          item?.patient_name.toLowerCase().startsWith(name.toLowerCase()),
+          (item?.patient_name &&
+            item?.patient_name.toLowerCase().startsWith(name.toLowerCase())) ||
+          item?.patient_phone_number.startsWith(name),
       );
       setFilteredData(filtered);
     } else {
@@ -111,10 +112,11 @@ const PatientSearch = ({navigation}) => {
     setSelectedClinic(clinic.clinic_name);
     setClinicId(clinic.id);
     dispatch(addclinic_id(clinic.id));
+    setShow(false);
 
-    setTimeout(() => {
-      ClinicRef?.current?.snapToIndex(0);
-    }, 1000);
+    // setTimeout(() => {
+    //   ClinicRef?.current?.snapToIndex(0);
+    // }, 1000);
   };
   useFocusEffect(
     React.useCallback(() => {
@@ -126,16 +128,34 @@ const PatientSearch = ({navigation}) => {
       fetchData();
     }, [clinicID]),
   );
+  const [show, setShow] = useState(false);
   return (
     <View style={styles.main}>
       <View style={styles.select}>
-        <SelectorBtn
-          name="chevron-down"
-          input={selectedClinic}
-          onPress={() => ClinicRef?.current?.snapToIndex(1)}
-        />
+        <View>
+          <SelectorBtn
+            name="chevron-down"
+            input={selectedClinic}
+            // onPress={() => ClinicRef?.current?.snapToIndex(1)}
+            onPress={() => setShow(!show)}
+          />
+          {show && (
+            <View style={styles.modalContainer}>
+              {/* <Text style={styles.clinicText}>
+              {Language[language]['clinic']}
+            </Text> */}
+              {clinics?.map((clinic, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() => handleClinicSelection(clinic)}>
+                  <Text style={[styles.modalfields]}>{clinic.clinic_name}</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
+        </View>
         <InputText
-          placeholder="Search name"
+          placeholder="Search By Name/Phone"
           value={name}
           setValue={ChangeNameValue}
           textStyle={styles.input}
@@ -177,7 +197,10 @@ const PatientSearch = ({navigation}) => {
       </View>
 
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}
-      <BottomSheetView bottomSheetRef={ClinicRef} snapPoints={'50%'}>
+      <BottomSheetView
+        bottomSheetRef={ClinicRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#000000aa'}>
         <View style={styles.modalContainer}>
           <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
           {clinics?.map((clinic, index) => (
@@ -209,7 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: moderateScale(24),
     gap: moderateScale(24),
-    backgroundColor:CUSTOMCOLOR.background,
+    backgroundColor: CUSTOMCOLOR.background,
     // borderWidth:1
   },
   select: {
@@ -260,14 +283,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(24),
   },
   modalContainer: {
-    height: moderateScale(400),
-    width: '100%',
+    // height: moderateScale(510),
+    // width: '100%',
     //justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
     //alignSelf: 'center',
     borderRadius: moderateScale(10),
-    padding: moderateScale(32),
+    padding: moderateScale(16),
     gap: moderateScale(16),
   },
   modalfields: {

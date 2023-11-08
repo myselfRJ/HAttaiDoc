@@ -39,7 +39,7 @@ import {SelectorBtn} from '../components';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useFocusEffect} from '@react-navigation/native';
 import CustomIcon from '../components/icon';
-import { fileurl } from '../utility/urls';
+import {fileurl} from '../utility/urls';
 
 const History = ({route, navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -124,11 +124,11 @@ const History = ({route, navigation}) => {
   }, []);
   const handlePrescription = () => {
     const filepath = prescription?.file_url;
-    const path = `${fileurl}${filepath}`
+    const path = `${fileurl}${filepath}`;
     navigation.navigate('pdfhistory', {path});
   };
   const handleReferral = filepath => {
-    const path = `${fileurl}${filepath}`
+    const path = `${fileurl}${filepath}`;
     navigation.navigate('pdfhistory', {path});
   };
   const reports_finding = [
@@ -146,7 +146,7 @@ const History = ({route, navigation}) => {
     physical?.file5 ? physical?.file5 : null,
   ];
   const handleReports_Physical = filepath => {
-    const path = `${fileurl}${filepath}`
+    const path = `${fileurl}${filepath}`;
     if (filepath?.includes('pdf')) {
       navigation.navigate('pdfhistory', {path});
     } else {
@@ -170,11 +170,21 @@ const History = ({route, navigation}) => {
           <TouchableOpacity
             key={index}
             onPress={() => setSelectedType(item?.text)}>
-            <Image source={item?.image} style={{height: 100, width: 100}} />
+            <Image
+              source={item?.image}
+              style={{
+                height: moderateScale(100),
+                width: moderateScale(100),
+                alignSelf: 'center',
+              }}
+            />
             <Text
               style={{
                 alignSelf: 'center',
-                color: CUSTOMCOLOR.black,
+                color:
+                  selectedType === item?.text
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.black,
                 fontSize: CUSTOMFONTSIZE.h3,
               }}>
               {item?.text}
@@ -207,22 +217,23 @@ const History = ({route, navigation}) => {
           <Text style={styles.subhead}>{selectedType}</Text>
           {referral?.length > 0 ? (
             referral?.map((item, index) => (
-              <TouchableOpacity onPress={() => handleReferral(item?.file_referral)} key = {index}>
+              <TouchableOpacity
+                onPress={() => handleReferral(item?.file_referral)}
+                key={index}>
                 <ShowChip
-                key={index}
-                
-                text={
-                  <>
-                    <Icon
-                      color={CUSTOMCOLOR.error}
-                      size={moderateScale(20)}
-                      name={'file-pdf-box'}
-                    />
-                    {<Text>{item?.file_referral?.split('/')[4]}</Text>}
-                  </>
-                }
-                main={{marginHorizontal: 0}}
-              />
+                  key={index}
+                  text={
+                    <>
+                      <Icon
+                        color={CUSTOMCOLOR.error}
+                        size={moderateScale(20)}
+                        name={'file-pdf-box'}
+                      />
+                      {<Text>{item?.file_referral?.split('/')[4]}</Text>}
+                    </>
+                  }
+                  main={{marginHorizontal: 0}}
+                />
               </TouchableOpacity>
             ))
           ) : (
@@ -246,7 +257,9 @@ const History = ({route, navigation}) => {
                           <Icon
                             color={CUSTOMCOLOR.error}
                             size={moderateScale(20)}
-                            name={item?.includes('pdf') ? 'file-pdf-box' : 'image'}
+                            name={
+                              item?.includes('pdf') ? 'file-pdf-box' : 'image'
+                            }
                           />
                           {<Text>{item?.split('/')[4]}</Text>}
                         </>
@@ -277,7 +290,9 @@ const History = ({route, navigation}) => {
                           <Icon
                             color={CUSTOMCOLOR.error}
                             size={moderateScale(20)}
-                            name={item?.includes('pdf') ? 'file-pdf-box' : 'image'}
+                            name={
+                              item?.includes('pdf') ? 'file-pdf-box' : 'image'
+                            }
                           />
                           {<Text>{item?.split('/')[4]}</Text>}
                         </>

@@ -98,7 +98,7 @@ const ConsultationCard = ({data}) => {
                 gap: moderateScale(4),
                 padding: moderateScale(4),
               }}>
-              <Pressable style={styles.icon}>
+              {/* <Pressable style={styles.icon}>
                 <Icon
                   name={'download'}
                   size={moderateScale(16)}
@@ -112,7 +112,7 @@ const ConsultationCard = ({data}) => {
                   color={CUSTOMCOLOR.primary}
                   style={styles.icon}
                 />
-              </Pressable>
+              </Pressable> */}
             </View>
             <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
               <HButton

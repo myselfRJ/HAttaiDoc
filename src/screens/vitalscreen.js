@@ -86,15 +86,17 @@ const VitalScreen = ({route, props}) => {
     oxygen_level: '',
     others: {},
   });
-  console.log('====>dias', vitals);
+
+  useEffect(() => {
+    updateOthersVitals();
+  }, [othresKey, othersValue]);
 
   const handlePress = () => {
-    updateOthersVitals();
     console.log('=vitals', vitals);
     setTimeout(() => {
       dispatch(addVitals(vitals));
       nav.goBack();
-    }, 200);
+    }, 500);
   };
   const PulseChange = text => {
     const updatedVitals = {...vitals, pulse_rate: text};

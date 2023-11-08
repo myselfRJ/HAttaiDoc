@@ -52,6 +52,7 @@ const UserCard = props => {
               </Text>
               <Text style={styles.text}>{userdata?.clinic_name}</Text>
               <Text style={styles.text}>{userdata?.role}</Text>
+              <Text style={styles.text}>{userdata?.user_phone_number}</Text>
             </View>
           </View>
           <View style={{gap: moderateScale(16)}}>

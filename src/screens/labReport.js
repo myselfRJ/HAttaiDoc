@@ -130,7 +130,12 @@ const LabReports = () => {
           index === array?.findIndex(obj => obj.lab_test === item?.lab_test)
         );
       });
-      setSug(uniqueArray);
+      if (uniqueArray?.length > 15) {
+        uniqueArray?.splice(15);
+        setSug(uniqueArray);
+      } else {
+        setSug(uniqueArray);
+      }
     });
   }, []);
 
@@ -169,7 +174,7 @@ const LabReports = () => {
                   ? 'magnify'
                   : 'close'
               }
-              onPress={() => setShow(!show)}
+              onPress={() => setValue('')}
             />
             {value.length > 1 &&
               (value === selected || show ? null : (
@@ -292,6 +297,8 @@ const styles = StyleSheet.create({
     height: moderateScale(300),
     backgroundColor: CUSTOMCOLOR.white,
     // marginHorizontal: horizontalScale(8),
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
   },
   recomend: {
     padding: moderateScale(8),

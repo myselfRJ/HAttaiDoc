@@ -24,7 +24,8 @@ export const URL = {
   getPatientByClinic: clinicId =>
     `${baseUrl}customappointment/get-patients/${clinicId}/`,
   getPatientByNumber: phoneId => `${baseUrl}custompatient/${phoneId}`,
-  getPatientsAll: phoneId => `${baseUrl}custompatient/allPatients?phone_number=${phoneId}`,
+  getPatientsAll: phoneId =>
+    `${baseUrl}custompatient/allPatients?phone_number=${phoneId}`,
   getClinic: phoneId =>
     `${baseUrl}clinic/get/clinic/?doctor_phone_number=${phoneId}`,
   getPractitionerByNumber: phoneId =>
