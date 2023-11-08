@@ -125,44 +125,46 @@ const AppointmentCard = ({appointment, openVisit}) => {
               />
             </Pressable> */}
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: moderateScale(16),
-              paddingTop: moderateScale(24),
-            }}>
-            <HButton
-              label={'Reschedule'}
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-                borderWidth: moderateScale(0.5),
-                borderColor: CUSTOMCOLOR.borderColor,
-                paddingHorizontal: horizontalScale(24),
-                paddingVertical: verticalScale(8),
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-                fontSize: CUSTOMFONTFAMILY.h3,
-              }}
-              onPress={handleReschedule}
-            />
-            <HButton
-              btnstyles={{
-                // backgroundColor: CUSTOMCOLOR.white,
-                // borderWidth: moderateScale(0.5),
-                // borderColor: CUSTOMCOLOR.borderColor,
-                paddingHorizontal: horizontalScale(24),
-                paddingVertical: verticalScale(12),
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.white,
-                fontSize: CUSTOMFONTFAMILY.h3,
-              }}
-              onPress={handleOnpress}
-              label={'Start Visit'}
-              // style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
-            />
-          </View>
+          {appointment?.status === 'pending' ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(16),
+                paddingTop: moderateScale(24),
+              }}>
+              <HButton
+                label={'Reschedule'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(0.5),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                  paddingHorizontal: horizontalScale(24),
+                  paddingVertical: verticalScale(8),
+                }}
+                textStyle={{
+                  color: CUSTOMCOLOR.primary,
+                  fontSize: CUSTOMFONTFAMILY.h3,
+                }}
+                onPress={handleReschedule}
+              />
+              <HButton
+                btnstyles={{
+                  // backgroundColor: CUSTOMCOLOR.white,
+                  // borderWidth: moderateScale(0.5),
+                  // borderColor: CUSTOMCOLOR.borderColor,
+                  paddingHorizontal: horizontalScale(24),
+                  paddingVertical: verticalScale(12),
+                }}
+                textStyle={{
+                  color: CUSTOMCOLOR.white,
+                  fontSize: CUSTOMFONTFAMILY.h3,
+                }}
+                onPress={handleOnpress}
+                label={'Start Visit'}
+                // style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
+              />
+            </View>
+          ) : null}
         </View>
       </View>
 

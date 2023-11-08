@@ -25,19 +25,38 @@ const VisitOpen = props => {
     <>
       <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
         <Text style={styles.text}>{props.label}</Text>
-        <View style={styles.gap}>
-          <Icon
-            name={'pencil'}
-            color={CUSTOMCOLOR.primary}
-            // style={{
-            //   borderWidth: 1,
-            //   borderColor: CUSTOMCOLOR.borderColor,
-            //   borderRadius: moderateScale(100),
-            //   // padding: moderateScale(4),
-            // }}
-            size={moderateScale(16)}
-          />
-          {/* <Icon
+
+        <View style={{flexDirection: 'row'}}>
+          {props.doneIcon && (
+            <View style={styles.gap}>
+              <Icon
+                name={props.doneIcon}
+                color={CUSTOMCOLOR.success}
+                // style={{
+                //   borderWidth: 1,
+                //   borderColor: CUSTOMCOLOR.borderColor,
+                //   borderRadius: moderateScale(100),
+                //   // padding: moderateScale(4),
+                // }}
+                size={moderateScale(16)}
+              />
+            </View>
+          )}
+          <View style={styles.gap}>
+            <Icon
+              name={props.icon}
+              color={CUSTOMCOLOR.primary}
+              // style={{
+              //   borderWidth: 1,
+              //   borderColor: CUSTOMCOLOR.borderColor,
+              //   borderRadius: moderateScale(100),
+              //   // padding: moderateScale(4),
+              // }}
+              size={moderateScale(16)}
+            />
+          </View>
+        </View>
+        {/* <Icon
             name={'pencil'}
             color={CUSTOMCOLOR.primary}
             style={{
@@ -48,7 +67,6 @@ const VisitOpen = props => {
             }}
             size={moderateScale(16)}
           /> */}
-        </View>
       </TouchableOpacity>
     </>
   );

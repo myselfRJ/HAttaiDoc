@@ -115,7 +115,7 @@ const OthersFees = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      if(jsonData?.data?.fees){
+      if (jsonData?.data?.fees) {
         const fees = JSON.parse(jsonData?.data?.fees);
         const filtering = fees?.filter(
           item => item?.service_name === 'Consultation Fees',
@@ -144,7 +144,7 @@ const OthersFees = ({navigation}) => {
           charge: parseInt(consultation_fees),
         },
         ...submittedFees,
-       
+
         {totalFees: totalFees},
       ]),
       patient_phone_number: feesDetails?.patient_phone,
@@ -226,7 +226,7 @@ const OthersFees = ({navigation}) => {
       setLoading(false);
     }
   };
-
+  const rupeeSymbol = '\u20B9';
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={{gap: moderateScale(16)}}>
@@ -241,9 +241,9 @@ const OthersFees = ({navigation}) => {
         </View>
         {submittedFees?.length > 0 && (
           <View style={{flexDirection: 'row', gap: horizontalScale(8)}}>
-            <Text style={{fontWeight: '400', color: CUSTOMCOLOR.primary}}>
+            {/* <Text style={{fontWeight: '400', color: CUSTOMCOLOR.primary}}>
               Service Fees
-            </Text>
+            </Text> */}
             {/* <Icon
               size={moderateScale(24)}
               color={CUSTOMCOLOR.primary}
@@ -298,7 +298,7 @@ const OthersFees = ({navigation}) => {
           }}>
           Total :{' '}
           <Text style={{fontSize: CUSTOMFONTSIZE.h1, color: CUSTOMCOLOR.black}}>
-            {totalFees}
+            {`${rupeeSymbol}${totalFees}`}
           </Text>
         </Text>
         <View
