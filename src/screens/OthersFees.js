@@ -1,10 +1,16 @@
 import React from 'react';
-import {useState, useEffect,useRef} from 'react';
-import { useSelector,useDispatch } from 'react-redux';
-import {View, StyleSheet, Text, TouchableOpacity,Alert} from 'react-native';
+import {useState, useEffect, useRef} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native';
 
 import PrescriptionHead from '../components/prescriptionHead';
-import {BottomSheetView, HButton, InputText, SelectorBtn, StatusMessage} from '../components';
+import {
+  BottomSheetView,
+  HButton,
+  InputText,
+  SelectorBtn,
+  StatusMessage,
+} from '../components';
 import {
   moderateScale,
   verticalScale,
@@ -26,8 +32,8 @@ import {
   updatefees,
 } from '../redux/features/prescription/prescriptionSlice';
 import ShowChip from '../components/showChip';
-import { URL } from '../utility/urls';
-import { fetchApi } from '../api/fetchApi';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
 
 // import {Icon} from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -37,19 +43,19 @@ const OthersFees = ({navigation}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const service_fees = useSelector(state => state.prescription.fees);
-  console.log('service',service_fees);
+  console.log('service', service_fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
   const [submittedFees, setSubmiitedFees] = useState([]);
   const [name, setName] = useState('');
   const [fees, setFees] = useState('');
-  const [data,setData] =  useState([])
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {feesDetails} =route.params;
+  const {feesDetails} = route.params;
   const id = feesDetails?.appointment_id;
-  console.log('id',submittedFees)
+  console.log('id', submittedFees);
   let totalFees = parseInt(consultation_fees);
-  
+
   submittedFees?.forEach(item => {
     totalFees += parseInt(item.charge);
   });
@@ -62,36 +68,29 @@ const OthersFees = ({navigation}) => {
     setName('');
     setFees('');
   };
-  console.log('length',submittedFees?.length);
+  console.log('length', submittedFees?.length);
   const handleDispatch = () => {
-    
+    dispatch(
+      updatefees([
+        ...submittedFees,
+        {
+          service_name: `Consultation Fees`,
+          charge: parseInt(consultation_fees),
+        },
+        {totalFees: totalFees},
+      ]),
+    );
     if (data) {
       if (data?.length > 1) {
         UpdateFees();
-        dispatch(
-          addfees([
-            ...submittedFees,
-            {totalFees: totalFees},
-          ]),
-        );
       } else {
         SaveFees();
-        dispatch(
-          addfees([
-            ...submittedFees,
-            {
-              service_name: `Consultation Fees`,
-              charge: parseInt(consultation_fees),
-            },
-            {totalFees: totalFees},
-          ]),
-        );
+
         Alert.alert('Success', 'Fees details added successfully');
       }
     } else {
       Alert.alert('Warning', 'Please Enter Correct Details');
     }
-    
   };
   const [apiStatus, setApiStatus] = useState({});
 
@@ -104,7 +103,7 @@ const OthersFees = ({navigation}) => {
     const updatefees = submittedFees?.filter((_, index) => index !== ind);
     setSubmiitedFees(updatefees);
   };
-  
+
   // console.log('=========fees',data);
 
   const GetFees = async () => {
@@ -116,17 +115,19 @@ const OthersFees = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      const fees  = JSON.parse(jsonData?.data?.fees)
+      const fees = JSON.parse(jsonData?.data?.fees);
       // fees?.map((item,ind)=>{
       //   item?.service_name === 'Consultation Fees' ? fees?.shift() : ''
       // })
-      const filtering = fees?.filter(item => item?.service_name === 'Consultation Fees' )
-     if (filtering?.length===1){
-      fees?.shift()
-     }
-      fees?.pop()
-      setSubmiitedFees(fees)
-      setData(JSON.parse(jsonData?.data?.fees))
+      const filtering = fees?.filter(
+        item => item?.service_name === 'Consultation Fees',
+      );
+      if (filtering?.length === 1) {
+        fees?.shift();
+      }
+      fees?.pop();
+      setSubmiitedFees(fees);
+      setData(JSON.parse(jsonData?.data?.fees));
       // dispatch(addfees([jsonData?.data?.fees,...submittedFees]))
     } else {
       console.error('API call failed:', response.status, response);
@@ -138,11 +139,18 @@ const OthersFees = ({navigation}) => {
 
   const UpdateFees = async () => {
     const updateFees = {
-      fees : JSON.stringify([...submittedFees,{totalFees:totalFees}]),
-      patient_phone_number :feesDetails?.patient_phone,
-      doctor_phone_number : feesDetails?.doctor_phone_number,
-      clinic_id : feesDetails?.clinic_id,
-      appointment_id : feesDetails?.appointment_id
+      fees: JSON.stringify([
+        ...submittedFees,
+        {
+          service_name: `Consultation Fees`,
+          charge: parseInt(consultation_fees),
+        },
+        {totalFees: totalFees},
+      ]),
+      patient_phone_number: feesDetails?.patient_phone,
+      doctor_phone_number: feesDetails?.doctor_phone_number,
+      clinic_id: feesDetails?.clinic_id,
+      appointment_id: feesDetails?.appointment_id,
     };
     try {
       const response = await fetchApi(URL.updateFees(id), {
@@ -171,14 +179,17 @@ const OthersFees = ({navigation}) => {
   };
 
   const SaveFees = async () => {
-    const feeDetails = JSON.stringify([...submittedFees,{totalFees:totalFees}])
+    const feeDetails = JSON.stringify([
+      ...submittedFees,
+      {totalFees: totalFees},
+    ]);
     const FeesSaving = {
-      fees:feeDetails,
-      patient_phone_number :feesDetails?.patient_phone,
-      doctor_phone_number : feesDetails?.doctor_phone_number,
-      clinic_id : feesDetails?.clinic_id,
-      appointment_id : feesDetails?.appointment_id
-    }
+      fees: feeDetails,
+      patient_phone_number: feesDetails?.patient_phone,
+      doctor_phone_number: feesDetails?.doctor_phone_number,
+      clinic_id: feesDetails?.clinic_id,
+      appointment_id: feesDetails?.appointment_id,
+    };
     setLoading(true);
     try {
       const response = await fetchApi(URL.savefees, {
@@ -249,25 +260,31 @@ const OthersFees = ({navigation}) => {
               paddingLeft: moderateScale(12),
               alignItems: 'center',
             }}>
-              <View style={{flexDirection:'row',gap:horizontalScale(16),alignItems:'center'}}>
-            <Text style={styles.text}>{item?.service_name}</Text>
-            <TouchableOpacity onPress={() => handleDelete(index)} style={{backgroundColor:'#F8F8FF',borderRadius:moderateScale(100),
-            // borderWidth:0.25,
-            alignItems:'center',
-            // borderColor:CUSTOMCOLOR.delete,
-            padding:moderateScale(4)}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: horizontalScale(16),
+                alignItems: 'center',
+              }}>
+              <Text style={styles.text}>{item?.service_name}</Text>
+              <TouchableOpacity
+                onPress={() => handleDelete(index)}
+                style={{
+                  backgroundColor: '#F8F8FF',
+                  borderRadius: moderateScale(100),
+                  // borderWidth:0.25,
+                  alignItems: 'center',
+                  // borderColor:CUSTOMCOLOR.delete,
+                  padding: moderateScale(4),
+                }}>
                 <Icon
                   name={'close'}
                   size={moderateScale(16)}
                   color={CUSTOMCOLOR.error}
                 />
               </TouchableOpacity>
-            
             </View>
-            <Text style={styles.text}>
-              {item?.charge}{' '}
-              
-            </Text>
+            <Text style={styles.text}>{item?.charge} </Text>
           </View>
         ))}
         <Seperator />
@@ -316,7 +333,7 @@ const OthersFees = ({navigation}) => {
         onPress={handleDispatch}
         btnstyles={commonstyles.activebtn}
       />
-       <BottomSheetView
+      <BottomSheetView
         bottomSheetRef={SuccesRef}
         snapPoints={'50%'}
         backgroundStyle={'#fff'}>
@@ -331,7 +348,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(8),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   text: {
     fontSize: CUSTOMFONTSIZE.h3,

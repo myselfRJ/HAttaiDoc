@@ -41,6 +41,7 @@ import {
   UpadteVitals,
   UpadateCheifComplaint,
   addCheifComplaint,
+  addfees,
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
@@ -289,6 +290,37 @@ const Visit = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchVitals();
+  }, []);
+  console.log('======service', service_fees);
+  const GetFees = async () => {
+    const response = await fetchApi(URL.updateFees(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      const fees = JSON.parse(jsonData?.data?.fees);
+      if (fees) {
+        dispatch(addfees(fees));
+      } else {
+        dispatch(
+          addfees([
+            {
+              service_name: `Consultation Fees`,
+              charge: parseInt(consultation_fees),
+            },
+            {totalFees: parseInt(consultation_fees)},
+          ]),
+        );
+      }
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    GetFees();
   }, []);
   const months = CONSTANTS.months;
 
@@ -991,12 +1023,12 @@ const Visit = ({navigation, route}) => {
                         params.gende = gende;
                       } else if (value.navigate === 'service_fees') {
                         params.consultation_fees = consultation_fees;
-                        params.feesDetails ={
+                        params.feesDetails = {
                           clinic_id: Clinic_id,
                           patient_phone: patient_phone,
-                          doctor_phone_number:phone,
-                          appointment_id: appointment_id
-                        }
+                          doctor_phone_number: phone,
+                          appointment_id: appointment_id,
+                        };
                       } else if (value.navigate === 'refer') {
                         params.patient_details = {
                           doc_phone: data?.doctor_phone_number,
