@@ -935,6 +935,12 @@ const Visit = ({ navigation, route }) => {
                         params.gende = gende;
                       } else if (value.navigate === 'service_fees') {
                         params.consultation_fees = consultation_fees;
+                        params.feesDetails ={
+                          clinic_id: Clinic_id,
+                          patient_phone: patient_phone,
+                          doctor_phone_number:phone,
+                          appointment_id: appointment_id
+                        }
                       } else if (value.navigate === 'refer') {
                         params.patient_details = {
                           doc_phone: data?.doctor_phone_number,

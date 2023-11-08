@@ -1,10 +1,10 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useState, useEffect,useRef} from 'react';
+import { useSelector,useDispatch } from 'react-redux';
+import {View, StyleSheet, Text, TouchableOpacity,Alert} from 'react-native';
 
 import PrescriptionHead from '../components/prescriptionHead';
-import {HButton, InputText, SelectorBtn} from '../components';
+import {BottomSheetView, HButton, InputText, SelectorBtn, StatusMessage} from '../components';
 import {
   moderateScale,
   verticalScale,
@@ -19,30 +19,40 @@ import Seperator from '../components/seperator';
 import {Screen} from 'react-native-screens';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {commonstyles} from '../styles/commonstyle';
 import {
   addfees,
   updatefees,
 } from '../redux/features/prescription/prescriptionSlice';
 import ShowChip from '../components/showChip';
+import { URL } from '../utility/urls';
+import { fetchApi } from '../api/fetchApi';
+
 // import {Icon} from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OthersFees = ({navigation}) => {
+  // const token = useSelector(state => state.authenticate.auth.access);
+  const token = useSelector(state => state?.authenticate.auth.access);
   const dispatch = useDispatch();
+  const nav = useNavigation();
   const service_fees = useSelector(state => state.prescription.fees);
+  console.log('service',service_fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
   const [submittedFees, setSubmiitedFees] = useState([]);
   const [name, setName] = useState('');
   const [fees, setFees] = useState('');
-
+  const [data,setData] =  useState([])
+  const [loading, setLoading] = useState(false);
+  const {feesDetails} =route.params;
+  const id = feesDetails?.appointment_id;
+  console.log('id',submittedFees)
   let totalFees = parseInt(consultation_fees);
-
+  
   submittedFees?.forEach(item => {
     totalFees += parseInt(item.charge);
   });
-
   const handleAdd = () => {
     setSubmiitedFees([
       ...submittedFees,
@@ -52,25 +62,160 @@ const OthersFees = ({navigation}) => {
     setName('');
     setFees('');
   };
+  console.log('length',submittedFees?.length);
   const handleDispatch = () => {
-    dispatch(
-      addfees([
-        ...submittedFees,
-        {
-          service_name: `Consultation Fees`,
-          charge: parseInt(consultation_fees),
-        },
-        {totalFees: totalFees},
-      ]),
-    );
-    navigation.goBack();
+    
+    if (data) {
+      if (data?.length > 1) {
+        UpdateFees();
+        dispatch(
+          addfees([
+            ...submittedFees,
+            {totalFees: totalFees},
+          ]),
+        );
+      } else {
+        SaveFees();
+        dispatch(
+          addfees([
+            ...submittedFees,
+            {
+              service_name: `Consultation Fees`,
+              charge: parseInt(consultation_fees),
+            },
+            {totalFees: totalFees},
+          ]),
+        );
+        Alert.alert('Success', 'Fees details added successfully');
+      }
+    } else {
+      Alert.alert('Warning', 'Please Enter Correct Details');
+    }
+    
   };
+  const [apiStatus, setApiStatus] = useState({});
+
+  const SuccesRef = useRef(null);
+  useEffect(() => {
+    SuccesRef?.current?.snapToIndex(1);
+  }, []);
 
   const handleDelete = ind => {
     const updatefees = submittedFees?.filter((_, index) => index !== ind);
     setSubmiitedFees(updatefees);
   };
-  console.log('=========fees', service_fees);
+  
+  // console.log('=========fees',data);
+
+  const GetFees = async () => {
+    const response = await fetchApi(URL.updateFees(id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      const fees  = JSON.parse(jsonData?.data?.fees)
+      // fees?.map((item,ind)=>{
+      //   item?.service_name === 'Consultation Fees' ? fees?.shift() : ''
+      // })
+      const filtering = fees?.filter(item => item?.service_name === 'Consultation Fees' )
+     if (filtering?.length===1){
+      fees?.shift()
+     }
+      fees?.pop()
+      setSubmiitedFees(fees)
+      setData(JSON.parse(jsonData?.data?.fees))
+      // dispatch(addfees([jsonData?.data?.fees,...submittedFees]))
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    GetFees();
+  }, []);
+
+  const UpdateFees = async () => {
+    const updateFees = {
+      fees : JSON.stringify([...submittedFees,{totalFees:totalFees}]),
+      patient_phone_number :feesDetails?.patient_phone,
+      doctor_phone_number : feesDetails?.doctor_phone_number,
+      clinic_id : feesDetails?.clinic_id,
+      appointment_id : feesDetails?.appointment_id
+    };
+    try {
+      const response = await fetchApi(URL.updateFees(id), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(updateFees),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.status === 'success') {
+          Alert.alert('Success', jsonData?.message);
+          navigation.goBack();
+        } else {
+          Alert.alert('warn', jsonData?.message);
+        }
+      } else {
+        console.error('API call failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
+  const SaveFees = async () => {
+    const feeDetails = JSON.stringify([...submittedFees,{totalFees:totalFees}])
+    const FeesSaving = {
+      fees:feeDetails,
+      patient_phone_number :feesDetails?.patient_phone,
+      doctor_phone_number : feesDetails?.doctor_phone_number,
+      clinic_id : feesDetails?.clinic_id,
+      appointment_id : feesDetails?.appointment_id
+    }
+    setLoading(true);
+    try {
+      const response = await fetchApi(URL.savefees, {
+        method: 'POST',
+        headers: {
+          Prefer: '',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json, application/xml',
+        },
+        body: JSON.stringify(FeesSaving),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData) {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          SuccesRef?.current?.snapToIndex(1);
+          setTimeout(() => {
+            nav?.goBack();
+          }, 1000);
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          SuccesRef?.current?.snapToIndex(1);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      SuccesRef?.current?.snapToIndex(1);
+      console.error('Error occurred:', error);
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={{gap: moderateScale(16)}}>
@@ -162,6 +307,7 @@ const OthersFees = ({navigation}) => {
             label={'Add'}
             icon="plus"
             onPress={handleAdd}
+            // onPress={handleDispatch}
           />
         </View>
       </ScrollView>
@@ -170,6 +316,12 @@ const OthersFees = ({navigation}) => {
         onPress={handleDispatch}
         btnstyles={commonstyles.activebtn}
       />
+       <BottomSheetView
+        bottomSheetRef={SuccesRef}
+        snapPoints={'50%'}
+        backgroundStyle={'#fff'}>
+        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
+      </BottomSheetView>
     </View>
   );
 };
