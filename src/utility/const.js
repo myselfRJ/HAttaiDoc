@@ -3,39 +3,39 @@ export const CONSTANT = {
   ConsultationList: [
     // {label: 'Reason for visit', icon: 'chevron-right', navigate: 'complaints'},
 
-    {label: 'Symptoms', icon: 'chevron-right', navigate: 'symptoms'},
+    {label: 'Symptoms', icon: 'pencil', navigate: 'symptoms'},
     {
-      label: 'History Present Illness',
-      icon: 'chevron-right',
+      label: 'History of Present Illness',
+      icon: 'pencil',
       navigate: 'notescreen',
     },
-    {label: 'Diagnosis', icon: 'chevron-right', navigate: 'diagnosis'},
-    {label: 'Prescribe', icon: 'chevron-right', navigate: 'pres'},
-    {label: 'Test Prescribe', icon: 'chevron-right', navigate: 'labreport'},
+    {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
+    {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
+    {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
     {
       label: 'Report Findings',
-      icon: 'chevron-right',
+      icon: 'pencil',
       navigate: 'findings',
     },
-    {label: 'Follow-Up', icon: 'chevron-right', navigate: 'FollowUp'},
+    {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
     {
-      label: 'Additional Fees',
-      icon: 'chevron-right',
+      label: 'Fees',
+      icon: 'pencil',
       navigate: 'service_fees',
     },
     {
       label: 'Referral',
-      icon: 'chevron-right',
+      icon: 'pencil',
       navigate: 'refer',
     },
     {
       label: 'Medical History',
-      icon: 'chevron-right',
+      icon: 'pencil',
       navigate: 'medicalhistory',
     },
     {
       label: 'Physical Examinations',
-      icon: 'chevron-right',
+      icon: 'pencil',
       navigate: 'examination',
     },
 

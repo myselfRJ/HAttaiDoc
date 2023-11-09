@@ -26,11 +26,11 @@ import DocumentPicker from 'react-native-document-picker';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fileurl, URL} from '../utility/urls';
-import { fetchApi } from '../api/fetchApi';
+import {fetchApi} from '../api/fetchApi';
 import {useRoute} from '@react-navigation/native';
-import { stopUpload } from 'react-native-fs';
+import {stopUpload} from 'react-native-fs';
 import CustomIcon from '../components/icon';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -40,8 +40,9 @@ const ExaminationFindings = ({navigation}) => {
   const [describe, setDescribe] = useState('');
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
-  const [report,setreport] = useState()
-  const appointment_id = examinationDetails?.appointment_id; 
+  const [report, setreport] = useState();
+  const appointment_id = examinationDetails?.appointment_id;
+  console.log(appointment_id);
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const postData = async url => {
     const formData = new FormData();
@@ -74,17 +75,17 @@ const ExaminationFindings = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert("Success","Succesfully Saved")
+        Alert.alert('Success', 'Succesfully Saved');
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
-      Alert.alert("Error",`${error}`)
+      Alert.alert('Error', `${error}`);
       console.error('Error:', error);
     }
   };
 
-  const fetchReport= async () => {
+  const fetchReport = async () => {
     const response = await fetchApi(URL.get_reports(appointment_id), {
       method: 'GET',
       headers: {
@@ -93,10 +94,10 @@ const ExaminationFindings = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('report===',jsonData)
+      console.log('report===', jsonData);
       setValue(jsonData?.data?.finding);
-      setDescribe(jsonData?.data?.description)
-      setreport(jsonData?.data)
+      setDescribe(jsonData?.data?.description);
+      setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -106,11 +107,13 @@ const ExaminationFindings = ({navigation}) => {
     // SetUploadDocument(report_findings)
   }, []);
 
-  const report_findings = [{name:report?.file1 ? report?.file1 : null},
-     {name:report?.file2 ? report?.file2 : null},
-     {name:report?.file3 ? report?.file3 : null},
-    {name:report?.file4 ? report?.file4 : null},
-     {name:report?.file5 ? report?.file5 : null}]
+  const report_findings = [
+    {name: report?.file1 ? report?.file1 : null},
+    {name: report?.file2 ? report?.file2 : null},
+    {name: report?.file3 ? report?.file3 : null},
+    {name: report?.file4 ? report?.file4 : null},
+    {name: report?.file5 ? report?.file5 : null},
+  ];
 
   const apiUrl = URL.uploadExaminations;
 
@@ -217,9 +220,8 @@ const ExaminationFindings = ({navigation}) => {
   };
 
   const handleReports_Physical = filepath => {
-    const path = `${fileurl}${filepath}`
+    const path = `${fileurl}${filepath}`;
     if (filepath?.includes('pdf')) {
-      
       navigation.navigate('pdfhistory', {path});
     } else {
       navigation.navigate('img', {path});
@@ -266,66 +268,65 @@ const ExaminationFindings = ({navigation}) => {
           fontSize: CUSTOMFONTSIZE.h3,
         }}
       />
-      {
-        !report ? (
-          uploaddocument?.length > 0 ? (
-            <View style={{marginTop: verticalScale(16)}}>
-              {uploaddocument?.map((item, index) => (
-                <ShowChip
+      {!report ? (
+        uploaddocument?.length > 0 ? (
+          <View style={{marginTop: verticalScale(16)}}>
+            {uploaddocument?.map((item, index) => (
+              <ShowChip
+                key={index}
+                onPress={() => handleDelete(index)}
+                text={
+                  <>
+                    <Icon
+                      color={CUSTOMCOLOR.error}
+                      size={moderateScale(20)}
+                      name={
+                        item?.type === 'application/pdf'
+                          ? 'file-pdf-box'
+                          : 'image'
+                      }
+                    />{' '}
+                    {item?.name?.includes('temp')
+                      ? item?.name?.split('temp_')[1]?.toString()
+                      : item?.name}
+                  </>
+                }
+                main={{marginHorizontal: 0}}
+              />
+            ))}
+          </View>
+        ) : null
+      ) : report_findings?.length > 0 ? (
+        <View style={{marginTop: verticalScale(16)}}>
+          {report_findings?.map(
+            (item, index) =>
+              item?.name !== null && (
+                <TouchableOpacity
                   key={index}
-                  onPress={() => handleDelete(index)}
-                  text={
-                    <>
-                      <Icon
-                        color={CUSTOMCOLOR.error}
-                        size={moderateScale(20)}
-                        name={
-                          item?.type === 'application/pdf'
-                            ? 'file-pdf-box'
-                            : 'image'
-                        }
-                      />{' '}
-                      {item?.name?.includes('temp')
-                        ? item?.name?.split('temp_')[1]?.toString()
-                        : item?.name}
-                    </>
-                  }
-                  main={{marginHorizontal: 0}}
-                />
-              ))}
-            </View>
-          ) : null
-        )
-     :report_findings?.length > 0 ? (
-      <View style={{marginTop: verticalScale(16)}}>
-        {report_findings?.map((item, index) => (
-          item?.name !== null && (
-           <TouchableOpacity key = {index}  onPress={() => handleReports_Physical(item?.name)}>
-             <ShowChip
-            key={index}
-           
-            text={
-              <>
-                <Icon
-                  color={CUSTOMCOLOR.error}
-                  size={moderateScale(20)}
-                  name={
-                    item?.name?.includes('pdf')
-                      ? 'file-pdf-box'
-                      : 'image'
-                  }
-                />{' '}
-                
-                { item?.name}
-              </>
-            }
-            main={{marginHorizontal: 0}}
-          />
-           </TouchableOpacity>
-          )
-        ))}
-      </View>
-    ) : null }
+                  onPress={() => handleReports_Physical(item?.name)}>
+                  <ShowChip
+                    key={index}
+                    text={
+                      <>
+                        <Icon
+                          color={CUSTOMCOLOR.error}
+                          size={moderateScale(20)}
+                          name={
+                            item?.name?.includes('pdf')
+                              ? 'file-pdf-box'
+                              : 'image'
+                          }
+                        />{' '}
+                        {item?.name}
+                      </>
+                    }
+                    main={{marginHorizontal: 0}}
+                  />
+                </TouchableOpacity>
+              ),
+          )}
+        </View>
+      ) : null}
       <PlusButton
         size={moderateScale(40)}
         style={{
@@ -374,6 +375,6 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     flex: 1,
     gap: verticalScale(16),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
 });

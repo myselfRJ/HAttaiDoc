@@ -127,7 +127,7 @@ const ProtectedRoute = () => {
         component={OthersFees}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Service Charges',
+          title: 'Fees',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

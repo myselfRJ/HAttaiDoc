@@ -61,8 +61,9 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
- console.log('rate',vitalsData);
+  console.log('rate', vitalsData);
   const note = useSelector(state => state.prescription.note);
+  console.log('=====note', note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
@@ -291,7 +292,7 @@ const Visit = ({navigation, route}) => {
   useEffect(() => {
     fetchVitals();
   }, []);
-  console.log('======service', service_fees);
+  const [serviceFees, setServiceFees] = useState([]);
   const GetFees = async () => {
     const response = await fetchApi(URL.updateFees(appointment_id), {
       method: 'GET',
@@ -301,10 +302,11 @@ const Visit = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      
+
       if (jsonData?.data?.fees) {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
+        setServiceFees(fees);
       } else {
         dispatch(
           addfees([
@@ -322,6 +324,25 @@ const Visit = ({navigation, route}) => {
   };
   useEffect(() => {
     GetFees();
+  }, []);
+  const [report, setreport] = useState({});
+  const fetchReport = async () => {
+    const response = await fetchApi(URL.get_reports(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setreport(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchReport();
+    // SetUploadDocument(report_findings)
   }, []);
   const months = CONSTANTS.months;
 
@@ -589,9 +610,10 @@ const Visit = ({navigation, route}) => {
                     <th style=" padding: 8px; text-align: center;">Duration</th>
                     <th style=" padding: 8px; text-align: center;">Quantity</th>
                 </tr>
-                ${prescribe?.map(
-                  (item, index) =>
-                    `<tr>
+                ${prescribe
+                  ?.map(
+                    (item, index) =>
+                      `<tr>
                   <td style="padding: 8px; text-align: center;font-size:16x;">${
                     parseInt(index) + 1
                   }</td>
@@ -611,7 +633,8 @@ const Visit = ({navigation, route}) => {
                     item?.total_quantity
                   }</td>
               </tr>`,
-                ).join('')}
+                  )
+                  .join('')}
             </table>
             </div>
             </div>
@@ -730,9 +753,10 @@ const Visit = ({navigation, route}) => {
         <th style="padding: 8px; text-align: start; width: 20%;">Service Name</th>
         <th style="padding: 8px; text-align: start; width:20%">Amount</th>
     </tr>
-                        ${service_fees?.map((item, index) =>
-                          item?.service_name
-                            ? `<tr>
+                        ${service_fees
+                          ?.map((item, index) =>
+                            item?.service_name
+                              ? `<tr>
                           <td style="padding: 8px; text-align: start;font-size:16x;width: 10%">${
                             parseInt(index) + 1
                           }</td>
@@ -744,8 +768,9 @@ const Visit = ({navigation, route}) => {
                           }</td>
                           
                       </tr>`
-                            : ''
-                        ).join('')}           
+                              : '',
+                          )
+                          .join('')}           
                     </table>
                     <p style="margin-left: 48%;font-weight:700;font-size:16px";>Total : Rs.
                     ${charge ? charge[charge && 'totalFees'] : ''}</p>
@@ -968,7 +993,9 @@ const Visit = ({navigation, route}) => {
                       `Temp: ${
                         vitalsData?.body_temperature
                       }${String.fromCharCode(8451)}`}{' '}
-                    {vitalsData?.others?.length>0 ? `${lastKey} : ${lastValue}` : null}
+                    {vitalsData?.others?.length > 0
+                      ? `${lastKey} : ${lastValue}`
+                      : null}
                   </Text>
                 )}
 
@@ -1014,6 +1041,52 @@ const Visit = ({navigation, route}) => {
                   <VisitOpen
                     label={value.label}
                     icon={value.icon}
+                    doneIcon={
+                      (value?.label === 'Fees' && serviceFees?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Symptoms' && Symptom?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'History of Present Illness' &&
+                      Prescribe?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Diagnosis' && diagnosis?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Test Prescribe' &&
+                      labreport?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Follow-Up' && date?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Medical History' &&
+                      pasthistory?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'History of Present Illness' &&
+                      note?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Report Findings' && report
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Referral' && selectedDoctor?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Medical History' &&
+                      (commor?.length > 0 ||
+                        socialHistory?.length > 0 ||
+                        familyHistory?.length > 0 ||
+                        medicationHistory ||
+                        pasthistory ||
+                        menstrualHistory ||
+                        obstericHistory)
+                        ? 'check-circle'
+                        : '')
+                    }
                     // navigate={() =>
                     //   navigation.navigate(
                     //     value.navigate,
@@ -1265,16 +1338,17 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'History Present Illness' && note !== '' && (
-                    <View style={styles.complaintcontainer}>
-                      <Icon
-                        name="file-document-edit"
-                        color={CUSTOMCOLOR.primary}
-                        size={moderateScale(16)}
-                      />
-                      <Text style={styles.pulse}>{note}</Text>
-                    </View>
-                  )}
+                  {value.label === 'History of Present Illness' &&
+                    note !== '' && (
+                      <View style={styles.complaintcontainer}>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{note}</Text>
+                      </View>
+                    )}
                   {/* {value.label === 'Diagnosis' && diagnosis !== '' && 
                     
                      {diagnosis.map((item,index)=>{

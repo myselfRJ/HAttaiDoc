@@ -256,6 +256,7 @@ const ReferToDoctor = () => {
   };
 
   const handlePreview = async () => {
+    handleAddDoctors();
     if (sug?.length === 0 || !sug) {
       StoreAsyncData('referals', [
         {

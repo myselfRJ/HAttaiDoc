@@ -142,7 +142,9 @@ const PatientSearch = ({navigation}) => {
   );
   useFocusEffect(
     React.useCallback(() => {
-      fetchData();
+      if (clinicID) {
+        fetchData();
+      }
     }, [clinicID]),
   );
   const [show, setShow] = useState(false);
