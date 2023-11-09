@@ -549,7 +549,7 @@ export default function Prescribe1({navigation}) {
         </View>
         <View>
           <Text style={styles.ModeText}>
-            {Language[language]['duration']}(inDays)
+            {Language[language]['duration']}
           </Text>
           <View style={styles.radiogroup}>
             <Option
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(4),
 
     paddingVertical: verticalScale(8),
-    fontWeight: 500,
+    fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
   },

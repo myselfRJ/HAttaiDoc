@@ -381,11 +381,13 @@ const AddClinic = ({navigation}) => {
   const handleTypeSelect = value => {
     setConsultValue(value);
     slotTypeRef?.current?.snapToIndex(0);
+    setShows(!shows)
   };
 
   const handleDurationSelect = value => {
     setDurationValue(value);
     slotDurationRef?.current?.snapToIndex(0);
+    setShowDuration(!showduration)
   };
   const [weekdays, setWeekdays] = useState({
     M: 'Monday',
@@ -700,7 +702,8 @@ const AddClinic = ({navigation}) => {
       Alert.alert('Warning', '"Please Enter All Details"');
     }
   };
-
+const [shows,setShows] = useState(false);
+const [showduration,setShowDuration] = useState(false)
   return (
     <View
       style={{
@@ -942,24 +945,61 @@ const AddClinic = ({navigation}) => {
                   </View>
 
                   <View style={styles.selector}>
+                    <View>
                     <SelectorBtn
                       select={styles.select1}
                       label="Type"
-                      name="chevron-down"
+                      name={shows === true ? "chevron-up" : "chevron-down"}
                       onPress={() => {
-                        slotTypeRef?.current?.snapToIndex(1);
+                        // slotTypeRef?.current?.snapToIndex(1);
+                        setShows(!shows)
                       }}
                       input={selectedConsultValue}
                     />
+                   
+                 
+                    {shows &&(
+                      consultType?.length>0 ? (
+                        <View style={{borderWidth:0.5,borderColor:CUSTOMCOLOR.primary,borderRadius:moderateScale(1)}}>
+                        {consultType?.map((item,index)=>(
+                         
+                          <TouchableOpacity style={{paddingHorizontal:horizontalScale(8),paddingVertical:verticalScale(8)}}
+                          onPress={() => handleTypeSelect(item)}>
+                            <Text style={{color:CUSTOMCOLOR.black,fontSize:CUSTOMFONTSIZE.h3}}>{item}</Text>
+                          </TouchableOpacity>
+                         
+                        ))}
+                        </View>
+                      ):null
+                    )}
+                    
+                    </View>
+                    <View>
                     <SelectorBtn
                       select={styles.select1}
                       label="Duration"
-                      name="chevron-down"
+                      name= {showduration === true ? "chevron-up" : "chevron-down"}
                       onPress={() => {
-                        slotDurationRef?.current?.snapToIndex(1);
+                        // slotDurationRef?.current?.snapToIndex(1);
+                        setShowDuration(!showduration)
                       }}
                       input={<Text>{selectedDurationValue} Mins</Text>}
                     />
+                      {showduration &&(
+                      durationMins?.length>0 ? (
+                        <View style={{borderWidth:0.5,borderColor:CUSTOMCOLOR.primary,borderRadius:moderateScale(1)}}>
+                        {durationMins?.map((item,index)=>(
+                         
+                          <TouchableOpacity style={{paddingHorizontal:horizontalScale(16),paddingVertical:verticalScale(4)}}
+                          onPress={() => handleDurationSelect(item)}>
+                            <Text style={{color:CUSTOMCOLOR.black,fontSize:CUSTOMFONTSIZE.h3}}>{item}</Text>
+                          </TouchableOpacity>
+                         
+                        ))}
+                        </View>
+                      ):null
+                    )}
+                  </View>
                   </View>
                   <View style={{alignItems: 'flex-end'}}>
                     <HButton

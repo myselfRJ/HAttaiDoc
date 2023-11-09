@@ -80,6 +80,7 @@ const UpdateProfile = ({navigation}) => {
     gender: 'male',
     medical_number: '',
     experience: '',
+    degree: '',
   });
 
   const [status, setStatus] = useState(false);
@@ -273,6 +274,7 @@ const UpdateProfile = ({navigation}) => {
         gender: jsonData?.data?.gender,
         medical_number: jsonData?.data?.medical_number,
         experience: jsonData?.data?.experience,
+        degree: jsonData?.data?.degree,
       });
       setSelectedSpeciality(jsonData?.data?.specialization);
       setSelectedImage(jsonData?.data?.profile_pic_url);
@@ -310,6 +312,7 @@ const UpdateProfile = ({navigation}) => {
         : data?.medical_doc_url,
       pan_doc_url: pan ? pan?.uri : '',
       latest_doc_url: latestRecord ? latestRecord?.uri : '',
+      degree: values.degree
     };
     try {
       setLoading(true);
@@ -464,7 +467,13 @@ const UpdateProfile = ({navigation}) => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             /> */}
-
+                <InputText
+          inputContainer={{paddingHorizontal: moderateScale(0)}}
+          label='Degree'
+          placeholder="Eg : MBBS"
+          value={values.degree}
+          setValue={value => handleChangeValue('degree', value)}
+        />
             <SelectorBtn
               required={true}
               label={Language[language]['specialization']}

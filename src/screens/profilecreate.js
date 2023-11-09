@@ -82,6 +82,7 @@ const ProfileCreate = ({navigation}) => {
     gender: 'male',
     medical_number: '',
     experience: '',
+    degree:'',
   });
 
   const [status, setStatus] = useState(false);
@@ -228,6 +229,7 @@ const ProfileCreate = ({navigation}) => {
     pan_doc_url: '',
     latest_doc_url: '',
     pharmacyPhone: '',
+    degree: values.degree
   };
 
   const fetchData = async () => {
@@ -427,6 +429,13 @@ const ProfileCreate = ({navigation}) => {
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             /> */}
+              <InputText
+          inputContainer={{paddingHorizontal: moderateScale(0)}}
+          label='Degree'
+          placeholder="Eg : MBBS"
+          value={values.degree}
+          setValue={value => handleChangeValue('degree', value)}
+        />
         <View style={styles.specialization}>
           <SelectorBtn
             required={true}

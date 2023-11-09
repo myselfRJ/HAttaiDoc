@@ -476,7 +476,7 @@ const Visit = ({navigation, route}) => {
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${Symptom?.map(
-                                item => item?.symptom,
+                                item => item?.symptom.join(' ')
                               )}</p>
                           </div>`
                             : ''
@@ -756,6 +756,19 @@ const Visit = ({navigation, route}) => {
                         justify-content: center;
                         margin-top: 84px;">
                             <div>
+                            <p id='values2'  style="  font-weight: 400;
+                            font-size: 16px;
+                            color:#000000;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding-bottom: 32px;
+                            line-height: 4px;">
+                            This presctiption has been electronically signed by  Dr. ${data?.doctor_name}, ${data?.degree}. Reg: ${data?.medical_number} on ${
+                              new Date().toISOString().split('T')[0]
+                            } at ${new Date().toString().split(' ')[4]}</p>
+
+
                             <p id='values2'  style="  font-weight: 300;
                             font-size: 14px;
                             color:#000000;

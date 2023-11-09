@@ -360,7 +360,7 @@ export const CONSTANTS = {
     'Rheumatology',
   ],
   consultTypes: ['In clinic', 'Telephonic'],
-  duration: [10, 15, 20, 25, 30],
+  duration: [5,10, 15, 20, 25, 30, 45, 60],
   abhaOption: ["Don't Have ABHA_ID", 'Have ABHA_ID'],
   role: ['Receptionist', 'Administrator', 'Others'],
   clinic: ['Rasi Clinic', 'Magizh Clinic', 'Kamatchi Clinic'],
