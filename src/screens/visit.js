@@ -63,6 +63,7 @@ const Visit = ({navigation, route}) => {
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   console.log('rate', vitalsData);
   const note = useSelector(state => state.prescription.note);
+  console.log('=====note', note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
@@ -323,6 +324,25 @@ const Visit = ({navigation, route}) => {
   };
   useEffect(() => {
     GetFees();
+  }, []);
+  const [report, setreport] = useState({});
+  const fetchReport = async () => {
+    const response = await fetchApi(URL.get_reports(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setreport(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchReport();
+    // SetUploadDocument(report_findings)
   }, []);
   const months = CONSTANTS.months;
 
@@ -1032,6 +1052,26 @@ const Visit = ({navigation, route}) => {
                       (value?.label === 'Medical History' &&
                       pasthistory?.length > 0
                         ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'History of Present Illness' &&
+                      note?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Report Findings' && report
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Referral' && selectedDoctor?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Medical History' &&
+                      (commor?.length > 0 ||
+                        socialHistory?.length > 0 ||
+                        familyHistory?.length > 0 ||
+                        medicationHistory ||
+                        pasthistory ||
+                        menstrualHistory ||
+                        obstericHistory)
+                        ? 'check-circle'
                         : '')
                     }
                     // navigate={() =>
@@ -1285,16 +1325,17 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'History Present Illness' && note !== '' && (
-                    <View style={styles.complaintcontainer}>
-                      <Icon
-                        name="file-document-edit"
-                        color={CUSTOMCOLOR.primary}
-                        size={moderateScale(16)}
-                      />
-                      <Text style={styles.pulse}>{note}</Text>
-                    </View>
-                  )}
+                  {value.label === 'History of Present Illness' &&
+                    note !== '' && (
+                      <View style={styles.complaintcontainer}>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{note}</Text>
+                      </View>
+                    )}
                   {/* {value.label === 'Diagnosis' && diagnosis !== '' && 
                     
                      {diagnosis.map((item,index)=>{
