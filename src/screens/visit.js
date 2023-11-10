@@ -462,23 +462,22 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
                         </div>
-                        ${
-                          Symptom?.length > 0
-                            ? `<div class='subContaioner'  style="  display: flex;
-                          flex-direction: row;
-                          gap: 8px;
-                          line-height:4px;">
-                              <p id='subhead' style="font-weight: 400px;
-                              font-size: 16px;
-                              color:#4ba5fa;">Symptoms:</p>
-                              <p id='values' style=" font-weight: 300px;
-                              font-size: 16px;
-                              color:#000000;">${Symptom?.map(
-                                item => item?.symptom,
-                              )}</p>
-                          </div>`
-                            : ''
-                        }
+                        ${Symptom?.length > 0
+                          ? `<div class='subContaioner' style="display: flex;
+                              flex-direction: row;
+                              gap: 8px;
+                              line-height:4px;">
+                                <p id='subhead' style="font-weight: 400px;
+                                  font-size: 16px;
+                                  color:#4ba5fa;">Symptoms:</p>
+                                <p id='values' style="font-weight: 300px;
+                                  font-size: 16px;
+                                  color:#000000;">
+                                  ${Symptom?.map(item => item?.symptom).join(',  ')}
+                                </p>
+                            </div>`
+                          : ''}
+                        
                         ${
                           vitalsData?.pulse_rate ||
                           vitalsData?.weight ||
@@ -567,8 +566,8 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${diagnosis?.map(
-                              item => item?.diagnosis,
-                            )}</p>
+                              item => item?.diagnosis).join(',  ')
+                            }</p>
                         </div>`
                            : ''
                        }
@@ -644,8 +643,7 @@ const Visit = ({navigation, route}) => {
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${labreport?.map(
-                                (item, ind) => item?.lab_test,
-                              )}</p>
+                                (item, ind) => item?.lab_test).join(',  ')}</p>
                           </div>`
                             : ''
                         }
@@ -706,16 +704,24 @@ const Visit = ({navigation, route}) => {
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            padding-bottom: 32px;
                             line-height: 4px;">
-                            This presctiption has been electronically signed by  Dr. ${
-                              data?.doctor_name
-                            }, ${data?.degree}. Reg: ${
-          data?.medical_number
-        } on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
-          ?.toString()
-          ?.split(' ')[4]
-          ?.toString()}</p>
+                            This presctiption has been electronically signed by</p>
+          <p id='values2'  style="  font-weight: 400;
+          font-size: 16px;
+          color:#000000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-bottom: 32px;
+          line-height: 4px;">
+          Dr. ${
+            data?.doctor_name
+          }, ${data?.degree}. Reg: ${
+data?.medical_number
+} on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
+?.toString()
+?.split(' ')[4]
+?.toString()}</p>
 
 
                             <p id='values2'  style="  font-weight: 300;
