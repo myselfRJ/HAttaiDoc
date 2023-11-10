@@ -143,9 +143,11 @@ const ReferToDoctor = () => {
                   data?.doctor_name
                 } ,  ${data?.doctor_phone_number}.</p>
                 <p style="margin: 0;text-align: center">powered by</p>
+                <div  style="display: flex; justify-content: center; align-items: center;">
                 <img style="height: 50px;width:120px" src="${
                   CONSTANTS.pdf_footer
                 }" style="float: center; margin-right: 10px;margin-top: 36px" alt="Image Description">
+                </div>
             </footer>
         </body>
         </html>
