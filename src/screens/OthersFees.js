@@ -72,11 +72,12 @@ const OthersFees = ({navigation}) => {
   const handleDispatch = () => {
     dispatch(
       updatefees([
-        ...submittedFees,
         {
           service_name: `Consultation Fees`,
           charge: parseInt(consultation_fees),
         },
+        ...submittedFees,
+        ,
         {totalFees: totalFees},
       ]),
     );
@@ -180,6 +181,10 @@ const OthersFees = ({navigation}) => {
 
   const SaveFees = async () => {
     const feeDetails = JSON.stringify([
+      {
+        service_name: `Consultation Fees`,
+        charge: parseInt(consultation_fees),
+      },
       ...submittedFees,
       {totalFees: totalFees},
     ]);

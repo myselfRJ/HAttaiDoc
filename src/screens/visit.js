@@ -61,12 +61,13 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
-  console.log('rate', vitalsData);
+  console.log('indra==================>', vitalsData);
   const note = useSelector(state => state.prescription.note);
-  console.log('=====note', note);
+  console.log('=====note', selectedComplaint);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
+  console.log('=====note', selectedComplaint);
   const selectedDoctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
@@ -202,30 +203,6 @@ const Visit = ({navigation, route}) => {
   useEffect(() => {
     fetchDoctor();
   }, []);
-
-  const handlePreview = async () => {
-    const prevScreen = 'visit';
-    const doc_phone = data?.doctor_phone_number;
-    setPrevLoad(true);
-    const path =
-      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
-    createPDF();
-    if (await PermmisionStorage()) {
-      setTimeout(() => {
-        navigation.navigate('pdf', {
-          path,
-          consultationData,
-          UpdateVitals,
-          UpdateComplaint,
-          appointment_id,
-          doc_phone,
-          patient_phone,
-          prevScreen,
-        });
-        setPrevLoad(false);
-      }, 2000);
-    }
-  };
 
   const UpdateVitals = {
     pulse_rate: vitalsData?.pulse_rate,
@@ -365,8 +342,8 @@ const Visit = ({navigation, route}) => {
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
+
       let options = {
-        //Content to print
         html: `<!DOCTYPE html>
         <html>
             <head>
@@ -445,13 +422,13 @@ const Visit = ({navigation, route}) => {
                     <div class='address' style="flex-direction: column; margin-left: 16px;">
                        
                             <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">Dr.${
-                              data.doctor_name
+                              data?.doctor_name
                             }</p>
                             <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">${
-                              data.specialization
+                              data?.specialization
                             }</p>
                             <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">Regd No:${
-                              data.medical_number
+                              data?.medical_number
                             }</p>
                       </div>
                         <div class='namecontaioner' style="margin-left: 230px; text-align: right;">
@@ -497,7 +474,7 @@ const Visit = ({navigation, route}) => {
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${Symptom?.map(
-                                item => item?.symptom.join(' ')
+                                item => item?.symptom,
                               )}</p>
                           </div>`
                             : ''
@@ -655,49 +632,6 @@ const Visit = ({navigation, route}) => {
                         </div>`
                        : ''
                    }
-        
-                       ${
-                         selectedDoctor?.length
-                           ? ` <div >
-                        <p id='subhead' style="font-weight: 400px;
-                        font-size: 16px;
-                        color:#4ba5fa;">Refer a Doctor:</p>
-                        ${selectedDoctor?.map(
-                          (
-                            item,
-                            ind,
-                          ) => `<div class='vitalscontaioner' style=" display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        margin-left: 8px;
-                        line-height: 2px;">
-                            <p id='values1' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Name:</p>
-                            <p id='values' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">${
-                              item?.dr_name?.length > 0
-                                ? `Dr.${item?.dr_name},${item?.doctor_or_name}`
-                                : `Dr.${item?.doctor_or_name}`
-                            }</p>
-                            <p id='values1' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Specialist:</p>
-                            <p id='values' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">${item?.speciality}</p>
-                            <p id='values1' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Ph:</p>
-                            <p id='values' style="  font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">${item?.phone}</p>
-                        </div>`,
-                        )}
-                    </div>`
-                           : ''
-                       }
                         ${
                           labreport?.length > 0
                             ? `<div class='subContaioner' style="  display: flex;
@@ -728,21 +662,6 @@ const Visit = ({navigation, route}) => {
                               <p id='values'  style=" font-weight: 300px;
                               font-size: 16px;
                               color:#000000;">${date}</p>
-                          </div>`
-                            : ''
-                        }
-                        ${
-                          dateTimeRed?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
-                          flex-direction: row;
-                          gap: 8px;
-                          line-height:4px; ">
-                              <p id='subhead' style="font-weight: 400px;
-                              font-size: 16px;
-                              color:#4ba5fa;">Validity Upto:</p>
-                              <p id='values' style=" font-weight: 300px;
-                              font-size: 16px;
-                              color:#000000;">${dateTimeRed}</p>
                           </div>`
                             : ''
                         }
@@ -789,9 +708,14 @@ const Visit = ({navigation, route}) => {
                             justify-content: center;
                             padding-bottom: 32px;
                             line-height: 4px;">
-                            This presctiption has been electronically signed by  Dr. ${data?.doctor_name}, ${data?.degree}. Reg: ${data?.medical_number} on ${
-                              new Date().toISOString().split('T')[0]
-                            } at ${new Date().toString().split(' ')[4]}</p>
+                            This presctiption has been electronically signed by  Dr. ${
+                              data?.doctor_name
+                            }, ${data?.degree}. Reg: ${
+          data?.medical_number
+        } on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
+          ?.toString()
+          ?.split(' ')[4]
+          ?.toString()}</p>
 
 
                             <p id='values2'  style="  font-weight: 300;
@@ -831,11 +755,34 @@ const Visit = ({navigation, route}) => {
         directory: 'docs',
       };
       let file = await RNHTMLtoPDF.convert(options);
+      console.log('indra');
       console.log(file.filePath);
       setFilePath(file.filePath);
     }
   };
-
+  const handlePreview = async () => {
+    const prevScreen = 'visit';
+    const doc_phone = data?.doctor_phone_number;
+    setPrevLoad(true);
+    const path =
+      'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
+    createPDF();
+    if (await PermmisionStorage()) {
+      setTimeout(() => {
+        navigation.navigate('pdf', {
+          path,
+          consultationData,
+          UpdateVitals,
+          UpdateComplaint,
+          appointment_id,
+          doc_phone,
+          patient_phone,
+          prevScreen,
+        });
+        setPrevLoad(false);
+      }, 2000);
+    }
+  };
   const handlePDf = async () => {
     createPDF();
     if (await isPermitted()) {
@@ -1046,6 +993,9 @@ const Visit = ({navigation, route}) => {
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Symptoms' && Symptom?.length > 0
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Prescribe' && Prescribe?.length > 0
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'History of Present Illness' &&

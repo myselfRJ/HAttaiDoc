@@ -76,7 +76,6 @@ export default function Prescribe1({navigation}) {
   // console.log('duration', mgs);
   // console.log('medicine111',newMedicine);
 
-    
   const handleAddPrescribe = () => {
     if (newMedicine?.length > 1) {
       // const new1 = newMedicine?.filter((item)=> item?.term)
@@ -84,14 +83,16 @@ export default function Prescribe1({navigation}) {
       console.log('medicine', newmed);
       setMedicine(newmed);
     }
-    
+
     dispatch(
       addPrescribe([
         ...prevPres,
         {
-          medicine: medicine?.includes('mg' || 'ml' || 'g') ? medicine : `${medicine} ${mgs}`,
+          medicine: medicine?.includes('mg' || 'ml' || 'g')
+            ? medicine
+            : `${medicine} ${mgs}`,
           mode: mode,
-          dose_quantity: "",
+          dose_quantity: '',
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
@@ -131,8 +132,8 @@ export default function Prescribe1({navigation}) {
   const setMedicineValue = value => {
     setMedicine(value);
     selectedMedicine(value);
-    setselectedGeneric(!setgeneric);
-    setSelectedMgs(!setmgs);
+    setselectedGeneric(true);
+    setSelectedMgs(true);
   };
 
   const setMG = value => {
@@ -218,7 +219,7 @@ export default function Prescribe1({navigation}) {
   // console.log('filter values=====>', filtered);
   useEffect(() => {
     if (medicine) {
-      const filtered = [...data,...CONSTANTS.medicine]?.filter(
+      const filtered = [...data, ...CONSTANTS.medicine]?.filter(
         item =>
           item?.term &&
           item?.term.toLowerCase().includes(medicine.toLowerCase()),
@@ -238,7 +239,6 @@ export default function Prescribe1({navigation}) {
       !data?.find(item => item.term.toLowerCase() === medicine.toLowerCase())
     ) {
       setnewMedicine([{term: medicine}]);
-      
     } else {
       setnewMedicine(null);
     }
@@ -548,9 +548,7 @@ export default function Prescribe1({navigation}) {
           </View>
         </View>
         <View>
-          <Text style={styles.ModeText}>
-            {Language[language]['duration']}
-          </Text>
+          <Text style={styles.ModeText}>{Language[language]['duration']}</Text>
           <View style={styles.radiogroup}>
             <Option
               label="days"

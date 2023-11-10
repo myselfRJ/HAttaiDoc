@@ -55,7 +55,7 @@ const VitalScreen = ({route, props}) => {
   const handleDate = () => {
     setOpen(!open);
   };
-
+  const vitalsData = useSelector(state => state.prescription.vitalsData);
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = selectedDate?.toISOString().split('T')[0];
