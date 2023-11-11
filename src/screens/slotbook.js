@@ -561,6 +561,7 @@ const SlotBook = ({navigation, route}) => {
             onPress={() => handleOptions('TelePhonic')}
           />
         </View>
+        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>Appointment Type{' '}<Text style={{color:'red',fontSize:CUSTOMFONTSIZE.h4}}>*</Text></Text>
         <View style={styles.selection}>
           {selections?.map((val, ind) => (
             <View key={ind}>
