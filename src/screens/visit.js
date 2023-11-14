@@ -36,7 +36,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import Prescribe1 from './prescibe1';
-
+import {useFocusEffect} from '@react-navigation/native';
 import {
   UpadteVitals,
   UpadateCheifComplaint,
@@ -61,7 +61,8 @@ const Visit = ({navigation, route}) => {
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
-  console.log('indra==================>', vitalsData);
+  const physical = useSelector(state => state.prescription.physicalExamination);
+  console.log('indra==================>', physical);
   const note = useSelector(state => state.prescription.note);
   console.log('=====note', selectedComplaint);
   const selectedComplaint = useSelector(
@@ -140,9 +141,6 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchPatientData();
-  }, []);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
   useEffect(() => {
@@ -200,9 +198,6 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchDoctor();
-  }, []);
 
   const UpdateVitals = {
     pulse_rate: vitalsData?.pulse_rate,
@@ -247,9 +242,6 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchComplaint();
-  }, []);
 
   const fetchVitals = async () => {
     const response = await fetchApi(URL.updatevitlas(appointment_id), {
@@ -266,9 +258,7 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchVitals();
-  }, []);
+
   const [serviceFees, setServiceFees] = useState([]);
   const GetFees = async () => {
     const response = await fetchApi(URL.updateFees(appointment_id), {
@@ -299,9 +289,6 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    GetFees();
-  }, []);
   const [report, setreport] = useState({});
   const fetchReport = async () => {
     const response = await fetchApi(URL.get_reports(appointment_id), {
@@ -319,8 +306,23 @@ const Visit = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchReport();
+    fetchPatientData();
+    GetFees();
+    fetchVitals();
+    fetchComplaint();
+    fetchDoctor();
     // SetUploadDocument(report_findings)
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchReport();
+      fetchPatientData();
+      GetFees();
+      fetchVitals();
+      fetchComplaint();
+      fetchDoctor();
+    }, []),
+  );
   const months = CONSTANTS.months;
 
   const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : '';
@@ -462,8 +464,9 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             color:#000000;">${selectedComplaint}</p>
                         </div>
-                        ${Symptom?.length > 0
-                          ? `<div class='subContaioner' style="display: flex;
+                        ${
+                          Symptom?.length > 0
+                            ? `<div class='subContaioner' style="display: flex;
                               flex-direction: row;
                               gap: 8px;
                               line-height:4px;">
@@ -473,10 +476,13 @@ const Visit = ({navigation, route}) => {
                                 <p id='values' style="font-weight: 300px;
                                   font-size: 16px;
                                   color:#000000;">
-                                  ${Symptom?.map(item => item?.symptom).join(',  ')}
+                                  ${Symptom?.map(item => item?.symptom).join(
+                                    ',  ',
+                                  )}
                                 </p>
                             </div>`
-                          : ''}
+                            : ''
+                        }
                         
                         ${
                           vitalsData?.pulse_rate ||
@@ -565,9 +571,9 @@ const Visit = ({navigation, route}) => {
                             color:#4ba5fa;">Diagnosis:</p>
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
-                            color:#000000;">${diagnosis?.map(
-                              item => item?.diagnosis).join(',  ')
-                            }</p>
+                            color:#000000;">${diagnosis
+                              ?.map(item => item?.diagnosis)
+                              .join(',  ')}</p>
                         </div>`
                            : ''
                        }
@@ -642,8 +648,9 @@ const Visit = ({navigation, route}) => {
                               color:#4ba5fa;">Test Prescribed:</p>
                               <p id='values' style=" font-weight: 300px;
                               font-size: 16px;
-                              color:#000000;">${labreport?.map(
-                                (item, ind) => item?.lab_test).join(',  ')}</p>
+                              color:#000000;">${labreport
+                                ?.map((item, ind) => item?.lab_test)
+                                .join(',  ')}</p>
                           </div>`
                             : ''
                         }
@@ -714,14 +721,12 @@ const Visit = ({navigation, route}) => {
           justify-content: center;
           padding-bottom: 32px;
           line-height: 4px;">
-          Dr. ${
-            data?.doctor_name
-          }, ${data?.degree}. Reg: ${
-data?.medical_number
-} on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
-?.toString()
-?.split(' ')[4]
-?.toString()}</p>
+          Dr. ${data?.doctor_name}, ${data?.degree}. Reg: ${
+          data?.medical_number
+        } on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
+          ?.toString()
+          ?.split(' ')[4]
+          ?.toString()}</p>
 
 
                             <p id='values2'  style="  font-weight: 300;
@@ -1040,6 +1045,9 @@ data?.medical_number
                         pasthistory ||
                         menstrualHistory ||
                         obstericHistory)
+                        ? 'check-circle'
+                        : '') ||
+                      (value?.label === 'Physical Examinations' && physical
                         ? 'check-circle'
                         : '')
                     }
