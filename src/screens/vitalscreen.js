@@ -33,6 +33,7 @@ import {validateInput} from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
 const VitalScreen = ({route, props}) => {
+  const vitalsData = useSelector(state => state.prescription.vitalsData);
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -51,16 +52,16 @@ const VitalScreen = ({route, props}) => {
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
   const {gende} = route.params;
-  console.log('gender=', gende);
   const handleDate = () => {
     setOpen(!open);
   };
-  const vitalsData = useSelector(state => state.prescription.vitalsData);
+
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = selectedDate?.toISOString().split('T')[0];
-    console.log('date formate', updateLDD);
-    lmpChange(updateLDD);
+    setLDD(updateLDD);
+    const updateEDD = handleEdd(selectedDate);
+    setEdd(updateEDD);
   };
   const handleCancel = () => {
     setOpen(open);
@@ -72,102 +73,34 @@ const VitalScreen = ({route, props}) => {
   }`;
   const [othresKey, setOthersKey] = useState('');
   const [othersValue, setOthersValue] = useState('');
-  const [vitals, setVitals] = useState({
-    pulse_rate: '',
-    weight: '',
-    height: '',
-    body_temperature: '',
-    rate: '',
-    bmi: '',
-    diastolic: '',
-    systolic: '',
-    LDD: '',
-    EDD: '',
-    oxygen_level: '',
-    others: {},
-  });
 
-  useEffect(() => {
-    updateOthersVitals();
-  }, [othresKey, othersValue]);
+  const [pulse, setPulse] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setheight] = useState('');
 
-  const handlePress = () => {
-    console.log('=vitals', vitals);
-    setTimeout(() => {
-      dispatch(addVitals(vitals));
-      nav.goBack();
-    }, 500);
-  };
-  const PulseChange = text => {
-    const updatedVitals = {...vitals, pulse_rate: text};
-    setVitals(updatedVitals);
-  };
-  const weightChange = text => {
-    const updatedVitals = {...vitals, weight: text};
-    setVitals(updatedVitals);
-  };
-  const heightChange = text => {
-    const updatedVitals = {...vitals, height: text};
-    setVitals(updatedVitals);
-  };
-  const tempChange = text => {
-    const updatedVitals = {...vitals, body_temperature: text};
-    setVitals(updatedVitals);
-  };
-  const spo2Change = text => {
-    const updatedVitals = {...vitals, oxygen_level: text};
-    setVitals(updatedVitals);
-  };
-  const rateChange = text => {
-    const updatedVitals = {...vitals, rate: text};
-    setVitals(updatedVitals);
-  };
+  const [temp, setTemp] = useState('');
+  const [bmi, setBmi] = useState();
+  const [rate, setRate] = useState('');
+  const [diastolic, setdiastolic] = useState('');
+  const [systolic, setsystolic] = useState('');
+  const [ldd, setLDD] = useState('');
+  const [spo2, setSpo2] = useState('');
+
   const handleBMI = () => {
     const height = (parseInt(vitals.height) / 100) ** 2;
     const weight = parseFloat(vitals.weight);
     const BMI = (weight / height).toString().slice(0, 5);
 
     if (BMI !== NaN) {
-      bmiChange(BMI);
       setBmi(BMI);
     } else {
-      bmiChange(null);
       setBmi(null);
     }
   };
 
   useEffect(() => {
     handleBMI();
-  }, [vitals.height, vitals.weight]);
-
-  const [bmi, setBmi] = useState();
-
-  const bmiChange = bmi => {
-    const updatedVitals = {...vitals, bmi: bmi};
-    setVitals(updatedVitals);
-  };
-  const diastolicChange = text => {
-    const updatedVitals = {...vitals, diastolic: text};
-    setVitals(updatedVitals);
-  };
-  const systolicChange = text => {
-    const updatedVitals = {...vitals, systolic: text};
-    setVitals(updatedVitals);
-  };
-
-  const lmpChange = lmpdate => {
-    console.log('updatedLMMP', updatedVitals);
-    const EDD = handleEdd(lmpdate);
-    usChange(EDD);
-    const updatedVitals = {...vitals, LDD: lmpdate, EDD: EDD};
-    setEdd(EDD);
-    setVitals(updatedVitals);
-  };
-  const usChange = formatedDate => {
-    const updatedVitals = {...vitals, EDD: formatedDate};
-    console.log('updateValues.......', updatedVitals);
-    setVitals(updatedVitals);
-  };
+  }, [height, weight]);
 
   const handleEdd = selectedDate => {
     let startDate = new Date(selectedDate);
@@ -182,15 +115,49 @@ const VitalScreen = ({route, props}) => {
     const EDD = `${day}-${month}-${year}`;
     return EDD;
   };
-  const updateOthersVitals = () => {
-    setVitals({
-      ...vitals,
-      others: {
-        ...vitals.others,
-        [othresKey]: othersValue,
-      },
-    });
+  const vitals = {
+    pulse_rate: pulse,
+    weight: weight,
+    height: height,
+    body_temperature: temp,
+    rate: rate,
+    bmi: bmi,
+    diastolic: diastolic,
+    systolic: systolic,
+    LDD: ldd,
+    EDD: edd,
+    oxygen_level: spo2,
+    others: {[othresKey]: othersValue},
   };
+  const handlePress = () => {
+    setTimeout(() => {
+      dispatch(addVitals(vitals));
+      nav.goBack();
+    }, 500);
+  };
+  useEffect(() => {
+    if (vitalsData) {
+      setheight(vitalsData?.height);
+      setWeight(vitalsData?.weight);
+      setBmi(vitalsData?.bmi);
+      setPulse(vitalsData?.pulse_rate);
+      setTemp(vitalsData?.body_temperature);
+      setRate(vitalsData?.rate);
+      setdiastolic(vitalsData?.diastolic);
+      setsystolic(vitalsData?.systolic);
+      setSpo2(vitalsData?.oxygen_level);
+      setOthersKey(
+        vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null,
+      );
+      setOthersValue(
+        vitalsData?.others ? Object.values(vitalsData?.others)[0] : null,
+      );
+      setEdd(vitalsData?.EDD);
+      if (vitalsData?.others) {
+        setShow(!show);
+      }
+    }
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -204,13 +171,13 @@ const VitalScreen = ({route, props}) => {
             </View>
             <View style={styles.fields}>
               <VitalField
-                //   ref={heightRef}
+                value={height}
                 point={heightRef}
                 re={weightRef}
                 //   onSubmitEditing={() => weightRef.current && weightRef.current.focus()}
                 name="Height"
                 placeholder="Cm"
-                setvalue={text => heightChange(text)}
+                setvalue={text => setheight(text)}
               />
               <VitalField
                 //   ref ={weightRef}
@@ -218,7 +185,8 @@ const VitalScreen = ({route, props}) => {
                 re={pulseRef}
                 name="Weight"
                 placeholder="Kg"
-                setvalue={text => weightChange(text)}
+                value={height}
+                setvalue={text => setWeight(text)}
               />
               {bmi !== 'NaN' ? (
                 <VitalField name="BMI" value={bmi} />
@@ -230,28 +198,32 @@ const VitalScreen = ({route, props}) => {
                 re={tempRef}
                 name="Pulse"
                 placeholder="bpm"
-                setvalue={text => PulseChange(text)}
+                value={pulse}
+                setvalue={text => setPulse(text)}
               />
               <VitalField
                 point={tempRef}
                 re={spoRef}
                 name="Temp"
                 placeholder="°C"
-                setvalue={text => tempChange(text)}
+                value={temp}
+                setvalue={text => setTemp(text)}
               />
               <VitalField
                 point={spoRef}
                 re={rateRef}
                 name="SPO2"
                 placeholder="%"
-                setvalue={text => spo2Change(text)}
+                value={spo2}
+                setvalue={text => setSpo2(text)}
               />
               <VitalField
                 point={rateRef}
                 re={sysRef}
                 name="Resp.rate"
                 placeholder="brpm"
-                setvalue={text => rateChange(text)}
+                value={rate}
+                setvalue={text => setRate(text)}
               />
             </View>
           </View>
@@ -267,15 +239,17 @@ const VitalScreen = ({route, props}) => {
                 point={sysRef}
                 re={diaoRef}
                 name="Systolic BP"
+                value={systolic}
                 placeholder="mmhg"
-                setvalue={text => systolicChange(text)}
+                setvalue={text => setsystolic(text)}
               />
               <VitalField
                 point={diaoRef}
                 // re={pulseRef}
                 name="Diastolic BP"
                 placeholder="mmhg"
-                setvalue={text => diastolicChange(text)}
+                value={diastolic}
+                setvalue={text => setdiastolic(text)}
               />
             </View>
           </View>
@@ -296,7 +270,7 @@ const VitalScreen = ({route, props}) => {
                       handleDate();
                     }}
                     name={'calendar'}
-                    input={lmpdates}
+                    input={vitalsData?.LDD ? vitalsData?.LDD : lmpdates}
                   />
                   {open && (
                     <DatePicker
@@ -311,7 +285,7 @@ const VitalScreen = ({route, props}) => {
                   )}
 
                   {/* <View style={{borderWidth:1,alignItems:'center'}}> */}
-                  <VitalField name="EDD" value={vitals?.EDD} />
+                  <VitalField name="EDD" value={edd} />
                   {/* </View> */}
                 </View>
               </View>
