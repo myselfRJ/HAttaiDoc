@@ -255,7 +255,6 @@ const PdfView = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        console.log('API Response:', responseData);
         // handleAddDoctors();
         Alert.alert('Success', 'Successfully shared to patient');
         setLoading(false);

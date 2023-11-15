@@ -14,25 +14,17 @@ const authenticateSlice = createSlice({
   initialState,
   reducers: {
     accessupdate: (state, action) => {
-      console.log(action);
       state.access = action.payload;
-      console.log(state, 'state');
     },
     tokenupdate: (state, action) => {
-      console.log(action);
       state.auth = action.payload;
-      console.log(state, 'state');
     },
     tokenrevoke: state => {
-      console.log('1');
       state = initialState;
     },
     updateauthenticate: (state, action) => {
-      console.log('payload', action.payload);
-
       state.auth.access = action.payload.access_token;
       state.auth.refresh = action.payload.refresh_token;
-      console.log('state', state);
     },
   },
 });

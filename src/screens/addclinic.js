@@ -79,7 +79,6 @@ const AddClinic = ({navigation}) => {
   const address = useSelector(state => state?.address?.address);
   // const {prevScrn} = route.params;
   const [cnFess, setCnFees] = useState('');
-  console.log('cnfees=======', cnFess);
   const clinics = useSelector(state => state.clinic?.clinics);
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
@@ -164,7 +163,6 @@ const AddClinic = ({navigation}) => {
     fees: '',
     // slots: [],
   });
-  console.log('set===', value.fees);
   const prevScrn = 'account';
   const Clinic_Data = [
     {
@@ -334,7 +332,6 @@ const AddClinic = ({navigation}) => {
   const consultType = CONSTANTS.consultTypes;
   const durationMins = CONSTANTS.duration;
   const [selectSlot, setselectSlot] = useState([]);
-  // console.log('length===', selectSlot);
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
 
@@ -585,7 +582,6 @@ const AddClinic = ({navigation}) => {
         phone: jsonData.data?.clinic_phone_number,
         fees: jsonData.data?.fees,
       };
-      console.log('clinic', clinicdata?.fees);
       setValue(clinicdata);
       setCnFees(jsonData.data?.fees);
       setSelectedImage(jsonData.data?.clinic_photo_url);

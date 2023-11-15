@@ -35,7 +35,6 @@ export default function MedicalRecordPatient({route, navigation}) {
 
   const token = useSelector(state => state?.authenticate?.auth?.access);
   const {patient_phone} = route.params;
-  // console.log('-------------------phone', patient_phone);
   const fetchData = async () => {
     const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
       method: 'GET',
@@ -45,7 +44,6 @@ export default function MedicalRecordPatient({route, navigation}) {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log(jsonData.data);
       setData(jsonData.data[0]);
     } else {
       console.error('API call failed:', response.status, response);
@@ -67,7 +65,6 @@ export default function MedicalRecordPatient({route, navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log(jsonData.data);
       setConsultation(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);

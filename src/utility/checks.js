@@ -6,7 +6,7 @@ const checkNumber = number => {
 };
 
 function checkPassword(inputtxt) {
-  console.log(inputtxt);
+  // console.log(inputtxt);
   if (inputtxt === undefined || null) {
     return false;
   }

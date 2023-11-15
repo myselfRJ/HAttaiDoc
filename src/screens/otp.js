@@ -27,13 +27,11 @@ const Otp = ({navigation}) => {
     counter > 0
       ? setTimeout(() => {
           setCounter(counter - 1);
-          console.log(counter);
         }, 1000)
       : console.log('over');
   }
   const submitbtn = async (phone, otp) => {
     setLoading(!loading);
-    console.log(phone, otp, 'phone otp');
     {
       phone && otp
         ? PostApi(
@@ -45,7 +43,6 @@ const Otp = ({navigation}) => {
             false,
           )
             .then(function (response) {
-              console.log(response.data);
               if (response.data['status'] === 'success') {
                 showToast('Success', 'OTP verification successful.');
                 navigation.navigate('protected', {screen: 'profilecreate'});
@@ -64,7 +61,7 @@ const Otp = ({navigation}) => {
     //
   };
   const onPress = () => {
-    console.log(otp, 'otp', checkOtp(otp), checkNumber(1212121212));
+    // console.log(otp, 'otp', checkOtp(otp), checkNumber(1212121212));
     if (checkNumber('7121212878') && checkOtp(otp)) {
       submitbtn(7878, otp);
     } else {

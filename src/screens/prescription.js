@@ -28,39 +28,22 @@ const Prescription = ({route}) => {
     state => state?.prescription?.selectedComplaint,
   );
   const symptom = useSelector(state => state?.symptoms?.symptom);
-  console.log('symptom==', symptom);
   const symptomData = symptom.map(item => item.symptom);
   const prescribe_data = useSelector(state => state?.pres);
-  console.log('pres==', prescribe_data);
-  console.log(
-    'frequencyyy===>',
-    prescribe_data?.prescribeItems[0]?.frequency.split(','),
-  );
   const notes = useSelector(state => state?.prescription?.note);
   const refer_doctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
-  // console.log('>>>>>>>diagnosis',diagnosis[0].diagnosis)
   const followup = useSelector(state => state?.dateTime?.date);
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
-  console.log('name===', clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
-  console.log('address=', clinic_Address);
   const test = useSelector(state => state?.labreport?.labReport);
-  console.log('test>>>>>>>>>>', test);
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const {name, gender, patient_age, patient_phone_number} = route.params;
   const sign = useSelector(state => state?.sign);
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
-  console.log('logooo', logo);
-  console.log(
-    'patient phone--',
-    name,
-    gender,
-    patient_age,
-    patient_phone_number,
-  );
+
 
   const current = new Date();
   const options = {
@@ -88,7 +71,6 @@ const Prescription = ({route}) => {
   };
   const format = current.toLocaleDateString(undefined, options);
   const base64Image = sign?.sign;
-  console.log('base==', base64Image);
   const [logostate, setLogo] = useState();
   const handleLogo = () => {
     if (logo) {

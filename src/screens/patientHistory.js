@@ -42,7 +42,6 @@ export default function PatientHistory({route, navigation}) {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData.data);
       setConsultation(jsonData?.data[0]?.consultation);
     } else {
       console.error('API call failed:', response.status, response);
@@ -94,7 +93,6 @@ export default function PatientHistory({route, navigation}) {
 
   const handleBook = () => {
     const patient_phone = data?.patient_phone_number;
-    // console.log('-----------phonepatient', patient_phone);
     navigation.navigate('bookslot', {patient_phone});
   };
   return (

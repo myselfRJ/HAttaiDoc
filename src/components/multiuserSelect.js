@@ -27,7 +27,7 @@ function MultiUserSelect(props) {
     props.action();
   };
   const renderChip = item => {
-    console.log('स्वागत');
+    // console.log('स्वागत');
     return (
       <View style={styles.chip}>
         <Text style={styles.chip_text}>{item.item}</Text>

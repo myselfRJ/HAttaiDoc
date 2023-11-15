@@ -39,7 +39,6 @@ const Login = ({navigation}) => {
     setLoading(!loading);
     PostApi('signup/token/', data, false)
       .then(function (response) {
-        console.log(response.data);
         if (response.status === 201) {
           showToast('Success', response.data.message);
           navigation.navigate('otp');
@@ -51,11 +50,9 @@ const Login = ({navigation}) => {
       .catch(function (error) {
         showToast('Login failed : ', `${error.response.data.detail}`);
         requestFailed();
-        console.log(error.response.data, 'l');
       });
   };
   const onPress = () => {
-    console.log(phone, password);
     if (checkNumber(phone) && checkPassword(password)) {
       loginbtn();
     } else {

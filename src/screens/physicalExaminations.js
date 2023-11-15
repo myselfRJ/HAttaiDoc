@@ -45,14 +45,17 @@ import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
-
+import { fileurl } from '../utility/urls';
 const PhysicalExamination = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
   const {examinationDetails} = route.params;
+  const appointment_id = examinationDetails?.appointment_id;
+
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
+  const [report,setreport] = useState('')
   // const [selectedFilename, setSelectedFilename] = useState([]);
 
   const postData = async url => {
@@ -163,7 +166,6 @@ const PhysicalExamination = ({navigation}) => {
         ...uploaddocument,
         {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
       ]);
-      console.log('result===', result[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker
@@ -179,7 +181,7 @@ const PhysicalExamination = ({navigation}) => {
       value: value,
       documents: JSON.stringify(uploaddocument),
     };
-    dispatch(addExamination(value));
+    dispatch(addExamination(examinations));
     setValue('');
   };
   const handleDelete = index => {
@@ -192,6 +194,40 @@ const PhysicalExamination = ({navigation}) => {
     if (uploaddocument?.length >= 5) {
     } else {
       setModal(!modal);
+    }
+  };
+  const fetchPhysical = async () => {
+    const response = await fetchApi(URL.get_physical(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      setValue(jsonData?.data?.notes === undefined ? '' :jsonData?.data?.notes);
+      // setDescribe(jsonData?.data?.description);
+      setreport(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  useEffect(() => {
+    fetchPhysical();
+  }, []);
+  const report_findings = [
+    {name: report?.file1 ? report?.file1 : null},
+    {name: report?.file2 ? report?.file2 : null},
+    {name: report?.file3 ? report?.file3 : null},
+    {name: report?.file4 ? report?.file4 : null},
+    {name: report?.file5 ? report?.file5 : null},
+  ];
+  const handleReports_Physical = filepath => {
+    const path = `${fileurl}${filepath}`;
+    if (filepath?.includes('pdf')) {
+      navigation.navigate('pdfhistory', {path});
+    } else {
+      navigation.navigate('img', {path});
     }
   };
   return (
@@ -209,7 +245,7 @@ const PhysicalExamination = ({navigation}) => {
           fontWeight: '700',
         }}
       />
-      {uploaddocument?.length > 0 ? (
+      {!report ? (uploaddocument?.length > 0 ? (
         <View style={{marginTop: verticalScale(16)}}>
           {uploaddocument?.map((item, index) => (
             <ShowChip
@@ -235,7 +271,39 @@ const PhysicalExamination = ({navigation}) => {
             />
           ))}
         </View>
-      ) : null}
+      ) : null) : 
+      report_findings?.length > 0 ? (
+        <View style={{marginTop: verticalScale(16)}}>
+          {report_findings?.map(
+            (item, index) =>
+              item?.name !== null && (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleReports_Physical(item?.name)}>
+                  <ShowChip
+                    key={index}
+                    text={
+                      <>
+                        <Icon
+                          color={CUSTOMCOLOR.error}
+                          size={moderateScale(20)}
+                          name={
+                            item?.name?.includes('pdf')
+                              ? 'file-pdf-box'
+                              : 'image'
+                          }
+                        />{' '}
+                        {item?.name}
+                      </>
+                    }
+                    main={{marginHorizontal: 0}}
+                  />
+                </TouchableOpacity>
+              ),
+          )}
+        </View>
+      ) : null
+      }
       <PlusButton
         size={moderateScale(40)}
         style={{

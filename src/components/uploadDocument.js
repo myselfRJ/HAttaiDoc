@@ -15,7 +15,7 @@ const pickSingleFile = async () => {
       {
         result.map((val,index)=> console.log('uri===>',val.uri))
       }
-      console.log('result===',result)
+      // console.log('result===',result)
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker

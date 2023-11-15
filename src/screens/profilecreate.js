@@ -286,7 +286,6 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
 
-  console.log('======>value', value);
   return (
     <View style={styles.main}>
       <ProgresHeader progressData={progressData} />
@@ -696,14 +695,14 @@ const styles = StyleSheet.create({
     height: moderateScale(200),
     // paddingHorizontal:horizontalScale(66),
     // zIndex: 10,
-    borderWidth: 0.5,
+    borderWidth: 1,
     // borderRightWidth: 1.5,
     borderColor: CUSTOMCOLOR.primary,
     position: 'absolute',
-    right: 0,
+    right: 1,
     // bottom: 8,
-    top: verticalScale(70.5),
-    borderRadius: moderateScale(4),
+    top: verticalScale(68),
+    borderRadius: moderateScale(2),
     gap: moderateScale(6),
     // padding: moderateScale(4),
   },

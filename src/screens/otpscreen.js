@@ -54,10 +54,6 @@ const OtpScreen = ({route}) => {
   const [loading, setLoading] = useState(false);
 
   const {phone, trace_id} = useSelector(state => state?.phone?.data);
-  console.log(phone);
-  //console.log("..........",data)
-  // const {phone, Trace_id} = route.params;
-  // console.log('route.params:', route.params);
   const nav = useNavigation();
 
   const startTimer = () => {
@@ -109,7 +105,6 @@ const OtpScreen = ({route}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
-        console.log('generateResponse', jsonData);
         dispatch(addLogin_phone.addLogin_phone(jsonData.data));
         //setLoading(!loading);
       } else {
@@ -132,7 +127,6 @@ const OtpScreen = ({route}) => {
         },
         body: JSON.stringify({phone: phone, otp: value, trace_id: trace_id}),
       });
-      console.log(trace_id);
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {

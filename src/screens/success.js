@@ -13,8 +13,6 @@ const Success = ({navigation, route}) => {
   // }, []);
 
   const {patient_phone_number} = route.params;
-
-  console.log('route,params----', patient_phone_number);
   const handleSubmit = () => {
     const patient_phone = patient_phone_number;
     navigation.navigate('bookslot', {patient_phone});

@@ -60,12 +60,12 @@ import ImageViewer from '../screens/imageViewer';
 const Stack = createNativeStackNavigator();
 
 const ProtectedRoute = () => {
-  console.log(getAccessToken(state => state));
+  // console.log(getAccessToken(state => state));
   const isAuth = useSelector(state => state.authenticate.auth.access);
   const access = useSelector(state => state.getAccessToken);
-  console.log('isAuth.....', isAuth);
+  // console.log('isAuth.....', isAuth);
 
-  console.log('isAccess.....', access);
+  // console.log('isAccess.....', access);
 
   return (
     <Stack.Navigator

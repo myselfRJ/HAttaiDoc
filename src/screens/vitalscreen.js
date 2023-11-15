@@ -185,7 +185,7 @@ const VitalScreen = ({route, props}) => {
                 re={pulseRef}
                 name="Weight"
                 placeholder="Kg"
-                value={height}
+                value={weight}
                 setvalue={text => setWeight(text)}
               />
               {bmi !== 'NaN' ? (

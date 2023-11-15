@@ -46,10 +46,6 @@ const PatientCreate = ({navigation, route}) => {
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
   const default_image = CONSTANTS.default_image;
 
-  // console.log('====================================');
-  // console.log('-----------default', default_image);
-  // console.log('====================================');
-
   const handleOptions = value => {
     setSelected(value);
   };
@@ -179,7 +175,6 @@ const PatientCreate = ({navigation, route}) => {
   }, []);
 
   const patient_phone = patient_phone_number;
-  // console.log('==========>formatteddata', formatDate);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -195,7 +190,6 @@ const PatientCreate = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        // console.log('---------------', jsonData);
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
@@ -238,7 +232,6 @@ const PatientCreate = ({navigation, route}) => {
   //     setPatient_Phone_number(phoneRoute);
   //   }
   // }, []);
-  // console.log("=====val",formattedDate,formatDate);
   const findUsSelection = value => {
     const isSelected = find.includes(value);
 
@@ -249,7 +242,6 @@ const PatientCreate = ({navigation, route}) => {
     }
   };
 
-  console.log('=======>find', find);
 
   return (
     <View style={styles.main}>

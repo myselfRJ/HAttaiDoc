@@ -47,10 +47,8 @@ import {capitalizeWord} from '../utility/const';
 
 const Symptoms = ({navigation}) => {
   const symptomsData = useSelector(state => state.symptoms.symptom);
-  console.log('symptommmm', symptom);
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
-  console.log('days', days);
   const [hr, setHr] = useState('');
   const [selected, setSelected] = useState('');
   const [sevSelected, setSevSelected] = useState('');
@@ -123,7 +121,6 @@ const Symptoms = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({term: item}));
-      // console.log('======>', snomed_data);
       setData([...snomed_data, {term: symptom}]);
     } else {
       console.error('API call failed:', response.status, response);

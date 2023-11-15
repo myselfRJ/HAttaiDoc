@@ -48,7 +48,7 @@ const InputText = props => {
     passtoParent(numericValue);
   };
   const numeric = props.numeric;
-  // console.log('-----------numric',numeric);
+
 
   return (
     <>

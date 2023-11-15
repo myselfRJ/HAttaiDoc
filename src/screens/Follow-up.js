@@ -48,7 +48,6 @@ export default function DateTime() {
   };
 
   const dateTimeRed = useSelector(state => state.dateTime?.date);
-  console.log('-------------------', dateTimeRed, '------------------------');
 
   const handleCancel = () => {
     setOpen(open);
@@ -70,9 +69,6 @@ export default function DateTime() {
   const follow_upTime = date?.toString().split(' ')[4].substring(0, 5);
 
   const follow_upDateTime = `${day} ${month} ${year} at ${follow_upTime}`;
-
-  console.log(follow_upDateTime);
-
   const handleDates = selectedDate => {
     let startDate = new Date(selectedDate);
 

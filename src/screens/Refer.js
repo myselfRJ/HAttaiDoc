@@ -159,7 +159,6 @@ const ReferToDoctor = () => {
         directory: 'refer',
       };
       let file = await RNHTMLtoPDF.convert(options);
-      console.log(file.filePath);
       setFilePath(file.filePath);
       // handle();
     }
@@ -194,7 +193,6 @@ const ReferToDoctor = () => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        console.log('API Response:', responseData);
         handleAddDoctors();
         Alert.alert('', 'Successfully Shared to Patient');
         setLoading(false);

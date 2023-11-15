@@ -84,9 +84,6 @@ const AadharVerify = ({navigation}) => {
     PostAbha();
   }, []);
   const AbhaAccessToken = useSelector(state => state.abha.auth.access);
-  console.log('====================================');
-  console.log('====abha', AbhaAccessToken);
-  console.log('====================================');
 
   const fetchData = async () => {
     const url =
@@ -109,7 +106,6 @@ const AadharVerify = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('======,AAdhar', jsonData);
         dispatch(UpdatetxnId(jsonData.txnId));
         dispatch(addAadhar(aadhar_no));
         setLoading(!loading);
@@ -121,9 +117,7 @@ const AadharVerify = ({navigation}) => {
     }
   };
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
-  console.log('====================================');
-  console.log('---------abhatxnid', AbhaTxnId);
-  console.log('====================================');
+
 
   const PostOtp = async () => {
     const url =
@@ -151,24 +145,23 @@ const AadharVerify = ({navigation}) => {
       if (response.ok) {
         if (selected === 'Yes') {
           const jsonData = await response.json();
-          console.log('======,aadharOtp', jsonData?.token);
-          console.log(
-            '======,aadharOtp',
-            jsonData?.mobileLinkedHid?.[0].healthIdNumber,
-          );
-          console.log('======,aadharOtp', jsonData?.txnId);
+          // console.log('======,aadharOtp', jsonData?.token);
+          // console.log(
+          //   '======,aadharOtp',
+          //   jsonData?.mobileLinkedHid?.[0].healthIdNumber,
+          // );
+          // console.log('======,aadharOtp', jsonData?.txnId);
           let headers = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${AbhaAccessToken}`,
             'T-Token': `Bearer ${jsonData?.token}`,
             mobileLoginWebRequest: 'mobileLoginWebRequest',
           };
-          console.log('====================================');
-          console.log('---------------------', {
-            healthId: jsonData?.mobileLinkedHid?.[0].healthIdNumber,
-            txnId: jsonData?.txnId,
-          });
-          console.log('====================================');
+          // console.log('---------------------', {
+          //   healthId: jsonData?.mobileLinkedHid?.[0].healthIdNumber,
+          //   txnId: jsonData?.txnId,
+          // });
+      
           const UserTokenResponse = await fetchApi(URL.AbhaExistsGetUserToken, {
             method: 'POST',
             headers: headers,
@@ -188,7 +181,6 @@ const AadharVerify = ({navigation}) => {
             headers: headersProfile,
           });
           const jsonDataProfile = await UserAbhaProfile.json();
-          console.log('abhaprofile-----------------------', jsonDataProfile);
           const firstName = jsonDataProfile?.firstName;
           const lastName = jsonDataProfile?.lastName;
           const middleName = jsonDataProfile?.middleName;
@@ -216,7 +208,6 @@ const AadharVerify = ({navigation}) => {
           setotpLoading(false);
         } else {
           const jsonData = await response.json();
-          console.log('======,aadharOtp', jsonData);
           navigation.navigate('mobileverify');
           setAadhar_no();
           setValue();

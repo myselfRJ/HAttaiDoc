@@ -41,10 +41,6 @@ const MobileVerify = ({navigation}) => {
   const AbhaTxnId = useSelector(state => state.abha.auth.txnid);
   const aadhar_no = useSelector(state => state?.abha?.auth?.aadharNo);
 
-  console.log('====================================');
-  console.log('aaaadhar no ', aadhar_no, '-----------------');
-  console.log('====================================');
-
   const postPhone = async () => {
     setLoading(true);
     try {
@@ -61,7 +57,6 @@ const MobileVerify = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('======,AAdharMOBILE', jsonData);
         setLoading(false);
       } else {
         console.error('API call failed:', response.status, response);
@@ -89,7 +84,6 @@ const MobileVerify = ({navigation}) => {
       });
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('======,AAdharOtp', jsonData);
         navigation.navigate('abhacreate');
         setPhoneNumber();
         setValue();

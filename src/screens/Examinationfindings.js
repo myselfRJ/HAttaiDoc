@@ -42,7 +42,6 @@ const ExaminationFindings = ({navigation}) => {
   const [uploaddocument, SetUploadDocument] = useState([]);
   const [report, setreport] = useState();
   const appointment_id = examinationDetails?.appointment_id;
-  console.log(appointment_id);
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const postData = async url => {
     const formData = new FormData();
@@ -84,7 +83,6 @@ const ExaminationFindings = ({navigation}) => {
       console.error('Error:', error);
     }
   };
-
   const fetchReport = async () => {
     const response = await fetchApi(URL.get_reports(appointment_id), {
       method: 'GET',
@@ -94,9 +92,8 @@ const ExaminationFindings = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('report===', jsonData);
-      setValue(jsonData?.data?.finding);
-      setDescribe(jsonData?.data?.description);
+      setValue(jsonData?.data?.finding === undefined ? '' :jsonData?.data?.finding);
+      setDescribe(jsonData?.data?.description === undefined ? '' :jsonData?.data?.description);
       setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -296,7 +293,8 @@ const ExaminationFindings = ({navigation}) => {
             ))}
           </View>
         ) : null
-      ) : report_findings?.length > 0 ? (
+      ) : 
+      report_findings?.length > 0 ? (
         <View style={{marginTop: verticalScale(16)}}>
           {report_findings?.map(
             (item, index) =>

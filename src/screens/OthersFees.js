@@ -43,7 +43,6 @@ const OthersFees = ({navigation}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const service_fees = useSelector(state => state.prescription.fees);
-  console.log('service', service_fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
   const [submittedFees, setSubmiitedFees] = useState([]);
@@ -53,7 +52,6 @@ const OthersFees = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {feesDetails} = route.params;
   const id = feesDetails?.appointment_id;
-  console.log('id', submittedFees);
   let totalFees = parseInt(consultation_fees);
 
   submittedFees?.forEach(item => {
@@ -68,7 +66,6 @@ const OthersFees = ({navigation}) => {
     setName('');
     setFees('');
   };
-  console.log('length', submittedFees?.length);
   const handleDispatch = () => {
     dispatch(
       updatefees([
@@ -104,8 +101,6 @@ const OthersFees = ({navigation}) => {
     const updatefees = submittedFees?.filter((_, index) => index !== ind);
     setSubmiitedFees(updatefees);
   };
-
-  // console.log('=========fees',data);
 
   const GetFees = async () => {
     const response = await fetchApi(URL.updateFees(id), {

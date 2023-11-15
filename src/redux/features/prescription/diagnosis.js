@@ -11,7 +11,6 @@ const diagnosisSlice = createSlice({
   reducers: {
     addDiagnosis: (state, action) => {
       state.DiagnosisItems = action.payload;
-      console.log('action.payload',action.payload);
     },
     updateDiagnosis: (state, action) => {
         state.DiagnosisItems = action.payload;
