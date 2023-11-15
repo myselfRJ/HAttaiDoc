@@ -175,10 +175,10 @@ const Symptoms = ({navigation}) => {
       const uniqueArray = array?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.symptom === item?.symptom);
       });
-      if (uniqueArray?.length>10){
-        uniqueArray?.splice(10)
+      if (uniqueArray?.length > 10) {
+        uniqueArray?.splice(10);
         setSug(uniqueArray);
-      }else{
+      } else {
         setSug(uniqueArray);
       }
     });
@@ -247,11 +247,12 @@ const Symptoms = ({navigation}) => {
                       backgroundColor:
                         item?.symptom === selected
                           ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.white,
+                          : CUSTOMCOLOR.recent,
                     },
                   ]}>
                   <Text
                     style={{
+                      fontWeight: '700',
                       color:
                         item?.symptom === selected
                           ? CUSTOMCOLOR.white
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: horizontalScale(8),
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
-    borderRadius:moderateScale(4)
+    borderRadius: moderateScale(4),
   },
   inputtext: {
     // paddingVertical: verticalScale(0),

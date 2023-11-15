@@ -203,13 +203,16 @@ const Allergies = () => {
                       backgroundColor:
                         value === item
                           ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.white,
+                          : CUSTOMCOLOR.recent,
                     },
                   ]}>
                   <Text
                     style={{
+                      fontWeight: '700',
                       color:
-                        value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                        value === item
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
                     }}>
                     {item?.allergies}
                   </Text>
@@ -240,10 +243,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.background,
   },
   recomend: {
-    padding: moderateScale(8),
+    padding: moderateScale(12),
     borderRadius: moderateScale(4),
-    paddingHorizontal: horizontalScale(16),
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: CUSTOMCOLOR.primary,
   },
   input: {

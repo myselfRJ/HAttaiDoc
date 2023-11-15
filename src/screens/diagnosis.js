@@ -117,6 +117,7 @@ const Diagnosis = ({navigation}) => {
     navigation.goBack();
   };
   const selectChange = value => {
+    // setValue(value);
     setSelected(value);
     dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
     if (sug?.length > 0) {
@@ -231,12 +232,13 @@ const Diagnosis = ({navigation}) => {
                       backgroundColor:
                         value === item
                           ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.white,
+                          : CUSTOMCOLOR.recent,
                     },
                   ]}
                   inputstyle={{
+                    fontWeight: '700',
                     color:
-                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                      value === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
                   }}></SelectorBtn>
               ))}
             </View>

@@ -220,11 +220,12 @@ const LabReports = () => {
                       backgroundColor:
                         value === item
                           ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.white,
+                          : CUSTOMCOLOR.recent,
                     },
                   ]}>
                   <Text
                     style={{
+                      fontWeight: '700',
                       color:
                         value === item
                           ? CUSTOMCOLOR.white

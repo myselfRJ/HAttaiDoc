@@ -457,6 +457,14 @@ const ReferToDoctor = () => {
               contentContainerStyle={{gap: moderateScale(12)}}> */}
             {sug?.map((item, index) => (
               <SelectorBtn
+                select={{
+                  backgroundColor: CUSTOMCOLOR.recent,
+                }}
+                inputstyle={{
+                  color: CUSTOMCOLOR.primary,
+                  fontSize: moderateScale(14),
+                  fontWeight: '700',
+                }}
                 key={index}
                 onPress={() => handlePress(item)}
                 input={item?.dr_name ? item?.dr_name : item?.doctor_or_name}
@@ -566,6 +574,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   Modes: {
+    paddingTop: verticalScale(16),
     // borderWidth: 1,
     flexDirection: 'row',
     gap: moderateScale(16),

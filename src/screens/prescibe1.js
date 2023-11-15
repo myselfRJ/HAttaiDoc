@@ -395,7 +395,7 @@ export default function Prescribe1({navigation}) {
                     backgroundColor:
                       medicine === value?.medicine
                         ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.white,
+                        : CUSTOMCOLOR.recent,
                   }}
                   inputstyle={{
                     color:
@@ -403,7 +403,7 @@ export default function Prescribe1({navigation}) {
                         ? CUSTOMCOLOR.white
                         : CUSTOMCOLOR.primary,
                     fontSize: moderateScale(14),
-                    fontWeight: '600',
+                    fontWeight: '700',
                   }}
                 />
               ))}
