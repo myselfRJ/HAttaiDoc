@@ -30,10 +30,8 @@ const Signup = ({navigation}) => {
       password2: password2,
     };
     setLoading(!loading);
-    console.log(data);
     PostApi('signup/doctor', data, false)
       .then(function (response) {
-        console.log(response.data);
         if (response.status === 201) {
           showToast('Success', response.data.message);
           navigation.navigate('otp');
@@ -46,7 +44,6 @@ const Signup = ({navigation}) => {
       .catch(function (error) {
         showToast('Error', 'Signup failed.');
         requestFailed();
-        console.log(error, 'l');
         navigation.navigate('otp'); //r5emove
       });
   };

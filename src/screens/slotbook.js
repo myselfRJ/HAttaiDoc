@@ -251,13 +251,6 @@ const SlotBook = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(false);
   const {patient_phone} = route.params;
-  console.log(
-    '-----------------params',
-    patient_phone,
-    Clinic_id,
-    phone,
-    speciality,
-  );
 
   let today = moment().toISOString().split('T')[0] + 'T';
 

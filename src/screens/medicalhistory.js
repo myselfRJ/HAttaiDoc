@@ -145,7 +145,6 @@ const MedicalHistory = ({navigation, route}) => {
       setComorbidities('');
     }
   };
-  console.log('commor', commor_sug);
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
@@ -176,7 +175,6 @@ const MedicalHistory = ({navigation, route}) => {
           array?.findIndex(obj => obj.commorbities === item?.commorbities)
         );
       });
-      // console.log('======>unique', uniqueArray);
       setCommor_Sug([...commor_sug, ...uniqueArray]);
     });
     RetriveAsyncData('socialHistory').then(array => {

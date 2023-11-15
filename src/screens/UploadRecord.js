@@ -38,7 +38,6 @@ const Uploadrecord = ({navigation}) => {
   const [description, setDescription] = useState('');
   const [recordstype, setRecordsType] = useState('');
   const [otherstype, setOthersType] = useState('');
-  console.log('===recotsd', recordstype, otherstype);
   const recordItems = [
     {label: 'Prescription', value: 'Prescription'},
     {label: 'Scan', value: 'Scan'},
@@ -169,7 +168,6 @@ const Uploadrecord = ({navigation}) => {
       if (responseData) {
         Alert.alert('Successfully saved');
         navigation.goBack();
-        console.log('API Response:', responseData);
       }
     } catch (error) {
       Alert.alert(`${error}`);

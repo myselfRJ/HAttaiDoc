@@ -16,10 +16,6 @@ import {
 
 const InitScreen = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
-
-  console.log('====================================');
-  console.log('token', token);
-  console.log('====================================');
   const [data, setData] = useState();
 
   const prevScrn = 'undefined';

@@ -62,13 +62,10 @@ const Visit = ({navigation, route}) => {
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  console.log('indra==================>', physical);
   const note = useSelector(state => state.prescription.note);
-  console.log('=====note', selectedComplaint);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
-  console.log('=====note', selectedComplaint);
   const selectedDoctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
@@ -109,7 +106,6 @@ const Visit = ({navigation, route}) => {
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
     service_fees?.length > 0 ? service_fees?.[service_fees?.length - 1] : null;
-  console.log('charge===', charge ? charge[charge && 'totalFees'] : null);
 
   useEffect(() => {
     setPrescribe(Prescribe);
@@ -318,8 +314,8 @@ const Visit = ({navigation, route}) => {
       fetchReport();
       fetchPatientData();
       GetFees();
-      fetchVitals();
-      fetchComplaint();
+      // fetchVitals();
+      // fetchComplaint();
       fetchDoctor();
     }, []),
   );
@@ -583,7 +579,7 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             margin-top:4px;
                             color:#4ba5fa; margin: 0;" >Prescribe:</p>
-                    <table style="border-collapse: collapse;margin-bottom: 48px;">
+                    <table style="border-collapse: collapse;margin-bottom: 40px;margin-top:12px;">
                 <tr>
                     <th style=" padding: 8px; text-align: center;">S.No</th>
                     <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
@@ -671,9 +667,9 @@ const Visit = ({navigation, route}) => {
                             : ''
                         }
           <p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
-                        <table style="border-collapse: collapse;margin-bottom: 48px;">
+                        <table style="border-collapse: collapse;margin-bottom: 48px;margin-top:12px;">
                         <tr>
-        <th style="text-align: start; width:10%">S.No</th>
+        <th style="padding:4px;text-align: start; width:10%">S.No</th>
         <th style="padding: 8px; text-align: start; width: 20%;">Service Name</th>
         <th style="padding: 8px; text-align: start; width:20%">Amount</th>
     </tr>
@@ -696,7 +692,7 @@ const Visit = ({navigation, route}) => {
                           )
                           .join('')}           
                     </table>
-                    <p style="margin-left: 48%;font-weight:700;font-size:16px";>Total : Rs.
+                    <p style="margin-left: 50%;font-weight:700;font-size:16px";>Total : Rs.
                     ${charge ? charge[charge && 'totalFees'] : ''}</p>
                     </div>
                     <div class ='footer'>
@@ -705,7 +701,7 @@ const Visit = ({navigation, route}) => {
                         justify-content: center;
                         margin-top: 84px;">
                             <div>
-                            <p id='values2'  style="  font-weight: 400;
+                            <p id='values2'  style="  font-weight: 300;
                             font-size: 16px;
                             color:#000000;
                             display: flex;
@@ -713,7 +709,7 @@ const Visit = ({navigation, route}) => {
                             justify-content: center;
                             line-height: 4px;">
                             This presctiption has been electronically signed by</p>
-          <p id='values2'  style="  font-weight: 400;
+          <p id='values2'  style="  font-weight: 300;
           font-size: 16px;
           color:#000000;
           display: flex;
@@ -766,8 +762,6 @@ const Visit = ({navigation, route}) => {
         directory: 'docs',
       };
       let file = await RNHTMLtoPDF.convert(options);
-      console.log('indra');
-      console.log(file.filePath);
       setFilePath(file.filePath);
     }
   };
@@ -942,19 +936,17 @@ const Visit = ({navigation, route}) => {
                 {vitalsData && (
                   <Text style={styles.patientText}>
                     {vitalsData?.systolic &&
-                      `BP : ${vitalsData.systolic}/${vitalsData.diastolic}`}{' '}
-                    {vitalsData?.rate && `SPO2: ${vitalsData?.rate}`}{' '}
-                    {vitalsData?.bmi && `BMI: ${vitalsData?.bmi}`}{' '}
+                     <Text>BP: <Text style={{fontWeight:'700'}}>{vitalsData.systolic}/{vitalsData.diastolic}</Text></Text>}{' '}
+                    {vitalsData?.oxygen_level &&                     <Text>SPO2: <Text style={{fontWeight:'700'}}>{vitalsData.oxygen_level}</Text>%</Text>}{' '}
+                    {vitalsData?.bmi && <Text>BMI: <Text style={{fontWeight:'700'}}>{vitalsData.bmi}</Text></Text>}{' '}
                     {vitalsData?.pulse_rate &&
-                      `Pulse: ${vitalsData?.pulse_rate}`}{' '}
+                      <Text>Pulse: <Text style={{fontWeight:'700'}}>{vitalsData.pulse_rate}</Text>bpm</Text>}{' '}
                     {vitalsData?.body_temperature &&
-                      `Temp: ${
-                        vitalsData?.body_temperature
-                      }${String.fromCharCode(8451)}`}{' '}
-                    {vitalsData?.others?.length > 0
-                      ? `${lastKey} : ${lastValue}`
-                      : null}
-                  </Text>
+                      <Text>Temp: <Text style={{fontWeight:'700'}}>{vitalsData.body_temperature}</Text>{String.fromCharCode(8451)}</Text>
+                    }{' '}
+                    {vitalsData?.others &&  
+                       <Text><Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null}</Text> :<Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text>
+                  </Text>}</Text>
                 )}
 
                 <Seperator />

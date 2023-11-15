@@ -121,21 +121,18 @@ const UpdateProfile = ({navigation}) => {
   const handlelatest = async () => {
     try {
       const file = await pickSingleFile();
-      console.log(file);
       setLatestRecord(file ? file : {});
     } catch (error) {}
   };
   const handleSelectFilename = async () => {
     try {
       const file = await pickSingleFile();
-      console.log(file);
       setSelectedFilename(file ? file : {});
     } catch (error) {}
   };
   const handlePan = async () => {
     try {
       const file = await pickSingleFile();
-      console.log(file);
       setPan(file ? file : {});
     } catch (error) {}
   };
@@ -252,7 +249,6 @@ const UpdateProfile = ({navigation}) => {
     setTimeout(() => {
       appointmentCardRef?.current?.snapToIndex(0);
     }, 500);
-    console.log(speciality);
   };
 
   useEffect(() => {
@@ -327,7 +323,6 @@ const UpdateProfile = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',

@@ -9,7 +9,6 @@ const symptomsSlice = createSlice({
   initialState,
   reducers: {
     addSymptom: (state, action) => {
-      console.log(action.payload, '===redux');
       state.symptom = action.payload;
     },
     deleteSymptom: state => {

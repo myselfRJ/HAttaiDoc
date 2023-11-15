@@ -98,7 +98,6 @@ const LabReports = () => {
       setFilteredData(filtering_data);
     }
   }, [data, value]);
-  console.log('==========>filtering', filtered);
 
   const HandlePress = value => {
     setValue(value);

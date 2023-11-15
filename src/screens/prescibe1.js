@@ -73,14 +73,10 @@ export default function Prescribe1({navigation}) {
   const [filtered, setFilteredData] = useState([]);
 
   const prevPres = useSelector(state => state.pres.prescribeItems);
-  // console.log('duration', mgs);
-  // console.log('medicine111',newMedicine);
-
   const handleAddPrescribe = () => {
     if (newMedicine?.length > 1) {
       // const new1 = newMedicine?.filter((item)=> item?.term)
       const newmed = `${medicine} ${mgs}`;
-      console.log('medicine', newmed);
       setMedicine(newmed);
     }
 
@@ -205,7 +201,6 @@ export default function Prescribe1({navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('fetch data====>', jsonData);
       const snomed_data = jsonData?.map(item => ({type: 'sno', term: item}));
       setData(snomed_data);
     } else {
@@ -215,8 +210,6 @@ export default function Prescribe1({navigation}) {
   useEffect(() => {
     fetchMedicine();
   }, [medicine]);
-
-  // console.log('filter values=====>', filtered);
   useEffect(() => {
     if (medicine) {
       const filtered = [...data, ...CONSTANTS.medicine]?.filter(
@@ -257,7 +250,6 @@ export default function Prescribe1({navigation}) {
       StoreAsyncData('prescribe', prevPres);
     }
   };
-  // console.log('=======.prv', sug);
   useEffect(() => {
     // clearStorage()
     RetriveAsyncData('prescribe')

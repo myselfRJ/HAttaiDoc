@@ -12,8 +12,8 @@ const Login_Phone_Slice = createSlice({
   reducers: {
     addLogin_phone: (state, action) => {
       state.data= action.payload;
-      console.log("state",state)
-      console.log(initialState)
+      // console.log("state",state)
+      // console.log(initialState)
  
     },
   },

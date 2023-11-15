@@ -30,7 +30,6 @@ const Entry = ({navigation}) => {
   const [Trace_id, setTrace_id] = useState();
   const dispatch = useDispatch();
   const logindata = useSelector(state => state?.phone);
-  console.log('===logindata===', logindata);
 
   const [loading, setLoading] = useState(false);
   // const fetchtrace = async () => {
@@ -57,7 +56,6 @@ const Entry = ({navigation}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
-        console.log('generateResponse', jsonData.data);
         dispatch(addLogin_phone.addLogin_phone({...jsonData.data, phone}));
         // console.log("login DATA",logindata)
         //setTrace_id(jsonData.data.trace_id);

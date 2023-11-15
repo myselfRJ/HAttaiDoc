@@ -12,9 +12,6 @@ import {
 } from '../utility/scaleDimension';
 const HeaderAvatar = ({data}) => {
   const imgurl = data?.profile_pic_url;
-  // console.log('====================================');
-  // console.log('profile pic', imgurl);
-  // console.log('====================================');
   return (
     <>
       <View style={styles.avatarmain}>

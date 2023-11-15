@@ -13,20 +13,16 @@ import {
 const PastHistory = () => {
   const nav = useNavigation();
   const [value, setValue] = useState('');
-  console.log('value===', value);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.pasthistory?.pasthistory);
-  console.log('prev-----', prev);
 
   const HandleAddValue = () => {
     if (value) {
-      console.log('valuesssssssssss');
       dispatch(addpastHistory([...prev, {past_history: value}]));
       setValue('');
     }
   };
   const handleDelete = index => {
-    console.log('prescription index', index);
     if (prev) {
       const updatedPrescriptions = prev?.filter((item, ind) => ind !== index);
 

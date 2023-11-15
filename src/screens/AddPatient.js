@@ -38,7 +38,6 @@ import { checkNumber } from '../utility/checks';
 const Abha = ({navigation}) => {
   const dispatch = useDispatch();
   const patientData = useSelector(state => state.patient.patient);
-  console.log('redux data---', patientData);
   const token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
   const [selected, setSelected] = useState('');
@@ -92,7 +91,7 @@ const Abha = ({navigation}) => {
     const options = {
       mediaType: 'photo',
       quality: 0.5,
-    };
+    }
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
@@ -100,7 +99,6 @@ const Abha = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.uri);
         setSelectedImage(response?.assets?.[0]?.uri);
       }
     });
@@ -163,7 +161,6 @@ const Abha = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
         //navigation.navigate('success');
       } else {
         console.error('API call failed:', response.status);

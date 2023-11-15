@@ -65,7 +65,6 @@ const AddUser = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [showclinic, setShowclinic] = useState(false);
   const {id} = route.params;
-  console.log('----------------users', id);
   const dispatch = useDispatch();
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -80,10 +79,6 @@ const AddUser = ({navigation}) => {
   const [clinic_ID, setClinic_Id] = useState();
   const [otherRole, setOtherRole] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
-  console.log(
-    '================================+++++++++clinic',
-    selectedClinic,
-  );
   const [values, setValues] = useState({
     name: '',
     phone: '',

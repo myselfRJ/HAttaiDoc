@@ -155,7 +155,6 @@ const UserDisplay = ({navigation}) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('sucee', data);
         if (data.status === 'success') {
           setVisible(!visible);
         }

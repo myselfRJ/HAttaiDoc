@@ -11,7 +11,6 @@ const commorbitiesSlice = createSlice({
   reducers: {
     addCommorbities: (state, action) => {
       state.commorbitiesItems = action.payload;
-      console.log('action.payload',action.payload);
     },
     updateCommorbities: (state, action) => {
         state.commorbitiesItems = action.payload;

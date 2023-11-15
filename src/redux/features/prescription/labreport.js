@@ -11,7 +11,6 @@ const labReportSlice = createSlice({
   reducers: {
     addLabReport: (state, action) => {
       state.labReport = action.payload;
-      console.log('action.payload',action.payload);
     },
     updateLabReport: (state, action) => {
         state.labReport = action.payload;

@@ -75,7 +75,6 @@ export default function Prescribe() {
     const updatedPrescribe = prescribeList?.filter(
       (item, ind) => ind !== index,
     );
-    console.log(updatedPrescribe);
     setPrescribeList(updatedPrescribe);
   };
 
@@ -98,12 +97,10 @@ export default function Prescribe() {
 
   const toggleFrequencyValue = (index, value) => {
     const frequency = prescribeInput[index].frequency;
-    console.log('frequency', frequency);
     const updatedFrequency = frequency.includes(value)
       ? frequency.filter(item => item !== value)
       : JSON.stringify([...frequency, value]);
     handlePrescribeChange(updatedFrequency, index, 'frequency');
-    console.log('upadtefrequency', updatedFrequency);
     // if (frequency === 'null') {
     //   const updatedFrequency = [value];
     //   handlePrescribeChange(updatedFrequency, index, 'frequency');

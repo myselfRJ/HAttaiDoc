@@ -124,11 +124,8 @@ const Commorbities = ({navigation}) => {
         );
       });
       setSug(uniqueArray);
-      console.log('============>array', array);
     });
   }, []);
-
-  console.log('=========>sug', sug);
 
   return (
     <View style={styles.main}>

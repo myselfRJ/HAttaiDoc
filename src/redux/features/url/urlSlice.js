@@ -7,7 +7,6 @@ const urlSlice = createSlice({
   initialState,
   reducers: {
     urlupdate: (state, action) => {
-      console.log('.....', action);
       state.url = action.payload;
     },
   },

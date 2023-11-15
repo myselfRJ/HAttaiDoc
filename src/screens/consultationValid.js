@@ -57,7 +57,6 @@ export default function Valid() {
   };
 
   const dateTimeRed = useSelector(state => state.valid?.date);
-  console.log('----------', dateTimeRed);
 
   const handleCancel = () => {
     setOpen(open);
@@ -91,7 +90,7 @@ export default function Valid() {
   };
 
   const sign = createRef();
-  console.log('sign====>', sign);
+
 
   const saveSign = () => {
     sign.current.saveImage();
@@ -117,8 +116,6 @@ export default function Valid() {
 
   const _onDragEvent = () => {
     setSign(!doctorSign)
-    // This callback will be called when the user enters signature
-    console.log('dragged');
   };
 
   return (

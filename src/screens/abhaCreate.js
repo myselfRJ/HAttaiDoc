@@ -69,7 +69,6 @@ const AbhaCreate = ({navigation, route}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('response====>', response?.assets?.[0]?.base64);
         setSelectedImage(response?.assets?.[0]?.base64);
       }
     });
@@ -109,7 +108,6 @@ const AbhaCreate = ({navigation, route}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        console.log(jsonData);
         const patient_phone_number = jsonData?.mobile;
         const postPatientdata = await fetchApi(URL.addPatient, {
           method: 'POST',
@@ -131,7 +129,6 @@ const AbhaCreate = ({navigation, route}) => {
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
           useDispatch(addPatient.addPatient(PatientData))
-          console.log('patients', PatientData);
           setTimeout(() => {
             navigation.navigate('success', {patient_phone_number});
           }, 1000);
@@ -174,18 +171,18 @@ const AbhaCreate = ({navigation, route}) => {
     return isPasswordValid && isPasswordLengthValid && passwordsMatch;
   };
 
-  console.log('====================================');
-  console.log(
-    {email: email},
-    {firstName: firstName},
-    {lastName: lastName},
-    {middleName: middleName},
-    {healthId: healthID},
-    {profilePhoto: selectedImage},
-    {txnId: AbhaTxnId},
-    {password: password},
-  );
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(
+  //   {email: email},
+  //   {firstName: firstName},
+  //   {lastName: lastName},
+  //   {middleName: middleName},
+  //   {healthId: healthID},
+  //   {profilePhoto: selectedImage},
+  //   {txnId: AbhaTxnId},
+  //   {password: password},
+  // );
+  // console.log('====================================');
 
   return (
     <ScrollView>

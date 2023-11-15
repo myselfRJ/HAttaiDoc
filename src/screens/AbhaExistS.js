@@ -58,7 +58,6 @@ const AbhaExistDetails = ({route}) => {
   } = route.params;
 
   const token = useSelector(state => state?.authenticate?.auth?.access);
-  console.log('--------------token', token);
 
   const fetchData = async () => {
     try {
@@ -82,7 +81,6 @@ const AbhaExistDetails = ({route}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
        // useDispatch(addPatient.addPatient(jsonData))
-        console.log('patient data----',jsonData);
         setTimeout(() => {
           navigation.navigate('success', {patient_phone_number});
         }, 1000);

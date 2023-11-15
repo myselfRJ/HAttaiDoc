@@ -23,7 +23,6 @@ const PatientSearch = patient => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
-  console.log('------------------patient', patient);
 
   return (
     <>

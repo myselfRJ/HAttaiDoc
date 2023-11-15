@@ -29,10 +29,6 @@ import CustomIcon from '../components/icon';
 const SearchAddnew = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const clinic_id = useSelector(state => state.clinicid?.clinic_id);
-
-  // console.log('====================================');
-  // console.log('clinc----------ID,---------------', clinic_id);
-  // console.log('====================================');
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
   const [phoneNumber, setPhoneNumber] = useState('');

@@ -13,9 +13,7 @@ const AbhaAccessSlice = createSlice({
   initialState,
   reducers: {
     updateAbhaAccess: (state, action) => {
-      console.log('payload', action.payload);
       state.auth.access = action.payload;
-      console.log('state', state);
     },
     UpdatetxnId: (state, action) => {
       state.auth.txnid = action.payload;

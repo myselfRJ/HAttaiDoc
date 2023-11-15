@@ -13,7 +13,6 @@ const CheifComplaints = ({route}) => {
     'suggestion5',
   ];
   const {complaint} = route.params;
-  console.log('com====', complaint);
   return (
     <Provider store={store}>
       <ComplaintsCard complaint={complaint} />

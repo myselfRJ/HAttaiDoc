@@ -7,7 +7,7 @@ import {
   verticalScale,
 } from '../utility/scaleDimension';
 const AddImage = props => {
-  // console.log('urel====>', props.encodedBase64);
+
 
   return props?.encodedBase64 ? (
     <Pressable onPress={props.onPress} style={styles.url}>

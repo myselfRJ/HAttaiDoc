@@ -44,7 +44,6 @@ const SlotCreate = ({navigation, route}) => {
   const durationMins = CONSTANTS.duration;
   const [visibleSlot, setVisibleSlot] = useState(false);
   const [selectSlot, setselectSlot] = useState([]);
-  console.log('length===', selectSlot);
   const [selectedConsultValue, setConsultValue] = useState(consultType[0]);
   const [selectedDurationValue, setDurationValue] = useState(durationMins[1]);
   const [slots, setSlots] = useState({
@@ -56,9 +55,6 @@ const SlotCreate = ({navigation, route}) => {
     Sa: [],
     Su: [],
   });
-
-  console.log('allslots===', slots);
-
   const [selectedDay, setSelectedDay] = useState('M');
 
   const DaySelection = index => {

@@ -47,14 +47,12 @@ const PatientSearchCard = patient_data => {
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
-    // console.log(patient_data.data);
     navigation.navigate('patientrecord', {patient_phone});
     patientSearchRef?.current?.snapToIndex(0);
   };
 
   const handleOnBook = () => {
     const patient_phone = patient_phone_number;
-    console.log(patient_data.data);
     navigation.navigate('bookslot', {patient_phone});
     patientSearchRef?.current?.snapToIndex(0);
   };
