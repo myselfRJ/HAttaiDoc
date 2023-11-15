@@ -205,8 +205,9 @@ const PhysicalExamination = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
+      console.log('physical===',jsonData)
       setValue(jsonData?.data?.notes === undefined ? '' :jsonData?.data?.notes);
-      // setDescribe(jsonData?.data?.description);
+      // setDescribe(jsonData?.data?.description);nnnnn
       setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);

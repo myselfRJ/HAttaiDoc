@@ -208,7 +208,7 @@ const Allergies = () => {
                   ]}>
                   <Text
                     style={{
-                      fontWeight: '700',
+                      fontWeight: '400',
                       color:
                         value === item
                           ? CUSTOMCOLOR.white

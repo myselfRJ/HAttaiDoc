@@ -29,7 +29,7 @@ const ShowChip = props => {
           style={{
             color: CUSTOMCOLOR.primary,
             fontFamily: CUSTOMFONTFAMILY.body,
-            fontWeight: '700',
+            fontWeight: '400',
             fontSize: CUSTOMFONTSIZE.h3,
           }}>
           {props.text}

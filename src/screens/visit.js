@@ -62,6 +62,7 @@ const Visit = ({navigation, route}) => {
 
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
+  console.log('physical===',physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -808,6 +809,8 @@ const Visit = ({navigation, route}) => {
     }
   }
 
+  const physi = JSON.stringify(physical)
+
   return (
     <View>
       <ScrollView>
@@ -884,9 +887,9 @@ const Visit = ({navigation, route}) => {
                     patient_data?.gender === 'Female') &&
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
-                    <Text style={styles.patientText}>
-                      Pregnancy : LMP :{`${day}-${months[month]}-${Year}`} |
-                      EDD:
+                    <Text style={[styles.patientText,{fontWeight:'700'}]}>
+                      Pregnancy : LMP:{' '}{`${day}-${months[month]}-${Year}`} |
+                      EDD:{' '}
                       {vitalsData.EDD}
                     </Text>
                   ) : null}
@@ -946,7 +949,9 @@ const Visit = ({navigation, route}) => {
                     }{' '}
                     {vitalsData?.others &&  
                        <Text><Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null}</Text> :<Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text>
-                  </Text>}</Text>
+                  </Text>}
+                  </Text>
+                 
                 )}
 
                 <Seperator />
@@ -977,7 +982,7 @@ const Visit = ({navigation, route}) => {
                         <React.Fragment key={index}>
                           <Text style={styles.patientText}>
                             {item?.allergies}
-                            {index < allergies.length - 1 ? ',' : ''}
+                            {index < allergies.length - 1 ? ',  ' : ''}
                           </Text>
                         </React.Fragment>
                       ))
@@ -1039,7 +1044,7 @@ const Visit = ({navigation, route}) => {
                         obstericHistory)
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Physical Examinations' && physical
+                      (value?.label === 'Physical Examinations' && physi !== '{}'
                         ? 'check-circle'
                         : '')
                     }

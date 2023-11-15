@@ -63,6 +63,7 @@ const ProfileCreate = ({navigation}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [show, setshow] = useState(false);
   const [del, setDel] = useState(false);
+  const [searchstate,setsearchState] = useState('')
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -84,6 +85,18 @@ const ProfileCreate = ({navigation}) => {
     experience: '',
     degree:'',
   });
+  const [filteredState,setFilteredState]= useState([])
+  useEffect(()=>{
+    const filteredState = CONSTANTS.state?.filter((item)=>(
+      item.toLowerCase().startsWith(searchstate.toLowerCase())
+    ))
+    if (filteredState){
+      setFilteredState(filteredState)
+    }else{
+      setFilteredState(CONSTANTS.state)
+    }
+   
+  },[searchstate])
 
   const [status, setStatus] = useState(false);
 
@@ -229,7 +242,7 @@ const ProfileCreate = ({navigation}) => {
     pan_doc_url: '',
     latest_doc_url: '',
     pharmacyPhone: '',
-    degree: values.degree
+    degree: values.degree ? value.degree : "MBBS"
   };
 
   const fetchData = async () => {
@@ -466,8 +479,8 @@ const ProfileCreate = ({navigation}) => {
                 // paddingVertical:moderateScale(0),
                 paddingHorizontal: moderateScale(0),
               }}
-              label="Medical Registration Number"
-              placeholder="Medical Registration number"
+              label="Medical Council Registration Number"
+              placeholder="Medical Council Registration number"
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             />
@@ -489,6 +502,14 @@ const ProfileCreate = ({navigation}) => {
 
             {show === true && (
               <View style={styles.statecontainer}>
+              <InputText
+              search={true}
+              placeholder={'Search state'}
+              value={searchstate}
+              IconName={'magnify'}
+              setValue = {setsearchState}
+            
+              />
                 <ScrollView
                   persistentScrollbar={true}
                   contentContainerStyle={{
@@ -497,7 +518,7 @@ const ProfileCreate = ({navigation}) => {
                   }}>
                   {/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
 
-                  {CONSTANTS.state.map((state, index) => (
+                  {filteredState?.map((state, index) => (
                     <TouchableOpacity
                       key={index}
                       onPress={() => {
@@ -505,8 +526,8 @@ const ProfileCreate = ({navigation}) => {
                         setshow(false);
                       }}
                       style={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(4),
+                        // paddingHorizontal: horizontalScale(4),
+                        // paddingVertical: verticalScale(4),
                       }}>
                       <Text
                         style={[
@@ -535,7 +556,7 @@ const ProfileCreate = ({navigation}) => {
             // borderWidth:1,
             zIndex: -1,
           }}>
-          <Text style={styles.medtext}>Medical Registration Document</Text>
+          <Text style={styles.medtext}>Medical Council Registration Certificate</Text>
           <View style={styles.doc_upload}>
             {selectedFilename ? (
               <View style={styles.selectedfilecontainer}>
@@ -588,6 +609,7 @@ const ProfileCreate = ({navigation}) => {
               values.gender &&
               formatDate &&
               selectedSpeciality &&
+              selectedState !== 'Select' &&
               values.medical_number
                 ? CUSTOMCOLOR.primary
                 : CUSTOMCOLOR.disable,
@@ -599,7 +621,11 @@ const ProfileCreate = ({navigation}) => {
               Alert.alert('Please enter Name');
             } else if (!values.medical_number) {
               Alert.alert('Please Enter Your Medical Number ');
-            } else {
+            } 
+            else if(selectedState === 'Select'){
+              Alert.alert('Please select State');
+            }
+            else {
               fetchData();
             }
           }}
@@ -725,7 +751,7 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: 400,
     fontFamily: CUSTOMFONTFAMILY.body,
-    paddingHorizontal: moderateScale(32),
+    paddingHorizontal: moderateScale(8),
     paddingVertical: moderateScale(10),
   },
   DOBselect: {

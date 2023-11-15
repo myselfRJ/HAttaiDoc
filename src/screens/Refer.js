@@ -142,11 +142,11 @@ const ReferToDoctor = () => {
                 <p style="text-align: center;margin: 36px;">For questions or more information, please contact Dr. ${
                   data?.doctor_name
                 } ,  ${data?.doctor_phone_number}.</p>
-                <p style="margin: 0;text-align: center">powered by</p>
+                <p style="margin: 8px;text-align: center;font-weight:300;font-size:12px;">powered by</p>
                 <div  style="display: flex; justify-content: center; align-items: center;">
                 <img style="height: 50px;width:120px" src="${
                   CONSTANTS.pdf_footer
-                }" style="float: center; margin-right: 10px;margin-top: 36px" alt="Image Description">
+                }" style="float: center; margin-right: 10px;margin-top: 48px" alt="Image Description">
                 </div>
             </footer>
         </body>
@@ -315,7 +315,7 @@ const ReferToDoctor = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
-  console.log('======>sug', sug);
+  // console.log('======>sug', sug);
   const handlePress = value => {
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
