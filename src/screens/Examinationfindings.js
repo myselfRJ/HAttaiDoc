@@ -27,7 +27,7 @@ import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fileurl, URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {stopUpload} from 'react-native-fs';
 import CustomIcon from '../components/icon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -37,6 +37,7 @@ const ExaminationFindings = ({navigation}) => {
   const route = useRoute();
   const {examinationDetails} = route.params;
   const [value, setValue] = useState('');
+  const nav = useNavigation();
   const [describe, setDescribe] = useState('');
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
@@ -115,8 +116,13 @@ const ExaminationFindings = ({navigation}) => {
   const apiUrl = URL.uploadExaminations;
 
   const handle = () => {
-    postData(apiUrl);
-    handlePress();
+    if(report != undefined){
+      nav?.goBack();
+    }else{
+      postData(apiUrl);
+      handlePress();
+    }
+    
   };
 
   const onImagePress = () => {
@@ -224,7 +230,7 @@ const ExaminationFindings = ({navigation}) => {
       navigation.navigate('img', {path});
     }
   };
-
+console.log('report',report);
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -331,7 +337,7 @@ const ExaminationFindings = ({navigation}) => {
           alignSelf: 'flex-end',
           marginTop: verticalScale(48),
           backgroundColor:
-            uploaddocument?.length === 5
+            uploaddocument?.length === 5 || report != undefined
               ? CUSTOMCOLOR.disable
               : CUSTOMCOLOR.primary,
         }}

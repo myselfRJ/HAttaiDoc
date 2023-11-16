@@ -422,7 +422,7 @@ export const CONSTANTS = {
     },
   ],
   ReferTypes: ['Clinic', 'Hospital', 'Doctor'],
-  blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'UnSure'],
+  blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'Unsure'],
   find_us: [
     'Newspaper',
     'TV',

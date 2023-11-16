@@ -603,9 +603,11 @@ const SlotBook = ({navigation, route}) => {
                   label="Book Slot"
                   //onPress={() => navigation.navigate('dashboard')}
                   onPress={() => {
-                    if (id === undefined) {
+                    if (id === undefined && !loading ) {
                       selectedTypeAppointment
-                        ? Appointment_Booking()
+                        ?
+                          Appointment_Booking()
+                
                         : Alert.alert(
                             'Warn',
                             'Please Select Type Of Appointment',
