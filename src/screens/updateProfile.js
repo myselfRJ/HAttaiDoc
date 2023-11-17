@@ -576,9 +576,9 @@ const UpdateProfile = ({navigation}) => {
                 onUpload={handleSelectFilename}
               />
               <UploadShow
-                head={'Pan'}
+                head={'Aadhar'}
                 file={pan && pan?.name}
-                label={' Upload Pan'}
+                label={' Upload Aadhar'}
                 onUpload={handlePan}
                 onDelete={handleClearpan}
               />

@@ -188,7 +188,7 @@ const Account = () => {
         <View style={styles.ProfView}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
-              <View style={styles.profCard}>
+              {/* <View style={styles.profCard}>
                 <Icon
                   name="google-circles-communities"
                   size={16}
@@ -196,14 +196,14 @@ const Account = () => {
                 />
                 <Text style={styles.subhead}>Registration Council</Text>
                 <Text style={styles.subvalue}>Medical Registration</Text>
-              </View>
+              </View> */}
               <View style={styles.profCard}>
                 <Icon
                   name="medical-bag"
                   size={16}
                   color={CUSTOMCOLOR.primary}
                 />
-                <Text style={styles.subhead}>Medical Number</Text>
+                <Text style={styles.subhead}>Medical Council Regd. No</Text>
                 <Text style={styles.subvalue}>{data?.medical_number}</Text>
               </View>
               <View style={styles.profCard}>

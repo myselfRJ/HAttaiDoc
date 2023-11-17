@@ -548,7 +548,7 @@ const SlotBook = ({navigation, route}) => {
             onPress={() => handleOptions('offline')}
           />
           <Option
-            label="TelePhonic"
+            label="Telephonic"
             value="TelePhonic"
             selected={selectedMode === 'TelePhonic'}
             onPress={() => handleOptions('TelePhonic')}

@@ -92,6 +92,7 @@ const AddClinic = ({navigation}) => {
     Sa: [],
     Su: [],
   });
+  console.log('pharmach',phramcyPhone);
   const ResetReduxSlots = () => {
     const newSlotsss = {
       slots: {
@@ -173,7 +174,7 @@ const AddClinic = ({navigation}) => {
       slot: JSON.stringify(slots),
       clinic_phone_number: value.phone,
       clinic_logo_url: selectedLogo ? selectedLogo : CONSTANTS.default_image,
-      phramcyPhone: phramcyPhone ? phramcyPhone : '',
+      pharmacyPhone: phramcyPhone ? phramcyPhone : '',
     },
   ];
 

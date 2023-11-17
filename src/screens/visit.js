@@ -810,7 +810,7 @@ const Visit = ({navigation, route}) => {
   }
 
   const physi = JSON.stringify(physical)
-
+console.log(typeof (vitalsData?.others));
   return (
     <View>
       <ScrollView>
@@ -947,9 +947,11 @@ const Visit = ({navigation, route}) => {
                     {vitalsData?.body_temperature &&
                       <Text>Temp: <Text style={{fontWeight:'700'}}>{vitalsData.body_temperature}</Text>{String.fromCharCode(8451)}</Text>
                     }{' '}
-                    {vitalsData?.others &&  
-                       <Text><Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null}</Text> :<Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text>
-                  </Text>}
+                    {Object.keys(vitalsData?.others)[0] !== "" &&  
+                     
+                        <Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null} :
+                        <Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text></Text>
+                 }
                   </Text>
                  
                 )}
