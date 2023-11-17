@@ -156,7 +156,7 @@ export default function DateTime() {
       <View style={styles.submit}>
         <HButton
           btnstyles={commonstyles.activebtn}
-          label={'submit'}
+          label={'Save'}
           onPress={() => {
             handlePress();
           }}
