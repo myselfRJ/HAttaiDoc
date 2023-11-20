@@ -32,6 +32,7 @@ import {
   UpadateCheifComplaint,
   addCheifComplaint,
   updatefees,
+  updateAdditionalNote,
 } from '../redux/features/prescription/prescriptionSlice';
 import {
   CUSTOMCOLOR,
@@ -57,7 +58,7 @@ const PdfView = ({navigation}) => {
     prevScreen,
   } = route.params;
   const SuccesRef = useRef(null);
-
+ console.log('data==',consultationData?.note);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
@@ -113,6 +114,7 @@ const PdfView = ({navigation}) => {
     dispatch(UpadateCheifComplaint(newComplaint));
     dispatch(updatecommorbidities(commorbidities));
     dispatch(updatefees([]));
+    dispatch(updateAdditionalNote(''))
   };
   const putComplaint = async () => {
     try {

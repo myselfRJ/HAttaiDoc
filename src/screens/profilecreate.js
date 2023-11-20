@@ -675,10 +675,10 @@ const ProfileCreate = ({navigation}) => {
                 // justifyContent: 'space-between',
               }}>
               <UploadShow
-                head={'Medical Document'}
+                head={'Redg. Document'}
                 file={selectedFilename && selectedFilename?.name}
                 onDelete={handleClearFile}
-                label={'upload Medical Document'}
+                label={'upload Redg. Document'}
                 onUpload={handleSelectFilename}
               />
               <UploadShow
@@ -689,7 +689,7 @@ const ProfileCreate = ({navigation}) => {
                 onDelete={handleClearpan}
               />
               <UploadShow
-                head={'lastest Degree Certificate'}
+                head={'Lastest Degree Certificate'}
                 file={latestRecord && latestRecord?.name}
                 label={'Upload Latest Degree'}
                 onUpload={handlelatest}

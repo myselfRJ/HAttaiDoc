@@ -43,6 +43,7 @@ const OthersFees = ({navigation}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const service_fees = useSelector(state => state.prescription.fees);
+  console.log('fees===',service_fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
   const [submittedFees, setSubmiitedFees] = useState([]);
@@ -52,11 +53,17 @@ const OthersFees = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {feesDetails} = route.params;
   const id = feesDetails?.appointment_id;
-  let totalFees = parseInt(consultation_fees);
+  let totalFees = 0;
 
   submittedFees?.forEach(item => {
     totalFees += parseInt(item.charge);
   });
+  useEffect(()=>{
+    setSubmiitedFees([...submittedFees, {
+      service_name: `Consultation Fees`,
+      charge: parseInt(consultation_fees),
+    }])
+  },[])
   const handleAdd = () => {
     setSubmiitedFees([
       ...submittedFees,
@@ -69,17 +76,17 @@ const OthersFees = ({navigation}) => {
   const handleDispatch = () => {
     dispatch(
       updatefees([
-        {
-          service_name: `Consultation Fees`,
-          charge: parseInt(consultation_fees),
-        },
-        ...submittedFees,
+        // {
+        //   service_name: `Consultation Fees`,
+        //   charge: parseInt(consultation_fees),
+        // },
+        ...submittedFees
         ,
         {totalFees: totalFees},
       ]),
     );
     if (data) {
-      if (data?.length > 1) {
+      if (data?.length > 0) {
         UpdateFees();
       } else {
         SaveFees();
@@ -98,8 +105,12 @@ const OthersFees = ({navigation}) => {
   }, []);
 
   const handleDelete = ind => {
-    const updatefees = submittedFees?.filter((_, index) => index !== ind);
-    setSubmiitedFees(updatefees);
+    const updatefee = submittedFees?.filter((_, index) => index !== ind);
+    // if(service_fees?.length>0){
+    //   const updatedfess = service_fees?.filter(((_, index) => index !== ind))
+    // dispatch(updatefees(updatedfess))
+    // }
+    setSubmiitedFees(updatefee);
   };
 
   const GetFees = async () => {
@@ -135,10 +146,6 @@ const OthersFees = ({navigation}) => {
   const UpdateFees = async () => {
     const updateFees = {
       fees: JSON.stringify([
-        {
-          service_name: `Consultation Fees`,
-          charge: parseInt(consultation_fees),
-        },
         ...submittedFees,
 
         {totalFees: totalFees},
@@ -176,10 +183,6 @@ const OthersFees = ({navigation}) => {
 
   const SaveFees = async () => {
     const feeDetails = JSON.stringify([
-      {
-        service_name: `Consultation Fees`,
-        charge: parseInt(consultation_fees),
-      },
       ...submittedFees,
       {totalFees: totalFees},
     ]);
@@ -235,10 +238,10 @@ const OthersFees = ({navigation}) => {
           head={{paddingHorizontal: 0}}
           headtext={{fontWeight: 'bold'}}
         />
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.text}>Consultation Fees</Text>
           <Text style={styles.text}>{consultation_fees}</Text>
-        </View>
+        </View> */}
         {submittedFees?.length > 0 && (
           <View style={{flexDirection: 'row', gap: horizontalScale(8)}}>
             {/* <Text style={{fontWeight: '400', color: CUSTOMCOLOR.primary}}>

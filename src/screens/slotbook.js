@@ -268,7 +268,7 @@ const SlotBook = ({navigation, route}) => {
       if (jsonData?.data) {
         setFormatDate(jsonData?.data?.appointment_date);
         setComplaint(jsonData?.data?.complaint);
-        setSelectedMode(jsonData?.data?.mode_of_consultation);
+        // setSelectedMode(jsonData?.data?.mode_of_consultation);
         setSelectedTypeAppointment(
           jsonData?.data?.appointment_type === 'walkin'
             ? 'New'
@@ -296,7 +296,7 @@ const SlotBook = ({navigation, route}) => {
         },
         body: JSON.stringify({
           appointment_date: formatDate,
-          mode_of_consultation: selectedMode,
+          mode_of_consultation: 'inclinic',
           appointment_type:
             selectedTypeAppointment === 'New'
               ? 'walkin'
@@ -363,7 +363,7 @@ const SlotBook = ({navigation, route}) => {
         },
         body: JSON.stringify({
           appointment_date: formatDate,
-          mode_of_consultation: selectedMode,
+          mode_of_consultation: 'inclinic',
           appointment_type:
             selectedTypeAppointment === 'New'
               ? 'walkin'
@@ -540,7 +540,7 @@ const SlotBook = ({navigation, route}) => {
             ))}
         </View>
 
-        <View style={styles.type}>
+        {/* <View style={styles.type}>
           <Option
             label="Offline"
             value="Offline"
@@ -553,7 +553,7 @@ const SlotBook = ({navigation, route}) => {
             selected={selectedMode === 'TelePhonic'}
             onPress={() => handleOptions('TelePhonic')}
           />
-        </View>
+        </View> */}
         <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>Appointment Type{' '}<Text style={{color:'red',fontSize:CUSTOMFONTSIZE.h4}}>*</Text></Text>
         <View style={styles.selection}>
           {selections?.map((val, ind) => (

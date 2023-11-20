@@ -56,6 +56,7 @@ import PdfView from '../screens/PdfPreview';
 import PatientHistoryPdf from '../screens/PdfHistory';
 import History from '../screens/History';
 import ImageViewer from '../screens/imageViewer';
+import AdditionalNotes from '../screens/additionNotes';
 
 const Stack = createNativeStackNavigator();
 
@@ -150,6 +151,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Report Findings',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+        <Stack.Screen
+        name="additional"
+        component={AdditionalNotes}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Notes',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

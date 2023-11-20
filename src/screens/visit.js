@@ -48,6 +48,7 @@ import {CONSTANTS} from '../utility/constant';
 import Seperator from '../components/seperator';
 import PDFViewer from '../components/PdfViewer';
 import {PermmisionStorage} from '../utility/permissions';
+import { addAllergies } from '../redux/features/prescription/allergies';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
@@ -56,10 +57,9 @@ const Visit = ({navigation, route}) => {
   // const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-
   const date = useSelector(state => state?.dateTime?.date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
-
+  const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
   console.log('physical===',physical);
@@ -144,6 +144,31 @@ const Visit = ({navigation, route}) => {
     dispatch(addCheifComplaint(complaint));
   }, []);
 
+  const fetchAllergyData = async () => {
+    const response = await fetchApi(URL.getAllergy(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      const allergiesData = jsonData?.data?.map(item => ({allergies:item?.allergies}))
+      const uniqueArray = allergiesData?.filter((item, index) => {
+        return (
+          index === allergiesData?.findIndex(obj => obj.allergies === item?.allergies)
+        );
+      });
+      dispatch(addAllergies(uniqueArray))
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllergyData();
+  }, []);
+
   const [chief_complaint, setComplaint] = useState('');
   const [vitals, setVitals] = useState({});
   const consultationData = {
@@ -156,7 +181,7 @@ const Visit = ({navigation, route}) => {
     refer_to_doctor: selectedDoctor,
     // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
     follow_up: date,
-    note: note,
+    note: JSON.stringify(({note:note,additional_notes:notes})),
     diagnosis: diagnosis,
     labReports: labreport,
     // commoribities: commorbities,
@@ -271,17 +296,15 @@ const Visit = ({navigation, route}) => {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
         setServiceFees(fees);
-      } else {
-        dispatch(
-          addfees([
-            {
-              service_name: `Consultation Fees`,
-              charge: parseInt(consultation_fees),
-            },
-            {totalFees: parseInt(consultation_fees)},
-          ]),
-        );
-      }
+        console.log("========fee",fees);
+      } 
+      // else {
+      //   dispatch(
+      //     addfees([
+      //       {totalFees: parseInt(consultation_fees)},
+      //     ]),
+      //   );
+      // }
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -627,7 +650,7 @@ const Visit = ({navigation, route}) => {
                     line-height:4px;">
                             <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
-                            color:#4ba5fa;">Notes:</p>
+                            color:#4ba5fa;">History of Present Illness:</p>
                             <p id='values' style=" font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${note}</p>
@@ -667,7 +690,7 @@ const Visit = ({navigation, route}) => {
                           </div>`
                             : ''
                         }
-          <p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
+                        ${service_fees?.length >1 ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
                         <table style="border-collapse: collapse;margin-bottom: 48px;margin-top:12px;">
                         <tr>
         <th style="padding:4px;text-align: start; width:10%">S.No</th>
@@ -694,7 +717,7 @@ const Visit = ({navigation, route}) => {
                           .join('')}           
                     </table>
                     <p style="margin-left: 50%;font-weight:700;font-size:16px";>Total : Rs.
-                    ${charge ? charge[charge && 'totalFees'] : ''}</p>
+                    ${charge ? charge[charge && 'totalFees'] : ''}</p>`:''}
                     </div>
                     <div class ='footer'>
                         <footer class='desc' style=" display: flex;
@@ -1010,8 +1033,8 @@ console.log(typeof (vitalsData?.others));
                       (value?.label === 'Prescribe' && Prescribe?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'History of Present Illness' &&
-                      Prescribe?.length > 0
+                      (value.label === 'Additional Recommendations/Notes' &&
+                      notes !== '' 
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Diagnosis' && diagnosis?.length > 0
@@ -1312,6 +1335,17 @@ console.log(typeof (vitalsData?.others));
                           size={moderateScale(16)}
                         />
                         <Text style={styles.pulse}>{note}</Text>
+                      </View>
+                    )}
+                    {value.label === 'Additional Recommendations/Notes' &&
+                    notes !== '' && (
+                      <View style={styles.complaintcontainer}>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{notes}</Text>
                       </View>
                     )}
                   {/* {value.label === 'Diagnosis' && diagnosis !== '' && 

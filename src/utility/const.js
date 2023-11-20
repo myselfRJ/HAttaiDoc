@@ -9,14 +9,26 @@ export const CONSTANT = {
       icon: 'pencil',
       navigate: 'notescreen',
     },
-    {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
-    {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
-    {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
+    {
+      label: 'Physical Examinations',
+      icon: 'pencil',
+      navigate: 'examination',
+    },
+    {
+      label: 'Medical History',
+      icon: 'pencil',
+      navigate: 'medicalhistory',
+    },
     {
       label: 'Report Findings',
       icon: 'pencil',
       navigate: 'findings',
     },
+    {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
+    {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
+    {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
+    {label: 'Additional Recommendations/Notes', icon: 'pencil', navigate: 'additional'},
+  
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
     {
       label: 'Fees',
@@ -28,16 +40,8 @@ export const CONSTANT = {
       icon: 'pencil',
       navigate: 'refer',
     },
-    {
-      label: 'Medical History',
-      icon: 'pencil',
-      navigate: 'medicalhistory',
-    },
-    {
-      label: 'Physical Examinations',
-      icon: 'pencil',
-      navigate: 'examination',
-    },
+    
+  
 
     // {label: 'Comorbidities', icon: 'chevron-right', navigate: 'commorbities'},
     // {

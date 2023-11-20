@@ -69,6 +69,7 @@ export const URL = {
   get_reports: id => `${baseUrl}consult/get-examination?id=${id}`,
   getFees: id => `${baseUrl}consult/getFees?id=${id}`,
   updateFees: id => `${baseUrl}consult/updateFees?id=${id}`,
+  getAllergy: phone => `${baseUrl}consult/get-allergies?phone=${phone}`,
   savefees: `${baseUrl}consult/saveFees`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
