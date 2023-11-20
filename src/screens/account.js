@@ -301,7 +301,7 @@ const Account = () => {
                   size={moderateScale(20)}
                   name={'file-pdf-box'}
                 />
-                {<Text>pan.pdf</Text>}
+                {<Text>Aadhar.pdf</Text>}
               </>
             }
             main={{marginHorizontal: 0}}
@@ -320,7 +320,7 @@ const Account = () => {
                   size={moderateScale(20)}
                   name={'file-pdf-box'}
                 />
-                {<Text>Latest Document.pdf</Text>}
+                {<Text>Degree.pdf</Text>}
               </>
             }
             main={{marginHorizontal: 0}}

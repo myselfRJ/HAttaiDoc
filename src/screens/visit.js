@@ -947,11 +947,13 @@ console.log(typeof (vitalsData?.others));
                     {vitalsData?.body_temperature &&
                       <Text>Temp: <Text style={{fontWeight:'700'}}>{vitalsData.body_temperature}</Text>{String.fromCharCode(8451)}</Text>
                     }{' '}
-                    {Object.keys(vitalsData?.others)[0] !== "" &&  
+                    {vitalsData?.others && (
+                      Object?.keys(vitalsData?.others)[0] !== "" &&  
                      
-                        <Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null} :
-                        <Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text></Text>
-                 }
+                      <Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null} :
+                      <Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text></Text>
+               
+                    )}
                   </Text>
                  
                 )}

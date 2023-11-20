@@ -54,16 +54,18 @@ import Modal from 'react-native-modal';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import CustomCalendar from '../components/calendar';
 
+
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
   const appointmentCardRef = useRef(null);
-  const [selectedFilename, setSelectedFilename] = useState('');
+  const [selectedFilename, setSelectedFilename] = useState({});
   const [uploaddocument, SetUploadDocument] = useState('');
   const [isHovered, setIsHovered] = useState(false);
   const [show, setshow] = useState(false);
   const [del, setDel] = useState(false);
   const [searchstate,setsearchState] = useState('')
+  const [pan, setPan] = useState({});
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   useEffect(() => {
@@ -110,24 +112,6 @@ const ProfileCreate = ({navigation}) => {
     }
   };
 
-  const pickSingleFile = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-      });
-      const originalFilename = result[0]?.name || '';
-      setSelectedFilename(originalFilename);
-      const base64Document = await convertUriToBase64(result[0]?.uri || '');
-      SetUploadDocument(base64Document);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-      } else {
-      }
-    }
-  };
-  const handleClearFile = () => {
-    setSelectedFilename('');
-  };
   const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
@@ -226,7 +210,7 @@ const ProfileCreate = ({navigation}) => {
     setState(state);
     handleChangeValue('state', state);
   };
-
+  const [latestRecord, setLatestRecord] = useState({});
   const doctor_profile_data = {
     doctor_name: values.doctor_name,
     experience: values.experience,
@@ -237,11 +221,10 @@ const ProfileCreate = ({navigation}) => {
     specialization: selectedSpeciality,
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
-    medical_doc_url: uploaddocument,
     state: selectedState === 'select' ? null : selectedState,
-    pan_doc_url: '',
-    latest_doc_url: '',
-    pharmacyPhone: '',
+    medical_doc_url: selectedFilename?.uri,
+    pan_doc_url: pan?.uri,
+    latest_doc_url: latestRecord?.uri,
     degree: values.degree ? value.degree : "MBBS"
   };
 
@@ -298,6 +281,96 @@ const ProfileCreate = ({navigation}) => {
     disableBackButton();
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
+
+  const pickSingleFile = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+      });
+      const originalFilename = result[0]?.name || '';
+      const base64Document = await convertUriToBase64(result[0]?.uri || '');
+      let fileDetails = {
+        name: originalFilename,
+        uri: base64Document,
+      };
+      return fileDetails;
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // Handle cancel event
+      } else {
+        // Handle other errors
+      }
+    }
+  };
+
+ 
+//  console.log('latest==',latestRecord?.uri)
+  const handlelatest = async () => {
+    try {
+      const file = await pickSingleFile();
+      setLatestRecord(file ? file : {});
+    } catch (error) {}
+  };
+  const handleSelectFilename = async () => {
+    try {
+      const file = await pickSingleFile();
+      setSelectedFilename(file ? file : {});
+    } catch (error) {}
+  };
+  const handlePan = async () => {
+    try {
+      const file = await pickSingleFile();
+      setPan(file ? file : {});
+    } catch (error) {}
+  };
+
+  const handleClearFile = () => {
+    setSelectedFilename('');
+  };
+  const handleClearpan = () => {
+    setPan('');
+  };
+  const handleClearlatest = () => {
+    setLatestRecord('');
+  };
+
+  const UploadShow = ({head, file, onUpload, onDelete, label}) => {
+    return (
+      <View style={styles.doc_upload}>
+        <Text style={styles.medtext}>{head}</Text>
+        {file ? (
+          <View style={styles.selectedfilecontainer}>
+            <Text style={styles.selectedFileInfo}>{file}</Text>
+            <TouchableOpacity
+              onPress={onDelete}
+              style={{
+                backgroundColor: CUSTOMCOLOR.white,
+                borderRadius: moderateScale(24),
+              }}>
+              <Icon
+                name="close"
+                size={moderateScale(24)}
+                color={CUSTOMCOLOR.delete}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <HButton
+            label={label}
+            onPress={onUpload}
+            btnstyles={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderColor: CUSTOMCOLOR.primary,
+              borderWidth: 0.5,
+              borderRadius: 4,
+              alignSelf: 'flex-start',
+            }}
+            textStyle={{color: CUSTOMCOLOR.primary, fontSize: 12}}
+          />
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.main}>
@@ -549,7 +622,7 @@ const ProfileCreate = ({navigation}) => {
             )}
           </View>
         </View>
-        <View
+        {/* <View
           style={{
             // alignSelf: 'flex-start',
             gap: verticalScale(4),
@@ -589,7 +662,40 @@ const ProfileCreate = ({navigation}) => {
               />
             )}
           </View>
-        </View>
+        </View> */}
+        
+        <View
+              style={{
+                // alignSelf: 'flex-start',
+                gap: verticalScale(8),
+                // borderWidth:1,
+                zIndex: -1,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                // justifyContent: 'space-between',
+              }}>
+              <UploadShow
+                head={'Medical Document'}
+                file={selectedFilename && selectedFilename?.name}
+                onDelete={handleClearFile}
+                label={'upload Medical Document'}
+                onUpload={handleSelectFilename}
+              />
+              <UploadShow
+                head={'Aadhar'}
+                file={pan && pan?.name}
+                label={' Upload Aadhar'}
+                onUpload={handlePan}
+                onDelete={handleClearpan}
+              />
+              <UploadShow
+                head={'lastest Degree Certificate'}
+                file={latestRecord && latestRecord?.name}
+                label={'Upload Latest Degree'}
+                onUpload={handlelatest}
+                onDelete={handleClearlatest}
+              />
+            </View>
       </ScrollView>
 
       <View

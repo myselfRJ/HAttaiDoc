@@ -51,6 +51,7 @@ import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
 import RNFS from 'react-native-fs';
 import {useNavigation} from '@react-navigation/native';
+import ShowChip from '../components/showChip';
 
 const UpdateProfile = ({navigation}) => {
   const nav = useNavigation;
@@ -63,7 +64,7 @@ const UpdateProfile = ({navigation}) => {
   const appointmentCardRef = useRef(null);
   const [selectedFilename, setSelectedFilename] = useState({});
 
-  const [uploaddocument, SetUploadDocument] = useState();
+  const [documents,setDocuments] = useState([]);
   const [pan, setPan] = useState({});
   const {phone} = useSelector(state => state?.phone?.data);
   const SuccesRef = useRef(null);
@@ -274,7 +275,7 @@ const UpdateProfile = ({navigation}) => {
       });
       setSelectedSpeciality(jsonData?.data?.specialization);
       setSelectedImage(jsonData?.data?.profile_pic_url);
-      SetUploadDocument(jsonData?.data?.medical_doc_url);
+    setDocuments([{medical:jsonData?.data?.medical_doc_url},{aadhar:jsonData?.data?.pan_doc_url},{degree:jsonData?.data?.latest_doc_url}]);
       setState(jsonData?.data?.state);
     } else {
       console.error('API call failed:', response.status, response);
@@ -283,7 +284,7 @@ const UpdateProfile = ({navigation}) => {
   useEffect(() => {
     fetchDoctors();
   }, []);
-
+console.log(documents?.length);
   const handleStateSelection = state => {
     setState(state);
     handleChangeValue('state', state);
@@ -305,9 +306,9 @@ const UpdateProfile = ({navigation}) => {
       profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
       medical_doc_url: selectedFilename
         ? selectedFilename?.uri
-        : data?.medical_doc_url,
-      pan_doc_url: pan ? pan?.uri : '',
-      latest_doc_url: latestRecord ? latestRecord?.uri : '',
+        : documents?.[0]?.medical,
+      pan_doc_url: pan ? pan?.uri : documents?.[1]?.aadhar,
+      latest_doc_url: latestRecord ? latestRecord?.uri : documents?.[2]?.degree,
       degree: values.degree
     };
     try {
@@ -387,6 +388,11 @@ const UpdateProfile = ({navigation}) => {
         )}
       </View>
     );
+  };
+  const handleDocuments = file => {
+    const path = `data:application/pdf;base64,${file}`;
+
+    navigation.navigate('pdfhistory', {path});
   };
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.white}}>
@@ -557,7 +563,65 @@ const UpdateProfile = ({navigation}) => {
                 )}
               </View>
             </View>
-
+            <View style={{flexDirection:'row',gap:horizontalScale(16)}}>
+            {documents[0]?.medical && (
+        <TouchableOpacity
+          onPress={() => handleDocuments(documents[0]?.medical)}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>Registration Document.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
+      {documents[1]?.aadhar && (
+        <TouchableOpacity
+          onPress={() => handleDocuments(documents[0]?.aadhar)}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>Aadhar.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
+      {documents[2]?.degree && (
+        <TouchableOpacity
+          onPress={() => handleDocuments(documents[0]?.degree)}
+          style={{marginTop: verticalScale(8)}}>
+          <ShowChip
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>Degree.pdf</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+        </TouchableOpacity>
+      )}
+            </View>
             <View
               style={{
                 // alignSelf: 'flex-start',
@@ -583,9 +647,9 @@ const UpdateProfile = ({navigation}) => {
                 onDelete={handleClearpan}
               />
               <UploadShow
-                head={'lastest Document'}
+                head={'lastest Degree Certificate'}
                 file={latestRecord && latestRecord?.name}
-                label={'Upload Latest Record'}
+                label={'Upload Latest Degree'}
                 onUpload={handlelatest}
                 onDelete={handleClearlatest}
               />
@@ -595,7 +659,7 @@ const UpdateProfile = ({navigation}) => {
       </Keyboardhidecontainer>
 
       <View
-        style={{flex: 1, justifyContent: 'flex-end', bottom: verticalScale(8)}}>
+        style={{flex:1,justifyContent: 'flex-end',bottom:verticalScale(32)}}>
         <HButton
           btnstyles={commonstyles.activebtn}
           label={Language[language]['save']}
@@ -671,7 +735,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(24),
     // borderWidth: 1,
-    gap: verticalScale(16),
+    // gap: verticalScale(16),
     zIndex: 1,
     // backgroundColor: CUSTOMCOLOR.white,
   },
@@ -835,7 +899,7 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: verticalScale(120),
     zIndex: 2,
-    gap: verticalScale(16),
+    gap: verticalScale(8),
   },
 });
 
