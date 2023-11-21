@@ -50,7 +50,12 @@ import ChipInput from '../components/ChipInput';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
-  const {gende} = route.params;
+  const {medicaldata} = route.params;
+  const phone = medicaldata?.phone;
+  const token = useSelector(state => state.authenticate.auth.access);
+  const patient_phone= medicaldata?.patient_phone;
+  console.log('phone',phone,patient_phone);
+
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
@@ -71,7 +76,7 @@ const MedicalHistory = ({navigation, route}) => {
   const [menstrual, setMenstrual] = useState('');
   const [obstetric, setObstetric] = useState('');
   const [select, setSelect] = useState('');
-
+  console.log('med==',medical);
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
@@ -111,6 +116,7 @@ const MedicalHistory = ({navigation, route}) => {
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
+  console.log('medical=His',medicationHistory);
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
@@ -214,6 +220,54 @@ const MedicalHistory = ({navigation, route}) => {
     dispatch(addobstericHistory({...obstericHistory, obstetric}));
     nav.goBack();
   };
+  
+  const fetchMedicalData = async () => {
+    const response = await fetchApi(URL.getMedical(phone,patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      console.log('medication',jsonData?.data[0]);
+      if(jsonData?.data[0]?.commoribities){
+        const commo = JSON.parse(jsonData?.data[0]?.commoribities);
+        dispatch(addcommorbiditis(commo))
+      }
+      if(jsonData?.data[0]?.family_history){
+        const family = JSON.parse(jsonData?.data[0]?.family_history);
+        dispatch(addfamilyHistory(family))
+      }
+      if(jsonData?.data[0]?.social_history){
+        const social = JSON.parse(jsonData?.data[0]?.social_history);
+        dispatch(addsocialHistory(social))
+      }
+      if (jsonData?.data[0]?.medication_history) {
+        const medication = JSON.parse(jsonData?.data[0]?.medication_history);
+        setMedical(medication?.medical);
+        dispatch(addmedicationHistory(medication?.medical));
+      }
+      if (jsonData?.data[0]?.past_history) {
+        const hospitalization = JSON.parse(jsonData?.data[0]?.past_history);
+        setPast(hospitalization?.past);
+        dispatch(addpastHistory(hospitalization?.past));
+      }
+      console.log('abghfgbkbkbj======',jsonData?.data[0]?.mensutral_history);
+      if (jsonData?.data[0]?.mensutral_history) {
+        const mens = JSON.parse(jsonData?.data[0]?.mensutral_history);
+        console.log('abghfgbkbkbj======',jsonData?.data[0]?.mensutral_history);
+        setMenstrual(mens?.menstrual);
+        dispatch(addmenstrualHistory(mens?.menstrual));
+      }
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+console.log('================================',menstrual);
+  useEffect(() => {
+    fetchMedicalData();
+  }, []);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -255,6 +309,41 @@ const MedicalHistory = ({navigation, route}) => {
               ))}
             </View>
           ) : null}
+           <ChipInput
+            placeholder={'Eg : Heart diseases, sugar'}
+            item={'family'}
+            label={'Family History'}
+            data={familyHistory}
+            value={family}
+            setValue={setFamily}
+            onSubmit={handleFamily}
+            delete={handleDeleteFamliy}
+          />
+          {family_sug?.length > 0 ? (
+            <View style={styles.suggestion}>
+              {family_sug?.map((item, ind) => (
+                <TouchableOpacity
+                  key={ind}
+                  style={[
+                    styles.sug,
+                    // item?.family == select
+                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
+                    //   : {backgroundColor: CUSTOMCOLOR.white},
+                  ]}
+                  onPress={() => handleSelectFamily(item?.family)}>
+                  <Text
+                    style={[
+                      styles.sugtxt,
+                      item?.family == select,
+                      // ? {color: CUSTOMCOLOR.white}
+                      // : {color: CUSTOMCOLOR.primary},
+                    ]}>
+                    {item?.family}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : null}
 
           <ChipInput
             placeholder={'Eg : smoking, drinking'}
@@ -291,41 +380,7 @@ const MedicalHistory = ({navigation, route}) => {
               ))}
             </View>
           ) : null}
-          <ChipInput
-            placeholder={'Eg : Heart diseases, sugar'}
-            item={'family'}
-            label={'Family History'}
-            data={familyHistory}
-            value={family}
-            setValue={setFamily}
-            onSubmit={handleFamily}
-            delete={handleDeleteFamliy}
-          />
-          {family_sug?.length > 0 ? (
-            <View style={styles.suggestion}>
-              {family_sug?.map((item, ind) => (
-                <TouchableOpacity
-                  key={ind}
-                  style={[
-                    styles.sug,
-                    // item?.family == select
-                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
-                    //   : {backgroundColor: CUSTOMCOLOR.white},
-                  ]}
-                  onPress={() => handleSelectFamily(item?.family)}>
-                  <Text
-                    style={[
-                      styles.sugtxt,
-                      item?.family == select,
-                      // ? {color: CUSTOMCOLOR.white}
-                      // : {color: CUSTOMCOLOR.primary},
-                    ]}>
-                    {item?.family}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ) : null}
+         
           <InputText
             inputContainer={styles.inputtext}
             label="Medication History"
@@ -367,7 +422,7 @@ const MedicalHistory = ({navigation, route}) => {
             setValue={txt => setPast(txt)}
             blur={false}
           />
-          {(gende == 'Female' || gende == 'female') && (
+          {(medicaldata?.gende == 'Female' || medicaldata?.gende == 'female') && (
             <InputText
               inputContainer={styles.inputtext}
               label="Menstrual History"
@@ -377,7 +432,7 @@ const MedicalHistory = ({navigation, route}) => {
               blur={false}
             />
           )}
-          {(gende == 'Female' || gende == 'female') && (
+          {(medicaldata?.gende == 'Female' || medicaldata?.gende == 'female') && (
             <InputText
               inputContainer={styles.inputtext}
               label="Obstetric History"

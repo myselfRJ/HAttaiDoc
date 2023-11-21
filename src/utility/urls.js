@@ -71,6 +71,8 @@ export const URL = {
   getAllergy: phone => `${baseUrl}consult/get-allergies?phone=${phone}`,
   getNotes: (doc_phone, pat_phone) =>
     `${baseUrl}consult/get-Notes?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
+  getMedical: (doc_phone, pat_phone) =>
+    `${baseUrl}consult/get-Pasthistory?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
   savefees: `${baseUrl}consult/saveFees`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',

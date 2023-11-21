@@ -49,20 +49,25 @@ import Seperator from '../components/seperator';
 import PDFViewer from '../components/PdfViewer';
 import {PermmisionStorage} from '../utility/permissions';
 import {addAllergies} from '../redux/features/prescription/allergies';
+import {
+  addcommorbiditis,
+  addfamilyHistory,
+  addmedicationHistory,
+  addsocialHistory,
+} from '../redux/features/prescription/pastHistory';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
   // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
   // const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
   const date = useSelector(state => state?.dateTime?.date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  console.log('physical===', physical);
+  // console.log('physical===',physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -83,6 +88,7 @@ const Visit = ({navigation, route}) => {
   );
 
   const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
+  // const pasthistory2 = useSelector(state => state?.pasthistory?.medicationHistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
   const dateTimeRed = useSelector(state => state.valid?.valid);
@@ -299,7 +305,7 @@ const Visit = ({navigation, route}) => {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
         setServiceFees(fees);
-        console.log('========fee', fees);
+        // console.log("========fee",fees);
       }
       // else {
       //   dispatch(
@@ -430,7 +436,8 @@ const Visit = ({navigation, route}) => {
                   padding:5%;
                 }
                 .page-break-inside {
-                  page-break-inside: avoid; /* Allow automatic page breaks inside this element */
+                  page-break-inside: avoid;
+                  margin-top:16px;
               }
             </style>
             </head>
@@ -605,8 +612,9 @@ const Visit = ({navigation, route}) => {
                     <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
                             margin-top:4px;
+                            margin-top:12px;
                             color:#4ba5fa; margin: 0;" >Prescribe:</p>
-                    <table style="border-collapse: collapse;margin-bottom: 40px;margin-top:12px;">
+                    <table style="border-collapse: collapse;margin-bottom: 40px;">
                 <tr>
                     <th style=" padding: 8px; text-align: center;">S.No</th>
                     <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
@@ -642,6 +650,21 @@ const Visit = ({navigation, route}) => {
                   .join('')}
             </table>
             </div>
+            ${
+              date?.length > 0
+                ? `<div class='subContaioner' style="  display: flex;
+              flex-direction: row;
+              gap: 8px;
+              line-height:4px;">
+                  <p id='subhead' style="font-weight: 400px;
+                  font-size: 16px;
+                  color:#4ba5fa;">Follow Up:</p>
+                  <p id='values'  style=" font-weight: 300px;
+                  font-size: 16px;
+                  color:#000000;">${date}</p>
+              </div>`
+                : ''
+            }
             </div>
                     <div class ='page'>
             
@@ -678,25 +701,11 @@ const Visit = ({navigation, route}) => {
                             : ''
                         }
         
-                        ${
-                          date?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
-                          flex-direction: row;
-                          gap: 8px;
-                          line-height:4px;">
-                              <p id='subhead' style="font-weight: 400px;
-                              font-size: 16px;
-                              color:#4ba5fa;">Follow Up:</p>
-                              <p id='values'  style=" font-weight: 300px;
-                              font-size: 16px;
-                              color:#000000;">${date}</p>
-                          </div>`
-                            : ''
-                        }
+                       
                         ${
                           service_fees?.length > 1
-                            ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
-                        <table style="border-collapse: collapse;margin-bottom: 48px;margin-top:12px;">
+                            ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa;margin-top:16px;">Consultaion Fees:</p>
+                        <table style="border-collapse: collapse;margin-bottom: 48px;">
                         <tr>
         <th style="padding:4px;text-align: start; width:10%">S.No</th>
         <th style="padding: 8px; text-align: start; width: 20%;">Service Name</th>
@@ -1171,6 +1180,11 @@ const Visit = ({navigation, route}) => {
                         params.gende = gende;
                       } else if (value.label === 'Additional Notes') {
                         params.patient_phone = patient_phone;
+                        params.medicaldata = {
+                          gende: gende,
+                          patient_phone: patient_phone,
+                          phone: phone,
+                        };
                       }
 
                       navigation.navigate(value.navigate, params);
