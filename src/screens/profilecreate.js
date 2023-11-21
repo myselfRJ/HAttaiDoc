@@ -54,7 +54,6 @@ import Modal from 'react-native-modal';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import CustomCalendar from '../components/calendar';
 
-
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
   const [apiStatus, setApiStatus] = useState({});
@@ -64,7 +63,7 @@ const ProfileCreate = ({navigation}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [show, setshow] = useState(false);
   const [del, setDel] = useState(false);
-  const [searchstate,setsearchState] = useState('')
+  const [searchstate, setsearchState] = useState('');
   const [pan, setPan] = useState({});
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -85,20 +84,19 @@ const ProfileCreate = ({navigation}) => {
     gender: 'male',
     medical_number: '',
     experience: '',
-    degree:'',
+    degree: '',
   });
-  const [filteredState,setFilteredState]= useState([])
-  useEffect(()=>{
-    const filteredState = CONSTANTS.state?.filter((item)=>(
-      item.toLowerCase().startsWith(searchstate.toLowerCase())
-    ))
-    if (filteredState){
-      setFilteredState(filteredState)
-    }else{
-      setFilteredState(CONSTANTS.state)
+  const [filteredState, setFilteredState] = useState([]);
+  useEffect(() => {
+    const filteredState = CONSTANTS.state?.filter(item =>
+      item.toLowerCase().startsWith(searchstate.toLowerCase()),
+    );
+    if (filteredState) {
+      setFilteredState(filteredState);
+    } else {
+      setFilteredState(CONSTANTS.state);
     }
-   
-  },[searchstate])
+  }, [searchstate]);
 
   const [status, setStatus] = useState(false);
 
@@ -225,7 +223,7 @@ const ProfileCreate = ({navigation}) => {
     medical_doc_url: selectedFilename?.uri,
     pan_doc_url: pan?.uri,
     latest_doc_url: latestRecord?.uri,
-    degree: values.degree ? value.degree : "MBBS"
+    degree: values.degree ? value.degree : 'MBBS',
   };
 
   const fetchData = async () => {
@@ -303,8 +301,7 @@ const ProfileCreate = ({navigation}) => {
     }
   };
 
- 
-//  console.log('latest==',latestRecord?.uri)
+  //  console.log('latest==',latestRecord?.uri)
   const handlelatest = async () => {
     try {
       const file = await pickSingleFile();
@@ -334,10 +331,10 @@ const ProfileCreate = ({navigation}) => {
     setLatestRecord('');
   };
 
-  const UploadShow = ({head, file, onUpload, onDelete, label}) => {
+  const UploadShow = ({style, head, file, onUpload, onDelete, label}) => {
     return (
       <View style={styles.doc_upload}>
-        <Text style={styles.medtext}>{head}</Text>
+        <Text style={[styles.medtext, style]}>{head}</Text>
         {file ? (
           <View style={styles.selectedfilecontainer}>
             <Text style={styles.selectedFileInfo}>{file}</Text>
@@ -514,9 +511,9 @@ const ProfileCreate = ({navigation}) => {
               value={values.medical_number}
               setValue={value => handleChangeValue('medical_number', value)}
             /> */}
-              <InputText
+        <InputText
           inputContainer={{paddingHorizontal: moderateScale(0)}}
-          label='Degree'
+          label="Degree"
           placeholder="Eg : MBBS"
           value={values.degree}
           setValue={value => handleChangeValue('degree', value)}
@@ -575,14 +572,13 @@ const ProfileCreate = ({navigation}) => {
 
             {show === true && (
               <View style={styles.statecontainer}>
-              <InputText
-              search={true}
-              placeholder={'Search state'}
-              value={searchstate}
-              IconName={'magnify'}
-              setValue = {setsearchState}
-            
-              />
+                <InputText
+                  search={true}
+                  placeholder={'Search state'}
+                  value={searchstate}
+                  IconName={'magnify'}
+                  setValue={setsearchState}
+                />
                 <ScrollView
                   persistentScrollbar={true}
                   contentContainerStyle={{
@@ -598,10 +594,12 @@ const ProfileCreate = ({navigation}) => {
                         handleStateSelection(state);
                         setshow(false);
                       }}
-                      style={{
-                        // paddingHorizontal: horizontalScale(4),
-                        // paddingVertical: verticalScale(4),
-                      }}>
+                      style={
+                        {
+                          // paddingHorizontal: horizontalScale(4),
+                          // paddingVertical: verticalScale(4),
+                        }
+                      }>
                       <Text
                         style={[
                           styles.statefields,
@@ -663,39 +661,40 @@ const ProfileCreate = ({navigation}) => {
             )}
           </View>
         </View> */}
-        
+
         <View
-              style={{
-                // alignSelf: 'flex-start',
-                gap: verticalScale(8),
-                // borderWidth:1,
-                zIndex: -1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                // justifyContent: 'space-between',
-              }}>
-              <UploadShow
-                head={'Redg. Document'}
-                file={selectedFilename && selectedFilename?.name}
-                onDelete={handleClearFile}
-                label={'upload Redg. Document'}
-                onUpload={handleSelectFilename}
-              />
-              <UploadShow
-                head={'Aadhar'}
-                file={pan && pan?.name}
-                label={' Upload Aadhar'}
-                onUpload={handlePan}
-                onDelete={handleClearpan}
-              />
-              <UploadShow
-                head={'Lastest Degree Certificate'}
-                file={latestRecord && latestRecord?.name}
-                label={'Upload Latest Degree'}
-                onUpload={handlelatest}
-                onDelete={handleClearlatest}
-              />
-            </View>
+          style={{
+            // alignSelf: 'flex-start',
+            gap: verticalScale(8),
+            // borderWidth:1,
+            zIndex: -1,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            // justifyContent: 'space-between',
+          }}>
+          <UploadShow
+            head={'Redg. Document'}
+            file={selectedFilename && selectedFilename?.name}
+            onDelete={handleClearFile}
+            label={'upload Redg. Document'}
+            onUpload={handleSelectFilename}
+          />
+          <UploadShow
+            head={'Aadhar'}
+            file={pan && pan?.name}
+            label={' Upload Aadhar'}
+            style={{alignSelf: 'center'}}
+            onUpload={handlePan}
+            onDelete={handleClearpan}
+          />
+          <UploadShow
+            head={'Lastest Degree Certificate'}
+            file={latestRecord && latestRecord?.name}
+            label={'Upload Latest Degree'}
+            onUpload={handlelatest}
+            onDelete={handleClearlatest}
+          />
+        </View>
       </ScrollView>
 
       <View
@@ -727,11 +726,9 @@ const ProfileCreate = ({navigation}) => {
               Alert.alert('Please enter Name');
             } else if (!values.medical_number) {
               Alert.alert('Please Enter Your Medical Number ');
-            } 
-            else if(selectedState === 'Select'){
+            } else if (selectedState === 'Select') {
               Alert.alert('Please select State');
-            }
-            else {
+            } else {
               fetchData();
             }
           }}

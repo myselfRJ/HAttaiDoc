@@ -212,6 +212,7 @@ const MyClinics = ({navigation}) => {
           {clinicData?.map((item, index) => (
             <View key={index} style={{marginBottom: moderateScale(8)}}>
               <ClinicCard
+                key={item.id}
                 index={item.id}
                 data={item}
                 cancel={() => handleDelete(item?.id)}

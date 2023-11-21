@@ -64,7 +64,7 @@ const UpdateProfile = ({navigation}) => {
   const appointmentCardRef = useRef(null);
   const [selectedFilename, setSelectedFilename] = useState({});
 
-  const [documents,setDocuments] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [pan, setPan] = useState({});
   const {phone} = useSelector(state => state?.phone?.data);
   const SuccesRef = useRef(null);
@@ -275,7 +275,11 @@ const UpdateProfile = ({navigation}) => {
       });
       setSelectedSpeciality(jsonData?.data?.specialization);
       setSelectedImage(jsonData?.data?.profile_pic_url);
-    setDocuments([{medical:jsonData?.data?.medical_doc_url},{aadhar:jsonData?.data?.pan_doc_url},{degree:jsonData?.data?.latest_doc_url}]);
+      setDocuments([
+        {medical: jsonData?.data?.medical_doc_url},
+        {aadhar: jsonData?.data?.pan_doc_url},
+        {degree: jsonData?.data?.latest_doc_url},
+      ]);
       setState(jsonData?.data?.state);
     } else {
       console.error('API call failed:', response.status, response);
@@ -284,7 +288,7 @@ const UpdateProfile = ({navigation}) => {
   useEffect(() => {
     fetchDoctors();
   }, []);
-console.log(documents?.length);
+  console.log(documents?.length);
   const handleStateSelection = state => {
     setState(state);
     handleChangeValue('state', state);
@@ -309,7 +313,7 @@ console.log(documents?.length);
         : documents?.[0]?.medical,
       pan_doc_url: pan ? pan?.uri : documents?.[1]?.aadhar,
       latest_doc_url: latestRecord ? latestRecord?.uri : documents?.[2]?.degree,
-      degree: values.degree
+      degree: values.degree,
     };
     try {
       setLoading(true);
@@ -352,10 +356,10 @@ console.log(documents?.length);
       setLoading(false);
     }
   };
-  const UploadShow = ({head, file, onUpload, onDelete, label}) => {
+  const UploadShow = ({style, head, file, onUpload, onDelete, label}) => {
     return (
       <View style={styles.doc_upload}>
-        <Text style={styles.medtext}>{head}</Text>
+        <Text style={[styles.medtext, style]}>{head}</Text>
         {file ? (
           <View style={styles.selectedfilecontainer}>
             <Text style={styles.selectedFileInfo}>{file}</Text>
@@ -468,13 +472,13 @@ console.log(documents?.length);
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             /> */}
-                <InputText
-          inputContainer={{paddingHorizontal: moderateScale(0)}}
-          label='Degree'
-          placeholder="Eg : MBBS"
-          value={values.degree}
-          setValue={value => handleChangeValue('degree', value)}
-        />
+            <InputText
+              inputContainer={{paddingHorizontal: moderateScale(0)}}
+              label="Degree"
+              placeholder="Eg : MBBS"
+              value={values.degree}
+              setValue={value => handleChangeValue('degree', value)}
+            />
             <SelectorBtn
               required={true}
               label={Language[language]['specialization']}
@@ -563,64 +567,64 @@ console.log(documents?.length);
                 )}
               </View>
             </View>
-            <View style={{flexDirection:'row',gap:horizontalScale(16)}}>
-            {documents[0]?.medical && (
-        <TouchableOpacity
-          onPress={() => handleDocuments(documents[0]?.medical)}
-          style={{marginTop: verticalScale(8)}}>
-          <ShowChip
-            text={
-              <>
-                <Icon
-                  color={CUSTOMCOLOR.error}
-                  size={moderateScale(20)}
-                  name={'file-pdf-box'}
-                />
-                {<Text>Registration Document.pdf</Text>}
-              </>
-            }
-            main={{marginHorizontal: 0}}
-          />
-        </TouchableOpacity>
-      )}
-      {documents[1]?.aadhar && (
-        <TouchableOpacity
-          onPress={() => handleDocuments(documents[0]?.aadhar)}
-          style={{marginTop: verticalScale(8)}}>
-          <ShowChip
-            text={
-              <>
-                <Icon
-                  color={CUSTOMCOLOR.error}
-                  size={moderateScale(20)}
-                  name={'file-pdf-box'}
-                />
-                {<Text>Aadhar.pdf</Text>}
-              </>
-            }
-            main={{marginHorizontal: 0}}
-          />
-        </TouchableOpacity>
-      )}
-      {documents[2]?.degree && (
-        <TouchableOpacity
-          onPress={() => handleDocuments(documents[0]?.degree)}
-          style={{marginTop: verticalScale(8)}}>
-          <ShowChip
-            text={
-              <>
-                <Icon
-                  color={CUSTOMCOLOR.error}
-                  size={moderateScale(20)}
-                  name={'file-pdf-box'}
-                />
-                {<Text>Degree.pdf</Text>}
-              </>
-            }
-            main={{marginHorizontal: 0}}
-          />
-        </TouchableOpacity>
-      )}
+            <View style={{flexDirection: 'row', gap: horizontalScale(16)}}>
+              {documents[0]?.medical && (
+                <TouchableOpacity
+                  onPress={() => handleDocuments(documents[0]?.medical)}
+                  style={{marginTop: verticalScale(8)}}>
+                  <ShowChip
+                    text={
+                      <>
+                        <Icon
+                          color={CUSTOMCOLOR.error}
+                          size={moderateScale(20)}
+                          name={'file-pdf-box'}
+                        />
+                        {<Text>Registration Document.pdf</Text>}
+                      </>
+                    }
+                    main={{marginHorizontal: 0}}
+                  />
+                </TouchableOpacity>
+              )}
+              {documents[1]?.aadhar && (
+                <TouchableOpacity
+                  onPress={() => handleDocuments(documents[0]?.aadhar)}
+                  style={{marginTop: verticalScale(8)}}>
+                  <ShowChip
+                    text={
+                      <>
+                        <Icon
+                          color={CUSTOMCOLOR.error}
+                          size={moderateScale(20)}
+                          name={'file-pdf-box'}
+                        />
+                        {<Text>Aadhar.pdf</Text>}
+                      </>
+                    }
+                    main={{marginHorizontal: 0}}
+                  />
+                </TouchableOpacity>
+              )}
+              {documents[2]?.degree && (
+                <TouchableOpacity
+                  onPress={() => handleDocuments(documents[0]?.degree)}
+                  style={{marginTop: verticalScale(8)}}>
+                  <ShowChip
+                    text={
+                      <>
+                        <Icon
+                          color={CUSTOMCOLOR.error}
+                          size={moderateScale(20)}
+                          name={'file-pdf-box'}
+                        />
+                        {<Text>Degree.pdf</Text>}
+                      </>
+                    }
+                    main={{marginHorizontal: 0}}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
             <View
               style={{
@@ -641,6 +645,7 @@ console.log(documents?.length);
               />
               <UploadShow
                 head={'Aadhar'}
+                style={{alignSelf: 'center'}}
                 file={pan && pan?.name}
                 label={' Upload Aadhar'}
                 onUpload={handlePan}
@@ -659,7 +664,11 @@ console.log(documents?.length);
       </Keyboardhidecontainer>
 
       <View
-        style={{flex:1,justifyContent: 'flex-end',bottom:verticalScale(32)}}>
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          bottom: verticalScale(32),
+        }}>
         <HButton
           btnstyles={commonstyles.activebtn}
           label={Language[language]['save']}
