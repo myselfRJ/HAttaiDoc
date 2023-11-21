@@ -1177,14 +1177,13 @@ const Visit = ({navigation, route}) => {
                           appointment_id: appointment_id,
                         };
                       } else if (value.navigate === 'medicalhistory') {
-                        params.gende = gende;
-                      } else if (value.label === 'Additional Notes') {
-                        params.patient_phone = patient_phone;
                         params.medicaldata = {
                           gende: gende,
                           patient_phone: patient_phone,
                           phone: phone,
                         };
+                      } else if (value.label === 'Additional Notes') {
+                        params.patient_phone = patient_phone;
                       }
 
                       navigation.navigate(value.navigate, params);

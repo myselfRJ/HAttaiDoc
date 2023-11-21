@@ -53,8 +53,8 @@ const MedicalHistory = ({navigation, route}) => {
   const {medicaldata} = route.params;
   const phone = medicaldata?.phone;
   const token = useSelector(state => state.authenticate.auth.access);
-  const patient_phone= medicaldata?.patient_phone;
-  console.log('phone',phone,patient_phone);
+  const patient_phone = medicaldata?.patient_phone;
+  console.log('phone', phone, patient_phone);
 
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
@@ -76,7 +76,7 @@ const MedicalHistory = ({navigation, route}) => {
   const [menstrual, setMenstrual] = useState('');
   const [obstetric, setObstetric] = useState('');
   const [select, setSelect] = useState('');
-  console.log('med==',medical);
+  console.log('med==', medical);
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
@@ -116,7 +116,7 @@ const MedicalHistory = ({navigation, route}) => {
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
-  console.log('medical=His',medicationHistory);
+  console.log('medical=His', medicationHistory);
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
@@ -220,51 +220,60 @@ const MedicalHistory = ({navigation, route}) => {
     dispatch(addobstericHistory({...obstericHistory, obstetric}));
     nav.goBack();
   };
-  
+
   const fetchMedicalData = async () => {
-    const response = await fetchApi(URL.getMedical(phone,patient_phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      console.log('medication',jsonData?.data[0]);
-      if(jsonData?.data[0]?.commoribities){
-        const commo = JSON.parse(jsonData?.data[0]?.commoribities);
-        dispatch(addcommorbiditis(commo))
+    try {
+      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('medication', jsonData?.data[0]);
+        console.log('', jsonData?.data[0]?.mensutral_history);
+        if (jsonData?.data[0]?.commoribities) {
+          const commo = JSON.parse(jsonData.data[0].commoribities);
+          dispatch(addcommorbiditis(commo));
+        }
+        if (jsonData?.data[0]?.family_history) {
+          const family = JSON.parse(jsonData.data[0].family_history);
+          dispatch(addfamilyHistory(family));
+        }
+        if (jsonData?.data[0]?.social_history) {
+          const social = JSON.parse(jsonData.data[0].social_history);
+          dispatch(addsocialHistory(social));
+        }
+        if (jsonData?.data[0]?.medication_history) {
+          const medication = JSON.parse(jsonData.data[0].medication_history);
+          setMedical(medication?.medical);
+          dispatch(addmedicationHistory(medication?.medical));
+        }
+        if (jsonData?.data[0]?.past_history) {
+          const hospitalization = JSON.parse(jsonData.data[0].past_history);
+          setPast(hospitalization?.past);
+          dispatch(addpastHospitalization(hospitalization?.past));
+        }
+        if (jsonData?.data[0]?.mensutral_history) {
+          const mens = JSON.parse(jsonData.data[0].mensutral_history);
+          setMenstrual(mens?.menstrual);
+          dispatch(addmenstrualHistory(mens?.menstural));
+        }
+        if (jsonData?.data[0]?.obsteric_history) {
+          const mens = JSON.parse(jsonData.data[0].obsteric_history);
+          setObstetric(mens?.obstetric);
+          dispatch(addobstericHistory(mens?.obstetric));
+        }
+      } else {
+        console.error('API call failed:', response.status, response);
       }
-      if(jsonData?.data[0]?.family_history){
-        const family = JSON.parse(jsonData?.data[0]?.family_history);
-        dispatch(addfamilyHistory(family))
-      }
-      if(jsonData?.data[0]?.social_history){
-        const social = JSON.parse(jsonData?.data[0]?.social_history);
-        dispatch(addsocialHistory(social))
-      }
-      if (jsonData?.data[0]?.medication_history) {
-        const medication = JSON.parse(jsonData?.data[0]?.medication_history);
-        setMedical(medication?.medical);
-        dispatch(addmedicationHistory(medication?.medical));
-      }
-      if (jsonData?.data[0]?.past_history) {
-        const hospitalization = JSON.parse(jsonData?.data[0]?.past_history);
-        setPast(hospitalization?.past);
-        dispatch(addpastHistory(hospitalization?.past));
-      }
-      console.log('abghfgbkbkbj======',jsonData?.data[0]?.mensutral_history);
-      if (jsonData?.data[0]?.mensutral_history) {
-        const mens = JSON.parse(jsonData?.data[0]?.mensutral_history);
-        console.log('abghfgbkbkbj======',jsonData?.data[0]?.mensutral_history);
-        setMenstrual(mens?.menstrual);
-        dispatch(addmenstrualHistory(mens?.menstrual));
-      }
-    } else {
-      console.error('API call failed:', response.status, response);
+    } catch (error) {
+      console.error('Error in fetchMedicalData:', error);
     }
   };
-console.log('================================',menstrual);
+
   useEffect(() => {
     fetchMedicalData();
   }, []);
@@ -309,7 +318,7 @@ console.log('================================',menstrual);
               ))}
             </View>
           ) : null}
-           <ChipInput
+          <ChipInput
             placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
@@ -380,7 +389,7 @@ console.log('================================',menstrual);
               ))}
             </View>
           ) : null}
-         
+
           <InputText
             inputContainer={styles.inputtext}
             label="Medication History"
@@ -422,7 +431,8 @@ console.log('================================',menstrual);
             setValue={txt => setPast(txt)}
             blur={false}
           />
-          {(medicaldata?.gende == 'Female' || medicaldata?.gende == 'female') && (
+          {(medicaldata?.gende == 'Female' ||
+            medicaldata?.gende == 'female') && (
             <InputText
               inputContainer={styles.inputtext}
               label="Menstrual History"
@@ -432,7 +442,8 @@ console.log('================================',menstrual);
               blur={false}
             />
           )}
-          {(medicaldata?.gende == 'Female' || medicaldata?.gende == 'female') && (
+          {(medicaldata?.gende == 'Female' ||
+            medicaldata?.gende == 'female') && (
             <InputText
               inputContainer={styles.inputtext}
               label="Obstetric History"
