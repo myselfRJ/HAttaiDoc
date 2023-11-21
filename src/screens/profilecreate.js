@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.h3,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-
+    fontWeight:'400',
     paddingVertical: verticalScale(8),
     alignSelf: 'flex-start',
   },
