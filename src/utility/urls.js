@@ -1,11 +1,11 @@
-// const baseUrl = 'http://10.9.64.61:8000/api/v1/';
+const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 // const baseUrl = 'http://10.9.64.23:8000/api/v1/';
 // const baseUrl = 'http://34.205.77.155/api/v1/';
-const baseUrl = 'http://13.200.15.208/api/v1/';
+// const baseUrl = 'http://13.200.15.208/api/v1/';
 // const snomedUrl = 'http://34.205.77.155/';
 const snomedUrl = 'http://13.200.15.208/';
-// export const fileurl = `http://10.9.64.61:8000`;
-export const fileurl = `http://13.200.15.208`;
+export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://13.200.15.208`;
 
 // export const fileurl = `http://10.9.64.23:8000`;
 
@@ -66,10 +66,11 @@ export const URL = {
   get_physical: id => `${baseUrl}consult/get-physical?id=${id}`,
   reschedule_appointment: id =>
     `${baseUrl}customappointment/reschedule_appointment?id=${id}`,
-  get_reports: id => `${baseUrl}consult/get-examination?id=${id}`,
   getFees: id => `${baseUrl}consult/getFees?id=${id}`,
   updateFees: id => `${baseUrl}consult/updateFees?id=${id}`,
   getAllergy: phone => `${baseUrl}consult/get-allergies?phone=${phone}`,
+  getNotes: (doc_phone, pat_phone) =>
+    `${baseUrl}consult/get-Notes?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
   savefees: `${baseUrl}consult/saveFees`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',

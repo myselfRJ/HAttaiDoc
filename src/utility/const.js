@@ -27,8 +27,8 @@ export const CONSTANT = {
     {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
     {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
     {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
-    {label: 'Additional Recommendations/Notes', icon: 'pencil', navigate: 'additional'},
-  
+    {label: 'Additional Notes', icon: 'pencil', navigate: 'additional'},
+
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
     {
       label: 'Fees',
@@ -40,8 +40,6 @@ export const CONSTANT = {
       icon: 'pencil',
       navigate: 'refer',
     },
-    
-  
 
     // {label: 'Comorbidities', icon: 'chevron-right', navigate: 'commorbities'},
     // {

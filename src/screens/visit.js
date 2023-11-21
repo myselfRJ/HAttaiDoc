@@ -48,7 +48,7 @@ import {CONSTANTS} from '../utility/constant';
 import Seperator from '../components/seperator';
 import PDFViewer from '../components/PdfViewer';
 import {PermmisionStorage} from '../utility/permissions';
-import { addAllergies } from '../redux/features/prescription/allergies';
+import {addAllergies} from '../redux/features/prescription/allergies';
 
 const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
@@ -62,7 +62,7 @@ const Visit = ({navigation, route}) => {
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  console.log('physical===',physical);
+  console.log('physical===', physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -153,13 +153,16 @@ const Visit = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      const allergiesData = jsonData?.data?.map(item => ({allergies:item?.allergies}))
+      const allergiesData = jsonData?.data?.map(item => ({
+        allergies: item?.allergies,
+      }));
       const uniqueArray = allergiesData?.filter((item, index) => {
         return (
-          index === allergiesData?.findIndex(obj => obj.allergies === item?.allergies)
+          index ===
+          allergiesData?.findIndex(obj => obj.allergies === item?.allergies)
         );
       });
-      dispatch(addAllergies(uniqueArray))
+      dispatch(addAllergies(uniqueArray));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -181,7 +184,7 @@ const Visit = ({navigation, route}) => {
     refer_to_doctor: selectedDoctor,
     // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
     follow_up: date,
-    note: JSON.stringify(({note:note,additional_notes:notes})),
+    note: JSON.stringify({note: note, additional_notes: notes}),
     diagnosis: diagnosis,
     labReports: labreport,
     // commoribities: commorbities,
@@ -296,8 +299,8 @@ const Visit = ({navigation, route}) => {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
         setServiceFees(fees);
-        console.log("========fee",fees);
-      } 
+        console.log('========fee', fees);
+      }
       // else {
       //   dispatch(
       //     addfees([
@@ -690,7 +693,9 @@ const Visit = ({navigation, route}) => {
                           </div>`
                             : ''
                         }
-                        ${service_fees?.length >1 ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
+                        ${
+                          service_fees?.length > 1
+                            ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa; margin: 0;">Consultaion Fees:</p>
                         <table style="border-collapse: collapse;margin-bottom: 48px;margin-top:12px;">
                         <tr>
         <th style="padding:4px;text-align: start; width:10%">S.No</th>
@@ -717,7 +722,9 @@ const Visit = ({navigation, route}) => {
                           .join('')}           
                     </table>
                     <p style="margin-left: 50%;font-weight:700;font-size:16px";>Total : Rs.
-                    ${charge ? charge[charge && 'totalFees'] : ''}</p>`:''}
+                    ${charge ? charge[charge && 'totalFees'] : ''}</p>`
+                            : ''
+                        }
                     </div>
                     <div class ='footer'>
                         <footer class='desc' style=" display: flex;
@@ -832,8 +839,8 @@ const Visit = ({navigation, route}) => {
     }
   }
 
-  const physi = JSON.stringify(physical)
-console.log(typeof (vitalsData?.others));
+  const physi = JSON.stringify(physical);
+  console.log(typeof vitalsData?.others);
   return (
     <View>
       <ScrollView>
@@ -910,10 +917,9 @@ console.log(typeof (vitalsData?.others));
                     patient_data?.gender === 'Female') &&
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
-                    <Text style={[styles.patientText,{fontWeight:'700'}]}>
-                      Pregnancy : LMP:{' '}{`${day}-${months[month]}-${Year}`} |
-                      EDD:{' '}
-                      {vitalsData.EDD}
+                    <Text style={[styles.patientText, {fontWeight: '700'}]}>
+                      Pregnancy : LMP: {`${day}-${months[month]}-${Year}`} |
+                      EDD: {vitalsData.EDD}
                     </Text>
                   ) : null}
                 </View>
@@ -961,24 +967,64 @@ console.log(typeof (vitalsData?.others));
                 </View>
                 {vitalsData && (
                   <Text style={styles.patientText}>
-                    {vitalsData?.systolic &&
-                     <Text>BP: <Text style={{fontWeight:'700'}}>{vitalsData.systolic}/{vitalsData.diastolic}</Text></Text>}{' '}
-                    {vitalsData?.oxygen_level &&                     <Text>SPO2: <Text style={{fontWeight:'700'}}>{vitalsData.oxygen_level}</Text>%</Text>}{' '}
-                    {vitalsData?.bmi && <Text>BMI: <Text style={{fontWeight:'700'}}>{vitalsData.bmi}</Text></Text>}{' '}
-                    {vitalsData?.pulse_rate &&
-                      <Text>Pulse: <Text style={{fontWeight:'700'}}>{vitalsData.pulse_rate}</Text>bpm</Text>}{' '}
-                    {vitalsData?.body_temperature &&
-                      <Text>Temp: <Text style={{fontWeight:'700'}}>{vitalsData.body_temperature}</Text>{String.fromCharCode(8451)}</Text>
-                    }{' '}
-                    {vitalsData?.others && (
-                      Object?.keys(vitalsData?.others)[0] !== "" &&  
-                     
-                      <Text>{vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null} :
-                      <Text style={{fontWeight:'700'}}>{vitalsData?.others ? Object.values(vitalsData?.others)[0] : null}</Text></Text>
-               
-                    )}
+                    {vitalsData?.systolic && (
+                      <Text>
+                        BP:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.systolic}/{vitalsData.diastolic}
+                        </Text>
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.oxygen_level && (
+                      <Text>
+                        SPO2:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.oxygen_level}
+                        </Text>
+                        %
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.bmi && (
+                      <Text>
+                        BMI:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.bmi}
+                        </Text>
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.pulse_rate && (
+                      <Text>
+                        Pulse:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.pulse_rate}
+                        </Text>
+                        bpm
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.body_temperature && (
+                      <Text>
+                        Temp:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.body_temperature}
+                        </Text>
+                        {String.fromCharCode(8451)}
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.others &&
+                      Object?.keys(vitalsData?.others)[0] !== '' && (
+                        <Text>
+                          {vitalsData?.others
+                            ? Object.keys(vitalsData?.others)[0]
+                            : null}{' '}
+                          :
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.others
+                              ? Object.values(vitalsData?.others)[0]
+                              : null}
+                          </Text>
+                        </Text>
+                      )}
                   </Text>
-                 
                 )}
 
                 <Seperator />
@@ -1034,7 +1080,7 @@ console.log(typeof (vitalsData?.others));
                         ? 'check-circle'
                         : '') ||
                       (value.label === 'Additional Recommendations/Notes' &&
-                      notes !== '' 
+                      notes !== ''
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Diagnosis' && diagnosis?.length > 0
@@ -1071,7 +1117,8 @@ console.log(typeof (vitalsData?.others));
                         obstericHistory)
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Physical Examinations' && physi !== '{}'
+                      (value?.label === 'Physical Examinations' &&
+                      physi !== '{}'
                         ? 'check-circle'
                         : '')
                     }
@@ -1122,6 +1169,8 @@ console.log(typeof (vitalsData?.others));
                         };
                       } else if (value.navigate === 'medicalhistory') {
                         params.gende = gende;
+                      } else if (value.label === 'Additional Notes') {
+                        params.patient_phone = patient_phone;
                       }
 
                       navigation.navigate(value.navigate, params);
@@ -1337,17 +1386,16 @@ console.log(typeof (vitalsData?.others));
                         <Text style={styles.pulse}>{note}</Text>
                       </View>
                     )}
-                    {value.label === 'Additional Recommendations/Notes' &&
-                    notes !== '' && (
-                      <View style={styles.complaintcontainer}>
-                        <Icon
-                          name="file-document-edit"
-                          color={CUSTOMCOLOR.primary}
-                          size={moderateScale(16)}
-                        />
-                        <Text style={styles.pulse}>{notes}</Text>
-                      </View>
-                    )}
+                  {value.label === 'Additional Notes' && notes !== '' && (
+                    <View style={styles.complaintcontainer}>
+                      <Icon
+                        name="file-document-edit"
+                        color={CUSTOMCOLOR.primary}
+                        size={moderateScale(16)}
+                      />
+                      <Text style={styles.pulse}>{notes}</Text>
+                    </View>
+                  )}
                   {/* {value.label === 'Diagnosis' && diagnosis !== '' && 
                     
                      {diagnosis.map((item,index)=>{
