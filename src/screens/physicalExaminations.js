@@ -100,8 +100,13 @@ const PhysicalExamination = ({navigation}) => {
   const apiUrl = URL.uploadPhysicalExamination;
 
   const handle = () => {
-    postData(apiUrl);
-    handlePress();
+    if(report != undefined){
+      nav?.goBack();
+    }else{
+      postData(apiUrl);
+      handlePress();
+    }
+    
   };
 
   const onImagePress = () => {
@@ -311,12 +316,18 @@ const PhysicalExamination = ({navigation}) => {
           alignSelf: 'flex-end',
           marginTop: verticalScale(48),
           backgroundColor:
-            uploaddocument?.length === 5
+            uploaddocument?.length === 5 || report != undefined
               ? CUSTOMCOLOR.disable
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
-        onPress={handleModal}
+        onPress={()=>{
+          if(report != undefined){
+            setModal(false)
+          }else{
+            handleModal()
+          }
+        }}
       />
       {modal && (
         <GalleryModel

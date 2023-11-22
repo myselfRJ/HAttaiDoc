@@ -112,7 +112,7 @@ const SlotBook = ({navigation, route}) => {
     5: 'F',
     6: 'Sa',
   };
-
+  console.log('slots===========',bookedSlots);
   const Day = weekDys[new Date(date).getDay()];
 
   const fetchAppointment = async () => {
@@ -131,6 +131,7 @@ const SlotBook = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
+      
       setBookedSlots(
         jsonData.data?.map((item, index) => item?.appointment_slot),
       );

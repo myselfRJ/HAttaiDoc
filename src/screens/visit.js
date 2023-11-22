@@ -534,12 +534,22 @@ const Visit = ({navigation, route}) => {
                         line-height: 2px;">
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
-                            color:#000000;">Pulse rate:</p>
+                            color:#000000;">Pulse:</p>
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
                               vitalsData?.pulse_rate
-                                ? vitalsData?.pulse_rate
+                                ? `${vitalsData?.pulse_rate}bpm`
+                                : ''
+                            }</p>
+                            <p id='values1' style="font-weight: 500;
+                            font-size: 16px;
+                            color:#000000;">BP:</p>
+                            <p id='values' style="font-weight: 300px;
+                            font-size: 16px;
+                            color:#000000;">${
+                              vitalsData?.systolic
+                                ? `${vitalsData?.systolic}/${vitalsData?.diastolic}`
                                 : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
@@ -548,7 +558,7 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
-                              vitalsData?.weight ? vitalsData?.weight : ''
+                              vitalsData?.weight ? `${vitalsData?.weight}kg` : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
@@ -556,7 +566,7 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
-                              vitalsData?.height ? vitalsData?.height : ''
+                              vitalsData?.height ? `${vitalsData?.height}cm` : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
@@ -565,7 +575,7 @@ const Visit = ({navigation, route}) => {
                             font-size: 16px;
                             color:#000000;">${
                               vitalsData?.body_temperature
-                                ? vitalsData?.body_temperature
+                                ? `${vitalsData?.body_temperature}°C`
                                 : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
@@ -574,7 +584,7 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
-                              vitalsData?.rate ? vitalsData?.rate : ''
+                              vitalsData?.rate ? `${vitalsData?.rate}brpm` : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;

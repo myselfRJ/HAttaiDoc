@@ -176,9 +176,38 @@ const PdfView = ({navigation}) => {
 
           // Prescribe.splice(0,Prescribe.length)
           ResetRuduxState();
-          setTimeout(() => {
-            navigation.navigate('tab');
-          }, 1000);
+          const formData = new FormData();
+          formData.append('doctor_phone_number', `${doc_phone}`);
+          formData.append('patient_phone_number', `${patient_phone}`);
+          formData.append('clinic_id', `${Clinic_id}`);
+          formData.append('appointment_id', `${appointment_id}`);
+          formData.append('pharmacyPhone', `${pharmaphone}`);
+          formData.append('file_url', {
+            uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
+            type: 'application/pdf',
+            name: `${patient_phone}.pdf`,
+          });
+      
+          const requestOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          };
+      
+          try {
+            const response = await fetch(URL.uploadPDF, requestOptions);
+            const responseData = await response.json();
+            console.log('API Response:', responseData);
+            setTimeout(() => {
+              navigation.navigate('tab');
+            }, 1000);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+          
 
           setLoading(false);
           // setTimeout(() => {
@@ -196,41 +225,14 @@ const PdfView = ({navigation}) => {
       setLoading(false);
     }
   };
-  const postPrescriptionPDF = async url => {
-    const formData = new FormData();
-    formData.append('doctor_phone_number', `${doc_phone}`);
-    formData.append('patient_phone_number', `${patient_phone}`);
-    formData.append('clinic_id', `${Clinic_id}`);
-    formData.append('appointment_id', `${appointment_id}`);
-    formData.append('pharmacyPhone', `${pharmaphone}`);
-    formData.append('file_url', {
-      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
-      type: 'application/pdf',
-      name: `${patient_phone}.pdf`,
-    });
+  // const postPrescriptionPDF = async url => {
+   
+  // };
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    };
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.json();
-      console.log('API Response:', responseData);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const handlePrescribePDF = () => {
-    const apiUrl = URL.uploadPDF;
-    postPrescriptionPDF(apiUrl);
-  };
+  // const handlePrescribePDF = () => {
+  //   const apiUrl = URL.uploadPDF;
+  //   postPrescriptionPDF(apiUrl);
+  // };
   const postReferalPdf = async url => {
     const formData = new FormData();
     formData.append('doctor_phone_number', `${doc_phone}`);
@@ -275,7 +277,7 @@ const PdfView = ({navigation}) => {
 
   const handleConfirm = () => {
     if (prevScreen === 'visit') {
-      handlePrescribePDF();
+      // handlePrescribePDF();
       putComplaint();
       putVitals();
       fetchData();

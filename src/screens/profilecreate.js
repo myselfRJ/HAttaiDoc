@@ -673,10 +673,10 @@ const ProfileCreate = ({navigation}) => {
             // justifyContent: 'space-between',
           }}>
           <UploadShow
-            head={'Redg. Document'}
+            head={'Registration Document'}
             file={selectedFilename && selectedFilename?.name}
             onDelete={handleClearFile}
-            label={'upload Redg. Document'}
+            label={'Upload Registration Document'}
             onUpload={handleSelectFilename}
           />
           <UploadShow

@@ -221,7 +221,7 @@ const ExaminationFindings = ({navigation}) => {
       setModal(!modal);
     }
   };
-
+console.log('upload==',uploaddocument);
   const handleReports_Physical = filepath => {
     const path = `${fileurl}${filepath}`;
     if (filepath?.includes('pdf')) {
@@ -342,7 +342,14 @@ console.log('report',report);
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
-        onPress={handleModal}
+        onPress={()=>{
+          if(report != undefined){
+            setModal(false)
+          }
+          else{
+            handleModal();
+          }
+        }}
       />
       {modal && (
         <GalleryModel
