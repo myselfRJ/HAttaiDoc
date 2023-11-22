@@ -415,7 +415,7 @@ const Visit = ({navigation, route}) => {
                   max-height: calc(50vh - (header height + footer height + margins)); 
     page-break-before: auto;
     page-break-after: always;
-    page-break-inside: auto;
+    page-break-inside: always;
     margin: 0;
     padding: 24px;
     padding-top:150px;
@@ -431,18 +431,19 @@ const Visit = ({navigation, route}) => {
         
                 .maincontainer {
                   width: 95%; 
-                  height: 100%; 
+                  height: 60%; 
                   background-color: #ffffff;
                   padding:5%;
                 }
                 .page-break-inside {
-                  page-break-inside: avoid;
+                  page-break-inside: always;
                   margin-top:16px;
+                  border: 1px solid black
               }
             </style>
             </head>
             <body>
-                <div class='maincontaioner'>
+                <div class='maincontainer'>
     
             <div class='header' >
                 <div class='first' style="display: flex; flex-direction: row;">
@@ -558,7 +559,9 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
-                              vitalsData?.weight ? `${vitalsData?.weight}kg` : ''
+                              vitalsData?.weight
+                                ? `${vitalsData?.weight}kg`
+                                : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
@@ -566,7 +569,9 @@ const Visit = ({navigation, route}) => {
                             <p id='values' style="font-weight: 300px;
                             font-size: 16px;
                             color:#000000;">${
-                              vitalsData?.height ? `${vitalsData?.height}cm` : ''
+                              vitalsData?.height
+                                ? `${vitalsData?.height}cm`
+                                : ''
                             }</p>
                             <p id='values1' style="font-weight: 500;
                             font-size: 16px;
@@ -618,13 +623,13 @@ const Visit = ({navigation, route}) => {
                            : ''
                        }
                     </div>
-                   <div class='page-break-inside'> 
+                   <div class='page-break-inside' > 
                     <p id='subhead' style="font-weight: 400px;
                             font-size: 16px;
                             margin-top:4px;
                             margin-top:12px;
                             color:#4ba5fa; margin: 0;" >Prescribe:</p>
-                    <table style="border-collapse: collapse;margin-bottom: 40px;">
+                    <table class='page-break-inside' style="border-collapse: collapse;margin-bottom: 40px;">
                 <tr>
                     <th style=" padding: 8px; text-align: center;">S.No</th>
                     <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
@@ -749,6 +754,7 @@ const Visit = ({navigation, route}) => {
                         <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
+                        border: 1px solid black;
                         margin-top: 84px;">
                             <div>
                             <p id='values2'  style="  font-weight: 300;
