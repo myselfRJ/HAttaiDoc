@@ -57,6 +57,9 @@ import PatientHistoryPdf from '../screens/PdfHistory';
 import History from '../screens/History';
 import ImageViewer from '../screens/imageViewer';
 import AdditionalNotes from '../screens/additionNotes';
+import MenstrualHistory from '../screens/menstrualHistory';
+import ObstetricHistory from '../screens/obstetricHistory';
+import MaritalHistory from '../screens/maritalHistory';
 
 const Stack = createNativeStackNavigator();
 
@@ -151,6 +154,39 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Report Findings',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="menstrual"
+        component={MenstrualHistory}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Back',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="obstetric"
+        component={ObstetricHistory}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Back',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+       <Stack.Screen
+        name="marital"
+        component={MaritalHistory}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Back',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

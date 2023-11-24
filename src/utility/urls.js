@@ -1,11 +1,11 @@
-// const baseUrl = 'http://10.9.64.61:8000/api/v1/';
+const baseUrl = 'http://10.9.64.61:8000/api/v1/';
 // const baseUrl = 'http://10.9.64.23:8000/api/v1/';
 // const baseUrl = 'http://34.205.77.155/api/v1/';
-const baseUrl = 'http://3.6.40.67/api/v1/';
+// const baseUrl = 'http://3.6.40.67/api/v1/';
 // const snomedUrl = 'http://34.205.77.155/';
 const snomedUrl = 'http://3.6.40.67/';
-// export const fileurl = `http://10.9.64.61:8000`;
-export const fileurl = `http://3.6.40.67`;
+export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://3.6.40.67`;
 
 // export const fileurl = `http://10.9.64.23:8000`;
 

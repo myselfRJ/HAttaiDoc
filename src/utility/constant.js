@@ -5,6 +5,7 @@ export const CONSTANTS = {
   dose_ml: ['5ml', '10ml', '15ml', '20ml'],
   timing: ['After Food', 'Before Food'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
+  menstruration_status:['Regular','Irregular'],
   commoribities: [
     {commorbities: 'Diabetics'},
     {commorbities: 'Cancer'},

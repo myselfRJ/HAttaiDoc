@@ -24,7 +24,7 @@ const VisitOpen = props => {
   return (
     <>
       <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
-        <Text style={styles.text}>{props.label}</Text>
+        <Text style={[styles.text,props.textstyle]}>{props.label}</Text>
 
         <View style={{flexDirection: 'row'}}>
           {props.doneIcon && (
@@ -42,7 +42,7 @@ const VisitOpen = props => {
               />
             </View>
           )}
-          <View style={styles.gap}>
+          <View style={[styles.gap,props.iconstyle]}>
             <Icon
               name={props.icon}
               color={CUSTOMCOLOR.primary}
@@ -52,7 +52,7 @@ const VisitOpen = props => {
               //   borderRadius: moderateScale(100),
               //   // padding: moderateScale(4),
               // }}
-              size={moderateScale(16)}
+              size={props.size ? props.size : moderateScale(16)}
             />
           </View>
         </View>

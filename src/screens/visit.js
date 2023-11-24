@@ -1207,7 +1207,7 @@ const Visit = ({navigation, route}) => {
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexWrap: 'wrap'}}>
+                      <View style={{flexWrap: 'wrap',borderWidth:1}}>
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (
@@ -1224,7 +1224,6 @@ const Visit = ({navigation, route}) => {
                                   </Text>
                                 </View>
                               </View>
-                              // </View>
                             )
                           );
                         })}

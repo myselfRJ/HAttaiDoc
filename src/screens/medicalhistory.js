@@ -47,6 +47,7 @@ import {
 import {commonstyles} from '../styles/commonstyle';
 import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
+import { VisitOpen } from '../components';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
@@ -116,7 +117,7 @@ const MedicalHistory = ({navigation, route}) => {
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
-  console.log('medical=His', medicationHistory);
+  // console.log('medical=His', medicationHistory);
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
@@ -216,8 +217,8 @@ const MedicalHistory = ({navigation, route}) => {
   const handledata = () => {
     dispatch(addpastHospitalization({...hospitalization, past}));
     dispatch(addmedicationHistory({...medicationHistory, medical}));
-    dispatch(addmenstrualHistory({...menstrualHistory, menstrual}));
-    dispatch(addobstericHistory({...obstericHistory, obstetric}));
+    // dispatch(addmenstrualHistory({...menstrualHistory, menstrual}));
+    // dispatch(addobstericHistory({...obstericHistory, obstetric}));
     nav.goBack();
   };
 
@@ -283,6 +284,38 @@ const MedicalHistory = ({navigation, route}) => {
 
       <ScrollView>
         <View style={styles.input}>
+          <View style={styles.visitOpenItem}>
+          <VisitOpen
+          label={'Menstrual History'}
+          icon={'menu-right'}
+          iconstyle={{borderWidth:0}}
+          size={moderateScale(32)}
+          textstyle={styles.text}
+          navigate={()=> navigation.navigate('menstrual')}
+          />
+          </View>
+          <View style={styles.visitOpenItem}>
+          <VisitOpen
+          label={'Obstetric History'}
+          icon={'menu-right'}
+          iconstyle={{borderWidth:0}}
+          size={moderateScale(32)}
+          textstyle={styles.text}
+          navigate={()=> navigation.navigate('obstetric')}
+          />
+          </View>
+          <View style={styles.visitOpenItem}>
+          <VisitOpen
+          label={'Marital History'}
+          icon={'menu-right'}
+          iconstyle={{borderWidth:0}}
+          size={moderateScale(32)}
+          textstyle={styles.text}
+          navigate={()=>{
+            navigation.navigate('marital')
+          }}
+          />
+          </View>
           <ChipInput
             placeholder={'Enter new comorbidities'}
             item={'commorbities'}
@@ -431,7 +464,7 @@ const MedicalHistory = ({navigation, route}) => {
             setValue={txt => setPast(txt)}
             blur={false}
           />
-          {(medicaldata?.gende == 'Female' ||
+          {/* {(medicaldata?.gende == 'Female' ||
             medicaldata?.gende == 'female') && (
             <InputText
               inputContainer={styles.inputtext}
@@ -452,7 +485,7 @@ const MedicalHistory = ({navigation, route}) => {
               setValue={txt => setObstetric(txt)}
               blur={false}
             />
-          )}
+          )} */}
         </View>
       </ScrollView>
       <View style={{justifyContent: 'flex-end'}}>
@@ -486,12 +519,27 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     marginHorizontal: horizontalScale(8),
   },
+  visitOpenItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderWidth: moderateScale(1),
+    borderRadius: moderateScale(8),
+  },
+  text: {
+    fontWeight: '400',
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+  },
   inputtext: {
     paddingVertical: verticalScale(0),
   },
   input: {
     // paddingHorizontal:horizontalScale(8),
-    gap: moderateScale(16),
+    gap: moderateScale(12),
   },
   touch: {
     paddingHorizontal: horizontalScale(8),

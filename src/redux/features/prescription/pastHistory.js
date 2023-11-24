@@ -7,7 +7,7 @@ const initialState = {
   socialHistory: [],
   familyHistory: [],
   medicationHistory: '',
-  menstrualHistory: '',
+  menstrualHistory: [],
   obstericHistory: '',
 };
 
