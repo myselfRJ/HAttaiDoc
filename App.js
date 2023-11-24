@@ -16,6 +16,8 @@ import {moderateScale} from './src/utility/scaleDimension';
 import {PermmisionStorage} from './src/utility/permissions';
 import messaging from '@react-native-firebase/messaging';
 
+import sendNotification from './src/utility/notifications';
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -49,6 +51,9 @@ function App() {
   React.useEffect(() => {
     getTokenFcm();
   }, []);
+
+  // Assuming that sendNotification is an asynchronous function defined somewhere in your code.
+
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>

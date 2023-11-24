@@ -75,6 +75,7 @@ export const URL = {
     `${baseUrl}consult/get-Pasthistory?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
   savefees: `${baseUrl}consult/saveFees`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
+  sendNotification: 'https://fcm.googleapis.com/fcm/send',
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',

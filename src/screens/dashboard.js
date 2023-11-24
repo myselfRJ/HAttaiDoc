@@ -56,7 +56,7 @@ import {commonstyles} from '../styles/commonstyle';
 import {disableBackButton} from '../utility/backDisable';
 import DButton from '../components/DButton';
 import AppointmentStatusCard from '../components/appointmentStatusCard';
-
+import sendNotification from '../utility/notifications';
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -94,7 +94,17 @@ const Dashboard = ({navigation, route}) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const sendNotifications = async () => {
+    const body = 'hi';
+    const title = 'hello';
+    const fcmTokens =
+      'dqKzxMePTRqQHvAn70vRnR:APA91bHZej7-mZjsdjSQ-ZmFvY88GIcQkvZRjLTKZudcasxxVShVoFbAgAD6KdOFHOEU9rgb6sKDW5GJ8GHbQvjGa4TD56QrPKy4FhsE4T3rjuX4WUeJbt-DNTTPdZZrlSeoiGlFoXTG';
 
+    await sendNotification(fcmTokens, body, title);
+  };
+  React.useEffect(() => {
+    sendNotifications();
+  }, []);
   const fetchClinic = async () => {
     const response = await fetchApi(URL.getClinic(phone), {
       method: 'GET',
