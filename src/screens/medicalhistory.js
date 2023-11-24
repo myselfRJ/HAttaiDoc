@@ -13,9 +13,9 @@ import {
   addsocialHistory,
   updatesocialHistory,
   addmedicationHistory,
-  addmenstrualHistory,
   addobstericHistory,
   addpastHospitalization,
+  addmenstrualHistory,
 } from '../redux/features/prescription/pastHistory';
 // import {
 //   addCommorbities,
@@ -47,7 +47,7 @@ import {
 import {commonstyles} from '../styles/commonstyle';
 import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
-import { VisitOpen } from '../components';
+import {VisitOpen} from '../components';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
@@ -117,10 +117,11 @@ const MedicalHistory = ({navigation, route}) => {
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
-  // console.log('medical=His', medicationHistory);
+
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
+  console.log('medical=His', menstrualHistory);
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
   );
@@ -257,11 +258,11 @@ const MedicalHistory = ({navigation, route}) => {
           setPast(hospitalization?.past);
           dispatch(addpastHospitalization(hospitalization?.past));
         }
-        if (jsonData?.data[0]?.mensutral_history) {
-          const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          setMenstrual(mens?.menstrual);
-          dispatch(addmenstrualHistory(mens?.menstural));
-        }
+        // if (jsonData?.data[0]?.mensutral_history) {
+        //   const mens = JSON.parse(jsonData.data[0].mensutral_history);
+        //   setMenstrual(mens?.menstrual);
+        //   dispatch(addmenstrualHistory(mens?.menstural));
+        // }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
           setObstetric(mens?.obstetric);
@@ -285,36 +286,36 @@ const MedicalHistory = ({navigation, route}) => {
       <ScrollView>
         <View style={styles.input}>
           <View style={styles.visitOpenItem}>
-          <VisitOpen
-          label={'Menstrual History'}
-          icon={'menu-right'}
-          iconstyle={{borderWidth:0}}
-          size={moderateScale(32)}
-          textstyle={styles.text}
-          navigate={()=> navigation.navigate('menstrual')}
-          />
+            <VisitOpen
+              label={'Menstrual History'}
+              icon={'menu-right'}
+              iconstyle={{borderWidth: 0}}
+              size={moderateScale(32)}
+              textstyle={styles.text}
+              navigate={() => navigation.navigate('menstrual')}
+            />
           </View>
           <View style={styles.visitOpenItem}>
-          <VisitOpen
-          label={'Obstetric History'}
-          icon={'menu-right'}
-          iconstyle={{borderWidth:0}}
-          size={moderateScale(32)}
-          textstyle={styles.text}
-          navigate={()=> navigation.navigate('obstetric')}
-          />
+            <VisitOpen
+              label={'Obstetric History'}
+              icon={'menu-right'}
+              iconstyle={{borderWidth: 0}}
+              size={moderateScale(32)}
+              textstyle={styles.text}
+              navigate={() => navigation.navigate('obstetric')}
+            />
           </View>
           <View style={styles.visitOpenItem}>
-          <VisitOpen
-          label={'Marital History'}
-          icon={'menu-right'}
-          iconstyle={{borderWidth:0}}
-          size={moderateScale(32)}
-          textstyle={styles.text}
-          navigate={()=>{
-            navigation.navigate('marital')
-          }}
-          />
+            <VisitOpen
+              label={'Marital History'}
+              icon={'menu-right'}
+              iconstyle={{borderWidth: 0}}
+              size={moderateScale(32)}
+              textstyle={styles.text}
+              navigate={() => {
+                navigation.navigate('marital');
+              }}
+            />
           </View>
           <ChipInput
             placeholder={'Enter new comorbidities'}

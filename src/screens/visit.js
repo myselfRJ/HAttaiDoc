@@ -87,7 +87,8 @@ const Visit = ({navigation, route}) => {
     state => state?.commorbities?.commorbitiesItems,
   );
 
-  const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
+  // const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
+
   // const pasthistory2 = useSelector(state => state?.pasthistory?.medicationHistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
@@ -103,6 +104,9 @@ const Visit = ({navigation, route}) => {
   );
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
+  );
+  const martialHistory = useSelector(
+    state => state?.pasthistory?.martialHistory,
   );
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
@@ -214,7 +218,9 @@ const Visit = ({navigation, route}) => {
   };
 
   const [data, setData] = useState();
-
+  // console.log('====================================');
+  // console.log(pasthistory);
+  // console.log('====================================');
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
@@ -1118,10 +1124,6 @@ const Visit = ({navigation, route}) => {
                       (value?.label === 'Follow-Up' && date?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Medical History' &&
-                      pasthistory?.length > 0
-                        ? 'check-circle'
-                        : '') ||
                       (value?.label === 'History of Present Illness' &&
                       note?.length > 0
                         ? 'check-circle'
@@ -1133,15 +1135,15 @@ const Visit = ({navigation, route}) => {
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Medical History' &&
-                      (commor?.length > 0 ||
+                        (commor?.length > 0 ||
                         socialHistory?.length > 0 ||
                         familyHistory?.length > 0 ||
                         medicationHistory ||
-                        pasthistory ||
-                        menstrualHistory ||
-                        obstericHistory)
-                        ? 'check-circle'
-                        : '') ||
+                        menstrualHistory?.length > 0 ||
+                        JSON.stringify(obstericHistory) !== '{}' ||
+                        JSON.stringify(martialHistory) !== '{}'
+                          ? 'check-circle'
+                          : '')) ||
                       (value?.label === 'Physical Examinations' &&
                       physi !== '{}'
                         ? 'check-circle'
@@ -1207,7 +1209,7 @@ const Visit = ({navigation, route}) => {
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexWrap: 'wrap',borderWidth:1}}>
+                      <View style={{flexWrap: 'wrap', borderWidth: 1}}>
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (

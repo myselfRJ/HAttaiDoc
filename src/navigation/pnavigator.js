@@ -60,6 +60,7 @@ import AdditionalNotes from '../screens/additionNotes';
 import MenstrualHistory from '../screens/menstrualHistory';
 import ObstetricHistory from '../screens/obstetricHistory';
 import MaritalHistory from '../screens/maritalHistory';
+import Alert from '../screens/Alerts';
 
 const Stack = createNativeStackNavigator();
 
@@ -81,6 +82,11 @@ const ProtectedRoute = () => {
         name="tab"
         component={BottomTab}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="alert"
+        component={Alert}
+        // options={{headerShown: false}}
       />
       <Stack.Screen
         name="clinic"
@@ -181,7 +187,7 @@ const ProtectedRoute = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="marital"
         component={MaritalHistory}
         options={{
@@ -192,7 +198,7 @@ const ProtectedRoute = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="additional"
         component={AdditionalNotes}
         options={{

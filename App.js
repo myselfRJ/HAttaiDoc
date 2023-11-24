@@ -14,6 +14,7 @@ import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {moderateScale} from './src/utility/scaleDimension';
 import {PermmisionStorage} from './src/utility/permissions';
+import messaging from '@react-native-firebase/messaging';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,18 @@ function App() {
     console.log('indaaaaa');
     PermmisionStorage();
   });
+  const getTokenFcm = async () => {
+    try {
+      const Token = await messaging().getToken();
+      console.log(Token);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getTokenFcm();
+  }, []);
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>

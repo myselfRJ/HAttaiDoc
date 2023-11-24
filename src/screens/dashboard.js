@@ -343,7 +343,8 @@ const Dashboard = ({navigation, route}) => {
             label="Book Appointment"
             btnstyles={commonstyles.activebtn}
             // textStyle={{bottom:verticalScale(4),borderWidth:1}}
-            onPress={() => navigation.navigate('addnew')}
+            // onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('alert')}
           />
         </View>
       </View>
