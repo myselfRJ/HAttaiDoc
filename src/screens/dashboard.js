@@ -73,9 +73,8 @@ const Dashboard = ({navigation, route}) => {
   };
 
   const [setAppointment, setDataAppointment] = useState([]);
-  // console.log('appoooo==',setAppointment)
   const {phone} = useSelector(state => state?.phone?.data);
-
+  const fcmToken = useSelector(state=>state?.phone?.fcmtoken)
   const dispatch = useDispatch();
 
   const [date, setDate] = useState(new Date());
@@ -123,9 +122,6 @@ const Dashboard = ({navigation, route}) => {
   }, [phone]);
   const [doc_name, setDoc_name] = useState();
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-  // console.log('====================================');
-  // console.log(Clinic_id, '-------clinic');
-  // console.log('====================================');
 
   const fetchDoctors = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -142,13 +138,33 @@ const Dashboard = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
 
-  // const handleAddData = () => {
-  //   dispatch(addDoctor_profile.addDoctor_profile(doctor_profile_data));
-  // };
+const savingFcmToken=async()=>{
+  const response = await fetchApi(URL.addFcmToken,{
+    method:'POST',
+    headers:{
+      Authorization:`Bearer ${token}`,
+      'Content-Type': 'application/json',
+          Accept: 'application/json',
+    },
+    body:JSON.stringify({
+      doctor_phone : phone,
+      fcmtoken:fcmToken,
+      user_phone:''
+    })
+  })
+  try{
+    const jsonData = await response.json()
+    console.log(jsonData?.data);
+  }catch(error){
+    console.log(error);
+  }
+}
+
+useEffect(() => {
+  fetchDoctors();
+  savingFcmToken()
+}, []);
 
   const appointment_date = formatDate;
 
@@ -343,8 +359,8 @@ const Dashboard = ({navigation, route}) => {
             label="Book Appointment"
             btnstyles={commonstyles.activebtn}
             // textStyle={{bottom:verticalScale(4),borderWidth:1}}
-            // onPress={() => navigation.navigate('addnew')}
-            onPress={() => navigation.navigate('alert')}
+            onPress={() => navigation.navigate('addnew')}
+            // onPress={() => navigation.navigate('alert')}
           />
         </View>
       </View>

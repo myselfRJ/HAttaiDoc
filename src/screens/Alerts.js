@@ -38,7 +38,7 @@ import sendNotification from '../utility/notification';
 import getMessaging from '@react-native-firebase/messaging';
 import {horizontalScale, verticalScale} from '../utility/scaleDimension';
 
-const Alert = () => {
+const AlertMessage = () => {
   const [users, setUsers] = useState([]);
   const [tokens, setToken] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
@@ -61,9 +61,10 @@ const Alert = () => {
   useEffect(() => {
     fetchUsers();
   }, [phone]);
+  const [user_phone,setUser_phone] = useState('')
   const GetFcmTokens = async () => {
     try {
-      const response = await fetchApi(URL.GetFcmToken(phone, '9538002347'), {
+      const response = await fetchApi(URL.GetFcmToken(phone,user_phone), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -71,21 +72,20 @@ const Alert = () => {
       });
       const jsonData = await response.json();
       console.log(jsonData?.data);
-      setToken(jsonData?.data);
+      setToken(jsonData?.data)
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     GetFcmTokens();
-  }, []);
+  }, [user_phone]);
   const [message, setMessage] = useState('');
   const [back, setBack] = useState({borderColor: CUSTOMCOLOR.primary});
-  console.log(back);
   const send = () => {
     const body = message;
     const title = 'Message From Doctor';
-    const fcmTokens = [tokens?.[0]?.fcmtoken];
+    const fcmTokens = tokens;
 
     sendNotification(fcmTokens, body, title);
   };
@@ -96,50 +96,31 @@ const Alert = () => {
     }
   }, [message]);
 
-  //   const ftoken =
-  //     'AAAAz5ihZ2k:APA91bHjASxPwGM8B4Wm65D571YUt0IzsEgXHLPSNLu_GeDxK1Ni-NYc13puVhbFdf-GyN_87T8D7VJx1q2kYN02KTexaCbCSRYfRBVtplshylUcZVT69-6nJqV6jRT_pywtXuqkst6l';
-  //   const sendNotification = async () => {
-  //     const NotificationDetails = {
-  //       data: {},
-  //       notification: {
-  //         body: 'Indra',
-  //         title: 'hello world',
-  //       },
-  //       registration_ids: [tokens?.[0]?.fcmtoken],
-  //     };
-  //     try {
-  //       const response = await fetch('https://fcm.googleapis.com/fcm/send', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${ftoken}`,
-  //           Accept: 'application/json, application/xml',
-  //         },
-  //         body: JSON.stringify(NotificationDetails),
-  //       });
-  //       if (response.ok) {
-  //         const jsonData = await response.json();
-  //         if (jsonData) {
-  //           Alert.alert('success', 'Succesfully sent');
-  //         } else {
-  //           Alert.alert('Warn', 'Try After sometime');
-  //           console.error('API call failed:', response.status, response);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //       Alert.alert('Error', 'Try After sometime');
-  //     }
-  //   };
-
+const handleUserphone = (userPhone) =>{
+       if (user_phone){
+        setUser_phone('')
+       }else{
+        setUser_phone(userPhone)
+       }
+}
   return (
     <View
       style={{
-        flex: 1,
+        // flex: 1,
         paddingHorizontal: horizontalScale(16),
         paddingVertical: verticalScale(20),
         gap: verticalScale(36),
       }}>
+        <View>
+        <Text style={commonstyles.subhead}>Select Admin:</Text>
+        <View style={{flexDirection:'row'}}>
+          {users?.map((item,index)=>(
+            <SelectorBtn key={index} input = {item?.clinic_user_name} onPress={()=>{
+             handleUserphone(item?.user_phone_number)
+            }} select={{backgroundColor:user_phone===item?.user_phone_number?CUSTOMCOLOR.primary:CUSTOMCOLOR.white}}/>
+          ))}
+        </View>
+        </View>
       <InputText
         textStyle={back}
         label={'message'}
@@ -150,11 +131,11 @@ const Alert = () => {
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <HButton
           label={'send'}
+          btnstyles={{backgroundColor:user_phone?CUSTOMCOLOR.primary:CUSTOMCOLOR.disable}}
           onPress={() => {
-            if (message) {
+            if (message && user_phone) {
               send();
             } else {
-              console.log('=================');
               setBack({borderColor: CUSTOMCOLOR.error});
             }
           }}
@@ -164,4 +145,4 @@ const Alert = () => {
   );
 };
 
-export default Alert;
+export default AlertMessage;

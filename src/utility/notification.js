@@ -14,7 +14,7 @@ const sendNotification = async (fcmTokens, body, title) => {
     },
     registration_ids: fcmTokens,
   };
-  console.log(body, title);
+  console.log(fcmTokens)
   try {
     const response = await fetchApi(URL.sendNotification, {
       method: 'POST',
@@ -29,7 +29,7 @@ const sendNotification = async (fcmTokens, body, title) => {
     // console.log(NotificationDetails);
     if (response.ok) {
       const jsonData = await response.json();
-      if (jsonData) {
+      if (jsonData?.success !== 0) {
         console.log(jsonData);
         Alert.alert('success', 'Succesfully sent');
       } else {

@@ -60,7 +60,7 @@ import AdditionalNotes from '../screens/additionNotes';
 import MenstrualHistory from '../screens/menstrualHistory';
 import ObstetricHistory from '../screens/obstetricHistory';
 import MaritalHistory from '../screens/maritalHistory';
-import Alert from '../screens/Alerts';
+import AlertMessage from '../screens/Alerts';
 
 const Stack = createNativeStackNavigator();
 
@@ -85,7 +85,7 @@ const ProtectedRoute = () => {
       />
       <Stack.Screen
         name="alert"
-        component={Alert}
+        component={AlertMessage}
         // options={{headerShown: false}}
       />
       <Stack.Screen

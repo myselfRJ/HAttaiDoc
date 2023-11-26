@@ -1,15 +1,12 @@
-const baseUrl = 'http://10.9.64.61:8000/api/v1/';
-// const baseUrl = 'http://10.9.64.23:8000/api/v1/';
-// const baseUrl = 'http://34.205.77.155/api/v1/';
+// const baseUrl = 'http://10.9.64.61:8000/api/v1/';
+const baseUrl = 'http://192.168.1.11:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
-// const snomedUrl = 'http://34.205.77.155/';
 const snomedUrl = 'http://3.6.40.67/';
-export const fileurl = `http://10.9.64.61:8000`;
+// export const fileurl = `http://10.9.64.61:8000`;
+export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-
 // export const fileurl = `http://10.9.64.23:8000`;
 
-// export const Host = '13.200.15.208';
 
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
@@ -74,6 +71,7 @@ export const URL = {
   getMedical: (doc_phone, pat_phone) =>
     `${baseUrl}consult/get-Pasthistory?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
   savefees: `${baseUrl}consult/saveFees`,
+  addFcmToken:`${baseUrl}fcmtokens/addToken`,
   GetFcmToken: (doc_phone, userPhone) =>
     `${baseUrl}fcmtokens/getToken?doc_phone=${doc_phone}&user_phone=${userPhone}`,
   sendNotification: 'https://fcm.googleapis.com/fcm/send',

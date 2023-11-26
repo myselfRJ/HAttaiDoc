@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, Alert} from 'react-native';
+import {View, StyleSheet, Alert, Pressable, Modal,TouchableWithoutFeedback} from 'react-native';
 import {
   addFindings,
   UpadteFindings,
@@ -31,6 +31,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {stopUpload} from 'react-native-fs';
 import CustomIcon from '../components/icon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import AlertMessage from './Alerts';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -221,7 +222,7 @@ const ExaminationFindings = ({navigation}) => {
       setModal(!modal);
     }
   };
-console.log('upload==',uploaddocument);
+// console.log('upload==',uploaddocument);
   const handleReports_Physical = filepath => {
     const path = `${fileurl}${filepath}`;
     if (filepath?.includes('pdf')) {
@@ -230,14 +231,21 @@ console.log('upload==',uploaddocument);
       navigation.navigate('img', {path});
     }
   };
-console.log('report',report);
+const [visible,setVisible] = useState(false)
   return (
     <View style={styles.main}>
+      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
       <PrescriptionHead
         heading={'Report Findings'}
         headtext={{fontWeight: 'bold'}}
         head={{paddingHorizontal: 0}}
       />
+        <Pressable onPress={()=>{
+          setVisible(!visible)
+        }}>
+        <Icon name={'bell'} color={CUSTOMCOLOR.primary} size={moderateScale(36)}/>
+        </Pressable>
+      </View>
       <InputText
         value={value}
         label={'Report Finding'}
@@ -360,7 +368,33 @@ console.log('report',report);
           document={true}
           onDocument={pickSingleFile}
         />
+        
       )}
+      <Modal visible={visible} onRequestClose={()=>{
+        setVisible(!visible)
+      }}
+      transparent={true}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#000000aa',
+        }}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setVisible(!visible);
+          }}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View
+          style={{
+            backgroundColor: CUSTOMCOLOR.white,
+            borderTopEndRadius: moderateScale(16),
+            borderTopLeftRadius: moderateScale(16),
+          }}>
+     <AlertMessage/>
+     </View>
+      </View>
+    </Modal>
       <View
         style={{
           justifyContent: 'flex-end',
@@ -387,5 +421,15 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: verticalScale(16),
     backgroundColor: CUSTOMCOLOR.background,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    // width:'100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // borderWidth:1
+    // backgroundColor: 'rgba(0,0,0,0.5)'
   },
 });

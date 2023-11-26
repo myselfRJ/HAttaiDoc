@@ -13,8 +13,8 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {moderateScale} from './src/utility/scaleDimension';
-import {PermmisionStorage} from './src/utility/permissions';
-import messaging from '@react-native-firebase/messaging';
+import {PermmisionStorage,NotificationPermission} from './src/utility/permissions';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -34,21 +34,10 @@ function App() {
 
   let netConnection = netInfo.isConnected;
   React.useEffect(() => {
-    console.log('indaaaaa');
     PermmisionStorage();
+    NotificationPermission()
   });
-  const getTokenFcm = async () => {
-    try {
-      const Token = await messaging().getToken();
-      console.log(Token);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  React.useEffect(() => {
-    getTokenFcm();
-  }, []);
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>

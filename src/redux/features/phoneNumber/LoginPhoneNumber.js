@@ -3,7 +3,8 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   data:{
   phone: '',
-  trace_id:''}
+  trace_id:''},
+  fcmtoken:''
 };
 
 const Login_Phone_Slice = createSlice({
@@ -12,12 +13,12 @@ const Login_Phone_Slice = createSlice({
   reducers: {
     addLogin_phone: (state, action) => {
       state.data= action.payload;
-      // console.log("state",state)
-      // console.log(initialState)
- 
     },
+    addFcmToken:(state,action)=>{
+      state.fcmtoken=action.payload
+    }
   },
 });
 
-export const addLogin_phone = Login_Phone_Slice.actions;
+export const {addLogin_phone,addFcmToken} = Login_Phone_Slice.actions;
 export const Login_phone_Reducer = Login_Phone_Slice.reducer;
