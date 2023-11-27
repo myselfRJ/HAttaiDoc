@@ -1,5 +1,5 @@
 // const baseUrl = 'http://10.9.64.61:8000/api/v1/';
-const baseUrl = 'http://192.168.1.11:8000/api/v1/'
+const baseUrl = 'http://10.9.64.25:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
 // export const fileurl = `http://10.9.64.61:8000`;
@@ -75,6 +75,8 @@ export const URL = {
   GetFcmToken: (doc_phone, userPhone) =>
     `${baseUrl}fcmtokens/getToken?doc_phone=${doc_phone}&user_phone=${userPhone}`,
   sendNotification: 'https://fcm.googleapis.com/fcm/send',
+  GetNotificationData:(phone,id)=>`${baseUrl}fcmtokens/get-notifications-by-doc?doc_phone=${phone}&appointment_id=${id}`,
+  saveNotifications:`${baseUrl}fcmtokens/save-notifications`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

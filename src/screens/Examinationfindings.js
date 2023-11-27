@@ -391,7 +391,7 @@ const [visible,setVisible] = useState(false)
             borderTopEndRadius: moderateScale(16),
             borderTopLeftRadius: moderateScale(16),
           }}>
-     <AlertMessage/>
+     <AlertMessage data={examinationDetails}/>
      </View>
       </View>
     </Modal>

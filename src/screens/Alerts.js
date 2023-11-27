@@ -38,11 +38,13 @@ import sendNotification from '../utility/notification';
 import getMessaging from '@react-native-firebase/messaging';
 import {horizontalScale, verticalScale} from '../utility/scaleDimension';
 
-const AlertMessage = () => {
+const AlertMessage = (props) => {
+  const data_set = props.data
   const [users, setUsers] = useState([]);
   const [tokens, setToken] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
+   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchUsers = async () => {
     const response = await fetchApi(URL.getUsers(phone), {
       method: 'GET',
@@ -84,10 +86,18 @@ const AlertMessage = () => {
   const [back, setBack] = useState({borderColor: CUSTOMCOLOR.primary});
   const send = () => {
     const body = message;
-    const title = 'Message From Doctor';
+    // const title = 'Message From Doctor';
     const fcmTokens = tokens;
+    const data={
+      user_phone:user_phone,
+      Clinic_id:Clinic_id,
+      doc_phone:phone,
+      patient_phone:data_set?.patient_phone,
+      appointment_id:data_set?.appointment_id,
+      Logintoken:token
+    }
 
-    sendNotification(fcmTokens, body, title);
+    sendNotification(fcmTokens, body,data,'entry');
   };
 
   useEffect(() => {
