@@ -24,7 +24,15 @@ const VisitOpen = props => {
   return (
     <>
       <TouchableOpacity onPress={props.navigate} style={styles.inpcontainer}>
-        <Text style={[styles.text,props.textstyle]}>{props.label}</Text>
+        <View style={{flexDirection: 'row', gap: horizontalScale(16)}}>
+          <Text style={[styles.text, props.textstyle]}>{props.label}</Text>
+          {props.date ? (
+            <Text
+              style={{fontSize: CUSTOMFONTSIZE.h3, color: CUSTOMCOLOR.primary}}>
+              Updated Date: {props.date}
+            </Text>
+          ) : null}
+        </View>
 
         <View style={{flexDirection: 'row'}}>
           {props.doneIcon && (
@@ -42,7 +50,7 @@ const VisitOpen = props => {
               />
             </View>
           )}
-          <View style={[styles.gap,props.iconstyle]}>
+          <View style={[styles.gap, props.iconstyle]}>
             <Icon
               name={props.icon}
               color={CUSTOMCOLOR.primary}

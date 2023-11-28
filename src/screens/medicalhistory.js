@@ -48,6 +48,8 @@ import {commonstyles} from '../styles/commonstyle';
 import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
 import {VisitOpen} from '../components';
+import {updateDate} from '../redux/features/prescription/Followupslice';
+// import ShowChip from '../components/showChip';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
@@ -55,6 +57,7 @@ const MedicalHistory = ({navigation, route}) => {
   const phone = medicaldata?.phone;
   const token = useSelector(state => state.authenticate.auth.access);
   const patient_phone = medicaldata?.patient_phone;
+
   console.log('phone', phone, patient_phone);
 
   const data = useSelector(state => state?.pasthistory?.pasthistory);
@@ -67,6 +70,7 @@ const MedicalHistory = ({navigation, route}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
+  const [updatedate, setUpdatedate] = useState('');
   const [commor_sug, setCommor_Sug] = useState([...CONSTANTS.commoribities]);
   const [past, setPast] = useState('');
   const [social, setSocial] = useState('');
@@ -76,6 +80,7 @@ const MedicalHistory = ({navigation, route}) => {
   const [medical, setMedical] = useState('');
   const [menstrual, setMenstrual] = useState('');
   const [obstetric, setObstetric] = useState('');
+  const [getdata, setDate] = useState();
   const [select, setSelect] = useState('');
   console.log('med==', medical);
   const handleSelectComorbidities = value => {
@@ -164,6 +169,7 @@ const MedicalHistory = ({navigation, route}) => {
       setSocial('');
     }
   };
+  console.log('updated=========================', updatedate);
   const handleFamily = () => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
@@ -234,8 +240,13 @@ const MedicalHistory = ({navigation, route}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
+        // setDate(jsonData?.data[0]);
         console.log('medication', jsonData?.data[0]);
-        console.log('', jsonData?.data[0]?.mensutral_history);
+        setUpdatedate(
+          jsonData?.data[0]?.updated_at
+            ? jsonData?.data[0]?.updated_at?.split('T')[0]
+            : '',
+        );
         if (jsonData?.data[0]?.commoribities) {
           const commo = JSON.parse(jsonData.data[0].commoribities);
           dispatch(addcommorbiditis(commo));
@@ -258,11 +269,12 @@ const MedicalHistory = ({navigation, route}) => {
           setPast(hospitalization?.past);
           dispatch(addpastHospitalization(hospitalization?.past));
         }
-        // if (jsonData?.data[0]?.mensutral_history) {
-        //   const mens = JSON.parse(jsonData.data[0].mensutral_history);
-        //   setMenstrual(mens?.menstrual);
-        //   dispatch(addmenstrualHistory(mens?.menstural));
-        // }
+        if (jsonData?.data[0]?.mensutral_history) {
+          const mens = JSON.parse(jsonData.data[0].mensutral_history);
+          // setMenstrual(mens);
+          console.log('mens================', mens);
+          dispatch(addmenstrualHistory(mens));
+        }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
           setObstetric(mens?.obstetric);
@@ -279,6 +291,10 @@ const MedicalHistory = ({navigation, route}) => {
   useEffect(() => {
     fetchMedicalData();
   }, []);
+  // useEffect(() => {
+  //   setUpdatedate(getdata?.updated_at?.split('T'[0]));
+  // }, [data]);
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -288,12 +304,53 @@ const MedicalHistory = ({navigation, route}) => {
           <View style={styles.visitOpenItem}>
             <VisitOpen
               label={'Menstrual History'}
-              icon={'menu-right'}
-              iconstyle={{borderWidth: 0}}
-              size={moderateScale(32)}
+              icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+              iconstyle={{
+                borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+              }}
+              size={
+                menstrualHistory !== '' ? moderateScale(16) : moderateScale(32)
+              }
               textstyle={styles.text}
-              navigate={() => navigation.navigate('menstrual')}
+              navigate={() =>
+                navigation.navigate('menstrual', {phone, patient_phone})
+              }
+              date={updatedate !== '' ? updatedate : null}
             />
+            {/* {updatedate != '' && <Text>{updatedate.split('T')[0]}</Text>} */}
+
+            <View style={styles.basiccontainer}>
+              {/* <View style={{flexWrap: 'wrap'}}> */}
+              {menstrualHistory != '' && (
+                <View style={styles.symptomicon}>
+                  <Text style={styles.pulse}>
+                    Menarche: {menstrualHistory?.age} Yrs,{' '}
+                    {menstrualHistory?.status}, Flow:{' '}
+                    {menstrualHistory?.flowdays} days, Cycle:{' '}
+                    {menstrualHistory?.cycledays} days
+                    {
+                      menstrualHistory?.pregnant && (
+                        <Text>
+                          , Pregnant: LMP{' '}
+                          {menstrualHistory?.pregnant.split('T')[0]}
+                        </Text>
+                      )
+                      // typeof menstrualHistory?.pregnant === 'string'
+                    }
+                    {
+                      menstrualHistory?.menopause && (
+                        <Text>
+                          , Menopause: LMP{' '}
+                          {menstrualHistory?.menopause.split('T')[0]}
+                        </Text>
+                      )
+                      // typeof menstrualHistory?.menopause === 'string'
+                    }
+                  </Text>
+                </View>
+              )}
+              {/* </View> */}
+            </View>
           </View>
           <View style={styles.visitOpenItem}>
             <VisitOpen
@@ -569,6 +626,30 @@ const styles = StyleSheet.create({
     gap: moderateScale(8),
     marginHorizontal: horizontalScale(8),
     flexWrap: 'wrap',
+  },
+  chipText: {
+    color: CUSTOMCOLOR.primary,
+    fontSize: CUSTOMFONTSIZE.h4,
+  },
+  basiccontainer: {
+    width: '100%',
+    borderRadius: moderateScale(4),
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
+  },
+  pulse: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    // fontWeight: 400,
+    fontSize: moderateScale(14),
+    lineHeight: moderateScale(15.04),
+    color: CUSTOMCOLOR.black,
+  },
+  symptomicon: {
+    flexDirection: 'row',
+    gap: moderateScale(10),
+    alignItems: 'center',
+    // flexWrap: 'wrap',
   },
 });
 export default MedicalHistory;

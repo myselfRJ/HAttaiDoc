@@ -17,6 +17,7 @@ const MaritalHistory = () => {
   const [cons, setCons] = useState('');
   const [others, setOthers] = useState('');
   const dispatch = useDispatch();
+  const marital = useSelector(state => state?.pasthistory?.martialHistory);
   const handleDispatch = () => {
     dispatch(addmartialHistory({married: maried, cons: cons, others: others}));
     setMarried('');

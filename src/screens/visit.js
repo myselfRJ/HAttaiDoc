@@ -102,6 +102,7 @@ const Visit = ({navigation, route}) => {
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
+
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
   );
@@ -1209,7 +1210,7 @@ const Visit = ({navigation, route}) => {
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexWrap: 'wrap', borderWidth: 1}}>
+                      <View style={{flexWrap: 'wrap'}}>
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (
