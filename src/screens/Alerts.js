@@ -91,13 +91,13 @@ const AlertMessage = (props) => {
     const data={
       user_phone:user_phone,
       Clinic_id:Clinic_id,
-      doc_phone:phone,
+      doc_phone:`${phone}.sent`,
       patient_phone:data_set?.patient_phone,
       appointment_id:data_set?.appointment_id,
       Logintoken:token
     }
 
-    sendNotification(fcmTokens, body,data,'entry');
+    sendNotification(fcmTokens, body,data,'uploadrecord');
   };
 
   useEffect(() => {

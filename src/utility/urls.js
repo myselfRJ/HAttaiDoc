@@ -28,7 +28,7 @@ export const URL = {
   getPractitionerByNumber: phoneId =>
     `${baseUrl}practioner/practioner/?doctor_phone_number=${phoneId}`,
   savePrescription: `${baseUrl}consult/savePrescription`,
-  getUserByNumber: phoneId => `${baseUrl}customuser/${phoneId}`,
+  getUserByNumber: phoneId => `${baseUrl}customuser/?user_phone_number=${phoneId}`,
   getInitScreen: `${baseUrl}practioner/init`,
   getUsers: phoneId =>
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
@@ -77,6 +77,7 @@ export const URL = {
   sendNotification: 'https://fcm.googleapis.com/fcm/send',
   GetNotificationData:(phone,id)=>`${baseUrl}fcmtokens/get-notifications-by-doc?doc_phone=${phone}&appointment_id=${id}`,
   saveNotifications:`${baseUrl}fcmtokens/save-notifications`,
+  visibility_notification:(id)=>`${baseUrl}fcmtokens/update-visible?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

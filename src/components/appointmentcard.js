@@ -1,4 +1,4 @@
-import React, {useRef, useState,useEffect} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,7 +21,7 @@ import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   moderateScale,
   verticalScale,
@@ -30,7 +30,7 @@ import {
 import PlusButton from './plusbtn';
 import HButton from './button';
 import {capitalizeWord} from '../utility/const';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -77,28 +77,39 @@ const AppointmentCard = ({appointment, openVisit}) => {
     navigation.navigate('bookslot', {id, patient_phone});
   };
   const token = useSelector(state => state.authenticate.auth.access);
-  const [notification,setNotification] = useState([])
+  const [notification, setNotification] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
-const NotificationData = async()=>{
-  try{
-    const response = await fetchApi(URL.GetNotificationData(phone,appointment?.id),{
-      method:'GET',
-      headers:{
-        Authorization:`Bearer ${token}`
+  const NotificationData = async () => {
+    try {
+      const response = await fetchApi(
+        URL.GetNotificationData(phone, appointment?.id),
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.ok) {
+        const jsonData = await response.json();
+        setNotification(jsonData?.data);
+        console.log(jsonData);
       }
-    })
-    if (response.ok){
-      const jsonData = await response.json()
-      setNotification(jsonData?.data)
-      console.log(jsonData);
+    } catch (error) {
+      console.log(error);
     }
-  }catch(error){
-    console.log(error);
-  }
-}
-useEffect(()=>{
-  NotificationData()
-},[])
+  };
+  useEffect(() => {
+    NotificationData();
+  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      NotificationData();
+    }, []),
+  );
+  const length_ofNotification = notification?.filter(
+    item => item?.seen === false && !item?.doctor_phone_number?.includes('sent'),
+  );
   return (
     <View style={styles.main}>
       <View style={styles.tokenContainer}>
@@ -141,27 +152,35 @@ useEffect(()=>{
         </View>
         <View>
           <View style={{marginLeft: moderateScale(220)}}>
-          {notification?.length > 0 && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            backgroundColor: 'red',
-            borderRadius: 10,
-            paddingHorizontal: 5,
-            zIndex:1,
-            marginBottom:10
-          }}
-        >
-          <Text style={{ color: '#FFF' }}>{notification?.length}</Text></View>)}
-            <Pressable style={styles.icon} onPress={() => setVisible(!visible)}>
+            {notification?.length > 0 &&
+              length_ofNotification?.length !== 0 && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    backgroundColor: 'red',
+                    borderRadius: 10,
+                    paddingHorizontal: 5,
+                    zIndex: 1,
+                    marginBottom: 10,
+                  }}>
+                  <Text style={{color: CUSTOMCOLOR.white}}>
+                    {length_ofNotification?.length}
+                  </Text>
+                </View>
+              )}
+
+            <Pressable
+              style={styles.icon}
+              onPress={() => {
+                  navigation.navigate('notify', {notification});
+              }}>
               <Icon
                 name={'message-processing'}
                 size={moderateScale(24)}
                 color={CUSTOMCOLOR.primary}
               />
-         
             </Pressable>
           </View>
           {appointment?.status === 'pending' ? (
