@@ -36,17 +36,21 @@ import {checkNotifications} from 'react-native-permissions';
 import {checkNumber} from '../utility/checks';
 import sendNotification from '../utility/notification';
 import getMessaging from '@react-native-firebase/messaging';
-import {horizontalScale, verticalScale} from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 
-const AlertMessage = (props) => {
-  const data_set = props.data
+const AlertMessage = props => {
+  const data_set = props.data;
   const [users, setUsers] = useState([]);
   const [tokens, setToken] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
-   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchUsers = async () => {
-    const response = await fetchApi(URL.getUsers(phone), {
+    const response = await fetchApi(URL.get_user_by_clinic_id(Clinic_id), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -63,10 +67,10 @@ const AlertMessage = (props) => {
   useEffect(() => {
     fetchUsers();
   }, [phone]);
-  const [user_phone,setUser_phone] = useState('')
+  const [user_phone, setUser_phone] = useState('');
   const GetFcmTokens = async () => {
     try {
-      const response = await fetchApi(URL.GetFcmToken(phone,user_phone), {
+      const response = await fetchApi(URL.GetFcmToken(phone, user_phone), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,7 +78,7 @@ const AlertMessage = (props) => {
       });
       const jsonData = await response.json();
       console.log(jsonData?.data);
-      setToken(jsonData?.data)
+      setToken(jsonData?.data);
     } catch (error) {
       console.log(error);
     }
@@ -85,19 +89,19 @@ const AlertMessage = (props) => {
   const [message, setMessage] = useState('');
   const [back, setBack] = useState({borderColor: CUSTOMCOLOR.primary});
   const send = () => {
-    const body = message;
+    const body = sendvalue !== 'Others' ? sendvalue : message;
     // const title = 'Message From Doctor';
     const fcmTokens = tokens;
-    const data={
-      user_phone:user_phone,
-      Clinic_id:Clinic_id,
-      doc_phone:`${phone}.sent`,
-      patient_phone:data_set?.patient_phone,
-      appointment_id:data_set?.appointment_id,
-      Logintoken:token
-    }
-
-    sendNotification(fcmTokens, body,data,'uploadrecord');
+    const data = {
+      user_phone: user_phone,
+      Clinic_id: Clinic_id,
+      doc_phone: `${phone}.sent`,
+      patient_phone: data_set?.patient_phone,
+      appointment_id: data_set?.appointment_id,
+      Logintoken: token,
+    };
+    sendNotification(fcmTokens, body, data, 'uploadrecord');
+    props.onPress && props.onPress();
   };
 
   useEffect(() => {
@@ -106,13 +110,14 @@ const AlertMessage = (props) => {
     }
   }, [message]);
 
-const handleUserphone = (userPhone) =>{
-       if (user_phone){
-        setUser_phone('')
-       }else{
-        setUser_phone(userPhone)
-       }
-}
+  const handleUserphone = userPhone => {
+    if (user_phone) {
+      setUser_phone('');
+    } else {
+      setUser_phone(userPhone);
+    }
+  };
+  const [sendvalue, setSendValue] = useState('');
   return (
     <View
       style={{
@@ -121,29 +126,99 @@ const handleUserphone = (userPhone) =>{
         paddingVertical: verticalScale(20),
         gap: verticalScale(36),
       }}>
-        <View>
+      <View>
         <Text style={commonstyles.subhead}>Select Admin:</Text>
-        <View style={{flexDirection:'row'}}>
-          {users?.map((item,index)=>(
-            <SelectorBtn key={index} input = {item?.clinic_user_name} onPress={()=>{
-             handleUserphone(item?.user_phone_number)
-            }} select={{backgroundColor:user_phone===item?.user_phone_number?CUSTOMCOLOR.primary:CUSTOMCOLOR.white}}/>
+        <View style={{flexDirection: 'row'}}>
+          {users?.map((item, index) => (
+            <SelectorBtn
+              key={index}
+              input={item?.clinic_user_name}
+              onPress={() => {
+                handleUserphone(item?.user_phone_number);
+              }}
+              select={{
+                backgroundColor:
+                  user_phone === item?.user_phone_number
+                    ? CUSTOMCOLOR.primary
+                    : CUSTOMCOLOR.white,
+              }}
+            />
           ))}
         </View>
-        </View>
-      <InputText
-        textStyle={back}
-        label={'message'}
-        value={message}
-        setValue={setMessage}
-        required={true}
-      />
+      </View>
+      <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+        <HButton
+          type={'addtype'}
+          icon={'file-document-outline'}
+          color={
+            sendvalue !== 'Others' && sendvalue !== ''
+              ? CUSTOMCOLOR.white
+              : CUSTOMCOLOR.primary
+          }
+          btnstyles={{
+            backgroundColor:
+              sendvalue !== 'Others' && sendvalue !== ''
+                ? CUSTOMCOLOR.primary
+                : CUSTOMCOLOR.white,
+            borderWidth: 0.5,
+            borderColor: CUSTOMCOLOR.borderColor,
+          }}
+          onPress={() => {
+            if (!sendvalue || sendvalue === 'Others') {
+              setSendValue(
+                `Please Upload Records for ${data_set?.patient_name}`,
+              );
+            } else {
+              setSendValue('');
+            }
+          }}
+        />
+        <HButton
+          type={'addtype'}
+          // icon={'message-processing'}
+          label={'Others'}
+          color={CUSTOMCOLOR.primary}
+          btnstyles={{
+            backgroundColor:
+              sendvalue === 'Others' ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+            borderWidth: 0.5,
+            borderColor: CUSTOMCOLOR.borderColor,
+          }}
+          textStyle={{
+            color:
+              sendvalue === 'Others' ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+          }}
+          onPress={() => {
+            if (!sendvalue || sendvalue.includes('for')) {
+              setSendValue('Others');
+            } else {
+              setSendValue('');
+            }
+          }}
+        />
+      </View>
+      {sendvalue === 'Others' && (
+        <InputText
+          textStyle={back}
+          label={'message'}
+          value={message}
+          setValue={setMessage}
+          required={true}
+        />
+      )}
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <HButton
           label={'send'}
-          btnstyles={{backgroundColor:user_phone?CUSTOMCOLOR.primary:CUSTOMCOLOR.disable}}
+          btnstyles={{
+            backgroundColor: user_phone
+              ? CUSTOMCOLOR.primary
+              : CUSTOMCOLOR.disable,
+          }}
           onPress={() => {
-            if (message && user_phone) {
+            if (
+              (user_phone && sendvalue !== 'Others') ||
+              (sendvalue === 'Others' && message && user_phone)
+            ) {
               send();
             } else {
               setBack({borderColor: CUSTOMCOLOR.error});

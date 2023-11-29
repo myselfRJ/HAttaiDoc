@@ -1,12 +1,11 @@
 // const baseUrl = 'http://10.9.64.61:8000/api/v1/';
-const baseUrl = 'http://10.9.64.25:8000/api/v1/'
+const baseUrl = 'http://10.9.64.54:8000/api/v1/';
 // const baseUrl = 'http://3.6.40.67/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
 // export const fileurl = `http://10.9.64.61:8000`;
-export const fileurl = `http://192.168.1.11:8000`
+export const fileurl = `http://10.9.64.54:8000`;
 // export const fileurl = `http://3.6.40.67`;
 // export const fileurl = `http://10.9.64.23:8000`;
-
 
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
@@ -28,7 +27,8 @@ export const URL = {
   getPractitionerByNumber: phoneId =>
     `${baseUrl}practioner/practioner/?doctor_phone_number=${phoneId}`,
   savePrescription: `${baseUrl}consult/savePrescription`,
-  getUserByNumber: phoneId => `${baseUrl}customuser/?user_phone_number=${phoneId}`,
+  getUserByNumber: phoneId =>
+    `${baseUrl}customuser/?user_phone_number=${phoneId}`,
   getInitScreen: `${baseUrl}practioner/init`,
   getUsers: phoneId =>
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
@@ -53,6 +53,8 @@ export const URL = {
   update_clinic_user: id => `${baseUrl}customuser/update-user?id=${id}`,
   delete_clinic_user: id => `${baseUrl}customuser/delete-user?id=${id}`,
   get_clinic_user_by_id: id => `${baseUrl}customuser/getuser-id?id=${id}`,
+  get_user_by_clinic_id: id =>
+    `${baseUrl}customuser/getUserbyClinic_id?id=${id}`,
   uploadExaminations: `${baseUrl}consult/exam`,
   uploadPhysicalExamination: `${baseUrl}consult/physical`,
   refer_doc_pdf: `${baseUrl}consult/refer`,
@@ -71,13 +73,14 @@ export const URL = {
   getMedical: (doc_phone, pat_phone) =>
     `${baseUrl}consult/get-Pasthistory?doc_phone=${doc_phone}&pat_phone=${pat_phone}`,
   savefees: `${baseUrl}consult/saveFees`,
-  addFcmToken:`${baseUrl}fcmtokens/addToken`,
+  addFcmToken: `${baseUrl}fcmtokens/addToken`,
   GetFcmToken: (doc_phone, userPhone) =>
     `${baseUrl}fcmtokens/getToken?doc_phone=${doc_phone}&user_phone=${userPhone}`,
   sendNotification: 'https://fcm.googleapis.com/fcm/send',
-  GetNotificationData:(phone,id)=>`${baseUrl}fcmtokens/get-notifications-by-doc?doc_phone=${phone}&appointment_id=${id}`,
-  saveNotifications:`${baseUrl}fcmtokens/save-notifications`,
-  visibility_notification:(id)=>`${baseUrl}fcmtokens/update-visible?id=${id}`,
+  GetNotificationData: (phone, id) =>
+    `${baseUrl}fcmtokens/get-notifications-by-doc?doc_phone=${phone}&appointment_id=${id}`,
+  saveNotifications: `${baseUrl}fcmtokens/save-notifications`,
+  visibility_notification: id => `${baseUrl}fcmtokens/update-visible?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

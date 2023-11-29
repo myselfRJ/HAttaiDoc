@@ -252,7 +252,7 @@ const ExaminationFindings = ({navigation}) => {
           headtext={{fontWeight: 'bold'}}
           head={{paddingHorizontal: 0}}
         />
-        <Pressable
+        {/* <Pressable
           onPress={() => {
             setVisible(!visible);
           }}>
@@ -261,7 +261,7 @@ const ExaminationFindings = ({navigation}) => {
             color={CUSTOMCOLOR.primary}
             size={moderateScale(36)}
           />
-        </Pressable>
+        </Pressable> */}
       </View>
       <InputText
         value={value}
@@ -384,7 +384,7 @@ const ExaminationFindings = ({navigation}) => {
           onDocument={pickSingleFile}
         />
       )}
-      <Modal
+      {/* <Modal
         visible={visible}
         onRequestClose={() => {
           setVisible(!visible);
@@ -407,10 +407,13 @@ const ExaminationFindings = ({navigation}) => {
               borderTopEndRadius: moderateScale(16),
               borderTopLeftRadius: moderateScale(16),
             }}>
-            <AlertMessage data={examinationDetails} />
+            <AlertMessage
+              data={examinationDetails}
+              onPress={() => setVisible(!visible)}
+            />
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       <View
         style={{
           justifyContent: 'flex-end',
