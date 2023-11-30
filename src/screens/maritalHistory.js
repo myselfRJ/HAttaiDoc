@@ -9,19 +9,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CUSTOMCOLOR} from '../settings/styles';
 import {HButton, InputText} from '../components';
 import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {addmartialHistory} from '../redux/features/prescription/pastHistory';
 const height = Dimensions.get('window')?.height;
 const width = Dimensions.get('window')?.width;
 const MaritalHistory = () => {
+  const nav = useNavigation();
   const [maried, setMarried] = useState('');
   const [cons, setCons] = useState('');
   const [others, setOthers] = useState('');
   const dispatch = useDispatch();
+  const marital = useSelector(state => state?.pasthistory?.martialHistory);
   const handleDispatch = () => {
     dispatch(addmartialHistory({married: maried, cons: cons, others: others}));
     setMarried('');
     setCons('');
     setOthers('');
+    nav.goBack();
   };
   return (
     <View style={styles.main}>

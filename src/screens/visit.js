@@ -106,13 +106,15 @@ const Visit = ({navigation, route}) => {
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
+
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
   );
+
   const martialHistory = useSelector(
     state => state?.pasthistory?.martialHistory,
   );
-
+  console.log('==========>onbd', typeof JSON.stringify(martialHistory));
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
 
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
@@ -211,6 +213,7 @@ const Visit = ({navigation, route}) => {
       medication_history: JSON.stringify(medicationHistory),
       mensutral_history: JSON.stringify(menstrualHistory),
       obsteric_history: JSON.stringify(obstericHistory),
+      martial_history: JSON.stringify(martialHistory),
     },
 
     meta_data: {

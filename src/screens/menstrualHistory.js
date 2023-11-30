@@ -18,18 +18,25 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import {CONSTANTS} from '../utility/constant';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment, {min} from 'moment';
 import {addmenstrualHistory} from '../redux/features/prescription/pastHistory';
 import {commonstyles} from '../styles/commonstyle';
 import {useSelector, useDispatch} from 'react-redux';
-const MenstrualHistory = () => {
+import {useNavigation} from '@react-navigation/native';
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+
+const MenstrualHistory = ({navigation, route}) => {
   const dispatch = useDispatch();
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
-  console.log(',enstr==', menstrualHistory);
+  const {phone, patient_phone} = route.params;
+  const token = useSelector(state => state.authenticate.auth.access);
+  const nav = useNavigation();
+  // const nav = console.log(',enstr==', menstrualHistory);
   const selction = ['Yes', 'No'];
   const [age, setAge] = useState('');
   const [status, setStatus] = useState('');
@@ -39,10 +46,12 @@ const MenstrualHistory = () => {
   const [menopause, setMenopause] = useState('');
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const formatDate = moment(date).format('YYYY-MM-DD');
+  const [formatDate, setformatDate] = useState('');
+  const [formatDate1, setformatDate1] = useState('');
+  // const formatDate = moment(date).format('YYYY-MM-DD');
   const [date1, setDate1] = useState(new Date());
   const [open1, setOpen1] = useState(false);
-  const formatDate1 = moment(date).format('YYYY-MM-DD');
+  // const formatDate1 = moment(date1).format('YYYY-MM-DD');
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -51,6 +60,7 @@ const MenstrualHistory = () => {
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
+    setformatDate(moment(date).format('YYYY-MM-DD'));
   };
   const handleCancel = () => {
     setOpen(false);
@@ -58,6 +68,7 @@ const MenstrualHistory = () => {
   const handleConfirm1 = date => {
     setDate1(date);
     setOpen1(false);
+    setformatDate1(moment(date1).format('YYYY-MM-DD'));
   };
   const handleCancel1 = () => {
     setOpen1(false);
@@ -71,21 +82,71 @@ const MenstrualHistory = () => {
   const menoselect = val => {
     setMenopause(val);
   };
+  useEffect(() => {
+    menstrualHistory.pregnant ? setPreg('Yes') : setPreg('');
+    menstrualHistory.menopause ? setMenopause('Yes') : setMenopause('');
+  }, []);
   const handledata = () => {
     dispatch(
-      addmenstrualHistory([
-        ...menstrualHistory,
-        {
-          age: age,
-          status: status,
-          flowdays: flow,
-          cycledays: cycle,
-          pregnant: date,
-          menopause: date1,
-        },
-      ]),
+      addmenstrualHistory({
+        age: age,
+        status: status,
+        flowdays: flow,
+        cycledays: cycle,
+        pregnant: formatDate,
+        menopause: formatDate1,
+      }),
     );
+
+    setAge('');
+    setStatus('');
+    setFlow('');
+    setCycle('');
+    setPreg('');
+    setMenopause('');
+    setformatDate('');
+    setformatDate1('');
+
+    nav.goBack();
   };
+  const pregn = menstrualHistory?.pregnant;
+  console.log(pregn), '================';
+
+  const fetchMenstrualData = async () => {
+    try {
+      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const jsonData = await response.json();
+
+        if (jsonData?.data[0]?.mensutral_history) {
+          const mens = JSON.parse(jsonData.data[0].mensutral_history);
+          // setMenstrual(mens);
+          setAge(mens?.age);
+          setStatus(mens?.status);
+          setFlow(mens?.flowdays);
+          setCycle(mens?.cycledays);
+          setformatDate(mens?.pregnant);
+          setformatDate1(mens?.menopause);
+          console.log('mens================', mens);
+          dispatch(addmenstrualHistory(mens));
+        }
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error in fetchMedicalData:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenstrualData();
+  }, []);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Menstrual History" />
@@ -147,7 +208,7 @@ const MenstrualHistory = () => {
             label={'LMP(Last month period)'}
             name="calendar"
             onPress={() => setOpen('to')}
-            input={formatDate}
+            input={formatDate ? formatDate : 'Select Date'}
             style={styles.DOBselect}
           />
           <DatePicker
@@ -179,8 +240,8 @@ const MenstrualHistory = () => {
           <SelectorBtn
             label={'LMP(Last month period)'}
             name="calendar"
-            onPress={() => setOpen('to')}
-            input={formatDate1}
+            onPress={() => setOpen1('to')}
+            input={formatDate1 ? formatDate1 : 'Select Date'}
             style={styles.DOBselect}
           />
           <DatePicker
