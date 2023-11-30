@@ -402,7 +402,6 @@ const Visit = ({navigation, route}) => {
     right: 0;
     background-color: #ffffff;
     text-align: center;
-    border-bottom: 1px solid #4ba5fa;
     padding-bottom: 8px;
     margin: 0;
     padding: 24px;
@@ -448,7 +447,6 @@ const Visit = ({navigation, route}) => {
                 .page-break-inside {
                   page-break-inside: always;
                   margin-top:16px;
-                  border: 1px solid black
               }
             </style>
             </head>
@@ -764,7 +762,6 @@ const Visit = ({navigation, route}) => {
                         <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
-                        border: 1px solid black;
                         margin-top: 84px;">
                             <div>
                             <p id='values2'  style="  font-weight: 300;
@@ -1265,7 +1262,7 @@ const Visit = ({navigation, route}) => {
                   />
                   {value.label === 'Symptoms' && Symptom.length > 0 && (
                     <View style={styles.basiccontainer}>
-                      <View style={{flexWrap: 'wrap', borderWidth: 1}}>
+                      <View style={{flexWrap: 'wrap'}}>
                         {Symptom?.map((item, index) => {
                           return (
                             item.symptom != '' && (
