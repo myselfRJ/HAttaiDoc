@@ -131,6 +131,12 @@ const AlertMessage = props => {
         <View style={{flexDirection: 'row'}}>
           {users?.map((item, index) => (
             <SelectorBtn
+              inputstyle={{
+                color:
+                  user_phone === item?.user_phone_number
+                    ? CUSTOMCOLOR.white
+                    : CUSTOMCOLOR.black,
+              }}
               key={index}
               input={item?.clinic_user_name}
               onPress={() => {

@@ -14,6 +14,13 @@ import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ObstetricField = props => {
+  const setValue = props.setvalues;
+  const handleNumericInput = input => {
+    // (/[^a-zA-Z]/g, '') for only strings
+    const numericValue = input.replace(/[^0-9]/g, '');
+    setValue(numericValue);
+  };
+  const numeric = props.numeric;
   return (
     <View style={styles.main}>
       <View style={styles.fields}>
@@ -22,11 +29,12 @@ const ObstetricField = props => {
           placeholder="Enter"
           style={styles.input}
           value={props.values}
-          onChangeText={props.setvalues}
+          onChangeText={numeric ? handleNumericInput : setValue}
         />
       </View>
-      {props.show == true ? (
+      {props.show == true || (props.values && props.values.length > 0) ? (
         <View style={styles.desc}>
+          {/* Your existing code */}
           <TextInput
             placeholder="Description"
             style={styles.main}
@@ -38,7 +46,6 @@ const ObstetricField = props => {
               position: 'absolute',
               top: verticalScale(12),
               right: horizontalScale(12),
-              // height: verticalScale(30),
               borderRadius: moderateScale(100),
               alignItems: 'center',
               backgroundColor: CUSTOMCOLOR.white,

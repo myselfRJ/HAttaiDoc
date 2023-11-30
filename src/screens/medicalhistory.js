@@ -172,7 +172,7 @@ const MedicalHistory = ({navigation, route}) => {
     }
   };
   console.log('====================================');
-  console.log('garadfgh', menstrualHistory);
+  console.log('garadfgh', menstrualHistory?.pregnant);
   console.log('====================================');
   const handleFamily = () => {
     if (family.trim() !== '') {
@@ -346,8 +346,12 @@ const MedicalHistory = ({navigation, route}) => {
                         {
                           menstrualHistory?.pregnant && (
                             <Text>
-                              , Pregnant: LMP{' '}
-                              {menstrualHistory?.pregnant.split('T')[0]}
+                              ,{' '}
+                              {menstrualHistory?.pregnant !== 'NaN'
+                                ? `Pregnant (Yes): LMP ${
+                                    menstrualHistory?.pregnant.split('T')[0]
+                                  }`
+                                : 'Pregnant (No)'}
                             </Text>
                           )
                           // typeof menstrualHistory?.pregnant === 'string'
@@ -355,8 +359,12 @@ const MedicalHistory = ({navigation, route}) => {
                         {
                           menstrualHistory?.menopause && (
                             <Text>
-                              , Menopause: LMP{' '}
-                              {menstrualHistory?.menopause.split('T')[0]}
+                              ,{' '}
+                              {menstrualHistory?.menopause !== 'NaN'
+                                ? `Menopause (Yes): LMP ${
+                                    menstrualHistory?.menopause.split('T')[0]
+                                  }`
+                                : 'Menopause (No)'}
                             </Text>
                           )
                           // typeof menstrualHistory?.menopause === 'string'
@@ -383,11 +391,13 @@ const MedicalHistory = ({navigation, route}) => {
                     : moderateScale(32)
                 }
                 textstyle={styles.text}
-                navigate={() => navigation.navigate('obstetric')}
+                navigate={() =>
+                  navigation.navigate('obstetric', {phone, patient_phone})
+                }
               />
               {JSON.stringify(obstericHistory) !== '{}' && (
                 <View style={styles.basiccontainer}>
-                  {obstericHistory != undefined && (
+                  {obstericHistory != '' && (
                     <>
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
@@ -416,13 +426,13 @@ const MedicalHistory = ({navigation, route}) => {
                             ))} */}
                           <Text>Description : </Text>
                           {obstericHistory?.gravidity?.desc &&
-                            `G - ${obstericHistory?.gravidity?.desc},`}{' '}
+                            `G - ${obstericHistory?.gravidity?.desc}`}
                           {obstericHistory?.term?.desc &&
-                            `T - ${obstericHistory?.term?.desc},`}{' '}
+                            `,${' '}T - ${obstericHistory?.term?.desc}`}
                           {obstericHistory?.premature?.desc &&
-                            `P - ${obstericHistory?.premature?.desc},`}{' '}
+                            `,${' '}P - ${obstericHistory?.premature?.desc}`}
                           {obstericHistory?.abortions?.desc &&
-                            `A - ${obstericHistory?.abortions?.desc}`}{' '}
+                            `,${' '}A - ${obstericHistory?.abortions?.desc}`}
                         </Text>
                       </View>
                     </>
@@ -444,7 +454,7 @@ const MedicalHistory = ({navigation, route}) => {
                 size={marital !== '' ? moderateScale(16) : moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() => {
-                  navigation.navigate('marital');
+                  navigation.navigate('marital', {phone, patient_phone});
                 }}
               />
               {JSON.stringify(marital) !== '{}' && (
@@ -453,8 +463,10 @@ const MedicalHistory = ({navigation, route}) => {
                   {marital != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        {`Maried Since: ${marital?.married},`}{' '}
-                        {`Consanguinity: ${marital?.cons}`}
+                        {`Maried Since: ${marital?.married}`}
+                        {marital?.cons
+                          ? `${' '},Consanguinity: ${marital?.cons}`
+                          : null}
                       </Text>
                     </View>
                   )}

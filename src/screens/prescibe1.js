@@ -85,8 +85,8 @@ export default function Prescribe1({navigation}) {
         ...prevPres,
         {
           medicine: medicine?.includes('mg' || 'ml' || 'g')
-            ? medicine
-            : `${medicine} ${mgs}`,
+            ? medicine?.toUpperCase()
+            : `${medicine?.toUpperCase()} ${mgs}`,
           mode: mode,
           dose_quantity: '',
           timing: timing,
@@ -296,7 +296,7 @@ export default function Prescribe1({navigation}) {
         <View>
           {prevPres?.map((item, ind) => (
             <ShowChip
-              main={{marginHorizontal: 0}}
+              // main={{marginHorizontal: -10}}
               key={ind}
               text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
               onPress={() => handleDelete(ind)}

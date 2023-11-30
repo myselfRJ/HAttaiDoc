@@ -11,7 +11,7 @@ export const CONSTANTS = {
     {commorbities: 'Cancer'},
     {commorbities: 'Arthritis'},
     {commorbities: 'Stroke'},
-    {commorbities: 'CAD'},
+    {commorbities: 'Coronary Artery Disease'},
     {commorbities: 'High blood pressure'},
     {commorbities: 'Thyroid Disease'},
     {commorbities: 'Epilepsy'},
@@ -34,6 +34,7 @@ export const CONSTANTS = {
     {family: 'Epilepsy'},
     {family: 'Asthma'},
     {family: 'COPD'},
+    {family: 'Coronary Artery Disease'},
   ],
   Lab: [
     {
@@ -423,7 +424,7 @@ export const CONSTANTS = {
       phone: '9100765472',
     },
   ],
-  ReferTypes: ['Clinic', 'Hospital', 'Doctor'],
+  ReferTypes: ['Clinic', 'Hospital', 'Doctor', 'Lab / Imaging Center'],
   blood_Groups: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'Unsure'],
   find_us: [
     'Newspaper',

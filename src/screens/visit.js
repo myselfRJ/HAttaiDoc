@@ -507,22 +507,18 @@ const Visit = ({navigation, route}) => {
                             color:#000000;">${selectedComplaint}</p>
                         </div>
                         ${
-                          Symptom?.length > 0
-                            ? `<div class='subContaioner' style="display: flex;
-                              flex-direction: row;
-                              gap: 8px;
-                              line-height:4px;">
-                                <p id='subhead' style="font-weight: 400px;
-                                  font-size: 16px;
-                                  color:#4ba5fa;">Symptoms:</p>
-                                <p id='values' style="font-weight: 300px;
-                                  font-size: 16px;
-                                  color:#000000;">
-                                  ${Symptom?.map(item => item?.symptom).join(
-                                    ',  ',
-                                  )}
-                                </p>
-                            </div>`
+                          note?.length > 0
+                            ? ` <div class='subContaioner' style="  display: flex;
+                         flex-direction: row;
+                         gap: 8px;
+                         line-height:4px;">
+                                 <p id='subhead' style="font-weight: 400px;
+                                 font-size: 16px;
+                                 color:#4ba5fa;">History of Present Illness:</p>
+                                 <p id='values' style=" font-weight: 300px;
+                                 font-size: 16px;
+                                 color:#000000;">${note}</p>
+                             </div>`
                             : ''
                         }
                         
@@ -694,21 +690,7 @@ const Visit = ({navigation, route}) => {
             </div>
                     <div class ='page'>
             
-                   ${
-                     note?.length > 0
-                       ? ` <div class='subContaioner' style="  display: flex;
-                    flex-direction: row;
-                    gap: 8px;
-                    line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 16px;
-                            color:#4ba5fa;">History of Present Illness:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${note}</p>
-                        </div>`
-                       : ''
-                   }
+                   
                         ${
                           labreport?.length > 0
                             ? `<div class='subContaioner' style="  display: flex;
@@ -1005,8 +987,8 @@ const Visit = ({navigation, route}) => {
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
                     <Text style={[styles.patientText, {fontWeight: '700'}]}>
-                      Pregnancy : LMP: {`${day}-${months[month]}-${Year}`} |
-                      EDD: {vitalsData.EDD}
+                      Pregnant (LMP: {`${day}-${months[month]}-${Year}`} | EDD:{' '}
+                      {vitalsData.EDD})
                     </Text>
                   ) : null}
                 </View>
@@ -1071,7 +1053,7 @@ const Visit = ({navigation, route}) => {
                         %
                       </Text>
                     )}{' '}
-                    {vitalsData?.bmi && (
+                    {vitalsData?.bmi !== 'NaN' && (
                       <Text>
                         BMI:{' '}
                         <Text style={{fontWeight: '700'}}>
@@ -1256,7 +1238,7 @@ const Visit = ({navigation, route}) => {
                           patient_phone: patient_phone,
                           phone: phone,
                         };
-                      } else if (value.label === 'Additional Notes') {
+                      } else if (value.label === 'Dr. Notes') {
                         params.patient_phone = patient_phone;
                       }
 
@@ -1472,7 +1454,7 @@ const Visit = ({navigation, route}) => {
                         <Text style={styles.pulse}>{note}</Text>
                       </View>
                     )}
-                  {value.label === 'Additional Notes' && notes !== '' && (
+                  {value.label === 'Dr. Notes' && notes !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"

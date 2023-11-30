@@ -11,23 +11,23 @@ export const CONSTANT = {
     },
     {
       label: 'Physical Examinations',
-      icon: 'pencil',
+      icon: 'stethoscope',
       navigate: 'examination',
     },
     {
       label: 'Medical History',
-      icon: 'pencil',
+      icon: 'stethoscope',
       navigate: 'medicalhistory',
     },
     {
       label: 'Report Findings',
-      icon: 'pencil',
+      icon: 'stethoscope',
       navigate: 'findings',
     },
     {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
     {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
     {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
-    {label: 'Additional Notes', icon: 'pencil', navigate: 'additional'},
+    {label: 'Dr. Notes', icon: 'pencil', navigate: 'additional'},
 
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
     {

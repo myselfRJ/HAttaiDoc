@@ -37,20 +37,23 @@ const ShowChip = props => {
       </View>
       {props.onPress && (
         <TouchableOpacity
-          style={{
-            height: moderateScale(28),
-            width: moderateScale(28),
+          style={[
+            {
+              height: moderateScale(28),
+              width: moderateScale(28),
 
-            backgroundColor: CUSTOMCOLOR.white,
-            borderRadius: moderateScale(28),
-            // borderWidth:1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+              backgroundColor: CUSTOMCOLOR.white,
+              borderRadius: moderateScale(28),
+              // borderWidth:1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+            props.style,
+          ]}
           onPress={props.onPress}>
           <Icon
             name="close"
-            size={moderateScale(24)}
+            size={props.size ? props.size : moderateScale(20)}
             color={CUSTOMCOLOR.delete}
           />
 
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     padding: moderateScale(4),
     marginBottom: moderateScale(4),
-    marginHorizontal: horizontalScale(8),
+    // marginHorizontal: horizontalScale(8),
     backgroundColor: '#EAF3FC',
     justifyContent: 'space-between',
     borderRadius: moderateScale(4),

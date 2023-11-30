@@ -57,6 +57,7 @@ const ReferToDoctor = () => {
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [dr_name, setDr_Name] = useState('');
+  const [newPhone, setNewPhone] = useState('');
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
@@ -226,7 +227,8 @@ const ReferToDoctor = () => {
         setPhone(''),
         setSelected(''),
         setNotes(''),
-        setDr_Name(''))
+        setDr_Name(''),
+        setNewPhone(''))
       : null;
     // nav.goBack();
   };
@@ -320,6 +322,7 @@ const ReferToDoctor = () => {
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
     setDr_Name(value?.dr_name);
+    setNewPhone(value?.newPhone);
     setSpeciality(value?.speciality);
     setPhone(value?.phone);
     setNotes(value?.notes);
@@ -354,20 +357,49 @@ const ReferToDoctor = () => {
                 ? 'Dr.Name'
                 : selected === 'Clinic'
                 ? ' Clinic Name'
-                : 'Hospital Name'
+                : selected === 'Hospital'
+                ? 'Hospital Name'
+                : 'lab / Imaging Center Name'
             }
             placeholder={
               selected === 'Doctor'
                 ? 'Enter Dr.Name'
                 : selected === 'Clinic'
                 ? 'Enter Clinic Name'
-                : 'Enter Hospital Name'
+                : selected === 'Hospital'
+                ? 'Enter Hospital Name'
+                : 'Enter lab / imaging center name'
             }
             inputContainer={{paddingHorizontal: 0}}
             value={name}
             setValue={val => setName(val)}
           />
-          {selected === 'Clinic' || selected === 'Hospital' ? (
+          {selected === 'Clinic' ||
+          selected === 'Hospital' ||
+          selected === 'Lab / Imaging Center' ? (
+            <InputText
+              label={
+                selected === 'Clinic'
+                  ? ' Clinic Phone Number'
+                  : selected === 'Hospital'
+                  ? 'Hospital Phone Number'
+                  : 'Center Phone Number'
+              }
+              placeholder={
+                selected === 'Clinic'
+                  ? 'Enter Clinic Phone Number'
+                  : selected === 'Hospital'
+                  ? 'Enter Hospital Phone Number'
+                  : 'Enter Center Phone Number'
+              }
+              inputContainer={{paddingHorizontal: 0}}
+              value={newPhone}
+              setValue={val => setNewPhone(val)}
+            />
+          ) : null}
+          {selected === 'Clinic' ||
+          selected === 'Hospital' ||
+          selected === 'Lab / Imaging Center' ? (
             <InputText
               label={'Dr.Name'}
               placeholder="Dr.Name"

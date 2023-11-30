@@ -8,7 +8,7 @@ import {
 import {HButton, InputText, Option, PlusButton} from '../components';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {commonstyles} from '../styles/commonstyle';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {addobstericHistory} from '../redux/features/prescription/pastHistory';
 import ObstetricField from '../components/obstetricField';
@@ -16,8 +16,12 @@ import CustomCalendar from '../components/calendar';
 import ShowChip from '../components/showChip';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-const ObstetricHistory = () => {
+import {URL} from '../utility/urls';
+import {fetchApi} from '../api/fetchApi';
+const ObstetricHistory = ({route}) => {
   const dispatch = useDispatch();
+  const token = useSelector(state => state.authenticate.auth.access);
+  const {phone, patient_phone} = route.params;
   const nav = useNavigation();
   const obstetric = useSelector(state => state?.pasthistory?.obstericHistory);
   // const [value, setvalue] = useState({
@@ -100,14 +104,10 @@ const ObstetricHistory = () => {
   const [ind, setInd] = useState(parseInt(1));
   const [addChild, setAddchild] = useState([]);
   const [childShow, setChildShow] = useState(false);
-  // const handlePlus = () => {
-  //   setAddchild(prevChildren => [
-  //     ...prevChildren,
-  //     {age: child.age, gender: child.gender},
-  //   ]);
-  //   setChild({age: '', gender: ''});
-  //   setInd(parseInt(ind) + 1);
-  // };
+  const handleDeleteChild = index => {
+    const newChild = addChild?.filter((_, ind) => ind !== index);
+    setAddchild(newChild);
+  };
   const handlePlus = () => {
     const parsedLiving = parseInt(living, 10);
 
@@ -143,9 +143,68 @@ const ObstetricHistory = () => {
   //   state => state?.pasthistory?.obstericHistory,
   // );
   // console.log('==========>', typeof JSON.stringify(obstericHistory));
+
+  const fetchObstetricData = async () => {
+    try {
+      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const jsonData = await response.json();
+
+        if (jsonData?.data[0]?.obsteric_history) {
+          const mens = JSON.parse(jsonData.data[0].obsteric_history);
+          console.log('get data=======================', mens);
+          setGravidity({
+            value: mens?.gravidity?.value,
+            desc: mens?.gravidity?.desc,
+          });
+          setTerm({
+            value: mens?.term?.value,
+            desc: mens?.term?.desc,
+          });
+          setPremature({
+            value: mens?.preamture?.value,
+            desc: mens?.premature?.desc,
+          });
+          setAbortions({
+            value: mens?.abortions?.value,
+            desc: mens?.abortions?.desc,
+          });
+          setLiving(mens?.living?.map(item => item?.living));
+          {
+            mens?.living?.map(item =>
+              setAddchild(prevChildren => [
+                ...prevChildren,
+                {
+                  name: item?.name,
+                  age: item?.age,
+                  gender: item?.gender,
+                },
+              ]),
+            );
+          }
+
+          dispatch(addobstericHistory(mens));
+        }
+      } else {
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.error('Error in fetchMedicalData:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchObstetricData();
+  }, []);
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading={'Past Obstetric History(GPLA)'} />
+      <PrescriptionHead heading={'Past Obstetric History (GPAL)'} />
       {/* <View style={styles.fields}>
         <InputText
           label={'Year'}
@@ -200,6 +259,7 @@ const ObstetricHistory = () => {
         <ObstetricField
           label={'Gravidity'}
           values={gravidity.value}
+          numeric={true}
           setvalues={val => {
             handleGravidity('value', val), setShow(true);
           }}
@@ -209,6 +269,7 @@ const ObstetricHistory = () => {
           onPress={() => setShow(!show)}
         />
         <ObstetricField
+          numeric={true}
           label={'Term'}
           values={term.value}
           setvalues={val => {
@@ -220,6 +281,7 @@ const ObstetricHistory = () => {
           onPress={() => setshowTerm(!showTerm)}
         />
         <ObstetricField
+          numeric={true}
           label={'Premature'}
           values={premature.value}
           setvalues={val => {
@@ -231,6 +293,7 @@ const ObstetricHistory = () => {
           onPress={() => setshowpre(!showPre)}
         />
         <ObstetricField
+          numeric={true}
           label={'Abortions'}
           values={abortions.value}
           setvalues={val => {
@@ -269,7 +332,12 @@ const ObstetricHistory = () => {
                       main={{marginBottom: verticalScale(-4)}}
                       key={ind}
                       text={`${item.name} | Age : ${item.age} | Gender : ${item.gender}`}
-                      // onPress={() => handleDelete(ind)}
+                      onPress={() => handleDeleteChild(ind)}
+                      size={moderateScale(20)}
+                      style={{
+                        height: moderateScale(24),
+                        width: moderateScale(24),
+                      }}
                       ind={ind}
                     />
                   ))}

@@ -100,7 +100,7 @@ const AdditionalNotes = ({navigation, route}) => {
       <InputText
         style={styles.notes}
         multiline={true}
-        label={'Additional Recommendations/Notes'}
+        label={'Dr. Notes'}
         placeholder="write your notes"
         value={note}
         setValue={setNote}

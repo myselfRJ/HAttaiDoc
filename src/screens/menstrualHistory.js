@@ -93,8 +93,8 @@ const MenstrualHistory = ({navigation, route}) => {
         status: status,
         flowdays: flow,
         cycledays: cycle,
-        pregnant: formatDate,
-        menopause: formatDate1,
+        pregnant: formatDate ? formatDate : 'NaN',
+        menopause: formatDate1 ? formatDate1 : 'NaN',
       }),
     );
 
@@ -151,14 +151,15 @@ const MenstrualHistory = ({navigation, route}) => {
     <View style={styles.main}>
       <PrescriptionHead heading="Menstrual History" />
       <InputText
-        label={'Menarche(The first occurrence of menstruration)'}
+        label={'Menarche (The first occurrence of menstruration)'}
         placeholder={'Age'}
         value={age}
         setValue={setAge}
+        numeric={true}
       />
       <View style={styles.fields}>
         <View style={{gap: verticalScale(4)}}>
-          <Text style={styles.text}>Menstruration Status</Text>
+          <Text style={styles.text}>Menstruation Status</Text>
           <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
             {CONSTANTS.menstruration_status.map((item, ind) => (
               <SelectionTab
@@ -176,6 +177,7 @@ const MenstrualHistory = ({navigation, route}) => {
           placeholder={'Enter Days'}
           value={flow}
           setValue={setFlow}
+          numeric={true}
         />
         <InputText
           inputContainer={{width: horizontalScale(200)}}
@@ -183,6 +185,7 @@ const MenstrualHistory = ({navigation, route}) => {
           placeholder={'Enter Cycle Days'}
           value={cycle}
           setValue={setCycle}
+          numeric={true}
         />
         {/* <PlusButton
                 icon={'plus'}
@@ -222,37 +225,41 @@ const MenstrualHistory = ({navigation, route}) => {
           />
         </>
       )}
-      <View style={{gap: verticalScale(4)}}>
-        <Text style={styles.text}>Menopause</Text>
-        <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
-          {selction.map((item, ind) => (
-            <SelectionTab
-              label={item}
-              key={ind}
-              onPress={() => menoselect(item)}
-              selected={menopause === item}
-            />
-          ))}
-        </View>
-      </View>
-      {menopause === 'Yes' && (
+      {preg === 'No' && (
         <>
-          <SelectorBtn
-            label={'LMP(Last month period)'}
-            name="calendar"
-            onPress={() => setOpen1('to')}
-            input={formatDate1 ? formatDate1 : 'Select Date'}
-            style={styles.DOBselect}
-          />
-          <DatePicker
-            modal
-            open={open1 !== false}
-            date={date1}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm1}
-            onCancel={handleCancel1}
-          />
+          <View style={{gap: verticalScale(4)}}>
+            <Text style={styles.text}>Menopause</Text>
+            <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
+              {selction.map((item, ind) => (
+                <SelectionTab
+                  label={item}
+                  key={ind}
+                  onPress={() => menoselect(item)}
+                  selected={menopause === item}
+                />
+              ))}
+            </View>
+          </View>
+          {menopause === 'Yes' && (
+            <>
+              <SelectorBtn
+                label={'LMP(Last month period)'}
+                name="calendar"
+                onPress={() => setOpen1('to')}
+                input={formatDate1 ? formatDate1 : 'Select Date'}
+                style={styles.DOBselect}
+              />
+              <DatePicker
+                modal
+                open={open1 !== false}
+                date={date1}
+                theme="auto"
+                mode="date"
+                onConfirm={handleConfirm1}
+                onCancel={handleCancel1}
+              />
+            </>
+          )}
         </>
       )}
 

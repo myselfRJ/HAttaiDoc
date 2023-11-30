@@ -54,7 +54,7 @@ const ExaminationFindings = ({navigation}) => {
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const postData = async url => {
     const formData = new FormData();
-    formData.append('finding', `${value}`);
+    formData.append('finding', `${value ? value : 'NaN'}`);
     formData.append('description', `${describe}`);
     formData.append('doctor_phone_number', `${examinationDetails?.doc_phone}`);
     formData.append(
@@ -263,7 +263,7 @@ const ExaminationFindings = ({navigation}) => {
           />
         </Pressable> */}
       </View>
-      <InputText
+      {/* <InputText
         value={value}
         label={'Report Finding'}
         setValue={setValue}
@@ -279,13 +279,13 @@ const ExaminationFindings = ({navigation}) => {
         lbltext={{
           fontSize: CUSTOMFONTSIZE.h3,
         }}
-      />
+      /> */}
       <InputText
         value={describe}
-        label={'Description'}
+        label={'Report Findings'}
         setValue={setDescribe}
         multiline={true}
-        placeholder={'Write Your Notes.......'}
+        placeholder={'Write Your Report findings.......'}
         textStyle={{
           height: moderateScale(200),
           textAlignVertical: 'top',

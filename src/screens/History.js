@@ -247,12 +247,14 @@ const History = ({route, navigation}) => {
       {selectedType === 'Report finding' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          <View>
-            <Text style={styles.head}>
-              Description:
-              <Text style={styles.notes}>{reports?.description}</Text>
-            </Text>
-          </View>
+          {reports?.description && (
+            <View>
+              <Text style={styles.head}>
+                Description:
+                <Text style={styles.notes}>{reports?.description}</Text>
+              </Text>
+            </View>
+          )}
           {reports_finding[0] !== null || reports?.description ? (
             reports_finding?.map(
               (item, index) =>
@@ -286,12 +288,14 @@ const History = ({route, navigation}) => {
       {selectedType === 'Physical Examinations' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          <View>
-            <Text style={styles.head}>
-              Description:
-              <Text style={styles.notes}>{physical?.notes}</Text>
-            </Text>
-          </View>
+          {physical?.notes && (
+            <View>
+              <Text style={styles.head}>
+                Description:
+                <Text style={styles.notes}>{physical?.notes}</Text>
+              </Text>
+            </View>
+          )}
           {physical_reports[0] !== null || physical?.notes ? (
             physical_reports?.map(
               (item, index) =>
