@@ -1,7 +1,14 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, Alert, Pressable, Modal,TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  Pressable,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {
   addFindings,
   UpadteFindings,
@@ -94,8 +101,14 @@ const ExaminationFindings = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setValue(jsonData?.data?.finding === undefined ? '' :jsonData?.data?.finding);
-      setDescribe(jsonData?.data?.description === undefined ? '' :jsonData?.data?.description);
+      setValue(
+        jsonData?.data?.finding === undefined ? '' : jsonData?.data?.finding,
+      );
+      setDescribe(
+        jsonData?.data?.description === undefined
+          ? ''
+          : jsonData?.data?.description,
+      );
       setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
@@ -117,13 +130,12 @@ const ExaminationFindings = ({navigation}) => {
   const apiUrl = URL.uploadExaminations;
 
   const handle = () => {
-    if(report != undefined){
+    if (report != undefined) {
       nav?.goBack();
-    }else{
+    } else {
       postData(apiUrl);
       handlePress();
     }
-    
   };
 
   const onImagePress = () => {
@@ -222,7 +234,7 @@ const ExaminationFindings = ({navigation}) => {
       setModal(!modal);
     }
   };
-// console.log('upload==',uploaddocument);
+  // console.log('upload==',uploaddocument);
   const handleReports_Physical = filepath => {
     const path = `${fileurl}${filepath}`;
     if (filepath?.includes('pdf')) {
@@ -231,20 +243,25 @@ const ExaminationFindings = ({navigation}) => {
       navigation.navigate('img', {path});
     }
   };
-const [visible,setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
   return (
     <View style={styles.main}>
-      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-      <PrescriptionHead
-        heading={'Report Findings'}
-        headtext={{fontWeight: 'bold'}}
-        head={{paddingHorizontal: 0}}
-      />
-        <Pressable onPress={()=>{
-          setVisible(!visible)
-        }}>
-        <Icon name={'bell'} color={CUSTOMCOLOR.primary} size={moderateScale(36)}/>
-        </Pressable>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <PrescriptionHead
+          heading={'Report Findings'}
+          headtext={{fontWeight: 'bold'}}
+          head={{paddingHorizontal: 0}}
+        />
+        {/* <Pressable
+          onPress={() => {
+            setVisible(!visible);
+          }}>
+          <Icon
+            name={'bell'}
+            color={CUSTOMCOLOR.primary}
+            size={moderateScale(36)}
+          />
+        </Pressable> */}
       </View>
       <InputText
         value={value}
@@ -307,8 +324,7 @@ const [visible,setVisible] = useState(false)
             ))}
           </View>
         ) : null
-      ) : 
-      report_findings?.length > 0 ? (
+      ) : report_findings?.length > 0 ? (
         <View style={{marginTop: verticalScale(16)}}>
           {report_findings?.map(
             (item, index) =>
@@ -350,11 +366,10 @@ const [visible,setVisible] = useState(false)
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
-        onPress={()=>{
-          if(report != undefined){
-            setModal(false)
-          }
-          else{
+        onPress={() => {
+          if (report != undefined) {
+            setModal(false);
+          } else {
             handleModal();
           }
         }}
@@ -368,33 +383,37 @@ const [visible,setVisible] = useState(false)
           document={true}
           onDocument={pickSingleFile}
         />
-        
       )}
-      <Modal visible={visible} onRequestClose={()=>{
-        setVisible(!visible)
-      }}
-      transparent={true}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#000000aa',
-        }}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setVisible(!visible);
-          }}>
-          <View style={styles.modalOverlay} />
-        </TouchableWithoutFeedback>
+      {/* <Modal
+        visible={visible}
+        onRequestClose={() => {
+          setVisible(!visible);
+        }}
+        transparent={true}>
         <View
           style={{
-            backgroundColor: CUSTOMCOLOR.white,
-            borderTopEndRadius: moderateScale(16),
-            borderTopLeftRadius: moderateScale(16),
+            flex: 1,
+            backgroundColor: '#000000aa',
           }}>
-     <AlertMessage/>
-     </View>
-      </View>
-    </Modal>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisible(!visible);
+            }}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <View
+            style={{
+              backgroundColor: CUSTOMCOLOR.white,
+              borderTopEndRadius: moderateScale(16),
+              borderTopLeftRadius: moderateScale(16),
+            }}>
+            <AlertMessage
+              data={examinationDetails}
+              onPress={() => setVisible(!visible)}
+            />
+          </View>
+        </View>
+      </Modal> */}
       <View
         style={{
           justifyContent: 'flex-end',

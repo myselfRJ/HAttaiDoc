@@ -9,7 +9,10 @@ import {
   Platform,
   Image,
   Pressable,
+  TouchableWithoutFeedback,
+  Modal,
 } from 'react-native';
+import AlertMessage from './Alerts';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
   CUSTOMCOLOR,
@@ -57,6 +60,7 @@ import {
 } from '../redux/features/prescription/pastHistory';
 
 const Visit = ({navigation, route}) => {
+  const [visible, setVisible] = useState(false);
   const [filePath, setFilePath] = useState('');
   // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
@@ -401,7 +405,6 @@ const Visit = ({navigation, route}) => {
     right: 0;
     background-color: #ffffff;
     text-align: center;
-    border-bottom: 1px solid #4ba5fa;
     padding-bottom: 8px;
     margin: 0;
     padding: 24px;
@@ -447,7 +450,6 @@ const Visit = ({navigation, route}) => {
                 .page-break-inside {
                   page-break-inside: always;
                   margin-top:16px;
-                  border: 1px solid black
               }
             </style>
             </head>
@@ -763,7 +765,6 @@ const Visit = ({navigation, route}) => {
                         <footer class='desc' style=" display: flex;
                         align-items:center;
                         justify-content: center;
-                        border: 1px solid black;
                         margin-top: 84px;">
                             <div>
                             <p id='values2'  style="  font-weight: 300;
@@ -874,7 +875,13 @@ const Visit = ({navigation, route}) => {
   }
 
   const physi = JSON.stringify(physical);
-  console.log(typeof vitalsData?.others);
+  const examinationDetails = {
+    doc_phone: data?.doctor_phone_number,
+    patient_phone: patient_phone,
+    clinic_id: Clinic_id,
+    appointment_id: appointment_id,
+    patient_name: patient_data?.patient_name,
+  };
   return (
     <View>
       <ScrollView>
@@ -885,20 +892,66 @@ const Visit = ({navigation, route}) => {
               <Text style={styles.h2}>
                 {Language[language]['consultation']}
               </Text>
-              <HButton
-                type={'addtype'}
-                label={'Rx History'}
-                btnstyles={{
-                  backgroundColor: CUSTOMCOLOR.white,
-                  borderWidth: 0.5,
-                  borderColor: CUSTOMCOLOR.borderColor,
-                }}
-                textStyle={{color: CUSTOMCOLOR.primary}}
-                onPress={() => {
-                  navigation.navigate('patientrecord', {patient_phone});
-                }}
-              />
+              <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+                <HButton
+                  type={'addtype'}
+                  icon={'message-processing'}
+                  color={CUSTOMCOLOR.primary}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderWidth: 0.5,
+                    borderColor: CUSTOMCOLOR.borderColor,
+                  }}
+                  textStyle={{color: CUSTOMCOLOR.primary}}
+                  onPress={() => {
+                    setVisible(!visible);
+                  }}
+                />
+                <HButton
+                  type={'addtype'}
+                  label={'Rx History'}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderWidth: 0.5,
+                    borderColor: CUSTOMCOLOR.borderColor,
+                  }}
+                  textStyle={{color: CUSTOMCOLOR.primary}}
+                  onPress={() => {
+                    navigation.navigate('patientrecord', {patient_phone});
+                  }}
+                />
+              </View>
             </View>
+            <Modal
+              visible={visible}
+              onRequestClose={() => {
+                setVisible(!visible);
+              }}
+              transparent={true}>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#000000aa',
+                }}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setVisible(!visible);
+                  }}>
+                  <View style={styles.modalOverlay} />
+                </TouchableWithoutFeedback>
+                <View
+                  style={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderTopEndRadius: moderateScale(16),
+                    borderTopLeftRadius: moderateScale(16),
+                  }}>
+                  <AlertMessage
+                    data={examinationDetails}
+                    onPress={() => setVisible(!visible)}
+                  />
+                </View>
+              </View>
+            </Modal>
             <View
               style={{
                 // paddingHorizontal: moderateScale(24),
@@ -1761,6 +1814,16 @@ const styles = StyleSheet.create({
     // borderBottomWidth: moderateScale(0.5),
     // borderBottomColor: CUSTOMCOLOR.primary,
     paddingHorizontal: horizontalScale(8),
+  },
+  modalOverlay: {
+    position: 'absolute',
+    // width:'100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // borderWidth:1
+    // backgroundColor: 'rgba(0,0,0,0.5)'
   },
 });
 export default Visit;

@@ -17,18 +17,32 @@ const HButton = props => {
   return (
     <>
       <Pressable
-        style={props.type=='addtype'?{...styles.btncontainer,...{paddingHorizontal:horizontalScale(24),paddingVertical:verticalScale(12),...props.btnstyles}}:{...styles?.btncontainer, ...props.btnstyles}}
+        style={
+          props.type == 'addtype'
+            ? {
+                ...styles.btncontainer,
+                ...{
+                  paddingHorizontal: horizontalScale(24),
+                  paddingVertical: verticalScale(12),
+                  ...props.btnstyles,
+                },
+              }
+            : {...styles?.btncontainer, ...props.btnstyles}
+        }
         onPress={props.loading ? null : props.onPress}>
         {props.icon && (
           <Icon
             // style={styles.icon}
             name={props.icon}
-            color={CUSTOMCOLOR.white}
+            color={props.color ? props.color : CUSTOMCOLOR.white}
             size={props.size ? props.size : moderateScale(24)}
           />
         )}
         {props.loading && (
-          <ActivityIndicator size="small" color={props.loadColor?props.loadColor:CUSTOMCOLOR.white} />
+          <ActivityIndicator
+            size="small"
+            color={props.loadColor ? props.loadColor : CUSTOMCOLOR.white}
+          />
         )}
         <Text style={{...styles.btntext, ...props.textStyle}}>
           {props.label}

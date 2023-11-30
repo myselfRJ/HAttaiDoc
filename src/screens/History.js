@@ -46,8 +46,8 @@ const History = ({route, navigation}) => {
   const {appointment_id} = route.params;
   const [prescription, setPrescription] = useState();
   const [referral, setReferral] = useState([]);
-  const [reports, setReports] = useState();
-  const [physical, setPhysical] = useState();
+  const [reports, setReports] = useState({});
+  const [physical, setPhysical] = useState({});
   const [selectedType, setSelectedType] = useState();
   const images_path = [
     {image: require('../assets/images/rxhistory.png'), text: 'Prescription'},
@@ -96,7 +96,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setReports(jsonData?.data);
-      // console.log('======>data', jsonData?.data);
+      console.log('======>rep', jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -111,7 +111,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setPhysical(jsonData?.data);
-      // console.log('======>data', jsonData?.data);
+      console.log('======>data', jsonData?.data?.notes);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -122,6 +122,9 @@ const History = ({route, navigation}) => {
     fetchreports();
     fetchExamination();
   }, []);
+  console.log('====================================');
+  console.log(physical?.notes);
+  console.log('====================================');
   const handlePrescription = () => {
     const filepath = prescription?.file_url;
     const path = `${fileurl}${filepath}`;
@@ -244,7 +247,13 @@ const History = ({route, navigation}) => {
       {selectedType === 'Report finding' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          {reports_finding[0] !== null ? (
+          <View>
+            <Text style={styles.head}>
+              Description:
+              <Text style={styles.notes}>{reports?.description}</Text>
+            </Text>
+          </View>
+          {reports_finding[0] !== null || reports?.description ? (
             reports_finding?.map(
               (item, index) =>
                 item !== null && (
@@ -277,7 +286,13 @@ const History = ({route, navigation}) => {
       {selectedType === 'Physical Examinations' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          {physical_reports[0] !== null ? (
+          <View>
+            <Text style={styles.head}>
+              Description:
+              <Text style={styles.notes}>{physical?.notes}</Text>
+            </Text>
+          </View>
+          {physical_reports[0] !== null || physical?.notes ? (
             physical_reports?.map(
               (item, index) =>
                 item !== null && (
@@ -315,13 +330,18 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
+    backgroundColor: CUSTOMCOLOR.white,
+    flex: 1,
   },
   subhead: {
     paddingVertical: horizontalScale(12),
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
+    alignSelf: 'center',
   },
+  head: {color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h4},
+  notes: {color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3},
 });
 
 export default History;

@@ -61,6 +61,7 @@ import MenstrualHistory from '../screens/menstrualHistory';
 import ObstetricHistory from '../screens/obstetricHistory';
 import MaritalHistory from '../screens/maritalHistory';
 import AlertMessage from '../screens/Alerts';
+import Notification from '../screens/Notifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -149,6 +150,17 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'History',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="notify"
+        component={Notification}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Notifications',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
