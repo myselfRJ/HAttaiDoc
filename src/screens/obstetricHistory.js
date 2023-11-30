@@ -13,10 +13,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addobstericHistory} from '../redux/features/prescription/pastHistory';
 import ObstetricField from '../components/obstetricField';
 import CustomCalendar from '../components/calendar';
-
+import ShowChip from '../components/showChip';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 const ObstetricHistory = () => {
   const dispatch = useDispatch();
-  const obs = useSelector(state => state?.pasthistory?.obstericHistory);
+  const nav = useNavigation();
+  const obstetric = useSelector(state => state?.pasthistory?.obstericHistory);
   // const [value, setvalue] = useState({
   //   year: '',
   //   anc: '',
@@ -80,17 +83,17 @@ const ObstetricHistory = () => {
   const handledata = () => {
     dispatch(
       addobstericHistory({
-        year: value?.year,
-        anc: value?.anc,
-        delivery: value?.delivery,
-        pn: value?.pn,
-        baby: value?.baby,
-        age: value?.age,
-        others: value?.others,
+        gravidity: gravidity,
+        term: term,
+        premature: premature,
+        abortions: abortions,
+        living: [...addChild, {living: living}],
       }),
     );
+    nav.goBack();
   };
   const [child, setChild] = useState({
+    name: 'Child',
     age: '',
     gender: '',
   });
@@ -107,24 +110,22 @@ const ObstetricHistory = () => {
   // };
   const handlePlus = () => {
     const parsedLiving = parseInt(living, 10);
-    if (addChild.length < parsedLiving) {
-      setInd(parseInt(ind) + 1);
-    } else {
-      setInd(null);
-    }
-    if (parsedLiving > 0 && addChild.length < parsedLiving) {
-      setAddchild(prevChildren => [
-        ...prevChildren,
-        {age: child.age, gender: child.gender},
-      ]);
-      setChild({age: '', gender: ''});
-    } else {
-      // setChildShow(!childShow);
-      Alert.alert('Warning', 'Cannot add more children.');
-      console.log('Cannot add more children.');
-    }
+
+    setAddchild(prevChildren => {
+      if (prevChildren.length <= parsedLiving - 1) {
+        return [
+          ...prevChildren,
+          {
+            name: `Child ${ind}`,
+            age: child.age,
+            gender: child.gender,
+          },
+        ];
+      }
+    });
 
     setChild({age: '', gender: ''});
+    setInd(prevInd => prevInd + 1);
   };
 
   const handleOptions = value => {
@@ -137,9 +138,11 @@ const ObstetricHistory = () => {
       [field]: value,
     }));
   };
-  console.log('====================================');
-  console.log('garadfgh', childShow);
-  console.log('====================================');
+  // console.log('living=================', addChild);
+  // const obstericHistory = useSelector(
+  //   state => state?.pasthistory?.obstericHistory,
+  // );
+  // console.log('==========>', typeof JSON.stringify(obstericHistory));
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Past Obstetric History(GPLA)'} />
@@ -193,109 +196,126 @@ const ObstetricHistory = () => {
         value={value.others}
         setValue={val => handlevalue('others', val)}
       /> */}
-      <ObstetricField
-        label={'Gravidity'}
-        values={gravidity.value}
-        setvalues={val => {
-          handleGravidity('value', val), setShow(true);
-        }}
-        desc={gravidity.desc}
-        setDesc={val => handleGravidity('desc', val)}
-        show={show}
-        onPress={() => setShow(!show)}
-      />
-      <ObstetricField
-        label={'Term'}
-        values={term.value}
-        setvalues={val => {
-          handleTerm('value', val), setshowTerm(true);
-        }}
-        desc={term.desc}
-        setDesc={val => handleTerm('desc', val)}
-        show={showTerm}
-        onPress={() => setshowTerm(!showTerm)}
-      />
-      <ObstetricField
-        label={'Premature'}
-        values={premature.value}
-        setvalues={val => {
-          handlePremature('value', val), setshowpre(true);
-        }}
-        desc={premature.desc}
-        setDesc={val => handlePremature('desc', val)}
-        show={showPre}
-        onPress={() => setshowpre(!showPre)}
-      />
-      <ObstetricField
-        label={'Abortions'}
-        values={abortions.value}
-        setvalues={val => {
-          handleAbortion('value', val), setShowabor(true);
-        }}
-        desc={abortions.desc}
-        setDesc={val => handleAbortion('desc', val)}
-        show={showAbor}
-        onPress={() => setShowabor(!showAbor)}
-      />
-      <View style={styles.field}>
-        <Text style={styles.text}>{'Living'}</Text>
-        <TextInput
-          placeholder="Enter"
-          style={styles.inputtext}
-          value={living}
-          onChangeText={val => {
-            setLiving(val), setChildShow(true);
+      <ScrollView>
+        <ObstetricField
+          label={'Gravidity'}
+          values={gravidity.value}
+          setvalues={val => {
+            handleGravidity('value', val), setShow(true);
           }}
+          desc={gravidity.desc}
+          setDesc={val => handleGravidity('desc', val)}
+          show={show}
+          onPress={() => setShow(!show)}
         />
-      </View>
-      {childShow
-        ? addChild?.length < parseInt(living) && (
-            <View
-              style={{
-                borderWidth: 0.5,
-                borderColor: CUSTOMCOLOR.primary,
-                paddingHorizontal: horizontalScale(8),
-                paddingVertical: verticalScale(8),
-              }}>
+        <ObstetricField
+          label={'Term'}
+          values={term.value}
+          setvalues={val => {
+            handleTerm('value', val), setshowTerm(true);
+          }}
+          desc={term.desc}
+          setDesc={val => handleTerm('desc', val)}
+          show={showTerm}
+          onPress={() => setshowTerm(!showTerm)}
+        />
+        <ObstetricField
+          label={'Premature'}
+          values={premature.value}
+          setvalues={val => {
+            handlePremature('value', val), setshowpre(true);
+          }}
+          desc={premature.desc}
+          setDesc={val => handlePremature('desc', val)}
+          show={showPre}
+          onPress={() => setshowpre(!showPre)}
+        />
+        <ObstetricField
+          label={'Abortions'}
+          values={abortions.value}
+          setvalues={val => {
+            handleAbortion('value', val), setShowabor(true);
+          }}
+          desc={abortions.desc}
+          setDesc={val => handleAbortion('desc', val)}
+          show={showAbor}
+          onPress={() => setShowabor(!showAbor)}
+        />
+        <View style={styles.field}>
+          <Text style={styles.text}>{'Living'}</Text>
+          <TextInput
+            placeholder="Enter"
+            style={styles.inputtext}
+            value={living}
+            onChangeText={val => {
+              setLiving(val), setChildShow(true);
+            }}
+          />
+        </View>
+        {childShow
+          ? addChild?.length <= parseInt(living) && (
               <View
                 style={{
-                  flexDirection: 'row',
-                  gap: horizontalScale(32),
-                  alignItems: 'center',
-                  // alignSelf: 'center',
-                  justifyContent: 'center',
+                  borderWidth: 0.5,
+                  borderColor: CUSTOMCOLOR.primary,
+                  paddingHorizontal: horizontalScale(8),
+                  paddingVertical: verticalScale(16),
+                  borderRadius: moderateScale(4),
+                  gap: verticalScale(16),
                 }}>
-                <Text style={styles.text1}>{ind} Child</Text>
-                <TextInput
-                  placeholder="Age"
-                  style={styles.inputtext}
-                  value={child.age}
-                  onChangeText={val => handleChangeValue('age', val)}
-                />
-                <View style={styles.radiogroup}>
-                  <Option
-                    label="Male"
-                    value="male"
-                    selected={child.gender === 'male'}
-                    onPress={() => handleOptions('male')}
-                  />
-                  <Option
-                    label="Female"
-                    value="female"
-                    selected={child.gender === 'female'}
-                    onPress={() => handleOptions('female')}
-                  />
-                </View>
+                {addChild.length > 0 &&
+                  addChild?.map((item, ind) => (
+                    <ShowChip
+                      main={{marginBottom: verticalScale(-4)}}
+                      key={ind}
+                      text={`${item.name} | Age : ${item.age} | Gender : ${item.gender}`}
+                      // onPress={() => handleDelete(ind)}
+                      ind={ind}
+                    />
+                  ))}
+                {addChild?.length <= parseInt(living) - 1 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: horizontalScale(32),
+                      alignItems: 'center',
+                      // alignSelf: 'center',
+                      justifyContent: 'center',
+                      marginTop: moderateScale(8),
+                    }}>
+                    <Text style={styles.text1}>{ind} Child</Text>
+                    <TextInput
+                      placeholder="Age"
+                      style={styles.inputtext}
+                      value={child.age}
+                      onChangeText={val => handleChangeValue('age', val)}
+                    />
+                    <View style={styles.radiogroup}>
+                      <Option
+                        label="Male"
+                        value="Male"
+                        selected={child.gender === 'Male'}
+                        onPress={() => handleOptions('Male')}
+                      />
+                      <Option
+                        label="Female"
+                        value="Female"
+                        selected={child.gender === 'Female'}
+                        onPress={() => handleOptions('Female')}
+                      />
+                    </View>
+                    <PlusButton
+                      icon={'plus'}
+                      size={moderateScale(20)}
+                      style={{alignSelf: 'flex-end'}}
+                      onPress={handlePlus}
+                    />
+                  </View>
+                ) : null}
               </View>
-              <PlusButton
-                icon={'plus'}
-                size={moderateScale(20)}
-                style={{alignSelf: 'flex-end'}}
-                onPress={handlePlus}
-              />
-            </View>
-          )
-        : null}
+            )
+          : null}
+      </ScrollView>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <HButton
           btnstyles={commonstyles.activebtn}

@@ -11,7 +11,10 @@ import {updateSymptom} from '../redux/features/prescription/symptomslice';
 import {updateDate} from '../redux/features/prescription/Followupslice';
 import {updateCommorbities} from '../redux/features/prescription/commorbities';
 import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
-import {updatepastHistory} from '../redux/features/prescription/pastHistory';
+import {
+  updatemartialHistory,
+  updatepastHistory,
+} from '../redux/features/prescription/pastHistory';
 import {updateLabReport} from '../redux/features/prescription/labreport';
 import {updateAllergies} from '../redux/features/prescription/allergies';
 import {updateValid} from '../redux/features/prescription/valid';
@@ -33,6 +36,8 @@ import {
   addCheifComplaint,
   updatefees,
   updateAdditionalNote,
+  UpadteExamination,
+  UpadteFindings,
 } from '../redux/features/prescription/prescriptionSlice';
 import {
   CUSTOMCOLOR,
@@ -58,7 +63,7 @@ const PdfView = ({navigation}) => {
     prevScreen,
   } = route.params;
   const SuccesRef = useRef(null);
- console.log('data==',consultationData?.note);
+  console.log('data==', consultationData?.pastHistory?.martial_history);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);
@@ -82,8 +87,8 @@ const PdfView = ({navigation}) => {
     const hospitalization = '';
 
     const medicationHistory = '';
-    const menstrualHistory = '';
-    const obstericHistory = '';
+    const menstrualHistory = {};
+    const obstericHistory = {};
     const newDate = {
       date: '',
     };
@@ -114,7 +119,10 @@ const PdfView = ({navigation}) => {
     dispatch(UpadateCheifComplaint(newComplaint));
     dispatch(updatecommorbidities(commorbidities));
     dispatch(updatefees([]));
-    dispatch(updateAdditionalNote(''))
+    dispatch(updateAdditionalNote(''));
+    dispatch(UpadteFindings({}));
+    dispatch(UpadteExamination({}));
+    dispatch(updatemartialHistory({}));
   };
   const putComplaint = async () => {
     try {
@@ -187,7 +195,7 @@ const PdfView = ({navigation}) => {
             type: 'application/pdf',
             name: `${patient_phone}.pdf`,
           });
-      
+
           const requestOptions = {
             method: 'POST',
             headers: {
@@ -196,7 +204,7 @@ const PdfView = ({navigation}) => {
             },
             body: formData,
           };
-      
+
           try {
             const response = await fetch(URL.uploadPDF, requestOptions);
             const responseData = await response.json();
@@ -207,7 +215,6 @@ const PdfView = ({navigation}) => {
           } catch (error) {
             console.error('Error:', error);
           }
-          
 
           setLoading(false);
           // setTimeout(() => {
@@ -226,7 +233,7 @@ const PdfView = ({navigation}) => {
     }
   };
   // const postPrescriptionPDF = async url => {
-   
+
   // };
 
   // const handlePrescribePDF = () => {
