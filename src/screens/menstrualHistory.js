@@ -173,20 +173,21 @@ const MenstrualHistory = ({navigation, route}) => {
         </View>
         <InputText
           inputContainer={{width: horizontalScale(200)}}
-          label={'Flow Days'}
-          placeholder={'Enter Days'}
-          value={flow}
-          setValue={setFlow}
-          numeric={true}
-        />
-        <InputText
-          inputContainer={{width: horizontalScale(200)}}
           label={'Cycle Days'}
           placeholder={'Enter Cycle Days'}
           value={cycle}
           setValue={setCycle}
           numeric={true}
         />
+        <InputText
+          inputContainer={{width: horizontalScale(200)}}
+          label={'Flow Days'}
+          placeholder={'Enter Days'}
+          value={flow}
+          setValue={setFlow}
+          numeric={true}
+        />
+
         {/* <PlusButton
                 icon={'plus'}
                 size={24}

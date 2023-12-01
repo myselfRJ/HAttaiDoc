@@ -24,7 +24,15 @@ const ObstetricField = props => {
   return (
     <View style={styles.main}>
       <View style={styles.fields}>
-        <Text style={styles.text}>{props.label}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: horizontalScale(4),
+            alignItems: 'center',
+          }}>
+          <Text style={styles.text}>{props.label}</Text>
+          <Text style={styles.def}>{props.definition}</Text>
+        </View>
         <TextInput
           placeholder="Enter"
           style={styles.input}
@@ -95,6 +103,11 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     fontWeight: '600',
     color: CUSTOMCOLOR.black,
+  },
+  def: {
+    fontSize: moderateScale(14),
+    fontWeight: '400',
+    color: CUSTOMCOLOR.disable,
   },
 });
 export default ObstetricField;

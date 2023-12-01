@@ -255,9 +255,13 @@ const ObstetricHistory = ({route}) => {
         value={value.others}
         setValue={val => handlevalue('others', val)}
       /> */}
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: moderateScale(280),
+        }}>
         <ObstetricField
-          label={'Gravidity'}
+          label={'Gravida'}
+          definition={'(Number of pregnancies including current)'}
           values={gravidity.value}
           numeric={true}
           setvalues={val => {
@@ -270,7 +274,8 @@ const ObstetricHistory = ({route}) => {
         />
         <ObstetricField
           numeric={true}
-          label={'Term'}
+          label={'Para / Term'}
+          definition={'(Number of pregnancies carried to 37+ weeks)'}
           values={term.value}
           setvalues={val => {
             handleTerm('value', val), setshowTerm(true);
@@ -283,6 +288,9 @@ const ObstetricHistory = ({route}) => {
         <ObstetricField
           numeric={true}
           label={'Premature'}
+          definition={
+            '(Number of pregnancies carried between 20 and 36 6/7 weeks)'
+          }
           values={premature.value}
           setvalues={val => {
             handlePremature('value', val), setshowpre(true);
@@ -295,6 +303,7 @@ const ObstetricHistory = ({route}) => {
         <ObstetricField
           numeric={true}
           label={'Abortions'}
+          definition={'(Number of losses before 20 weeks)'}
           values={abortions.value}
           setvalues={val => {
             handleAbortion('value', val), setShowabor(true);
@@ -305,7 +314,15 @@ const ObstetricHistory = ({route}) => {
           onPress={() => setShowabor(!showAbor)}
         />
         <View style={styles.field}>
-          <Text style={styles.text}>{'Living'}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: horizontalScale(4),
+              alignItems: 'center',
+            }}>
+            <Text style={styles.text}>{'Living'}</Text>
+            <Text style={styles.def}>{'(Number of living children)'}</Text>
+          </View>
           <TextInput
             placeholder="Enter"
             style={styles.inputtext}
@@ -351,7 +368,7 @@ const ObstetricHistory = ({route}) => {
                       justifyContent: 'center',
                       marginTop: moderateScale(8),
                     }}>
-                    <Text style={styles.text1}>{ind} Child</Text>
+                    <Text style={styles.text1}>Child {ind}</Text>
                     <TextInput
                       placeholder="Age"
                       style={styles.inputtext}
@@ -384,7 +401,12 @@ const ObstetricHistory = ({route}) => {
             )
           : null}
       </ScrollView>
-      <View style={{flex: 1, justifyContent: 'flex-end'}}>
+      <View
+        style={{
+          // flex: 1,
+          justifyContent: 'flex-end',
+          bottom: verticalScale(32),
+        }}>
         <HButton
           btnstyles={commonstyles.activebtn}
           label={'Save'}
@@ -401,7 +423,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
-    gap: moderateScale(8),
+    gap: moderateScale(16),
     backgroundColor: CUSTOMCOLOR.background,
   },
   fields: {
@@ -428,6 +450,11 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
     color: CUSTOMCOLOR.black,
+  },
+  def: {
+    fontSize: moderateScale(14),
+    fontWeight: '400',
+    color: CUSTOMCOLOR.disable,
   },
   inputtext: {
     borderWidth: 0.5,

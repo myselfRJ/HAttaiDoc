@@ -132,7 +132,7 @@ const MedicalHistory = ({navigation, route}) => {
     state => state?.pasthistory?.obstericHistory,
   );
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
-  console.log('medical=His', marital);
+  console.log('medical=His===============', marital);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -463,9 +463,13 @@ const MedicalHistory = ({navigation, route}) => {
                   {marital != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        {`Maried Since: ${marital?.married}`}
+                        {`Marital Status: ${marital?.maritalstatus}`}
+                        {marital?.married
+                          ? `,${' '}Maried Since: ${marital?.married}`
+                          : null}
+
                         {marital?.cons
-                          ? `${' '},Consanguinity: ${marital?.cons}`
+                          ? `,${' '}Consanguinity: ${marital?.cons}`
                           : null}
                       </Text>
                     </View>
