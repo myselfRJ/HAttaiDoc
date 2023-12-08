@@ -34,6 +34,7 @@ const ObstetricField = props => {
           <Text style={styles.def}>{props.definition}</Text>
         </View>
         <TextInput
+          placeholderTextColor={CUSTOMCOLOR.disable}
           placeholder="Enter"
           style={styles.input}
           value={props.values}
@@ -45,6 +46,7 @@ const ObstetricField = props => {
           {/* Your existing code */}
           <TextInput
             placeholder="Description"
+            placeholderTextColor={CUSTOMCOLOR.disable}
             style={styles.main}
             value={props.desc}
             onChangeText={props.setDesc}
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(16),
     gap: moderateScale(16),
+    color: CUSTOMCOLOR.black,
   },
   fields: {
     flexDirection: 'row',
@@ -89,6 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(32),
     paddingVertical: verticalScale(4),
     borderRadius: moderateScale(4),
+    color: CUSTOMCOLOR.black,
   },
   desc: {
     borderWidth: 0.5,

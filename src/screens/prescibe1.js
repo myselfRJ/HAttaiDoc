@@ -304,7 +304,7 @@ export default function Prescribe1({navigation}) {
           ))}
         </View>
 
-        {/* <View>
+        <View>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes?.map(value => (
@@ -326,7 +326,7 @@ export default function Prescribe1({navigation}) {
               />
             ))}
           </View>
-        </View> */}
+        </View>
         <View>
           <InputText
             lbltext={{fontSize: moderateScale(14)}}
@@ -586,7 +586,7 @@ export default function Prescribe1({navigation}) {
           icon="plus"
           // size={moderateScale(16)}
           onPress={handleAddPrescribe}
-          btnstyles={{alignSelf: 'flex-end'}}
+          btnstyles={{alignSelf: 'flex-start'}}
         />
       </ScrollView>
       {/* <View

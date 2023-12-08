@@ -324,6 +324,7 @@ const ObstetricHistory = ({route}) => {
             <Text style={styles.def}>{'(Number of living children)'}</Text>
           </View>
           <TextInput
+            placeholderTextColor={CUSTOMCOLOR.disable}
             placeholder="Enter"
             style={styles.inputtext}
             value={living}
@@ -370,6 +371,7 @@ const ObstetricHistory = ({route}) => {
                     }}>
                     <Text style={styles.text1}>Child {ind}</Text>
                     <TextInput
+                      placeholderTextColor={CUSTOMCOLOR.disable}
                       placeholder="Age"
                       style={styles.inputtext}
                       value={child.age}
@@ -462,6 +464,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(32),
     paddingVertical: verticalScale(4),
     borderRadius: moderateScale(4),
+    color: CUSTOMCOLOR.black,
   },
   radiogroup: {
     paddingHorizontal: moderateScale(8),

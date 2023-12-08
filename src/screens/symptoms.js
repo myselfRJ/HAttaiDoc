@@ -54,6 +54,7 @@ const Symptoms = ({navigation}) => {
   const [sevSelected, setSevSelected] = useState('');
   const option = 'finding';
   // const [selected, setSelected] = useState('');
+  const [months, setmonths] = useState('');
   const [icon, setIcon] = useState('magnify');
   const [filtered, setFilteredData] = useState([]);
   const [data, setData] = useState([]);
@@ -62,7 +63,7 @@ const Symptoms = ({navigation}) => {
   const dispatch = useDispatch();
 
   const handleAddSymptoms = () => {
-    if (symptom && sevSelected && (days || hr)) {
+    if (symptom && (days || hr || months)) {
       dispatch(
         addSymptom([
           ...symptomsData,
@@ -70,11 +71,15 @@ const Symptoms = ({navigation}) => {
             symptom: symptom,
             // days: days ? days : hr,
             days:
-              days && hr
-                ? `${days} ${parseInt(days) > 1 ? 'days' : 'day'} & ${hr} hr`
-                : days && !hr
+              days && hr && months
+                ? `${months} ${
+                    parseInt(months) > 1 ? 'months' : 'month'
+                  } & ${days} ${parseInt(days) > 1 ? 'days' : 'day'} & ${hr} hr`
+                : days && !hr && !months
                 ? `${days} ${parseInt(days) > 1 ? 'days' : 'day'}`
-                : hr && `${hr} hr`,
+                : !days && hr && !months
+                ? `${hr} hr`
+                : `${months} ${parseInt(months) > 1 ? 'months' : 'month'}`,
             severity: sevSelected,
           },
         ]),
@@ -82,11 +87,12 @@ const Symptoms = ({navigation}) => {
     } else {
       Alert.alert('Warning', 'Enter all Fields');
     }
-    setDays(null);
-    setSymptom(null);
-    setSevSelected(null);
-    setHr(null);
-    setSelected(null);
+    setDays('');
+    setSymptom('');
+    setSevSelected('');
+    setHr('');
+    setSelected('');
+    setmonths('');
   };
 
   const handleSymptomSubmit = () => {
@@ -299,6 +305,7 @@ const Symptoms = ({navigation}) => {
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Days :</Text>
                 <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
                   style={styles.timeinput}
                   placeholder="Enter Days"
                   value={days}
@@ -317,10 +324,30 @@ const Symptoms = ({navigation}) => {
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Hr :</Text>
                 <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
                   style={styles.timeinput}
                   placeholder="Enter Hr"
                   value={hr}
                   onChangeText={text => setHr(text)}
+                  keyboardType="numeric"
+                />
+              </View>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontWeight: '400',
+                  fontSize: CUSTOMFONTSIZE.h3,
+                }}>
+                (OR)
+              </Text>
+              <View style={styles.timeFields}>
+                <Text style={styles.option}>Months :</Text>
+                <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
+                  style={styles.timeinput}
+                  placeholder="Enter Months"
+                  value={months}
+                  onChangeText={text => setmonths(text)}
                   keyboardType="numeric"
                 />
               </View>
@@ -331,7 +358,7 @@ const Symptoms = ({navigation}) => {
             type="addtype"
             btnstyles={{
               backgroundColor:
-                symptom && sevSelected && (days || hr)
+                symptom && (days || hr || months)
                   ? CUSTOMCOLOR.primary
                   : CUSTOMCOLOR.disable,
               alignSelf: 'flex-end',
@@ -363,7 +390,7 @@ const Symptoms = ({navigation}) => {
                   </View>
                 ) : null} */}
                 <View style={{flexDirection: 'row', gap: moderateScale(4)}}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={{
                       borderRadius: moderateScale(32),
                       backgroundColor: CUSTOMCOLOR.white,
@@ -374,7 +401,7 @@ const Symptoms = ({navigation}) => {
                       size={moderateScale(20)}
                       color={CUSTOMCOLOR.primary}
                     />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <TouchableOpacity
                     onPress={() => handleDeleteSymptom(ind)}
                     style={{
@@ -438,6 +465,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
     paddingVertical: verticalScale(10),
+    color: CUSTOMCOLOR.black,
   },
   mainHead: {
     color: CUSTOMCOLOR.black,

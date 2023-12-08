@@ -23,7 +23,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = props => {
   //props-> check, label, placeholder , action, secure, padtype
   const [visible, setVisible] = React.useState(props.secure || true);
-  const [errorStyles, setErrorStyle] = React.useState({borderColor:CUSTOMCOLOR.primary});
+  const [errorStyles, setErrorStyle] = React.useState({
+    borderColor: CUSTOMCOLOR.primary,
+  });
   const toggleVisible = () => {
     setVisible(!visible);
   };
@@ -48,8 +50,6 @@ const InputText = props => {
     passtoParent(numericValue);
   };
   const numeric = props.numeric;
-
-
   return (
     <>
       <View style={[styles.inpcontainer, props.inputContainer]}>
@@ -78,6 +78,7 @@ const InputText = props => {
             ]}
             textAlign={props.textAlign ?? 'left'}
             // underlineColorAndroid="transparent"
+            placeholderTextColor={CUSTOMCOLOR.disable}
             placeholder={props.placeholder}
             secureTextEntry={props.secure ? visible : false}
             inputMode={props.keypad ?? 'none'}
@@ -87,7 +88,6 @@ const InputText = props => {
             multiline={props.multiline}
             onSubmitEditing={props.onSubmit}
             blurOnSubmit={props.blur}
-
           />
           {props.secure !== undefined ? (
             visible ? (
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",
+    color: CUSTOMCOLOR.black,
     borderRadius: 4,
     fontFamily: CUSTOMFONTFAMILY.body,
   },

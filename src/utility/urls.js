@@ -6,7 +6,7 @@ const snomedUrl = 'http://3.6.40.67/';
 // export const fileurl = `http://10.9.64.54:8000`;
 // export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-export const fileurl = `http://13.200.15.208`;
+export const fileurl = 'http://13.200.15.208';
 
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,

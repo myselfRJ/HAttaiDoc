@@ -21,7 +21,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 const Notes = ({note, onChangeText, onPress}) => {
   return (
@@ -29,16 +29,18 @@ const Notes = ({note, onChangeText, onPress}) => {
       <View style={styles.inputbox}>
         <TextInput
           style={styles.notes}
+          placeholderTextColor={CUSTOMCOLOR.disable}
           multiline={true}
           placeholder="write your notes"
           value={note}
           onChangeText={onChangeText}
         />
       </View>
-      <View style={{justifyContent:'flex-end',flex:1}}>
-        <HButton label={Language[language]['save']} 
-        onPress={onPress} 
-        btnstyles={commonstyles.activebtn}
+      <View style={{justifyContent: 'flex-end', flex: 1}}>
+        <HButton
+          label={Language[language]['save']}
+          onPress={onPress}
+          btnstyles={commonstyles.activebtn}
         />
       </View>
     </>
@@ -52,15 +54,16 @@ const styles = StyleSheet.create({
     // height: moderateScale(60),
     // padding: moderateScale(8),
     // gap: moderateScale(4),
-    borderWidth:0.5,
-    borderColor:CUSTOMCOLOR.primary,
-    paddingHorizontal:horizontalScale(8),
-    borderRadius:moderateScale(4)
+    borderWidth: 0.5,
+    borderColor: CUSTOMCOLOR.primary,
+    paddingHorizontal: horizontalScale(8),
+    borderRadius: moderateScale(4),
   },
   notes: {
     borderRadius: moderateScale(4),
     padding: moderateScale(8),
     gap: moderateScale(10),
+    color: CUSTOMCOLOR.black,
     backgroundColor: CUSTOMCOLOR.white,
   },
   submitbtn: {

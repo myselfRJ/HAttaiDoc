@@ -11,7 +11,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 
 const DOBselect = props => {
   const [visible, setVisible] = React.useState(props.secure || true);
@@ -40,10 +40,12 @@ const DOBselect = props => {
       <Pressable
         style={{...styles.select, ...props.select}}
         onPress={props.onPress}>
-        <TextInput style={styles.h3}
-        placeholder='Enter age or select DOB'
-        value={props.input}
-        onChangeText={props.numeric ? handleNumericInput : props.setValue}
+        <TextInput
+          style={styles.h3}
+          placeholderTextColor={CUSTOMCOLOR.disable}
+          placeholder="Enter age or select DOB"
+          value={props.input}
+          onChangeText={props.numeric ? handleNumericInput : props.setValue}
         />
         <Icon name={props.name} size={24} color={CUSTOMCOLOR.primary} />
       </Pressable>
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
     lineHeight: CUSTOMFONTSIZE.h3 * 2,
-    width:300
+    width: 300,
   },
   indicator: {
     fontSize: CUSTOMFONTSIZE.h4,
