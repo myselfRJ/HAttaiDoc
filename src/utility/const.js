@@ -214,6 +214,226 @@ export const CONSTANT = {
       term: 'Inj dolokind aqua',
     },
   ],
+  blood: [
+    {
+      term: 'Blood Glucose(Fasting/P-Prandial/Random)',
+    },
+    {
+      term: 'GTT(Routine/ Extended)',
+    },
+    {
+      term: 'HbA,C',
+    },
+    {
+      term: 'Urea',
+    },
+    {
+      term: 'Creatinine',
+    },
+    {
+      term: 'Sodium',
+    },
+    {
+      term: 'Potassium',
+    },
+    {
+      term: 'Chloride',
+    },
+    {
+      term: 'Magnesium',
+    },
+    {
+      term: 'Calcium',
+    },
+    {
+      term: 'Phosphorus',
+    },
+    {
+      term: 'Uric Acid',
+    },
+    {
+      term: 'Fasting lipid Profile(FLP)',
+    },
+    {
+      term: 'Total Cholesterol',
+    },
+    {
+      term: 'Triglycerides',
+    },
+    {
+      term: 'HDL Cholesterol',
+    },
+    {
+      term: 'LDL Cholesterol',
+    },
+    {
+      term: 'VLDL Cholesterol',
+    },
+    {
+      term: 'Liver Function Tests(LFT)',
+    },
+    {
+      term: 'Total Bilirubin',
+    },
+    {
+      term: 'Direct Bilirubin',
+    },
+    {
+      term: 'AlK. Phosphatase /ALP / SAP',
+    },
+    {
+      term: 'SGOT / AST',
+    },
+    {
+      term: 'SGPT / ALT',
+    },
+    {
+      term: 'Total Proteins',
+    },
+    {
+      term: 'Albumin',
+    },
+    {
+      term: 'Globulin',
+    },
+    {
+      term: 'S.Amylase',
+    },
+    {
+      term: 'S.Lipase',
+    },
+    {
+      term: 'Gamma GT',
+    },
+    {
+      term: 'CPK',
+    },
+    {
+      term: 'CK-MB',
+    },
+    {
+      term: 'Troponine-1',
+    },
+    {
+      term: 'Ammonia',
+    },
+    {
+      term: 'ASA',
+    },
+    {
+      term: 'LDH',
+    },
+    {
+      term: 'Osmolality',
+    },
+    {
+      term: 'IRON',
+    },
+    {
+      term: 'TIBC',
+    },
+    {
+      term: 'Ferritin',
+    },
+    {
+      term: 'Biochemical Analysis(CSF/Body Fluids)',
+    },
+  ],
+  urine: [
+    {
+      term: '24 hrs. / Spot Protein',
+    },
+    {
+      term: '24 hrs. / Spot Creatinine',
+    },
+    {
+      term: 'MIcro Albumin',
+    },
+    {
+      term: 'Osmolality',
+    },
+    {
+      term: 'Spot Sodium',
+    },
+    {
+      term: 'Spot Potassium ',
+    },
+  ],
+  coagulation_assays: [
+    {
+      term: 'PT',
+    },
+    {
+      term: 'APTT',
+    },
+  ],
+  hormones: [
+    {
+      term: 'Thyroid Profile (T3,T4,TSH)',
+    },
+    {
+      term: 'T3',
+    },
+    {
+      term: 'TSH',
+    },
+    {
+      term: 'LH',
+    },
+    {
+      term: 'Prolactin',
+    },
+    {
+      term: 'Beta h-CG',
+    },
+    {
+      term: 'Testosterone',
+    },
+    {
+      term: 'T4',
+    },
+    {
+      term: 'FSH',
+    },
+    {
+      term: 'Free T3',
+    },
+    {
+      term: 'Free T4',
+    },
+    {
+      term: 'Estradiol',
+    },
+    {
+      term: 'PTH',
+    },
+  ],
+  tumor_markers: [
+    {
+      term: 'PSA',
+    },
+    {
+      term: 'ASP',
+    },
+    {
+      term: 'CA125',
+    },
+    {
+      term: 'CA 19-9',
+    },
+    {
+      term: 'C.E.A',
+    },
+  ],
+  vitamin_assays: [
+    {
+      term: 'Vit D',
+    },
+    {
+      term: 'Vit B12',
+    },
+  ],
+
   HistoryTypes: [
     'Prescription',
     'Referral',
