@@ -30,11 +30,13 @@ const clinic_data_Slice = createSlice({
   initialState,
   reducers: {
     addclinic_data: (state, action) => {
-      state.clinics = [...state.clinics, action.payload];
+      // state.clinics = [...state.clinics, action.payload];
+      state.clinics = action.payload;
     },
     updateclinics: (state, action) => {
-      const {index, updatedClinic} = action.payload;
-      state.clinics[index] = {...state.clinics[index], ...updatedClinic};
+      state.clinics = action.payload;
+      // const {index, updatedClinic} = action.payload;
+      // state.clinics[index] = {...state.clinics[index], ...updatedClinic};
     },
     deleteclinics: (state, action) => {
       state.clinics = action.payload;

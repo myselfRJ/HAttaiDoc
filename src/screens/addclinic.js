@@ -83,6 +83,27 @@ const AddClinic = ({navigation}) => {
   const [show, setShow] = useState(false);
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
+  const [mergedSlots, setMergedSlots] = useState({});
+  const processClinics = () => {
+    const mergedData = clinics?.reduce((acc, clinic) => {
+      const AllslotData = JSON.parse(clinic?.slot_data?.slot);
+      const keys = Object.keys(AllslotData);
+
+      keys.forEach(key => {
+        if (acc[key]) {
+          acc[key].push(...AllslotData[key]);
+        } else {
+          acc[key] = [...AllslotData[key]];
+        }
+      });
+      return acc;
+    }, {});
+    setMergedSlots({slot: mergedData});
+  };
+  useEffect(() => {
+    processClinics();
+  }, [clinics, phone]);
+
   const [slots, setSlots] = useState({
     M: [],
     T: [],
@@ -131,7 +152,6 @@ const AddClinic = ({navigation}) => {
       Slotadded();
     }, [slots]),
   );
-
   const handleClear = () => {
     setVisibleSlot(true);
     const newSlotsss = {
@@ -201,21 +221,12 @@ const AddClinic = ({navigation}) => {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
           dispatch(headerStatus({index: 1, status: true}));
-          // {
-          //   prevScrn === 'account'
-          //     ? setTimeout(() => {
-          //         navigation.navigate('tab');
-          //       }, 1000)
-          //     : setTimeout(() => {
-          //         navigation.navigate('adduser', {prevScrn1});
-          //       }, 1000);
-          // }
           navigation.goBack();
           setTimeout(() => {
             SuccesRef?.current?.snapToIndex(0);
           }, 2000);
           setLoading(false);
-          ResetClinicRedux();
+          // ResetClinicRedux();
           // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
@@ -338,29 +349,29 @@ const AddClinic = ({navigation}) => {
 
   const [selectedDay, setSelectedDay] = useState('M');
 
-  const DaySelection = index => {
-    const isSelected = selectedDay.includes(index);
-    if (isSelected) {
-      setSelectedDay(selectedDay.filter(i => i !== index));
-    } else {
-      setSelectedDay([...selectedDay, index]);
-    }
-  };
+  // const DaySelection = index => {
+  //   const isSelected = selectedDay.includes(index);
+  //   if (isSelected) {
+  //     setSelectedDay(selectedDay.filter(i => i !== index));
+  //   } else {
+  //     setSelectedDay([...selectedDay, index]);
+  //   }
+  // };
 
-  const handleSaveSlotData = () => {
-    if (
-      slots?.M.length > 0 ||
-      slots?.T.length > 0 ||
-      slots?.W.length > 0 ||
-      slots?.TH.length > 0 ||
-      slots?.F.length > 0 ||
-      slots?.Sa.length > 0 ||
-      slots?.Su.length > 0
-    ) {
-      dispatch(addslots(slots));
-    }
-    navigation.goBack();
-  };
+  // const handleSaveSlotData = () => {
+  //   if (
+  //     slots?.M.length > 0 ||
+  //     slots?.T.length > 0 ||
+  //     slots?.W.length > 0 ||
+  //     slots?.TH.length > 0 ||
+  //     slots?.F.length > 0 ||
+  //     slots?.Sa.length > 0 ||
+  //     slots?.Su.length > 0
+  //   ) {
+  //     dispatch(addslots(slots));
+  //   }
+  //   navigation.goBack();
+  // };
 
   const handleConfirm = time => {
     if (open === 'from') {
@@ -420,13 +431,23 @@ const AddClinic = ({navigation}) => {
         duration: selectedDurationValue,
         day: weekdays[selectedDay],
       };
+
+      const AllClinicSlotConflict = mergedSlots?.slot[selectedDay]?.some(
+        slot =>
+          (newSlot.fromTime >= slot.fromTime &&
+            newSlot.fromTime < slot.toTime) ||
+          (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime),
+      );
+
       const conflictingSlotExists = slots[selectedDay].some(
         slot =>
           (newSlot.fromTime >= slot.fromTime &&
             newSlot.fromTime < slot.toTime) ||
           (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime),
       );
-      if (!conflictingSlotExists) {
+      const condition = !(conflictingSlotExists && AllClinicSlotConflict);
+      console.log(condition);
+      if (!AllClinicSlotConflict && !conflictingSlotExists) {
         setAllSlots(prev => [...prev, newSlot]);
         setSlots(prevSlots => ({
           ...prevSlots,
@@ -435,7 +456,10 @@ const AddClinic = ({navigation}) => {
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
-        Alert.alert('Warning', 'A slot with conflicting time already exists.');
+        Alert.alert(
+          'Warning',
+          'A slot with conflicting time already exists. or Already these slot added in any clinic',
+        );
       }
     }
   };
