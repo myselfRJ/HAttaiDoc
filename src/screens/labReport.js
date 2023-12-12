@@ -87,6 +87,12 @@ const LabReports = () => {
       ...data,
       ...CONSTANT?.micro_biology,
       ...CONSTANT?.clinical_pathology,
+      ...CONSTANT?.blood,
+      ...CONSTANT?.urine,
+      ...CONSTANT?.vitamin_assays,
+      ...CONSTANT?.tumor_markers,
+      ...CONSTANT?.hormones,
+      ...CONSTANT?.coagulation_assays,
     ];
     if (value) {
       const filtered = filtering_data?.filter(

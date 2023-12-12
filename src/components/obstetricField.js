@@ -34,6 +34,7 @@ const ObstetricField = props => {
           <Text style={styles.def}>{props.definition}</Text>
         </View>
         <TextInput
+          placeholderTextColor={CUSTOMCOLOR.disable}
           placeholder="Enter"
           style={styles.input}
           value={props.values}
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(32),
     paddingVertical: verticalScale(4),
     borderRadius: moderateScale(4),
+    color: CUSTOMCOLOR.black,
   },
   desc: {
     borderWidth: 0.5,

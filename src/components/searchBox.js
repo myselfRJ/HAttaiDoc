@@ -24,6 +24,7 @@ const SearchBox = props => {
   return (
     <View style={styles.container}>
       <TextInput
+        placeholderTextColor={CUSTOMCOLOR.disable}
         style={styles.leftItem}
         onChangeText={setText}
         value={text}

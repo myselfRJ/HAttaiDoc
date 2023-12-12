@@ -29,6 +29,7 @@ const Notes = ({note, onChangeText, onPress}) => {
       <View style={styles.inputbox}>
         <TextInput
           style={styles.notes}
+          placeholderTextColor={CUSTOMCOLOR.disable}
           multiline={true}
           placeholder="write your notes"
           value={note}
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     padding: moderateScale(8),
     gap: moderateScale(10),
+    color: CUSTOMCOLOR.black,
     backgroundColor: CUSTOMCOLOR.white,
   },
   submitbtn: {
