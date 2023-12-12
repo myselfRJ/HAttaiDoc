@@ -94,9 +94,9 @@ const BottomTab = ({navigation, route}) => {
 const styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: CUSTOMCOLOR.primary,
-    height: verticalScale(80),
-    borderBottomRightRadius: 8,
-    borderBottomLeftRadius: 8,
+    height: verticalScale(60),
+    // borderBottomRightRadius: 8,
+    // borderBottomLeftRadius: 8,
   },
   leftIcon: {
     paddingHorizontal: horizontalScale(16),

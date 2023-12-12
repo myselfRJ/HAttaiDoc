@@ -33,6 +33,7 @@ const MaritalHistory = ({route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const dispatch = useDispatch();
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
+  console.log('marital=============', marital);
   const handleDispatch = () => {
     dispatch(
       addmartialHistory({
@@ -81,8 +82,14 @@ const MaritalHistory = ({route}) => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchMaritalData();
+  // }, []);
   useEffect(() => {
-    fetchMaritalData();
+    setmaritalStatus(marital?.maritalstatus);
+    setMarried(marital?.married);
+    setStatus(marital?.cons);
+    setOthers(marital?.others);
   }, []);
   return (
     <View style={styles.main}>

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     // height: moderateScale(60),
     // padding: moderateScale(8),
     // gap: moderateScale(4),
-    borderWidth: 0.5,
+    borderWidth: 0.75,
     borderColor: CUSTOMCOLOR.primary,
     paddingHorizontal: horizontalScale(8),
     borderRadius: moderateScale(4),

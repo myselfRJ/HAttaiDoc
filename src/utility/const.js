@@ -270,7 +270,7 @@ export const CONSTANT = {
       term: 'VLDL Cholesterol',
     },
     {
-      term: 'Liver Function Tests(LFT)',
+      term: 'Liver Function Tests (LFT)',
     },
     {
       term: 'Total Bilirubin',
