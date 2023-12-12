@@ -132,7 +132,7 @@ const MedicalHistory = ({navigation, route}) => {
     state => state?.pasthistory?.obstericHistory,
   );
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
-  console.log('medical=His===============', marital);
+  console.log('medical=His===============', menstrualHistory);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -302,7 +302,7 @@ const MedicalHistory = ({navigation, route}) => {
   // useEffect(() => {
   //   setUpdatedate(getdata?.updated_at?.split('T'[0]));
   // }, [data]);
-
+  console.log(menstrualHistory?.pregnant?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -343,32 +343,22 @@ const MedicalHistory = ({navigation, route}) => {
                         {menstrualHistory?.status}, Flow:{' '}
                         {menstrualHistory?.flowdays} days, Cycle:{' '}
                         {menstrualHistory?.cycledays} days
-                        {
-                          menstrualHistory?.pregnant && (
-                            <Text>
-                              ,{' '}
-                              {menstrualHistory?.pregnant !== 'NaN'
-                                ? `Pregnant (Yes): LMP ${
-                                    menstrualHistory?.pregnant.split('T')[0]
-                                  }`
-                                : 'Pregnant (No)'}
-                            </Text>
-                          )
-                          // typeof menstrualHistory?.pregnant === 'string'
-                        }
-                        {
-                          menstrualHistory?.menopause && (
-                            <Text>
-                              ,{' '}
-                              {menstrualHistory?.menopause !== 'NaN'
-                                ? `Menopause (Yes): LMP ${
-                                    menstrualHistory?.menopause.split('T')[0]
-                                  }`
-                                : 'Menopause (No)'}
-                            </Text>
-                          )
-                          // typeof menstrualHistory?.menopause === 'string'
-                        }
+                        <Text>
+                          ,{' '}
+                          {menstrualHistory?.pregnant !== ''
+                            ? `Pregnant (Yes): LMP ${
+                                menstrualHistory?.pregnant.split('T')[0]
+                              }`
+                            : 'Pregnant (No)'}
+                        </Text>
+                        <Text>
+                          ,{' '}
+                          {menstrualHistory?.menopause !== ''
+                            ? `Menopause (Yes): LMP ${
+                                menstrualHistory?.menopause.split('T')[0]
+                              }`
+                            : 'Menopause (No)'}
+                        </Text>
                       </Text>
                     </View>
                   )}

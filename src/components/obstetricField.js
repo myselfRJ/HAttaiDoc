@@ -40,12 +40,12 @@ const ObstetricField = props => {
           onChangeText={numeric ? handleNumericInput : setValue}
         />
       </View>
-      {props.show == true || (props.values && props.values.length > 0) ? (
+      {props.show == true && props.values && props.values.length > 0 ? (
         <View style={styles.desc}>
           {/* Your existing code */}
           <TextInput
             placeholder="Description"
-            style={styles.main}
+            style={styles.descText}
             value={props.desc}
             onChangeText={props.setDesc}
           />
@@ -77,6 +77,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(16),
     gap: moderateScale(16),
+    // borderWidth: 1,
+  },
+  descText: {
+    // paddingHorizontal: horizontalScale(24),
+    // paddingVertical: verticalScale(16),
+    width: '100%',
+    gap: moderateScale(16),
+    // borderWidth: 1,
   },
   fields: {
     flexDirection: 'row',

@@ -24,6 +24,7 @@ const ObstetricHistory = ({route}) => {
   const {phone, patient_phone} = route.params;
   const nav = useNavigation();
   const obstetric = useSelector(state => state?.pasthistory?.obstericHistory);
+  // console.log('obstetric========================', obstetric);
   // const [value, setvalue] = useState({
   //   year: '',
   //   anc: '',
@@ -107,6 +108,7 @@ const ObstetricHistory = ({route}) => {
   const handleDeleteChild = index => {
     const newChild = addChild?.filter((_, ind) => ind !== index);
     setAddchild(newChild);
+    setInd(index + parseInt(1));
   };
   const handlePlus = () => {
     const parsedLiving = parseInt(living, 10);
@@ -143,7 +145,7 @@ const ObstetricHistory = ({route}) => {
   //   state => state?.pasthistory?.obstericHistory,
   // );
   // console.log('==========>', typeof JSON.stringify(obstericHistory));
-
+  // console.log('pre============', premature);
   const fetchObstetricData = async () => {
     try {
       const response = await fetchApi(URL.getMedical(phone, patient_phone), {
@@ -158,7 +160,7 @@ const ObstetricHistory = ({route}) => {
 
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          console.log('get data=======================', mens);
+          // console.log('get data=======================', mens);
           setGravidity({
             value: mens?.gravidity?.value,
             desc: mens?.gravidity?.desc,
@@ -168,25 +170,47 @@ const ObstetricHistory = ({route}) => {
             desc: mens?.term?.desc,
           });
           setPremature({
-            value: mens?.preamture?.value,
+            value: mens?.premature?.value,
             desc: mens?.premature?.desc,
           });
           setAbortions({
             value: mens?.abortions?.value,
             desc: mens?.abortions?.desc,
           });
-          setLiving(mens?.living?.map(item => item?.living));
+          // if (mens?.living?.length > 0) {
+          //   mens?.living?.map(item => {
+          //     setLiving(item?.living);
+          //   });
+          // if (mens?.living) {
+          //   setLiving(mens.living.map(item => item?.living));
+
+          //   setAddchild(prevChildren => [
+          //     ...prevChildren,
+          //     ...mens.living.map(item => ({
+          //       name: item?.name,
+          //       age: item?.age,
+          //       gender: item?.gender,
+          //     })),
+          //   ]);
+          // }
+          console.log(
+            '==============>mens',
+            mens?.living[mens?.living?.length - 1]['living'],
+          );
+          setLiving(mens?.living[mens?.living?.length - 1]['living']);
           {
-            mens?.living?.map(item =>
-              setAddchild(prevChildren => [
-                ...prevChildren,
-                {
-                  name: item?.name,
-                  age: item?.age,
-                  gender: item?.gender,
-                },
-              ]),
-            );
+            mens?.living?.forEach(element => {
+              if (element?.age && element?.gender && element?.name) {
+                setAddchild(prevChildren => [
+                  ...prevChildren,
+                  {
+                    name: element?.name,
+                    age: element?.age,
+                    gender: element?.gender,
+                  },
+                ]);
+              }
+            });
           }
 
           dispatch(addobstericHistory(mens));
@@ -199,9 +223,60 @@ const ObstetricHistory = ({route}) => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchObstetricData();
+  // }, []);
   useEffect(() => {
-    fetchObstetricData();
+    if (obstetric) {
+      setGravidity({
+        value: obstetric?.gravidity?.value,
+        desc: obstetric?.gravidity?.desc,
+      });
+      if (obstetric?.gravidity?.desc) {
+        setShow(true);
+      }
+      setTerm({
+        value: obstetric?.term?.value,
+        desc: obstetric?.term?.desc,
+      });
+      if (obstetric?.term?.desc) {
+        setshowTerm(true);
+      }
+      setPremature({
+        value: obstetric?.premature?.value,
+        desc: obstetric?.premature?.desc,
+      });
+      if (obstetric?.premature?.desc) {
+        setshowpre(true);
+      }
+      setAbortions({
+        value: obstetric?.abortions?.value,
+        desc: obstetric?.abortions?.desc,
+      });
+      if (obstetric?.abortions?.desc) {
+        setShowabor(true);
+      }
+      if (obstetric?.living?.length > 0) {
+        // obstetric?.living?.map(item => {
+        setLiving(obstetric?.living[obstetric?.living?.length - 1]['living']);
+        // });
+        setChildShow(true);
+        obstetric?.living?.forEach(element => {
+          if (element?.age && element?.gender && element?.name) {
+            setAddchild(prevChildren => [
+              ...prevChildren,
+              {
+                name: element?.name,
+                age: element?.age,
+                gender: element?.gender,
+              },
+            ]);
+          }
+        });
+      }
+    }
   }, []);
+  // console.log('addchild===', addChild);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Past Obstetric History (GPAL)'} />
@@ -270,7 +345,10 @@ const ObstetricHistory = ({route}) => {
           desc={gravidity.desc}
           setDesc={val => handleGravidity('desc', val)}
           show={show}
-          onPress={() => setShow(!show)}
+          onPress={() => {
+            setShow(!show);
+            setGravidity({...gravidity, desc: ''});
+          }}
         />
         <ObstetricField
           numeric={true}
@@ -283,7 +361,10 @@ const ObstetricHistory = ({route}) => {
           desc={term.desc}
           setDesc={val => handleTerm('desc', val)}
           show={showTerm}
-          onPress={() => setshowTerm(!showTerm)}
+          onPress={() => {
+            setshowTerm(!showTerm);
+            setTerm({...term, desc: ''});
+          }}
         />
         <ObstetricField
           numeric={true}
@@ -298,7 +379,10 @@ const ObstetricHistory = ({route}) => {
           desc={premature.desc}
           setDesc={val => handlePremature('desc', val)}
           show={showPre}
-          onPress={() => setshowpre(!showPre)}
+          onPress={() => {
+            setshowpre(!showPre);
+            setPremature({...premature, desc: ''});
+          }}
         />
         <ObstetricField
           numeric={true}
@@ -311,7 +395,10 @@ const ObstetricHistory = ({route}) => {
           desc={abortions.desc}
           setDesc={val => handleAbortion('desc', val)}
           show={showAbor}
-          onPress={() => setShowabor(!showAbor)}
+          onPress={() => {
+            setShowabor(!showAbor);
+            setAbortions({...abortions, desc: ''});
+          }}
         />
         <View style={styles.field}>
           <View

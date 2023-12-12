@@ -27,6 +27,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
+import {ScrollView} from 'react-native-gesture-handler';
+import {mode} from '../redux/features/prescription/prescribeslice';
 
 const MenstrualHistory = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -36,7 +38,7 @@ const MenstrualHistory = ({navigation, route}) => {
   const {phone, patient_phone} = route.params;
   const token = useSelector(state => state.authenticate.auth.access);
   const nav = useNavigation();
-  // const nav = console.log(',enstr==', menstrualHistory);
+  console.log(',enstr==', menstrualHistory);
   const selction = ['Yes', 'No'];
   const [age, setAge] = useState('');
   const [status, setStatus] = useState('');
@@ -51,6 +53,7 @@ const MenstrualHistory = ({navigation, route}) => {
   // const formatDate = moment(date).format('YYYY-MM-DD');
   const [date1, setDate1] = useState(new Date());
   const [open1, setOpen1] = useState(false);
+  const [others, setOthers] = useState('');
   // const formatDate1 = moment(date1).format('YYYY-MM-DD');
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
@@ -78,14 +81,20 @@ const MenstrualHistory = ({navigation, route}) => {
   };
   const Pregselect = val => {
     setPreg(val);
+    if (val === 'No') {
+      setformatDate('');
+      if (val === 'Yes') {
+        setformatDate1('');
+      }
+    }
   };
   const menoselect = val => {
     setMenopause(val);
+    if (val === 'No') {
+      setformatDate1('');
+    }
   };
-  useEffect(() => {
-    menstrualHistory.pregnant ? setPreg('Yes') : setPreg('');
-    menstrualHistory.menopause ? setMenopause('Yes') : setMenopause('');
-  }, []);
+
   const handledata = () => {
     dispatch(
       addmenstrualHistory({
@@ -93,8 +102,9 @@ const MenstrualHistory = ({navigation, route}) => {
         status: status,
         flowdays: flow,
         cycledays: cycle,
-        pregnant: formatDate ? formatDate : 'NaN',
-        menopause: formatDate1 ? formatDate1 : 'NaN',
+        pregnant: formatDate ? formatDate : '',
+        menopause: formatDate1 ? formatDate1 : '',
+        others: others,
       }),
     );
 
@@ -106,7 +116,7 @@ const MenstrualHistory = ({navigation, route}) => {
     setMenopause('');
     setformatDate('');
     setformatDate1('');
-
+    setOthers('');
     nav.goBack();
   };
   const pregn = menstrualHistory?.pregnant;
@@ -133,7 +143,8 @@ const MenstrualHistory = ({navigation, route}) => {
           setCycle(mens?.cycledays);
           setformatDate(mens?.pregnant);
           setformatDate1(mens?.menopause);
-          console.log('mens================', mens);
+          setOthers(mens?.others);
+          // console.log('mens================', mens);
           dispatch(addmenstrualHistory(mens));
         }
       } else {
@@ -144,127 +155,157 @@ const MenstrualHistory = ({navigation, route}) => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchMenstrualData();
+  // }, []);
+  console.log('preg===', menstrualHistory.pregnant);
   useEffect(() => {
-    fetchMenstrualData();
+    if (menstrualHistory) {
+      setAge(menstrualHistory?.age);
+      setStatus(menstrualHistory?.status);
+      setCycle(menstrualHistory?.cycledays);
+      setFlow(menstrualHistory?.flowdays);
+      setformatDate(menstrualHistory?.pregnant);
+      setformatDate1(menstrualHistory?.menopause);
+      setOthers(menstrualHistory?.others);
+    }
+    if (menstrualHistory?.pregnant) {
+      menstrualHistory?.pregnant !== '' ? setPreg('Yes') : setPreg('No');
+      menstrualHistory?.menopause !== ''
+        ? setMenopause('Yes')
+        : setMenopause('No');
+    }
   }, []);
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Menstrual History" />
-      <InputText
-        label={'Menarche (The first occurrence of menstruration)'}
-        placeholder={'Age'}
-        value={age}
-        setValue={setAge}
-        numeric={true}
-      />
-      <View style={styles.fields}>
-        <View style={{gap: verticalScale(4)}}>
-          <Text style={styles.text}>Menstruation Status</Text>
-          <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
-            {CONSTANTS.menstruration_status.map((item, ind) => (
-              <SelectionTab
-                label={item}
-                key={ind}
-                onPress={() => HandleSelect(item)}
-                selected={status === item}
-              />
-            ))}
-          </View>
-        </View>
+      <ScrollView
+        contentContainerStyle={{
+          gap: moderateScale(16),
+          paddingBottom: verticalScale(120),
+        }}>
+        <PrescriptionHead heading="Menstrual History" />
         <InputText
-          inputContainer={{width: horizontalScale(200)}}
-          label={'Cycle Days'}
-          placeholder={'Enter Cycle Days'}
-          value={cycle}
-          setValue={setCycle}
+          label={'Menarche (The first occurrence of menstruration)'}
+          placeholder={'Age'}
+          value={age}
+          setValue={setAge}
           numeric={true}
         />
-        <InputText
-          inputContainer={{width: horizontalScale(200)}}
-          label={'Flow Days'}
-          placeholder={'Enter Days'}
-          value={flow}
-          setValue={setFlow}
-          numeric={true}
-        />
-
-        {/* <PlusButton
-                icon={'plus'}
-                size={24}
-                /> */}
-      </View>
-      <View style={{gap: verticalScale(4)}}>
-        <Text style={styles.text}>Pregnant</Text>
-        <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
-          {selction.map((item, ind) => (
-            <SelectionTab
-              label={item}
-              key={ind}
-              onPress={() => Pregselect(item)}
-              selected={preg === item}
-            />
-          ))}
-        </View>
-      </View>
-      {preg === 'Yes' && (
-        <>
-          <SelectorBtn
-            label={'LMP(Last month period)'}
-            name="calendar"
-            onPress={() => setOpen('to')}
-            input={formatDate ? formatDate : 'Select Date'}
-            style={styles.DOBselect}
-          />
-          <DatePicker
-            modal
-            open={open !== false}
-            date={date}
-            theme="auto"
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-          />
-        </>
-      )}
-      {preg === 'No' && (
-        <>
+        <View style={styles.fields}>
           <View style={{gap: verticalScale(4)}}>
-            <Text style={styles.text}>Menopause</Text>
+            <Text style={styles.text}>Menstruation Status</Text>
             <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
-              {selction.map((item, ind) => (
+              {CONSTANTS.menstruration_status.map((item, ind) => (
                 <SelectionTab
                   label={item}
                   key={ind}
-                  onPress={() => menoselect(item)}
-                  selected={menopause === item}
+                  onPress={() => HandleSelect(item)}
+                  selected={status === item}
                 />
               ))}
             </View>
           </View>
-          {menopause === 'Yes' && (
-            <>
-              <SelectorBtn
-                label={'LMP(Last month period)'}
-                name="calendar"
-                onPress={() => setOpen1('to')}
-                input={formatDate1 ? formatDate1 : 'Select Date'}
-                style={styles.DOBselect}
-              />
-              <DatePicker
-                modal
-                open={open1 !== false}
-                date={date1}
-                theme="auto"
-                mode="date"
-                onConfirm={handleConfirm1}
-                onCancel={handleCancel1}
-              />
-            </>
-          )}
-        </>
-      )}
+          <InputText
+            inputContainer={{width: horizontalScale(200)}}
+            label={'Cycle Days'}
+            placeholder={'Enter Cycle Days'}
+            value={cycle}
+            setValue={setCycle}
+            numeric={true}
+          />
+          <InputText
+            inputContainer={{width: horizontalScale(200)}}
+            label={'Flow Days'}
+            placeholder={'Enter Days'}
+            value={flow}
+            setValue={setFlow}
+            numeric={true}
+          />
 
-      <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          {/* <PlusButton
+                icon={'plus'}
+                size={24}
+                /> */}
+        </View>
+        <View style={{gap: verticalScale(4)}}>
+          <Text style={styles.text}>Pregnant</Text>
+          <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
+            {selction.map((item, ind) => (
+              <SelectionTab
+                label={item}
+                key={ind}
+                onPress={() => Pregselect(item)}
+                selected={preg === item}
+              />
+            ))}
+          </View>
+        </View>
+        {preg === 'Yes' && (
+          <>
+            <SelectorBtn
+              label={'LMP(Last month period)'}
+              name="calendar"
+              onPress={() => setOpen('to')}
+              input={formatDate ? formatDate : 'Select Date'}
+              style={styles.DOBselect}
+            />
+            <DatePicker
+              modal
+              open={open !== false}
+              date={date}
+              theme="auto"
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+          </>
+        )}
+        {preg === 'No' && (
+          <>
+            <View style={{gap: verticalScale(4)}}>
+              <Text style={styles.text}>Menopause</Text>
+              <View style={{gap: horizontalScale(8), flexDirection: 'row'}}>
+                {selction.map((item, ind) => (
+                  <SelectionTab
+                    label={item}
+                    key={ind}
+                    onPress={() => menoselect(item)}
+                    selected={menopause === item}
+                  />
+                ))}
+              </View>
+            </View>
+            {menopause === 'Yes' && (
+              <>
+                <SelectorBtn
+                  label={'LMP(Last month period)'}
+                  name="calendar"
+                  onPress={() => setOpen1('to')}
+                  input={formatDate1 ? formatDate1 : 'Select Date'}
+                  style={styles.DOBselect}
+                />
+                <DatePicker
+                  modal
+                  open={open1 !== false}
+                  date={date1}
+                  theme="auto"
+                  mode="date"
+                  onConfirm={handleConfirm1}
+                  onCancel={handleCancel1}
+                />
+              </>
+            )}
+          </>
+        )}
+        <InputText
+          value={others}
+          setValue={setOthers}
+          label={'Others'}
+          placeholder={'Others'}
+        />
+      </ScrollView>
+
+      <View style={{justifyContent: 'flex-end'}}>
         <HButton
           btnstyles={commonstyles.activebtn}
           label={'Save'}
