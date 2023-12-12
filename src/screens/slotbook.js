@@ -112,7 +112,7 @@ const SlotBook = ({navigation, route}) => {
     5: 'F',
     6: 'Sa',
   };
-  console.log('slots===========',bookedSlots);
+  // console.log('slots===========',bookedSlots);
   const Day = weekDys[new Date(date).getDay()];
 
   const fetchAppointment = async () => {
@@ -131,7 +131,7 @@ const SlotBook = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      
+
       setBookedSlots(
         jsonData.data?.map((item, index) => item?.appointment_slot),
       );
@@ -555,7 +555,10 @@ const SlotBook = ({navigation, route}) => {
             onPress={() => handleOptions('TelePhonic')}
           />
         </View> */}
-        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>Appointment Type{' '}<Text style={{color:'red',fontSize:CUSTOMFONTSIZE.h4}}>*</Text></Text>
+        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
+          Appointment Type{' '}
+          <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
+        </Text>
         <View style={styles.selection}>
           {selections?.map((val, ind) => (
             <View key={ind}>
@@ -604,11 +607,9 @@ const SlotBook = ({navigation, route}) => {
                   label="Book Slot"
                   //onPress={() => navigation.navigate('dashboard')}
                   onPress={() => {
-                    if (id === undefined && !loading ) {
+                    if (id === undefined && !loading) {
                       selectedTypeAppointment
-                        ?
-                          Appointment_Booking()
-                
+                        ? Appointment_Booking()
                         : Alert.alert(
                             'Warn',
                             'Please Select Type Of Appointment',

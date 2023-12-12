@@ -110,7 +110,7 @@ const MenstrualHistory = ({navigation, route}) => {
     nav.goBack();
   };
   const pregn = menstrualHistory?.pregnant;
-  console.log(pregn), '================';
+  // console.log(pregn), '================';
 
   const fetchMenstrualData = async () => {
     try {
@@ -133,7 +133,7 @@ const MenstrualHistory = ({navigation, route}) => {
           setCycle(mens?.cycledays);
           setformatDate(mens?.pregnant);
           setformatDate1(mens?.menopause);
-          console.log('mens================', mens);
+          // console.log('mens================', mens);
           dispatch(addmenstrualHistory(mens));
         }
       } else {

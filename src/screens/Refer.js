@@ -234,7 +234,12 @@ const ReferToDoctor = () => {
   };
 
   const handleSelect = val => {
-    setSelected(val);
+    if (selected === val) {
+      setSelected('');
+    } else {
+      setSelected(val);
+    }
+    // setSelected(val);
     setName('');
     setSpeciality('');
     setPhone('');
@@ -260,7 +265,7 @@ const ReferToDoctor = () => {
   const handlePreview = async () => {
     handleAddDoctors();
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('referals', [
+      StoreAsyncData(`referals${patient_details?.doc_phone}`, [
         {
           refer_to: selected,
           dr_name: dr_name ? dr_name : null,
@@ -271,7 +276,7 @@ const ReferToDoctor = () => {
         },
       ]);
     } else {
-      UpdateAsyncData('referals', {
+      UpdateAsyncData(`referals${patient_details?.doc_phone}`, {
         refer_to: selected,
         dr_name: dr_name ? dr_name : null,
         doctor_or_name: name,
@@ -303,21 +308,41 @@ const ReferToDoctor = () => {
     }
   };
   useEffect(() => {
-    // clearStorage()
-    RetriveAsyncData('referals')
+    RetriveAsyncData(`referals${patient_details?.doc_phone}`)
       .then(array => {
-        if (array?.length > 5) {
-          array?.splice(5);
-          setSug(array);
+        const uniqueArray = array?.filter((item, index) => {
+          const name = item?.dr_name ? item?.dr_name : item?.doctor_or_name;
+          const speciality = item?.speciality;
+          const currentDocName = name.toLowerCase();
+          const currentSpeciality = speciality.toLowerCase();
+          return (
+            index ===
+            array.findIndex(obj => {
+              const Currentname = obj?.dr_name
+                ? obj?.dr_name
+                : obj?.doctor_or_name;
+              const CurrentSpeciality = obj?.speciality;
+
+              return (
+                Currentname.toLowerCase() === currentDocName &&
+                CurrentSpeciality.toLowerCase() === currentSpeciality
+              );
+            })
+          );
+        });
+        // console.log('===========>', uniqueArray);
+        if (uniqueArray?.length > 5) {
+          uniqueArray?.splice(5);
+          setSug(uniqueArray);
         } else {
-          setSug(array);
+          setSug(uniqueArray);
         }
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
   }, []);
-  // console.log('======>sug', sug);
+
   const handlePress = value => {
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
@@ -351,193 +376,176 @@ const ReferToDoctor = () => {
               />
             ))}
           </View>
-          <InputText
-            label={
-              selected === 'Doctor'
-                ? 'Dr.Name'
-                : selected === 'Clinic'
-                ? ' Clinic Name'
-                : selected === 'Hospital'
-                ? 'Hospital Name'
-                : 'lab / Imaging Center Name'
-            }
-            placeholder={
-              selected === 'Doctor'
-                ? 'Enter Dr.Name'
-                : selected === 'Clinic'
-                ? 'Enter Clinic Name'
-                : selected === 'Hospital'
-                ? 'Enter Hospital Name'
-                : 'Enter lab / imaging center name'
-            }
-            inputContainer={{paddingHorizontal: 0}}
-            value={name}
-            setValue={val => setName(val)}
-          />
-          {selected === 'Clinic' ||
-          selected === 'Hospital' ||
-          selected === 'Lab / Imaging Center' ? (
-            <InputText
-              label={
-                selected === 'Clinic'
-                  ? ' Clinic Phone Number'
-                  : selected === 'Hospital'
-                  ? 'Hospital Phone Number'
-                  : 'Center Phone Number'
-              }
-              placeholder={
-                selected === 'Clinic'
-                  ? 'Enter Clinic Phone Number'
-                  : selected === 'Hospital'
-                  ? 'Enter Hospital Phone Number'
-                  : 'Enter Center Phone Number'
-              }
-              inputContainer={{paddingHorizontal: 0}}
-              value={newPhone}
-              setValue={val => setNewPhone(val)}
-            />
-          ) : null}
-          {selected === 'Clinic' ||
-          selected === 'Hospital' ||
-          selected === 'Lab / Imaging Center' ? (
-            <InputText
-              label={'Dr.Name'}
-              placeholder="Dr.Name"
-              inputContainer={{paddingHorizontal: 0}}
-              value={dr_name}
-              setValue={val => setDr_Name(val)}
-            />
-          ) : null}
-          {/* <InputText
-          label={'Speciality'}
-          placeholder="Speciality"
-          value={speciality}
-          inputContainer={{paddingHorizontal: 0}}
-          setValue={val => setSpeciality(val)}
-        /> */}
-          <View>
-            <SelectorBtn
-              onPress={() => setShow(!show)}
-              label={'Specialization'}
-              input={
-                speciality?.length > 0 ? speciality : 'Select Specialization'
-              }
-              name={'chevron-down'}
-            />
-            {show && (
-              <View
-                style={[
-                  styles.dropdownContainer,
-                  // {
-                  //   top:
-                  //     selected === 'Clinic' || selected === 'Hospital'
-                  //       ? verticalScale(360)
-                  //       : verticalScale(270),
-                  // },
-                ]}>
-                <ScrollView>
-                  {CONSTANTS?.speciality?.map((val, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={styles.touch}
-                      onPress={() => HandlePress(val)}>
-                      <Text
-                        style={{
-                          fontSize: CUSTOMFONTSIZE.h3,
-                          padding: moderateScale(10),
-                          color: CUSTOMCOLOR.black,
-                        }}
-                        key={index}>
-                        {val}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
+          {selected && (
+            <View>
+              <InputText
+                label={
+                  selected === 'Doctor'
+                    ? 'Dr.Name'
+                    : selected === 'Clinic'
+                    ? ' Clinic Name'
+                    : selected === 'Hospital'
+                    ? 'Hospital Name'
+                    : 'lab / Imaging Center Name'
+                }
+                placeholder={
+                  selected === 'Doctor'
+                    ? 'Enter Dr.Name'
+                    : selected === 'Clinic'
+                    ? 'Enter Clinic Name'
+                    : selected === 'Hospital'
+                    ? 'Enter Hospital Name'
+                    : 'Enter lab / imaging center name'
+                }
+                inputContainer={{paddingHorizontal: 0}}
+                value={name}
+                setValue={val => setName(val)}
+              />
+              {selected === 'Clinic' ||
+              selected === 'Hospital' ||
+              selected === 'Lab / Imaging Center' ? (
+                <InputText
+                  label={
+                    selected === 'Clinic'
+                      ? ' Clinic Phone Number'
+                      : selected === 'Hospital'
+                      ? 'Hospital Phone Number'
+                      : 'Center Phone Number'
+                  }
+                  placeholder={
+                    selected === 'Clinic'
+                      ? 'Enter Clinic Phone Number'
+                      : selected === 'Hospital'
+                      ? 'Enter Hospital Phone Number'
+                      : 'Enter Center Phone Number'
+                  }
+                  inputContainer={{paddingHorizontal: 0}}
+                  value={newPhone}
+                  setValue={val => setNewPhone(val)}
+                />
+              ) : null}
+              {selected === 'Clinic' ||
+              selected === 'Hospital' ||
+              selected === 'Lab / Imaging Center' ? (
+                <InputText
+                  label={'Dr.Name'}
+                  placeholder="Dr.Name"
+                  inputContainer={{paddingHorizontal: 0}}
+                  value={dr_name}
+                  setValue={val => setDr_Name(val)}
+                />
+              ) : null}
+              <View>
+                <SelectorBtn
+                  onPress={() => setShow(!show)}
+                  label={'Specialization'}
+                  input={
+                    speciality?.length > 0
+                      ? speciality
+                      : 'Select Specialization'
+                  }
+                  name={'chevron-down'}
+                />
+                {show && (
+                  <View
+                    style={[
+                      styles.dropdownContainer,
+                      // {
+                      //   top:
+                      //     selected === 'Clinic' || selected === 'Hospital'
+                      //       ? verticalScale(360)
+                      //       : verticalScale(270),
+                      // },
+                    ]}>
+                    <ScrollView>
+                      {CONSTANTS?.speciality?.map((val, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.touch}
+                          onPress={() => HandlePress(val)}>
+                          <Text
+                            style={{
+                              fontSize: CUSTOMFONTSIZE.h3,
+                              padding: moderateScale(10),
+                              color: CUSTOMCOLOR.black,
+                            }}
+                            key={index}>
+                            {val}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-          <InputText
-            label={'Phone Number'}
-            placeholder="Phone number"
-            value={phone}
-            inputContainer={{paddingHorizontal: 0}}
-            setValue={val => setPhone(val)}
-            numeric={true}
-          />
-          <InputText
-            label={'Referal Notes'}
-            placeholder="Referal Notes"
-            multiline={true}
-            value={notes}
-            inputContainer={{paddingHorizontal: 0}}
-            setValue={val => setNotes(val)}
-            textStyle={{
-              height: moderateScale(150),
-              textAlignVertical: 'top',
-              color: CUSTOMCOLOR.black,
-              fontWeight: '700',
-            }}
-          />
-        </View>
-        {sug?.length > 0 && (
-          <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
-            {/* <ScrollView
-              // horizontal={true}
-              persistentScrollbar={true}
-              contentContainerStyle={{gap: moderateScale(12)}}> */}
-            {sug?.map((item, index) => (
-              <SelectorBtn
-                select={{
-                  backgroundColor: CUSTOMCOLOR.recent,
-                }}
-                inputstyle={{
-                  color: CUSTOMCOLOR.primary,
-                  fontSize: moderateScale(14),
+              <InputText
+                label={'Phone Number'}
+                placeholder="Phone number"
+                value={phone}
+                inputContainer={{paddingHorizontal: 0}}
+                setValue={val => setPhone(val)}
+                numeric={true}
+              />
+              <InputText
+                label={'Referal Notes'}
+                placeholder="Referal Notes"
+                multiline={true}
+                value={notes}
+                inputContainer={{paddingHorizontal: 0}}
+                setValue={val => setNotes(val)}
+                textStyle={{
+                  height: moderateScale(150),
+                  textAlignVertical: 'top',
+                  color: CUSTOMCOLOR.black,
                   fontWeight: '700',
                 }}
-                key={index}
-                onPress={() => handlePress(item)}
-                input={item?.dr_name ? item?.dr_name : item?.doctor_or_name}
               />
-            ))}
-            {/* </ScrollView> */}
-          </View>
-        )}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: verticalScale(64),
-            justifyContent: 'flex-end',
-          }}>
-          {/* <HButton
-            label="Preview"
-            loading={prevLoad}
-            loadColor={CUSTOMCOLOR.primary}
-            onPress={handlePreview}
-            // onPress={createPDF}
-            btnstyles={{
-              backgroundColor: CUSTOMCOLOR.white,
-              borderWidth: 0.5,
-              borderColor: CUSTOMCOLOR.borderColor,
-            }}
-            textStyle={{
-              color: CUSTOMCOLOR.primary,
-            }}
-          /> */}
-          <HButton
-            btnstyles={{
-              backgroundColor:
-                selected && name && speciality
-                  ? CUSTOMCOLOR.primary
-                  : CUSTOMCOLOR.disable,
-            }}
-            icon="share"
-            label="Share"
-            type="addtype"
-            size={moderateScale(24)}
-            loading={prevLoad}
-            onPress={selected && name && speciality ? handlePreview : null}
-          />
+              {sug?.length > 0 && (
+                <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
+                  {sug?.map((item, index) => (
+                    <SelectorBtn
+                      select={{
+                        backgroundColor: CUSTOMCOLOR.recent,
+                      }}
+                      inputstyle={{
+                        color: CUSTOMCOLOR.primary,
+                        fontSize: moderateScale(14),
+                        fontWeight: '700',
+                      }}
+                      key={index}
+                      onPress={() => handlePress(item)}
+                      input={
+                        item?.dr_name ? item?.dr_name : item?.doctor_or_name
+                      }
+                    />
+                  ))}
+                </View>
+              )}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: verticalScale(64),
+                  justifyContent: 'flex-end',
+                }}>
+                <HButton
+                  btnstyles={{
+                    backgroundColor:
+                      selected && name && speciality
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.disable,
+                  }}
+                  icon="share"
+                  label="Share"
+                  type="addtype"
+                  size={moderateScale(24)}
+                  loading={prevLoad}
+                  onPress={
+                    selected && name && speciality ? handlePreview : null
+                  }
+                />
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
       {/* <View

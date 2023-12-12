@@ -92,7 +92,7 @@ const AddClinic = ({navigation}) => {
     Sa: [],
     Su: [],
   });
-  console.log('pharmach',phramcyPhone);
+  // console.log('pharmach',phramcyPhone);
   const ResetReduxSlots = () => {
     const newSlotsss = {
       slots: {

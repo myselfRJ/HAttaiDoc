@@ -96,7 +96,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setReports(jsonData?.data);
-      console.log('======>rep', jsonData?.data);
+      // console.log('======>rep', jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -111,7 +111,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setPhysical(jsonData?.data);
-      console.log('======>data', jsonData?.data?.notes);
+      // console.log('======>data', jsonData?.data?.notes);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -122,9 +122,6 @@ const History = ({route, navigation}) => {
     fetchreports();
     fetchExamination();
   }, []);
-  console.log('====================================');
-  console.log(physical?.notes);
-  console.log('====================================');
   const handlePrescription = () => {
     const filepath = prescription?.file_url;
     const path = `${fileurl}${filepath}`;

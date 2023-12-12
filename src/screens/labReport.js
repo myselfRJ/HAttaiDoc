@@ -33,6 +33,7 @@ import {CONSTANT} from '../utility/const';
 import {commonstyles} from '../styles/commonstyle';
 
 const LabReports = () => {
+  const {phone} = useSelector(state => state?.phone?.data);
   const navigation = useNavigation();
   const option = 'procedure';
   const [value, setValue] = useState('');
@@ -110,14 +111,14 @@ const LabReports = () => {
     setSelected(value);
     dispatch(addLabReport([...prev, {lab_test: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('labs', {lab_test: value});
+      UpdateAsyncData(`labs${phone}`, {lab_test: value});
     }
     setValue('');
   };
 
   const handledata = () => {
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('labs', prev);
+      StoreAsyncData(`labs${phone}`, prev);
     }
     navigation.goBack();
   };
@@ -125,11 +126,11 @@ const LabReports = () => {
     setSelected(value);
     dispatch(addLabReport([...prev, {lab_test: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('labs', {lab_test: value});
+      UpdateAsyncData(`labs${phone}`, {lab_test: value});
     }
   };
   useEffect(() => {
-    RetriveAsyncData('labs').then(array => {
+    RetriveAsyncData(`labs${phone}`).then(array => {
       const uniqueArray = array?.filter((item, index) => {
         return (
           index === array?.findIndex(obj => obj.lab_test === item?.lab_test)

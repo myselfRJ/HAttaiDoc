@@ -37,6 +37,7 @@ import {commonstyles} from '../styles/commonstyle';
 // import PlusButton from '../components';
 
 const Diagnosis = ({navigation}) => {
+  const {phone} = useSelector(state => state?.phone?.data);
   const dia_types = ['Provisional', 'Confirmed'];
   const option = 'finding';
   const term = 'diagnosis';
@@ -105,14 +106,14 @@ const Diagnosis = ({navigation}) => {
     setSelected(value);
     dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('diagnosis', {diagnosis: value});
+      UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
     }
     setValue('');
   };
 
   const handledata = () => {
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('diagnosis', prev);
+      StoreAsyncData(`diagnosis${phone}`, prev);
     }
     navigation.goBack();
   };
@@ -121,11 +122,11 @@ const Diagnosis = ({navigation}) => {
     setSelected(value);
     dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('diagnosis', {diagnosis: value});
+      UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
     }
   };
   useEffect(() => {
-    RetriveAsyncData('diagnosis').then(array => {
+    RetriveAsyncData(`diagnosis${phone}`).then(array => {
       const uniqueArray = array?.filter((item, index) => {
         return (
           index === array?.findIndex(obj => obj.diagnosis === item?.diagnosis)

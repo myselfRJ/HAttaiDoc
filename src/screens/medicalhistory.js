@@ -54,6 +54,7 @@ import {updateDate} from '../redux/features/prescription/Followupslice';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
+  const doc_phone = useSelector(state => state?.phone?.data);
   const {medicaldata} = route.params;
   const phone = medicaldata?.phone;
   const token = useSelector(state => state.authenticate.auth.access);
@@ -155,7 +156,9 @@ const MedicalHistory = ({navigation, route}) => {
       // if (commor?.length === 0 || commor == undefined) {
       //   StoreAsyncData('commorbidities', commor);
       // } else {
-      UpdateAsyncData('commorbidities', {commorbities: comorbidities});
+      UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
+        commorbities: comorbidities,
+      });
       // }
       setComorbidities('');
     }
@@ -166,27 +169,24 @@ const MedicalHistory = ({navigation, route}) => {
       // if (socialHistory?.length === 0 || socialHistory == undefined) {
       //   StoreAsyncData('socialHistory', socialHistory);
       // } else {
-      UpdateAsyncData('socialHistory', {social: social});
+      UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
       // }
       setSocial('');
     }
   };
-  console.log('====================================');
-  console.log('garadfgh', menstrualHistory?.pregnant);
-  console.log('====================================');
   const handleFamily = () => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
       // if (familyHistory?.length === 0 || familyHistory == undefined) {
       //   StoreAsyncData('familyHistory', familyHistory);
       // } else {
-      UpdateAsyncData('familyHistory', {family: family});
+      UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
       // }
       setFamily('');
     }
   };
   const handleAsyncStorage = () => {
-    RetriveAsyncData('commorbidities').then(array => {
+    RetriveAsyncData(`commorbidities${doc_phone?.phone}`).then(array => {
       const uniqueArray = [...commor_sug, ...array]?.filter((item, index) => {
         return (
           index ===
@@ -195,13 +195,13 @@ const MedicalHistory = ({navigation, route}) => {
       });
       setCommor_Sug([...commor_sug, ...uniqueArray]);
     });
-    RetriveAsyncData('socialHistory').then(array => {
+    RetriveAsyncData(`socialHistory${doc_phone?.phone}`).then(array => {
       const uniqueArray = [...social_sug, ...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.social === item?.social);
       });
       setSocial_Sug([...social_sug, ...uniqueArray]);
     });
-    RetriveAsyncData('familyHistory').then(array => {
+    RetriveAsyncData(`familyHistory${doc_phone?.phone}`).then(array => {
       const uniqueArray = [...family_sug, ...array]?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.family === item?.family);
       });
@@ -215,13 +215,13 @@ const MedicalHistory = ({navigation, route}) => {
 
   useEffect(() => {
     if (commor_sug?.length === 0 || commor_sug == undefined) {
-      StoreAsyncData('commorbidities', commor);
+      StoreAsyncData(`commorbidities${doc_phone?.phone}`, commor);
     }
     if (social_sug?.length === 0 || social_sug == undefined) {
-      StoreAsyncData('socialHistory', socialHistory);
+      StoreAsyncData(`socialHistory${doc_phone?.phone}`, socialHistory);
     }
     if (family_sug?.length === 0 || family_sug == undefined) {
-      StoreAsyncData('familyHistory', familyHistory);
+      StoreAsyncData(`familyHistory${doc_phone?.phone}`, familyHistory);
     }
   }, []);
 

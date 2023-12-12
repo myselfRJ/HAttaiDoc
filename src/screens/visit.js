@@ -114,7 +114,7 @@ const Visit = ({navigation, route}) => {
   const martialHistory = useSelector(
     state => state?.pasthistory?.martialHistory,
   );
-  console.log('==========>onbd', typeof JSON.stringify(martialHistory));
+  // console.log('==========>onbd', typeof JSON.stringify(martialHistory));
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
 
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);

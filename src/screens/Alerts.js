@@ -77,7 +77,7 @@ const AlertMessage = props => {
         },
       });
       const jsonData = await response.json();
-      console.log(jsonData?.data);
+      // console.log(jsonData?.data);
       setToken(jsonData?.data);
     } catch (error) {
       console.log(error);

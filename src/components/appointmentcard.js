@@ -93,7 +93,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
       if (response.ok) {
         const jsonData = await response.json();
         setNotification(jsonData?.data);
-        console.log(jsonData);
+        // console.log(jsonData);
       }
     } catch (error) {
       console.log(error);
@@ -108,7 +108,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
     }, []),
   );
   const length_ofNotification = notification?.filter(
-    item => item?.seen === false && !item?.doctor_phone_number?.includes('sent'),
+    item =>
+      item?.seen === false && !item?.doctor_phone_number?.includes('sent'),
   );
   return (
     <View style={styles.main}>
@@ -174,7 +175,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
             <Pressable
               style={styles.icon}
               onPress={() => {
-                  navigation.navigate('notify', {notification});
+                navigation.navigate('notify', {notification});
               }}>
               <Icon
                 name={'message-processing'}
@@ -314,6 +315,9 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h4,
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
+    width: verticalScale(200),
+    flexWrap: 'wrap',
+    textAlign: 'justify',
   },
   icon: {
     height: moderateScale(40),

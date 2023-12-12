@@ -46,6 +46,7 @@ import {commonstyles} from '../styles/commonstyle';
 import {capitalizeWord} from '../utility/const';
 
 const Symptoms = ({navigation}) => {
+  const {phone} = useSelector(state => state?.phone?.data);
   const symptomsData = useSelector(state => state.symptoms.symptom);
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
@@ -153,7 +154,7 @@ const Symptoms = ({navigation}) => {
     setSelected(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', {symptom: value});
+      UpdateAsyncData(`symptom${phone}`, {symptom: value});
     }
   };
 
@@ -161,7 +162,7 @@ const Symptoms = ({navigation}) => {
 
   const handledata = () => {
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('symptom', symptomsData);
+      StoreAsyncData(`symptom${phone}`, symptomsData);
     }
     navigation.goBack();
   };
@@ -170,11 +171,11 @@ const Symptoms = ({navigation}) => {
     setSymptom(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('symptom', {symptom: value});
+      UpdateAsyncData(`symptom${phone}`, {symptom: value});
     }
   };
   useEffect(() => {
-    RetriveAsyncData('symptom').then(array => {
+    RetriveAsyncData(`symptom${phone}`).then(array => {
       const uniqueArray = array?.filter((item, index) => {
         return index === array?.findIndex(obj => obj.symptom === item?.symptom);
       });

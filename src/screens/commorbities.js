@@ -33,6 +33,7 @@ import {
 } from '../utility/AsyncStorage';
 
 const Commorbities = ({navigation}) => {
+  const {phone} = useSelector(state => state?.phone?.data);
   const option = 'finding';
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState('');
@@ -49,7 +50,7 @@ const Commorbities = ({navigation}) => {
     setSelected(value);
     dispatch(addCommorbities([...prev, {commoribities: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('commoribities', {commoribities: value});
+      UpdateAsyncData(`commoribities${phone}`, {commoribities: value});
     }
   };
   const handleDelete = index => {
@@ -103,20 +104,20 @@ const Commorbities = ({navigation}) => {
     setSelected(value);
     dispatch(addCommorbities([...prev, {commoribities: value}]));
     if (sug?.length > 0) {
-      UpdateAsyncData('commoribities', {commoribities: value});
+      UpdateAsyncData(`commoribities${phone}`, {commoribities: value});
     }
     setValue('');
   };
 
   const handledata = () => {
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('commoribities', prev);
+      StoreAsyncData(`commoribities${phone}`, prev);
     }
     navigation.goBack();
   };
 
   useEffect(() => {
-    RetriveAsyncData('commoribities').then(array => {
+    RetriveAsyncData(`commoribities${phone}`).then(array => {
       const uniqueArray = array?.filter((item, index) => {
         return (
           index ===

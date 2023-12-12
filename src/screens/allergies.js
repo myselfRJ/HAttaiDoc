@@ -33,6 +33,7 @@ import {commonstyles} from '../styles/commonstyle';
 import CustomCalendar from '../components/calendar';
 
 const Allergies = () => {
+  const {phone} = useSelector(state => state?.phone?.data);
   const navigation = useNavigation();
   const [select, setSelect] = useState('');
   const option = 'finding';
@@ -53,7 +54,7 @@ const Allergies = () => {
   };
   const selectChange = value => {
     setSelect(value);
-    UpdateAsyncData('allergies', {allergies: value});
+    UpdateAsyncData(`allergies${phone}`, {allergies: value});
     dispatch(addAllergies([...prev, {allergies: value}]));
   };
   const handleDelete = index => {
@@ -99,19 +100,19 @@ const Allergies = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    UpdateAsyncData('allergies', {allergies: value});
+    UpdateAsyncData(`allergies${phone}`, {allergies: value});
     dispatch(addAllergies([...prev, {allergies: value}]));
     setValue('');
   };
 
   const handleBack = () => {
     if (sug?.length === 0 || !sug) {
-      StoreAsyncData('allergies', prev);
+      StoreAsyncData(`allergies${phone}`, prev);
     }
     navigation.goBack();
   };
   useEffect(() => {
-    RetriveAsyncData('allergies').then(array => {
+    RetriveAsyncData(`allergies${phone}`).then(array => {
       const uniqueArray = array?.filter((item, index) => {
         return (
           index === array?.findIndex(obj => obj.allergies === item?.allergies)

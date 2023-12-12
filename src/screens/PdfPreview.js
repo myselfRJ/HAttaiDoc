@@ -63,7 +63,7 @@ const PdfView = ({navigation}) => {
     prevScreen,
   } = route.params;
   const SuccesRef = useRef(null);
-  console.log('data==', consultationData?.pastHistory?.martial_history);
+  // console.log('data==', consultationData?.pastHistory?.martial_history);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
   }, []);

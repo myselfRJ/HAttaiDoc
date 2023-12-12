@@ -158,7 +158,7 @@ const ObstetricHistory = ({route}) => {
 
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          console.log('get data=======================', mens);
+          // console.log('get data=======================', mens);
           setGravidity({
             value: mens?.gravidity?.value,
             desc: mens?.gravidity?.desc,

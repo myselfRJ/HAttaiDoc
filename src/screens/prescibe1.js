@@ -43,6 +43,7 @@ import ShowChip from '../components/showChip';
 import {commonstyles} from '../styles/commonstyle';
 
 export default function Prescribe1({navigation}) {
+  const {phone} = useSelector(state => state?.phone?.data);
   const [data, setData] = useState([]);
 
   const option = 'clinical drug';
@@ -101,7 +102,7 @@ export default function Prescribe1({navigation}) {
     );
     if (sug?.length > 0) {
       const medicineName = `${medicine} ${mgs}`;
-      UpdateAsyncData('prescribe', {
+      UpdateAsyncData(`prescribe${phone}`, {
         medicine: setmedicine ? setmedicine : medicineName,
         mode: mode,
       });
@@ -126,19 +127,33 @@ export default function Prescribe1({navigation}) {
     }
   };
   const setMedicineValue = value => {
-    setMedicine(value);
-    selectedMedicine(value);
+    if (medicine === value) {
+      setMedicine('');
+      selectedMedicine('');
+    } else {
+      setMedicine(value);
+      selectedMedicine(value);
+    }
     setselectedGeneric(true);
     setSelectedMgs(true);
   };
 
   const setMG = value => {
-    setDose_quantity(value);
-    setmg(value);
+    if (mgs === value) {
+      setDose_quantity('');
+      setmg('');
+    } else {
+      setDose_quantity(value);
+      setmg(value);
+    }
   };
 
   const setTime = value => {
-    setTiming(value);
+    if (timing === value) {
+      setTiming('');
+    } else {
+      setTiming(value);
+    }
   };
 
   const FrequencySelection = index => {
@@ -247,12 +262,12 @@ export default function Prescribe1({navigation}) {
   };
   const handleBack = () => {
     if (sug?.length === 0 || sug === undefined) {
-      StoreAsyncData('prescribe', prevPres);
+      StoreAsyncData(`prescribe${phone}`, prevPres);
     }
   };
   useEffect(() => {
     // clearStorage()
-    RetriveAsyncData('prescribe')
+    RetriveAsyncData(`prescribe${phone}`)
       .then(array => {
         const uniqueArray = array?.filter((item, index) => {
           const currentMedicine = item?.medicine.toLowerCase(); // Convert to lowercase for case-insensitive comparison
@@ -304,7 +319,7 @@ export default function Prescribe1({navigation}) {
           ))}
         </View>
 
-        <View>
+        {/* <View>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes?.map(value => (
@@ -326,7 +341,7 @@ export default function Prescribe1({navigation}) {
               />
             ))}
           </View>
-        </View>
+        </View> */}
         <View>
           <InputText
             lbltext={{fontSize: moderateScale(14)}}
@@ -342,7 +357,7 @@ export default function Prescribe1({navigation}) {
               medicine === setmedicine ||
               medicine.length === 0
                 ? 'magnify'
-                : 'close'
+                : medicine?.length > 0 && 'close'
             }
             onPress={() => {
               // setShow(!show);

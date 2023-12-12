@@ -52,7 +52,8 @@ export default function MedicalRecordPatient({route, navigation}) {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
   const fetchPrescribe = async () => {
     const response = await fetchApi(
       URL.getConsultationByPatientPhone(patient_phone),
@@ -65,14 +66,21 @@ export default function MedicalRecordPatient({route, navigation}) {
     );
     if (response.ok) {
       const jsonData = await response.json();
-      setConsultation(jsonData?.data);
+      const filterData = jsonData?.data
+        ? jsonData?.data?.filter(
+            item =>
+              date?.toISOString()?.split('T')[0] ===
+              item?.consultation?.chief_complaint?.created_at?.split('T')[0],
+          )
+        : [];
+      setConsultation(filterData);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchPrescribe();
-  }, []);
+  }, [date]);
 
   const [vitals, setVitals] = useState({
     chiefComplaints: consultation?.chief_complaint?.complaint_message,
@@ -88,8 +96,6 @@ export default function MedicalRecordPatient({route, navigation}) {
       EDD: 'EDD',
     },
   });
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
 
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
@@ -97,7 +103,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     year: 'numeric',
   });
   const handleConfirm = date => {
-    setDOB(date);
+    setDate(date);
     setOpen(false);
   };
 
@@ -115,7 +121,6 @@ export default function MedicalRecordPatient({route, navigation}) {
     const patient_phone = data?.patient_phone_number;
     navigation.navigate('bookslot', {patient_phone});
   };
-
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32), gap: moderateScale(8)}}>

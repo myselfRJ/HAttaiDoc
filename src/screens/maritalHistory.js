@@ -50,7 +50,7 @@ const MaritalHistory = ({route}) => {
   const HandleSelect = val => {
     setStatus(val);
   };
-  console.log('marital', maritalstatus);
+  // console.log('marital', maritalstatus);
   const HandleSelectMarital = val => {
     setmaritalStatus(val);
   };

@@ -31,7 +31,6 @@ async function UpdateAsyncData(key, newElement) {
     await EncryptedStorage.setItem(key, JSON.stringify(existingData));
   } catch (error) {
     console.error('Error occurred', error);
-    // Handle errors
     Alert.alert('', 'Something Went Wrong');
   }
 }

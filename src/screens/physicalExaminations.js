@@ -45,7 +45,7 @@ import GalleryModel from '../components/GalleryModal';
 import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
-import { fileurl } from '../utility/urls';
+import {fileurl} from '../utility/urls';
 const PhysicalExamination = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
@@ -55,7 +55,7 @@ const PhysicalExamination = ({navigation}) => {
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
-  const [report,setreport] = useState('')
+  const [report, setreport] = useState('');
   // const [selectedFilename, setSelectedFilename] = useState([]);
 
   const postData = async url => {
@@ -88,25 +88,24 @@ const PhysicalExamination = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert("Success","Succesfully saved")
+        Alert.alert('Success', 'Succesfully saved');
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
-      Alert.alert("Error",`${error}`)
+      Alert.alert('Error', `${error}`);
       console.error('Error:', error);
     }
   };
   const apiUrl = URL.uploadPhysicalExamination;
 
   const handle = () => {
-    if(report != undefined){
+    if (report != undefined) {
       nav?.goBack();
-    }else{
+    } else {
       postData(apiUrl);
       handlePress();
     }
-    
   };
 
   const onImagePress = () => {
@@ -210,8 +209,10 @@ const PhysicalExamination = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log('physical===',jsonData)
-      setValue(jsonData?.data?.notes === undefined ? '' :jsonData?.data?.notes);
+      // console.log('physical===',jsonData)
+      setValue(
+        jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes,
+      );
       // setDescribe(jsonData?.data?.description);nnnnn
       setreport(jsonData?.data);
     } else {
@@ -251,34 +252,35 @@ const PhysicalExamination = ({navigation}) => {
           fontWeight: '700',
         }}
       />
-      {!report ? (uploaddocument?.length > 0 ? (
-        <View style={{marginTop: verticalScale(16)}}>
-          {uploaddocument?.map((item, index) => (
-            <ShowChip
-              key={index}
-              onPress={() => handleDelete(index)}
-              text={
-                <>
-                  <Icon
-                    color={CUSTOMCOLOR.error}
-                    size={moderateScale(20)}
-                    name={
-                      item?.type === 'application/pdf'
-                        ? 'file-pdf-box'
-                        : 'image'
-                    }
-                  />{' '}
-                  {item?.name?.includes('temp')
-                    ? item?.name?.split('temp_')[1]?.toString()
-                    : item?.name}
-                </>
-              }
-              main={{marginHorizontal: 0}}
-            />
-          ))}
-        </View>
-      ) : null) : 
-      report_findings?.length > 0 ? (
+      {!report ? (
+        uploaddocument?.length > 0 ? (
+          <View style={{marginTop: verticalScale(16)}}>
+            {uploaddocument?.map((item, index) => (
+              <ShowChip
+                key={index}
+                onPress={() => handleDelete(index)}
+                text={
+                  <>
+                    <Icon
+                      color={CUSTOMCOLOR.error}
+                      size={moderateScale(20)}
+                      name={
+                        item?.type === 'application/pdf'
+                          ? 'file-pdf-box'
+                          : 'image'
+                      }
+                    />{' '}
+                    {item?.name?.includes('temp')
+                      ? item?.name?.split('temp_')[1]?.toString()
+                      : item?.name}
+                  </>
+                }
+                main={{marginHorizontal: 0}}
+              />
+            ))}
+          </View>
+        ) : null
+      ) : report_findings?.length > 0 ? (
         <View style={{marginTop: verticalScale(16)}}>
           {report_findings?.map(
             (item, index) =>
@@ -308,8 +310,7 @@ const PhysicalExamination = ({navigation}) => {
               ),
           )}
         </View>
-      ) : null
-      }
+      ) : null}
       <PlusButton
         size={moderateScale(40)}
         style={{
@@ -321,11 +322,11 @@ const PhysicalExamination = ({navigation}) => {
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
-        onPress={()=>{
-          if(report != undefined){
-            setModal(false)
-          }else{
-            handleModal()
+        onPress={() => {
+          if (report != undefined) {
+            setModal(false);
+          } else {
+            handleModal();
           }
         }}
       />
