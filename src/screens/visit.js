@@ -71,7 +71,6 @@ const Visit = ({navigation, route}) => {
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  // console.log('physical===',physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -114,7 +113,6 @@ const Visit = ({navigation, route}) => {
   const martialHistory = useSelector(
     state => state?.pasthistory?.martialHistory,
   );
-  // console.log('==========>onbd', typeof JSON.stringify(martialHistory));
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
 
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
@@ -225,9 +223,6 @@ const Visit = ({navigation, route}) => {
   };
 
   const [data, setData] = useState();
-  // console.log('====================================');
-  // console.log(pasthistory);
-  // console.log('====================================');
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
@@ -318,15 +313,7 @@ const Visit = ({navigation, route}) => {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
         setServiceFees(fees);
-        // console.log("========fee",fees);
       }
-      // else {
-      //   dispatch(
-      //     addfees([
-      //       {totalFees: parseInt(consultation_fees)},
-      //     ]),
-      //   );
-      // }
     } else {
       console.error('API call failed:', response.status, response);
     }

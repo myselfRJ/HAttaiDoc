@@ -30,12 +30,13 @@ import {
 import PlusButton from './plusbtn';
 import HButton from './button';
 import {capitalizeWord} from '../utility/const';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
   const appointmentCardRef = useRef(null);
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const presentYear = new Date().toISOString().split('-')[0];
@@ -48,6 +49,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
+  // console.log(appointment.complaint);
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     const name = patient_name;
@@ -93,7 +95,6 @@ const AppointmentCard = ({appointment, openVisit}) => {
       if (response.ok) {
         const jsonData = await response.json();
         setNotification(jsonData?.data);
-        // console.log(jsonData);
       }
     } catch (error) {
       console.log(error);
@@ -111,6 +112,9 @@ const AppointmentCard = ({appointment, openVisit}) => {
     item =>
       item?.seen === false && !item?.doctor_phone_number?.includes('sent'),
   );
+  useEffect(() => {
+    dispatch(addCheifComplaint(appointment?.complaint));
+  }, []);
   return (
     <View style={styles.main}>
       <View style={styles.tokenContainer}>
@@ -148,7 +152,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
               {parseInt(presentYear) - parseInt(birthYear)} |{' '}
               {appointment.patient_data.gender}
             </Text>
-            <Text style={styles.subText}>{appointment.complaint}</Text>
+            <Text style={styles.subText}>{appointment?.complaint}</Text>
           </View>
         </View>
         <View>
@@ -175,7 +179,14 @@ const AppointmentCard = ({appointment, openVisit}) => {
             <Pressable
               style={styles.icon}
               onPress={() => {
-                navigation.navigate('notify', {notification});
+                navigation.navigate('notify', {
+                  notification,
+                  name: patient_name,
+                  age: patient_age,
+                  gende: patient_gender,
+                  complaint: appointment.complaint,
+                  consultation_fees: appointment?.clinic_data?.fees,
+                });
               }}>
               <Icon
                 name={'message-processing'}
