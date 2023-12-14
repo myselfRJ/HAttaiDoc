@@ -11,7 +11,14 @@ import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
-const NotificationCard = ({data}) => {
+const NotificationCard = ({
+  age,
+  data,
+  name,
+  gende,
+  complaint,
+  consultation_fees,
+}) => {
   const navigation = useNavigation();
   const token = useSelector(state => state.authenticate.auth.access);
   const [doc_name, SetDoc_name] = useState({});
@@ -58,6 +65,7 @@ const NotificationCard = ({data}) => {
       console.log(error);
     }
   };
+
   const handleData = () => {
     const patient_phone = data?.patient_phone_number;
     const doctor_phone_number = data?.doctor_phone_number?.includes('sent')
@@ -65,15 +73,19 @@ const NotificationCard = ({data}) => {
       : data?.doctor_phone_number;
     const appointment_id = data?.appointment_id;
     const clinic_id = data?.clinic_id;
-    if (!data?.seen) {
-      navigation.navigate(data?.notification_data, {
-        patient_phone,
-        doctor_phone_number,
-        appointment_id,
-        clinic_id,
-      });
-      VisibleOfNotification(data?.id);
-    }
+
+    navigation.navigate(data?.notification_data, {
+      name,
+      gende,
+      age,
+      complaint,
+      consultation_fees,
+      patient_phone,
+      doctor_phone_number,
+      appointment_id,
+      clinic_id,
+    });
+    VisibleOfNotification(data?.id);
   };
   return (
     <Pressable

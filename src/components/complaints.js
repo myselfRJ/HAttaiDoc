@@ -118,7 +118,7 @@ const ComplaintsCard = props => {
         IconName={
           (show && filtered.length > 0) ||
           selectedComplaint === selected ||
-          selectedComplaint.length === 0
+          selectedComplaint?.length === 0
             ? 'magnify'
             : 'close'
         }
