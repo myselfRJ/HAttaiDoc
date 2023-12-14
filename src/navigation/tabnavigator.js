@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Dashboard from '../screens/dashboard';
 import Appointment from '../screens/appoinment';
@@ -20,9 +20,18 @@ import PDFViewer from '../components/PdfViewer';
 const Tab = createBottomTabNavigator();
 
 const BottomTab = ({navigation, route}) => {
+  const header = () => (
+    <View style={{paddingHorizontal: horizontalScale(16)}}>
+      <Image
+        source={require('../assets/images/header.png')}
+        style={{height: 48, width: 48}}
+      />
+    </View>
+  );
   const options = {
     headerStyle: styles.headerStyle,
     headerTintColor: 'white',
+    headerRight: () => header(),
     // headerLeft: () => (
     //   <View style={styles.leftIcon}>
     //     <Icon
@@ -40,6 +49,7 @@ const BottomTab = ({navigation, route}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="dashboard"
@@ -94,7 +104,7 @@ const BottomTab = ({navigation, route}) => {
 const styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: CUSTOMCOLOR.primary,
-    height: verticalScale(60),
+    height: verticalScale(70),
     // borderBottomRightRadius: 8,
     // borderBottomLeftRadius: 8,
   },

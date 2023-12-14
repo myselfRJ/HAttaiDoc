@@ -10,7 +10,8 @@ const Notifications = ({route}) => {
       {notification?.length > 0 &&
         notification?.map(
           (item, index) =>
-            !item?.doctor_phone_number?.includes('sent') && (
+            !item?.doctor_phone_number?.includes('sent') &&
+            !item?.notification_data?.includes('pdf') && (
               <NotificationCard
                 key={index}
                 age={age}

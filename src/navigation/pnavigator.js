@@ -62,6 +62,7 @@ import ObstetricHistory from '../screens/obstetricHistory';
 import MaritalHistory from '../screens/maritalHistory';
 import AlertMessage from '../screens/Alerts';
 import Notification from '../screens/Notifications';
+import {Image} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,7 +73,12 @@ const ProtectedRoute = () => {
   // console.log('isAuth.....', isAuth);
 
   // console.log('isAccess.....', access);
-
+  const header = () => (
+    <Image
+      source={require('../assets/images/header.png')}
+      style={{height: 48, width: 48}}
+    />
+  );
   return (
     <Stack.Navigator
       //initialRouteName="addclinic"
@@ -98,6 +104,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -109,6 +116,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -120,6 +128,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -131,6 +140,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -142,6 +152,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -153,6 +164,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -164,6 +176,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -175,6 +188,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -186,6 +200,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -197,6 +212,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -208,6 +224,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -219,6 +236,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -230,6 +248,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
 
@@ -247,6 +266,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -273,6 +293,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -284,6 +305,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -295,6 +317,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -306,6 +329,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen name="patientlookup" component={Patientlookup} />
@@ -319,6 +343,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -330,6 +355,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
@@ -343,6 +369,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -354,6 +381,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -365,6 +393,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -376,6 +405,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -387,6 +417,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       {/* <Stack.Screen
@@ -409,6 +440,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -430,6 +462,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -461,6 +494,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -477,6 +511,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -488,6 +523,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -499,6 +535,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -510,6 +547,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen name="ab" component={Abha} options={{headerShown: false}} />
@@ -527,6 +565,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -538,6 +577,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -549,6 +589,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -560,6 +601,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -571,6 +613,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -582,6 +625,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
       <Stack.Screen
@@ -593,6 +637,7 @@ const ProtectedRoute = () => {
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
+          headerRight: () => header(),
         }}
       />
     </Stack.Navigator>

@@ -47,8 +47,29 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
 import {commonstyles} from '../styles/commonstyle';
+import sendNotification from '../utility/notification';
 
 const PdfView = ({navigation}) => {
+  const [patientFcmTokens, setPatientFcmTokens] = useState([]);
+  const FecthFcmTokensByPatient = async () => {
+    try {
+      const response = await fetch(URL.GetFcmTokens_Patient(patient_phone), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        setPatientFcmTokens(jsonData?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    FecthFcmTokensByPatient();
+  }, []);
   const [apiStatus, setApiStatus] = useState({});
   const [loading, setLoading] = useState(false);
   const route = useRoute();
@@ -181,8 +202,6 @@ const PdfView = ({navigation}) => {
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           SuccesRef?.current?.snapToIndex(1);
-
-          // Prescribe.splice(0,Prescribe.length)
           ResetRuduxState();
           const formData = new FormData();
           formData.append('doctor_phone_number', `${doc_phone}`);
@@ -209,6 +228,20 @@ const PdfView = ({navigation}) => {
             const response = await fetch(URL.uploadPDF, requestOptions);
             const responseData = await response.json();
             console.log('API Response:', responseData);
+            const data = {
+              user_phone: '',
+              Clinic_id: Clinic_id,
+              doc_phone: doc_phone,
+              patient_phone: patient_phone,
+              appointment_id: appointment_id,
+              Logintoken: token,
+            };
+            sendNotification(
+              patientFcmTokens,
+              `Appointment Sucessfully Completed`,
+              data,
+              `pdf,${responseData['file_url']}`,
+            );
             setTimeout(() => {
               navigation.navigate('tab');
             }, 1000);
@@ -232,14 +265,6 @@ const PdfView = ({navigation}) => {
       setLoading(false);
     }
   };
-  // const postPrescriptionPDF = async url => {
-
-  // };
-
-  // const handlePrescribePDF = () => {
-  //   const apiUrl = URL.uploadPDF;
-  //   postPrescriptionPDF(apiUrl);
-  // };
   const postReferalPdf = async url => {
     const formData = new FormData();
     formData.append('doctor_phone_number', `${doc_phone}`);

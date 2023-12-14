@@ -74,7 +74,7 @@ const Dashboard = ({navigation, route}) => {
 
   const [setAppointment, setDataAppointment] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
-  const fcmToken = useSelector(state=>state?.phone?.fcmtoken)
+  const fcmToken = useSelector(state => state?.phone?.fcmtoken);
   const dispatch = useDispatch();
 
   const [date, setDate] = useState(new Date());
@@ -139,32 +139,33 @@ const Dashboard = ({navigation, route}) => {
     }
   };
 
-const savingFcmToken=async()=>{
-  const response = await fetchApi(URL.addFcmToken,{
-    method:'POST',
-    headers:{
-      Authorization:`Bearer ${token}`,
-      'Content-Type': 'application/json',
-          Accept: 'application/json',
-    },
-    body:JSON.stringify({
-      doctor_phone : phone,
-      fcmtoken:fcmToken,
-      user_phone:''
-    })
-  })
-  try{
-    const jsonData = await response.json()
-    console.log(jsonData?.data);
-  }catch(error){
-    console.log(error);
-  }
-}
+  const savingFcmToken = async () => {
+    const response = await fetchApi(URL.addFcmToken, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        doctor_phone: phone,
+        fcmtoken: fcmToken,
+        user_phone: '',
+        patient_phone: '',
+      }),
+    });
+    try {
+      const jsonData = await response.json();
+      console.log(jsonData?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-useEffect(() => {
-  fetchDoctors();
-  savingFcmToken()
-}, []);
+  useEffect(() => {
+    fetchDoctors();
+    savingFcmToken();
+  }, []);
 
   const appointment_date = formatDate;
 

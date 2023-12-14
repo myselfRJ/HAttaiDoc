@@ -110,7 +110,9 @@ const AppointmentCard = ({appointment, openVisit}) => {
   );
   const length_ofNotification = notification?.filter(
     item =>
-      item?.seen === false && !item?.doctor_phone_number?.includes('sent'),
+      item?.seen === false &&
+      !item?.doctor_phone_number?.includes('sent') &&
+      !item?.notification_data?.includes('pdf'),
   );
   useEffect(() => {
     dispatch(addCheifComplaint(appointment?.complaint));
