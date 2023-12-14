@@ -1238,7 +1238,7 @@ const Visit = ({navigation, route}) => {
                           patient_phone: patient_phone,
                           phone: phone,
                         };
-                      } else if (value.label === 'Dr. Notes') {
+                      } else if (value.label === 'Doctor Notes') {
                         params.patient_phone = patient_phone;
                       }
 
@@ -1454,7 +1454,7 @@ const Visit = ({navigation, route}) => {
                         <Text style={styles.pulse}>{note}</Text>
                       </View>
                     )}
-                  {value.label === 'Dr. Notes' && notes !== '' && (
+                  {value.label === 'Doctor Notes' && notes !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
                         name="file-document-edit"
