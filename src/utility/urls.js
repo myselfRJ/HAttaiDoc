@@ -84,6 +84,7 @@ export const URL = {
   visibility_notification: id => `${baseUrl}fcmtokens/update-visible?id=${id}`,
   GetFcmTokens_Patient: phone =>
     `${baseUrl}fcmtokens/based_on_patient_phone?patient_phone=${phone}`,
+  getReportsbyId: id => `${baseUrl}consult/getUploadedRecordsby_id?id=${id}`,
   logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

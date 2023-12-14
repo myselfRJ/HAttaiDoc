@@ -49,6 +49,7 @@ const History = ({route, navigation}) => {
   const [reports, setReports] = useState({});
   const [physical, setPhysical] = useState({});
   const [selectedType, setSelectedType] = useState();
+  const [reportspatient, setReportsPatient] = useState([]);
   const images_path = [
     {image: require('../assets/images/rxhistory.png'), text: 'Prescription'},
     {image: require('../assets/images/report.png'), text: 'Referral'},
@@ -68,6 +69,28 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setPrescription(jsonData?.data);
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
+  const fetchReports = async () => {
+    const response = await fetchApi(URL.getReportsbyId(appointment_id), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.data?.length > 0) {
+        jsonData?.data?.map((item, index) => {
+          const report = item?.report_url;
+          setReportsPatient(previousReport => [
+            ...previousReport,
+            {report_url: report},
+          ]);
+        });
+      }
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -121,6 +144,7 @@ const History = ({route, navigation}) => {
     fetchConsultation();
     fetchreports();
     fetchExamination();
+    fetchReports();
   }, []);
   const handlePrescription = () => {
     const filepath = prescription?.file_url;
@@ -132,11 +156,11 @@ const History = ({route, navigation}) => {
     navigation.navigate('pdfhistory', {path});
   };
   const reports_finding = [
-    reports?.file1 ? reports?.file1 : null,
-    reports?.file2 ? reports?.file2 : null,
-    reports?.file3 ? reports?.file3 : null,
-    reports?.file4 ? reports?.file4 : null,
-    reports?.file5 ? reports?.file5 : null,
+    reports?.file1 ? {report_url: reports?.file1} : null,
+    reports?.file2 ? {report_url: reports?.file2} : null,
+    reports?.file3 ? {report_url: reports?.file3} : null,
+    reports?.file4 ? {report_url: reports?.file4} : null,
+    reports?.file5 ? {report_url: reports?.file5} : null,
   ];
   const physical_reports = [
     physical?.file1 ? physical?.file1 : null,
@@ -153,7 +177,7 @@ const History = ({route, navigation}) => {
       navigation.navigate('img', {path});
     }
   };
-  // console.log(physical_reports);
+  console.log('==========', [...reports_finding, ...reportspatient]);
   useFocusEffect(
     React.useCallback(() => {
       fetchRefferal();
@@ -252,13 +276,16 @@ const History = ({route, navigation}) => {
               </Text>
             </View>
           )}
-          {reports_finding[0] !== null || reports?.description ? (
-            reports_finding?.map(
+          {reports_finding[0]?.report_url !== null ||
+          reports?.description ||
+          reportspatient?.length > 0 ? (
+            [...reports_finding, ...reportspatient]?.map(
               (item, index) =>
+                item?.report_url !== null &&
                 item !== null && (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => handleReports_Physical(item)}>
+                    onPress={() => handleReports_Physical(item?.report_url)}>
                     <ShowChip
                       text={
                         <>
@@ -266,10 +293,12 @@ const History = ({route, navigation}) => {
                             color={CUSTOMCOLOR.error}
                             size={moderateScale(20)}
                             name={
-                              item?.includes('pdf') ? 'file-pdf-box' : 'image'
+                              item?.report_url?.includes('pdf')
+                                ? 'file-pdf-box'
+                                : 'image'
                             }
                           />
-                          {<Text>{item?.split('/')[4]}</Text>}
+                          {<Text>{item?.report_url?.split('/')[4]}</Text>}
                         </>
                       }
                       main={{marginHorizontal: 0}}
@@ -280,6 +309,7 @@ const History = ({route, navigation}) => {
           ) : (
             <CustomIcon label={'No Reports Avaialble'} />
           )}
+          <View></View>
         </>
       )}
       {selectedType === 'Physical Examinations' && (
