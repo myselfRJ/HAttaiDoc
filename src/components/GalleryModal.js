@@ -122,7 +122,7 @@ const GalleryModel = props => {
                 style={styles.icon}
                 color={CUSTOMCOLOR.primary}
               />
-              <Text style={styles.text}>Files</Text>
+              <Text style={styles.text}>FILES</Text>
             </TouchableOpacity>
           ) : null}
         </View>
