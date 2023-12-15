@@ -89,7 +89,10 @@ const AlertMessage = props => {
   const [message, setMessage] = useState('');
   const [back, setBack] = useState({borderColor: CUSTOMCOLOR.primary});
   const send = () => {
-    const body = sendvalue !== 'Others' ? sendvalue : message;
+    const body =
+      sendvalue !== 'Others'
+        ? `Please Upload ${sendvalue} reports for ${data_set?.patient_name}`
+        : message;
     // const title = 'Message From Doctor';
     const fcmTokens = tokens;
     const data = {
@@ -117,6 +120,7 @@ const AlertMessage = props => {
       setUser_phone(userPhone);
     }
   };
+  const Report_types = ['Prescription', 'Scan', 'Lab', 'Others'];
   const [sendvalue, setSendValue] = useState('');
   return (
     <View
@@ -153,60 +157,36 @@ const AlertMessage = props => {
         </View>
       </View>
       <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
-        <HButton
-          type={'addtype'}
-          icon={'file-document-outline'}
-          color={
-            sendvalue !== 'Others' && sendvalue !== ''
-              ? CUSTOMCOLOR.white
-              : CUSTOMCOLOR.primary
-          }
-          btnstyles={{
-            backgroundColor:
-              sendvalue !== 'Others' && sendvalue !== ''
-                ? CUSTOMCOLOR.primary
-                : CUSTOMCOLOR.white,
-            borderWidth: 0.5,
-            borderColor: CUSTOMCOLOR.borderColor,
-          }}
-          onPress={() => {
-            if (!sendvalue || sendvalue === 'Others') {
-              setSendValue(
-                `Please Upload Records for ${data_set?.patient_name}`,
-              );
-            } else {
-              setSendValue('');
-            }
-          }}
-        />
-        <HButton
-          type={'addtype'}
-          // icon={'message-processing'}
-          label={'Others'}
-          color={CUSTOMCOLOR.primary}
-          btnstyles={{
-            backgroundColor:
-              sendvalue === 'Others' ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
-            borderWidth: 0.5,
-            borderColor: CUSTOMCOLOR.borderColor,
-          }}
-          textStyle={{
-            color:
-              sendvalue === 'Others' ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-          }}
-          onPress={() => {
-            if (!sendvalue || sendvalue.includes('for')) {
-              setSendValue('Others');
-            } else {
-              setSendValue('');
-            }
-          }}
-        />
+        {Report_types?.map(item => (
+          <HButton
+            type={'addtype'}
+            key={item}
+            label={item}
+            textStyle={{
+              color:
+                sendvalue === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
+            }}
+            btnstyles={{
+              backgroundColor:
+                sendvalue === item ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+              borderWidth: 0.5,
+              borderColor: CUSTOMCOLOR.borderColor,
+            }}
+            onPress={() => {
+              if (item === sendvalue) {
+                setSendValue('');
+              } else {
+                setSendValue(item);
+              }
+            }}
+          />
+        ))}
       </View>
       {sendvalue === 'Others' && (
         <InputText
           textStyle={back}
           label={'message'}
+          placeholder={'Enter report type ...'}
           value={message}
           setValue={setMessage}
           required={true}
@@ -216,9 +196,10 @@ const AlertMessage = props => {
         <HButton
           label={'send'}
           btnstyles={{
-            backgroundColor: user_phone
-              ? CUSTOMCOLOR.primary
-              : CUSTOMCOLOR.disable,
+            backgroundColor:
+              user_phone && sendvalue
+                ? CUSTOMCOLOR.primary
+                : CUSTOMCOLOR.disable,
           }}
           onPress={() => {
             if (

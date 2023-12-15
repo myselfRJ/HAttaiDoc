@@ -39,6 +39,7 @@ import {
 } from '../utility/scaleDimension';
 import CustomIcon from '../components/icon';
 import {disableBackButton} from '../utility/backDisable';
+import {addclinic_data} from '../redux/features/profiles/clinicData';
 
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
@@ -112,7 +113,6 @@ const Appointment = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0].clinic_name);
       setClinic(jsonData?.data[0]?.id);
@@ -125,18 +125,18 @@ const Appointment = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchClinic();
-  }, [phone]);
-
+  // useEffect(() => {
+  //   fetchClinic();
+  // }, [phone]);
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const appointment_date = formatDate;
   const fetchAppointment = async () => {
-    const clinic_id = clinicID;
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
       appointment_date,
-    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    )}&clinic_id=${encodeURIComponent(Clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -153,7 +153,7 @@ const Appointment = ({navigation}) => {
   };
   useEffect(() => {
     fetchAppointment();
-  }, [formatDate, clinicID]);
+  }, [formatDate, Clinic_id]);
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
@@ -201,10 +201,10 @@ const Appointment = ({navigation}) => {
     fetchname();
   }, []);
 
-  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const clinics_data = useSelector(state => state?.clinic?.clinics);
 
   const handlePlusBUtton = () => {
-    dispatch(addclinic_id(clinicID));
+    dispatch(addclinic_id(Clinic_id));
     navigation.navigate('addnew');
   };
 
@@ -215,13 +215,13 @@ const Appointment = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointment();
-    }, [clinicID, appointment_date]),
+    }, [Clinic_id, appointment_date]),
   );
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchClinic();
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchClinic();
+  //   }, []),
+  // );
 
   useEffect(() => {
     disableBackButton();
@@ -243,13 +243,13 @@ const Appointment = ({navigation}) => {
                 // ClinicRef?.current?.snapToIndex(1);
                 setShow(!show);
               }}
-              input={selectedClinic}
+              input={Clinic_name}
             />
             {show && (
               <View style={styles.modalContainer}>
                 {/* <Text style={styles.clinicText}>{Language[language]['clinic']}</Text> */}
-                {clinics &&
-                  clinics?.map((clinic, index) => (
+                {clinics_data &&
+                  clinics_data?.map((clinic, index) => (
                     <Pressable
                       key={index}
                       onPress={() => handleClinicSelection(clinic)}>

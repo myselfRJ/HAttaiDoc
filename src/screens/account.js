@@ -10,6 +10,7 @@ import {
   Image,
   Pressable,
   Alert,
+  Linking,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
@@ -140,6 +141,35 @@ const Account = () => {
     navigation.navigate('pdfhistory', {path});
   };
   const prevScrn = 'account';
+  const openEmail = () => {
+    const email = 'contact@destratum.com';
+    const subject = 'Subject of the email';
+    const body = 'Body of the email';
+
+    const url = `mailto:${email}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(url)
+      .then(data => {
+        console.log('Email opened: ', data);
+      })
+      .catch(() => {
+        console.error('Error opening email');
+      });
+  };
+  const PhoneCall = () => {
+    const url = `tel:${'7305998993'}`;
+
+    Linking.openURL(url)
+      .then(data => {
+        console.log('Phone call initiated: ', data);
+      })
+      .catch(() => {
+        console.error('Error initiating phone call');
+        // Handle error or provide a fallback, as needed.
+      });
+  };
   return (
     <View style={styles.main}>
       <View>
@@ -327,11 +357,36 @@ const Account = () => {
           />
         </TouchableOpacity>
       )}
+
+      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+        <Text style={styles.contact}>If any quries contact us</Text>
+        <Text style={styles.contact}>
+          E-mail:
+          <Text style={styles.link} onPress={openEmail}>
+            contact@destratum.com
+          </Text>
+        </Text>
+        <Text style={styles.contact}>
+          Phone:
+          <Text style={styles.link} onPress={PhoneCall}>
+            7305998993
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  contact: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+  },
+  link: {
+    color: CUSTOMCOLOR.primary,
+    fontSize: CUSTOMFONTSIZE.h3,
+    textDecorationLine: 'underline',
+  },
   main: {
     flex: 1,
     paddingHorizontal: horizontalScale(24),

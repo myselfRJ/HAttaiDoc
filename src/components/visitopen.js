@@ -34,7 +34,7 @@ const VisitOpen = props => {
           ) : null}
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
           {props.doneIcon && (
             <View style={styles.gap}>
               <Icon

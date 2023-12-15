@@ -43,7 +43,6 @@ const OthersFees = ({navigation}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const service_fees = useSelector(state => state.prescription.fees);
-  console.log('fees===',service_fees);
   const route = useRoute();
   const {consultation_fees} = route.params;
   const [submittedFees, setSubmiitedFees] = useState([]);
@@ -58,12 +57,15 @@ const OthersFees = ({navigation}) => {
   submittedFees?.forEach(item => {
     totalFees += parseInt(item.charge);
   });
-  useEffect(()=>{
-    setSubmiitedFees([...submittedFees, {
-      service_name: `Consultation Fees`,
-      charge: parseInt(consultation_fees),
-    }])
-  },[])
+  useEffect(() => {
+    setSubmiitedFees([
+      ...submittedFees,
+      {
+        service_name: `Consultation Fees`,
+        charge: parseInt(consultation_fees),
+      },
+    ]);
+  }, []);
   const handleAdd = () => {
     setSubmiitedFees([
       ...submittedFees,
@@ -80,8 +82,7 @@ const OthersFees = ({navigation}) => {
         //   service_name: `Consultation Fees`,
         //   charge: parseInt(consultation_fees),
         // },
-        ...submittedFees
-        ,
+        ...submittedFees,
         {totalFees: totalFees},
       ]),
     );
@@ -127,8 +128,10 @@ const OthersFees = ({navigation}) => {
         const filtering = fees?.filter(
           item => item?.service_name === 'Consultation Fees',
         );
-        if (filtering?.length === 1) {
-          fees?.shift();
+        if (consultation_fees !== null) {
+          if (filtering?.length === 1) {
+            fees?.shift();
+          }
         }
         fees?.pop();
         setSubmiitedFees(fees);
@@ -145,11 +148,7 @@ const OthersFees = ({navigation}) => {
 
   const UpdateFees = async () => {
     const updateFees = {
-      fees: JSON.stringify([
-        ...submittedFees,
-
-        {totalFees: totalFees},
-      ]),
+      fees: JSON.stringify([...submittedFees, {totalFees: totalFees}]),
       patient_phone_number: feesDetails?.patient_phone,
       doctor_phone_number: feesDetails?.doctor_phone_number,
       clinic_id: feesDetails?.clinic_id,

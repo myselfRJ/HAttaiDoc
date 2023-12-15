@@ -51,6 +51,7 @@ export default function Prescribe1({navigation}) {
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
   const [setmedicine, selectedMedicine] = useState(null);
+  const [selectedgeneric, setSelectedGeneric] = useState(null);
   const [mgs, setmg] = useState('');
   const [setmgs, setSelectedMgs] = useState(false);
   const [dose_quantity, setDose_quantity] = useState('');
@@ -85,7 +86,13 @@ export default function Prescribe1({navigation}) {
       addPrescribe([
         ...prevPres,
         {
-          medicine: medicine?.includes('mg' || 'ml' || 'g')
+          medicine: generic
+            ? `${generic.toUpperCase()} ${
+                generic?.includes('mg' || 'ml' || 'g')
+                  ? ''
+                  : `${generic?.toUpperCase()}``${mgs}`
+              }`
+            : medicine?.includes('mg' || 'ml' || 'g')
             ? medicine?.toUpperCase()
             : `${medicine?.toUpperCase()} ${mgs}`,
           mode: mode,
@@ -206,7 +213,7 @@ export default function Prescribe1({navigation}) {
 
   const fetchMedicine = async () => {
     const response = await fetchApi(
-      URL.snomed(medicine ? medicine : 'NA', option),
+      URL.snomed(generic ? generic : medicine ? medicine : 'NA', option),
       {
         method: 'GET',
         headers: {
@@ -224,23 +231,22 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     fetchMedicine();
-  }, [medicine]);
-  useEffect(() => {
-    if (medicine) {
+  }, [medicine, generic]);
+
+  const FetchFilterDataofSnomed = value => {
+    if (medicine || generic) {
       const filtered = [...data, ...CONSTANTS.medicine]?.filter(
         item =>
-          item?.term &&
-          item?.term.toLowerCase().includes(medicine.toLowerCase()),
+          item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
-
-      setFilteredData([...filtered, {term: medicine, type: 'nsno'}]);
-      // setnewMedicine([...filtered, {term: medicine}])
+      setFilteredData([...filtered, {term: value, type: 'nsno'}]);
     } else {
       setFilteredData(data);
-      // setnewMedicine(data);
     }
-  }, [medicine]);
-
+  };
+  useEffect(() => {
+    FetchFilterDataofSnomed(generic ? generic : medicine);
+  }, [medicine, generic]);
   useEffect(() => {
     if (
       medicine &&
@@ -259,6 +265,10 @@ export default function Prescribe1({navigation}) {
       setselectedGeneric(false);
       setnewMedicine([{term: value?.term}]);
     }
+  };
+  const HandleSelectGeneric = value => {
+    setGeneric(value?.term);
+    setSelectedGeneric(value?.term);
   };
   const handleBack = () => {
     if (sug?.length === 0 || sug === undefined) {
@@ -289,14 +299,6 @@ export default function Prescribe1({navigation}) {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-  // const [med_filter, setMed_filter] = useState([]);
-  // useEffect(() => {
-  //   if (sug && mode) {
-  //     const resultArray = sug?.filter(word => word?.mode === mode);
-  //     setMed_filter(resultArray);
-  //   }
-  // }, [mode]);
 
   const handleOptions = value => {
     setDurationSelect(value);
@@ -389,10 +391,6 @@ export default function Prescribe1({navigation}) {
 
           {sug?.length > 0 && (
             <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
-              {/* <ScrollView
-              // horizontal={true}
-              persistentScrollbar={true}
-              contentContainerStyle={{gap: moderateScale(12)}}> */}
               {sug?.map(value => (
                 <SelectorBtn
                   key={value?.medicine}
@@ -432,6 +430,25 @@ export default function Prescribe1({navigation}) {
               value={generic}
               setValue={txt => setGeneric(txt)}
             />
+            {generic?.length > 1 &&
+              (generic === selectedgeneric || show ? null : (
+                <View style={styles.dropdownContainer}>
+                  <ScrollView persistentScrollbar={true}>
+                    {filtered?.map((val, index) => (
+                      <SelectorBtn
+                        select={{
+                          paddingHorizontal: horizontalScale(4),
+                          paddingVertical: verticalScale(8),
+                          borderWidth: 0,
+                          backgroundColor: null,
+                        }}
+                        onPress={() => HandleSelectGeneric(val)}
+                        key={index}
+                        input={val?.term}></SelectorBtn>
+                    ))}
+                  </ScrollView>
+                </View>
+              ))}
           </View>
         ) : null}
 

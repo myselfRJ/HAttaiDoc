@@ -63,6 +63,7 @@ import MaritalHistory from '../screens/maritalHistory';
 import AlertMessage from '../screens/Alerts';
 import Notification from '../screens/Notifications';
 import {Image} from 'react-native';
+import {moderateScale} from '../utility/scaleDimension';
 
 const Stack = createNativeStackNavigator();
 
@@ -76,7 +77,7 @@ const ProtectedRoute = () => {
   const header = () => (
     <Image
       source={require('../assets/images/header.png')}
-      style={{height: 48, width: 48}}
+      style={{height: moderateScale(48), width: moderateScale(48)}}
     />
   );
   return (
