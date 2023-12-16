@@ -835,7 +835,12 @@ const AddClinic = ({navigation}) => {
                 // paddingHorizontal: horizontalScale(8),
               }}>
               <Text style={styles.labeltext}>{Language[language]['fees']}</Text>
-              <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(8),
+                  paddingTop: moderateScale(2),
+                }}>
                 {CONSTANTS.clinic_fees?.map((val, ind) => (
                   <SelectorBtn
                     select={{
