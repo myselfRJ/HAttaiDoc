@@ -1,7 +1,7 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import {Provider} from 'react-redux';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -19,9 +19,51 @@ import {
 } from './src/utility/permissions';
 import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
-
-function App() {
+const HomeScreen = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = React.useState(true);
+  const [initialRoute, setInitialRoute] = React.useState('');
+  React.useEffect(() => {
+    navigation.navigate('up');
+  }, []);
+  React.useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      navigation.navigate('up');
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          setInitialRoute('up');
+        }
+        setLoading(false);
+      });
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert(
+        'Notification',
+        JSON.stringify(remoteMessage?.notification?.body),
+      );
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
+  return <View></View>;
+};
+function App() {
   axios
     .get('http://10.9.78.38:8000')
     .then(function (response) {
@@ -40,40 +82,6 @@ function App() {
     PermmisionStorage();
     NotificationPermission();
   });
-  const [loading, setLoading] = React.useState(true);
-  const [initialRoute, setInitialRoute] = React.useState('');
-
-  React.useEffect(() => {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      navigation.navigate('unprotected');
-    });
-
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-          setInitialRoute('unprotected');
-        }
-        setLoading(false);
-      });
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('Notification', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
-  }, []);
-
-  if (loading) {
-    return null;
-  }
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>
@@ -112,7 +120,19 @@ function App() {
         //   routeNameRef.current = currentRouteName;
         // }}
         >
-          <CombinedRoute />
+          <Stack.Navigator initialRouteName="home">
+            <Stack.Screen
+              name="home"
+              component={HomeScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="up"
+              component={CombinedRoute}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+          {/* <CombinedRoute /> */}
         </NavigationContainer>
       </GestureHandlerRootView>
     </Provider>
