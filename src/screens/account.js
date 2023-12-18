@@ -33,6 +33,7 @@ import {
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
 import ShowChip from '../components/showChip';
+import {RemoveKeyFromAsync} from '../utility/AsyncStorage';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -118,21 +119,37 @@ const Account = () => {
     }, [cliniId]),
   );
 
-  const userLogout = () => {
-    const newTokens = {
-      access: null,
-      refresh: null,
-      lastLogin: null,
-    };
-    const updateStatus = [
-      {progressname: 'Profile', status: false},
-      {progressname: 'Add Clinic', status: false},
-      {progressname: 'Add User', status: false},
-    ];
-    dispatch(authenticateActions.updateauthenticate(newTokens));
-    dispatch(updateheaderStatus(updateStatus));
-    Alert.alert('Logout Sucessfull ');
-    navigation.navigate('entry');
+  const userLogout = async () => {
+    const response = await fetch(URL.logout, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({refresh_token: rtoken}),
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.status === 'success') {
+        const newTokens = {
+          access: null,
+          refresh: null,
+          lastLogin: null,
+        };
+        const updateStatus = [
+          {progressname: 'Profile', status: false},
+          {progressname: 'Add Clinic', status: false},
+          {progressname: 'Add User', status: false},
+        ];
+        dispatch(authenticateActions.updateauthenticate(newTokens));
+        dispatch(updateheaderStatus(updateStatus));
+        RemoveKeyFromAsync('token_and_phone');
+        Alert.alert('Logout Sucessfull ');
+        navigation.navigate('entry');
+      } else {
+        Alert.alert('error', 'Something went wrong');
+      }
+    }
   };
 
   const handleDocuments = file => {

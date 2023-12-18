@@ -40,5 +40,16 @@ async function clearStorage() {
     await EncryptedStorage.clear();
   } catch (error) {}
 }
+async function RemoveKeyFromAsync(key) {
+  try {
+    await EncryptedStorage.removeItem(key);
+  } catch (error) {}
+}
 
-export {StoreAsyncData, RetriveAsyncData, UpdateAsyncData, clearStorage};
+export {
+  StoreAsyncData,
+  RetriveAsyncData,
+  UpdateAsyncData,
+  clearStorage,
+  RemoveKeyFromAsync,
+};

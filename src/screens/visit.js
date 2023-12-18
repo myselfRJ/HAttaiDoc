@@ -456,8 +456,8 @@ const Visit = ({navigation, route}) => {
                       logo === CONSTANTS.default_image
                         ? CONSTANTS.default_clinic_logo
                         : logo_url
-                    } style="width: 52px; height: 58px;" alt="Sample Image" />
-                    <div class='address' style="flex-direction: column; margin-left: 16px;">
+                    } style="width: 52px; height: 58px;  border:1px solid black" alt="Sample Image" />
+                    <div class='address' style="display:flex;flex-direction: column; width:400px; align-item:left;border:1px solid black; margin-left: 16px;">
                        
                             <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">Dr.${
                               data?.doctor_name

@@ -37,6 +37,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {Validators} from '../utils/FormUtils/Validators';
+import {StoreAsyncData} from '../utility/AsyncStorage';
 
 const OtpScreen = ({route}) => {
   const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
@@ -106,7 +107,6 @@ const OtpScreen = ({route}) => {
       if (response?.ok) {
         const jsonData = await response.json();
         dispatch(addLogin_phone.addLogin_phone(jsonData.data));
-        //setLoading(!loading);
       } else {
         console.error('API call failed:', response?.status);
         //setLoading(loading);
@@ -131,6 +131,12 @@ const OtpScreen = ({route}) => {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
           dispatch(authenticateActions.updateauthenticate(jsonData?.data));
+          const acces_token = jsonData?.data;
+          StoreAsyncData('token_and_phone', {
+            acces_token: acces_token,
+            phone: phone,
+            time: new Date(),
+          });
           setApiStatus({
             status: 'success',
             message: jsonData?.message,

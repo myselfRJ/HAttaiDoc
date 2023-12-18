@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {View, Text} from 'react-native';
 import {Provider} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CombinedRoute from './src/navigation/combinednavigator';
 import store from './src/redux/stores/store';
@@ -13,12 +13,15 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {moderateScale} from './src/utility/scaleDimension';
-import {PermmisionStorage,NotificationPermission} from './src/utility/permissions';
-
-
+import {
+  PermmisionStorage,
+  NotificationPermission,
+} from './src/utility/permissions';
+import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const navigation = useNavigation();
   axios
     .get('http://10.9.78.38:8000')
     .then(function (response) {
@@ -35,9 +38,42 @@ function App() {
   let netConnection = netInfo.isConnected;
   React.useEffect(() => {
     PermmisionStorage();
-    NotificationPermission()
+    NotificationPermission();
   });
+  const [loading, setLoading] = React.useState(true);
+  const [initialRoute, setInitialRoute] = React.useState('');
 
+  React.useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      navigation.navigate('unprotected');
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          setInitialRoute('unprotected');
+        }
+        setLoading(false);
+      });
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('Notification', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (loading) {
+    return null;
+  }
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>
