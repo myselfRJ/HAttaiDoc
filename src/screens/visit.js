@@ -299,6 +299,7 @@ const Visit = ({navigation, route}) => {
   };
 
   const [serviceFees, setServiceFees] = useState([]);
+  const [consultation, setConsultationFees] = useState();
   const GetFees = async () => {
     const response = await fetchApi(URL.updateFees(appointment_id), {
       method: 'GET',
@@ -313,6 +314,12 @@ const Visit = ({navigation, route}) => {
         const fees = JSON.parse(jsonData?.data?.fees);
         dispatch(addfees(fees));
         setServiceFees(fees);
+        const consultation_fees = fees?.filter(
+          item => item?.service_name === 'Consultation Fees',
+        );
+        setConsultationFees(
+          consultation_fees?.length > 0 ? consultation_fees[0] : null,
+        );
       }
     } else {
       console.error('API call failed:', response.status, response);
@@ -449,8 +456,8 @@ const Visit = ({navigation, route}) => {
                       logo === CONSTANTS.default_image
                         ? CONSTANTS.default_clinic_logo
                         : logo_url
-                    } style="width: 52px; height: 58px;" alt="Sample Image" />
-                    <div class='address' style="flex-direction: column; margin-left: 16px;">
+                    } style="width: 52px; height: 58px;  border:1px solid black" alt="Sample Image" />
+                    <div class='address' style="display:flex;flex-direction: column; width:400px; align-item:left;border:1px solid black; margin-left: 16px;">
                        
                             <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">Dr.${
                               data?.doctor_name
@@ -1196,7 +1203,9 @@ const Visit = ({navigation, route}) => {
                       } else if (value.navigate === 'vitalscreen') {
                         params.gende = gende;
                       } else if (value.navigate === 'service_fees') {
-                        params.consultation_fees = consultation_fees;
+                        params.consultation_fees = consultation
+                          ? null
+                          : consultation_fees;
                         params.feesDetails = {
                           clinic_id: Clinic_id,
                           patient_phone: patient_phone,

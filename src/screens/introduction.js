@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -10,12 +10,50 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
-
+import {RetriveAsyncData} from '../utility/AsyncStorage';
+import {useSelector, useDispatch} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
+import {
+  addFcmToken,
+  addLogin_phone,
+} from '../redux/features/phoneNumber/LoginPhoneNumber';
+import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 const Introduction = ({navigation}) => {
+  const dispatch = useDispatch();
+  const getTokenFcm = async () => {
+    try {
+      const Token = await messaging().getToken();
+      console.log(Token);
+      dispatch(addFcmToken(Token));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('intro');
-    }, 2000);
+    getTokenFcm();
+  }, []);
+
+  useEffect(() => {
+    RetriveAsyncData(`token_and_phone`).then(array => {
+      if (array?.time) {
+        const originalDate = new Date(array?.time);
+        const newDate = new Date(originalDate);
+        newDate.setDate(originalDate.getDate() + 29);
+        const formattedNewDate = newDate.toISOString();
+        dispatch(authenticateActions.updateauthenticate(array?.acces_token));
+        dispatch(addLogin_phone({phone: array?.phone, trace_id: ''}));
+        if (originalDate.toISOString() <= formattedNewDate && array?.time) {
+          setTimeout(() => {
+            navigation.navigate('protected');
+          }, 2000);
+        }
+      } else {
+        setTimeout(() => {
+          navigation.navigate('intro');
+        }, 2000);
+      }
+    });
   }, []);
   return (
     <View style={styles.main}>

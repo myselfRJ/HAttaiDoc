@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -12,6 +12,9 @@ import {horizontalScale} from '../utility/scaleDimension';
 import {verticalScale, moderateScale} from '../utility/scaleDimension';
 import Logo from '../components/logo';
 import Gif from '../components/gif';
+import messaging from '@react-native-firebase/messaging';
+import {addFcmToken} from '../redux/features/phoneNumber/LoginPhoneNumber';
+import {useDispatch} from 'react-redux';
 
 const Intro = ({navigation}) => {
   return (

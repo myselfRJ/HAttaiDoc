@@ -72,19 +72,20 @@ const PatientSearch = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchClincs();
-  }, [phone]);
-
+  // useEffect(() => {
+  //   fetchClincs();
+  // }, [phone]);
+  const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const [filteredData, setFilteredData] = useState([]);
   const [name, setName] = useState('');
 
   const ChangeNameValue = e => {
     setName(e);
   };
-
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientByClinic(clinicID), {
+    const response = await fetchApi(URL.getPatientByClinic(Clinic_id), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -97,14 +98,13 @@ const PatientSearch = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-
   useEffect(() => {
-    if (clinicID) {
+    if (Clinic_id) {
       setTimeout(() => {
         fetchData();
       }, 80);
     }
-  }, [clinicID]);
+  }, [Clinic_id]);
 
   useEffect(() => {
     if (name) {
@@ -135,17 +135,17 @@ const PatientSearch = ({navigation}) => {
     //   ClinicRef?.current?.snapToIndex(0);
     // }, 1000);
   };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchClincs();
+  //   }, []),
+  // );
   useFocusEffect(
     React.useCallback(() => {
-      fetchClincs();
-    }, []),
-  );
-  useFocusEffect(
-    React.useCallback(() => {
-      if (clinicID) {
+      if (Clinic_id) {
         fetchData();
       }
-    }, [clinicID]),
+    }, [Clinic_id]),
   );
   const [show, setShow] = useState(false);
   return (
@@ -154,16 +154,13 @@ const PatientSearch = ({navigation}) => {
         <View>
           <SelectorBtn
             name="chevron-down"
-            input={selectedClinic}
+            input={Clinic_name}
             // onPress={() => ClinicRef?.current?.snapToIndex(1)}
             onPress={() => setShow(!show)}
           />
           {show && (
             <View style={styles.modalContainer}>
-              {/* <Text style={styles.clinicText}>
-              {Language[language]['clinic']}
-            </Text> */}
-              {clinics?.map((clinic, index) => (
+              {Clinic_data?.map((clinic, index) => (
                 <Pressable
                   key={index}
                   onPress={() => handleClinicSelection(clinic)}>
@@ -206,7 +203,7 @@ const PatientSearch = ({navigation}) => {
                 meta={'value'}
                 key={ind}
                 patient_data={val}
-                onPress={() => navigation.navigate('visit')}
+                // onPress={() => navigation.navigate('visit')}
               />
             ))}
           </ScrollView>

@@ -43,26 +43,21 @@ const sendNotification = async (fcmTokens, body, data_notification, screen) => {
     // console.log(NotificationDetails);
     if (response.ok) {
       const jsonData = await response.json();
-      if (jsonData?.success !== 0) {
-        console.log(jsonData);
-        Alert.alert('success', 'Succesfully sent');
-        if (data_notification) {
-          try {
-            const savingNotificationdata = await fetchApi(
-              URL.saveNotifications,
-              {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${data_notification?.Logintoken}`,
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-                },
-                body: JSON.stringify(savingNotification),
-              },
-            );
-          } catch (error) {
-            console.log(error);
-          }
+      console.log(jsonData);
+      Alert.alert('success', 'Succesfully sent');
+      if (data_notification) {
+        try {
+          const savingNotificationdata = await fetchApi(URL.saveNotifications, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${data_notification?.Logintoken}`,
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(savingNotification),
+          });
+        } catch (error) {
+          console.log(error);
         }
       } else {
         Alert.alert('Warn', 'Try After sometime');

@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     fontWeight: '400',
     gap: verticalScale(4),
-    // backgroundColor: CUSTOMCOLOR.white,
     borderRadius: 4,
   },
   labeltext: {
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
     // borderColor: CUSTOMCOLOR.primary,
-    borderWidth: 0.5,
+    borderWidth: 1,
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(6),
     fontWeight: '400',

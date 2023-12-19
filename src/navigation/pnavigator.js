@@ -66,6 +66,7 @@ import {Image} from 'react-native';
 import Vaccination_List from '../screens/vaccinationList';
 import VaccinationKids from '../screens/VaccinationKids';
 import Adult from '../screens/Adult';
+import {moderateScale} from '../utility/scaleDimension';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,7 +80,7 @@ const ProtectedRoute = () => {
   const header = () => (
     <Image
       source={require('../assets/images/header.png')}
-      style={{height: 48, width: 48}}
+      style={{height: moderateScale(48), width: moderateScale(48)}}
     />
   );
   return (

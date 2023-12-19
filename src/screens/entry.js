@@ -15,7 +15,10 @@ import {URL} from '../utility/urls';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
-import {addFcmToken, addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
+import {
+  addFcmToken,
+  addLogin_phone,
+} from '../redux/features/phoneNumber/LoginPhoneNumber';
 import OtpEncryption from '../utility/encryption';
 import moment from 'moment';
 import {
@@ -23,7 +26,6 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
-import messaging from '@react-native-firebase/messaging'
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -42,19 +44,7 @@ const Entry = ({navigation}) => {
   //     fetchtrace();
   //   }
   // }, []);
-  const getTokenFcm = async () => {
-    try {
-      const Token = await messaging().getToken();
-      console.log(Token);
-      dispatch(addFcmToken(Token))
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-useEffect(() => {
-    getTokenFcm();
-  }, []);
   const fetchData = async () => {
     try {
       setLoading(!loading);

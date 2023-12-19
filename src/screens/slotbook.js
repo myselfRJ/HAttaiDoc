@@ -615,7 +615,9 @@ const SlotBook = ({navigation, route}) => {
                             'Please Select Type Of Appointment',
                           );
                     } else {
-                      updateAppointment();
+                      if (!loading) {
+                        updateAppointment();
+                      }
                     }
                   }}
                   loading={loading}

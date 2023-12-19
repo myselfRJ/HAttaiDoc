@@ -56,6 +56,7 @@ import {commonstyles} from '../styles/commonstyle';
 import {disableBackButton} from '../utility/backDisable';
 import DButton from '../components/DButton';
 import AppointmentStatusCard from '../components/appointmentStatusCard';
+import {addclinic_data} from '../redux/features/profiles/clinicData';
 
 const Dashboard = ({navigation, route}) => {
   const ClinicRef = useRef(null);
@@ -107,6 +108,7 @@ const Dashboard = ({navigation, route}) => {
       setDataClinic(jsonData.data);
       setSelectedClinic(jsonData.data[0]?.clinic_name);
       setClinicId(jsonData.data[0]?.id);
+      dispatch(addclinic_data(jsonData?.data));
       dispatch(addclinic_id(jsonData.data[0]?.id));
       dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
       dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
@@ -121,8 +123,7 @@ const Dashboard = ({navigation, route}) => {
     fetchClinic();
   }, [phone]);
   const [doc_name, setDoc_name] = useState();
-  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-
+  const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const fetchDoctors = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
       method: 'GET',
@@ -168,14 +169,15 @@ const Dashboard = ({navigation, route}) => {
   }, []);
 
   const appointment_date = formatDate;
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
 
   const fetchAppointment = async () => {
-    const clinic_id = clinicid;
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
       appointment_date,
-    )}&clinic_id=${encodeURIComponent(clinic_id)}`;
+    )}&clinic_id=${encodeURIComponent(Clinic_id)}`;
     const response = await fetchApi(apiUrl, {
       method: 'GET',
       headers: {
@@ -192,7 +194,7 @@ const Dashboard = ({navigation, route}) => {
   // useFocusEffect(())
   useEffect(() => {
     fetchAppointment();
-  }, [formatDate, clinicid]);
+  }, [formatDate, Clinic_id]);
 
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -220,13 +222,13 @@ const Dashboard = ({navigation, route}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointment();
-    }, [clinicid, appointment_date]),
+    }, [Clinic_id, appointment_date]),
   );
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchClinic();
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchClinic();
+  //   }, []),
+  // );
   useEffect(() => {
     disableBackButton();
   }, []);
@@ -279,15 +281,15 @@ const Dashboard = ({navigation, route}) => {
                 // ClinicRef?.current?.snapToIndex(1);
                 setShow(!show);
               }}
-              input={selectedClinic}
+              input={Clinic_name}
             />
             {show && (
               <View style={styles.modalContainer}>
                 {/* <Text style={styles.clinicText}>
                 {Language[language]['clinic']}
               </Text> */}
-                {clinics &&
-                  clinics?.map((clinic, index) => (
+                {Clinic_data &&
+                  Clinic_data?.map((clinic, index) => (
                     <Pressable
                       key={index}
                       onPress={() => handleClinicSelection(clinic)}>

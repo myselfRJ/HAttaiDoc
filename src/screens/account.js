@@ -10,6 +10,7 @@ import {
   Image,
   Pressable,
   Alert,
+  Linking,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
@@ -32,6 +33,7 @@ import {
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
 import ShowChip from '../components/showChip';
+import {RemoveKeyFromAsync} from '../utility/AsyncStorage';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -117,21 +119,37 @@ const Account = () => {
     }, [cliniId]),
   );
 
-  const userLogout = () => {
-    const newTokens = {
-      access: null,
-      refresh: null,
-      lastLogin: null,
-    };
-    const updateStatus = [
-      {progressname: 'Profile', status: false},
-      {progressname: 'Add Clinic', status: false},
-      {progressname: 'Add User', status: false},
-    ];
-    dispatch(authenticateActions.updateauthenticate(newTokens));
-    dispatch(updateheaderStatus(updateStatus));
-    Alert.alert('Logout Sucessfull ');
-    navigation.navigate('entry');
+  const userLogout = async () => {
+    const response = await fetch(URL.logout, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({refresh_token: rtoken}),
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.status === 'success') {
+        const newTokens = {
+          access: null,
+          refresh: null,
+          lastLogin: null,
+        };
+        const updateStatus = [
+          {progressname: 'Profile', status: false},
+          {progressname: 'Add Clinic', status: false},
+          {progressname: 'Add User', status: false},
+        ];
+        dispatch(authenticateActions.updateauthenticate(newTokens));
+        dispatch(updateheaderStatus(updateStatus));
+        RemoveKeyFromAsync('token_and_phone');
+        Alert.alert('Logout Sucessfull ');
+        navigation.navigate('entry');
+      } else {
+        Alert.alert('error', 'Something went wrong');
+      }
+    }
   };
 
   const handleDocuments = file => {
@@ -140,6 +158,35 @@ const Account = () => {
     navigation.navigate('pdfhistory', {path});
   };
   const prevScrn = 'account';
+  const openEmail = () => {
+    const email = 'contact@destratum.com';
+    const subject = 'Subject of the email';
+    const body = 'Body of the email';
+
+    const url = `mailto:${email}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(url)
+      .then(data => {
+        console.log('Email opened: ', data);
+      })
+      .catch(() => {
+        console.error('Error opening email');
+      });
+  };
+  const PhoneCall = () => {
+    const url = `tel:${'7305998993'}`;
+
+    Linking.openURL(url)
+      .then(data => {
+        console.log('Phone call initiated: ', data);
+      })
+      .catch(() => {
+        console.error('Error initiating phone call');
+        // Handle error or provide a fallback, as needed.
+      });
+  };
   return (
     <View style={styles.main}>
       <View>
@@ -327,11 +374,36 @@ const Account = () => {
           />
         </TouchableOpacity>
       )}
+
+      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+        <Text style={styles.contact}>If any quries contact us</Text>
+        <Text style={styles.contact}>
+          E-mail:
+          <Text style={styles.link} onPress={openEmail}>
+            contact@destratum.com
+          </Text>
+        </Text>
+        <Text style={styles.contact}>
+          Phone:
+          <Text style={styles.link} onPress={PhoneCall}>
+            7305998993
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  contact: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+  },
+  link: {
+    color: CUSTOMCOLOR.primary,
+    fontSize: CUSTOMFONTSIZE.h3,
+    textDecorationLine: 'underline',
+  },
   main: {
     flex: 1,
     paddingHorizontal: horizontalScale(24),
