@@ -469,7 +469,7 @@ const MedicalHistory = ({navigation, route}) => {
               )}
             </View>
           )}
-          {Age >= 16 ? (
+          {Age <= 18 ? (
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Immunization Chart for Kids'}
