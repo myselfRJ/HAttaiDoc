@@ -427,6 +427,7 @@ const VaccinationKids = ({navigation}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
+        navigation.goBack();
       } else {
         console.error('API call failed:', response?.status);
         // setLoading(false);

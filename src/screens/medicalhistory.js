@@ -469,51 +469,54 @@ const MedicalHistory = ({navigation, route}) => {
               )}
             </View>
           )}
-          {Age <= 18 ? (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Immunization Chart for Kids'}
-                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
-                iconstyle={{
-                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
-                }}
-                size={
-                  menstrualHistory !== ''
-                    ? moderateScale(16)
-                    : moderateScale(32)
-                }
-                textstyle={styles.text}
-                navigate={() =>
-                  navigation.navigate('kids', {phone, patient_phone})
-                }
-                // date={
-                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
-                // }
-              />
-            </View>
-          ) : (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Adult'}
-                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
-                iconstyle={{
-                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
-                }}
-                size={
-                  menstrualHistory !== ''
-                    ? moderateScale(16)
-                    : moderateScale(32)
-                }
-                textstyle={styles.text}
-                navigate={() =>
-                  navigation.navigate('adult', {phone, patient_phone})
-                }
-                // date={
-                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
-                // }
-              />
-            </View>
-          )}
+          {
+            Age <= 18 ? (
+              <View style={styles.visitOpenItem}>
+                <VisitOpen
+                  label={'Immunization Chart for Kids'}
+                  icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                  iconstyle={{
+                    borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                  }}
+                  size={
+                    menstrualHistory !== ''
+                      ? moderateScale(16)
+                      : moderateScale(32)
+                  }
+                  textstyle={styles.text}
+                  navigate={() =>
+                    navigation.navigate('kids', {phone, patient_phone})
+                  }
+                  // date={
+                  //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+                  // }
+                />
+              </View>
+            ) : null
+            // (
+            //   <View style={styles.visitOpenItem}>
+            //     <VisitOpen
+            //       label={'Adult'}
+            //       icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+            //       iconstyle={{
+            //         borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+            //       }}
+            //       size={
+            //         menstrualHistory !== ''
+            //           ? moderateScale(16)
+            //           : moderateScale(32)
+            //       }
+            //       textstyle={styles.text}
+            //       navigate={() =>
+            //         navigation.navigate('adult', {phone, patient_phone})
+            //       }
+            //       // date={
+            //       //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+            //       // }
+            //     />
+            //   </View>
+            // )
+          }
 
           <ChipInput
             placeholder={'Enter new comorbidities'}
