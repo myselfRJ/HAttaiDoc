@@ -59,8 +59,8 @@ const MedicalHistory = ({navigation, route}) => {
   const phone = medicaldata?.phone;
   const token = useSelector(state => state.authenticate.auth.access);
   const patient_phone = medicaldata?.patient_phone;
-
-  console.log('phone', phone, patient_phone);
+  const Age = medicaldata?.Age;
+  console.log('phone', phone, patient_phone, Age);
 
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
@@ -469,6 +469,51 @@ const MedicalHistory = ({navigation, route}) => {
               )}
             </View>
           )}
+          {Age >= 16 ? (
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={'Immunization Chart for Kids'}
+                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                iconstyle={{
+                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                }}
+                size={
+                  menstrualHistory !== ''
+                    ? moderateScale(16)
+                    : moderateScale(32)
+                }
+                textstyle={styles.text}
+                navigate={() =>
+                  navigation.navigate('kids', {phone, patient_phone})
+                }
+                // date={
+                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+                // }
+              />
+            </View>
+          ) : (
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={'Adult'}
+                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                iconstyle={{
+                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                }}
+                size={
+                  menstrualHistory !== ''
+                    ? moderateScale(16)
+                    : moderateScale(32)
+                }
+                textstyle={styles.text}
+                navigate={() =>
+                  navigation.navigate('adult', {phone, patient_phone})
+                }
+                // date={
+                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+                // }
+              />
+            </View>
+          )}
 
           <ChipInput
             placeholder={'Enter new comorbidities'}
@@ -610,6 +655,7 @@ const MedicalHistory = ({navigation, route}) => {
               ))}
             </View>
           ) : null}
+
           <InputText
             inputContainer={styles.inputtext}
             label="Past Hospitalization"

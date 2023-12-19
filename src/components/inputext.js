@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     // borderColor: CUSTOMCOLOR.primary,
     borderWidth: 0.5,
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(9.5),
+    paddingVertical: verticalScale(6),
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h3,
     // outlinedStyle: "none",

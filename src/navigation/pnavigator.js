@@ -63,6 +63,9 @@ import MaritalHistory from '../screens/maritalHistory';
 import AlertMessage from '../screens/Alerts';
 import Notification from '../screens/Notifications';
 import {Image} from 'react-native';
+import Vaccination_List from '../screens/vaccinationList';
+import VaccinationKids from '../screens/VaccinationKids';
+import Adult from '../screens/Adult';
 
 const Stack = createNativeStackNavigator();
 
@@ -414,6 +417,42 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Present Illness',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+      <Stack.Screen
+        name="kids"
+        component={Vaccination_List}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Immunization Chart for Kids',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+      <Stack.Screen
+        name="vaccination"
+        component={VaccinationKids}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Immunization Chart for Kids',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+      <Stack.Screen
+        name="adult"
+        component={Adult}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Vaccination for Adults',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
