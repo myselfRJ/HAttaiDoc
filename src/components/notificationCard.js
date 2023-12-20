@@ -74,17 +74,19 @@ const NotificationCard = ({
     const appointment_id = data?.appointment_id;
     const clinic_id = data?.clinic_id;
 
-    navigation.navigate(data?.notification_data, {
-      name,
-      gende,
-      age,
-      complaint,
-      consultation_fees,
-      patient_phone,
-      doctor_phone_number,
-      appointment_id,
-      clinic_id,
-    });
+    if (!data?.seen) {
+      navigation.navigate(data?.notification_data, {
+        name,
+        gende,
+        age,
+        complaint,
+        consultation_fees,
+        patient_phone,
+        doctor_phone_number,
+        appointment_id,
+        clinic_id,
+      });
+    }
     VisibleOfNotification(data?.id);
   };
   return (

@@ -213,7 +213,9 @@ const PhysicalExamination = ({navigation}) => {
       setValue(
         jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes,
       );
-      // setDescribe(jsonData?.data?.description);nnnnn
+      const value =
+        jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes;
+      dispatch(addExamination({value: value}));
       setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);

@@ -71,6 +71,8 @@ const Visit = ({navigation, route}) => {
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
+  const reptr = useSelector(state => state.prescription.eaxminationFindings);
+  console.log('============>', physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -221,7 +223,6 @@ const Visit = ({navigation, route}) => {
       appointment_id: appointment_id,
     },
   };
-
   const [data, setData] = useState();
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -383,424 +384,332 @@ const Visit = ({navigation, route}) => {
 
       let options = {
         html: `<!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <!-- <link rel="stylesheet" href="style.css" type="text/css"> -->
-                <title>
-                    Consultation Pdf
-                </title>
-                <style>
-                .header {
-                  position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #ffffff;
-    text-align: center;
-    padding-bottom: 8px;
-    margin: 0;
-    padding: 24px;
-    z-index: 1; 
+      <style>
+      body {width:100%}
+      header {width:100%;display: flex;position:fixed;top:0; justify-content: space-between;border-bottom: 2px solid black;padding-bottom: 8px;}
+       text {font-size: 12px;padding:1px;font-weight: 500;}
+      h5 {margin: 1px;padding: 0px; font-size:14px;color:#4ba5fa}
+      tr {display:flex;font-size:14px;justify-content: space-between;width:100%;padding:8px;align-items:flex-start;}
+      td{justify-content: space-around;font-size: 10px;}
+      .doctor-head text {color:#4ba5fa}
+      </style>
+      
+      <body >
+          <header >
+              <div style="display:flex;flex-direction: row; gap:1rem;">
+                  <img src=${
+                    logo === CONSTANTS.default_image
+                      ? CONSTANTS.default_clinic_logo
+                      : logo_url
+                  }
+                  style="height:48px;width:48px">
+              </img>
+              <div class="doctor-head" style="display:flex;flex-direction: column;align-items:flex-start;">
+                  <text>
+                     Dr.${data?.doctor_name}
+                  </text>
+                  <text>
+                      ${data?.specialization}
+                  </text>
+                  <text>
+                     Reg No. ${data?.medical_number}
+                  </text>
+              </div>
+          
+          
+              </div>
+              <div style="display:flex;flex-direction: column; gap:2px; align-items: flex-end;">
+                 <h5>
+                  ${clinic_name}
+                 <h5>
+                 <text style="font-size: 10px;">
+                  Phone: ${clinic_phone} / Address: ${clinic_Address}
+                 </text>
+              </div>
+          
+          </header>
+          <div style="page-break-after: auto;padding:1rem;gap:8px;margin-top:100px">
+              <div style="gap:8px;" >
+          <div style="display:flex;justify-content: space-between;align-items:center;">
+              <img src=${CONSTANTS.prescription_logo}
+              style="height:28px;width:24px;">
+          </img>
+          <text style="font-size: 10px;">
+             Date: ${new Date().toISOString().split('T')[0]} Time:${
+          new Date().toString().split(' ')[4]
+        }
+             </text>
+          </div>
+          <div>
+              <text>${name}  | ${gende} | ${age} | ${patient_phone}</text>
+          </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:16px">
+          <div>
+              <h5>
+                 Reason for Visit
+              </h5>
+              <text>
+              ${selectedComplaint}
+              </text>
+          </div>
+          ${
+            note?.length > 0
+              ? `<div>
+              <h5>
+                  History of Present illness
+              </h5>
+              <text>
+                  ${note}
+              </text>
+          </div>`
+              : ''
+          }
+          ${
+            vitalsData?.pulse_rate ||
+            vitalsData?.weight ||
+            vitalsData?.height ||
+            vitalsData?.body_temperature ||
+            vitalsData?.rate ||
+            vitalsData?.bmi
+              ? `<div>
+              <h5>
+                  Vitals
+              </h5>
+              <text>
+                  ${
+                    vitalsData?.pulse_rate
+                      ? 'Pulse Rate' + ' ' + vitalsData.pulse_rate + 'bpm'
+                      : ''
+                  }
+                  ${
+                    vitalsData?.systolic
+                      ? 'BP' +
+                        ' ' +
+                        vitalsData.systolic +
+                        '/' +
+                        vitalsData.diastolic +
+                        'bpm'
+                      : ''
+                  }
+                  ${
+                    vitalsData?.weight
+                      ? 'Weight' + ' ' + vitalsData.weight + 'Kgs'
+                      : ''
+                  }
+                  ${
+                    vitalsData?.height
+                      ? 'Height' + ' ' + vitalsData.height + 'cm'
+                      : ''
+                  }
+                  ${
+                    vitalsData?.body_temperature
+                      ? 'Temp' + ' ' + vitalsData.body_temperature + '°C'
+                      : ''
+                  }
+                  ${
+                    vitalsData?.rate
+                      ? 'Respiratory Rate' + ' ' + vitalsData.rate + 'brpm'
+                      : ''
+                  }
+                  ${vitalsData?.bmi ? 'BMI' + ' ' + vitalsData.bmi + '' : ''}
+                  
+                  
 
-                }
-        
-                .footer {
-                  position: fixed;
-                  bottom: 0;
-                  left: 0;
-                  right: 0;
-                  background-color: #ffffff;
-                  text-align: center;
-                  padding: 10px; 
-                  margin: 0;
-                }
-        
-                .page {
-                  max-height: calc(50vh - (header height + footer height + margins)); 
-    page-break-before: auto;
-    page-break-after: always;
-    page-break-inside: always;
-    margin: 0;
-    padding: 24px;
-    padding-top:150px;
-                }
-                .page + .header {
-                  top: -50px; 
-                  z-index: 2;
-              }
-              .page + .header + .page {
-                
-                max-height: calc(50vh - (footer height + margins));
-            }
-        
-                .maincontainer {
-                  width: 95%; 
-                  height: 60%; 
-                  background-color: #ffffff;
-                  padding:5%;
-                }
-                .page-break-inside {
-                  page-break-inside: always;
-                  margin-top:16px;
-              }
-            </style>
-            </head>
-            <body>
-                <div class='maincontainer'>
-    
-            <div class='header' >
-                <div class='first' style="display: flex; flex-direction: row;">
-                    <img id='img' src=${
-                      logo === CONSTANTS.default_image
-                        ? CONSTANTS.default_clinic_logo
-                        : logo_url
-                    } style="width: 52px; height: 58px;  border:1px solid black" alt="Sample Image" />
-                    <div class='address' style="display:flex;flex-direction: column; width:400px; align-item:left;border:1px solid black; margin-left: 16px;">
-                       
-                            <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">Dr.${
-                              data?.doctor_name
-                            }</p>
-                            <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">${
-                              data?.specialization
-                            }</p>
-                            <p id='spec' style="font-weight: 400; font-size: 14px; color: #4ba5fa; margin: 0;">Regd No:${
-                              data?.medical_number
-                            }</p>
-                      </div>
-                        <div class='namecontaioner' style="margin-left: 230px; text-align: right;">
-                            <p id='docname' style="font-weight: 600; font-size: 16px; color: #4ba5fa; margin: 0;">${clinic_name}</p>
-                            <p id='spec' style="font-weight: 400; font-size: 14px; text-align: justify; color: #000000; margin: 0; margin-left: 16px; justify-content: flex-start;">${clinic_phone} | ${clinic_Address}</p>
-                        </div>
-                    </div>
-             
-            </div>
-           <div class='page page-break-inside'>
-            <div class='second' style="display: flex; flex-direction: row; justify-content: space-between;">
-                <img id='rximg' src=${
-                  CONSTANTS.prescription_logo
-                } style="width: 28px; height: 43px;" />
-                <p id='date' style="font-size: 16px; font-weight: 400px;">Date:${
-                  new Date().toISOString().split('T')[0]
-                }, Time:${new Date().toString().split(' ')[4]}</p>
-            </div>
-       
-                    <div class='third' >
-                        <p id='patientDetails' style=" font-size: 16px;
-                        font-weight: 400px;">${name} | ${gende} | ${age} | ${patient_phone}</p>
-                        <div class='subContaioner' style="  display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 16px;
-                            color:#4ba5fa;">Chief Complaint:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${selectedComplaint}</p>
-                        </div>
-                        ${
-                          note?.length > 0
-                            ? ` <div class='subContaioner' style="  display: flex;
-                         flex-direction: row;
-                         gap: 8px;
-                         line-height:4px;">
-                                 <p id='subhead' style="font-weight: 400px;
-                                 font-size: 16px;
-                                 color:#4ba5fa;">History of Present Illness:</p>
-                                 <p id='values' style=" font-weight: 300px;
-                                 font-size: 16px;
-                                 color:#000000;">${note}</p>
-                             </div>`
-                            : ''
-                        }
-                        
-                        ${
-                          vitalsData?.pulse_rate ||
-                          vitalsData?.weight ||
-                          vitalsData?.height ||
-                          vitalsData?.body_temperature ||
-                          vitalsData?.rate ||
-                          vitalsData?.bmi
-                            ? `
-                        <div >
-                        <p id='subhead' style="font-weight: 400px;
-                        font-size: 16px;
-                        margin:0;
-                        color:#4ba5fa;">Vitals:</p>
-                        <div class='vitalscontaioner' style="display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        margin-left: 8px;
-                        line-height: 2px;">
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Pulse:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.pulse_rate
-                                ? `${vitalsData?.pulse_rate}bpm`
-                                : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">BP:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.systolic
-                                ? `${vitalsData?.systolic}/${vitalsData?.diastolic}`
-                                : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Weight:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.weight
-                                ? `${vitalsData?.weight}kg`
-                                : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Height:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.height
-                                ? `${vitalsData?.height}cm`
-                                : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Temp:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.body_temperature
-                                ? `${vitalsData?.body_temperature}°C`
-                                : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">Res.rate:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.rate ? `${vitalsData?.rate}brpm` : ''
-                            }</p>
-                            <p id='values1' style="font-weight: 500;
-                            font-size: 16px;
-                            color:#000000;">BMI:</p>
-                            <p id='values' style="font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${
-                              vitalsData?.bmi ? vitalsData?.bmi : ''
-                            }</p>
-                        </div>
-                    </div>
-                        `
-                            : ''
-                        }
-                       
-                       ${
-                         diagnosis?.length > 0
-                           ? ` <div class='subContaioner' style="  display: flex;
-                        flex-direction: row;
-                        gap: 8px;
-                        line-height:4px;">
-                            <p id='subhead' style="font-weight: 400px;
-                            font-size: 16px;
-                            color:#4ba5fa;">Diagnosis:</p>
-                            <p id='values' style=" font-weight: 300px;
-                            font-size: 16px;
-                            color:#000000;">${diagnosis
-                              ?.map(item => item?.diagnosis)
-                              .join(',  ')}</p>
-                        </div>`
-                           : ''
-                       }
-                    </div>
-                   <div class='page-break-inside' > 
-                    <p id='subhead' style="font-weight: 400px;
-                            font-size: 16px;
-                            margin-top:4px;
-                            margin-top:12px;
-                            color:#4ba5fa; margin: 0;" >Prescribe:</p>
-                    <table class='page-break-inside' style="border-collapse: collapse;margin-bottom: 40px;">
-                <tr>
-                    <th style=" padding: 8px; text-align: center;">S.No</th>
-                    <th style=" padding: 8px; text-align: center; width: 18%;">Medicine</th>
-                    <th style=" padding: 8px; text-align: center;">Timing</th>
-                    <th style=" padding: 8px; text-align: center;">Frequency</th>
-                    <th style=" padding: 8px; text-align: center;">Duration</th>
-                    <th style=" padding: 8px; text-align: center;">Quantity</th>
+
+              </text>
+          </div>`
+              : ''
+          }
+          ${
+            diagnosis?.length > 0
+              ? `<div>
+              <h5>
+                  Diagnosis
+              </h5>
+              <text>
+                  ${diagnosis?.map(value => value.diagnosis).join(', ')}
+              </text>
+          </div>`
+              : ''
+          }
+          ${
+            Symptom?.length > 0
+              ? `<div>
+              <h5>
+                  Symptom
+              </h5>
+              <text>
+                  ${Symptom?.map(value => value.symptom).join(', ')}
+              </text>
+          </div>`
+              : ''
+          } 
+          ${
+            JSON?.stringify(reptr) !== '{}'
+              ? `<div>
+              <h5>
+                  Report Finding
+              </h5>
+              <text>
+                  ${reptr?.describe}
+              </text>
+          </div>`
+              : ''
+          } 
+          ${
+            JSON?.stringify(physical) !== '{}'
+              ? `<div>
+              <h5>
+                  Physical Examination
+              </h5>
+              <text>
+                  ${physical?.value}
+              </text>
+          </div>`
+              : ''
+          } 
+      </div>
+          
+          
+          <div style="margin-top:16px;" >
+          <h5 style="font-size:14px">
+          Prescribe
+          </h5>
+          <table style="width:100%;;">
+          
+
+              <tr>
+                  <th style="text-align:center;width:4%;">S.NO</th>
+                  <th style="text-align:center;width:45%;">Medicine</th>
+                  <th style="text-align:center;width:12%;">Timing</th>
+                  <th style="text-align:center;width:12%;">Frequency</th>
+                  <th style="text-align:center;width:12%;">Duration</th>
+                  <th style="text-align:center;width:12%;">Quantity</th>
                 </tr>
                 ${prescribe
                   ?.map(
-                    (item, index) =>
-                      `<tr>
-                  <td style="padding: 8px; text-align: center;font-size:16x;">${
+                    (value, index) => `
+                <tr style=${
+                  index === 10
+                    ? 'page-break-before:always;margin-top:100px'
+                    : ''
+                }>
+                  <td style="text-align:center;width:4%">${
                     parseInt(index) + 1
                   }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x; width: 20%;">${
-                    item?.medicine
+                  <td style="text-align:center;width:45%">${
+                    value?.medicine
                   }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.timing
+                  <td style="text-align:center;width:12%">${value?.timing}</td>
+                  <td style="text-align:center;width:12%">${
+                    value?.frequency
                   }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.frequency
+                  <td style="text-align:center;width:12%">${
+                    value?.duration
                   }</td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.duration
-                  } </td>
-                  <td style="padding: 8px; text-align: center;font-size:16x">${
-                    item?.total_quantity
+                  <td style="text-align:center;width:12%">${
+                    value.total_quantity
                   }</td>
-              </tr>`,
+                </tr>
+                `,
                   )
                   .join('')}
-            </table>
-            </div>
-            ${
-              date?.length > 0
-                ? `<div class='subContaioner' style="  display: flex;
-              flex-direction: row;
-              gap: 8px;
-              line-height:4px;">
-                  <p id='subhead' style="font-weight: 400px;
-                  font-size: 16px;
-                  color:#4ba5fa;">Follow Up:</p>
-                  <p id='values'  style=" font-weight: 300px;
-                  font-size: 16px;
-                  color:#000000;">${date}</p>
-              </div>`
-                : ''
-            }
-            </div>
-                    <div class ='page'>
-            
-                   
-                        ${
-                          labreport?.length > 0
-                            ? `<div class='subContaioner' style="  display: flex;
-                          flex-direction: row;
-                          gap: 8px;
-                          line-height:4px;">
-                              <p id='subhead' style="font-weight: 400px;
-                              font-size: 16px;
-                              color:#4ba5fa;">Test Prescribed:</p>
-                              <p id='values' style=" font-weight: 300px;
-                              font-size: 16px;
-                              color:#000000;">${labreport
-                                ?.map((item, ind) => item?.lab_test)
-                                .join(',  ')}</p>
-                          </div>`
-                            : ''
-                        }
-        
-                       
-                        ${
-                          service_fees?.length > 1
-                            ? `<p id='subhead' style="font-weight: 400; font-size: 16px;color: #4ba5fa;margin-top:16px;">Consultaion Fees:</p>
-                        <table style="border-collapse: collapse;margin-bottom: 48px;">
-                        <tr>
-        <th style="padding:4px;text-align: start; width:10%">S.No</th>
-        <th style="padding: 8px; text-align: start; width: 20%;">Service Name</th>
-        <th style="padding: 8px; text-align: start; width:20%">Amount</th>
-    </tr>
-                        ${service_fees
-                          ?.map((item, index) =>
-                            item?.service_name
-                              ? `<tr>
-                          <td style="padding: 8px; text-align: start;font-size:16x;width: 10%">${
-                            parseInt(index) + 1
-                          }</td>
-                          <td style="padding: 8px; text-align: start;font-size:16x;width: 20%">${
-                            item?.service_name
-                          }</td>
-                          <td style="padding: 8px; text-align: start;font-size:16x; width: 20%;">${
-                            item?.charge
-                          }</td>
-                          
-                      </tr>`
-                              : '',
-                          )
-                          .join('')}           
-                    </table>
-                    <p style="margin-left: 50%;font-weight:700;font-size:16px";>Total : Rs.
-                    ${charge ? charge[charge && 'totalFees'] : ''}</p>`
-                            : ''
-                        }
-                    </div>
-                    <div class ='footer'>
-                        <footer class='desc' style=" display: flex;
-                        align-items:center;
-                        justify-content: center;
-                        margin-top: 84px;">
-                            <div>
-                            <p id='values2'  style="  font-weight: 300;
-                            font-size: 16px;
-                            color:#000000;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            line-height: 4px;">
-                            This presctiption has been electronically signed by</p>
-          <p id='values2'  style="  font-weight: 300;
-          font-size: 16px;
-          color:#000000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-bottom: 32px;
-          line-height: 4px;">
-          Dr. ${data?.doctor_name}, ${data?.degree}. Reg: ${
+           
+          </table>
+          </div>
+
+          ${
+            date?.length > 0
+              ? `<div>
+              <h5>
+                  Follow Up
+              </h5>
+              <text>
+                  ${date}
+              </text>
+          </div>`
+              : ''
+          } 
+          ${
+            labreport?.length > 0
+              ? `<div style="margin-top:16px">
+              <h5>
+                  Test Prescribed
+              </h5>
+              <text>
+                  ${labreport?.map(value => value.lab_test).join(', ')}
+              </text>
+          </div>`
+              : ''
+          } 
+
+          ${
+            service_fees?.length > 1
+              ? `<div style="page-break-before:always;">
+              <div style="height:100px"></div>
+              <h5>
+              Consultaion Fees
+              </h5>
+    <table style="width:100%;;">
+     
+              <tr>
+                  <th style="text-align:center;width:4%;">S.NO</th>
+                  <th style="text-align:center;width:45%;">Service name</th>
+                  <th style="text-align:center;width:12%;">Amount</th>
+                
+                </tr>
+                ${service_fees
+                  ?.map(
+                    (value, index) => `
+               ${
+                 value?.service_name
+                   ? `<tr>
+                  <td style="text-align:center;width:4%">${
+                    parseInt(index) + 1
+                  }</td>
+                  <td style="text-align:center;width:45%">${
+                    value?.service_name
+                  }</td>
+                  <td style="text-align:center;width:12%">${value?.charge}</td>
+                  
+                </tr>`
+                   : ''
+               }
+                `,
+                  )
+                  .join('')}
+
+           
+          </table>
+          <div style="display:flex;width:100%;justify-content:flex-end;">
+          <text >Total Rs ${charge ? charge[charge && 'totalFees'] : ''}</text>
+          </div></div>`
+              : ''
+          }
+          
+
+      </div>
+      <footer style="display:flex;flex-direction:column;align-items:center;position:fixed;  bottom:0;page-break-before: auto;">
+          <p>
+              This Prescription electronically signed by ${
+                data?.doctor_name
+              } ,${data?.degree}, ${
           data?.medical_number
-        } on ${new Date()?.toISOString()?.split('T')[0]} at ${new Date()
-          ?.toString()
-          ?.split(' ')[4]
-          ?.toString()}</p>
-
-
-                            <p id='values2'  style="  font-weight: 300;
-                            font-size: 14px;
-                            color:#000000;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            line-height: 4px;">In case of any drug interactions or side effects STOP all medicines</p>
-                            <p id='values2'  style="  font-weight: 300;
-                            font-size: 14px;
-                            color:#000000;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            line-height: 4px;">immediately and consult your doctor or nearest hospital</p>
-                        </div>
-                        </footer>
-                    <div>
-                    <p id='values2'  style="  font-weight: 300;
-                            font-size: 10px;
-                            color:#000000;
-                            line-height: 0px;
-                            ">Powered By</p>
-                        <img  id='foot' src=${CONSTANTS.pdf_footer} style="
-                        width: 98px;
-                        height: 40px;"/>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </body>
-        </html>`,
-        //File Name
+        }, ${new Date().toString()}
+          </p>
+          <img src=${
+            CONSTANTS.pdf_footer
+          } style="align-self:center;width:104px;height:40px"></img>
+      </footer>
+        
+      </body>
+      
+      
+      
+      </html>`,
         fileName: 'test',
-        //File directory
+        //     //File directory
         directory: 'docs',
       };
       let file = await RNHTMLtoPDF.convert(options);
