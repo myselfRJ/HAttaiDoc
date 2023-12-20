@@ -365,27 +365,13 @@ const VaccinationKids = ({navigation}) => {
     },
   ]);
   const setVaccineState = (age, newData) => {
-    console.log('newData....', newData);
     let newVac = vaccine.map((value, index) => {
       if (value.age === age) {
         value.vaccineDetails = newData;
       }
       return value;
     });
-    console.log('...newVac', newVac);
     setvaccine(newVac);
-
-    // setvaccine(prevVaccine => {
-    //   return prevVaccine.map(group => {
-    //     if (group.age === age) {
-    //       return {
-    //         ...group,
-    //         vaccineDetails: newData || [],
-    //       };
-    //     }
-    //     return group;
-    //   });
-    // });
   };
   const updateVaccineDetails = (age, type, status, date, batch) => {
     setvaccine(prevVaccine => {

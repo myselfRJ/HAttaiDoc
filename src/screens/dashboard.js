@@ -191,7 +191,6 @@ const Dashboard = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  // useFocusEffect(())
   useEffect(() => {
     fetchAppointment();
   }, [formatDate, Clinic_id]);
@@ -207,7 +206,6 @@ const Dashboard = ({navigation, route}) => {
   const [show, setShow] = useState(false);
   const handleClinicSelection = clinic => {
     setSelectedClinic(clinic.clinic_name);
-    // handleChangeValue('clinic', clinic.clinic_name);
     setClinicId(clinic.id);
     dispatch(addclinic_id(clinic?.id));
     dispatch(addclinic_name(clinic?.clinic_name));
@@ -224,11 +222,6 @@ const Dashboard = ({navigation, route}) => {
       fetchAppointment();
     }, [Clinic_id, appointment_date]),
   );
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchClinic();
-  //   }, []),
-  // );
   useEffect(() => {
     disableBackButton();
   }, []);
@@ -240,7 +233,32 @@ const Dashboard = ({navigation, route}) => {
     appointment => appointment.status === 'pending',
   );
   let totalAppointments = setAppointment.length;
-
+  const FetchRangeAppointments = async () => {
+    const start_date = encodeURIComponent('2023-12-18');
+    const end_date = encodeURIComponent('2023-12-20');
+    try {
+      const response = await fetchApi(
+        URL.getAppointmentsInRange(start_date, end_date, phone),
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.ok) {
+        const jsonData = await response.json();
+        console.log('====================================');
+        console.log(jsonData?.data?.length);
+        console.log('====================================');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    FetchRangeAppointments();
+  }, []);
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>

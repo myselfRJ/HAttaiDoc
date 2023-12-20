@@ -3,6 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Dimensions,
   Button,
   TouchableOpacity,
   PermissionsAndroid,
@@ -385,18 +386,21 @@ const Visit = ({navigation, route}) => {
       let options = {
         html: `<!DOCTYPE html>
       <style>
-      body {width:100%}
-      header {width:100%;display: flex;position:fixed;top:0; justify-content: space-between;border-bottom: 2px solid black;padding-bottom: 8px;}
+      body {width: 827px; height:1169px;}
+      header {width:inherit;position:fixed;top:12px;left:12px;justify-content:center;align-items:center;}
        text {font-size: 12px;padding:1px;font-weight: 500;}
+
       h5 {margin: 1px;padding: 0px; font-size:14px;color:#4ba5fa}
       tr {display:flex;font-size:14px;justify-content: space-between;width:100%;padding:8px;align-items:flex-start;}
       td{justify-content: space-around;font-size: 10px;}
       .doctor-head text {color:#4ba5fa}
+      
       </style>
       
       <body >
           <header >
-              <div style="display:flex;flex-direction: row; gap:1rem;">
+          <div style="display:flex;height:80px;width:inherit;flex-direction:row;justify-content:space-between;align-items:center;border-bottom:2px solid black">
+              <div style="display:flex;flex-direction: row; gap:1rem; position:absolute";left:16px;border:1px solid black>
                   <img src=${
                     logo === CONSTANTS.default_image
                       ? CONSTANTS.default_clinic_logo
@@ -418,7 +422,7 @@ const Visit = ({navigation, route}) => {
           
           
               </div>
-              <div style="display:flex;flex-direction: column; gap:2px; align-items: flex-end;">
+              <div style="display:flex;flex-direction: column;gap:2px; align-items: flex-end;position:absolute;right:12px">
                  <h5>
                   ${clinic_name}
                  <h5>
@@ -426,6 +430,7 @@ const Visit = ({navigation, route}) => {
                   Phone: ${clinic_phone} / Address: ${clinic_Address}
                  </text>
               </div>
+              <div>
           
           </header>
           <div style="page-break-after: auto;padding:1rem;gap:8px;margin-top:100px">
@@ -690,8 +695,8 @@ const Visit = ({navigation, route}) => {
           
 
       </div>
-      <footer style="display:flex;flex-direction:column;align-items:center;position:fixed;  bottom:0;page-break-before: auto;">
-          <p>
+      <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
+          <p style="text-align:center">
               This Prescription electronically signed by ${
                 data?.doctor_name
               } ,${data?.degree}, ${

@@ -13,6 +13,8 @@ export const URL = {
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
   profileUrl: `${baseUrl}practioner/practitoner-save`,
   get_all_appointments_of_clinic: `${baseUrl}customappointment/get/appointment/`,
+  getAppointmentsInRange: (start, end, phone) =>
+    `${baseUrl}customappointment/app?start_date=${start}&end_date=${end}&doctor_phone=${phone}`,
   Appointment_Booking: `${baseUrl}customappointment/book-appointment/`,
   SlotsAvailable: clinicId => `${baseUrl}clinic/get-slot/${clinicId}/`,
   addclinic: `${baseUrl}clinic/clinic-save`,

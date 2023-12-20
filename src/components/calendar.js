@@ -54,7 +54,6 @@ const CustomCalendar = props => {
               onDayPress={props.onpress}
               markedDates={props.date ? {[props.date]: {selected: true}} : {}}
             />
-
             <View style={styles.modalButtonsContainer}>
               <Pressable style={styles.cancelButton} onPress={handleCancel}>
                 <Text style={styles.buttonText}>Cancel</Text>
