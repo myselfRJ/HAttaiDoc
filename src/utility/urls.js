@@ -1,12 +1,12 @@
-const baseUrl = 'http://10.9.79.239:8000/api/v1/';
+// const baseUrl = 'http://10.9.79.239:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.11:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
-// const baseUrl = 'http://13.200.15.208/api/v1/';
+const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
-export const fileurl = `http://10.9.79.239:8000`;
+// export const fileurl = `http://10.9.79.239:8000`;
 // export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-// export const fileurl = `http://13.200.15.208`;
+export const fileurl = `http://13.200.15.208`;
 
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
@@ -85,7 +85,10 @@ export const URL = {
   GetFcmTokens_Patient: phone =>
     `${baseUrl}fcmtokens/based_on_patient_phone?patient_phone=${phone}`,
   getReportsbyId: id => `${baseUrl}consult/getUploadedRecordsby_id?id=${id}`,
-  logout: `${baseUrl}doctor-authenticate/logout`,
+  uploadImmunizationKids: `${baseUrl}consult/uploadImmunization`,
+  getImmunization: (age, phone) =>
+    `${baseUrl}consult/getImmunization?patient_phone=${phone}&age=${age}`,
+  logout: `${baseUrl}doctor-authenticate/generate-otp/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:
     'https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/generateOtp',

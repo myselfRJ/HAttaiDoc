@@ -767,6 +767,10 @@ const Visit = ({navigation, route}) => {
     appointment_id: appointment_id,
     patient_name: patient_data?.patient_name,
   };
+  const Age =
+    new Date().getFullYear() -
+    parseInt(patient_data?.birth_date?.split('-')[0].toString());
+
   return (
     <View>
       <ScrollView>
@@ -1142,6 +1146,7 @@ const Visit = ({navigation, route}) => {
                           gende: gende,
                           patient_phone: patient_phone,
                           phone: phone,
+                          Age: Age,
                         };
                       } else if (value.label === 'Doctor Notes') {
                         params.patient_phone = patient_phone;
