@@ -88,13 +88,19 @@ export default function Prescribe1({navigation}) {
         {
           medicine: generic
             ? `${generic.toUpperCase()} ${
-                generic?.includes('mg' || 'ml' || 'g')
+                generic &&
+                (generic.includes('mg') ||
+                  generic.includes('ml') ||
+                  generic.includes('g'))
                   ? ''
-                  : `${generic?.toUpperCase()}``${mgs}`
+                  : `${generic.toUpperCase()} ${mgs}`
               }`
-            : medicine?.includes('mg' || 'ml' || 'g')
-            ? medicine?.toUpperCase()
-            : `${medicine?.toUpperCase()} ${mgs}`,
+            : medicine &&
+              (medicine.includes('mg') ||
+                medicine.includes('ml') ||
+                medicine.includes('g'))
+            ? medicine.toUpperCase()
+            : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
           mode: mode,
           dose_quantity: '',
           timing: timing,

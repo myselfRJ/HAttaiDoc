@@ -5,13 +5,20 @@ import {useRoute} from '@react-navigation/native';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {StatusMessage, HButton, BottomSheetView} from '../components';
-import {horizontalScale, verticalScale} from '../utility/scaleDimension';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../utility/scaleDimension';
 import {updatePrescribe1} from '../redux/features/prescription/prescr';
 import {updateSymptom} from '../redux/features/prescription/symptomslice';
 import {updateDate} from '../redux/features/prescription/Followupslice';
 import {updateCommorbities} from '../redux/features/prescription/commorbities';
 import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
 import {
+  addAdvice,
+  addProcedures,
+  addRedFalg,
   updatemartialHistory,
   updatepastHistory,
 } from '../redux/features/prescription/pastHistory';
@@ -144,6 +151,9 @@ const PdfView = ({navigation}) => {
     dispatch(UpadteFindings({}));
     dispatch(UpadteExamination({}));
     dispatch(updatemartialHistory({}));
+    dispatch(addRedFalg(''));
+    dispatch(addProcedures(''));
+    dispatch(addAdvice(''));
   };
   const putComplaint = async () => {
     try {
@@ -320,7 +330,8 @@ const PdfView = ({navigation}) => {
   return (
     <>
       <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
-        <ScrollView contentContainerStyle={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{flex: 1, marginBottom: moderateScale(20)}}>
           <PDFViewer path={path} />
         </ScrollView>
 
@@ -329,8 +340,6 @@ const PdfView = ({navigation}) => {
             //   flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            // gap: horizontalScale(48),
-            marginBottom: verticalScale(8),
           }}>
           <HButton
             loading={loading}

@@ -10,6 +10,9 @@ const initialState = {
   menstrualHistory: {},
   obstericHistory: {},
   martialHistory: {},
+  procedures: '',
+  red_flag: '',
+  advice: '',
 };
 
 const pastHistorySlice = createSlice({
@@ -64,6 +67,15 @@ const pastHistorySlice = createSlice({
     updatemartialHistory: (state, action) => {
       state.martialHistory = action.payload;
     },
+    addProcedures: (state, action) => {
+      state.procedures = action.payload;
+    },
+    addRedFalg: (state, action) => {
+      state.red_flag = action.payload;
+    },
+    addAdvice: (state, action) => {
+      state.advice = action.payload;
+    },
   },
 });
 
@@ -84,6 +96,9 @@ export const {
   updatesocialHistory,
   addmartialHistory,
   updatemartialHistory,
+  addProcedures,
+  addRedFalg,
+  addAdvice,
 } = pastHistorySlice.actions;
 
 export const pastHistoryReducer = pastHistorySlice.reducer;

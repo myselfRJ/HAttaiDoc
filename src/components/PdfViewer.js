@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   pdf: {
-    // flex: 1,
-    // marginVertical: verticalScale(20),
+    marginBottom: moderateScale(60),
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height - verticalScale(110),
   },

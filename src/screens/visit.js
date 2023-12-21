@@ -73,7 +73,6 @@ const Visit = ({navigation, route}) => {
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
-  console.log('============>', physical);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
@@ -124,7 +123,9 @@ const Visit = ({navigation, route}) => {
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
     service_fees?.length > 0 ? service_fees?.[service_fees?.length - 1] : null;
-
+  const procedure = useSelector(state => state.pasthistory.procedures);
+  const redflag = useSelector(state => state.pasthistory.red_flag);
+  const advices = useSelector(state => state?.pasthistory?.advice);
   useEffect(() => {
     setPrescribe(Prescribe);
   }, [Prescribe]);
@@ -215,6 +216,8 @@ const Visit = ({navigation, route}) => {
       mensutral_history: JSON.stringify(menstrualHistory),
       obsteric_history: JSON.stringify(obstericHistory),
       martial_history: JSON.stringify(martialHistory),
+      procedures: procedure,
+      red_flag: redflag,
     },
 
     meta_data: {
@@ -376,9 +379,6 @@ const Visit = ({navigation, route}) => {
   //   ? `data:image/jpeg;base64,${sign}`
   //   : data?.doctor_name;
   const Sign_base64 = `${data?.doctor_name}`;
-  // useEffect(() => {
-  //   createPDF();
-  // });
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
@@ -458,6 +458,18 @@ const Visit = ({navigation, route}) => {
               ${selectedComplaint}
               </text>
           </div>
+          ${
+            Symptom?.length > 0
+              ? `<div>
+              <h5>
+                  Symptom
+              </h5>
+              <text>
+                  ${Symptom?.map(value => value.symptom).join(', ')}
+              </text>
+          </div>`
+              : ''
+          } 
           ${
             note?.length > 0
               ? `<div>
@@ -539,18 +551,6 @@ const Visit = ({navigation, route}) => {
               : ''
           }
           ${
-            Symptom?.length > 0
-              ? `<div>
-              <h5>
-                  Symptom
-              </h5>
-              <text>
-                  ${Symptom?.map(value => value.symptom).join(', ')}
-              </text>
-          </div>`
-              : ''
-          } 
-          ${
             JSON?.stringify(reptr) !== '{}'
               ? `<div>
               <h5>
@@ -563,7 +563,7 @@ const Visit = ({navigation, route}) => {
               : ''
           } 
           ${
-            JSON?.stringify(physical) !== '{}'
+            JSON?.stringify(physical) !== '{}' || physical?.value !== ''
               ? `<div>
               <h5>
                   Physical Examination
@@ -623,7 +623,18 @@ const Visit = ({navigation, route}) => {
            
           </table>
           </div>
-
+          ${
+            advices?.length > 0
+              ? `<div>
+              <h5>
+                  Advices
+              </h5>
+              <text>
+                  ${advices}
+              </text>
+          </div>`
+              : ''
+          } 
           ${
             date?.length > 0
               ? `<div>
@@ -1084,6 +1095,9 @@ const Visit = ({navigation, route}) => {
                       (value?.label === 'Referral' && selectedDoctor?.length > 0
                         ? 'check-circle'
                         : '') ||
+                      (value?.label === 'Advice' && advices?.length > 0
+                        ? 'check-circle'
+                        : '') ||
                       (value?.label === 'Medical History' &&
                         (commor?.length > 0 ||
                         socialHistory?.length > 0 ||
@@ -1220,6 +1234,18 @@ const Visit = ({navigation, route}) => {
                           size={moderateScale(16)}
                         />
                         <Text style={styles.pulse}>{date}</Text>
+                      </>
+                    </View>
+                  )}
+                  {value.label === 'Advice' && advices !== '' && (
+                    <View style={styles.FollowUpcontainer}>
+                      <>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{advices}</Text>
                       </>
                     </View>
                   )}

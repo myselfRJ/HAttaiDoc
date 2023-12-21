@@ -236,7 +236,7 @@ const Dashboard = ({navigation, route}) => {
   let totalAppointments = setAppointment.length;
   const FetchRangeAppointments = async () => {
     const start_date = encodeURIComponent('2022-12-18');
-    const end_date = encodeURIComponent('2023-12-20');
+    const end_date = encodeURIComponent('2023-12-22');
     try {
       const response = await fetchApi(
         URL.getAppointmentsInRange(start_date, end_date, phone),
@@ -270,12 +270,82 @@ const Dashboard = ({navigation, route}) => {
       console.log(error);
     }
   };
+
+  const FetchRangeFees = async () => {
+    const start_date = encodeURIComponent('2022-12-19');
+    const end_date = encodeURIComponent('2023-12-21');
+    try {
+      const response = await fetchApi(
+        URL.getRangeFess(start_date, end_date, phone),
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.ok) {
+        const jsonData = await response.json();
+        function filterDataByDateRange(startDate, endDate) {
+          return jsonData?.data.filter(entry => {
+            const entryDate = new Date(entry.created_at);
+            return entryDate >= startDate && entryDate <= endDate;
+          });
+        }
+        let totalFees = 0;
+        // const currentDate = new Date();
+        // const oneYearAgo = new Date(currentDate);
+        // oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+        const Fess_date_range = filterDataByDateRange(
+          new Date(start_date),
+          new Date(end_date),
+        );
+        const monthlyData = {};
+        Fess_date_range.forEach(entry => {
+          const entryDate = new Date(entry.created_at);
+          const year = entryDate.getFullYear().toString();
+          const month = entryDate.toISOString().slice(0, 7);
+          if (!monthlyData[year]) {
+            monthlyData[year] = {};
+          }
+          if (!monthlyData[year][month]) {
+            monthlyData[year][month] = [];
+          }
+          monthlyData[year][month].push(entry);
+        });
+        const feeItems = [];
+        for (const year in monthlyData) {
+          if (monthlyData.hasOwnProperty(year)) {
+            for (const month in monthlyData[year]) {
+              if (monthlyData[year].hasOwnProperty(month)) {
+                monthlyData[year][month]?.map(item => {
+                  const fees = JSON.parse(item?.fees);
+                  totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
+                });
+                feeItems.push({
+                  month: `${month?.split('-')[0]}-${
+                    months[month?.split('-')[1]]
+                  }`,
+                  fees: totalFees,
+                });
+                console.log(feeItems);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     FetchRangeAppointments();
+    FetchRangeFees();
   }, []);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
+      FetchRangeFees();
     }, [phone]),
   );
   return (

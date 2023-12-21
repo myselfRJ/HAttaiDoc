@@ -17,6 +17,8 @@ import {
   addpastHospitalization,
   addmenstrualHistory,
   addmartialHistory,
+  addProcedures,
+  addRedFalg,
 } from '../redux/features/prescription/pastHistory';
 // import {
 //   addCommorbities,
@@ -84,7 +86,8 @@ const MedicalHistory = ({navigation, route}) => {
   const [obstetric, setObstetric] = useState('');
   const [getdata, setDate] = useState();
   const [select, setSelect] = useState('');
-  console.log('med==', medical);
+  const [red_flag, setRed_Flag] = useState('');
+  const [procedures, setprocedures] = useState('');
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
@@ -133,7 +136,9 @@ const MedicalHistory = ({navigation, route}) => {
     state => state?.pasthistory?.obstericHistory,
   );
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
-  console.log('medical=His===============', menstrualHistory);
+  const procedure = useSelector(state => state.pasthistory.procedures);
+  const redflag = useSelector(state => state.pasthistory.red_flag);
+  console.log(redflag, 'medical=His===============', procedure);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -228,8 +233,8 @@ const MedicalHistory = ({navigation, route}) => {
   const handledata = () => {
     dispatch(addpastHospitalization({...hospitalization, past}));
     dispatch(addmedicationHistory({...medicationHistory, medical}));
-    // dispatch(addmenstrualHistory({...menstrualHistory, menstrual}));
-    // dispatch(addobstericHistory({...obstericHistory, obstetric}));
+    dispatch(addProcedures(procedures));
+    dispatch(addRedFalg(red_flag));
     nav.goBack();
   };
 
@@ -287,6 +292,14 @@ const MedicalHistory = ({navigation, route}) => {
         if (jsonData?.data[0]?.martial_history) {
           const mens = JSON.parse(jsonData.data[0].martial_history);
           dispatch(addmartialHistory(mens));
+        }
+        if (jsonData?.data[0]?.procedures) {
+          setprocedures(jsonData?.data[0]?.procedures);
+          dispatch(addProcedures(jsonData?.data[0]?.procedures));
+        }
+        if (jsonData?.data[0]?.red_flag) {
+          setRed_Flag(jsonData?.data[0]?.red_flag);
+          dispatch(addRedFalg(jsonData?.data[0]?.red_flag));
         }
       } else {
         console.error('API call failed:', response.status, response);
@@ -665,6 +678,22 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder="Reason for hospitalization"
             value={past}
             setValue={txt => setPast(txt)}
+            blur={false}
+          />
+          <InputText
+            inputContainer={styles.inputtext}
+            label="Procedures"
+            placeholder="Enter Procedures"
+            value={procedures}
+            setValue={txt => setprocedures(txt)}
+            blur={false}
+          />
+          <InputText
+            inputContainer={styles.inputtext}
+            label="Red Flag"
+            placeholder="Enter Red Flags"
+            value={red_flag}
+            setValue={txt => setRed_Flag(txt)}
             blur={false}
           />
           {/* {(medicaldata?.gende == 'Female' ||

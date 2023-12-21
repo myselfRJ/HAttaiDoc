@@ -60,11 +60,11 @@ const Symptoms = ({navigation}) => {
   const [filtered, setFilteredData] = useState([]);
   const [data, setData] = useState([]);
   const [sug, setSug] = useState([]);
-
+  const [years, setYears] = useState('');
   const dispatch = useDispatch();
 
   const handleAddSymptoms = () => {
-    if (symptom && (days || hr || months)) {
+    if (symptom && (days || hr || months || years)) {
       dispatch(
         addSymptom([
           ...symptomsData,
@@ -72,14 +72,18 @@ const Symptoms = ({navigation}) => {
             symptom: symptom,
             // days: days ? days : hr,
             days:
-              days && hr && months
-                ? `${months} ${
+              days && hr && months && years
+                ? `${years} ${
+                    parseInt(years) > 1 ? 'years' : 'year'
+                  } & ${months} ${
                     parseInt(months) > 1 ? 'months' : 'month'
                   } & ${days} ${parseInt(days) > 1 ? 'days' : 'day'} & ${hr} hr`
-                : days && !hr && !months
+                : days && !hr && !months && !years
                 ? `${days} ${parseInt(days) > 1 ? 'days' : 'day'}`
-                : !days && hr && !months
+                : !days && hr && !months && !years
                 ? `${hr} hr`
+                : !days && !hr && !months && years
+                ? `${years} ${parseInt(years) > 1 ? 'years' : 'year'}`
                 : `${months} ${parseInt(months) > 1 ? 'months' : 'month'}`,
             severity: sevSelected,
           },
@@ -94,6 +98,7 @@ const Symptoms = ({navigation}) => {
     setHr('');
     setSelected('');
     setmonths('');
+    setYears('');
   };
 
   const handleSymptomSubmit = () => {
@@ -352,6 +357,25 @@ const Symptoms = ({navigation}) => {
                   keyboardType="numeric"
                 />
               </View>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontWeight: '400',
+                  fontSize: CUSTOMFONTSIZE.h3,
+                }}>
+                (OR)
+              </Text>
+              <View style={styles.timeFields}>
+                <Text style={styles.option}>Years :</Text>
+                <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
+                  style={styles.timeinput}
+                  placeholder="Enter Years"
+                  value={years}
+                  onChangeText={text => setYears(text)}
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
           </View>
           <HButton
@@ -359,7 +383,7 @@ const Symptoms = ({navigation}) => {
             type="addtype"
             btnstyles={{
               backgroundColor:
-                symptom && (days || hr || months)
+                symptom && (days || hr || months || years)
                   ? CUSTOMCOLOR.primary
                   : CUSTOMCOLOR.disable,
               alignSelf: 'flex-end',

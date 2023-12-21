@@ -30,6 +30,7 @@ export const CONSTANT = {
     {label: 'Doctor Notes', icon: 'stethoscope', navigate: 'additional'},
 
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
+    {label: 'Advice', icon: 'pencil', navigate: 'advice'},
     {
       label: 'Fees',
       icon: 'pencil',

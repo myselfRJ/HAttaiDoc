@@ -1,12 +1,12 @@
-// const baseUrl = 'http://10.9.79.239:8000/api/v1/';
+const baseUrl = 'http://10.9.79.239:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.11:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
-const baseUrl = 'http://13.200.15.208/api/v1/';
+// const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
-// export const fileurl = `http://10.9.79.239:8000`;
+export const fileurl = `http://10.9.79.239:8000`;
 // export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-export const fileurl = `http://13.200.15.208`;
+// export const fileurl = `http://13.200.15.208`;
 
 export const URL = {
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
@@ -69,6 +69,8 @@ export const URL = {
   reschedule_appointment: id =>
     `${baseUrl}customappointment/reschedule_appointment?id=${id}`,
   getFees: id => `${baseUrl}consult/getFees?id=${id}`,
+  getRangeFess: (start_date, end_date, phone) =>
+    `${baseUrl}consult/getFessInrange?start_date=${start_date}&end_date=${end_date}&phone=${phone}`,
   updateFees: id => `${baseUrl}consult/updateFees?id=${id}`,
   getAllergy: phone => `${baseUrl}consult/get-allergies?phone=${phone}`,
   getNotes: (doc_phone, pat_phone) =>

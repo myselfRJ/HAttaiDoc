@@ -67,6 +67,7 @@ import Vaccination_List from '../screens/vaccinationList';
 import VaccinationKids from '../screens/VaccinationKids';
 import Adult from '../screens/Adult';
 import {moderateScale} from '../utility/scaleDimension';
+import {Advices} from '../screens/Avices';
 
 const Stack = createNativeStackNavigator();
 
@@ -153,6 +154,18 @@ const ProtectedRoute = () => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Fees',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+      <Stack.Screen
+        name="advice"
+        component={Advices}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Advice',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },
