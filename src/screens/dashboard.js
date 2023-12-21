@@ -59,6 +59,7 @@ import AppointmentStatusCard from '../components/appointmentStatusCard';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
 
 const Dashboard = ({navigation, route}) => {
+  const months = CONSTANTS.months;
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const [clinic, setClinic] = useState('');
@@ -234,7 +235,7 @@ const Dashboard = ({navigation, route}) => {
   );
   let totalAppointments = setAppointment.length;
   const FetchRangeAppointments = async () => {
-    const start_date = encodeURIComponent('2023-12-18');
+    const start_date = encodeURIComponent('2022-12-18');
     const end_date = encodeURIComponent('2023-12-20');
     try {
       const response = await fetchApi(
@@ -248,9 +249,22 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('====================================');
-        console.log(jsonData?.data?.length);
-        console.log('====================================');
+        const monthlyCounts = [];
+        jsonData?.data.forEach(appointment => {
+          const date = new Date(appointment.appointment_date);
+          const monthYear = `${
+            months[date.getMonth() + 1]
+          }-${date.getFullYear()}`;
+          const existingMonth = monthlyCounts.find(
+            entry => entry.month === monthYear,
+          );
+          if (existingMonth) {
+            existingMonth.count++;
+          } else {
+            monthlyCounts.push({month: monthYear, count: 1});
+          }
+        });
+        console.log(monthlyCounts);
       }
     } catch (error) {
       console.log(error);
@@ -259,6 +273,11 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     FetchRangeAppointments();
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      FetchRangeAppointments();
+    }, [phone]),
+  );
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
@@ -274,7 +293,7 @@ const Dashboard = ({navigation, route}) => {
         </View>
 
         <View>
-          {/* <ToggleSwitch value={visible} onValueChange={handleChart} /> */}
+          <ToggleSwitch value={visible} onValueChange={handleChart} />
 
           {visible && (
             <View style={styles.cardContainer}>
