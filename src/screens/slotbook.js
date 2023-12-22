@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  Pressable,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -40,9 +41,18 @@ import {
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
 import {capitalizeWord} from '../utility/const';
+import {
+  addPharmaPhone,
+  addclinic_Address,
+  addclinic_id,
+  addclinic_logo,
+  addclinic_name,
+  addclinic_phone,
+} from '../redux/features/profiles/clinicId';
 
 const SlotBook = ({navigation, route}) => {
   const option = 'finding';
+  const dispatch = useDispatch();
   const {id} = route.params;
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
@@ -60,8 +70,8 @@ const SlotBook = ({navigation, route}) => {
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState();
 
-  const [selectedMode, setSelectedMode] = useState('offline');
-
+  const [selectedMode, setSelectedMode] = useState('In clinic');
+  const [clinicShow, setClinicShow] = useState(false);
   const handleOptions = value => {
     setSelectedMode(value);
   };
@@ -95,9 +105,20 @@ const SlotBook = ({navigation, route}) => {
   const handleCancel = () => {
     setOpen(false);
   };
-
+  const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-
+  console.log('=============>', Clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
+  const handleClinicSelection = clinic => {
+    dispatch(addclinic_id(clinic?.id));
+    dispatch(addclinic_name(clinic?.clinic_name));
+    dispatch(addclinic_Address(clinic?.clinic_Address));
+    dispatch(addclinic_logo(clinic?.clinic_logo_url));
+    dispatch(addclinic_phone(clinic?.clinic_phone_number));
+    dispatch(addPharmaPhone(clinic.pharmacyPhone));
+    setClinicShow(!clinicShow);
+    // ClinicRef?.current?.snapToIndex(0);
+  };
   const {phone} = useSelector(state => state?.phone?.data);
   const speciality = useSelector(
     state => state?.doctor_profile?.doctor_profile?.specialization,
@@ -112,7 +133,6 @@ const SlotBook = ({navigation, route}) => {
     5: 'F',
     6: 'Sa',
   };
-  // console.log('slots===========',bookedSlots);
   const Day = weekDys[new Date(date).getDay()];
 
   const fetchAppointment = async () => {
@@ -141,7 +161,7 @@ const SlotBook = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchAppointment();
-  }, [formatDate, Clinic_id]);
+  }, [formatDate, Clinic_id, clinicShow]);
 
   const fetchslots = async () => {
     const response = await fetchApi(URL.SlotsAvailable(Clinic_id), {
@@ -163,7 +183,7 @@ const SlotBook = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchslots();
-  }, []);
+  }, [formatDate, Clinic_id, clinicShow]);
 
   useEffect(() => {}, [selectedSlot]);
 
@@ -217,7 +237,10 @@ const SlotBook = ({navigation, route}) => {
     });
     return timeList;
   };
-  let list = getTimeList(slotDetails?.[Day]);
+  const filterSlots = slotDetails?.[Day]?.filter(
+    item => item?.consultType === selectedMode,
+  );
+  let list = getTimeList(filterSlots);
   const token = useSelector(state => state.authenticate.auth.access);
 
   const renderItems = ({item, index}) => {
@@ -297,7 +320,7 @@ const SlotBook = ({navigation, route}) => {
         },
         body: JSON.stringify({
           appointment_date: formatDate,
-          mode_of_consultation: 'inclinic',
+          mode_of_consultation: selectedMode,
           appointment_type:
             selectedTypeAppointment === 'New'
               ? 'walkin'
@@ -364,7 +387,7 @@ const SlotBook = ({navigation, route}) => {
         },
         body: JSON.stringify({
           appointment_date: formatDate,
-          mode_of_consultation: 'inclinic',
+          mode_of_consultation: selectedMode,
           appointment_type:
             selectedTypeAppointment === 'New'
               ? 'walkin'
@@ -449,39 +472,50 @@ const SlotBook = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({term: item}));
-      // console.log('======>', snomed_data);
       setData([...snomed_data, {term: complaint}]);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
-    // console.log('======>data', data);
   };
   useEffect(() => {
     fetchComplaints();
   }, [complaint]);
 
-  // useEffect(() => {
-  //   if (complaint) {
-  //     const filtered = data?.filter(
-  //       item =>
-  //         item?.term &&
-  //         item?.term.toLowerCase().startsWith(complaint.toLowerCase()),
-  //     );
-  //     setFilteredData([...filtered, {term: complaint}]);
-  //   } else {
-  //     setFilteredData(data);
-  //   }
-  // }, [complaint]);
   const HandlePress = value => {
     setComplaint(value);
     setSelected(value);
-    //  dispatch(addDiagnosis([...prev, {diagnosis: value}]));
-    //  setComplaint('')
   };
 
   return (
     <View style={styles.main}>
+      <View style={styles.select}>
+        <View>
+          <SelectorBtn
+            label={'Clinic :'}
+            name={clinicShow ? 'chevron-up' : 'chevron-down'}
+            onPress={() => {
+              setClinicShow(!clinicShow);
+            }}
+            input={Clinic_name}
+          />
+          {clinicShow && (
+            <View style={styles.modalContainer}>
+              {/* <Text style={styles.clinicText}>
+                {Language[language]['clinic']}
+              </Text> */}
+              {Clinic_data &&
+                Clinic_data?.map((clinic, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => handleClinicSelection(clinic)}>
+                    <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
+                  </Pressable>
+                ))}
+            </View>
+          )}
+        </View>
+      </View>
       <View style={{gap: verticalScale(8)}}>
         <SelectorBtn
           label="Date"
@@ -541,20 +575,20 @@ const SlotBook = ({navigation, route}) => {
             ))}
         </View>
 
-        {/* <View style={styles.type}>
+        <View style={styles.type}>
           <Option
             label="Offline"
             value="Offline"
-            selected={selectedMode === 'offline'}
-            onPress={() => handleOptions('offline')}
+            selected={selectedMode === 'In clinic'}
+            onPress={() => handleOptions('In clinic')}
           />
           <Option
             label="Telephonic"
             value="TelePhonic"
-            selected={selectedMode === 'TelePhonic'}
-            onPress={() => handleOptions('TelePhonic')}
+            selected={selectedMode === 'Telephonic'}
+            onPress={() => handleOptions('Telephonic')}
           />
-        </View> */}
+        </View>
         <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
           Appointment Type{' '}
           <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
@@ -647,7 +681,21 @@ const styles = StyleSheet.create({
     zIndex: 1,
     backgroundColor: CUSTOMCOLOR.background,
   },
-  //
+  modalContainer: {
+    backgroundColor: CUSTOMCOLOR.white,
+    borderRadius: moderateScale(10),
+    borderColor: CUSTOMCOLOR.borderColor,
+    borderWidth: 1,
+    padding: moderateScale(16),
+    gap: moderateScale(16),
+  },
+  modalfields: {
+    color: CUSTOMCOLOR.primary,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
+    fontFamily: CUSTOMFONTFAMILY.body,
+    padding: moderateScale(4),
+  },
   type: {
     flexDirection: 'row',
     alignItems: 'center',

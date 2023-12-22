@@ -383,9 +383,8 @@ const Dashboard = ({navigation, route}) => {
           <View>
             <SelectorBtn
               label={'Clinic :'}
-              name={open == true ? 'chevron-up' : 'chevron-down'}
+              name={show ? 'chevron-up' : 'chevron-down'}
               onPress={() => {
-                // ClinicRef?.current?.snapToIndex(1);
                 setShow(!show);
               }}
               input={Clinic_name}

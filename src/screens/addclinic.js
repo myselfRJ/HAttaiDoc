@@ -98,7 +98,7 @@ const AddClinic = ({navigation}) => {
       });
       return acc;
     }, {});
-    setMergedSlots({slot: mergedData});
+    setMergedSlots(mergedData);
   };
   useEffect(() => {
     processClinics();
@@ -432,7 +432,7 @@ const AddClinic = ({navigation}) => {
         day: weekdays[selectedDay],
       };
 
-      const AllClinicSlotConflict = mergedSlots?.slot[selectedDay]?.some(
+      const AllClinicSlotConflict = mergedSlots[selectedDay]?.some(
         slot =>
           (newSlot.fromTime >= slot.fromTime &&
             newSlot.fromTime < slot.toTime) ||
@@ -516,14 +516,14 @@ const AddClinic = ({navigation}) => {
       Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
       return updatedSlots;
     });
-    // if (slotData) {
-    //   const updatedSlots = {};
-    //   for (const day in slotData) {
-    //     updatedSlots[day] = slotData[day].filter(slot => slot.index !== index);
-    //   }
-    //   Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
-    //   dispatch(updateslots(updatedSlots));
-    // }
+    setMergedSlots(prevSlots => {
+      const updatedSlots = {};
+      for (const day in prevSlots) {
+        updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
+      }
+      // Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
+      return updatedSlots;
+    });
   };
 
   const onDaySelectionChange = value => {
@@ -588,7 +588,6 @@ const AddClinic = ({navigation}) => {
     });
     setselectSlot([]);
   };
-
   const {id} = route.params;
   const fetchClinic_slots = async () => {
     const response = await fetchApi(URL.get_clinic_slots_by_id(id), {
