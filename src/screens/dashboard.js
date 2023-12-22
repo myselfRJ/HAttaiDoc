@@ -57,6 +57,7 @@ import {disableBackButton} from '../utility/backDisable';
 import DButton from '../components/DButton';
 import AppointmentStatusCard from '../components/appointmentStatusCard';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
+import {AppointmentDatafilterAndSortData} from '../utility/const';
 
 const Dashboard = ({navigation, route}) => {
   const months = CONSTANTS.months;
@@ -348,6 +349,8 @@ const Dashboard = ({navigation, route}) => {
       FetchRangeFees();
     }, [phone]),
   );
+  const AppointmentFilterdata =
+    AppointmentDatafilterAndSortData(setAppointment);
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
@@ -448,8 +451,8 @@ const Dashboard = ({navigation, route}) => {
         <ScrollView
           style={styles.appointmentcard}
           contentContainerStyle={{gap: moderateScale(8)}}>
-          {setAppointment?.length > 0 ? (
-            setAppointment?.map((value, index) => {
+          {AppointmentFilterdata?.length > 0 ? (
+            AppointmentFilterdata?.map((value, index) => {
               return (
                 <AppointmentCard
                   key={index}

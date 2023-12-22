@@ -1,6 +1,14 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {Text, View, StyleSheet, Pressable, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Image,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -19,7 +27,7 @@ import {Icon, InputText} from '../components';
 import DatePicker from 'react-native-date-picker';
 import BottomSheetView from '../components/bottomSheet';
 import {CONSTANTS} from '../utility/constant';
-import {CONSTANT} from '../utility/const';
+import {AppointmentDatafilterAndSortData, CONSTANT} from '../utility/const';
 import {ChartCard, HeaderAvatar} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
@@ -226,7 +234,18 @@ const Appointment = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-
+  const AppointmentFilterResult =
+    AppointmentDatafilterAndSortData(filteredData);
+  const renderItems = ({item, index}) => {
+    return (
+      <AppointmentCard
+        key={index}
+        appointment={item}
+        openVisit={() => navigation.navigate('visit')}
+      />
+    );
+  };
+  console.log(Dimensions.get('window').height);
   return (
     <View style={styles.main}>
       <View>
@@ -307,23 +326,11 @@ const Appointment = ({navigation}) => {
         <Text style={[commonstyles.h2, styles.appointment]}>
           {Language[language]['appointments']}
         </Text>
-        <ScrollView
+        <FlatList
+          data={AppointmentFilterResult}
+          renderItem={renderItems}
           style={styles.appointmentCard}
-          contentContainerStyle={{gap: moderateScale(8)}}>
-          {filteredData?.length > 0 ? (
-            filteredData?.map((value, index) => {
-              return (
-                <AppointmentCard
-                  key={index}
-                  appointment={value}
-                  openVisit={() => navigation.navigate('visit')}
-                />
-              );
-            })
-          ) : (
-            <CustomIcon label="No Appointments" />
-          )}
-        </ScrollView>
+        />
       </View>
       <View style={{justifyContent: 'flex-end', flex: 1}}>
         <HButton
@@ -361,7 +368,10 @@ const styles = StyleSheet.create({
   },
 
   appointmentCard: {
-    height: moderateScale(400),
+    height:
+      Dimensions.get('window').height >= 900
+        ? moderateScale(600)
+        : moderateScale(400),
     marginHorizontal: horizontalScale(8),
     gap: moderateScale(16),
     // borderWidth: 1,

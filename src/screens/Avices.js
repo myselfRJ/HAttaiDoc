@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {HButton, InputText} from '../components';
 import {CUSTOMCOLOR} from '../settings/styles';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   horizontalScale,
   moderateScale,
@@ -14,11 +14,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addAdvice} from '../redux/features/prescription/pastHistory';
 export const Advices = ({navigation}) => {
   const dispatch = useDispatch();
+  const advices = useSelector(state => state?.pasthistory?.advice);
   const [advice, SetAdvice] = useState('');
   const onPress = () => {
     dispatch(addAdvice(advice));
     navigation.goBack();
   };
+  useEffect(() => {
+    SetAdvice(advices);
+  }, []);
   return (
     <View
       style={{

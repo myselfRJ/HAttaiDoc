@@ -450,6 +450,7 @@ const ProfileCreate = ({navigation}) => {
             <SelectorBtn
               label={'Age'}
               selectContainer={{flex: 5, gap: 0, paddingVertical: -1}}
+              select={{paddingVertical: 4}}
             />
             // <InputText
             //   inputContainer={{
@@ -492,6 +493,7 @@ const ProfileCreate = ({navigation}) => {
             onPress={() => (value ? null : setOpen(true))}
             input={value ? '' : formattedDate}
             style={styles.DOBselect}
+            select={{paddingVertical: verticalScale(4)}}
           />
         </View>
         <DatePicker
@@ -563,7 +565,7 @@ const ProfileCreate = ({navigation}) => {
               label="State"
               name={show == true ? 'chevron-up' : 'chevron-down'}
               size={moderateScale(24)}
-              // onPress={toggleModal}
+              select={{paddingVertical: verticalScale(4)}}
               onPress={() => {
                 setshow(!show);
               }}

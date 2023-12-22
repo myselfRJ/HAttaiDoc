@@ -185,7 +185,7 @@ const MenstrualHistory = ({navigation, route}) => {
         }}>
         <PrescriptionHead heading="Menstrual History" />
         <InputText
-          label={'Menarche (The first occurrence of menstruration)'}
+          label={'Menarche (The first occurrence of menstruation)'}
           placeholder={'Age'}
           value={age}
           setValue={setAge}

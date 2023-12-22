@@ -447,3 +447,17 @@ export const capitalizeWord = word => {
   if (word.length === 0) return word;
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
+
+export const AppointmentDatafilterAndSortData = data => {
+  const completedItems = data?.filter(item => item.status === 'completed');
+  const pendingItems = data?.filter(item => item.status === 'pending');
+  const sortedData = pendingItems;
+  sortedData?.sort((a, b) => {
+    const timeA = new Date(`2023-01-01T${a.appointment_time?.split('-')[0]}`);
+    const timeB = new Date(`2023-01-01T${b.appointment_time?.split('-')[0]}`);
+
+    return timeA - timeB;
+  });
+  const sorteddata = sortedData?.concat(completedItems);
+  return sorteddata;
+};

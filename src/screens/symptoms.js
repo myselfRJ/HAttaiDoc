@@ -309,7 +309,7 @@ const Symptoms = ({navigation}) => {
             </View>
             <View style={styles.subvalues}>
               <View style={styles.timeFields}>
-                <Text style={styles.option}>Days :</Text>
+                <Text style={styles.option}>Day :</Text>
                 <TextInput
                   placeholderTextColor={CUSTOMCOLOR.disable}
                   style={styles.timeinput}
@@ -347,7 +347,7 @@ const Symptoms = ({navigation}) => {
                 (OR)
               </Text>
               <View style={styles.timeFields}>
-                <Text style={styles.option}>Months :</Text>
+                <Text style={styles.option}>Month :</Text>
                 <TextInput
                   placeholderTextColor={CUSTOMCOLOR.disable}
                   style={styles.timeinput}
@@ -366,7 +366,7 @@ const Symptoms = ({navigation}) => {
                 (OR)
               </Text>
               <View style={styles.timeFields}>
-                <Text style={styles.option}>Years :</Text>
+                <Text style={styles.option}>Year :</Text>
                 <TextInput
                   placeholderTextColor={CUSTOMCOLOR.disable}
                   style={styles.timeinput}

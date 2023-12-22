@@ -237,7 +237,12 @@ const MedicalHistory = ({navigation, route}) => {
     dispatch(addRedFalg(red_flag));
     nav.goBack();
   };
-
+  useEffect(() => {
+    setRed_Flag(redflag);
+    setprocedures(procedure);
+    setMedical(medicationHistory?.medical);
+    setPast(hospitalization?.past);
+  }, []);
   const fetchMedicalData = async () => {
     try {
       const response = await fetchApi(URL.getMedical(phone, patient_phone), {
