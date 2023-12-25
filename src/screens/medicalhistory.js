@@ -62,7 +62,6 @@ const MedicalHistory = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const patient_phone = medicaldata?.patient_phone;
   const Age = medicaldata?.Age;
-  console.log('phone', phone, patient_phone, Age);
 
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
@@ -138,7 +137,6 @@ const MedicalHistory = ({navigation, route}) => {
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
   const procedure = useSelector(state => state.pasthistory.procedures);
   const redflag = useSelector(state => state.pasthistory.red_flag);
-  console.log(redflag, 'medical=His===============', procedure);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -255,7 +253,6 @@ const MedicalHistory = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         // setDate(jsonData?.data[0]);
-        console.log('medication', jsonData?.data[0]);
         setUpdatedate(
           jsonData?.data[0]?.updated_at
             ? jsonData?.data[0]?.updated_at?.split('T')[0]
@@ -320,7 +317,6 @@ const MedicalHistory = ({navigation, route}) => {
   // useEffect(() => {
   //   setUpdatedate(getdata?.updated_at?.split('T'[0]));
   // }, [data]);
-  console.log(menstrualHistory?.pregnant?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -695,7 +691,7 @@ const MedicalHistory = ({navigation, route}) => {
           />
           <InputText
             inputContainer={styles.inputtext}
-            label="Red Flag"
+            label={'Red Flag'}
             placeholder="Enter Red Flags"
             value={red_flag}
             setValue={txt => setRed_Flag(txt)}
