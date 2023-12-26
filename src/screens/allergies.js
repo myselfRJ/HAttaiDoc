@@ -36,7 +36,7 @@ const Allergies = () => {
   const {phone} = useSelector(state => state?.phone?.data);
   const navigation = useNavigation();
   const [select, setSelect] = useState('');
-  const option = 'finding';
+  const option = 'substance';
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);

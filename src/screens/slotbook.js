@@ -69,6 +69,7 @@ const SlotBook = ({navigation, route}) => {
   const selections = CONSTANTS.selections;
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState();
+  const [bottom, setBottom] = useState(false);
 
   const [selectedMode, setSelectedMode] = useState('In clinic');
   const [clinicShow, setClinicShow] = useState(false);
@@ -351,7 +352,7 @@ const SlotBook = ({navigation, route}) => {
             status: 'success',
             message: jsonData.mesaage,
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 1000);
@@ -361,7 +362,7 @@ const SlotBook = ({navigation, route}) => {
             status: 'warning',
             message: 'Please Enter Complaint and Slot Timings',
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status);
         }
       }
@@ -372,7 +373,7 @@ const SlotBook = ({navigation, route}) => {
         status: 'error',
         message: 'Something Went Wrong Please Try After Sometime',
       });
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('API call failed:', response.status);
     }
   };
@@ -421,7 +422,7 @@ const SlotBook = ({navigation, route}) => {
             status: 'success',
             message: jsonData.mesaage,
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 1000);
@@ -431,7 +432,7 @@ const SlotBook = ({navigation, route}) => {
             status: 'warning',
             message: 'Please Enter Complaint and Slot Timings',
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status);
         }
       }
@@ -442,14 +443,10 @@ const SlotBook = ({navigation, route}) => {
         status: 'error',
         message: 'Something Went Wrong Please Try After Sometime',
       });
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('API call failed:', response.status);
     }
   };
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
 
   useEffect(() => {
     disableBackButton();
@@ -664,11 +661,11 @@ const SlotBook = ({navigation, route}) => {
         </View>
       </View>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
     </View>
   );
 };

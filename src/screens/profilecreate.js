@@ -67,9 +67,7 @@ const ProfileCreate = ({navigation}) => {
   const [pan, setPan] = useState({});
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+  const [bottom, setBottom] = useState(false);
   const [loading, setLoading] = useState(false);
   const onDelete = () => {
     setSelectedImage('');
@@ -246,7 +244,7 @@ const ProfileCreate = ({navigation}) => {
             status: 'success',
             message: 'Successfully created',
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           dispatch(headerStatus({index: 0, status: true}));
           // setStatus(!status);
           setTimeout(() => {
@@ -257,7 +255,7 @@ const ProfileCreate = ({navigation}) => {
           // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           // setTimeout(() => {
           //   navigation.navigate('pro');
           // }, 1000)
@@ -269,7 +267,7 @@ const ProfileCreate = ({navigation}) => {
       }
     } catch (error) {
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('Error occurred:', error);
       setLoading(false);
     }
@@ -767,11 +765,11 @@ const ProfileCreate = ({navigation}) => {
         </View>
       </BottomSheetView>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
     </View>
   );
 };

@@ -69,9 +69,7 @@ const UpdateProfile = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
   const SuccesRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+  const [bottom, setBottom] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const progressData = useSelector(state => state.progress?.status);
@@ -156,6 +154,7 @@ const UpdateProfile = ({navigation}) => {
   const [DOB, setDOB] = useState(new Date());
   const [formatDate, setFormatDate] = useState('');
   const [open, setOpen] = useState(false);
+  const [appointType, setAppointType] = useState(false);
   const formattedDate = DOB.toISOString().split('T')[0];
   const handleAge = age => {
     setValue(age);
@@ -247,9 +246,6 @@ const UpdateProfile = ({navigation}) => {
   const handleSpecialitySelection = speciality => {
     setSelectedSpeciality(speciality);
     handleChangeValue('speciality', speciality);
-    setTimeout(() => {
-      appointmentCardRef?.current?.snapToIndex(0);
-    }, 500);
   };
 
   useEffect(() => {
@@ -333,7 +329,7 @@ const UpdateProfile = ({navigation}) => {
             status: 'success',
             message: 'Successfully created',
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             navigation.navigate('account');
           }, 1000);
@@ -342,7 +338,7 @@ const UpdateProfile = ({navigation}) => {
           // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status);
           setLoading(false);
         }
@@ -351,7 +347,7 @@ const UpdateProfile = ({navigation}) => {
       }
     } catch (error) {
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('Error occurred:', error);
       setLoading(false);
     }
@@ -485,7 +481,7 @@ const UpdateProfile = ({navigation}) => {
               name="chevron-down"
               // onPress={toggleModal}
               onPress={() => {
-                appointmentCardRef?.current?.snapToIndex(1);
+                setAppointType(true);
               }}
               input={selectedSpeciality}
             />
@@ -679,10 +675,7 @@ const UpdateProfile = ({navigation}) => {
           }}
         />
       </View>
-      <BottomSheetView
-        bottomSheetRef={appointmentCardRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#000000aa'}>
+      <BottomSheetView visible={appointType} setVisible={setAppointType}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
           <ScrollView persistentScrollbar={true}>
@@ -716,11 +709,11 @@ const UpdateProfile = ({navigation}) => {
         </View>
       </BottomSheetView>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
 
       {modal && (
         <View>
@@ -887,7 +880,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.h3,
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
-    fontWeight:'400',
+    fontWeight: '400',
     paddingVertical: verticalScale(8),
     alignSelf: 'flex-start',
   },

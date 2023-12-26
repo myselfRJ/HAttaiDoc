@@ -50,6 +50,7 @@ const OthersFees = ({navigation}) => {
   const [fees, setFees] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [bottom, setBottom] = useState(false);
   const {feesDetails} = route.params;
   const id = feesDetails?.appointment_id;
   let totalFees = 0;
@@ -99,11 +100,6 @@ const OthersFees = ({navigation}) => {
     }
   };
   const [apiStatus, setApiStatus] = useState({});
-
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
 
   const handleDelete = ind => {
     const updatefee = submittedFees?.filter((_, index) => index !== ind);
@@ -208,14 +204,14 @@ const OthersFees = ({navigation}) => {
         const jsonData = await response.json();
         if (jsonData) {
           setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             nav?.goBack();
           }, 1000);
           setLoading(false);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status, response);
           setLoading(false);
         }
@@ -223,7 +219,7 @@ const OthersFees = ({navigation}) => {
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('Error occurred:', error);
       setLoading(false);
     }
@@ -336,11 +332,11 @@ const OthersFees = ({navigation}) => {
         btnstyles={commonstyles.activebtn}
       />
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
     </View>
   );
 };

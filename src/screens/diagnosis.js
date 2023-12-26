@@ -76,8 +76,10 @@ const Diagnosis = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
+      console.log(jsonData);
       const snomed_data = jsonData?.map(item => ({term: item}));
       setData(snomed_data);
+
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);

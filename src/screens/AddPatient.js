@@ -32,8 +32,8 @@ import {HttpStatusCode} from 'axios';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import {addPatient} from '../redux/features/patient/patientslice';
-import { checkNotifications } from 'react-native-permissions';
-import { checkNumber } from '../utility/checks';
+import {checkNotifications} from 'react-native-permissions';
+import {checkNumber} from '../utility/checks';
 
 const Abha = ({navigation}) => {
   const dispatch = useDispatch();
@@ -42,10 +42,7 @@ const Abha = ({navigation}) => {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMDU5MzQwLCJpYXQiOjE2OTA5NzI5NDAsImp0aSI6ImMzNThiODcwNDJlOTQyMDE4OWY3ZTZlNGNkYzU5ZGMwIiwidXNlcl9pZCI6IjkxNzc0Njg1MTEifQ.-fTXhuaLDMCKH8jh1UZmHJ06Sp36bnHtHr5FZnOiUN0';
   const [selected, setSelected] = useState('');
   const formatDate = moment(DOB).format('YYYY-MM-DD');
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+  const [bottom, setBottom] = useState(false);
 
   const handleOptions = value => {
     setSelected(value);
@@ -91,7 +88,7 @@ const Abha = ({navigation}) => {
     const options = {
       mediaType: 'photo',
       quality: 0.5,
-    }
+    };
 
     launchImageLibrary(options, response => {
       if (response.didCancel) {
@@ -112,33 +109,7 @@ const Abha = ({navigation}) => {
       image: selectedImage,
     },
   ];
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(URL.profileUrl, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Accept:
-  //             'application/json, application/xml, multipart/form-data, text/html, text/plain, application/EDI-X12',
-  //         },
-  //         body: JSON.stringify({
-  //           name: name,
-  //           gender: gender,
-  //           phone_number: phone_number,
-  //           birth_date: birth_date,
-  //           image: selectedImage,
-  //         }),
-  //       });
-  //       if (response.status === HttpStatusCode.Created) {
-  //         const jsonData = await response.json();
-  //         console.log(jsonData);
-  //       } else {
-  //         console.error('API call failed:', response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred:', error);
-  //     }
-  //   };
+
   const fetchData = async () => {
     try {
       const response = await fetchApi(URL.addPatient, {
@@ -161,7 +132,6 @@ const Abha = ({navigation}) => {
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
-        //navigation.navigate('success');
       } else {
         console.error('API call failed:', response.status);
       }
@@ -208,8 +178,8 @@ const Abha = ({navigation}) => {
             }}
           />
           <InputText
-          doubleCheck={[true, false]}
-          check={checkNumber}
+            doubleCheck={[true, false]}
+            check={checkNumber}
             label={Language[language]['phone_number']}
             placeholder={Language[language]['phone_number']}
             value={phone_number}
@@ -272,16 +242,16 @@ const Abha = ({navigation}) => {
               handleSaveData();
               fetchData();
               navigation.navigate('success');
-              SuccesRef?.current?.snapToIndex(1);
+              setBottom(true);
             }}
           />
         </View>
-        <BottomSheetView bottomSheetRef={SuccesRef} snapPoints={'50%'}>
-          <StatusMessage
-            status={'success'}
-            message="Sucessfully Created Abha ID"
-          />
-        </BottomSheetView>
+        <BottomSheetView
+          visible={bottom}
+          setVisible={setBottom}
+          status={'success'}
+          message="Sucessfully Created Abha ID"
+        />
       </View>
     </ScrollView>
   );

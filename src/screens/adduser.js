@@ -96,6 +96,7 @@ const AddUser = ({navigation}) => {
   const {prevScrn} = route.params;
   // console.log('----prevvvv', prevScrn);
   const [modal, setModal] = useState(false);
+  const [bottom, setBottom] = useState(false);
   const ModalVisible = () => {
     setModal(true);
     GlRef?.current?.snapToIndex(1);
@@ -132,7 +133,7 @@ const AddUser = ({navigation}) => {
   ];
   const SuccesRef = useRef(null);
   useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
+    setBottom(true);
   }, []);
 
   const ResetClinic_Users_Redux = () => {
@@ -157,7 +158,7 @@ const AddUser = ({navigation}) => {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           dispatch(headerStatus({index: 1, status: true}));
           navigation.goBack();
           setTimeout(() => {
@@ -169,7 +170,7 @@ const AddUser = ({navigation}) => {
           // SuccesRef?.current?.snapToIndex(0);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status, response);
           setLoading(false);
         }
@@ -177,7 +178,7 @@ const AddUser = ({navigation}) => {
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('Error occurred:', error);
       setLoading(false);
     }
@@ -221,20 +222,6 @@ const AddUser = ({navigation}) => {
   const handleOptions = value => {
     handleChangeValue('gender', value);
   };
-
-  // const handleRoleSelection = role => {
-  //   setSelectedRole(role);
-  //   handleChangeValue('role', role);
-  //   setTimeout(() => {
-  //     RoleRef?.current?.snapToIndex(0);
-  //   }, 500);
-  // };
-
-  // const handleClinicSelection = clinic => {
-  //   setSelectedClinic(clinic.clinic_name);
-  //   handleChangeValue('clinic', clinic.clinic_name);
-  //   ClinicRef?.current?.snapToIndex(0);
-  // };
 
   const onImagePress = () => {
     const options = {
@@ -551,50 +538,7 @@ const AddUser = ({navigation}) => {
                 input={selectedClinic}
               /> */}
             </View>
-            {/* <View style={styles.save}>
-              <HButton
-                btnstyles={{
-                  backgroundColor:
-                    values.name &&
-                    values.gender &&
-                    values.phone.length === 10 &&
-                    selectedClinic &&
-                    selectedRole
-                      ? CUSTOMCOLOR.primary
-                      : CUSTOMCOLOR.disable,
-                }}
-                label="save"
-                onPress={handlePlusIconClick}
-              />
-            </View> */}
-            {/* <View style={styles.users}>
-              <View>
-                {values?.slots?.length > 0 && (
-                  <Text style={styles.UsersText}>Users</Text>
-                )}
-                <View
-                  style={{
-                    gap: moderateScale(4),
-                    marginBottom: moderateScale(4),
-                  }}>
-                  {showSlotChip &&
-                    clinic_users?.map((item, index) => (
-                      <View
-                        style={{marginBottom: moderateScale(4)}}
-                        key={index}>
-                        <SlotChip
-                          key={item.index}
-                          index={item.index}
-                          onPress={() => handleDeleteSlotChip(index)}
-                          time={<Text>Name: {item.clinic_user_name}</Text>}
-                          type={<Text>Role: {item.role}</Text>}
-                          duration={<Text>Clinic: {item.clinic_id}</Text>}
-                        />
-                      </View>
-                    ))}
-                </View>
-              </View>
-            </View> */}
+
             <View style={styles.bottom}>
               {/* <HButton
                 rightIcon="arrow-right-thin"
@@ -631,62 +575,13 @@ const AddUser = ({navigation}) => {
           loading={loading}
         />
       </View>
-      {/* <BottomSheetView
-        bottomSheetRef={RoleRef}
-        snapPoints={'20%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <View style={styles.modalContainer}>
-          {CONSTANTS.role.map((role, index) => (
-            <Pressable key={index} onPress={() => handleRoleSelection(role)}>
-              <Text
-                style={[
-                  styles.modalfields,
-                  {
-                    color:
-                      selectedRole === role
-                        ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.black,
-                  },
-                ]}>
-                {role}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      </BottomSheetView> */}
-      {/* <BottomSheetView
-        bottomSheetRef={ClinicRef}
-        snapPoints={'35%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.clinicsname}>{Language[language]['clinic']}</Text>
-          {clinics &&
-            clinics?.map((clinic, index) => (
-              <Pressable
-                key={index}
-                onPress={() => handleClinicSelection(clinic)}>
-                <Text
-                  style={[
-                    styles.modalfields,
-                    {
-                      color:
-                        selectedClinic === clinic
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.black,
-                    },
-                  ]}>
-                  {clinic.clinic_name}
-                </Text>
-              </Pressable>
-            ))}
-        </View>
-      </BottomSheetView> */}
+
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
       {modal && (
         <View>
           <GalleryModel

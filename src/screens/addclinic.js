@@ -84,6 +84,7 @@ const AddClinic = ({navigation}) => {
   const [logoShow, setLogoShow] = useState(false);
   const dispatch = useDispatch();
   const [mergedSlots, setMergedSlots] = useState({});
+  const [bottom, setBottom] = useState(false);
   const processClinics = () => {
     const mergedData = clinics?.reduce((acc, clinic) => {
       const AllslotData = JSON.parse(clinic?.slot_data?.slot);
@@ -168,15 +169,12 @@ const AddClinic = ({navigation}) => {
     dispatch(updateslots(newSlotsss?.slots));
   };
 
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
-
   const [status, setStatus] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedLogo, setSelectedLogo] = useState(null);
+  const [ctype, setCtype] = useState(false);
+  const [slottype, setSlotType] = useState(false);
   const [value, setValue] = useState({
     clinic: '',
     address: '',
@@ -219,18 +217,16 @@ const AddClinic = ({navigation}) => {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           dispatch(headerStatus({index: 1, status: true}));
           navigation.goBack();
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 2000);
+
           setLoading(false);
           // ResetClinicRedux();
-          // SuccesRef?.current?.snapToIndex(0);
+          // ;
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status, response);
           setLoading(false);
         }
@@ -238,7 +234,7 @@ const AddClinic = ({navigation}) => {
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       setLoading(false);
     }
   };
@@ -389,7 +385,7 @@ const AddClinic = ({navigation}) => {
   const FromformattedTime = moment(fromTime).utcOffset(330).format('HH:mm');
   const handleTypeSelect = value => {
     setConsultValue(value);
-    slotTypeRef?.current?.snapToIndex(0);
+    setSlotType(false);
     setShows(!shows);
   };
 
@@ -1232,7 +1228,7 @@ const AddClinic = ({navigation}) => {
           loading={loading}
         />
       </View>
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={addressRef}
         snapPoints={'100%'}
         backgroundStyle={CUSTOMCOLOR.white}>
@@ -1243,16 +1239,13 @@ const AddClinic = ({navigation}) => {
             }}
           />
         </View>
-      </BottomSheetView>
-      <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
+      </BottomSheetView> */}
+      <BottomSheetView visible={bottom} setVisible={setBottom}>
         <StatusMessage status={apiStatus.status} message={apiStatus.message} />
       </BottomSheetView>
       <BottomSheetView
-        bottomSheetRef={slotTypeRef}
-        snapPoints={'40%'}
+        visible={ctype}
+        setVisible={setCtype}
         backgroundStyle={CUSTOMCOLOR.white}>
         <ScrollView>
           <View style={styles.bottomSheet}>
@@ -1269,8 +1262,8 @@ const AddClinic = ({navigation}) => {
         </ScrollView>
       </BottomSheetView>
       <BottomSheetView
-        bottomSheetRef={slotDurationRef}
-        snapPoints={'40%'}
+        visible={slottype}
+        setVisible={setSlotType}
         backgroundStyle={CUSTOMCOLOR.white}>
         <ScrollView>
           <View style={styles.bottomSheet}>

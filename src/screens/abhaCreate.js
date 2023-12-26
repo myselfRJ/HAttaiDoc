@@ -35,11 +35,7 @@ import {addPatient} from '../redux/features/patient/patientslice';
 import {Alert} from 'react-native';
 
 const AbhaCreate = ({navigation, route}) => {
-  const SuccesRef = useRef(null);
-
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+  const [bottom, setBottom] = useState(false);
 
   const [firstName, setFirstname] = useState('');
   const [lastName, setLastname] = useState('');
@@ -128,11 +124,11 @@ const AbhaCreate = ({navigation, route}) => {
         });
         if (postPatientdata.status === HttpStatusCode.Ok) {
           const PatientData = await postPatientdata.json();
-          useDispatch(addPatient.addPatient(PatientData))
+          useDispatch(addPatient.addPatient(PatientData));
           setTimeout(() => {
             navigation.navigate('success', {patient_phone_number});
           }, 1000);
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setFirstname();
           setMiddlename();
           setLastname();
@@ -260,14 +256,11 @@ const AbhaCreate = ({navigation, route}) => {
           />
         </View>
         <BottomSheetView
-          bottomSheetRef={SuccesRef}
-          snapPoints={'50%'}
-          backgroundStyle={'#fff'}>
-          <StatusMessage
-            status={'success'}
-            message="Sucessfully Created Abha ID"
-          />
-        </BottomSheetView>
+          visible={bottom}
+          setVisible={setBottom}
+          status={'success'}
+          message="Sucessfully Created Abha ID"
+        />
       </View>
     </ScrollView>
   );

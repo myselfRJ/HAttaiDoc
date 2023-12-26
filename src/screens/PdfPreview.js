@@ -58,6 +58,7 @@ import sendNotification from '../utility/notification';
 
 const PdfView = ({navigation}) => {
   const [patientFcmTokens, setPatientFcmTokens] = useState([]);
+  const [bottom, setBottom] = useState(false);
   const FecthFcmTokensByPatient = async () => {
     try {
       const response = await fetch(URL.GetFcmTokens_Patient(patient_phone), {
@@ -90,11 +91,9 @@ const PdfView = ({navigation}) => {
     patient_phone,
     prevScreen,
   } = route.params;
-  const SuccesRef = useRef(null);
+
   // console.log('data==', consultationData?.pastHistory?.martial_history);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+
   const dispatch = useDispatch();
   const token = useSelector(state => state.authenticate.auth.access);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
@@ -211,7 +210,7 @@ const PdfView = ({navigation}) => {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           ResetRuduxState();
           const formData = new FormData();
           formData.append('doctor_phone_number', `${doc_phone}`);
@@ -350,11 +349,11 @@ const PdfView = ({navigation}) => {
         </View>
       </View>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
     </>
   );
 };

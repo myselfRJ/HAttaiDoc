@@ -479,7 +479,7 @@ const Dashboard = ({navigation, route}) => {
 
       {/* </View> */}
 
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={ClinicRef}
         snapPoints={'50%'}
         backgroundStyle={'#000000aa'}>
@@ -494,7 +494,7 @@ const Dashboard = ({navigation, route}) => {
               </Pressable>
             ))}
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
     </View>
   );
 };

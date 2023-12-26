@@ -54,6 +54,8 @@ const OtpScreen = ({route}) => {
   const [apiStatus, setApiStatus] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [bottom, setBottom] = useState(false);
+
   const {phone, trace_id} = useSelector(state => state?.phone?.data);
   const nav = useNavigation();
 
@@ -87,11 +89,6 @@ const OtpScreen = ({route}) => {
     setValue('');
     resendOtp();
   };
-
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
 
   const resendOtp = async () => {
     //setLoading(!loading);
@@ -141,7 +138,7 @@ const OtpScreen = ({route}) => {
             status: 'success',
             message: jsonData?.message,
           });
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             nav.navigate('protected');
           }, 1000);
@@ -149,7 +146,7 @@ const OtpScreen = ({route}) => {
           setLoading(false);
         } else {
           setApiStatus({status: 'warning', message: jsonData.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status);
           setLoading(false);
         }
@@ -157,7 +154,7 @@ const OtpScreen = ({route}) => {
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       setLoading(false);
     }
   };
@@ -249,11 +246,12 @@ const OtpScreen = ({route}) => {
         </View>
       </ScrollView>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={CUSTOMCOLOR.white}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        backgroundStyle={CUSTOMCOLOR.white}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
     </View>
   );
 };

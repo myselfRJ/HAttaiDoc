@@ -213,7 +213,7 @@ const PatientSearch = ({navigation}) => {
       </View>
 
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={ClinicRef}
         snapPoints={'50%'}
         backgroundStyle={'#000000aa'}>
@@ -238,7 +238,7 @@ const PatientSearch = ({navigation}) => {
             </Pressable>
           ))}
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
     </View>
   );
 };

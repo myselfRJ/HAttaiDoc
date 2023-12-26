@@ -169,10 +169,7 @@ const PatientCreate = ({navigation, route}) => {
 
   const [apiStatus, setApiStatus] = useState({});
   const RoleRef = useRef(null);
-  const SuccesRef = useRef(null);
-  useEffect(() => {
-    SuccesRef?.current?.snapToIndex(1);
-  }, []);
+  const [bottom, setBottom] = useState(false);
 
   const patient_phone = patient_phone_number;
   const fetchData = async () => {
@@ -192,7 +189,7 @@ const PatientCreate = ({navigation, route}) => {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           setTimeout(() => {
             navigation.navigate('bookslot', {patient_phone});
           }, 1000);
@@ -204,12 +201,9 @@ const PatientCreate = ({navigation, route}) => {
           setSpouse_nmae('');
           setAge();
           setLoading(false);
-          setTimeout(() => {
-            SuccesRef?.current?.snapToIndex(0);
-          }, 1500);
         } else {
           setApiStatus({status: 'warning', message: jsonData?.message});
-          SuccesRef?.current?.snapToIndex(1);
+          setBottom(true);
           console.error('API call failed:', response.status, response);
           setLoading(false);
         }
@@ -217,7 +211,7 @@ const PatientCreate = ({navigation, route}) => {
     } catch (error) {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
-      SuccesRef?.current?.snapToIndex(1);
+      setBottom(true);
       console.error('Error occurred:', error);
       setLoading(false);
     }
@@ -227,11 +221,6 @@ const PatientCreate = ({navigation, route}) => {
     setModal(true);
   };
 
-  // useEffect(() => {
-  //   if (phoneRoute) {
-  //     setPatient_Phone_number(phoneRoute);
-  //   }
-  // }, []);
   const findUsSelection = value => {
     const isSelected = find.includes(value);
 
@@ -241,7 +230,6 @@ const PatientCreate = ({navigation, route}) => {
       setFind([...find, value]);
     }
   };
-
 
   return (
     <View style={styles.main}>
@@ -635,11 +623,12 @@ const PatientCreate = ({navigation, route}) => {
         </Keyboardhidecontainer>
       </ScrollView>
       <BottomSheetView
-        bottomSheetRef={SuccesRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#fff'}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
+
       {modal && (
         <View>
           <GalleryModel

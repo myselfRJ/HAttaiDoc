@@ -1384,17 +1384,16 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'History of Present Illness' &&
-                    note !== '' && (
-                      <View style={styles.complaintcontainer}>
-                        <Icon
-                          name="file-document-edit"
-                          color={CUSTOMCOLOR.primary}
-                          size={moderateScale(16)}
-                        />
-                        <Text style={styles.pulse}>{note}</Text>
-                      </View>
-                    )}
+                  {value.label === 'History of Present Illness' && note !== '' && (
+                    <View style={styles.complaintcontainer}>
+                      <Icon
+                        name="file-document-edit"
+                        color={CUSTOMCOLOR.primary}
+                        size={moderateScale(16)}
+                      />
+                      <Text style={styles.pulse}>{note}</Text>
+                    </View>
+                  )}
                   {value.label === 'Doctor Notes' && notes !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
@@ -1405,19 +1404,7 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{notes}</Text>
                     </View>
                   )}
-                  {/* {value.label === 'Diagnosis' && diagnosis !== '' && 
-                    
-                     {diagnosis.map((item,index)=>{
-                      <View style={styles.complaintcontainer}>
-                       <Icon
-                       name="prescription"
-                       color={CUSTOMCOLOR.primary}
-                       size={moderateScale(16)}
-                     />
-                     <Text style={styles.pulse}>{diagnosis}</Text>
-                        
-                    </View>
-                     })} } */}
+
                   {value.label === 'Diagnosis' && diagnosis.length > 0 && (
                     <View style={styles.basiccontainer}>
                       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -1448,31 +1435,30 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Comorbidities' &&
-                    commorbities.length > 0 && (
-                      <View style={styles.basiccontainer}>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                          <View style={styles.common}>
-                            <View>
-                              {commorbities?.map((item, ind) => (
-                                <View key={ind} style={styles.common}>
-                                  <Icon
-                                    name="prescription"
-                                    size={moderateScale(16)}
-                                    color={CUSTOMCOLOR.primary}
-                                  />
-                                  <View>
-                                    <Text style={styles.pulse}>
-                                      {item?.commoribities}
-                                    </Text>
-                                  </View>
+                  {value.label === 'Comorbidities' && commorbities.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View style={styles.common}>
+                          <View>
+                            {commorbities?.map((item, ind) => (
+                              <View key={ind} style={styles.common}>
+                                <Icon
+                                  name="prescription"
+                                  size={moderateScale(16)}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={styles.pulse}>
+                                    {item?.commoribities}
+                                  </Text>
                                 </View>
-                              ))}
-                            </View>
+                              </View>
+                            ))}
                           </View>
                         </View>
                       </View>
-                    )}
+                    </View>
+                  )}
 
                   {value.label === 'Past Hospitalization' &&
                     pasthistory.length > 0 && (
