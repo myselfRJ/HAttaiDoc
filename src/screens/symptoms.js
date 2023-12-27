@@ -53,7 +53,7 @@ const Symptoms = ({navigation}) => {
   const [hr, setHr] = useState('');
   const [selected, setSelected] = useState('');
   const [sevSelected, setSevSelected] = useState('');
-  const option = 'finding';
+  const option = 'finding++disorder';
   // const [selected, setSelected] = useState('');
   const [months, setmonths] = useState('');
   const [icon, setIcon] = useState('magnify');

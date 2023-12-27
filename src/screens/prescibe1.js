@@ -46,7 +46,7 @@ export default function Prescribe1({navigation}) {
   const {phone} = useSelector(state => state?.phone?.data);
   const [data, setData] = useState([]);
 
-  const option = 'clinical drug';
+  const option = 'real clinical drug';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');

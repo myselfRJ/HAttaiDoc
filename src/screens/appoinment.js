@@ -339,7 +339,7 @@ const Appointment = ({navigation}) => {
           onPress={handlePlusBUtton}
         />
       </View>
-      <BottomSheetView
+      {/* <BottomSheetView
         bottomSheetRef={ClinicRef}
         snapPoints={'50%'}
         backgroundStyle={'#000000aa'}>
@@ -354,7 +354,7 @@ const Appointment = ({navigation}) => {
               </Pressable>
             ))}
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
     </View>
   );
 };

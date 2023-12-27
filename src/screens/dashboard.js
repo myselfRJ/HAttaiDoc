@@ -57,7 +57,12 @@ import {disableBackButton} from '../utility/backDisable';
 import DButton from '../components/DButton';
 import AppointmentStatusCard from '../components/appointmentStatusCard';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
-import {AppointmentDatafilterAndSortData} from '../utility/const';
+import {
+  AppointmentDatafilterAndSortData,
+  AppointmentsInAMonth,
+  AppointmentsInAYear,
+  WeekdaysData,
+} from '../utility/const';
 
 const Dashboard = ({navigation, route}) => {
   const months = CONSTANTS.months;
@@ -173,7 +178,8 @@ const Dashboard = ({navigation, route}) => {
   const appointment_date = formatDate;
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
-
+  const [Appointmentdatainrange, setAppointmentdatainrange] = useState([]);
+  const [Appointmentdatainmonths, setAppointmentdatainmonths] = useState([]);
   const fetchAppointment = async () => {
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
@@ -198,10 +204,10 @@ const Dashboard = ({navigation, route}) => {
   }, [formatDate, Clinic_id]);
 
   const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    labels: Appointmentdatainmonths,
     datasets: [
       {
-        data: [90, 45, 28, 80, 99, 43],
+        data: Appointmentdatainrange,
       },
     ],
   };
@@ -234,10 +240,21 @@ const Dashboard = ({navigation, route}) => {
   let pendingAppointments = setAppointment.filter(
     appointment => appointment.status === 'pending',
   );
+  const currentDate = new Date();
+  const oneYearAgo = new Date(currentDate);
+  oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+  const oneMonthAgo = new Date(currentDate);
+  oneMonthAgo.setMonth(currentDate.getMonth() - 1);
+  const oneWeekAgo = new Date(currentDate);
+  oneWeekAgo.setDate(currentDate.getDate() - 7);
   let totalAppointments = setAppointment.length;
   const FetchRangeAppointments = async () => {
-    const start_date = encodeURIComponent('2022-12-18');
-    const end_date = encodeURIComponent('2023-12-22');
+    const start_date = encodeURIComponent(
+      oneYearAgo.toISOString()?.split('T')[0],
+    );
+    const end_date = encodeURIComponent(
+      currentDate?.toISOString()?.split('T')[0],
+    );
     try {
       const response = await fetchApi(
         URL.getAppointmentsInRange(start_date, end_date, phone),
@@ -250,107 +267,107 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        const monthlyCounts = [];
-        jsonData?.data.forEach(appointment => {
-          const date = new Date(appointment.appointment_date);
-          const monthYear = `${
-            months[date.getMonth() + 1]
-          }-${date.getFullYear()}`;
-          const existingMonth = monthlyCounts.find(
-            entry => entry.month === monthYear,
-          );
-          if (existingMonth) {
-            existingMonth.count++;
-          } else {
-            monthlyCounts.push({month: monthYear, count: 1});
-          }
+        const data = AppointmentsInAYear(jsonData?.data, start_date, end_date);
+        let weekdata = data?.map((item, index) => {
+          return item?.count;
         });
-        console.log(monthlyCounts);
+        setAppointmentdatainrange(weekdata);
+        let months = data?.map((item, index) => {
+          return item?.month?.split('-')[0];
+        });
+        setAppointmentdatainmonths(months);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(Appointmentdatainrange, Appointmentdatainmonths);
 
-  const FetchRangeFees = async () => {
-    const start_date = encodeURIComponent('2022-12-19');
-    const end_date = encodeURIComponent('2023-12-21');
-    try {
-      const response = await fetchApi(
-        URL.getRangeFess(start_date, end_date, phone),
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (response.ok) {
-        const jsonData = await response.json();
-        function filterDataByDateRange(startDate, endDate) {
-          return jsonData?.data.filter(entry => {
-            const entryDate = new Date(entry.created_at);
-            return entryDate >= startDate && entryDate <= endDate;
-          });
-        }
-        let totalFees = 0;
-        // const currentDate = new Date();
-        // const oneYearAgo = new Date(currentDate);
-        // oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
-        const Fess_date_range = filterDataByDateRange(
-          new Date(start_date),
-          new Date(end_date),
-        );
-        const monthlyData = {};
-        Fess_date_range.forEach(entry => {
-          const entryDate = new Date(entry.created_at);
-          const year = entryDate.getFullYear().toString();
-          const month = entryDate.toISOString().slice(0, 7);
-          if (!monthlyData[year]) {
-            monthlyData[year] = {};
-          }
-          if (!monthlyData[year][month]) {
-            monthlyData[year][month] = [];
-          }
-          monthlyData[year][month].push(entry);
-        });
-        const feeItems = [];
-        for (const year in monthlyData) {
-          if (monthlyData.hasOwnProperty(year)) {
-            for (const month in monthlyData[year]) {
-              if (monthlyData[year].hasOwnProperty(month)) {
-                monthlyData[year][month]?.map(item => {
-                  const fees = JSON.parse(item?.fees);
-                  totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
-                });
-                feeItems.push({
-                  month: `${month?.split('-')[0]}-${
-                    months[month?.split('-')[1]]
-                  }`,
-                  fees: totalFees,
-                });
-                console.log(feeItems);
-              }
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const FetchRangeFees = async () => {
+  //   const start_date = encodeURIComponent('2022-12-19');
+  //   const end_date = encodeURIComponent('2023-12-21');
+  //   try {
+  //     const response = await fetchApi(
+  //       URL.getRangeFess(start_date, end_date, phone),
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+  //     if (response.ok) {
+  //       const jsonData = await response.json();
+  //       function filterDataByDateRange(startDate, endDate) {
+  //         return jsonData?.data.filter(entry => {
+  //           const entryDate = new Date(entry.created_at);
+  //           return entryDate >= startDate && entryDate <= endDate;
+  //         });
+  //       }
+  //       let totalFees = 0;
+  //       const currentDate = new Date();
+  //       // const oneYearAgo = new Date(currentDate);
+  //       // oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+  //       const oneMonthAgo = new Date(currentDate);
+  //       oneMonthAgo.setMonth(currentDate.getMonth() - 1);
+  //       const oneWeekAgo = new Date(currentDate);
+  //       oneWeekAgo.setDate(currentDate.getDate() - 7);
+  //       console.log('==================', oneMonthAgo, oneWeekAgo);
+  //       const Fess_date_range = filterDataByDateRange(
+  //         new Date(start_date),
+  //         new Date(end_date),
+  //       );
+  //       const monthlyData = {};
+  //       Fess_date_range.forEach(entry => {
+  //         const entryDate = new Date(entry.created_at);
+  //         const year = entryDate.getFullYear().toString();
+  //         const month = entryDate.toISOString().slice(0, 7);
+  //         if (!monthlyData[year]) {
+  //           monthlyData[year] = {};
+  //         }
+  //         if (!monthlyData[year][month]) {
+  //           monthlyData[year][month] = [];
+  //         }
+  //         monthlyData[year][month].push(entry);
+  //       });
+  //       const feeItems = [];
+  //       for (const year in monthlyData) {
+  //         if (monthlyData.hasOwnProperty(year)) {
+  //           for (const month in monthlyData[year]) {
+  //             if (monthlyData[year].hasOwnProperty(month)) {
+  //               monthlyData[year][month]?.map(item => {
+  //                 const fees = JSON.parse(item?.fees);
+  //                 totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
+  //               });
+  //               feeItems.push({
+  //                 month: `${month?.split('-')[0]}-${
+  //                   months[month?.split('-')[1]]
+  //                 }`,
+  //                 fees: totalFees,
+  //               });
+  //               console.log(feeItems);
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   useEffect(() => {
     FetchRangeAppointments();
-    FetchRangeFees();
+    // FetchRangeFees();
   }, []);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
-      FetchRangeFees();
+      // FetchRangeFees();
     }, [phone]),
   );
   const AppointmentFilterdata =
     AppointmentDatafilterAndSortData(setAppointment);
+
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>

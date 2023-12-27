@@ -25,7 +25,7 @@ const ChartCard = props => {
   const selector = [
     Language[language]['weekly'],
     Language[language]['monthly'],
-    Language[language]['yearly'],
+    // Language[language]['yearly'],
   ];
   return (
     <View style={styles.container}>
@@ -63,25 +63,33 @@ const ChartCard = props => {
           }}
         />
       </View>
-      <BarChart
-        data={props.data}
-        width={Dimensions.get('window').width / 2.5}
-        height={200}
-        yAxisLabel={props.label ? props.label : undefined}
-        withInnerLines={false}
-        verticalLabelRotation={0}
-        fromZero={true}
-        showBarTops={true}
-        chartConfig={{
-          backgroundColor: CUSTOMCOLOR.white,
-          backgroundGradientFrom: CUSTOMCOLOR.white,
-          backgroundGradientTo: CUSTOMCOLOR.white,
-          decimalPlaces: 0,
-          barPercentage: 0.8,
-          color: () => CUSTOMCOLOR.graph,
-          labelColor: () => CUSTOMCOLOR.black,
-        }}
-      />
+      <View
+        style={{
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+        }}>
+        <BarChart
+          data={props.data}
+          width={360}
+          height={300}
+          yAxisLabel={props.label ? props.label : undefined}
+          withInnerLines={true}
+          verticalLabelRotation={0}
+          fromZero={true}
+          showBarTops={true}
+          chartConfig={{
+            backgroundColor: CUSTOMCOLOR.white,
+            backgroundGradientFrom: CUSTOMCOLOR.white,
+            backgroundGradientTo: CUSTOMCOLOR.white,
+            decimalPlaces: 0,
+            barPercentage: 0.5,
+            propsForLabels: {fontSize: 10, fontStyle: 'italic'},
+            style: {backfaceVisibility: 'visible'},
+            color: () => CUSTOMCOLOR.graph,
+            labelColor: () => CUSTOMCOLOR.black,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -90,10 +98,9 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     paddingBottom: 8,
     borderRadius: 4,
-    paddingRight: 16,
   },
   header: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',

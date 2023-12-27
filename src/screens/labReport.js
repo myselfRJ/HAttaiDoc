@@ -31,6 +31,7 @@ import {
 } from '../utility/AsyncStorage';
 import {CONSTANT} from '../utility/const';
 import {commonstyles} from '../styles/commonstyle';
+import CustomModal from '../components/CustomModal';
 
 const LabReports = () => {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -144,7 +145,16 @@ const LabReports = () => {
       }
     });
   }, []);
-
+  const [modal, setModal] = useState(false);
+  const [template, setTemplate] = useState('');
+  const HandleTemplates = () => {
+    if (prev?.length > 0 && template) {
+      StoreAsyncData(`template${phone}${template}`, prev);
+      setModal(!modal);
+      console.log('indraaaaaaaaaaaaaa');
+    }
+  };
+  console.log(prev);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
@@ -242,23 +252,6 @@ const LabReports = () => {
                 </TouchableOpacity>
               ))}
             </View>
-
-            {/* <View
-              style={{
-                alignSelf: 'flex-end',
-                marginTop: moderateScale(32),
-                paddingHorizontal: horizontalScale(8),
-              }}>
-              <HButton
-                // btnstyles={{paddingHorizontal:horizontalScale(12)}}
-                type="addtype"
-                icon="plus"
-                label={'Add'}
-                onPress={() => {
-                  HandleAddValue();
-                }}
-              />
-            </View> */}
             <View style={{top: moderateScale(32), gap: moderateScale(4)}}>
               {prev?.map((item, ind) =>
                 prev.length > 0 ? (
@@ -281,7 +274,26 @@ const LabReports = () => {
             handledata();
           }}
         />
+        {/* <HButton
+          btnstyles={commonstyles.activebtn}
+          label={'open'}
+          onPress={() => {
+            setModal(!modal);
+          }}
+        /> */}
       </View>
+      {/* {modal && (
+        <CustomModal visible={modal} Close={setModal}>
+          <View style={{backgroundColor: CUSTOMCOLOR.white}}>
+            <InputText
+              value={template}
+              setValue={setTemplate}
+              placeholder={'Enter Template Name'}
+            />
+          </View>
+          <HButton label={'save'} onPress={HandleTemplates} />
+        </CustomModal>
+      )} */}
     </View>
   );
 };

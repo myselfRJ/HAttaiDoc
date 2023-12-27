@@ -51,7 +51,7 @@ import {
 } from '../redux/features/profiles/clinicId';
 
 const SlotBook = ({navigation, route}) => {
-  const option = 'finding';
+  const option = 'procedure++situation++finding';
   const dispatch = useDispatch();
   const {id} = route.params;
   const [data, setData] = useState([]);

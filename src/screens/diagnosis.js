@@ -39,7 +39,7 @@ import {commonstyles} from '../styles/commonstyle';
 const Diagnosis = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
   const dia_types = ['Provisional', 'Confirmed'];
-  const option = 'finding';
+  const option = 'disorder';
   const term = 'diagnosis';
   const nav = useNavigation();
   const [value, setValue] = useState('');

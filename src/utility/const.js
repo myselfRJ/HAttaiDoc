@@ -461,3 +461,116 @@ export const AppointmentDatafilterAndSortData = data => {
   const sorteddata = sortedData?.concat(completedItems);
   return sorteddata;
 };
+import {CONSTANTS} from './constant';
+const months = CONSTANTS.months;
+
+export const AppointmentsInAYear = (data, start_date, end_date) => {
+  function generateMonthSeries(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const monthSeries = [];
+    while (start <= end) {
+      const month = start.toLocaleString('default', {month: 'short'});
+      const year = start.getFullYear();
+      const monthString = `${month}-${year}`;
+
+      monthSeries.push(monthString);
+      start.setMonth(start.getMonth() + 1);
+    }
+
+    return monthSeries;
+  }
+  const result = generateMonthSeries(start_date, end_date);
+  // console.log('====================================');
+  // console.log('=========dates', start_date, end_date, data);
+  // console.log('====================================');
+  const monthlyCounts = [];
+  data.forEach(appointment => {
+    const date = new Date(appointment.appointment_date);
+    const monthYear = `${months[date.getMonth() + 1]}-${date.getFullYear()}`;
+    const existingMonth = monthlyCounts.find(
+      entry => entry.month === monthYear,
+    );
+    if (existingMonth) {
+      existingMonth.count++;
+    } else {
+      monthlyCounts.push({month: monthYear, count: 1});
+    }
+  });
+  if (monthlyCounts?.length > 0) {
+    console.log('====================================');
+    console.log(result, monthlyCounts);
+    console.log('====================================');
+    let dummyvariable = result?.map((item, _) => {
+      let obj = monthlyCounts.filter(e => e.month === item);
+      if (obj.length > 0) {
+        return {month: obj[0]?.month, count: obj[0]?.count};
+      } else {
+        return {month: item, count: 0};
+      }
+    });
+    console.log('====================================');
+    console.log('======dummy', dummyvariable);
+    console.log('====================================');
+    return dummyvariable;
+  }
+};
+
+export const AppointmentsInAMonth = (data, startDate, endDate) => {
+  const dailyCounts = {};
+  data.forEach(appointment => {
+    const date = new Date(appointment.appointment_date);
+    const dayKey = date.toISOString().split('T')[0];
+    if (!dailyCounts[dayKey]) {
+      dailyCounts[dayKey] = 0;
+    }
+    dailyCounts[dayKey]++;
+  });
+  const EveryDayresult = {};
+  const currentDate = new Date(startDate);
+  const endDateTime = new Date(endDate).getTime();
+  while (currentDate.getTime() <= endDateTime) {
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    EveryDayresult[formattedDate] = dailyCounts[formattedDate] || 0;
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return EveryDayresult;
+};
+
+// export const Appointments = (data, startDate, endDate) => {
+//   const dailyCounts = {};
+//   data.forEach(appointment => {
+//     const date = new Date(appointment.appointment_date);
+//     const dayKey = date.toISOString().split('T')[0];
+//     if (!dailyCounts[dayKey]) {
+//       dailyCounts[dayKey] = 0;
+//     }
+//     dailyCounts[dayKey]++;
+//   });
+//   const EveryDayresult = {};
+//   const currentDate = new Date(startDate);
+//   const endDateTime = new Date(endDate).getTime();
+//   while (currentDate.getTime() <= endDateTime) {
+//     const formattedDate = new Date(currentDate - 30).getMonth();
+//     EveryDayresult[formattedDate] = dailyCounts[formattedDate] || 0;
+//     currentDate.setDate(currentDate.getDate() + 1);
+//   }
+//   return EveryDayresult;
+// };
+
+export const WeekdaysData = data => {
+  const weekname = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dateday = [];
+  for (const date in data) {
+    if (data.hasOwnProperty(date)) {
+      const dateObject = new Date(date);
+      const weekDay = dateObject.getDay();
+      const dayName = weekname[weekDay];
+      dateday.push({
+        day: dayName,
+        value: data[date],
+      });
+    }
+  }
+  return dateday;
+};
