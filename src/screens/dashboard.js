@@ -73,7 +73,7 @@ const Dashboard = ({navigation, route}) => {
   const [clinics, setDataClinic] = useState();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
-
+  const [range, setRange] = useState('Monthly');
   const [visible, setVisible] = useState(false);
 
   const handleChart = () => {
@@ -180,6 +180,8 @@ const Dashboard = ({navigation, route}) => {
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const [Appointmentdatainrange, setAppointmentdatainrange] = useState([]);
   const [Appointmentdatainmonths, setAppointmentdatainmonths] = useState([]);
+  const [fesscollection, setFesscollection] = useState([]);
+  const [feescollectionmonth, setFeescollectionMonth] = useState([]);
   const fetchAppointment = async () => {
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
@@ -250,7 +252,9 @@ const Dashboard = ({navigation, route}) => {
   let totalAppointments = setAppointment.length;
   const FetchRangeAppointments = async () => {
     const start_date = encodeURIComponent(
-      oneYearAgo.toISOString()?.split('T')[0],
+      range === 'Monthly'
+        ? oneYearAgo.toISOString()?.split('T')[0]
+        : oneWeekAgo.toISOString()?.split('T')[0],
     );
     const end_date = encodeURIComponent(
       currentDate?.toISOString()?.split('T')[0],
@@ -267,21 +271,38 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        const data = AppointmentsInAYear(jsonData?.data, start_date, end_date);
-        let weekdata = data?.map((item, index) => {
-          return item?.count;
-        });
-        setAppointmentdatainrange(weekdata);
-        let months = data?.map((item, index) => {
-          return item?.month?.split('-')[0];
-        });
-        setAppointmentdatainmonths(months);
+        if (range === 'Monthly') {
+          const data = AppointmentsInAYear(
+            jsonData?.data,
+            start_date,
+            end_date,
+          );
+          let weekdata = data?.map((item, index) => {
+            return item?.count;
+          });
+          setAppointmentdatainrange(weekdata);
+          let months = data?.map((item, index) => {
+            return item?.month?.split('-')[0];
+          });
+          setAppointmentdatainmonths(months);
+        } else {
+          const weeklydata = WeekdaysData(
+            AppointmentsInAMonth(jsonData?.data, start_date, end_date),
+          );
+          let weekdata = weeklydata?.map((item, index) => {
+            return item?.value;
+          });
+          setAppointmentdatainrange(weekdata);
+          let months = weeklydata?.map((item, index) => {
+            return item?.day;
+          });
+          setAppointmentdatainmonths(months);
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(Appointmentdatainrange, Appointmentdatainmonths);
 
   // const FetchRangeFees = async () => {
   //   const start_date = encodeURIComponent('2022-12-19');
@@ -358,7 +379,7 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     FetchRangeAppointments();
     // FetchRangeFees();
-  }, []);
+  }, [range]);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
@@ -388,10 +409,14 @@ const Dashboard = ({navigation, route}) => {
           {visible && (
             <View style={styles.cardContainer}>
               <ChartCard
+                values={['Monthly', 'Weekly']}
+                onSelect={() => setRange('Weekly')}
                 data={data}
                 title={Language[language]['total_patient']}
               />
               <ChartCard
+                values={['Monthly', 'Weekly']}
+                onSelect={() => setRange('Weekly')}
                 data={data}
                 title={Language[language]['earnings']}
                 label="₹ "

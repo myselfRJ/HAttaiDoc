@@ -481,9 +481,6 @@ export const AppointmentsInAYear = (data, start_date, end_date) => {
     return monthSeries;
   }
   const result = generateMonthSeries(start_date, end_date);
-  // console.log('====================================');
-  // console.log('=========dates', start_date, end_date, data);
-  // console.log('====================================');
   const monthlyCounts = [];
   data.forEach(appointment => {
     const date = new Date(appointment.appointment_date);
@@ -498,9 +495,6 @@ export const AppointmentsInAYear = (data, start_date, end_date) => {
     }
   });
   if (monthlyCounts?.length > 0) {
-    console.log('====================================');
-    console.log(result, monthlyCounts);
-    console.log('====================================');
     let dummyvariable = result?.map((item, _) => {
       let obj = monthlyCounts.filter(e => e.month === item);
       if (obj.length > 0) {
@@ -509,9 +503,6 @@ export const AppointmentsInAYear = (data, start_date, end_date) => {
         return {month: item, count: 0};
       }
     });
-    console.log('====================================');
-    console.log('======dummy', dummyvariable);
-    console.log('====================================');
     return dummyvariable;
   }
 };
@@ -536,27 +527,6 @@ export const AppointmentsInAMonth = (data, startDate, endDate) => {
   }
   return EveryDayresult;
 };
-
-// export const Appointments = (data, startDate, endDate) => {
-//   const dailyCounts = {};
-//   data.forEach(appointment => {
-//     const date = new Date(appointment.appointment_date);
-//     const dayKey = date.toISOString().split('T')[0];
-//     if (!dailyCounts[dayKey]) {
-//       dailyCounts[dayKey] = 0;
-//     }
-//     dailyCounts[dayKey]++;
-//   });
-//   const EveryDayresult = {};
-//   const currentDate = new Date(startDate);
-//   const endDateTime = new Date(endDate).getTime();
-//   while (currentDate.getTime() <= endDateTime) {
-//     const formattedDate = new Date(currentDate - 30).getMonth();
-//     EveryDayresult[formattedDate] = dailyCounts[formattedDate] || 0;
-//     currentDate.setDate(currentDate.getDate() + 1);
-//   }
-//   return EveryDayresult;
-// };
 
 export const WeekdaysData = data => {
   const weekname = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

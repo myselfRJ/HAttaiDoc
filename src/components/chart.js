@@ -22,11 +22,12 @@ const ChartCard = props => {
     barPercentage: 1,
   };
 
-  const selector = [
-    Language[language]['weekly'],
-    Language[language]['monthly'],
-    // Language[language]['yearly'],
-  ];
+  // const selector = [
+  //   Language[language]['weekly'],
+  //   Language[language]['monthly'],
+  //   // Language[language]['yearly'],
+  // ];
+  const selector = props.values;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -37,9 +38,9 @@ const ChartCard = props => {
           renderDropdownIcon={() => <SvgXml xml={down} />}
           dropdownIconPosition="right"
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            props.onSelect && props.onSelect();
           }}
-          defaultValue={Language[language]['montly']}
+          defaultValue={selector[0]}
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
