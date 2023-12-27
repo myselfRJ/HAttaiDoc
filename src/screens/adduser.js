@@ -132,9 +132,9 @@ const AddUser = ({navigation}) => {
     },
   ];
   const SuccesRef = useRef(null);
-  useEffect(() => {
-    setBottom(true);
-  }, []);
+  // useEffect(() => {
+  //   setBottom(true);
+  // }, []);
 
   const ResetClinic_Users_Redux = () => {
     const ResetClinic_users = [];
@@ -160,9 +160,10 @@ const AddUser = ({navigation}) => {
           setApiStatus({status: 'success', message: 'Successfully created'});
           setBottom(true);
           dispatch(headerStatus({index: 1, status: true}));
-          navigation.goBack();
+
           setTimeout(() => {
             SuccesRef?.current?.snapToIndex(0);
+            navigation.goBack();
           }, 2000);
           setSelectedClinic(jsonData.data[0]?.clinic_name);
           setLoading(false);
@@ -179,7 +180,6 @@ const AddUser = ({navigation}) => {
       console.error('Error occurred:', error);
       setApiStatus({status: 'error', message: 'Please try again'});
       setBottom(true);
-      console.error('Error occurred:', error);
       setLoading(false);
     }
   };
@@ -188,10 +188,7 @@ const AddUser = ({navigation}) => {
   const handlePlusIconClick = () => {
     if (values.name) {
       {
-        id !== undefined
-          ? UpdateUser()
-          : (fetchData(),
-            Alert.alert('Success', '"User data added successfully"'));
+        id !== undefined ? UpdateUser() : fetchData();
       }
       setShowSlotChip(true);
       setSelectedImage('');
@@ -327,15 +324,25 @@ const AddUser = ({navigation}) => {
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
-          Alert.alert('Success', jsonData?.message);
-          navigation.goBack();
+          setApiStatus({status: 'success', message: 'Successfully Updated'});
+          setBottom(true);
+
+          setTimeout(() => {
+            SuccesRef?.current?.snapToIndex(0);
+            navigation.goBack();
+          }, 2000);
         } else {
-          Alert.alert('warn', jsonData?.message);
+          setApiStatus({status: 'warning', message: jsonData?.message});
+          setBottom(true);
         }
       } else {
         console.error('API call failed:', response.status);
+        setApiStatus({status: 'error', message: `${response.status}`});
+        setBottom(true);
       }
     } catch (error) {
+      setApiStatus({status: 'error', message: error});
+      setBottom(true);
       console.error('An error occurred:', error);
     }
   };

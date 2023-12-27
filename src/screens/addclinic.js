@@ -219,8 +219,9 @@ const AddClinic = ({navigation}) => {
           setApiStatus({status: 'success', message: 'Successfully created'});
           setBottom(true);
           dispatch(headerStatus({index: 1, status: true}));
-          navigation.goBack();
-
+          setTimeout(() => {
+            navigation.goBack();
+          }, 2000);
           setLoading(false);
           // ResetClinicRedux();
           // ;
@@ -556,7 +557,7 @@ const AddClinic = ({navigation}) => {
     }
   };
   const handleClearAllSlots = () => {
-    setSlots({
+    const Slots = {
       M: [],
       T: [],
       W: [],
@@ -564,7 +565,9 @@ const AddClinic = ({navigation}) => {
       F: [],
       Sa: [],
       Su: [],
-    });
+    };
+    setSlots(Slots);
+    setMergedSlots(Slots);
     setselectSlot([]);
     Alert.alert('Success', 'All Slots are cleared');
   };
@@ -574,6 +577,15 @@ const AddClinic = ({navigation}) => {
     );
 
     setSlots(prevSlots => {
+      const updatedSlots = {...prevSlots};
+      for (const day in prevSlots) {
+        updatedSlots[day] = prevSlots[day].filter(
+          slot => !selectedIndices.includes(slot.index),
+        );
+      }
+      return updatedSlots;
+    });
+    setMergedSlots(prevSlots => {
       const updatedSlots = {...prevSlots};
       for (const day in prevSlots) {
         updatedSlots[day] = prevSlots[day].filter(
@@ -686,10 +698,7 @@ const AddClinic = ({navigation}) => {
     if (value.clinic) {
       if (!visibleSlot) {
         {
-          id !== undefined
-            ? Update_Clinic_slots()
-            : (fetchData(),
-              Alert.alert('Success', '"Clinic data added successfully"'));
+          id !== undefined ? Update_Clinic_slots() : fetchData();
         }
         setShowSlotChip(true);
         (value.clinic = ''),
@@ -988,6 +997,7 @@ const AddClinic = ({navigation}) => {
                             }}>
                             {consultType?.map((item, index) => (
                               <TouchableOpacity
+                                key={index}
                                 style={{
                                   paddingHorizontal: horizontalScale(8),
                                   paddingVertical: verticalScale(8),
@@ -1028,6 +1038,7 @@ const AddClinic = ({navigation}) => {
                             }}>
                             {durationMins?.map((item, index) => (
                               <TouchableOpacity
+                                key={index}
                                 style={{
                                   paddingHorizontal: horizontalScale(16),
                                   paddingVertical: verticalScale(8),
@@ -1240,10 +1251,13 @@ const AddClinic = ({navigation}) => {
           />
         </View>
       </BottomSheetView> */}
-      <BottomSheetView visible={bottom} setVisible={setBottom}>
-        <StatusMessage status={apiStatus.status} message={apiStatus.message} />
-      </BottomSheetView>
       <BottomSheetView
+        visible={bottom}
+        setVisible={setBottom}
+        status={apiStatus.status}
+        message={apiStatus.message}
+      />
+      {/* <BottomSheetView
         visible={ctype}
         setVisible={setCtype}
         backgroundStyle={CUSTOMCOLOR.white}>
@@ -1278,7 +1292,7 @@ const AddClinic = ({navigation}) => {
             ))}
           </View>
         </ScrollView>
-      </BottomSheetView>
+      </BottomSheetView> */}
       {/* {modal && (
         <GalleryModel
           visible={modal}

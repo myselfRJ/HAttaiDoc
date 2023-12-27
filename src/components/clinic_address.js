@@ -67,6 +67,7 @@ const ClinicAddress = ({navigation}) => {
         fetchCurrentLocation();
       }
     };
+    checkLocationPermission();
     const fetchCurrentLocation = () => {
       Geolocation.getCurrentPosition(
         position => {
@@ -80,8 +81,6 @@ const ClinicAddress = ({navigation}) => {
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     };
-
-    checkLocationPermission();
   }, []);
 
   const onRegionChangeComplete = e => console.log('region Change');

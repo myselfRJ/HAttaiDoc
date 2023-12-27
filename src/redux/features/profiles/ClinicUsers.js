@@ -9,11 +9,10 @@ const clinic_users_data_Slice = createSlice({
   initialState,
   reducers: {
     addclinic_users: (state, action) => {
-      state.clinic_users = [...state.clinic_users, action.payload];
+      state.clinic_users = action.payload;
     },
     updateclinic_users: (state, action) => {
-      const {index, updatedUser} = action.payload;
-      state.clinic_users[index] = {...state.clinic_users[index], ...updatedUser};
+      state.clinic_users = action.payload;
     },
   },
 });
