@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(16),
     gap: verticalScale(16),
+    backgroundColor: CUSTOMCOLOR.background,
   },
   inputbox: {
     // flex:1,

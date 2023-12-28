@@ -210,18 +210,27 @@ const Dashboard = ({navigation, route}) => {
   }, [formatDate, Clinic_id]);
 
   const AppointmentChartData = {
-    labels: Appointmentdatainmonths,
+    labels:
+      Appointmentdatainmonths?.length > 0
+        ? Appointmentdatainmonths
+        : ['JAN', 'FEB', 'MAR', 'APR'],
     datasets: [
       {
-        data: Appointmentdatainrange,
+        data:
+          Appointmentdatainrange?.length > 0
+            ? Appointmentdatainrange
+            : [99, 100, 20, 0],
       },
     ],
   };
   const feeChartData = {
-    labels: feescollectionmonth,
+    labels:
+      feescollectionmonth?.length > 0
+        ? feescollectionmonth
+        : ['JAN', 'FEB', 'MAR', 'APR'],
     datasets: [
       {
-        data: fesscollection,
+        data: fesscollection?.length > 0 ? fesscollection : [99, 100, 20, 0],
       },
     ],
   };
@@ -318,7 +327,7 @@ const Dashboard = ({navigation, route}) => {
 
   const FetchRangeFees = async () => {
     const start_date = encodeURIComponent(
-      rangeFees === 'Monthly'
+      rangeAppointment === 'Monthly'
         ? oneYearAgo.toISOString()?.split('T')[0]
         : oneWeekAgo.toISOString()?.split('T')[0],
     );
@@ -338,8 +347,7 @@ const Dashboard = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         const data = feeDataInyear(jsonData?.data, start_date, end_date);
-        console.log('===============>fees', data);
-        if (rangeFees === 'Monthly') {
+        if (rangeAppointment === 'Monthly') {
           const data = feeDataInyear(jsonData?.data, start_date, end_date);
           let months = data?.map(item => {
             return item?.month?.split('-')[0];
@@ -370,7 +378,7 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     FetchRangeAppointments();
     FetchRangeFees();
-  }, [rangeAppointment, rangeFees]);
+  }, [rangeAppointment]);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
@@ -385,6 +393,7 @@ const Dashboard = ({navigation, route}) => {
     setRangeFees(newRangeFees);
     setRangeAppointment(newRange);
   };
+  console.log('=========>', rangeFees, rangeAppointment);
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
@@ -413,7 +422,6 @@ const Dashboard = ({navigation, route}) => {
               <ChartCard
                 dropdown={true}
                 values={['Monthly', 'Weekly']}
-                onSelect={() => handleSelectrangeFees('Monthly')}
                 data={feeChartData}
                 title={Language[language]['earnings']}
                 label="₹ "

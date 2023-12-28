@@ -46,7 +46,7 @@ export const URL = {
   snomed: (term, option) =>
     `${snomedUrl}csnoserv/api/search/suggest?term=${term}&state=active&semantictag=${encodeURIComponent(
       option,
-    )}&acceptability=synonyms&returnlimit=80`,
+    )}&acceptability=synonyms&returnlimit=-1`,
   get_clinics_slots: phoneId =>
     `${baseUrl}clinic/Clinic_slots?doctor_phone_number=${phoneId}`,
   get_clinic_slots_by_id: id => `${baseUrl}clinic/clinic_id?id=${id}`,

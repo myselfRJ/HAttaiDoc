@@ -87,7 +87,7 @@ export default function Prescribe1({navigation}) {
         ...prevPres,
         {
           medicine: generic
-            ? `${generic.toUpperCase()} ${
+            ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
                 generic &&
                 (generic.includes('mg') ||
                   generic.includes('ml') ||
@@ -116,7 +116,11 @@ export default function Prescribe1({navigation}) {
     if (sug?.length > 0) {
       const medicineName = `${medicine} ${mgs}`;
       UpdateAsyncData(`prescribe${phone}`, {
-        medicine: setmedicine ? setmedicine : medicineName,
+        medicine: generic
+          ? `${medicine}(${generic})`
+          : setmedicine
+          ? setmedicine
+          : medicineName,
         mode: mode,
       });
     }
@@ -219,7 +223,10 @@ export default function Prescribe1({navigation}) {
 
   const fetchMedicine = async () => {
     const response = await fetchApi(
-      URL.snomed(generic ? generic : medicine ? medicine : 'NA', option),
+      URL.snomed(
+        generic ? generic : medicine ? medicine : 'NA',
+        generic ? 'clinical drug' : option,
+      ),
       {
         method: 'GET',
         headers: {
@@ -230,7 +237,11 @@ export default function Prescribe1({navigation}) {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({type: 'sno', term: item}));
-      setData(snomed_data);
+      setData([
+        {term: generic ? generic : medicine, type: 'nsno'},
+        ...snomed_data,
+        ...CONSTANTS.medicine,
+      ]);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -282,7 +293,7 @@ export default function Prescribe1({navigation}) {
     }
   };
   useEffect(() => {
-    // clearStorage()
+    // clearStorage();
     RetriveAsyncData(`prescribe${phone}`)
       .then(array => {
         const uniqueArray = array?.filter((item, index) => {
@@ -376,7 +387,7 @@ export default function Prescribe1({navigation}) {
             (medicine === setmedicine || show ? null : (
               <View style={styles.dropdownContainer}>
                 <ScrollView persistentScrollbar={true}>
-                  {filtered?.map((val, index) => (
+                  {data?.map((val, index) => (
                     <SelectorBtn
                       select={{
                         paddingHorizontal: horizontalScale(4),
@@ -440,7 +451,7 @@ export default function Prescribe1({navigation}) {
               (generic === selectedgeneric || show ? null : (
                 <View style={styles.dropdownContainer}>
                   <ScrollView persistentScrollbar={true}>
-                    {filtered?.map((val, index) => (
+                    {data?.map((val, index) => (
                       <SelectorBtn
                         select={{
                           paddingHorizontal: horizontalScale(4),
@@ -471,7 +482,7 @@ export default function Prescribe1({navigation}) {
             value={dose_number}
             setValue={value => setDose_number(value)}
           />
-          {newMedicine != null && setgeneric === false ? (
+          {/* {newMedicine != null && setgeneric === false ? (
             <>
               <InputText
                 label={Language[language]['dose']}
@@ -527,7 +538,7 @@ export default function Prescribe1({navigation}) {
                     ))}
               </View>
             </>
-          ) : null}
+          ) : null} */}
         </View>
         <View style={{top: moderateScale(8)}}>
           <Text style={[styles.ModeText, {paddingBottom: moderateScale(2)}]}>

@@ -101,7 +101,7 @@ const PhysicalExamination = ({navigation}) => {
 
   const handle = () => {
     if (report != undefined) {
-      nav?.goBack();
+      navigation?.goBack();
     } else {
       postData(apiUrl);
       handlePress();

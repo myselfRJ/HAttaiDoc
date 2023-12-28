@@ -905,7 +905,7 @@ const Visit = ({navigation, route}) => {
                     {new Date().getFullYear() -
                       parseInt(
                         patient_data?.birth_date?.split('-')[0].toString(),
-                      )}
+                      )}{' '}
                     | {patient_data?.gender}
                   </Text>
                   {(patient_data?.gender === 'female' ||
@@ -991,7 +991,7 @@ const Visit = ({navigation, route}) => {
                       <Text>
                         Pulse:{' '}
                         <Text style={{fontWeight: '700'}}>
-                          {vitalsData.pulse_rate}
+                          {vitalsData.pulse_rate}{' '}
                         </Text>
                         bpm
                       </Text>
@@ -1071,7 +1071,8 @@ const Visit = ({navigation, route}) => {
                       (value?.label === 'Symptoms' && Symptom?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Prescribe' && Prescribe?.length > 0
+                      (value?.label === 'Prescribe Medicine' &&
+                      Prescribe?.length > 0
                         ? 'check-circle'
                         : '') ||
                       (value.label === 'Additional Recommendations/Notes' &&
@@ -1202,32 +1203,33 @@ const Visit = ({navigation, route}) => {
                       </View>
                     </View>
                   )}
-                  {value.label === 'Prescribe' && prescribe.length > 0 && (
-                    <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View style={styles.pres}>
-                          <View>
-                            {prescribe?.map((item, ind) => (
-                              <View key={ind} style={styles.pres1}>
-                                <Icon
-                                  name="prescription"
-                                  size={moderateScale(16)}
-                                  color={CUSTOMCOLOR.primary}
-                                />
-                                <View>
-                                  <Text style={styles.pulse}>
-                                    {item.medicine} | {item.timing} |
-                                    {item.frequency} | {item.duration} |{' '}
-                                    {item.total_quantity}
-                                  </Text>
+                  {value.label === 'Prescribe Medicine' &&
+                    prescribe.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View style={styles.pres}>
+                            <View>
+                              {prescribe?.map((item, ind) => (
+                                <View key={ind} style={styles.pres1}>
+                                  <Icon
+                                    name="prescription"
+                                    size={moderateScale(16)}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={styles.pulse}>
+                                      {item.medicine} | {item.timing} |
+                                      {item.frequency} | {item.duration} |{' '}
+                                      {item.total_quantity}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
-                            ))}
+                              ))}
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  )}
+                    )}
                   {value.label === 'Follow-Up' && date !== '' && (
                     <View style={styles.FollowUpcontainer}>
                       <>

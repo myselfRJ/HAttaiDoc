@@ -227,14 +227,14 @@ const Symptoms = ({navigation}) => {
                       <TouchableOpacity
                         style={{
                           paddingHorizontal: horizontalScale(4),
-                          paddingVertical: verticalScale(8),
+                          paddingVertical: verticalScale(-1),
                         }}
                         onPress={() => HandlePress(val?.term)}
                         key={index}>
                         <Text
                           style={{
                             fontSize: CUSTOMFONTSIZE.h3,
-                            padding: moderateScale(10),
+                            padding: moderateScale(6),
                             color: CUSTOMCOLOR.black,
                           }}>
                           {val?.term}
@@ -319,14 +319,14 @@ const Symptoms = ({navigation}) => {
                   keyboardType="numeric"
                 />
               </View>
-              <Text
+              {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
                   fontSize: CUSTOMFONTSIZE.h3,
                 }}>
                 (OR)
-              </Text>
+              </Text> */}
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Hr :</Text>
                 <TextInput
@@ -338,14 +338,14 @@ const Symptoms = ({navigation}) => {
                   keyboardType="numeric"
                 />
               </View>
-              <Text
+              {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
                   fontSize: CUSTOMFONTSIZE.h3,
                 }}>
                 (OR)
-              </Text>
+              </Text> */}
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Month :</Text>
                 <TextInput
@@ -357,14 +357,14 @@ const Symptoms = ({navigation}) => {
                   keyboardType="numeric"
                 />
               </View>
-              <Text
+              {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
                   fontSize: CUSTOMFONTSIZE.h3,
                 }}>
                 (OR)
-              </Text>
+              </Text> */}
               <View style={styles.timeFields}>
                 <Text style={styles.option}>Year :</Text>
                 <TextInput
@@ -395,16 +395,23 @@ const Symptoms = ({navigation}) => {
           {symptomsData?.map((item, ind) => (
             <View key={ind} style={styles.reduxData}>
               <View style={styles.reduxData1}>
-                <Text style={styles.symText}>{item.symptom}</Text>
+                <Text style={styles.symText}>
+                  <Text style={{fontWeight: '600'}}>Symptom :</Text>{' '}
+                  {item.symptom}
+                </Text>
                 <View>
                   <Text style={styles.reduxText}>
-                    Severity : {capitalizeWord(item.severity)}
+                    <Text style={{fontWeight: '600'}}>Severity :</Text>{' '}
+                    {capitalizeWord(item.severity)}
                   </Text>
                 </View>
                 {/* {item.days &&
                 (item.days.includes('days') || item.days.includes('day')) ? ( */}
                 <View>
-                  <Text style={styles.reduxText}>Time Period: {item.days}</Text>
+                  <Text style={styles.reduxText}>
+                    <Text style={{fontWeight: '600'}}>Time Period:</Text>{' '}
+                    {item.days}
+                  </Text>
                 </View>
                 {/* ) : null} */}
                 {/* {item.days && item.days.includes('hr') ? (

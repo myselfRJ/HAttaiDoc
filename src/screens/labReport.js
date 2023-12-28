@@ -160,7 +160,7 @@ const LabReports = () => {
       <PrescriptionHead heading="Investigation Prescribed" />
       <ScrollView contentContainerStyle={{flex: 1}}>
         <View>
-          <View style={styles.tab}>
+          {/* <View style={styles.tab}>
             {CONSTANT.test?.map((val, ind) => (
               <SelectionTab
                 selectContainer={{
@@ -174,12 +174,12 @@ const LabReports = () => {
                 selected={seletedType === val}
               />
             ))}
-          </View>
+          </View> */}
           <View style={styles.input}>
             <InputText
               inputContainer={styles.inputtext}
               label="Search"
-              placeholder="Eg: blood test"
+              placeholder="Search Lab / Radialogy / Procedure"
               value={value}
               setValue={setValue}
               search={true}

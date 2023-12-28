@@ -35,7 +35,7 @@ import {clearStorage} from '../utility/AsyncStorage';
 const ComplaintsCard = props => {
   // const {complaint} = route.params
   // console.log('com1111====',complaint)
-  const option = 'finding';
+  const option = 'procedure++situation++finding++disorder';
   const [data, setData] = useState([]);
   const [filtered, setFilteredData] = useState([]);
   const [selected, setSelected] = useState('');

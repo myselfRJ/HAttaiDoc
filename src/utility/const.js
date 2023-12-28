@@ -26,7 +26,7 @@ export const CONSTANT = {
     },
     {label: 'Test Prescribe', icon: 'pencil', navigate: 'labreport'},
     {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
-    {label: 'Prescribe', icon: 'pencil', navigate: 'pres'},
+    {label: 'Prescribe Medicine', icon: 'pencil', navigate: 'pres'},
     {label: 'Doctor Notes', icon: 'stethoscope', navigate: 'additional'},
 
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},
@@ -573,6 +573,7 @@ export const WeekdaysData = data => {
 };
 
 export const feeDataInyear = (data, startDate, endDate) => {
+  console.log(data);
   function generateMonthSeries(startDate, endDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);

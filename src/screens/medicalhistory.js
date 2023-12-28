@@ -695,7 +695,7 @@ const MedicalHistory = ({navigation, route}) => {
           />
           <InputText
             inputContainer={styles.inputtext}
-            label="Red Flag"
+            label="Red Flag 🚩"
             placeholder="Enter Red Flags"
             value={red_flag}
             setValue={txt => setRed_Flag(txt)}
