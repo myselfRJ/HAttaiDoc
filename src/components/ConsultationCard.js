@@ -152,6 +152,7 @@ const ConsultationCard = ({data}) => {
 const styles = StyleSheet.create({
   main: {
     // flexDirection: 'row',
+    marginBottom: verticalScale(8),
     paddingHorizontal: moderateScale(24),
     paddingVertical: verticalScale(20),
     // paddingVertical: verticalScale(24),

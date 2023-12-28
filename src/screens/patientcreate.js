@@ -37,6 +37,7 @@ import {useSelector} from 'react-redux';
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
+import {handleCamera, handleGallery} from '../utility/const';
 
 const PatientCreate = ({navigation, route}) => {
   const {phoneRoute} = route.params;
@@ -72,37 +73,23 @@ const PatientCreate = ({navigation, route}) => {
   const [formatDate, setFormatDate] = useState('');
   const formattedDate = date.toISOString().split('T')[0];
 
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
 
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
   const [value, setValue] = useState('');

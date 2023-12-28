@@ -65,6 +65,7 @@ import {mode} from '../redux/features/prescription/prescribeslice';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
 import {checkNumber} from '../utility/checks';
+import {handleCamera, handleGallery} from '../utility/const';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -241,70 +242,45 @@ const AddClinic = ({navigation}) => {
   };
   const [showSlotChip, setShowSlotChip] = useState(false);
 
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-        setShow(!show);
-      }
-    });
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedImage(data?.base64);
+      setShow(!show);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
 
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
-  const LogoCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedLogo(response?.assets?.[0]?.base64);
-      }
-    });
+  const LogoCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedLogo(data?.base64);
+      setModal(false);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setlogo(false);
   };
-  const onLogoPress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedLogo(response?.assets?.[0]?.base64);
-        setLogoShow(!logoShow);
-      }
-    });
+  const onLogoPress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedLogo(data?.base64);
+      setModal(false);
+      setLogoShow(!logoShow);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setlogo(false);
   };
 
@@ -681,7 +657,7 @@ const AddClinic = ({navigation}) => {
           if (jsonData.status === 'success') {
             setApiStatus({
               status: 'success',
-              message: 'Successfully created',
+              message: 'Successfully Updated',
             });
             setBottom(true);
             setTimeout(() => {

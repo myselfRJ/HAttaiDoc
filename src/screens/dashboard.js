@@ -346,7 +346,6 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        const data = feeDataInyear(jsonData?.data, start_date, end_date);
         if (rangeAppointment === 'Monthly') {
           const data = feeDataInyear(jsonData?.data, start_date, end_date);
           let months = data?.map(item => {
@@ -393,7 +392,6 @@ const Dashboard = ({navigation, route}) => {
     setRangeFees(newRangeFees);
     setRangeAppointment(newRange);
   };
-  console.log('=========>', rangeFees, rangeAppointment);
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>

@@ -447,13 +447,93 @@ export const capitalizeWord = word => {
   if (word.length === 0) return word;
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+const fileSizeLimit = 1 * 1024 * 1024;
+export const handleGallery = async () => {
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    quality: 0.5,
+  };
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await launchImageLibrary(options);
+      if (response.didCancel) {
+        resolve(null);
+      } else if (response.error) {
+        reject(response.error);
+      } else {
+        const responsedData = response?.assets?.[0];
+        if (responsedData?.fileSize > fileSizeLimit) {
+          reject(
+            new Error('File size exceeds 1MB. Please select a smaller file.'),
+          );
+        } else {
+          const data = {
+            uri: responsedData?.uri,
+            base64: responsedData?.base64,
+            type: responsedData?.type,
+            name: responsedData?.fileName,
+            size: responsedData?.fileSize,
+            height: responsedData?.height,
+            width: responsedData?.width,
+          };
+          resolve(data);
+        }
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const handleCamera = async () => {
+  const options = {
+    mediaType: 'photo',
+    quality: 0.5,
+    includeBase64: true,
+  };
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await launchCamera(options);
+
+      if (response.didCancel) {
+        resolve(null);
+      } else if (response.error) {
+        reject(response.error);
+      } else {
+        const responsedData = response?.assets?.[0];
+        if (responsedData?.fileSize > fileSizeLimit) {
+          reject(
+            new Error('File size exceeds 1MB. Please select a smaller file.'),
+          );
+        } else {
+          const data = {
+            uri: responsedData?.uri,
+            base64: responsedData?.base64,
+            type: responsedData?.type,
+            name: responsedData?.fileName,
+            size: responsedData?.fileSize,
+            height: responsedData?.height,
+            width: responsedData?.width,
+          };
+          resolve(data);
+        }
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 import DocumentPicker from 'react-native-document-picker';
 export const pickSingleFile = async () => {
   try {
     const result = await DocumentPicker.pick({
       type: [DocumentPicker.types.pdf],
     });
-
     const originalFilename = result[0]?.name || '';
     const fileSize = result[0]?.size || 0;
     const maxSizeInBytes = 1 * 1024 * 1024;
@@ -573,7 +653,6 @@ export const WeekdaysData = data => {
 };
 
 export const feeDataInyear = (data, startDate, endDate) => {
-  console.log(data);
   function generateMonthSeries(startDate, endDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -648,7 +727,7 @@ export const feeDataIneachday = (data, startDate, endDate) => {
   function filterDataByDateRange(startDate, endDate) {
     return data.filter(entry => {
       const entryDate = new Date(entry.created_at);
-      return entryDate >= startDate && entryDate <= endDate;
+      return entryDate >= startDate;
     });
   }
 
@@ -656,7 +735,6 @@ export const feeDataIneachday = (data, startDate, endDate) => {
     new Date(startDate),
     new Date(endDate),
   );
-
   const dailyData = {};
 
   feesDataInRange.forEach(entry => {
@@ -664,7 +742,6 @@ export const feeDataIneachday = (data, startDate, endDate) => {
     const year = entryDate.getFullYear().toString();
     const month = entryDate.toLocaleString('default', {month: 'long'});
     const day = entryDate.toISOString().slice(0, 10);
-
     if (!dailyData[year]) {
       dailyData[year] = {};
     }
@@ -679,19 +756,14 @@ export const feeDataIneachday = (data, startDate, endDate) => {
 
     dailyData[year][month][day].push(entry);
   });
-
   const dailyFeeItems = {};
 
   const start = new Date(startDate);
   const end = new Date(endDate);
-
-  // Loop through each day in the date range
   while (start <= end) {
     const year = start.getFullYear().toString();
     const month = start.toLocaleString('default', {month: 'long'});
     const day = start.toISOString().slice(0, 10);
-
-    // Check if the date exists in the data, if not, add it with zero fees
     if (
       !dailyData[year] ||
       !dailyData[year][month] ||
@@ -706,8 +778,6 @@ export const feeDataIneachday = (data, startDate, endDate) => {
       });
       dailyFeeItems[day] = totalFees;
     }
-
-    // Move to the next day
     start.setDate(start.getDate() + 1);
   }
 

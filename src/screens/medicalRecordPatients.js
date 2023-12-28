@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Touchable,
   TouchableOpacity,
+  FlatList,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
@@ -32,7 +34,6 @@ export default function MedicalRecordPatient({route, navigation}) {
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
   const [consultation, setConsultation] = useState([]);
-
   const token = useSelector(state => state?.authenticate?.auth?.access);
   const {patient_phone} = route.params;
   const fetchData = async () => {
@@ -53,6 +54,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     fetchData();
   }, []);
   const [date, setDate] = useState(new Date());
+  const [handledate, sethandleDate] = useState('');
   const [open, setOpen] = useState(false);
   const fetchPrescribe = async () => {
     const response = await fetchApi(
@@ -69,18 +71,20 @@ export default function MedicalRecordPatient({route, navigation}) {
       const filterData = jsonData?.data
         ? jsonData?.data?.filter(
             item =>
-              date?.toISOString()?.split('T')[0] ===
+              handledate ===
               item?.consultation?.chief_complaint?.created_at?.split('T')[0],
           )
         : [];
-      setConsultation(filterData);
+      setConsultation(
+        handledate ? filterData?.reverse() : jsonData?.data?.reverse(),
+      );
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
     fetchPrescribe();
-  }, [date]);
+  }, [date, handledate]);
 
   const [vitals, setVitals] = useState({
     chiefComplaints: consultation?.chief_complaint?.complaint_message,
@@ -105,6 +109,8 @@ export default function MedicalRecordPatient({route, navigation}) {
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
+    const formatdate = date?.toISOString()?.split('T')[0];
+    sethandleDate(formatdate);
   };
 
   const handleCancel = () => {
@@ -120,6 +126,10 @@ export default function MedicalRecordPatient({route, navigation}) {
   const handleBook = () => {
     const patient_phone = data?.patient_phone_number;
     navigation.navigate('bookslot', {patient_phone});
+  };
+
+  const renderItems = ({item, index}) => {
+    return <ConsultationCard data={item?.consultation} />;
   };
   return (
     <View style={styles.container}>
@@ -171,17 +181,17 @@ export default function MedicalRecordPatient({route, navigation}) {
           Prescription
         </Text>
 
-        <ScrollView
-          style={styles.appointmentcard}
-          contentContainerStyle={{gap: moderateScale(8)}}>
+        <View>
           {consultation?.length > 0 ? (
-            consultation?.map((value, index) => (
-              <ConsultationCard data={value?.consultation} />
-            ))
+            <FlatList
+              style={styles.appointmentcard}
+              renderItem={renderItems}
+              data={consultation}
+            />
           ) : (
             <CustomIcon label={'No History'} />
           )}
-        </ScrollView>
+        </View>
 
         {/* <View
           style={{
@@ -257,10 +267,11 @@ const styles = StyleSheet.create({
   },
   patientinfo: {},
   appointmentcard: {
-    height: moderateScale(400),
+    height: moderateScale(
+      Dimensions.get('window').height - Dimensions.get('window').height / 2.5,
+    ),
     // paddingHorizontal: horizontalScale(8),
     // borderWidth:1
-    // gap: moderateScale(16),
   },
   container: {
     gap: moderateScale(16),

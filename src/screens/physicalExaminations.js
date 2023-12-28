@@ -46,6 +46,7 @@ import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
 import {fileurl} from '../utility/urls';
+import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
 const PhysicalExamination = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
@@ -108,73 +109,101 @@ const PhysicalExamination = ({navigation}) => {
     }
   };
 
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
+  // const onImagePress = () => {
+  //   const options = {
+  //     mediaType: 'photo',
+  //     includeBase64: true,
+  //     quality: 0.5,
+  //   };
 
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        // console.log('=======>', response?.assets);
-        SetUploadDocument([
-          ...uploaddocument,
-          {
-            name: response?.assets?.[0]?.fileName,
-            type: response?.assets?.[0]?.type,
-            uri: response?.assets?.[0]?.uri,
-          },
-        ]);
-      }
-    });
-    setModal(!modal);
+  //   launchImageLibrary(options, response => {
+  //     if (response.didCancel) {
+  //     } else if (response.error) {
+  //     } else {
+  //       // console.log('=======>', response?.assets);
+  //       SetUploadDocument([
+  //         ...uploaddocument,
+  //         {
+  //           name: response?.assets?.[0]?.fileName,
+  //           type: response?.assets?.[0]?.type,
+  //           uri: response?.assets?.[0]?.uri,
+  //         },
+  //       ]);
+  //     }
+  //   });
+  //   setModal(!modal);
+  // };
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      SetUploadDocument([
+        ...uploaddocument,
+        {
+          name: data?.name,
+          type: data?.type,
+          uri: data?.uri,
+        },
+      ]);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
+    setModal(false);
   };
 
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        // console.log("=======>",response?.assets);
-        SetUploadDocument([
-          ...uploaddocument,
-          {
-            name: response?.assets?.[0]?.fileName,
-            type: response?.assets?.[0]?.type,
-            uri: response?.assets?.[0]?.uri,
-          },
-        ]);
-      }
-    });
-    setModal(!modal);
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      SetUploadDocument([
+        ...uploaddocument,
+        {
+          name: data?.name,
+          type: data?.type,
+          uri: data?.uri,
+        },
+      ]);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
+    setModal(false);
   };
+  // const openCamera = () => {
+  //   const options = {
+  //     mediaType: 'photo',
+  //     quality: 0.5,
+  //     includeBase64: true,
+  //   };
 
-  const pickSingleFile = async () => {
+  //   launchCamera(options, response => {
+  //     if (response.didCancel) {
+  //     } else if (response.error) {
+  //     } else {
+  //       // console.log("=======>",response?.assets);
+
+  //     }
+  //   });
+  //   setModal(!modal);
+  // };
+
+  // const handleSelectFilename = async () => {
+  //   try {
+  //     const file = await pickSingleFile();
+  //     console.log(file);
+  //     // setSelectedFilename(file ? file : {});
+  //   } catch (error) {}
+  // };
+  const handleSelectFilename = async () => {
     try {
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
         allowMultiSelection: true,
       });
-      // setSelectedFilename(result[0]?.name);
-      // SetUploadDocument(result[0]?.uri);
       SetUploadDocument([
         ...uploaddocument,
         {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
       ]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
       } else {
-        // Handle other errors
       }
     }
     setModal(!modal);
@@ -339,7 +368,7 @@ const PhysicalExamination = ({navigation}) => {
           OnGallery={onImagePress}
           OnCamera={openCamera}
           document={true}
-          onDocument={pickSingleFile}
+          onDocument={handleSelectFilename}
         />
       )}
       <View

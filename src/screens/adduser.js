@@ -51,6 +51,7 @@ import {useRoute} from '@react-navigation/native';
 import {checkNumber} from '../utility/checks';
 import GalleryModel from '../components/GalleryModal';
 import {mode} from '../redux/features/prescription/prescribeslice';
+import {handleCamera, handleGallery} from '../utility/const';
 
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
@@ -100,22 +101,6 @@ const AddUser = ({navigation}) => {
   const ModalVisible = () => {
     setModal(true);
     GlRef?.current?.snapToIndex(1);
-  };
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
-    setModal(false);
   };
   const Clinic_users = [
     {
@@ -220,23 +205,24 @@ const AddUser = ({navigation}) => {
     handleChangeValue('gender', value);
   };
 
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedImage(data?.base64);
+      setShow(!show);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
+    setModal(false);
+  };
 
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        // console.log('User cancelled image picker');
-      } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
-      } else {
-        // console.log('response====>', response?.assets?.[0]?.base64);
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
   const fetchclinic = async () => {
