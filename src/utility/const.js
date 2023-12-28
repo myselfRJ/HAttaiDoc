@@ -544,3 +544,118 @@ export const WeekdaysData = data => {
   }
   return dateday;
 };
+
+export const feeDataInyear = (data, startDate, endDate) => {
+  function filterDataByDateRange(startDate, endDate) {
+    return data.filter(entry => {
+      const entryDate = new Date(entry.created_at);
+      return entryDate >= startDate && entryDate <= endDate;
+    });
+  }
+  let totalFees = 0;
+  const Fess_date_range = filterDataByDateRange(
+    new Date(startDate),
+    new Date(endDate),
+  );
+  const monthlyData = {};
+  Fess_date_range.forEach(entry => {
+    const entryDate = new Date(entry.created_at);
+    const year = entryDate.getFullYear().toString();
+    const month = entryDate.toISOString().slice(0, 7);
+    if (!monthlyData[year]) {
+      monthlyData[year] = {};
+    }
+    if (!monthlyData[year][month]) {
+      monthlyData[year][month] = [];
+    }
+    monthlyData[year][month].push(entry);
+  });
+  const feeItems = [];
+  for (const year in monthlyData) {
+    if (monthlyData.hasOwnProperty(year)) {
+      for (const month in monthlyData[year]) {
+        if (monthlyData[year].hasOwnProperty(month)) {
+          monthlyData[year][month]?.map(item => {
+            const fees = JSON.parse(item?.fees);
+            totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
+          });
+          feeItems.push({
+            month: `${month?.split('-')[0]}-${months[month?.split('-')[1]]}`,
+            fees: totalFees,
+          });
+          return feeItems;
+        }
+      }
+    }
+  }
+};
+
+export const feeDataIneachday = (data, startDate, endDate) => {
+  function filterDataByDateRange(startDate, endDate) {
+    return data.filter(entry => {
+      const entryDate = new Date(entry.created_at);
+      return entryDate >= startDate && entryDate <= endDate;
+    });
+  }
+
+  const feesDataInRange = filterDataByDateRange(
+    new Date(startDate),
+    new Date(endDate),
+  );
+
+  const dailyData = {};
+
+  feesDataInRange.forEach(entry => {
+    const entryDate = new Date(entry.created_at);
+    const year = entryDate.getFullYear().toString();
+    const month = entryDate.toLocaleString('default', {month: 'long'});
+    const day = entryDate.toISOString().slice(0, 10);
+
+    if (!dailyData[year]) {
+      dailyData[year] = {};
+    }
+
+    if (!dailyData[year][month]) {
+      dailyData[year][month] = {};
+    }
+
+    if (!dailyData[year][month][day]) {
+      dailyData[year][month][day] = [];
+    }
+
+    dailyData[year][month][day].push(entry);
+  });
+
+  const dailyFeeItems = {};
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Loop through each day in the date range
+  while (start <= end) {
+    const year = start.getFullYear().toString();
+    const month = start.toLocaleString('default', {month: 'long'});
+    const day = start.toISOString().slice(0, 10);
+
+    // Check if the date exists in the data, if not, add it with zero fees
+    if (
+      !dailyData[year] ||
+      !dailyData[year][month] ||
+      !dailyData[year][month][day]
+    ) {
+      dailyFeeItems[day] = 0;
+    } else {
+      let totalFees = 0;
+      dailyData[year][month][day]?.map(item => {
+        const fees = JSON.parse(item?.fees);
+        totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
+      });
+      dailyFeeItems[day] = totalFees;
+    }
+
+    // Move to the next day
+    start.setDate(start.getDate() + 1);
+  }
+
+  return dailyFeeItems;
+};
