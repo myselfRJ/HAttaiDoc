@@ -248,7 +248,7 @@ const OtpScreen = ({route}) => {
       <BottomSheetView
         visible={bottom}
         setVisible={setBottom}
-        backgroundStyle={CUSTOMCOLOR.white}
+        // backgroundStyle={CUSTOMCOLOR.white}
         status={apiStatus.status}
         message={apiStatus.message}
       />

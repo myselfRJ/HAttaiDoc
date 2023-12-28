@@ -33,36 +33,38 @@ const ChartCard = props => {
       <View style={styles.header}>
         <Text style={styles.title}>{props.title}</Text>
 
-        <SelectDropdown
-          data={selector}
-          renderDropdownIcon={() => <SvgXml xml={down} />}
-          dropdownIconPosition="right"
-          onSelect={(selectedItem, index) => {
-            props.onSelect && props.onSelect();
-          }}
-          defaultValue={selector[0]}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item;
-          }}
-          buttonStyle={{
-            width: 100,
-            height: 20,
-            backgroundColor: CUSTOMCOLOR.white,
-          }}
-          buttonTextStyle={{
-            color: CUSTOMCOLOR.black,
-            fontSize: 12,
-            lineHeight: 16,
-            fontWeight: '300',
-          }}
-        />
+        {props.dropdown ? null : (
+          <SelectDropdown
+            data={selector}
+            renderDropdownIcon={() => <SvgXml xml={down} />}
+            dropdownIconPosition="right"
+            onSelect={(selectedItem, index) => {
+              props.onSelect && props.onSelect();
+            }}
+            defaultValue={selector[0]}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            buttonStyle={{
+              width: 100,
+              height: 20,
+              backgroundColor: CUSTOMCOLOR.white,
+            }}
+            buttonTextStyle={{
+              color: CUSTOMCOLOR.black,
+              fontSize: 12,
+              lineHeight: 16,
+              fontWeight: '300',
+            }}
+          />
+        )}
       </View>
       <View
         style={{
@@ -71,8 +73,8 @@ const ChartCard = props => {
         }}>
         <BarChart
           data={props.data}
-          width={360}
-          height={300}
+          width={Dimensions.get('window').width - 50}
+          height={170}
           yAxisLabel={props.label ? props.label : undefined}
           withInnerLines={true}
           verticalLabelRotation={0}

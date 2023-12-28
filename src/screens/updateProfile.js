@@ -52,6 +52,7 @@ import GalleryModel from '../components/GalleryModal';
 import RNFS from 'react-native-fs';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
+import {pickSingleFile} from '../utility/const';
 
 const UpdateProfile = ({navigation}) => {
   const nav = useNavigation;
@@ -93,28 +94,6 @@ const UpdateProfile = ({navigation}) => {
       return null;
     }
   };
-
-  const pickSingleFile = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-      });
-      const originalFilename = result[0]?.name || '';
-      const base64Document = await convertUriToBase64(result[0]?.uri || '');
-      let fileDetails = {
-        name: originalFilename,
-        uri: base64Document,
-      };
-      return fileDetails;
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // Handle cancel event
-      } else {
-        // Handle other errors
-      }
-    }
-  };
-
   const [latestRecord, setLatestRecord] = useState({});
 
   const handlelatest = async () => {

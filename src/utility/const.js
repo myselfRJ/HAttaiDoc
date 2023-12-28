@@ -447,7 +447,34 @@ export const capitalizeWord = word => {
   if (word.length === 0) return word;
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
+import DocumentPicker from 'react-native-document-picker';
+export const pickSingleFile = async () => {
+  try {
+    const result = await DocumentPicker.pick({
+      type: [DocumentPicker.types.pdf],
+    });
 
+    const originalFilename = result[0]?.name || '';
+    const fileSize = result[0]?.size || 0;
+    const maxSizeInBytes = 1 * 1024 * 1024;
+
+    if (fileSize > maxSizeInBytes) {
+      alert('File size exceeds 1MB. Please select a smaller file.');
+      return null;
+    }
+
+    const base64Document = await convertUriToBase64(result[0]?.uri || '');
+    let fileDetails = {
+      name: originalFilename,
+      uri: base64Document,
+    };
+    return fileDetails;
+  } catch (err) {
+    if (DocumentPicker.isCancel(err)) {
+    } else {
+    }
+  }
+};
 export const AppointmentDatafilterAndSortData = data => {
   const completedItems = data?.filter(item => item.status === 'completed');
   const pendingItems = data?.filter(item => item.status === 'pending');
@@ -546,6 +573,21 @@ export const WeekdaysData = data => {
 };
 
 export const feeDataInyear = (data, startDate, endDate) => {
+  function generateMonthSeries(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const monthSeries = [];
+    while (start <= end) {
+      const month = start.toLocaleString('default', {month: 'short'});
+      const year = start.getFullYear();
+      const monthString = `${month}-${year}`;
+
+      monthSeries.push(monthString);
+      start.setMonth(start.getMonth() + 1);
+    }
+    return monthSeries;
+  }
+  const result = generateMonthSeries(startDate, endDate);
   function filterDataByDateRange(startDate, endDate) {
     return data.filter(entry => {
       const entryDate = new Date(entry.created_at);
@@ -580,13 +622,24 @@ export const feeDataInyear = (data, startDate, endDate) => {
             totalFees += parseInt(fees[fees?.length - 1]?.totalFees);
           });
           feeItems.push({
-            month: `${month?.split('-')[0]}-${months[month?.split('-')[1]]}`,
+            month: `${months[month?.split('-')[1]]}-${month?.split('-')[0]}`,
             fees: totalFees,
           });
-          return feeItems;
+          // return feeItems;
         }
       }
     }
+  }
+  if (feeItems?.length > 0) {
+    let dummyvariable = result?.map((item, _) => {
+      let obj = feeItems.filter(e => e.month === item);
+      if (obj.length > 0) {
+        return {month: obj[0]?.month, fees: obj[0]?.fees};
+      } else {
+        return {month: item, fees: 0};
+      }
+    });
+    return dummyvariable;
   }
 };
 

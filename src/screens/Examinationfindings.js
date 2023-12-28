@@ -193,18 +193,13 @@ const ExaminationFindings = ({navigation}) => {
         type: [DocumentPicker.types.pdf],
         allowMultiSelection: true,
       });
-      // setSelectedFilename(result[0]?.name);
-      // SetUploadDocument(result[0]?.uri);
       SetUploadDocument([
         ...uploaddocument,
         {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
       ]);
-      // console.log('result===', result[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
       } else {
-        // Handle other errors
       }
     }
     setModal(!modal);

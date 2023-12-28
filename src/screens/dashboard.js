@@ -76,7 +76,8 @@ const Dashboard = ({navigation, route}) => {
   const [clinics, setDataClinic] = useState();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicid, setClinicId] = useState('');
-  const [range, setRange] = useState('Monthly');
+  const [rangeAppointment, setRangeAppointment] = useState('Monthly');
+  const [rangeFees, setRangeFees] = useState('Monthly');
   const [visible, setVisible] = useState(false);
 
   const handleChart = () => {
@@ -208,11 +209,19 @@ const Dashboard = ({navigation, route}) => {
     fetchAppointment();
   }, [formatDate, Clinic_id]);
 
-  const data = {
+  const AppointmentChartData = {
     labels: Appointmentdatainmonths,
     datasets: [
       {
         data: Appointmentdatainrange,
+      },
+    ],
+  };
+  const feeChartData = {
+    labels: feescollectionmonth,
+    datasets: [
+      {
+        data: fesscollection,
       },
     ],
   };
@@ -255,7 +264,7 @@ const Dashboard = ({navigation, route}) => {
   let totalAppointments = setAppointment.length;
   const FetchRangeAppointments = async () => {
     const start_date = encodeURIComponent(
-      range === 'Monthly'
+      rangeAppointment === 'Monthly'
         ? oneYearAgo.toISOString()?.split('T')[0]
         : oneWeekAgo.toISOString()?.split('T')[0],
     );
@@ -274,11 +283,7 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        // console.log(
-        //   '===========data',
-        //   AppointmentsInAMonth(jsonData?.data, start_date, end_date),
-        // );
-        if (range === 'Monthly') {
+        if (rangeAppointment === 'Monthly') {
           const data = AppointmentsInAYear(
             jsonData?.data,
             start_date,
@@ -313,7 +318,9 @@ const Dashboard = ({navigation, route}) => {
 
   const FetchRangeFees = async () => {
     const start_date = encodeURIComponent(
-      oneWeekAgo.toISOString()?.split('T')[0],
+      rangeFees === 'Monthly'
+        ? oneYearAgo.toISOString()?.split('T')[0]
+        : oneWeekAgo.toISOString()?.split('T')[0],
     );
     const end_date = encodeURIComponent(
       currentDate?.toISOString()?.split('T')[0],
@@ -330,7 +337,31 @@ const Dashboard = ({navigation, route}) => {
       );
       if (response.ok) {
         const jsonData = await response.json();
-        console.log(jsonData?.data);
+        const data = feeDataInyear(jsonData?.data, start_date, end_date);
+        console.log('===============>fees', data);
+        if (rangeFees === 'Monthly') {
+          const data = feeDataInyear(jsonData?.data, start_date, end_date);
+          let months = data?.map(item => {
+            return item?.month?.split('-')[0];
+          });
+          setFeescollectionMonth(months);
+          let feesdata = data?.map(item => {
+            return item?.fees;
+          });
+          setFesscollection(feesdata);
+        } else {
+          const data = WeekdaysData(
+            feeDataIneachday(jsonData?.data, start_date, end_date),
+          );
+          let days = data?.map(item => {
+            return item?.day;
+          });
+          setFeescollectionMonth(days);
+          let feesdata = data?.map(item => {
+            return item?.value;
+          });
+          setFesscollection(feesdata);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -339,7 +370,7 @@ const Dashboard = ({navigation, route}) => {
   useEffect(() => {
     FetchRangeAppointments();
     FetchRangeFees();
-  }, [range]);
+  }, [rangeAppointment, rangeFees]);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
@@ -348,9 +379,11 @@ const Dashboard = ({navigation, route}) => {
   );
   const AppointmentFilterdata =
     AppointmentDatafilterAndSortData(setAppointment);
-  const handleSelect = value => {
-    const newRange = range === value ? '' : value;
-    setRange(newRange);
+  const handleSelectRange = value => {
+    const newRange = rangeAppointment === value ? '' : value;
+    const newRangeFees = rangeFees === value ? '' : value;
+    setRangeFees(newRangeFees);
+    setRangeAppointment(newRange);
   };
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
@@ -373,17 +406,18 @@ const Dashboard = ({navigation, route}) => {
             <View style={styles.cardContainer}>
               <ChartCard
                 values={['Monthly', 'Weekly']}
-                onSelect={() => handleSelect('Monthly')}
-                data={data}
+                onSelect={() => handleSelectRange('Monthly')}
+                data={AppointmentChartData}
                 title={Language[language]['total_patient']}
               />
-              {/* <ChartCard
+              <ChartCard
+                dropdown={true}
                 values={['Monthly', 'Weekly']}
-                onSelect={() => setRange('Weekly')}
-                data={data}
+                onSelect={() => handleSelectrangeFees('Monthly')}
+                data={feeChartData}
                 title={Language[language]['earnings']}
                 label="₹ "
-              /> */}
+              />
             </View>
           )}
         </View>
@@ -537,7 +571,7 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONTFAMILY.heading,
   },
   cardContainer: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'space-between',
     gap: moderateScale(8),
     paddingHorizontal: horizontalScale(8),

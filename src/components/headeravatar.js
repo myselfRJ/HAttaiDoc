@@ -23,7 +23,7 @@ const HeaderAvatar = ({data}) => {
           }}
         />
         <View>
-          <Text style={styles.name}>{data?.doctor_name}</Text>
+          <Text style={styles.name}>Dr. {data?.doctor_name}</Text>
           <Text style={styles.speciality}>{data?.specialization}</Text>
         </View>
       </View>
@@ -39,11 +39,10 @@ const styles = StyleSheet.create({
     // backgroundColor: "#454544",
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
-    
   },
   img: {
-    width:moderateScale(64),
-    height:moderateScale(64),
+    width: moderateScale(64),
+    height: moderateScale(64),
     borderRadius: moderateScale(60 / 2),
   },
   name: {
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: CUSTOMFONTSIZE.h4,
     color: '#000000',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
   speciality: {
     fontStyle: 'normal',
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h5,
     color: '#a1a1a1',
-    fontFamily:CUSTOMFONTFAMILY.body
+    fontFamily: CUSTOMFONTFAMILY.body,
   },
 });
 

@@ -72,6 +72,7 @@ const Visit = ({navigation, route}) => {
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
+  console.log('=============>physical', JSON.stringify(physical) !== '{}');
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -563,7 +564,9 @@ const Visit = ({navigation, route}) => {
               : ''
           } 
           ${
-            JSON?.stringify(physical) !== '{}' || physical?.value !== ''
+            JSON?.stringify(physical) !== '{}' &&
+            physical?.value !== '' &&
+            physical?.value !== undefined
               ? `<div>
               <h5>
                   Physical Examination
@@ -708,7 +711,7 @@ const Visit = ({navigation, route}) => {
       </div>
       <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
           <p style="text-align:center">
-              This Prescription electronically signed by ${
+              This Prescription electronically signed by Dr. ${
                 data?.doctor_name
               } ,${data?.degree}, ${
           data?.medical_number
@@ -1384,16 +1387,17 @@ const Visit = ({navigation, route}) => {
                       <Text style={styles.pulse}>{selectedComplaint}</Text>
                     </View>
                   )}
-                  {value.label === 'History of Present Illness' && note !== '' && (
-                    <View style={styles.complaintcontainer}>
-                      <Icon
-                        name="file-document-edit"
-                        color={CUSTOMCOLOR.primary}
-                        size={moderateScale(16)}
-                      />
-                      <Text style={styles.pulse}>{note}</Text>
-                    </View>
-                  )}
+                  {value.label === 'History of Present Illness' &&
+                    note !== '' && (
+                      <View style={styles.complaintcontainer}>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{note}</Text>
+                      </View>
+                    )}
                   {value.label === 'Doctor Notes' && notes !== '' && (
                     <View style={styles.complaintcontainer}>
                       <Icon
@@ -1435,30 +1439,31 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Comorbidities' && commorbities.length > 0 && (
-                    <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View style={styles.common}>
-                          <View>
-                            {commorbities?.map((item, ind) => (
-                              <View key={ind} style={styles.common}>
-                                <Icon
-                                  name="prescription"
-                                  size={moderateScale(16)}
-                                  color={CUSTOMCOLOR.primary}
-                                />
-                                <View>
-                                  <Text style={styles.pulse}>
-                                    {item?.commoribities}
-                                  </Text>
+                  {value.label === 'Comorbidities' &&
+                    commorbities.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View style={styles.common}>
+                            <View>
+                              {commorbities?.map((item, ind) => (
+                                <View key={ind} style={styles.common}>
+                                  <Icon
+                                    name="prescription"
+                                    size={moderateScale(16)}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={styles.pulse}>
+                                      {item?.commoribities}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
-                            ))}
+                              ))}
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  )}
+                    )}
 
                   {value.label === 'Past Hospitalization' &&
                     pasthistory.length > 0 && (

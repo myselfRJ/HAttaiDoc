@@ -113,6 +113,7 @@ const ProfileCreate = ({navigation}) => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
   );
+  const [shows, setShow] = useState(false);
   const [selectedState, setState] = useState('Select');
   const [age, setAge] = useState('');
 
@@ -198,9 +199,7 @@ const ProfileCreate = ({navigation}) => {
   const handleSpecialitySelection = speciality => {
     setSelectedSpeciality(speciality);
     handleChangeValue('speciality', speciality);
-    setTimeout(() => {
-      appointmentCardRef?.current?.snapToIndex(0);
-    }, 500);
+    setShow(false);
   };
   const handleStateSelection = state => {
     setState(state);
@@ -526,11 +525,36 @@ const ProfileCreate = ({navigation}) => {
             name="chevron-down"
             // onPress={toggleModal}
             onPress={() => {
-              appointmentCardRef?.current?.snapToIndex(1);
+              setShow(!shows);
             }}
             input={selectedSpeciality}
           />
         </View>
+        {shows && (
+          <View style={styles.modalContainer}>
+            <Text style={styles.bottext}>Select Speciality</Text>
+            <ScrollView persistentScrollbar={true}>
+              {CONSTANTS.speciality.map((speciality, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() => handleSpecialitySelection(speciality)}>
+                  <Text
+                    style={[
+                      styles.modalfields,
+                      {
+                        color:
+                          selectedSpeciality === speciality
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.black,
+                      },
+                    ]}>
+                    {speciality}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        )}
         <InputText
           inputContainer={{paddingHorizontal: moderateScale(0)}}
           label={Language[language]['experience']}
@@ -735,36 +759,6 @@ const ProfileCreate = ({navigation}) => {
         />
       </View>
       <BottomSheetView
-        bottomSheetRef={appointmentCardRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#000000aa'}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.bottext}>Select Speciality</Text>
-          <ScrollView persistentScrollbar={true}>
-            {CONSTANTS.speciality.map((speciality, index) => (
-              <Pressable
-                key={index}
-                onPress={() => handleSpecialitySelection(speciality)}
-                // style={{height: verticalScale(30)}}
-              >
-                <Text
-                  style={[
-                    styles.modalfields,
-                    {
-                      color:
-                        selectedSpeciality === speciality
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.black,
-                    },
-                  ]}>
-                  {speciality}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-      </BottomSheetView>
-      <BottomSheetView
         visible={bottom}
         setVisible={setBottom}
         status={apiStatus.status}
@@ -807,7 +801,7 @@ const styles = StyleSheet.create({
   },
 
   modalContainer: {
-    height: '100%',
+    height: horizontalScale(400),
     // width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
