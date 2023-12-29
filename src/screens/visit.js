@@ -706,9 +706,9 @@ const Visit = ({navigation, route}) => {
           <p style="text-align:center">
               This Prescription electronically signed by Dr. ${
                 data?.doctor_name
-              }${' '} ,${data?.degree}, ${
+              },${' '}${data?.degree}, ${' '}${
           data?.medical_number
-        }, ${new Date().toString()}
+        }, ${' '}${new Date().toString()}
           </p>
           <img src=${
             CONSTANTS.pdf_footer
