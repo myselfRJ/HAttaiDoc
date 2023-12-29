@@ -48,6 +48,7 @@ const AlertMessage = props => {
   const [tokens, setToken] = useState([]);
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
+  const serverFCM = useSelector(state => state?.phone?.serverFCMapi);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const fetchUsers = async () => {
     const response = await fetchApi(URL.get_user_by_clinic_id(Clinic_id), {
@@ -103,7 +104,7 @@ const AlertMessage = props => {
       appointment_id: data_set?.appointment_id,
       Logintoken: token,
     };
-    sendNotification(fcmTokens, body, data, 'uploadrecord');
+    sendNotification(serverFCM, fcmTokens, body, data, 'uploadrecord');
     props.onPress && props.onPress();
   };
 

@@ -109,30 +109,6 @@ const PhysicalExamination = ({navigation}) => {
     }
   };
 
-  // const onImagePress = () => {
-  //   const options = {
-  //     mediaType: 'photo',
-  //     includeBase64: true,
-  //     quality: 0.5,
-  //   };
-
-  //   launchImageLibrary(options, response => {
-  //     if (response.didCancel) {
-  //     } else if (response.error) {
-  //     } else {
-  //       // console.log('=======>', response?.assets);
-  //       SetUploadDocument([
-  //         ...uploaddocument,
-  //         {
-  //           name: response?.assets?.[0]?.fileName,
-  //           type: response?.assets?.[0]?.type,
-  //           uri: response?.assets?.[0]?.uri,
-  //         },
-  //       ]);
-  //     }
-  //   });
-  //   setModal(!modal);
-  // };
   const onImagePress = async () => {
     try {
       const data = await handleGallery();
@@ -166,46 +142,15 @@ const PhysicalExamination = ({navigation}) => {
     }
     setModal(false);
   };
-  // const openCamera = () => {
-  //   const options = {
-  //     mediaType: 'photo',
-  //     quality: 0.5,
-  //     includeBase64: true,
-  //   };
 
-  //   launchCamera(options, response => {
-  //     if (response.didCancel) {
-  //     } else if (response.error) {
-  //     } else {
-  //       // console.log("=======>",response?.assets);
-
-  //     }
-  //   });
-  //   setModal(!modal);
-  // };
-
-  // const handleSelectFilename = async () => {
-  //   try {
-  //     const file = await pickSingleFile();
-  //     console.log(file);
-  //     // setSelectedFilename(file ? file : {});
-  //   } catch (error) {}
-  // };
   const handleSelectFilename = async () => {
     try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-        allowMultiSelection: true,
-      });
+      const file = await pickSingleFile();
       SetUploadDocument([
         ...uploaddocument,
-        {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
+        {name: file?.name, type: file?.type, uri: file?.uri},
       ]);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-      } else {
-      }
-    }
+    } catch (error) {}
     setModal(!modal);
   };
   const dispatch = useDispatch();

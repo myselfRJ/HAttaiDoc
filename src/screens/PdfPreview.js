@@ -57,6 +57,7 @@ import {commonstyles} from '../styles/commonstyle';
 import sendNotification from '../utility/notification';
 
 const PdfView = ({navigation}) => {
+  const serverFCM = useSelector(state => state?.phone?.serverFCMapi);
   const [patientFcmTokens, setPatientFcmTokens] = useState([]);
   const [bottom, setBottom] = useState(false);
   const FecthFcmTokensByPatient = async () => {
@@ -236,7 +237,7 @@ const PdfView = ({navigation}) => {
           try {
             const response = await fetch(URL.uploadPDF, requestOptions);
             const responseData = await response.json();
-            console.log('API Response:', responseData);
+            // console.log('API Response:', responseData);
             const data = {
               user_phone: '',
               Clinic_id: Clinic_id,
@@ -246,6 +247,7 @@ const PdfView = ({navigation}) => {
               Logintoken: token,
             };
             sendNotification(
+              serverFCM,
               patientFcmTokens,
               `Appointment Sucessfully Completed`,
               data,

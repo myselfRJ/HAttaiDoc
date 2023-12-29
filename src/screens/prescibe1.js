@@ -220,11 +220,24 @@ export default function Prescribe1({navigation}) {
       Alert.alert('', 'Please give Atleast One Medication');
     }
   };
-
+  const snomedModeSearch =
+    mode === modes[0]
+      ? 'inj'
+      : mode === modes[1]
+      ? 'cap'
+      : mode === modes[2]
+      ? 'syr'
+      : mode === modes[3]
+      ? 'tab'
+      : '';
   const fetchMedicine = async () => {
     const response = await fetchApi(
       URL.snomed(
-        generic ? generic : medicine ? medicine : 'NA',
+        generic
+          ? `${snomedModeSearch} ${generic}`
+          : medicine
+          ? `${snomedModeSearch} ${medicine}`
+          : 'NA',
         generic ? 'clinical drug' : option,
       ),
       {
@@ -248,7 +261,7 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     fetchMedicine();
-  }, [medicine, generic]);
+  }, [medicine, generic, mode]);
 
   const FetchFilterDataofSnomed = value => {
     if (medicine || generic) {
@@ -338,13 +351,19 @@ export default function Prescribe1({navigation}) {
           ))}
         </View>
 
-        {/* <View>
+        <View>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes?.map(value => (
               <SelectorBtn
                 key={value}
-                onPress={() => setMode(value)}
+                onPress={() => {
+                  if (mode == value) {
+                    setMode('');
+                  } else {
+                    setMode(value);
+                  }
+                }}
                 input={value}
                 select={{
                   backgroundColor:
@@ -360,7 +379,7 @@ export default function Prescribe1({navigation}) {
               />
             ))}
           </View>
-        </View> */}
+        </View>
         <View>
           <InputText
             lbltext={{fontSize: moderateScale(14)}}

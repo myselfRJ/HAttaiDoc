@@ -193,10 +193,10 @@ const ObstetricHistory = ({route}) => {
           //     })),
           //   ]);
           // }
-          console.log(
-            '==============>mens',
-            mens?.living[mens?.living?.length - 1]['living'],
-          );
+          // console.log(
+          //   '==============>mens',
+          //   mens?.living[mens?.living?.length - 1]['living'],
+          // );
           setLiving(mens?.living[mens?.living?.length - 1]['living']);
           {
             mens?.living?.forEach(element => {

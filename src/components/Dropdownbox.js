@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {
   CUSTOMCOLOR,
@@ -15,24 +15,43 @@ import {
 const DropdownComponent = props => {
   const data = props.data;
   const setValue = props.select;
-
+  const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <Dropdown
-      style={{...styles.dropdown, ...props.style}}
-      placeholderStyle={styles.placeholderStyle}
-      selectedTextStyle={styles.selectedTextStyle}
-      inputSearchStyle={styles.inputSearchStyle}
-      iconStyle={styles.iconStyle}
-      data={data}
-      maxHeight={moderateScale(300)}
-      labelField="value"
-      valueField="label"
-      placeholder={props.placeholder}
-      value={props.value}
-      onChange={item => {
-        setValue(item.label);
-      }}
-    />
+    <View style={{gap: moderateScale(2)}}>
+      {props.label && (
+        <Text style={styles.h3}>
+          {props.label}{' '}
+          {props.required ? (
+            <Text
+              style={[
+                styles.indicator,
+                props.required && visible && styles.required,
+              ]}>
+              *
+            </Text>
+          ) : null}
+        </Text>
+      )}
+      <Dropdown
+        style={{...styles.dropdown, ...props.style}}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        search
+        searchPlaceholder={props.searchPlaceholder}
+        maxHeight={moderateScale(300)}
+        labelField="value"
+        valueField="label"
+        placeholder={props.placeholder}
+        value={props.value}
+        onChange={item => {
+          setValue(item.label);
+        }}
+        itemTextStyle={{color: CUSTOMCOLOR.black}}
+      />
+    </View>
   );
 };
 
@@ -42,7 +61,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: CUSTOMCOLOR.white,
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(2),
+    paddingVertical: verticalScale(4),
     fontWeight: '400',
     borderRadius: 4,
     borderWidth: 1,
@@ -50,17 +69,17 @@ const styles = StyleSheet.create({
     paddingLeft: moderateScale(15),
     fontSize: CUSTOMFONTSIZE.h3,
     fontFamily: CUSTOMFONTFAMILY.body,
-    marginHorizontal: 3,
+    // marginHorizontal: 3,
     // marginVertical: 15,
   },
   placeholderStyle: {
-    fontSize: moderateScale(16),
-    color: CUSTOMCOLOR.background,
+    fontSize: CUSTOMCOLOR.h3,
+    color: CUSTOMCOLOR.disable,
   },
   selectedTextStyle: {
-    margin: moderateScale(5),
-    fontSize: moderateScale(16),
-    color: CUSTOMCOLOR.primary,
+    // margin: moderateScale(5),
+    fontSize: CUSTOMCOLOR.h3,
+    color: CUSTOMCOLOR.black,
   },
   iconStyle: {
     width: moderateScale(20),
@@ -68,6 +87,20 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: moderateScale(40),
-    fontSize: moderateScale(16),
+    fontSize: CUSTOMCOLOR.h3,
+    color: CUSTOMCOLOR.black,
+  },
+  h3: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    color: CUSTOMCOLOR.black,
+    fontFamily: CUSTOMFONTFAMILY.body,
+    // lineHeight: CUSTOMFONTSIZE.h3 * 1.75,
+  },
+  indicator: {
+    fontSize: CUSTOMFONTSIZE.h3,
+    marginRight: 5,
+  },
+  required: {
+    color: 'red',
   },
 });

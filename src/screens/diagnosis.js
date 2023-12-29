@@ -76,7 +76,6 @@ const Diagnosis = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
       const snomed_data = jsonData?.map(item => ({term: item}));
       setData(snomed_data);
 

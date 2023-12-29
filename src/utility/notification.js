@@ -3,13 +3,13 @@ import {fetchApi} from '../api/fetchApi';
 import {URL} from './urls';
 import {useSelector} from 'react-redux';
 
-const token =
-  'AAAAz5ihZ2k:APA91bHjASxPwGM8B4Wm65D571YUt0IzsEgXHLPSNLu_GeDxK1Ni-NYc13puVhbFdf-GyN_87T8D7VJx1q2kYN02KTexaCbCSRYfRBVtplshylUcZVT69-6nJqV6jRT_pywtXuqkst6l';
-
-const sendNotification = async (fcmTokens, body, data_notification, screen) => {
-  // const Logintoken = useSelector(state => state.authenticate.auth.access);
-  // const {phone} = useSelector(state => state?.phone?.data);
-  // const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+const sendNotification = async (
+  token,
+  fcmTokens,
+  body,
+  data_notification,
+  screen,
+) => {
   const NotificationDetails = {
     data: {
       screen: screen,
@@ -43,7 +43,6 @@ const sendNotification = async (fcmTokens, body, data_notification, screen) => {
     // console.log(NotificationDetails);
     if (response.ok) {
       const jsonData = await response.json();
-      console.log(jsonData);
       Alert.alert('success', 'Succesfully sent');
       if (data_notification) {
         try {

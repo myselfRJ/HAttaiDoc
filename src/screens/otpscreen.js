@@ -29,7 +29,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {fetchApi} from '../api/fetchApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
-import {addLogin_phone} from '../redux/features/phoneNumber/LoginPhoneNumber';
+import {
+  addGoogleKey,
+  addLogin_phone,
+  addServerFCMToken,
+} from '../redux/features/phoneNumber/LoginPhoneNumber';
 // import {updateauthenticate} from '../redux/features/authenticate/authenticateSlice';
 import {
   moderateScale,
@@ -129,11 +133,23 @@ const OtpScreen = ({route}) => {
         if (jsonData.status === 'success') {
           dispatch(authenticateActions.updateauthenticate(jsonData?.data));
           const acces_token = jsonData?.data;
+          const apiTokens = await fetch(URL.retriveTokens, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${acces_token?.access_token}`,
+            },
+          });
+          const json = await apiTokens.json();
+          const Api = {google: json?.google_api, serverFCMapi: json?.FcmToken};
           StoreAsyncData('token_and_phone', {
             acces_token: acces_token,
             phone: phone,
             time: new Date(),
+            googleApi: Api?.google,
+            serverFCMapi: Api?.serverFCMapi,
           });
+          dispatch(addGoogleKey(Api?.google));
+          dispatch(addServerFCMToken(Api?.serverFCMapi));
           setApiStatus({
             status: 'success',
             message: jsonData?.message,

@@ -448,7 +448,7 @@ export const capitalizeWord = word => {
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-const fileSizeLimit = 1 * 1024 * 1024;
+
 export const handleGallery = async () => {
   const options = {
     mediaType: 'photo',
@@ -465,10 +465,12 @@ export const handleGallery = async () => {
         reject(response.error);
       } else {
         const responsedData = response?.assets?.[0];
+        const fileSizeLimit = 1 * 1024 * 1024;
         if (responsedData?.fileSize > fileSizeLimit) {
-          reject(
-            new Error('File size exceeds 1MB. Please select a smaller file.'),
-          );
+          Alert.alert('File size exceeds 1MB. Please select a smaller file.'),
+            reject(
+              new Error('File size exceeds 1MB. Please select a smaller file.'),
+            );
         } else {
           const data = {
             uri: responsedData?.uri,
@@ -505,10 +507,12 @@ export const handleCamera = async () => {
         reject(response.error);
       } else {
         const responsedData = response?.assets?.[0];
+        const fileSizeLimit = 1 * 1024 * 1024;
         if (responsedData?.fileSize > fileSizeLimit) {
-          reject(
-            new Error('File size exceeds 1MB. Please select a smaller file.'),
-          );
+          Alert.alert('File size exceeds 1MB. Please select a smaller file.'),
+            reject(
+              new Error('File size exceeds 1MB. Please select a smaller file.'),
+            );
         } else {
           const data = {
             uri: responsedData?.uri,
@@ -529,6 +533,16 @@ export const handleCamera = async () => {
 };
 
 import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
+const convertUriToBase64 = async documentUri => {
+  try {
+    const base64Data = await RNFS.readFile(documentUri, 'base64');
+    return base64Data;
+  } catch (error) {
+    console.error('Error converting document to base64:', error);
+    return null;
+  }
+};
 export const pickSingleFile = async () => {
   try {
     const result = await DocumentPicker.pick({
@@ -544,9 +558,12 @@ export const pickSingleFile = async () => {
     }
 
     const base64Document = await convertUriToBase64(result[0]?.uri || '');
+    const resultedData = result?.[0];
     let fileDetails = {
       name: originalFilename,
-      uri: base64Document,
+      base64uri: base64Document,
+      uri: resultedData?.uri,
+      type: resultedData?.type,
     };
     return fileDetails;
   } catch (err) {
@@ -569,6 +586,7 @@ export const AppointmentDatafilterAndSortData = data => {
   return sorteddata;
 };
 import {CONSTANTS} from './constant';
+import {Alert} from 'react-native';
 const months = CONSTANTS.months;
 
 export const AppointmentsInAYear = (data, start_date, end_date) => {

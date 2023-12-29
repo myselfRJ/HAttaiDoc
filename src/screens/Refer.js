@@ -44,6 +44,7 @@ import {
   UpdateAsyncData,
   RetriveAsyncData,
 } from '../utility/AsyncStorage';
+import DropdownComponent from '../components/Dropdownbox';
 
 const ReferToDoctor = () => {
   const route = useRoute();
@@ -435,7 +436,7 @@ const ReferToDoctor = () => {
                   setValue={val => setDr_Name(val)}
                 />
               ) : null}
-              <View>
+              {/* <View>
                 <SelectorBtn
                   onPress={() => setShow(!show)}
                   label={'Specialization'}
@@ -462,7 +463,7 @@ const ReferToDoctor = () => {
                         <TouchableOpacity
                           key={index}
                           style={styles.touch}
-                          onPress={() => HandlePress(val)}>
+                          onPress={() => HandlePress(val?.value)}>
                           <Text
                             style={{
                               fontSize: CUSTOMFONTSIZE.h3,
@@ -470,14 +471,26 @@ const ReferToDoctor = () => {
                               color: CUSTOMCOLOR.black,
                             }}
                             key={index}>
-                            {val}
+                            {val?.value}
                           </Text>
                         </TouchableOpacity>
                       ))}
                     </ScrollView>
                   </View>
                 )}
-              </View>
+              </View> */}
+              <DropdownComponent
+                searchPlaceholder={'Search Speciality.....'}
+                label={Language[language]['specialization']}
+                required={true}
+                style={{paddingHorizontal: 0}}
+                select={value => HandlePress(value)}
+                placeholder="Select Specialization"
+                value={
+                  speciality?.length > 0 ? speciality : 'Select Specialization'
+                }
+                data={CONSTANTS.speciality}
+              />
               <InputText
                 label={'Phone Number'}
                 placeholder="Phone number"

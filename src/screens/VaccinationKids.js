@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {
   horizontalScale,
   verticalScale,
@@ -396,7 +403,9 @@ const VaccinationKids = ({navigation}) => {
       });
     });
   };
+  const [loading, setLoading] = useState(false);
   const fetchData = async () => {
+    setLoading(true);
     try {
       const ageStatus = vaccine?.filter(item => item?.age === selectedStatus);
       const response = await fetchApi(URL.uploadImmunizationKids, {
@@ -413,14 +422,18 @@ const VaccinationKids = ({navigation}) => {
       });
       if (response?.ok) {
         const jsonData = await response.json();
-        navigation.goBack();
+        if (jsonData?.status === 'success') {
+          Alert.alert('Success', jsonData?.message);
+          navigation.goBack();
+          setLoading(false);
+        }
       } else {
         console.error('API call failed:', response?.status);
-        // setLoading(false);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error occurred:', error);
-      // setLoading(false);
+      setLoading(false);
     }
   };
   const getData = async () => {
@@ -1135,11 +1148,11 @@ const VaccinationKids = ({navigation}) => {
         <HButton
           label="Save"
           btnstyles={{
-            width: '55%',
             height: moderateScale(55),
-            borderRadius: moderateScale(12),
+            borderRadius: moderateScale(4),
           }}
           textStyle={{fontSize: CUSTOMFONTSIZE.h2}}
+          loading={loading}
           onPress={() => fetchData()}
         />
       </View>

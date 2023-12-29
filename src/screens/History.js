@@ -177,7 +177,6 @@ const History = ({route, navigation}) => {
       navigation.navigate('img', {path});
     }
   };
-  console.log('==========', [...reports_finding, ...reportspatient]);
   useFocusEffect(
     React.useCallback(() => {
       fetchRefferal();

@@ -146,7 +146,6 @@ const Adult = () => {
     setshow(!show);
     setvisible(false);
   };
-  console.log('document===========', document1);
   return (
     <View style={styles.container}>
       <ScrollView>

@@ -15,7 +15,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import {
   addFcmToken,
+  addGoogleKey,
   addLogin_phone,
+  addServerFCMToken,
 } from '../redux/features/phoneNumber/LoginPhoneNumber';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
 const Introduction = ({navigation}) => {
@@ -23,7 +25,6 @@ const Introduction = ({navigation}) => {
   const getTokenFcm = async () => {
     try {
       const Token = await messaging().getToken();
-      console.log(Token);
       dispatch(addFcmToken(Token));
     } catch (error) {
       console.error(error);
@@ -43,6 +44,8 @@ const Introduction = ({navigation}) => {
         const formattedNewDate = newDate.toISOString();
         dispatch(authenticateActions.updateauthenticate(array?.acces_token));
         dispatch(addLogin_phone({phone: array?.phone, trace_id: ''}));
+        dispatch(addGoogleKey(array?.googleApi));
+        dispatch(addServerFCMToken(array?.serverFCMapi));
         if (originalDate.toISOString() <= formattedNewDate && array?.time) {
           setTimeout(() => {
             navigation.navigate('protected');

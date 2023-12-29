@@ -108,7 +108,6 @@ const SlotBook = ({navigation, route}) => {
   };
   const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-  console.log('=============>', Clinic_id);
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const handleClinicSelection = clinic => {
     dispatch(addclinic_id(clinic?.id));

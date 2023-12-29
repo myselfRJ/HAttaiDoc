@@ -1,14 +1,15 @@
-const baseUrl = 'http://10.9.79.239:8000/api/v1/';
+// const baseUrl = 'http://10.9.79.239:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.11:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
-// const baseUrl = 'http://13.200.15.208/api/v1/';
+const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
-export const fileurl = `http://10.9.79.239:8000`;
+// export const fileurl = `http://10.9.79.239:8000`;
 // export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-// export const fileurl = `http://13.200.15.208`;
+export const fileurl = `http://13.200.15.208`;
 
 export const URL = {
+  retriveTokens: `${baseUrl}retrivetokens`,
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
   profileUrl: `${baseUrl}practioner/practitoner-save`,
@@ -44,6 +45,9 @@ export const URL = {
   updateDoctorProfile: phoneId =>
     `${baseUrl}practioner/change?doctor_phone_number=${phoneId}`,
   snomed: (term, option) =>
+    // `${snomedUrl}csnoserv/api/search/search?term=${term}&state=active&semantictag=${encodeURIComponent(
+    //   option,
+    // )}&acceptability=synonyms&returnlimit=100&groupbyconcept=false&refsetid=null&parentid=null&excludeparentconcept=false&fullconcept=true`,
     `${snomedUrl}csnoserv/api/search/suggest?term=${term}&state=active&semantictag=${encodeURIComponent(
       option,
     )}&acceptability=synonyms&returnlimit=-1`,

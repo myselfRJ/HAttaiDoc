@@ -245,7 +245,6 @@ const Appointment = ({navigation}) => {
       />
     );
   };
-  console.log(Dimensions.get('window').height);
   return (
     <View style={styles.main}>
       <View>

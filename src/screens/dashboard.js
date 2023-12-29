@@ -168,7 +168,6 @@ const Dashboard = ({navigation, route}) => {
     });
     try {
       const jsonData = await response.json();
-      console.log(jsonData?.data);
     } catch (error) {
       console.log(error);
     }

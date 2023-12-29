@@ -63,16 +63,13 @@ import {
 const Visit = ({navigation, route}) => {
   const [visible, setVisible] = useState(false);
   const [filePath, setFilePath] = useState('');
-  // const [show, setShow] = useState(false);
   const [prevLoad, setPrevLoad] = useState(false);
-  // const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const date = useSelector(state => state?.dateTime?.date);
   const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
   const notes = useSelector(state => state?.prescription?.additional_notes);
   const vitalsData = useSelector(state => state.prescription.vitalsData);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  console.log('=============>physical', JSON.stringify(physical) !== '{}');
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const note = useSelector(state => state.prescription.note);
   const selectedComplaint = useSelector(
@@ -92,10 +89,6 @@ const Visit = ({navigation, route}) => {
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
   );
-
-  // const pasthistory = useSelector(state => state?.pasthistory?.pasthistory);
-
-  // const pasthistory2 = useSelector(state => state?.pasthistory?.medicationHistory);
   const allergies = useSelector(state => state?.allergies?.allergies);
   const labreport = useSelector(state => state?.labreport?.labReport);
   const dateTimeRed = useSelector(state => state.valid?.valid);
@@ -1113,7 +1106,9 @@ const Visit = ({navigation, route}) => {
                           ? 'check-circle'
                           : '')) ||
                       (value?.label === 'Physical Examinations' &&
-                      physi !== '{}'
+                      physi !== '{}' &&
+                      physical?.value !== '' &&
+                      physical?.value !== undefined
                         ? 'check-circle'
                         : '')
                     }

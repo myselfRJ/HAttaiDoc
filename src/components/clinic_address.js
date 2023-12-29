@@ -28,7 +28,7 @@ import {
 } from '../utility/scaleDimension';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {mode} from '../redux/features/prescription/prescribeslice';
-
+import {useSelector} from 'react-redux';
 const {height, width} = Dimensions.get('screen');
 const ClinicAddress = ({navigation}) => {
   const ref = useRef('Search here');
@@ -36,6 +36,7 @@ const ClinicAddress = ({navigation}) => {
   const markerRef = useRef();
 
   const dispatch = useDispatch();
+  const google_api = useSelector(state => state?.phone?.googleApi);
   const [currentLocation, setCurrentLocation] = useState(null);
 
   const [markerCoordinates, setMarkerCoordinates] = useState({
@@ -97,7 +98,7 @@ const ClinicAddress = ({navigation}) => {
   const fetchFormattedAddress = async (latitude, longitude) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ`,
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${google_api}`,
       );
 
       if (response.data.status === 'OK' && response.data.results.length > 0) {
@@ -136,7 +137,7 @@ const ClinicAddress = ({navigation}) => {
             setRegiondata({...regionData, latitude, longitude});
           }}
           query={{
-            key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+            key: `${google_api}`,
             language: 'en',
           }}
           // currentLocation={true}
@@ -301,7 +302,7 @@ export default ClinicAddress;
 //         placeholder="Search"
 //         onPress={handlePlaceSelect}
 //         query={{
-//           key: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
+//           key: `${google_api}`,
 
 //           language: 'en',
 //         }}

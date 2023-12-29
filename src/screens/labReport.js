@@ -151,10 +151,8 @@ const LabReports = () => {
     if (prev?.length > 0 && template) {
       StoreAsyncData(`template${phone}${template}`, prev);
       setModal(!modal);
-      console.log('indraaaaaaaaaaaaaa');
     }
   };
-  console.log(prev);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />

@@ -38,7 +38,7 @@ const MenstrualHistory = ({navigation, route}) => {
   const {phone, patient_phone} = route.params;
   const token = useSelector(state => state.authenticate.auth.access);
   const nav = useNavigation();
-  console.log(',enstr==', menstrualHistory);
+  // console.log(',enstr==', menstrualHistory);
   const selction = ['Yes', 'No'];
   const [age, setAge] = useState('');
   const [status, setStatus] = useState('');
@@ -158,7 +158,7 @@ const MenstrualHistory = ({navigation, route}) => {
   // useEffect(() => {
   //   fetchMenstrualData();
   // }, []);
-  console.log('preg===', menstrualHistory.pregnant);
+  // console.log('preg===', menstrualHistory.pregnant);
   useEffect(() => {
     if (menstrualHistory) {
       setAge(menstrualHistory?.age);

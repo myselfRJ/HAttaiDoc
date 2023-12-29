@@ -53,6 +53,8 @@ import RNFS, {stat} from 'react-native-fs';
 import Modal from 'react-native-modal';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import CustomCalendar from '../components/calendar';
+import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
+import DropdownComponent from '../components/Dropdownbox';
 
 const ProfileCreate = ({navigation}) => {
   const GlRef = useRef(null);
@@ -84,34 +86,24 @@ const ProfileCreate = ({navigation}) => {
     experience: '',
     degree: '',
   });
-  const [filteredState, setFilteredState] = useState([]);
-  useEffect(() => {
-    const filteredState = CONSTANTS.state?.filter(item =>
-      item.toLowerCase().startsWith(searchstate.toLowerCase()),
-    );
-    if (filteredState) {
-      setFilteredState(filteredState);
-    } else {
-      setFilteredState(CONSTANTS.state);
-    }
-  }, [searchstate]);
+  // const [filteredState, setFilteredState] = useState([]);
+  // useEffect(() => {
+  //   const filteredState = CONSTANTS.state?.filter(item =>
+  //     item.toLowerCase().startsWith(searchstate.toLowerCase()),
+  //   );
+  //   if (filteredState) {
+  //     setFilteredState(filteredState);
+  //   } else {
+  //     setFilteredState(CONSTANTS.state);
+  //   }
+  // }, [searchstate]);
 
   const [status, setStatus] = useState(false);
-
-  const convertUriToBase64 = async documentUri => {
-    try {
-      const base64Data = await RNFS.readFile(documentUri, 'base64');
-      return base64Data;
-    } catch (error) {
-      console.error('Error converting document to base64:', error);
-      return null;
-    }
-  };
 
   const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
-    CONSTANTS.speciality[0],
+    CONSTANTS.speciality[0]?.value,
   );
   const [shows, setShow] = useState(false);
   const [selectedState, setState] = useState('Select');
@@ -152,37 +144,23 @@ const ProfileCreate = ({navigation}) => {
     setModal(true);
     GlRef?.current?.snapToIndex(1);
   };
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-        setDel(!del);
-      }
-    });
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
 
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
   const handleOptions = value => {
@@ -217,9 +195,9 @@ const ProfileCreate = ({navigation}) => {
     medical_number: values.medical_number,
     profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
     state: selectedState === 'select' ? null : selectedState,
-    medical_doc_url: selectedFilename?.uri,
-    pan_doc_url: pan?.uri,
-    latest_doc_url: latestRecord?.uri,
+    medical_doc_url: selectedFilename?.base64uri,
+    pan_doc_url: pan?.base64uri,
+    latest_doc_url: latestRecord?.base64uri,
     degree: values.degree ? value.degree : 'MBBS',
   };
 
@@ -277,28 +255,6 @@ const ProfileCreate = ({navigation}) => {
   }, []);
   // backgroundColor: modal ? '#000000aa' : null
 
-  const pickSingleFile = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-      });
-      const originalFilename = result[0]?.name || '';
-      const base64Document = await convertUriToBase64(result[0]?.uri || '');
-      let fileDetails = {
-        name: originalFilename,
-        uri: base64Document,
-      };
-      return fileDetails;
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // Handle cancel event
-      } else {
-        // Handle other errors
-      }
-    }
-  };
-
-  //  console.log('latest==',latestRecord?.uri)
   const handlelatest = async () => {
     try {
       const file = await pickSingleFile();
@@ -517,46 +473,57 @@ const ProfileCreate = ({navigation}) => {
           value={values.degree}
           setValue={value => handleChangeValue('degree', value)}
         />
-        <View style={styles.specialization}>
+        {/* <View style={styles.specialization}>
           <SelectorBtn
             required={true}
             selectContainer={{flex: 5, gap: 2, paddingVertical: 0}}
             label={Language[language]['specialization']}
             name="chevron-down"
-            // onPress={toggleModal}
             onPress={() => {
               setShow(!shows);
             }}
             input={selectedSpeciality}
           />
-        </View>
-        {shows && (
-          <View style={styles.modalContainer}>
-            <Text style={styles.bottext}>Select Speciality</Text>
-            <ScrollView persistentScrollbar={true}>
-              {CONSTANTS.speciality.map((speciality, index) => (
-                <Pressable
-                  key={index}
-                  onPress={() => handleSpecialitySelection(speciality)}>
-                  <Text
-                    style={[
-                      styles.modalfields,
-                      {
-                        color:
-                          selectedSpeciality === speciality
-                            ? CUSTOMCOLOR.primary
-                            : CUSTOMCOLOR.black,
-                      },
-                    ]}>
-                    {speciality}
-                  </Text>
-                </Pressable>
-              ))}
-            </ScrollView>
+          <View>
+            {shows && (
+              <View style={styles.modalContainer}>
+                <Text style={styles.bottext}>Select Speciality</Text>
+                <ScrollView persistentScrollbar={true} style={{height: 200}}>
+                  {CONSTANTS.speciality.map((speciality, index) => (
+                    <Pressable
+                      key={index}
+                      onPress={() => handleSpecialitySelection(speciality)}>
+                      <Text
+                        style={[
+                          styles.modalfields,
+                          {
+                            color:
+                              selectedSpeciality === speciality
+                                ? CUSTOMCOLOR.primary
+                                : CUSTOMCOLOR.black,
+                          },
+                        ]}>
+                        {speciality}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
-        )}
+        </View> */}
+        <DropdownComponent
+          searchPlaceholder={'Search Speciality.....'}
+          label={Language[language]['specialization']}
+          required={true}
+          style={{paddingHorizontal: 0}}
+          select={value => handleSpecialitySelection(value)}
+          placeholder="Type of Record"
+          value={selectedSpeciality}
+          data={CONSTANTS.speciality}
+        />
         <InputText
-          inputContainer={{paddingHorizontal: moderateScale(0)}}
+          inputContainer={{paddingHorizontal: moderateScale(0), zIndex: -1}}
           label={Language[language]['experience']}
           placeholder="experience in years"
           value={values.experience}
@@ -565,7 +532,7 @@ const ProfileCreate = ({navigation}) => {
           keypad="numeric"
         />
         <View style={styles.btn}>
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, zIndex: -1}}>
             <InputText
               required={true}
               inputContainer={{
@@ -581,7 +548,7 @@ const ProfileCreate = ({navigation}) => {
           </View>
 
           <View style={{flex: 1}}>
-            <SelectorBtn
+            {/* <SelectorBtn
               required={true}
               selectContainer={{gap: 2, paddingVertical: -1}}
               label="State"
@@ -592,9 +559,18 @@ const ProfileCreate = ({navigation}) => {
                 setshow(!show);
               }}
               input={selectedState}
+            /> */}
+            <DropdownComponent
+              label={'State'}
+              required={true}
+              style={{paddingHorizontal: 0}}
+              select={value => handleStateSelection(value)}
+              placeholder="Select State"
+              searchPlaceholder={'Search State.....'}
+              value={selectedState}
+              data={CONSTANTS.state}
             />
-
-            {show === true && (
+            {/* {show === true && (
               <View style={styles.statecontainer}>
                 <InputText
                   search={true}
@@ -609,8 +585,6 @@ const ProfileCreate = ({navigation}) => {
                     zIndex: 4,
                     backgroundColor: CUSTOMCOLOR.white,
                   }}>
-                  {/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
-
                   {filteredState?.map((state, index) => (
                     <TouchableOpacity
                       key={index}
@@ -618,12 +592,7 @@ const ProfileCreate = ({navigation}) => {
                         handleStateSelection(state);
                         setshow(false);
                       }}
-                      style={
-                        {
-                          // paddingHorizontal: horizontalScale(4),
-                          // paddingVertical: verticalScale(4),
-                        }
-                      }>
+                      style={{}}>
                       <Text
                         style={[
                           styles.statefields,
@@ -638,10 +607,9 @@ const ProfileCreate = ({navigation}) => {
                       </Text>
                     </TouchableOpacity>
                   ))}
-                  {/* </View>  */}
                 </ScrollView>
               </View>
-            )}
+            )} */}
           </View>
         </View>
         {/* <View
@@ -778,7 +746,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     // borderWidth: 1,
     gap: verticalScale(16),
-    zIndex: 1,
   },
 
   radiogroup: {
@@ -801,16 +768,23 @@ const styles = StyleSheet.create({
   },
 
   modalContainer: {
-    height: horizontalScale(400),
-    // width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    // height: horizontalScale(200),
+    // // width: '100%',
+    // justifyContent: 'flex-start',
+    // // alignItems: 'center',
     backgroundColor: CUSTOMCOLOR.white,
-    alignSelf: 'center',
-    borderRadius: moderateScale(10),
-    gap: moderateScale(16),
-    padding: moderateScale(10),
-    borderWidth: 1,
+    // // alignSelf: 'center',
+    // borderRadius: moderateScale(10),
+    // borderColor: CUSTOMCOLOR.primary,
+    // // gap: moderateScale(16),
+    // padding: moderateScale(10),
+    // borderWidth: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    // bottom: 0,
+    // right: 0,
+    zIndex: 100,
   },
   statecontainer: {
     zIndex: 14,
@@ -905,6 +879,7 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     // paddingHorizontal: horizontalScale(24),
     gap: verticalScale(8),
+    // zIndex: -1,
   },
   btn1: {
     flexDirection: 'row',

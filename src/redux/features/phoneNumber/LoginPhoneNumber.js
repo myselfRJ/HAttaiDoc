@@ -6,6 +6,8 @@ const initialState = {
     trace_id: '',
   },
   fcmtoken: '',
+  googleApi: '',
+  serverFCMapi: '',
 };
 
 const Login_Phone_Slice = createSlice({
@@ -18,8 +20,15 @@ const Login_Phone_Slice = createSlice({
     addFcmToken: (state, action) => {
       state.fcmtoken = action.payload;
     },
+    addGoogleKey: (state, action) => {
+      state.googleApi = action.payload;
+    },
+    addServerFCMToken: (state, action) => {
+      state.serverFCMapi = action.payload;
+    },
   },
 });
 
-export const {addLogin_phone, addFcmToken} = Login_Phone_Slice.actions;
+export const {addLogin_phone, addFcmToken, addGoogleKey, addServerFCMToken} =
+  Login_Phone_Slice.actions;
 export const Login_phone_Reducer = Login_Phone_Slice.reducer;

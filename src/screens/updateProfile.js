@@ -49,10 +49,9 @@ import {
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
-import RNFS from 'react-native-fs';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
-import {pickSingleFile} from '../utility/const';
+import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
 
 const UpdateProfile = ({navigation}) => {
   const nav = useNavigation;
@@ -85,15 +84,6 @@ const UpdateProfile = ({navigation}) => {
 
   const [status, setStatus] = useState(false);
 
-  const convertUriToBase64 = async documentUri => {
-    try {
-      const base64Data = await RNFS.readFile(documentUri, 'base64');
-      return base64Data;
-    } catch (error) {
-      console.error('Error converting document to base64:', error);
-      return null;
-    }
-  };
   const [latestRecord, setLatestRecord] = useState({});
 
   const handlelatest = async () => {
@@ -124,7 +114,7 @@ const UpdateProfile = ({navigation}) => {
   const handleClearlatest = () => {
     setLatestRecord('');
   };
-  const prevScrn = console.log(values);
+  // const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     CONSTANTS.speciality[0],
@@ -176,39 +166,23 @@ const UpdateProfile = ({navigation}) => {
     setModal(true);
     GlRef?.current?.snapToIndex(1);
   };
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        // console.log('response====>', response?.assets?.[0].base64);
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const onImagePress = async () => {
+    try {
+      const data = await handleGallery();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
 
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        setSelectedImage(response?.assets?.[0]?.base64);
-      }
-    });
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      setSelectedImage(data?.base64);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
     setModal(false);
   };
   const handleOptions = value => {
@@ -263,12 +237,10 @@ const UpdateProfile = ({navigation}) => {
   useEffect(() => {
     fetchDoctors();
   }, []);
-  console.log(documents?.length);
   const handleStateSelection = state => {
     setState(state);
     handleChangeValue('state', state);
   };
-
   const putProfile = async () => {
     const updateData = {
       doctor_name: values.doctor_name,
@@ -284,10 +256,12 @@ const UpdateProfile = ({navigation}) => {
       medical_number: values.medical_number,
       profile_pic_url: selectedImage ? selectedImage : CONSTANTS.default_image,
       medical_doc_url: selectedFilename
-        ? selectedFilename?.uri
+        ? selectedFilename?.base64uri
         : documents?.[0]?.medical,
-      pan_doc_url: pan ? pan?.uri : documents?.[1]?.aadhar,
-      latest_doc_url: latestRecord ? latestRecord?.uri : documents?.[2]?.degree,
+      pan_doc_url: pan ? pan?.base64uri : documents?.[1]?.aadhar,
+      latest_doc_url: latestRecord
+        ? latestRecord?.base64uri
+        : documents?.[2]?.degree,
       degree: values.degree,
     };
     try {

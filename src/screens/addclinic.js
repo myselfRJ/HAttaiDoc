@@ -418,8 +418,6 @@ const AddClinic = ({navigation}) => {
             newSlot.fromTime < slot.toTime) ||
           (newSlot.toTime > slot.fromTime && newSlot.toTime <= slot.toTime),
       );
-      const condition = !(conflictingSlotExists && AllClinicSlotConflict);
-      console.log(condition);
       if (!AllClinicSlotConflict && !conflictingSlotExists) {
         setAllSlots(prev => [...prev, newSlot]);
         setSlots(prevSlots => ({

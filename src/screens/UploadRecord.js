@@ -187,6 +187,7 @@ const Uploadrecord = ({navigation}) => {
         flex: 1,
         gap: moderateScale(8),
         paddingVertical: verticalScale(16),
+        backgroundColor: CUSTOMCOLOR.white,
       }}>
       <PrescribeHead heading={'Upload Reports'} />
       <DropdownComponent
