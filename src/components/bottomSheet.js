@@ -14,7 +14,6 @@ import {
 import StatusMessage from './statusMessage';
 
 const BottomSheetView = ({children, message, visible, setVisible, status}) => {
-  console.log('.............value', visible);
   return (
     <Modal
       animationType="slide"
@@ -34,7 +33,7 @@ const BottomSheetView = ({children, message, visible, setVisible, status}) => {
         }}>
         <TouchableWithoutFeedback
           onPress={() => {
-            setVisible(!visible);
+            setVisible(false);
           }}>
           <View />
         </TouchableWithoutFeedback>

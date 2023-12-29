@@ -148,7 +148,7 @@ const ClinicAddress = ({navigation}) => {
             },
             textInput: {
               // height: moderateScale(38),
-              color: '#5d5d5d',
+              color: CUSTOMCOLOR.black,
               height: verticalScale(60),
               fontSize: moderateScale(16),
 
@@ -157,6 +157,9 @@ const ClinicAddress = ({navigation}) => {
             },
             predefinedPlacesDescription: {
               color: '#1faadb',
+            },
+            description: {
+              color: CUSTOMCOLOR.black,
             },
           }}
         />

@@ -518,7 +518,7 @@ const ProfileCreate = ({navigation}) => {
           required={true}
           style={{paddingHorizontal: 0}}
           select={value => handleSpecialitySelection(value)}
-          placeholder="Type of Record"
+          placeholder="Select Speciality"
           value={selectedSpeciality}
           data={CONSTANTS.speciality}
         />

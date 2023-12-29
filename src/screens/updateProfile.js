@@ -52,6 +52,7 @@ import GalleryModel from '../components/GalleryModal';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
 import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
+import DropdownComponent from '../components/Dropdownbox';
 
 const UpdateProfile = ({navigation}) => {
   const nav = useNavigation;
@@ -117,7 +118,7 @@ const UpdateProfile = ({navigation}) => {
   // const prevScrn = console.log(values);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSpeciality, setSelectedSpeciality] = useState(
-    CONSTANTS.speciality[0],
+    CONSTANTS.speciality[0]?.value,
   );
   const [age, setAge] = useState('');
   const [DOB, setDOB] = useState(new Date());
@@ -428,7 +429,7 @@ const UpdateProfile = ({navigation}) => {
               value={values.degree}
               setValue={value => handleChangeValue('degree', value)}
             />
-            <SelectorBtn
+            {/* <SelectorBtn
               required={true}
               label={Language[language]['specialization']}
               name="chevron-down"
@@ -437,8 +438,17 @@ const UpdateProfile = ({navigation}) => {
                 setAppointType(true);
               }}
               input={selectedSpeciality}
+            /> */}
+            <DropdownComponent
+              searchPlaceholder={'Search Speciality.....'}
+              label={Language[language]['specialization']}
+              required={true}
+              style={{paddingHorizontal: 0}}
+              select={value => handleSpecialitySelection(value)}
+              placeholder="Select Speciality"
+              value={selectedSpeciality}
+              data={CONSTANTS.speciality}
             />
-
             <InputText
               label={Language[language]['experience']}
               placeholder="experience in years"
@@ -462,7 +472,7 @@ const UpdateProfile = ({navigation}) => {
               </View>
 
               <View style={{flex: 1}}>
-                <SelectorBtn
+                {/* <SelectorBtn
                   required={true}
                   selectContainer={{gap: 2, paddingVertical: -1}}
                   label="State"
@@ -473,9 +483,18 @@ const UpdateProfile = ({navigation}) => {
                     setshow(!show);
                   }}
                   input={selectedState}
+                /> */}
+                <DropdownComponent
+                  label={'State'}
+                  required={true}
+                  style={{paddingHorizontal: 0}}
+                  select={value => handleStateSelection(value)}
+                  placeholder="Select State"
+                  searchPlaceholder={'Search State.....'}
+                  value={selectedState}
+                  data={CONSTANTS.state}
                 />
-
-                {show === true && (
+                {/* {show === true && (
                   <View style={styles.statecontainer}>
                     <ScrollView
                       persistentScrollbar={true}
@@ -483,7 +502,6 @@ const UpdateProfile = ({navigation}) => {
                         zIndex: 4,
                         backgroundColor: CUSTOMCOLOR.white,
                       }}>
-                      {/* <View style={{position:'absolute',zIndex:16,height:150,width:150,backgroundColor:"green"}}> */}
 
                       {CONSTANTS.state.map((state, index) => (
                         <TouchableOpacity
@@ -510,10 +528,9 @@ const UpdateProfile = ({navigation}) => {
                           </Text>
                         </TouchableOpacity>
                       ))}
-                      {/* </View>  */}
                     </ScrollView>
                   </View>
-                )}
+                )} */}
               </View>
             </View>
             <View style={{flexDirection: 'row', gap: horizontalScale(16)}}>
@@ -628,7 +645,7 @@ const UpdateProfile = ({navigation}) => {
           }}
         />
       </View>
-      <BottomSheetView visible={appointType} setVisible={setAppointType}>
+      {/* <BottomSheetView visible={appointType} setVisible={setAppointType}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
           <ScrollView persistentScrollbar={true}>
@@ -653,14 +670,8 @@ const UpdateProfile = ({navigation}) => {
               </Pressable>
             ))}
           </ScrollView>
-          {/* <View style={styles.ContactMail}>
-            <Text style={styles.contact}>
-              If Your Specialization Not Mention please mail-to
-            </Text>
-            <Text style={styles.mail}>contact@destratum.com</Text>
-          </View> */}
         </View>
-      </BottomSheetView>
+      </BottomSheetView> */}
       <BottomSheetView
         visible={bottom}
         setVisible={setBottom}
