@@ -689,7 +689,7 @@ export const feeDataInyear = (data, startDate, endDate) => {
   function filterDataByDateRange(startDate, endDate) {
     return data.filter(entry => {
       const entryDate = new Date(entry.created_at);
-      return entryDate >= startDate && entryDate <= endDate;
+      return entryDate >= startDate;
     });
   }
   let totalFees = 0;
@@ -742,20 +742,20 @@ export const feeDataInyear = (data, startDate, endDate) => {
 };
 
 export const feeDataIneachday = (data, startDate, endDate) => {
-  function filterDataByDateRange(startDate, endDate) {
-    return data.filter(entry => {
-      const entryDate = new Date(entry.created_at);
-      return entryDate >= startDate;
-    });
-  }
+  // function filterDataByDateRange(startDate, endDate) {
+  //   return data.filter(entry => {
+  //     const entryDate = new Date(entry.created_at);
+  //     return entryDate >= startDate;
+  //   });
+  // }
 
-  const feesDataInRange = filterDataByDateRange(
-    new Date(startDate),
-    new Date(endDate),
-  );
+  // const feesDataInRange = filterDataByDateRange(
+  //   new Date(startDate),
+  //   new Date(endDate),
+  // );
   const dailyData = {};
 
-  feesDataInRange.forEach(entry => {
+  data.forEach(entry => {
     const entryDate = new Date(entry.created_at);
     const year = entryDate.getFullYear().toString();
     const month = entryDate.toLocaleString('default', {month: 'long'});
