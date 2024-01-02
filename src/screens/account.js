@@ -45,45 +45,50 @@ const Account = () => {
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const rtoken = useSelector(state => state.authenticate.auth.refresh);
-  const fetchDoctor = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // console.log('practitioner response====', response);
-    if (response.ok) {
-      const jsonData = await response.json();
-      // console.log('----------------------------', jsonData);
-      setData(jsonData.data);
-      // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
+
+  // const fetchDoctor = async () => {
+  //   const response = await fetchApi(URL.getPractitionerByNumber(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   // console.log('practitioner response====', response);
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     // console.log('----------------------------', jsonData);
+  //     setData(jsonData.data);
+  //     // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  // const fetchData = async () => {
+  //   const response = await fetchApi(URL.getClinic(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     // console.log('--------------clinics', jsonData);
+  //     setClinics(jsonData?.data);
+  //     setClinicId(jsonData?.data[0]?.id);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
+  const Clinic_data = useSelector(state => state?.clinic?.clinics);
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   useEffect(() => {
-    fetchDoctor();
-  }, []);
-  const fetchData = async () => {
-    const response = await fetchApi(URL.getClinic(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      // console.log('--------------clinics', jsonData);
-      setClinics(jsonData?.data);
-      setClinicId(jsonData?.data[0]?.id);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+    // fetchData();
+    setData(doc_prof);
+    setClinicId(Clinic_id);
+    setClinics(Clinic_data);
+  }, [doc_prof]);
 
   const fetchUsers = async () => {
     const response = await fetchApi(URL.getUsers(phone), {
@@ -113,12 +118,14 @@ const Account = () => {
   }`;
   useFocusEffect(
     React.useCallback(() => {
-      fetchData();
-      fetchDoctor();
+      // fetchData();
+      // fetchDoctor();
+      setClinicId(Clinic_id);
+      setClinics(Clinic_data);
       fetchUsers();
-    }, [cliniId]),
+      setData(doc_prof);
+    }, [doc_prof]),
   );
-
   const userLogout = async () => {
     const response = await fetch(URL.logout, {
       method: 'POST',
@@ -151,7 +158,6 @@ const Account = () => {
       }
     }
   };
-
   const handleDocuments = file => {
     const path = `data:application/pdf;base64,${file}`;
 

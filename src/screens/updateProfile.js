@@ -205,38 +205,57 @@ const UpdateProfile = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-
-  const fetchDoctors = async () => {
-    const response = await fetchApi(URL.updateDoctorProfile(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setGetDoctor(jsonData.data);
-      setValues({
-        doctor_name: jsonData?.data?.doctor_name,
-        gender: jsonData?.data?.gender,
-        medical_number: jsonData?.data?.medical_number,
-        experience: jsonData?.data?.experience,
-        degree: jsonData?.data?.degree,
-      });
-      setSelectedSpeciality(jsonData?.data?.specialization);
-      setSelectedImage(jsonData?.data?.profile_pic_url);
-      setDocuments([
-        {medical: jsonData?.data?.medical_doc_url},
-        {aadhar: jsonData?.data?.pan_doc_url},
-        {degree: jsonData?.data?.latest_doc_url},
-      ]);
-      setState(jsonData?.data?.state);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+  const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
+  const Clinic_data = useSelector(state => state?.clinic?.clinics);
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
+  // const fetchDoctors = async () => {
+  //   const response = await fetchApi(URL.updateDoctorProfile(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     setGetDoctor(jsonData.data);
+  //     setValues({
+  //       doctor_name: jsonData?.data?.doctor_name,
+  //       gender: jsonData?.data?.gender,
+  //       medical_number: jsonData?.data?.medical_number,
+  //       experience: jsonData?.data?.experience,
+  //       degree: jsonData?.data?.degree,
+  //     });
+  //     setSelectedSpeciality(jsonData?.data?.specialization);
+  //     setSelectedImage(jsonData?.data?.profile_pic_url);
+  //     setDocuments([
+  //       {medical: jsonData?.data?.medical_doc_url},
+  //       {aadhar: jsonData?.data?.pan_doc_url},
+  //       {degree: jsonData?.data?.latest_doc_url},
+  //     ]);
+  //     setState(jsonData?.data?.state);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
   useEffect(() => {
-    fetchDoctors();
+    setGetDoctor(doc_prof);
+    setValues({
+      doctor_name: doc_prof?.doctor_name,
+      gender: doc_prof?.gender,
+      medical_number: doc_prof?.medical_number,
+      experience: doc_prof?.experience,
+      degree: doc_prof?.degree,
+    });
+    setSelectedSpeciality(doc_prof?.specialization);
+    setSelectedImage(doc_prof?.profile_pic_url);
+    setDocuments([
+      {medical: doc_prof?.medical_doc_url},
+      {aadhar: doc_prof?.pan_doc_url},
+      {degree: doc_prof?.latest_doc_url},
+    ]);
+    setState(doc_prof?.state);
+    // fetchDoctors();
   }, []);
   const handleStateSelection = state => {
     setState(state);
@@ -279,6 +298,7 @@ const UpdateProfile = ({navigation}) => {
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
+          dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
           setApiStatus({
             status: 'success',
             message: 'Successfully created',

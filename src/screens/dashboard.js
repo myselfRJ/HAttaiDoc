@@ -144,13 +144,13 @@ const Dashboard = ({navigation, route}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setDoc_name(jsonData.data);
       dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
 
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   const savingFcmToken = async () => {
     const response = await fetchApi(URL.addFcmToken, {
       method: 'POST',
@@ -175,6 +175,7 @@ const Dashboard = ({navigation, route}) => {
 
   useEffect(() => {
     fetchDoctors();
+    setDoc_name(doc_prof);
     savingFcmToken();
   }, []);
 
@@ -381,7 +382,8 @@ const Dashboard = ({navigation, route}) => {
     React.useCallback(() => {
       FetchRangeAppointments();
       FetchRangeFees();
-    }, [phone]),
+      setDoc_name(doc_prof);
+    }, [doc_prof]),
   );
   const AppointmentFilterdata =
     AppointmentDatafilterAndSortData(setAppointment);

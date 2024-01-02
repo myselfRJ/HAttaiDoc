@@ -70,7 +70,8 @@ const SlotBook = ({navigation, route}) => {
 
   const [selectedTypeAppointment, setSelectedTypeAppointment] = useState();
   const [bottom, setBottom] = useState(false);
-
+  const payment_modes = ['Cash', 'UPI'];
+  const [paymentMode, setPaymentMode] = useState('');
   const [selectedMode, setSelectedMode] = useState('In clinic');
   const [clinicShow, setClinicShow] = useState(false);
   const handleOptions = value => {
@@ -89,7 +90,13 @@ const SlotBook = ({navigation, route}) => {
   const handleSelectType = value => {
     setSelectedTypeAppointment(value);
   };
-
+  const handleSelectPaymentMode = val => {
+    if (val === paymentMode) {
+      setPaymentMode('');
+    } else {
+      setPaymentMode(val);
+    }
+  };
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
@@ -292,6 +299,7 @@ const SlotBook = ({navigation, route}) => {
       if (jsonData?.data) {
         setFormatDate(jsonData?.data?.appointment_date);
         setComplaint(jsonData?.data?.complaint);
+        setPaymentMode(jsonData?.data?.payment_mode);
         // setSelectedMode(jsonData?.data?.mode_of_consultation);
         setSelectedTypeAppointment(
           jsonData?.data?.appointment_type === 'walkin'
@@ -332,6 +340,7 @@ const SlotBook = ({navigation, route}) => {
           patient_phone_number: patient_phone,
           doctor_phone_number: phone,
           is_paid: fee,
+          payment_mode: paymentMode,
           // complaint: complaint,
           patient_reference: patient_phone,
           practitioner_reference: phone,
@@ -400,6 +409,7 @@ const SlotBook = ({navigation, route}) => {
           patient_phone_number: patient_phone,
           doctor_phone_number: phone,
           is_paid: fee,
+          payment_mode: paymentMode,
           meta_data: {
             complaint: complaint,
             patient_reference: patient_phone,
@@ -619,7 +629,21 @@ const SlotBook = ({navigation, route}) => {
             />
           </View>
         </View>
-
+        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
+          Payment mode{' '}
+          <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
+        </Text>
+        <View style={styles.selection}>
+          {payment_modes?.map((val, ind) => (
+            <View key={ind}>
+              <SelectionTab
+                label={val}
+                onPress={() => handleSelectPaymentMode(val)}
+                selected={paymentMode === val}
+              />
+            </View>
+          ))}
+        </View>
         <View style={styles.child}>
           {list.length > 0 ? (
             <>

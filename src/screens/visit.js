@@ -221,6 +221,7 @@ const Visit = ({navigation, route}) => {
       appointment_id: appointment_id,
     },
   };
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   const [data, setData] = useState();
   const fetchDoctor = async () => {
     const response = await fetchApi(URL.getPractitionerByNumber(phone), {
@@ -345,7 +346,8 @@ const Visit = ({navigation, route}) => {
     GetFees();
     fetchVitals();
     fetchComplaint();
-    fetchDoctor();
+    // fetchDoctor();
+    setData(doc_prof);
     // SetUploadDocument(report_findings)
   }, []);
   useFocusEffect(
@@ -353,9 +355,7 @@ const Visit = ({navigation, route}) => {
       fetchReport();
       fetchPatientData();
       GetFees();
-      // fetchVitals();
-      // fetchComplaint();
-      fetchDoctor();
+      setData(doc_prof);
     }, []),
   );
   const months = CONSTANTS.months;

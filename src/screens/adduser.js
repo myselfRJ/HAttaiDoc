@@ -137,7 +137,7 @@ const AddUser = ({navigation}) => {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json, application/xml',
         },
-        body: JSON.stringify(Clinic_users),
+        body: JSON.stringify(Clinic_users?.[0]),
       });
       if (response.status === HttpStatusCode.Ok) {
         const jsonData = await response.json();

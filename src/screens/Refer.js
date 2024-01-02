@@ -85,8 +85,10 @@ const ReferToDoctor = () => {
       console.error('API call failed:', response.status, response);
     }
   };
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   useEffect(() => {
-    fetchDoctor();
+    // fetchDoctor();
+    setData(doc_prof);
   }, []);
   const contact = `${name} ${phone}`;
   const createPDF = async () => {

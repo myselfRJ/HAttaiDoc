@@ -1,12 +1,12 @@
-// const baseUrl = 'http://10.9.79.239:8000/api/v1/';
+const baseUrl = 'http://10.9.79.239:8000/api/v1/';
 // const baseUrl = 'http://192.168.1.11:8000/api/v1/'
 // const baseUrl = 'http://3.6.40.67/api/v1/';
-const baseUrl = 'http://13.200.15.208/api/v1/';
+// const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'http://3.6.40.67/';
-// export const fileurl = `http://10.9.79.239:8000`;
+export const fileurl = `http://10.9.79.239:8000`;
 // export const fileurl = `http://192.168.1.11:8000`
 // export const fileurl = `http://3.6.40.67`;
-export const fileurl = `http://13.200.15.208`;
+// export const fileurl = `http://13.200.15.208`;
 
 export const URL = {
   retriveTokens: `${baseUrl}retrivetokens`,

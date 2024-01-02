@@ -191,22 +191,24 @@ const Appointment = ({navigation}) => {
 
   const [doc_name, setDoc_name] = useState();
 
-  const fetchname = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setDoc_name(jsonData.data);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
+  // const fetchname = async () => {
+  //   const response = await fetchApi(URL.getPractitionerByNumber(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     // setDoc_name(jsonData.data);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   useEffect(() => {
-    fetchname();
+    // fetchname();
+    setDoc_name(doc_prof);
   }, []);
 
   const clinics_data = useSelector(state => state?.clinic?.clinics);
@@ -310,7 +312,6 @@ const Appointment = ({navigation}) => {
             IconName="magnify"
           />
           {/* <Icon name="search" size={16} style={styles.searchIcon} /> */}
-
           <View style={styles.tab}>
             {selections?.map((val, ind) => (
               <SelectionTab
