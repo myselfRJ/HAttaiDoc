@@ -1,4 +1,11 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  FlatList,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
@@ -16,7 +23,7 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {URL} from '../utility/urls';
-import {InputText, HButton, SelectionTab} from '../components';
+import {InputText, HButton, SelectionTab, SelectorBtn} from '../components';
 import {fetchApi} from '../api/fetchApi';
 import {
   CUSTOMFONTSIZE,
@@ -35,6 +42,7 @@ import CustomModal from '../components/CustomModal';
 
 const LabReports = () => {
   const {phone} = useSelector(state => state?.phone?.data);
+  const token = useSelector(state => state.authenticate.auth.access);
   const navigation = useNavigation();
   const option = 'procedure';
   const [value, setValue] = useState('');
@@ -145,14 +153,70 @@ const LabReports = () => {
       }
     });
   }, []);
-  const [modal, setModal] = useState(false);
+
   const [template, setTemplate] = useState('');
-  const HandleTemplates = () => {
-    if (prev?.length > 0 && template) {
-      StoreAsyncData(`template${phone}${template}`, prev);
+  const [loading, setLoading] = useState(false);
+  const savingTemplate = async () => {
+    const bodyData = {
+      key: 'tests',
+      temp_name: template,
+      temp_data: JSON.stringify(prev),
+      doc_phone: phone,
+    };
+    setLoading(true);
+    try {
+      const response = await fetchApi(URL.savingTemplate, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData?.status === 'success') {
+          setModal(!modal);
+          Alert.alert('success', 'Succesfully saved');
+          setLoading(false);
+        } else {
+          Alert.alert('warn', jsonData?.message);
+          setModal(!modal);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      Alert.alert('error', JSON.stringify(error));
+      setLoading(false);
       setModal(!modal);
     }
   };
+  const [templatesData, setTemplatesData] = useState([]);
+  const HandleTemplates = () => {
+    if (!template) {
+      Alert.alert('', 'Please Enter Template Name');
+    } else {
+      savingTemplate();
+    }
+  };
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getTemplates('tests', phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsonData = await response.json();
+    setTemplatesData(jsonData?.data);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const handleDispatch = data => {
+    const parsedData = JSON.parse(data);
+    dispatch(addLabReport(parsedData));
+  };
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
@@ -260,11 +324,25 @@ const LabReports = () => {
                   />
                 ) : null,
               )}
+              {templatesData?.map((item, inbdex) => (
+                <SelectorBtn
+                  input={item?.temp_name}
+                  onPress={() => handleDispatch(item?.temp_data)}
+                />
+              ))}
             </View>
           </View>
         </View>
       </ScrollView>
-      <View>
+
+      <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+        <HButton
+          btnstyles={commonstyles.activebtn}
+          label={'Save as Template'}
+          onPress={() => {
+            setModal(!modal);
+          }}
+        />
         <HButton
           btnstyles={commonstyles.activebtn}
           label={'Save'}
@@ -272,26 +350,32 @@ const LabReports = () => {
             handledata();
           }}
         />
-        {/* <HButton
-          btnstyles={commonstyles.activebtn}
-          label={'open'}
-          onPress={() => {
-            setModal(!modal);
-          }}
-        /> */}
       </View>
-      {/* {modal && (
+      {modal && (
         <CustomModal visible={modal} Close={setModal}>
           <View style={{backgroundColor: CUSTOMCOLOR.white}}>
             <InputText
+              label={'Template Name:'}
+              required={true}
               value={template}
               setValue={setTemplate}
               placeholder={'Enter Template Name'}
             />
           </View>
-          <HButton label={'save'} onPress={HandleTemplates} />
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: moderateScale(24),
+            }}>
+            <HButton
+              loading={loading}
+              label={'save'}
+              onPress={HandleTemplates}
+            />
+          </View>
         </CustomModal>
-      )} */}
+      )}
     </View>
   );
 };

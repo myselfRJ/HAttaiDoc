@@ -96,6 +96,9 @@ export const URL = {
   uploadImmunizationKids: `${baseUrl}consult/uploadImmunization`,
   getImmunization: (age, phone) =>
     `${baseUrl}consult/getImmunization?patient_phone=${phone}&age=${age}`,
+  savingTemplate: `${baseUrl}templates/savingTemp`,
+  getTemplates: (key, phone) =>
+    `${baseUrl}templates/get_temp?key=${key}&phone=${phone}`,
   logout: `${baseUrl}doctor-authenticate/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

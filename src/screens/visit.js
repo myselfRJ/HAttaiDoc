@@ -587,6 +587,7 @@ const Visit = ({navigation, route}) => {
                   <th style="text-align:center;width:12%;">Frequency</th>
                   <th style="text-align:center;width:12%;">Duration</th>
                   <th style="text-align:center;width:12%;">Quantity</th>
+                  <th style="text-align:center;width:12%;">Remarks</th>
                 </tr>
                 ${prescribe
                   ?.map(
@@ -612,6 +613,7 @@ const Visit = ({navigation, route}) => {
                   <td style="text-align:center;width:12%">${
                     value.total_quantity
                   }</td>
+                  <td style="text-align:center;width:12%">${value.others}</td>
                 </tr>
                 `,
                   )
@@ -1215,7 +1217,7 @@ const Visit = ({navigation, route}) => {
                                     <Text style={styles.pulse}>
                                       {item.medicine} | {item.timing} |
                                       {item.frequency} | {item.duration} |{' '}
-                                      {item.total_quantity}
+                                      {item.total_quantity} | {item.others}
                                     </Text>
                                   </View>
                                 </View>

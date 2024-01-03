@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: moderateScale(4),
     // gap:64,
+    flexWrap: 'wrap',
     borderColor: CUSTOMCOLOR.borderColor,
   },
   child: {

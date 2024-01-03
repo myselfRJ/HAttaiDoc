@@ -650,7 +650,7 @@ const SlotBook = ({navigation, route}) => {
               <View>
                 <Text style={styles.h2}>Available Slots</Text>
                 <FlatList
-                  style={{height: verticalScale(500)}}
+                  style={{height: verticalScale(400)}}
                   data={list}
                   renderItem={renderItems}
                   numColumns={4}

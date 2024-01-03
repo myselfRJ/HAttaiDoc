@@ -1,6 +1,12 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import React from 'react';
-import {View, Modal, Text, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Modal,
+  Text,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from 'react-native';
 import {
   moderateScale,
   verticalScale,
@@ -33,9 +39,9 @@ const BottomSheetView = ({children, message, visible, setVisible, status}) => {
         }}>
         <TouchableWithoutFeedback
           onPress={() => {
-            setVisible(false);
+            setVisible(!visible);
           }}>
-          <View />
+          <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
         <View
           style={{
@@ -69,3 +75,15 @@ const BottomSheetView = ({children, message, visible, setVisible, status}) => {
 };
 
 export default BottomSheetView;
+const styles = StyleSheet.create({
+  modalOverlay: {
+    position: 'absolute',
+    // width:'100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // borderWidth:1
+    // backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+});

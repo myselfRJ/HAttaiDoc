@@ -41,11 +41,12 @@ import {
 import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
 import {commonstyles} from '../styles/commonstyle';
+import CustomModal from '../components/CustomModal';
 
 export default function Prescribe1({navigation}) {
   const {phone} = useSelector(state => state?.phone?.data);
   const [data, setData] = useState([]);
-
+  const token = useSelector(state => state.authenticate.auth.access);
   const option = 'real clinical drug';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
@@ -73,15 +74,16 @@ export default function Prescribe1({navigation}) {
   const [durationSelect, setDurationSelect] = useState('days');
   const [newMedicine, setnewMedicine] = useState([]);
   const [filtered, setFilteredData] = useState([]);
-
+  const [modal, setModal] = useState(false);
+  const [template, setTemplate] = useState('');
   const prevPres = useSelector(state => state.pres.prescribeItems);
+  const [others, setOthers] = useState('');
   const handleAddPrescribe = () => {
     if (newMedicine?.length > 1) {
       // const new1 = newMedicine?.filter((item)=> item?.term)
       const newmed = `${medicine} ${mgs}`;
       setMedicine(newmed);
     }
-
     dispatch(
       addPrescribe([
         ...prevPres,
@@ -110,6 +112,7 @@ export default function Prescribe1({navigation}) {
             durationSelect === 'week' ? 'Week (once in a Week)' : durationSelect
           }`,
           total_quantity: total_quantity,
+          others: others ? others : '',
         },
       ]),
     );
@@ -333,6 +336,68 @@ export default function Prescribe1({navigation}) {
   const handleOptions = value => {
     setDurationSelect(value);
   };
+  const [loading, setLoading] = useState(false);
+  const savingTemplate = async () => {
+    const bodyData = {
+      key: 'prescribe',
+      temp_name: template,
+      temp_data: JSON.stringify(prevPres),
+      doc_phone: phone,
+    };
+    setLoading(true);
+    try {
+      const response = await fetchApi(URL.savingTemplate, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData?.status === 'success') {
+          setModal(!modal);
+          Alert.alert('success', 'Succesfully saved');
+          setLoading(false);
+        } else {
+          Alert.alert('warn', jsonData?.message);
+          setLoading(false);
+          setModal(!modal);
+        }
+      }
+    } catch (error) {
+      Alert.alert('error', JSON.stringify(error));
+      setLoading(false);
+      setModal(!modal);
+    }
+  };
+  const [templatesData, setTemplatesData] = useState([]);
+  const HandleTemplates = () => {
+    if (!template) {
+      Alert.alert('', 'Please Enter Template Name');
+    } else {
+      savingTemplate();
+    }
+  };
+  const fetchData = async () => {
+    const response = await fetchApi(URL.getTemplates('prescribe', phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsonData = await response.json();
+    setTemplatesData(jsonData?.data);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const handleDispatch = data => {
+    const parsedData = JSON.parse(data);
+    dispatch(addPrescribe(parsedData));
+  };
+
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -345,7 +410,7 @@ export default function Prescribe1({navigation}) {
             <ShowChip
               // main={{marginHorizontal: -10}}
               key={ind}
-              text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity}`}
+              text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
               onPress={() => handleDelete(ind)}
             />
           ))}
@@ -647,7 +712,12 @@ export default function Prescribe1({navigation}) {
             <Text style={styles.numText}>{total_quantity}</Text>
           )}
         </View>
-        {/* </View> */}
+        <InputText
+          placeholder={'Enter any Remarks......'}
+          value={others}
+          setValue={setOthers}
+          label={'Others (optional):'}
+        />
         <HButton
           type="addtype"
           label={'Add'}
@@ -656,29 +726,68 @@ export default function Prescribe1({navigation}) {
           onPress={handleAddPrescribe}
           btnstyles={{alignSelf: 'flex-start'}}
         />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}>
+          {templatesData?.map((item, index) => (
+            <SelectorBtn
+              input={item?.temp_name}
+              onPress={() => handleDispatch(item?.temp_data)}
+            />
+          ))}
+        </View>
       </ScrollView>
-      {/* <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          gap: moderateScale(20),
-        }}> */}
-
-      {/* </View> */}
-      <HButton
-        label={'Save'}
-        btnstyles={{
-          ...commonstyles.activebtn,
-          backgroundColor:
-            prevPres?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
-        }}
-        onPress={() => {
-          if (prevPres?.length > 0) {
-            handleAlert();
-            handleBack();
-          }
-        }}
-      />
+      <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+        <HButton
+          btnstyles={commonstyles.activebtn}
+          label={'Save as Template'}
+          onPress={() => {
+            setModal(!modal);
+          }}
+        />
+        <HButton
+          label={'Save'}
+          btnstyles={{
+            ...commonstyles.activebtn,
+            backgroundColor:
+              prevPres?.length > 0 ? CUSTOMCOLOR.primary : CUSTOMCOLOR.disable,
+          }}
+          onPress={() => {
+            if (prevPres?.length > 0) {
+              handleAlert();
+              handleBack();
+            }
+          }}
+        />
+      </View>
+      {modal && (
+        <CustomModal visible={modal} Close={setModal}>
+          <View style={{backgroundColor: CUSTOMCOLOR.white}}>
+            <InputText
+              label={'Template Name:'}
+              required={true}
+              value={template}
+              setValue={setTemplate}
+              placeholder={'Enter Template Name'}
+            />
+          </View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: moderateScale(24),
+            }}>
+            <HButton
+              loading={loading}
+              label={'save'}
+              onPress={HandleTemplates}
+            />
+          </View>
+        </CustomModal>
+      )}
     </View>
   );
 }
