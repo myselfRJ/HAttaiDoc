@@ -1046,6 +1046,7 @@ const AddClinic = ({navigation}) => {
                       size={16}
                       label="Add"
                       icon="plus"
+                      type={'addtype'}
                       textStyle={{fontSize: CUSTOMFONTSIZE.h3}}
                       btnstyles={{
                         paddingHorizontal: horizontalScale(12),

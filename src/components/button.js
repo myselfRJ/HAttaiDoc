@@ -13,7 +13,6 @@ import {
   verticalScale,
 } from '../utility/scaleDimension';
 const HButton = props => {
-  //props -> label, action
   return (
     <>
       <Pressable
