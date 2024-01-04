@@ -54,7 +54,7 @@ const LabReports = () => {
   const prev = useSelector(state => state?.labreport?.labReport);
   const [sug, setSug] = useState([]);
   const [seletedType, setSelectedType] = useState();
-
+  const [modal, setModal] = useState(false);
   const HandleAddValue = () => {
     if (value) {
       dispatch(addLabReport([...prev, {lab_test: value}]));
@@ -211,12 +211,19 @@ const LabReports = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [prev]);
+  const [selectedTemplate, setSelectedTemplate] = useState();
   const handleDispatch = data => {
-    const parsedData = JSON.parse(data);
-    dispatch(addLabReport(parsedData));
+    if (selectedTemplate === data) {
+      setSelectedTemplate('');
+      // const parsedData = JSON.parse(data);
+      dispatch(addLabReport([]));
+    } else {
+      setSelectedTemplate(data);
+      const parsedData = JSON.parse(data);
+      dispatch(addLabReport(parsedData));
+    }
   };
-
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
@@ -318,18 +325,57 @@ const LabReports = () => {
               {prev?.map((item, ind) =>
                 prev.length > 0 ? (
                   <ShowChip
+                    key={ind}
                     text={item?.lab_test}
                     onPress={() => handleDelete(ind)}
                     ind={ind}
                   />
                 ) : null,
               )}
-              {templatesData?.map((item, inbdex) => (
-                <SelectorBtn
-                  input={item?.temp_name}
-                  onPress={() => handleDispatch(item?.temp_data)}
-                />
-              ))}
+            </View>
+
+            <View
+              style={{
+                marginTop: moderateScale(80),
+                gap: moderateScale(8),
+              }}>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h2,
+                  fontWeight: '500',
+                }}>
+                {' '}
+                Your Templates:
+              </Text>
+              <View
+                style={{
+                  paddingLeft: moderateScale(4),
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  flexWrap: 'wrap',
+                }}>
+                {templatesData?.map((item, inbdex) => (
+                  <SelectorBtn
+                    key={inbdex}
+                    select={{
+                      backgroundColor:
+                        selectedTemplate === item?.temp_data
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.recent,
+                    }}
+                    inputstyle={{
+                      color:
+                        selectedTemplate === item?.temp_data
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
+                      fontWeight: '700',
+                    }}
+                    input={item?.temp_name}
+                    onPress={() => handleDispatch(item?.temp_data)}
+                  />
+                ))}
+              </View>
             </View>
           </View>
         </View>
@@ -337,7 +383,12 @@ const LabReports = () => {
 
       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
         <HButton
-          btnstyles={commonstyles.activebtn}
+          btnstyles={{
+            backgroundColor: CUSTOMCOLOR.white,
+            borderColor: CUSTOMCOLOR.primary,
+            // borderWidth: 1,
+          }}
+          textStyle={{color: CUSTOMCOLOR.black}}
           label={'Save as Template'}
           onPress={() => {
             setModal(!modal);

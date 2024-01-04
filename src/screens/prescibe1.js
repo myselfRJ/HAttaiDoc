@@ -185,7 +185,7 @@ export default function Prescribe1({navigation}) {
       setFrequency([...frequency, index]);
     }
   };
-
+  console.log('===========>', frequency);
   const getSelectedDaysString = () => {
     const selectedDays = [];
 
@@ -392,12 +392,41 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [prevPres]);
+  const [selectedTemplate, setSelectedTemplate] = useState();
   const handleDispatch = data => {
-    const parsedData = JSON.parse(data);
-    dispatch(addPrescribe(parsedData));
+    if (selectedTemplate === data) {
+      setSelectedTemplate('');
+      // const parsedData = JSON.parse(data);
+      dispatch(addPrescribe([]));
+    } else {
+      setSelectedTemplate(data);
+      const parsedData = JSON.parse(data);
+      dispatch(addPrescribe(parsedData));
+    }
   };
-
+  const DispatchEdit = data => {
+    setselectedGeneric(true);
+    setShow(!false);
+    selectedMedicine('');
+    setMedicine(data?.medicine);
+    setnewMedicine(data?.medicine);
+    setDose_number(data?.dose_number);
+    setTiming(data?.timing);
+    let frequencyList = data?.frequency?.split('-');
+    let newVal = [];
+    for (let i = 0; i < frequencyList.length; i++) {
+      if (frequencyList[i] !== '0') {
+        newVal.push(i);
+      }
+    }
+    setFrequency(newVal);
+    setDuration(data?.duration?.split(' ')[0]);
+    setDurationSelect(data?.duration?.split(' ')[1]);
+    setTotalQuantity(parseInt(data?.total_quantity));
+    setOthers(data?.others);
+  };
+  console.log(medicine?.length > 1 && (medicine === setmedicine || show));
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -412,6 +441,7 @@ export default function Prescribe1({navigation}) {
               key={ind}
               text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
               onPress={() => handleDelete(ind)}
+              onEdit={() => DispatchEdit(item)}
             />
           ))}
         </View>
@@ -453,7 +483,10 @@ export default function Prescribe1({navigation}) {
             placeholder="Ex : paracetamol  oral tablet"
             multiline={true}
             value={medicine}
-            setValue={val => setMedicine(val)}
+            setValue={val => {
+              setMedicine(val);
+              setShow(false);
+            }}
             search={true}
             IconName={
               (show && filtered.length > 0) ||
@@ -728,21 +761,56 @@ export default function Prescribe1({navigation}) {
         />
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
+            marginTop: moderateScale(20),
+            gap: moderateScale(8),
           }}>
-          {templatesData?.map((item, index) => (
-            <SelectorBtn
-              input={item?.temp_name}
-              onPress={() => handleDispatch(item?.temp_data)}
-            />
-          ))}
+          <Text
+            style={{
+              color: CUSTOMCOLOR.black,
+              fontSize: CUSTOMFONTSIZE.h2,
+              fontWeight: '500',
+            }}>
+            {' '}
+            Your Templates:
+          </Text>
+          <View
+            style={{
+              paddingLeft: moderateScale(4),
+              flexDirection: 'row',
+              gap: moderateScale(16),
+              flexWrap: 'wrap',
+            }}>
+            {templatesData?.map((item, inbdex) => (
+              <SelectorBtn
+                key={inbdex}
+                select={{
+                  backgroundColor:
+                    selectedTemplate === item?.temp_data
+                      ? CUSTOMCOLOR.primary
+                      : CUSTOMCOLOR.recent,
+                }}
+                inputstyle={{
+                  color:
+                    selectedTemplate === item?.temp_data
+                      ? CUSTOMCOLOR.white
+                      : CUSTOMCOLOR.primary,
+                  fontWeight: '700',
+                }}
+                input={item?.temp_name}
+                onPress={() => handleDispatch(item?.temp_data)}
+              />
+            ))}
+          </View>
         </View>
       </ScrollView>
       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
         <HButton
-          btnstyles={commonstyles.activebtn}
+          btnstyles={{
+            backgroundColor: CUSTOMCOLOR.white,
+            borderColor: CUSTOMCOLOR.primary,
+            // borderWidth: 1,
+          }}
+          textStyle={{color: CUSTOMCOLOR.black}}
           label={'Save as Template'}
           onPress={() => {
             setModal(!modal);

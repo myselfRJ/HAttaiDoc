@@ -513,7 +513,7 @@ const Dashboard = ({navigation, route}) => {
         </ScrollView>
         <View>
           <HButton
-            type="addtype"
+            // type="addtype"
             label="Book Appointment"
             btnstyles={commonstyles.activebtn}
             // textStyle={{bottom:verticalScale(4),borderWidth:1}}

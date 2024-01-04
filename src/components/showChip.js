@@ -35,6 +35,31 @@ const ShowChip = props => {
           {props.text}
         </Text>
       </View>
+      {props.onEdit && (
+        <TouchableOpacity
+          style={[
+            {
+              height: moderateScale(28),
+              width: moderateScale(28),
+
+              backgroundColor: CUSTOMCOLOR.white,
+              borderRadius: moderateScale(28),
+              // borderWidth:1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+            props.style,
+          ]}
+          onPress={props.onEdit}>
+          <Icon
+            name="pen"
+            size={props.size ? props.size : moderateScale(20)}
+            color={CUSTOMCOLOR.delete}
+          />
+
+          {/* </View> */}
+        </TouchableOpacity>
+      )}
       {props.onPress && (
         <TouchableOpacity
           style={[

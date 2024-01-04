@@ -14,6 +14,7 @@ let CUSTOMCOLOR = {
   warn: '#ffb732',
   delete: '#FF6347',
   success: '#2CBB15',
+  //#91D685,#C9E4FD
   edit: '#4ba5fa',
   disable: '#A9A9A9',
   borderColor: '#C0DFFC',

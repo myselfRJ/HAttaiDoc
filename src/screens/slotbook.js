@@ -629,21 +629,26 @@ const SlotBook = ({navigation, route}) => {
             />
           </View>
         </View>
-        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
-          Payment mode{' '}
-          <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
-        </Text>
-        <View style={styles.selection}>
-          {payment_modes?.map((val, ind) => (
-            <View key={ind}>
-              <SelectionTab
-                label={val}
-                onPress={() => handleSelectPaymentMode(val)}
-                selected={paymentMode === val}
-              />
+        {fee && (
+          <>
+            <Text
+              style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
+              Payment mode{' '}
+              <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
+            </Text>
+            <View style={styles.selection}>
+              {payment_modes?.map((val, ind) => (
+                <View key={ind}>
+                  <SelectionTab
+                    label={val}
+                    onPress={() => handleSelectPaymentMode(val)}
+                    selected={paymentMode === val}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </>
+        )}
         <View style={styles.child}>
           {list.length > 0 ? (
             <>
@@ -661,13 +666,22 @@ const SlotBook = ({navigation, route}) => {
                   label="Book Slot"
                   //onPress={() => navigation.navigate('dashboard')}
                   onPress={() => {
-                    if (id === undefined && !loading) {
+                    if (id === undefined && !loading && !fee) {
                       selectedTypeAppointment
                         ? Appointment_Booking()
                         : Alert.alert(
                             'Warn',
                             'Please Select Type Of Appointment',
                           );
+                    } else if (id === undefined && !loading && fee) {
+                      !selectedTypeAppointment
+                        ? Alert.alert(
+                            'Warn',
+                            'Please Select Type Of Appointment',
+                          )
+                        : !paymentMode
+                        ? Alert.alert('Warn', 'Select Payment Mode')
+                        : Appointment_Booking();
                     } else {
                       if (!loading) {
                         updateAppointment();

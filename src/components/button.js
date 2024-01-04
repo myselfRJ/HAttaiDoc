@@ -24,6 +24,9 @@ const HButton = props => {
                 ...{
                   paddingHorizontal: horizontalScale(24),
                   paddingVertical: verticalScale(12),
+                  backgroundColor: props?.type
+                    ? CUSTOMCOLOR.success
+                    : CUSTOMCOLOR.primary,
                   ...props.btnstyles,
                 },
               }
@@ -45,7 +48,7 @@ const HButton = props => {
           />
         )}
         <Text style={{...styles.btntext, ...props.textStyle}}>
-          {props.label}
+          {props.label?.toUpperCase()}
         </Text>
         {props.rightIcon && (
           <Icon

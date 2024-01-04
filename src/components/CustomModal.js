@@ -30,8 +30,8 @@ const CustomModal = ({visible, children, Close}) => {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          //   alignItems: 'center',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
           backgroundColor: '#000000aa',
         }}>
         <TouchableWithoutFeedback
