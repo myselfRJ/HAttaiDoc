@@ -24,7 +24,7 @@ const ShowChip = props => {
           color={CUSTOMCOLOR.primary}
         />
       )}
-      <View style={styles.alignchild}>
+      <View style={[styles.alignchild, props.align]}>
         <Text
           style={{
             color: CUSTOMCOLOR.primary,
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(4),
   },
   alignchild: {
-    width: '85%',
     // flex:10,
     justifyContent: 'space-between',
     // borderWidth:1,

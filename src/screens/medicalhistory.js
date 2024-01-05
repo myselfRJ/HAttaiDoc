@@ -285,8 +285,6 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          // setMenstrual(mens);
-          // console.log('mens================', mens);
           dispatch(addmenstrualHistory(mens));
         }
         if (jsonData?.data[0]?.obsteric_history) {
@@ -317,10 +315,6 @@ const MedicalHistory = ({navigation, route}) => {
   useEffect(() => {
     fetchMedicalData();
   }, []);
-  // useEffect(() => {
-  //   setUpdatedate(getdata?.updated_at?.split('T'[0]));
-  // }, [data]);
-  // console.log(menstrualHistory?.pregnant?.length);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />

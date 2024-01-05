@@ -334,49 +334,51 @@ const LabReports = () => {
               )}
             </View>
 
-            <View
-              style={{
-                marginTop: moderateScale(80),
-                gap: moderateScale(8),
-              }}>
-              <Text
-                style={{
-                  color: CUSTOMCOLOR.black,
-                  fontSize: CUSTOMFONTSIZE.h2,
-                  fontWeight: '500',
-                }}>
-                {' '}
-                Your Templates:
-              </Text>
+            {templatesData?.length > 0 && (
               <View
                 style={{
-                  paddingLeft: moderateScale(4),
-                  flexDirection: 'row',
-                  gap: moderateScale(16),
-                  flexWrap: 'wrap',
+                  marginTop: moderateScale(80),
+                  gap: moderateScale(8),
                 }}>
-                {templatesData?.map((item, inbdex) => (
-                  <SelectorBtn
-                    key={inbdex}
-                    select={{
-                      backgroundColor:
-                        selectedTemplate === item?.temp_data
-                          ? CUSTOMCOLOR.primary
-                          : CUSTOMCOLOR.recent,
-                    }}
-                    inputstyle={{
-                      color:
-                        selectedTemplate === item?.temp_data
-                          ? CUSTOMCOLOR.white
-                          : CUSTOMCOLOR.primary,
-                      fontWeight: '700',
-                    }}
-                    input={item?.temp_name}
-                    onPress={() => handleDispatch(item?.temp_data)}
-                  />
-                ))}
+                <Text
+                  style={{
+                    color: CUSTOMCOLOR.black,
+                    fontSize: CUSTOMFONTSIZE.h2,
+                    fontWeight: '500',
+                  }}>
+                  {' '}
+                  Your Templates:
+                </Text>
+                <View
+                  style={{
+                    paddingLeft: moderateScale(4),
+                    flexDirection: 'row',
+                    gap: moderateScale(16),
+                    flexWrap: 'wrap',
+                  }}>
+                  {templatesData?.map((item, inbdex) => (
+                    <SelectorBtn
+                      key={inbdex}
+                      select={{
+                        backgroundColor:
+                          selectedTemplate === item?.temp_data
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.recent,
+                      }}
+                      inputstyle={{
+                        color:
+                          selectedTemplate === item?.temp_data
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.primary,
+                        fontWeight: '700',
+                      }}
+                      input={item?.temp_name}
+                      onPress={() => handleDispatch(item?.temp_data)}
+                    />
+                  ))}
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </View>
       </ScrollView>

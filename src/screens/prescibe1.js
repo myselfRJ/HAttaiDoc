@@ -15,6 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {
   updatePrescribe1,
   addPrescribe,
+  updateIndexPrescribe,
 } from '../redux/features/prescription/prescr';
 import {CONSTANTS} from '../utility/constant';
 import {
@@ -79,16 +80,77 @@ export default function Prescribe1({navigation}) {
   const [template, setTemplate] = useState('');
   const prevPres = useSelector(state => state.pres.prescribeItems);
   const [others, setOthers] = useState('');
+
+  const [indexToUpdate, setIndextoUpdate] = useState('');
   const handleAddPrescribe = () => {
     if (newMedicine?.length > 1) {
       // const new1 = newMedicine?.filter((item)=> item?.term)
       const newmed = `${medicine} ${mgs}`;
       setMedicine(newmed);
     }
+    if (parseInt(indexToUpdate) >= 0 && indexToUpdate < prevPres.length) {
+      updateIndexvaluePrescribe();
+    } else {
+      dispatch(
+        addPrescribe([
+          ...prevPres,
+          {
+            medicine: generic
+              ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
+                  generic &&
+                  (generic.includes('mg') ||
+                    generic.includes('ml') ||
+                    generic.includes('g'))
+                    ? ''
+                    : `${generic.toUpperCase()} ${mgs}`
+                }`
+              : medicine &&
+                (medicine.includes('mg') ||
+                  medicine.includes('ml') ||
+                  medicine.includes('g'))
+              ? medicine.toUpperCase()
+              : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
+            mode: mode,
+            dose_quantity: '',
+            timing: timing,
+            frequency: selectedDaysString,
+            dose_number: dose_number,
+            duration: `${duration} ${
+              durationSelect === 'week'
+                ? 'Week (once in a Week)'
+                : durationSelect
+            }`,
+            total_quantity: total_quantity,
+            others: others ? others : '',
+          },
+        ]),
+      );
+    }
+    if (sug?.length > 0) {
+      const medicineName = `${medicine} ${mgs}`;
+      UpdateAsyncData(`prescribe${phone}`, {
+        medicine: generic
+          ? `${medicine}(${generic})`
+          : setmedicine
+          ? setmedicine
+          : medicineName,
+        mode: mode,
+      });
+    }
+    setMedicine('');
+    setMode('');
+    setDose_number('1');
+    setDose_quantity('');
+    setTiming('');
+    setFrequency([]);
+    setDuration('1');
+    setmg('');
+  };
+  const updateIndexvaluePrescribe = () => {
     dispatch(
-      addPrescribe([
-        ...prevPres,
-        {
+      updateIndexPrescribe({
+        index: indexToUpdate,
+        updatedItem: {
           medicine: generic
             ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
                 generic &&
@@ -115,29 +177,9 @@ export default function Prescribe1({navigation}) {
           total_quantity: total_quantity,
           others: others ? others : '',
         },
-      ]),
+      }),
     );
-    if (sug?.length > 0) {
-      const medicineName = `${medicine} ${mgs}`;
-      UpdateAsyncData(`prescribe${phone}`, {
-        medicine: generic
-          ? `${medicine}(${generic})`
-          : setmedicine
-          ? setmedicine
-          : medicineName,
-        mode: mode,
-      });
-    }
-    setMedicine('');
-    setMode('');
-    setDose_number('1');
-    setDose_quantity('');
-    setTiming('');
-    setFrequency([]);
-    setDuration('1');
-    setmg('');
   };
-
   const handleDelete = index => {
     if (prevPres) {
       const updatedPrescriptions = prevPres?.filter(
@@ -406,7 +448,8 @@ export default function Prescribe1({navigation}) {
       dispatch(addPrescribe(parsedData));
     }
   };
-  const DispatchEdit = data => {
+  const DispatchEdit = (data, ind) => {
+    setIndextoUpdate(ind);
     setselectedGeneric(true);
     setShow(!false);
     selectedMedicine('');
@@ -439,10 +482,11 @@ export default function Prescribe1({navigation}) {
           {prevPres?.map((item, ind) => (
             <ShowChip
               // main={{marginHorizontal: -10}}
+              align={{width: '85%'}}
               key={ind}
               text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
               onPress={() => handleDelete(ind)}
-              onEdit={() => DispatchEdit(item)}
+              onEdit={() => DispatchEdit(item, ind)}
             />
           ))}
         </View>
@@ -760,49 +804,51 @@ export default function Prescribe1({navigation}) {
           onPress={handleAddPrescribe}
           btnstyles={{alignSelf: 'flex-start'}}
         />
-        <View
-          style={{
-            marginTop: moderateScale(20),
-            gap: moderateScale(8),
-          }}>
-          <Text
-            style={{
-              color: CUSTOMCOLOR.black,
-              fontSize: CUSTOMFONTSIZE.h2,
-              fontWeight: '500',
-            }}>
-            {' '}
-            Your Templates:
-          </Text>
+        {templatesData?.length > 0 && (
           <View
             style={{
-              paddingLeft: moderateScale(4),
-              flexDirection: 'row',
-              gap: moderateScale(16),
-              flexWrap: 'wrap',
+              marginTop: moderateScale(20),
+              gap: moderateScale(8),
             }}>
-            {templatesData?.map((item, inbdex) => (
-              <SelectorBtn
-                key={inbdex}
-                select={{
-                  backgroundColor:
-                    selectedTemplate === item?.temp_data
-                      ? CUSTOMCOLOR.primary
-                      : CUSTOMCOLOR.recent,
-                }}
-                inputstyle={{
-                  color:
-                    selectedTemplate === item?.temp_data
-                      ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.primary,
-                  fontWeight: '700',
-                }}
-                input={capitalizeWord(item?.temp_name)}
-                onPress={() => handleDispatch(item?.temp_data)}
-              />
-            ))}
+            <Text
+              style={{
+                color: CUSTOMCOLOR.black,
+                fontSize: CUSTOMFONTSIZE.h2,
+                fontWeight: '500',
+              }}>
+              {' '}
+              Your Templates:
+            </Text>
+            <View
+              style={{
+                paddingLeft: moderateScale(4),
+                flexDirection: 'row',
+                gap: moderateScale(16),
+                flexWrap: 'wrap',
+              }}>
+              {templatesData?.map((item, inbdex) => (
+                <SelectorBtn
+                  key={inbdex}
+                  select={{
+                    backgroundColor:
+                      selectedTemplate === item?.temp_data
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.recent,
+                  }}
+                  inputstyle={{
+                    color:
+                      selectedTemplate === item?.temp_data
+                        ? CUSTOMCOLOR.white
+                        : CUSTOMCOLOR.primary,
+                    fontWeight: '700',
+                  }}
+                  input={capitalizeWord(item?.temp_name)}
+                  onPress={() => handleDispatch(item?.temp_data)}
+                />
+              ))}
+            </View>
           </View>
-        </View>
+        )}
       </ScrollView>
       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
         <HButton

@@ -384,7 +384,7 @@ const Symptoms = ({navigation}) => {
             btnstyles={{
               backgroundColor:
                 symptom && (days || hr || months || years)
-                  ? CUSTOMCOLOR.primary
+                  ? CUSTOMCOLOR.success
                   : CUSTOMCOLOR.disable,
               alignSelf: 'flex-end',
             }}

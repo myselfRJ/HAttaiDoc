@@ -16,10 +16,14 @@ const prescribeSlice = createSlice({
     updatePrescribe1: (state, action) => {
       state.prescribeItems = action.payload;
     },
+    updateIndexPrescribe: (state, action) => {
+      const {index, updatedItem} = action.payload;
+      state.prescribeItems[index] = updatedItem;
+    },
   },
 });
 
-export const {addPrescribe, updatePrescribe1, deletePrescribe} =
+export const {addPrescribe, updatePrescribe1, updateIndexPrescribe} =
   prescribeSlice.actions;
 
 export const prescribeReducer1 = prescribeSlice.reducer;
