@@ -188,6 +188,7 @@ const UserDisplay = ({navigation}) => {
           onPress={() => {
             navigation.navigate('adduser', {prevScrn});
           }}
+          type={'addtype'}
         />
         {users?.length > 0 ? null : (
           <HButton
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(12),
     flex: 1,
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   input: {
     fontSize: CUSTOMFONTSIZE.h2,

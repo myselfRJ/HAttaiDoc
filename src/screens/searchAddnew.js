@@ -90,6 +90,7 @@ const SearchAddnew = ({navigation}) => {
         btnstyles={{paddingVertical: verticalScale(8), alignSelf: 'flex-end'}}
         label="Add"
         icon="plus"
+        type={'addtype'}
         onPress={handleNavigate}
       />
 

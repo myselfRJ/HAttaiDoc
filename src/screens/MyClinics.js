@@ -201,6 +201,7 @@ const MyClinics = ({navigation}) => {
           <HButton
             // btnstyles={styles.btn}
             // inputstyle={styles.input}
+            type={'addtype'}
             label={clinicData?.length > 0 ? 'Add Another Clinic' : 'Add Clinic'}
             icon={'plus'}
             onPress={() => {

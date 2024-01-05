@@ -386,7 +386,7 @@ const LabReports = () => {
           btnstyles={{
             backgroundColor: CUSTOMCOLOR.white,
             borderColor: CUSTOMCOLOR.primary,
-            // borderWidth: 1,
+            borderWidth: 1,
           }}
           textStyle={{color: CUSTOMCOLOR.black}}
           label={'Save as Template'}

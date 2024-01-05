@@ -42,6 +42,7 @@ import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
 import {commonstyles} from '../styles/commonstyle';
 import CustomModal from '../components/CustomModal';
+import {capitalizeWord} from '../utility/const';
 
 export default function Prescribe1({navigation}) {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -796,7 +797,7 @@ export default function Prescribe1({navigation}) {
                       : CUSTOMCOLOR.primary,
                   fontWeight: '700',
                 }}
-                input={item?.temp_name}
+                input={capitalizeWord(item?.temp_name)}
                 onPress={() => handleDispatch(item?.temp_data)}
               />
             ))}
@@ -808,7 +809,7 @@ export default function Prescribe1({navigation}) {
           btnstyles={{
             backgroundColor: CUSTOMCOLOR.white,
             borderColor: CUSTOMCOLOR.primary,
-            // borderWidth: 1,
+            borderWidth: 1,
           }}
           textStyle={{color: CUSTOMCOLOR.black}}
           label={'Save as Template'}

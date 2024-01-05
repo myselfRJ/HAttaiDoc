@@ -160,13 +160,20 @@ const styles = StyleSheet.create({
   },
   eye: {
     position: 'absolute',
-    top: moderateScale(19), //12+fontsize.h3/2
-    right: moderateScale(10),
+    top: 0,
+    right: 12,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   search: {
     position: 'absolute',
-    top: moderateScale(12), //12+fontsize.h3/2
-    right: moderateScale(10),
+    top: 0,
+    right: 12,
+    bottom: 0,
+
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   indicator: {
     fontSize: CUSTOMFONTSIZE.h4,
@@ -180,11 +187,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     padding: 10,
     flex: 1,
-  },
-  bottom: {
-    borderBottomWidth: 0.8,
-
-    borderBottomColor: '#A9A9A9',
   },
 });
 

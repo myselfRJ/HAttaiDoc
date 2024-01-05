@@ -35,56 +35,58 @@ const ShowChip = props => {
           {props.text}
         </Text>
       </View>
-      {props.onEdit && (
-        <TouchableOpacity
-          style={[
-            {
-              height: moderateScale(28),
-              width: moderateScale(28),
+      <View style={{flexDirection: 'row', gap: moderateScale(14)}}>
+        {props.onEdit && (
+          <TouchableOpacity
+            style={[
+              {
+                height: moderateScale(28),
+                width: moderateScale(28),
 
-              backgroundColor: CUSTOMCOLOR.white,
-              borderRadius: moderateScale(28),
-              // borderWidth:1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-            props.style,
-          ]}
-          onPress={props.onEdit}>
-          <Icon
-            name="pen"
-            size={props.size ? props.size : moderateScale(20)}
-            color={CUSTOMCOLOR.delete}
-          />
+                backgroundColor: CUSTOMCOLOR.white,
+                borderRadius: moderateScale(28),
+                // borderWidth:1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
+              props.style,
+            ]}
+            onPress={props.onEdit}>
+            <Icon
+              name="pen"
+              size={props.size ? props.size : moderateScale(20)}
+              color={CUSTOMCOLOR.primary}
+            />
 
-          {/* </View> */}
-        </TouchableOpacity>
-      )}
-      {props.onPress && (
-        <TouchableOpacity
-          style={[
-            {
-              height: moderateScale(28),
-              width: moderateScale(28),
+            {/* </View> */}
+          </TouchableOpacity>
+        )}
+        {props.onPress && (
+          <TouchableOpacity
+            style={[
+              {
+                height: moderateScale(28),
+                width: moderateScale(28),
 
-              backgroundColor: CUSTOMCOLOR.white,
-              borderRadius: moderateScale(28),
-              // borderWidth:1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-            props.style,
-          ]}
-          onPress={props.onPress}>
-          <Icon
-            name="close"
-            size={props.size ? props.size : moderateScale(20)}
-            color={CUSTOMCOLOR.delete}
-          />
+                backgroundColor: CUSTOMCOLOR.white,
+                borderRadius: moderateScale(28),
+                // borderWidth:1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
+              props.style,
+            ]}
+            onPress={props.onPress}>
+            <Icon
+              name="close"
+              size={props.size ? props.size : moderateScale(20)}
+              color={CUSTOMCOLOR.delete}
+            />
 
-          {/* </View> */}
-        </TouchableOpacity>
-      )}
+            {/* </View> */}
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -111,12 +113,13 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(4),
   },
   alignchild: {
-    // width:"100%",
+    width: '85%',
     // flex:10,
     justifyContent: 'space-between',
     // borderWidth:1,
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     paddingHorizontal: horizontalScale(16),
   },
 });
