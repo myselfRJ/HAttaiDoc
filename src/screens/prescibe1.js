@@ -179,6 +179,7 @@ export default function Prescribe1({navigation}) {
         },
       }),
     );
+    setIndextoUpdate('');
   };
   const handleDelete = index => {
     if (prevPres) {
