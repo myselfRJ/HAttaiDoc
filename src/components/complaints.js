@@ -68,7 +68,7 @@ const ComplaintsCard = props => {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({term: item}));
-      setData(snomed_data);
+      setData([{term: selectedComplaint}, ...snomed_data]);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
@@ -78,16 +78,13 @@ const ComplaintsCard = props => {
     fetchComplaints();
   }, [selectedComplaint, option]);
   useEffect(() => {
-    setShow(!show);
-  }, [selectedComplaint]);
-  useEffect(() => {
     if (selectedComplaint) {
       const filtered = data?.filter(
         item =>
           item?.term &&
           item?.term.toLowerCase().includes(selectedComplaint.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: selectedComplaint}]);
+      setFilteredData([{term: selectedComplaint}, ...filtered]);
     } else {
       setFilteredData(data);
     }
@@ -100,6 +97,9 @@ const ComplaintsCard = props => {
   };
 
   const [show, setShow] = useState(false);
+  useEffect(() => {
+    setShow(true);
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -113,6 +113,7 @@ const ComplaintsCard = props => {
         value={selectedComplaint}
         setValue={text => {
           dispatch(addCheifComplaint(text));
+          setShow(false);
         }}
         search={true}
         IconName={
@@ -128,7 +129,7 @@ const ComplaintsCard = props => {
         (selectedComplaint === selected || show ? null : (
           <View style={styles.dropdownContainer}>
             <ScrollView>
-              {filtered?.map((val, index) => (
+              {data?.map((val, index) => (
                 <TouchableOpacity
                   style={styles.touch}
                   onPress={() => HandlePress(val?.term)}>

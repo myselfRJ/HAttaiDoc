@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
+  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -450,9 +451,11 @@ const VaccinationKids = ({navigation}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
-        const data = JSON.parse(jsonData?.data[0]?.vaccineDetails);
-        setData(data?.vaccineDetails);
-        setVaccineState(selectedStatus, data?.vaccineDetails);
+        if (jsonData?.data[0]?.vaccineDetails) {
+          const data = JSON.parse(jsonData?.data[0]?.vaccineDetails);
+          setData(data?.vaccineDetails);
+          setVaccineState(selectedStatus, data?.vaccineDetails);
+        }
       } else {
         console.error('API call failed:', response.status, response);
       }
@@ -464,699 +467,705 @@ const VaccinationKids = ({navigation}) => {
     getData();
   }, [selectedStatus]);
   return (
-    <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.white}}>
-      <ScrollView
-        style={{
-          paddingHorizontal: horizontalScale(24),
-          paddingVertical: verticalScale(12),
-        }}>
-        <Text
+    <ImageBackground
+      source={require('../assets/images/imbg.png')}
+      resizeMode={'contain'}
+      style={{flex: 1}}>
+      <View>
+        <ScrollView
           style={{
-            color: CUSTOMCOLOR.black,
-            fontSize: moderateScale(20),
-            fontWeight: '500',
-            paddingTop: moderateScale(10),
+            paddingHorizontal: horizontalScale(12),
+            paddingVertical: verticalScale(12),
           }}>
-          {selectedStatus}
-        </Text>
+          <Text
+            style={{
+              color: CUSTOMCOLOR.black,
+              fontSize: moderateScale(20),
+              fontWeight: '500',
+              paddingTop: moderateScale(10),
+              paddingHorizontal: horizontalScale(12),
+            }}>
+            {selectedStatus}
+          </Text>
 
-        <Text style={styles.head}>Vaccines</Text>
+          <Text style={styles.head}>Vaccines</Text>
 
-        {selectedStatus === 'At Birth' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '6 Weeks' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '10 Weeks' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '14 Weeks' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '6 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '7 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '6-9 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '9 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '12 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '15 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '16-18 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '18-19 months' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '18 months-5 years' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '4-6 years' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
-        {selectedStatus === '6-17 years' && (
-          <View style={styles.vaccine}>
-            {vaccine?.map(
-              (item, index) =>
-                item?.age === selectedStatus &&
-                item?.vaccineDetails?.map((item, index) => (
-                  <KidsVaccine
-                    name={item?.type}
-                    option={item?.status}
-                    setOption={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        value,
-                        item?.date,
-                        item?.batch,
-                      )
-                    }
-                    date={item?.date}
-                    setDate={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        value,
-                        item?.batch,
-                      )
-                    }
-                    value={item?.batch}
-                    setValue={value =>
-                      updateVaccineDetails(
-                        selectedStatus,
-                        item?.type,
-                        item?.status,
-                        item?.date,
-                        value,
-                      )
-                    }
-                  />
-                )),
-            )}
-          </View>
-        )}
+          {selectedStatus === 'At Birth' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '6 Weeks' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '10 Weeks' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '14 Weeks' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '6 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '7 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '6-9 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '9 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '12 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '15 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '16-18 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '18-19 months' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '18 months-5 years' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '4-6 years' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
+          {selectedStatus === '6-17 years' && (
+            <View style={styles.vaccine}>
+              {vaccine?.map(
+                (item, index) =>
+                  item?.age === selectedStatus &&
+                  item?.vaccineDetails?.map((item, index) => (
+                    <KidsVaccine
+                      name={item?.type}
+                      option={item?.status}
+                      setOption={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          value,
+                          item?.date,
+                          item?.batch,
+                        )
+                      }
+                      date={item?.date}
+                      setDate={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          value,
+                          item?.batch,
+                        )
+                      }
+                      value={item?.batch}
+                      setValue={value =>
+                        updateVaccineDetails(
+                          selectedStatus,
+                          item?.type,
+                          item?.status,
+                          item?.date,
+                          value,
+                        )
+                      }
+                    />
+                  )),
+              )}
+            </View>
+          )}
 
-        {expanded && (
-          <View>
-            <Text style={styles.head}>Others</Text>
-            {/* <KidsVaccine /> */}
-          </View>
-        )}
-        {/*   
+          {expanded && (
+            <View>
+              <Text style={styles.head}>Others</Text>
+              {/* <KidsVaccine /> */}
+            </View>
+          )}
+          {/*   
           <View style={{alignItems: 'flex-end', marginTop: moderateScale(30)}}>
             <HButton label="Other" icon={'plus'} onPress={toggleExpand} />
           </View> */}
-      </ScrollView>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingBottom: verticalScale(20),
-        }}>
-        <HButton
-          label="Save"
-          btnstyles={{
-            height: moderateScale(55),
-            borderRadius: moderateScale(4),
-          }}
-          textStyle={{fontSize: CUSTOMFONTSIZE.h2}}
-          loading={loading}
-          onPress={() => fetchData()}
-        />
+        </ScrollView>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingBottom: verticalScale(20),
+          }}>
+          <HButton
+            label="Save"
+            btnstyles={{
+              height: moderateScale(55),
+              borderRadius: moderateScale(4),
+            }}
+            textStyle={{fontSize: CUSTOMFONTSIZE.h2}}
+            loading={loading}
+            onPress={() => fetchData()}
+          />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -1172,6 +1181,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(20),
     fontWeight: '400',
     color: CUSTOMCOLOR.black,
+    paddingHorizontal: horizontalScale(12),
   },
   head2: {
     fontSize: CUSTOMFONTSIZE.h2,

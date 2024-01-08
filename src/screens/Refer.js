@@ -380,7 +380,7 @@ const ReferToDoctor = () => {
             ))}
           </View>
           {selected && (
-            <View>
+            <View style={{gap: verticalScale(16)}}>
               <InputText
                 label={
                   selected === 'Doctor'
@@ -389,7 +389,7 @@ const ReferToDoctor = () => {
                     ? ' Clinic Name'
                     : selected === 'Hospital'
                     ? 'Hospital Name'
-                    : 'lab / Imaging Center Name'
+                    : 'Lab / Imaging Center Name'
                 }
                 placeholder={
                   selected === 'Doctor'
@@ -502,8 +502,8 @@ const ReferToDoctor = () => {
                 numeric={true}
               />
               <InputText
-                label={'Referal Notes'}
-                placeholder="Referal Notes"
+                label={'Referral Notes'}
+                placeholder="Referral Notes"
                 multiline={true}
                 value={notes}
                 inputContainer={{paddingHorizontal: 0}}

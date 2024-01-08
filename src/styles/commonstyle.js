@@ -39,12 +39,12 @@ export const commonstyles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: verticalScale(64),
   },
-  subhead:{
-    color:CUSTOMCOLOR.black,
-    fontWeight:'600',
-    fontSize:16
+  subhead: {
+    color: CUSTOMCOLOR.black,
+    fontWeight: '600',
+    fontSize: 16,
   },
-  activebtn:{
-    alignSelf:'center'
-  }
+  activebtn: {
+    alignSelf: 'center',
+  },
 });

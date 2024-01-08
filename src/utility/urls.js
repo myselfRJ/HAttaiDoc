@@ -2,7 +2,7 @@
 const baseUrl = 'http://65.0.12.213/api/v1/';
 // const baseUrl = 'http://3.6.40.67/api/v1/';
 // const baseUrl = 'http://13.200.15.208/api/v1/';
-const snomedUrl = 'http://3.6.40.67/';
+const snomedUrl = 'https://healthattai.com/';
 // export const fileurl = `http://10.9.79.239:8000`;
 export const fileurl = `http://65.0.12.213`;
 // export const fileurl = `http://3.6.40.67`;

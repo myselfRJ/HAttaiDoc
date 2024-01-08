@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
@@ -19,6 +19,7 @@ import {
   addmartialHistory,
   addProcedures,
   addRedFalg,
+  addCheck_field,
 } from '../redux/features/prescription/pastHistory';
 // import {
 //   addCommorbities,
@@ -52,10 +53,15 @@ import {addpastHistory} from '../redux/features/prescription/pastHistory';
 import ChipInput from '../components/ChipInput';
 import {VisitOpen} from '../components';
 import {updateDate} from '../redux/features/prescription/Followupslice';
+import VitalField from '../components/vitalFields';
 // import ShowChip from '../components/showChip';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
+  const medication = useRef(null);
+  const pasthospital = useRef(null);
+  const procedureref = useRef(null);
+  const redflagref = useRef(null);
   const doc_phone = useSelector(state => state?.phone?.data);
   const {medicaldata} = route.params;
   const phone = medicaldata?.phone;
@@ -69,7 +75,7 @@ const MedicalHistory = ({navigation, route}) => {
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
 
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
-
+  const check_field = useSelector(state => state?.pasthistory.check_field);
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
   const dispatch = useDispatch();
   const nav = useNavigation();
@@ -190,33 +196,33 @@ const MedicalHistory = ({navigation, route}) => {
       setFamily('');
     }
   };
-  const handleAsyncStorage = () => {
-    RetriveAsyncData(`commorbidities${doc_phone?.phone}`).then(array => {
-      const uniqueArray = [...commor_sug, ...array]?.filter((item, index) => {
-        return (
-          index ===
-          array?.findIndex(obj => obj.commorbities === item?.commorbities)
-        );
-      });
-      setCommor_Sug([...commor_sug, ...uniqueArray]);
-    });
-    RetriveAsyncData(`socialHistory${doc_phone?.phone}`).then(array => {
-      const uniqueArray = [...social_sug, ...array]?.filter((item, index) => {
-        return index === array?.findIndex(obj => obj.social === item?.social);
-      });
-      setSocial_Sug([...social_sug, ...uniqueArray]);
-    });
-    RetriveAsyncData(`familyHistory${doc_phone?.phone}`).then(array => {
-      const uniqueArray = [...family_sug, ...array]?.filter((item, index) => {
-        return index === array?.findIndex(obj => obj.family === item?.family);
-      });
-      setFamily_Sug([...family_sug, ...uniqueArray]);
-    });
-  };
-  useEffect(() => {
-    // clearStorage();
-    handleAsyncStorage();
-  }, []);
+  // const handleAsyncStorage = () => {
+  //   RetriveAsyncData(`commorbidities${doc_phone?.phone}`).then(array => {
+  //     const uniqueArray = [...commor_sug, ...array]?.filter((item, index) => {
+  //       return (
+  //         index ===
+  //         array?.findIndex(obj => obj.commorbities === item?.commorbities)
+  //       );
+  //     });
+  //     setCommor_Sug([...commor_sug, ...uniqueArray]);
+  //   });
+  //   RetriveAsyncData(`socialHistory${doc_phone?.phone}`).then(array => {
+  //     const uniqueArray = [...social_sug, ...array]?.filter((item, index) => {
+  //       return index === array?.findIndex(obj => obj.social === item?.social);
+  //     });
+  //     setSocial_Sug([...social_sug, ...uniqueArray]);
+  //   });
+  //   RetriveAsyncData(`familyHistory${doc_phone?.phone}`).then(array => {
+  //     const uniqueArray = [...family_sug, ...array]?.filter((item, index) => {
+  //       return index === array?.findIndex(obj => obj.family === item?.family);
+  //     });
+  //     setFamily_Sug([...family_sug, ...uniqueArray]);
+  //   });
+  // };
+  // useEffect(() => {
+  //   // clearStorage();
+  //   handleAsyncStorage();
+  // }, []);
 
   useEffect(() => {
     if (commor_sug?.length === 0 || commor_sug == undefined) {
@@ -311,9 +317,14 @@ const MedicalHistory = ({navigation, route}) => {
       console.error('Error in fetchMedicalData:', error);
     }
   };
-
   useEffect(() => {
-    fetchMedicalData();
+    dispatch(addCheck_field('log'));
+  }, []);
+  useEffect(() => {
+    if (check_field?.length === 0) {
+      fetchMedicalData();
+      console.log('indra');
+    }
   }, []);
   return (
     <View style={styles.main}>
@@ -639,6 +650,9 @@ const MedicalHistory = ({navigation, route}) => {
 
           <InputText
             inputContainer={styles.inputtext}
+            point={medication}
+            re={pasthospital}
+            next={'next'}
             label="Medication History"
             placeholder="medicine name, dose, quantity, days,reason for medication"
             value={medical}
@@ -672,6 +686,8 @@ const MedicalHistory = ({navigation, route}) => {
           ) : null}
 
           <InputText
+            point={pasthospital}
+            re={procedureref}
             inputContainer={styles.inputtext}
             label="Past Hospitalization"
             placeholder="Reason for hospitalization"
@@ -680,6 +696,8 @@ const MedicalHistory = ({navigation, route}) => {
             blur={false}
           />
           <InputText
+            point={procedureref}
+            re={redflagref}
             inputContainer={styles.inputtext}
             label="Procedures"
             placeholder="Enter Procedures"
@@ -688,6 +706,7 @@ const MedicalHistory = ({navigation, route}) => {
             blur={false}
           />
           <InputText
+            point={redflagref}
             inputContainer={styles.inputtext}
             label="Red Flag 🚩"
             placeholder="Enter Red Flags"

@@ -91,7 +91,7 @@ const Allergies = () => {
         item =>
           item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: value}]);
+      setFilteredData([{term: value}, ...filtered]);
     } else {
       setFilteredData(data);
     }
@@ -134,6 +134,7 @@ const Allergies = () => {
         {prev?.map((item, ind) =>
           prev.length > 0 ? (
             <ShowChip
+              key={ind}
               text={item?.allergies}
               onPress={() => handleDelete(ind)}
               ind={ind}
@@ -160,7 +161,7 @@ const Allergies = () => {
               }
               onPress={() => setValue('')}
             />
-            {value.length >= 3 &&
+            {value.length >= 1 &&
               (value === selected || show ? null : (
                 <View style={styles.dropdownContainer}>
                   <ScrollView persistentScrollbar={true}>

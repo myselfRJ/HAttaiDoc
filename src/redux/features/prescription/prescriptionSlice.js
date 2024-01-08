@@ -25,7 +25,7 @@ const initialState = {
   physicalExamination: {},
   eaxminationFindings: {},
   fees: [],
-  additional_notes:''
+  additional_notes: '',
 };
 
 const prescriptionSlice = createSlice({
@@ -74,12 +74,12 @@ const prescriptionSlice = createSlice({
     updatefees: (state, action) => {
       state.fees = action.payload;
     },
-    addAdditionalNote: (state,action) =>{
+    addAdditionalNote: (state, action) => {
       state.additional_notes = action.payload;
     },
-    updateAdditionalNote: (state,action) =>{
+    updateAdditionalNote: (state, action) => {
       state.additional_notes = action.payload;
-    }
+    },
   },
 });
 export const {
@@ -98,6 +98,6 @@ export const {
   updatefees,
   addfees,
   addAdditionalNote,
-  updateAdditionalNote
+  updateAdditionalNote,
 } = prescriptionSlice.actions;
 export default prescriptionSlice.reducer;

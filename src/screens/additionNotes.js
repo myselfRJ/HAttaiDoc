@@ -50,7 +50,9 @@ const AdditionalNotes = ({navigation, route}) => {
   useEffect(() => {
     GetNotes();
   }, []);
-
+  const filteredata = additionalNote.filter(
+    item => JSON.parse(item?.notes_message)['additional_notes'] !== '',
+  );
   const NoteCard = ({date, notes}) => {
     return (
       <View
@@ -105,11 +107,11 @@ const AdditionalNotes = ({navigation, route}) => {
         value={note}
         setValue={setNote}
       />
-      {additionalNote?.length > 0 && (
+      {filteredata?.length > 0 && (
         <>
           <Text style={commonstyles.subhead}>Updated Notes</Text>
           <ScrollView contentContainerStyle={{height: '70%'}}>
-            {additionalNote?.map(
+            {filteredata?.map(
               (item, ind) =>
                 JSON.parse(item?.notes_message)['additional_notes'] !== '' && (
                   <NoteCard

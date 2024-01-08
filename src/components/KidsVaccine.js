@@ -17,18 +17,12 @@ import Option from './option';
 
 const KidsVaccine = props => {
   const [open, setOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState('');
-  // const [value,setValue] = useState('')//
-  console.log('.....', props.name, props.option);
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: CUSTOMCOLOR.white,
-        // paddingLeft: moderateScale(12),
-        // paddingTop: moderateScale(12),
-        // paddingBottom: moderateScale(4),
-        paddingHorizontal: horizontalScale(12),
+        paddingHorizontal: horizontalScale(8),
         paddingVertical: verticalScale(12),
         borderRadius: moderateScale(8),
         borderColor: '#C0DFFC',

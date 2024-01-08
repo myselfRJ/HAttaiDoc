@@ -83,68 +83,70 @@ export default function Prescribe1({navigation}) {
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
   const handleAddPrescribe = () => {
-    if (newMedicine?.length > 1) {
-      // const new1 = newMedicine?.filter((item)=> item?.term)
-      const newmed = `${medicine} ${mgs}`;
-      setMedicine(newmed);
+    if (medicine && timing && frequency) {
+      if (newMedicine?.length > 1) {
+        // const new1 = newMedicine?.filter((item)=> item?.term)
+        const newmed = `${medicine} ${mgs}`;
+        setMedicine(newmed);
+      }
+      if (parseInt(indexToUpdate) >= 0 && indexToUpdate < prevPres.length) {
+        updateIndexvaluePrescribe();
+      } else {
+        dispatch(
+          addPrescribe([
+            ...prevPres,
+            {
+              medicine: generic
+                ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
+                    generic &&
+                    (generic.includes('mg') ||
+                      generic.includes('ml') ||
+                      generic.includes('g'))
+                      ? ''
+                      : `${generic.toUpperCase()} ${mgs}`
+                  }`
+                : medicine &&
+                  (medicine.includes('mg') ||
+                    medicine.includes('ml') ||
+                    medicine.includes('g'))
+                ? medicine.toUpperCase()
+                : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
+              mode: mode,
+              dose_quantity: '',
+              timing: timing,
+              frequency: selectedDaysString,
+              dose_number: dose_number,
+              duration: `${duration} ${
+                durationSelect === 'week'
+                  ? 'Week (once in a Week)'
+                  : durationSelect
+              }`,
+              total_quantity: total_quantity,
+              others: others ? others : '',
+            },
+          ]),
+        );
+      }
+      if (sug?.length > 0) {
+        const medicineName = `${medicine} ${mgs}`;
+        UpdateAsyncData(`prescribe${phone}`, {
+          medicine: generic
+            ? `${medicine}(${generic})`
+            : setmedicine
+            ? setmedicine
+            : medicineName,
+          mode: mode,
+        });
+      }
+      setMedicine('');
+      setMode('');
+      setDose_number('1');
+      setDose_quantity('');
+      setTiming('');
+      setFrequency([]);
+      setDuration('1');
+      setmg('');
     }
-    if (parseInt(indexToUpdate) >= 0 && indexToUpdate < prevPres.length) {
-      updateIndexvaluePrescribe();
-    } else {
-      dispatch(
-        addPrescribe([
-          ...prevPres,
-          {
-            medicine: generic
-              ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
-                  generic &&
-                  (generic.includes('mg') ||
-                    generic.includes('ml') ||
-                    generic.includes('g'))
-                    ? ''
-                    : `${generic.toUpperCase()} ${mgs}`
-                }`
-              : medicine &&
-                (medicine.includes('mg') ||
-                  medicine.includes('ml') ||
-                  medicine.includes('g'))
-              ? medicine.toUpperCase()
-              : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
-            mode: mode,
-            dose_quantity: '',
-            timing: timing,
-            frequency: selectedDaysString,
-            dose_number: dose_number,
-            duration: `${duration} ${
-              durationSelect === 'week'
-                ? 'Week (once in a Week)'
-                : durationSelect
-            }`,
-            total_quantity: total_quantity,
-            others: others ? others : '',
-          },
-        ]),
-      );
-    }
-    if (sug?.length > 0) {
-      const medicineName = `${medicine} ${mgs}`;
-      UpdateAsyncData(`prescribe${phone}`, {
-        medicine: generic
-          ? `${medicine}(${generic})`
-          : setmedicine
-          ? setmedicine
-          : medicineName,
-        mode: mode,
-      });
-    }
-    setMedicine('');
-    setMode('');
-    setDose_number('1');
-    setDose_quantity('');
-    setTiming('');
-    setFrequency([]);
-    setDuration('1');
-    setmg('');
   };
   const updateIndexvaluePrescribe = () => {
     dispatch(
@@ -803,7 +805,13 @@ export default function Prescribe1({navigation}) {
           icon="plus"
           // size={moderateScale(16)}
           onPress={handleAddPrescribe}
-          btnstyles={{alignSelf: 'flex-start'}}
+          btnstyles={{
+            backgroundColor:
+              medicine && timing && frequency
+                ? CUSTOMCOLOR.success
+                : CUSTOMCOLOR.disable,
+            alignSelf: 'flex-end',
+          }}
         />
         {templatesData?.length > 0 && (
           <View
@@ -911,6 +919,7 @@ export default function Prescribe1({navigation}) {
 const styles = StyleSheet.create({
   prescribeConatiner: {
     gap: moderateScale(8),
+    paddingBottom: verticalScale(24),
   },
   ModeContainer: {
     gap: moderateScale(8),

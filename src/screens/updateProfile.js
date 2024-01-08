@@ -553,118 +553,143 @@ const UpdateProfile = ({navigation}) => {
                 )} */}
               </View>
             </View>
-            <View style={{flexDirection: 'row', gap: horizontalScale(16)}}>
-              {documents[0]?.medical && (
-                <TouchableOpacity
-                  onPress={() => handleDocuments(documents[0]?.medical)}
-                  style={{marginTop: verticalScale(8)}}>
-                  <ShowChip
-                    text={
-                      <>
-                        <Icon
-                          color={CUSTOMCOLOR.error}
-                          size={moderateScale(20)}
-                          name={'file-pdf-box'}
-                        />
-                        {<Text>Registration Document.pdf</Text>}
-                      </>
-                    }
-                    main={{marginHorizontal: 0}}
-                  />
-                </TouchableOpacity>
-              )}
-              {documents[1]?.aadhar && (
-                <TouchableOpacity
-                  onPress={() => handleDocuments(documents[0]?.aadhar)}
-                  style={{marginTop: verticalScale(8)}}>
-                  <ShowChip
-                    text={
-                      <>
-                        <Icon
-                          color={CUSTOMCOLOR.error}
-                          size={moderateScale(20)}
-                          name={'file-pdf-box'}
-                        />
-                        {<Text>Aadhar.pdf</Text>}
-                      </>
-                    }
-                    main={{marginHorizontal: 0}}
-                  />
-                </TouchableOpacity>
-              )}
-              {documents[2]?.degree && (
-                <TouchableOpacity
-                  onPress={() => handleDocuments(documents[0]?.degree)}
-                  style={{marginTop: verticalScale(8)}}>
-                  <ShowChip
-                    text={
-                      <>
-                        <Icon
-                          color={CUSTOMCOLOR.error}
-                          size={moderateScale(20)}
-                          name={'file-pdf-box'}
-                        />
-                        {<Text>Degree.pdf</Text>}
-                      </>
-                    }
-                    main={{marginHorizontal: 0}}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
             <View
               style={{
                 // alignSelf: 'flex-start',
                 gap: verticalScale(8),
                 // borderWidth:1,
                 // zIndex: -1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
+                flexDirection: 'column',
+                // flexWrap: 'wrap',
                 // justifyContent: 'space-between',
               }}>
-              <UploadShow
-                head={'Registration Document'}
-                file={selectedFilename && selectedFilename?.name}
-                onDelete={handleClearFile}
-                label={'Upload Regisration Document'}
-                onUpload={handleSelectFilename}
-              />
-              <UploadShow
-                head={'Aadhar'}
-                style={{alignSelf: 'center'}}
-                file={pan && pan?.name}
-                label={' Upload Aadhar'}
-                onUpload={handlePan}
-                onDelete={handleClearpan}
-              />
-              <UploadShow
-                head={'Lastest Degree Certificate'}
-                file={latestRecord && latestRecord?.name}
-                label={'Upload Latest Degree'}
-                onUpload={handlelatest}
-                onDelete={handleClearlatest}
+              <View
+                style={
+                  {
+                    // flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    // flexWrap: 'wrap',
+                  }
+                }>
+                <UploadShow
+                  head={'Medical Registration Document'}
+                  file={selectedFilename && selectedFilename?.name}
+                  onDelete={handleClearFile}
+                  label={'Upload Regisration Document'}
+                  onUpload={handleSelectFilename}
+                />
+                {documents[0]?.medical && (
+                  <TouchableOpacity
+                    onPress={() => handleDocuments(documents[0]?.medical)}
+                    style={{marginTop: verticalScale(8)}}>
+                    <ShowChip
+                      text={
+                        <>
+                          <Icon
+                            color={CUSTOMCOLOR.error}
+                            size={moderateScale(20)}
+                            name={'file-pdf-box'}
+                          />
+                          {<Text>Registration Document.pdf</Text>}
+                        </>
+                      }
+                      main={{marginHorizontal: 0}}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View
+                style={
+                  {
+                    // flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    // flexWrap: 'wrap',
+                  }
+                }>
+                <UploadShow
+                  head={'Aadhar'}
+                  // style={{alignSelf: 'center'}}
+                  file={pan && pan?.name}
+                  label={' Upload Aadhar'}
+                  onUpload={handlePan}
+                  onDelete={handleClearpan}
+                />
+                {documents[1]?.aadhar && (
+                  <TouchableOpacity
+                    onPress={() => handleDocuments(documents[0]?.aadhar)}
+                    style={{marginTop: verticalScale(8)}}>
+                    <ShowChip
+                      text={
+                        <>
+                          <Icon
+                            color={CUSTOMCOLOR.error}
+                            size={moderateScale(20)}
+                            name={'file-pdf-box'}
+                          />
+                          {<Text>Aadhar.pdf</Text>}
+                        </>
+                      }
+                      main={{marginHorizontal: 0}}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View
+                style={
+                  {
+                    // justifyContent: 'space-between',
+                    // flexDirection: 'row',
+                    // flexWrap: 'wrap',
+                  }
+                }>
+                <UploadShow
+                  head={'Lastest Degree Certificate'}
+                  file={latestRecord && latestRecord?.name}
+                  label={'Upload Latest Degree'}
+                  onUpload={handlelatest}
+                  onDelete={handleClearlatest}
+                />
+                {documents[2]?.degree && (
+                  <TouchableOpacity
+                    onPress={() => handleDocuments(documents[0]?.degree)}
+                    style={{marginTop: verticalScale(8)}}>
+                    <ShowChip
+                      text={
+                        <>
+                          <Icon
+                            color={CUSTOMCOLOR.error}
+                            size={moderateScale(20)}
+                            name={'file-pdf-box'}
+                          />
+                          {<Text>Degree.pdf</Text>}
+                        </>
+                      }
+                      main={{marginHorizontal: 0}}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: verticalScale(24),
+                flexDirection: 'row',
+                gap: horizontalScale(16),
+                alignSelf: 'center',
+              }}>
+              <HButton
+                btnstyles={commonstyles.activebtn}
+                label={Language[language]['save']}
+                loading={loading}
+                onPress={() => {
+                  // fetchData();
+                  putProfile();
+                }}
               />
             </View>
           </ScrollView>
         </View>
       </Keyboardhidecontainer>
-
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          bottom: verticalScale(32),
-        }}>
-        <HButton
-          btnstyles={commonstyles.activebtn}
-          label={Language[language]['save']}
-          loading={loading}
-          onPress={() => {
-            // fetchData();
-            putProfile();
-          }}
-        />
-      </View>
       {/* <BottomSheetView visible={appointType} setVisible={setAppointType}>
         <View style={styles.modalContainer}>
           <Text style={styles.bottext}>Select Speciality</Text>
@@ -774,8 +799,8 @@ const styles = StyleSheet.create({
     // padding: moderateScale(4),
   },
   content: {
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: moderateScale(24),
+    paddingVertical: moderateScale(16),
 
     // alignItems: 'center',
     gap: moderateScale(16),

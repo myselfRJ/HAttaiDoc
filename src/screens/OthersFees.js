@@ -68,13 +68,15 @@ const OthersFees = ({navigation}) => {
     ]);
   }, []);
   const handleAdd = () => {
-    setSubmiitedFees([
-      ...submittedFees,
+    if (name && fees) {
+      setSubmiitedFees([
+        ...submittedFees,
 
-      {service_name: name, charge: parseInt(fees)},
-    ]);
-    setName('');
-    setFees('');
+        {service_name: name, charge: parseInt(fees)},
+      ]);
+      setName('');
+      setFees('');
+    }
   };
   const handleDispatch = () => {
     dispatch(
@@ -318,7 +320,11 @@ const OthersFees = ({navigation}) => {
           />
           <HButton
             type="addtype"
-            btnstyles={{alignSelf: 'flex-end'}}
+            btnstyles={{
+              backgroundColor:
+                name && fees ? CUSTOMCOLOR.success : CUSTOMCOLOR.disable,
+              alignSelf: 'flex-end',
+            }}
             label={'Add'}
             icon="plus"
             onPress={handleAdd}
@@ -329,7 +335,9 @@ const OthersFees = ({navigation}) => {
       <HButton
         label={'Save'}
         onPress={handleDispatch}
-        btnstyles={commonstyles.activebtn}
+        btnstyles={{
+          alignSelf: 'center',
+        }}
       />
       <BottomSheetView
         visible={bottom}

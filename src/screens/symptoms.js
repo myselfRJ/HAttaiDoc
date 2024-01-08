@@ -62,7 +62,6 @@ const Symptoms = ({navigation}) => {
   const [sug, setSug] = useState([]);
   const [years, setYears] = useState('');
   const dispatch = useDispatch();
-
   const handleAddSymptoms = () => {
     if (symptom && (days || hr || months || years)) {
       dispatch(
@@ -70,21 +69,7 @@ const Symptoms = ({navigation}) => {
           ...symptomsData,
           {
             symptom: symptom,
-            // days: days ? days : hr,
-            days:
-              days && hr && months && years
-                ? `${years} ${
-                    parseInt(years) > 1 ? 'years' : 'year'
-                  } & ${months} ${
-                    parseInt(months) > 1 ? 'months' : 'month'
-                  } & ${days} ${parseInt(days) > 1 ? 'days' : 'day'} & ${hr} hr`
-                : days && !hr && !months && !years
-                ? `${days} ${parseInt(days) > 1 ? 'days' : 'day'}`
-                : !days && hr && !months && !years
-                ? `${hr} hr`
-                : !days && !hr && !months && years
-                ? `${years} ${parseInt(years) > 1 ? 'years' : 'year'}`
-                : `${months} ${parseInt(months) > 1 ? 'months' : 'month'}`,
+            days: symplist.join(' & '),
             severity: sevSelected,
           },
         ]),
@@ -149,7 +134,7 @@ const Symptoms = ({navigation}) => {
           item?.term &&
           item?.term.toLowerCase().includes(symptom.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: symptom}]);
+      setFilteredData([{term: symptom}, ...filtered]);
     } else {
       setFilteredData(data);
     }
@@ -192,7 +177,21 @@ const Symptoms = ({navigation}) => {
       }
     });
   }, []);
-
+  const symplist = [];
+  useEffect(() => {
+    if (days) {
+      symplist.push(`${days} ${parseInt(days) > 1 ? 'days' : 'day'}`);
+    }
+    if (years) {
+      symplist.push(`${years} ${parseInt(years) > 1 ? 'years' : 'year'}`);
+    }
+    if (months) {
+      symplist.push(`${months} ${parseInt(months) > 1 ? 'monthss' : 'months'}`);
+    }
+    if (hr) {
+      symplist.push(`${hr} ${parseInt(hr) > 1 ? 'hrs' : 'hr'}`);
+    }
+  }, [days, hr, years, months]);
   return (
     <View style={styles.mainContainer}>
       <PrescriptionHead heading={Language[language]['symptoms']} />

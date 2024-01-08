@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: moderateScale(10),
 
     elevation: moderateScale(2),
-    // backgroundColor: CUSTOMCOLOR.white,
+    backgroundColor: CUSTOMCOLOR.white,
     shadowColor: CUSTOMCOLOR.primary,
     // width: moderateScale(100),
     // height: moderateScale(230),

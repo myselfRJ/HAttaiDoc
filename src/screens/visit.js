@@ -348,6 +348,15 @@ const Visit = ({navigation, route}) => {
     fetchComplaint();
     // fetchDoctor();
     setData(doc_prof);
+    dispatch(
+      addfees([
+        {
+          service_name: `Consultation Fees`,
+          charge: parseInt(consultation_fees),
+        },
+        {totalFees: parseInt(consultation_fees)},
+      ]),
+    );
     // SetUploadDocument(report_findings)
   }, []);
   useFocusEffect(
@@ -359,11 +368,9 @@ const Visit = ({navigation, route}) => {
     }, []),
   );
   const months = CONSTANTS.months;
-
   const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : '';
   const day = vitalsData?.LDD ? vitalsData?.LDD.split('-')[2] : '';
   const Year = vitalsData?.LDD ? vitalsData?.LDD.split('-')[0] : '';
-
   const clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const clinic_Address = useSelector(state => state?.clinicid?.clinic_Address);
   const clinic_phone = useSelector(state => state?.clinicid?.clinic_phone);
@@ -659,7 +666,7 @@ const Visit = ({navigation, route}) => {
           } 
 
           ${
-            service_fees?.length > 1
+            service_fees?.length > 0
               ? `<div style="page-break-before:always;">
               <div style="height:100px"></div>
               <h5>

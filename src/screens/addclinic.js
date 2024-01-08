@@ -705,7 +705,7 @@ const AddClinic = ({navigation}) => {
         });
         // navigation.goBack();
       } else {
-        Alert.alert('Warning', '"Please Add Slots Details Also"');
+        Alert.alert('Warning', '"Please Add Slots Details Also"', {});
       }
     } else {
       Alert.alert('Warning', '"Please Enter All Details"');
@@ -1043,7 +1043,7 @@ const AddClinic = ({navigation}) => {
                   </View>
                   <View style={{alignItems: 'flex-end'}}>
                     <HButton
-                      size={16}
+                      size={moderateScale(16)}
                       label="Add"
                       icon="plus"
                       type={'addtype'}

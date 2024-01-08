@@ -60,8 +60,10 @@ export default DropdownComponent;
 const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: CUSTOMCOLOR.white,
+    marginTop: verticalScale(4),
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(4),
+    paddingVertical: verticalScale(2.5),
+    paddingBottom: verticalScale(4.2),
     fontWeight: '400',
     borderRadius: 4,
     borderWidth: 1,

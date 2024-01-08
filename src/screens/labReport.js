@@ -109,7 +109,7 @@ const LabReports = () => {
         item =>
           item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: value}]);
+      setFilteredData([{term: value}, ...filtered]);
     } else {
       setFilteredData(filtering_data);
     }

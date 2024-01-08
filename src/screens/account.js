@@ -219,11 +219,14 @@ const Account = () => {
             <View>
               <Text style={styles.docname}>{data?.doctor_name}</Text>
               <Text style={styles.subinfo}>
-                Age:{age} | {data?.gender}
+                Age: {age} | {data?.gender}
               </Text>
               <Text style={styles.subinfo}>DOB: {DateOfBirth}</Text>
               <Text style={styles.subinfo}>
-                Specialization:{data?.specialization}
+                Specialization:{' '}
+                <Text style={[styles.subinfo, {color: CUSTOMCOLOR.primary}]}>
+                  {data?.specialization}
+                </Text>
               </Text>
             </View>
             <TouchableOpacity
@@ -323,7 +326,7 @@ const Account = () => {
           />
         </View>
       </View>
-      {data?.medical_doc_url && (
+      {/* {data?.medical_doc_url && (
         <TouchableOpacity
           onPress={() => handleDocuments(data?.medical_doc_url)}
           style={{marginTop: verticalScale(8)}}>
@@ -379,18 +382,19 @@ const Account = () => {
             main={{marginHorizontal: 0}}
           />
         </TouchableOpacity>
-      )}
+      )} */}
 
       <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-        <Text style={styles.contact}>If any quries contact us</Text>
+        <Text style={styles.contact}>For any queries contact us at</Text>
         <Text style={styles.contact}>
           E-mail:
           <Text style={styles.link} onPress={openEmail}>
+            {' '}
             contact@destratum.com
           </Text>
         </Text>
         <Text style={styles.contact}>
-          Phone:
+          Phone:{' '}
           <Text style={styles.link} onPress={PhoneCall}>
             7305998993
           </Text>

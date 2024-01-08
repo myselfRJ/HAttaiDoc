@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, ImageBackground} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import VaccinationCard from '../components/VaccinationCard';
 import {
@@ -90,27 +90,34 @@ const Vaccination_List = ({navigation}) => {
   ];
 
   return (
-    <ScrollView style={{backgroundColor: CUSTOMCOLOR.white}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          paddingHorizontal: horizontalScale(15),
-          paddingVertical: verticalScale(24),
-          rowGap: moderateScale(15),
-        }}>
-        {vaccinationData.map(item => (
-          <VaccinationCard
-            key={item.id}
-            label={item.label}
-            image={item.image}
-            navigation={navigation}
-            patient_phone={patient_phone}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <ImageBackground
+      source={require('../assets/images/imbg.png')}
+      resizeMode={'contain'}
+      style={{
+        flex: 1,
+      }}>
+      <ScrollView style={{}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            paddingHorizontal: horizontalScale(15),
+            paddingVertical: verticalScale(24),
+            rowGap: moderateScale(15),
+          }}>
+          {vaccinationData.map(item => (
+            <VaccinationCard
+              key={item.id}
+              label={item.label}
+              image={item.image}
+              navigation={navigation}
+              patient_phone={patient_phone}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 export default Vaccination_List;

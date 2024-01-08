@@ -77,7 +77,10 @@ const InputText = props => {
               // (props.doubleCheck && props.check) ? styles.numStyle : styles.textinput
             ]}
             textAlign={props.textAlign ?? 'left'}
+            ref={props.point}
             // underlineColorAndroid="transparent"
+            returnKeyType={'done'}
+            // returnKeyType={props.next ? props.next : 'done'}
             placeholderTextColor={CUSTOMCOLOR.disable}
             placeholder={props.placeholder}
             secureTextEntry={props.secure ? visible : false}
@@ -86,8 +89,15 @@ const InputText = props => {
             onChangeText={numeric ? handleNumericInput : passtoParent}
             value={props.value}
             multiline={props.multiline}
-            onSubmitEditing={props.onSubmit}
-            blurOnSubmit={props.blur}
+            onSubmitEditing={() => {
+              if (props.onSubmit) {
+                props.onSubmit();
+              } else {
+                props?.re?.current?.focus();
+              }
+            }}
+            blurOnSubmit={false}
+            enablesReturnKeyAutomatically
           />
           {props.secure !== undefined ? (
             visible ? (

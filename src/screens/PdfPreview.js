@@ -17,6 +17,7 @@ import {updateCommorbities} from '../redux/features/prescription/commorbities';
 import {updateDiagnosis} from '../redux/features/prescription/diagnosis';
 import {
   addAdvice,
+  addCheck_field,
   addProcedures,
   addRedFalg,
   updatemartialHistory,
@@ -154,6 +155,7 @@ const PdfView = ({navigation}) => {
     dispatch(addRedFalg(''));
     dispatch(addProcedures(''));
     dispatch(addAdvice(''));
+    dispatch(addCheck_field(''));
   };
   const putComplaint = async () => {
     try {

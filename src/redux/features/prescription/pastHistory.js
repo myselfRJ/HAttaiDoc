@@ -13,6 +13,7 @@ const initialState = {
   procedures: '',
   red_flag: '',
   advice: '',
+  check_field: '',
 };
 
 const pastHistorySlice = createSlice({
@@ -76,6 +77,9 @@ const pastHistorySlice = createSlice({
     addAdvice: (state, action) => {
       state.advice = action.payload;
     },
+    addCheck_field: (state, action) => {
+      state.check_field = action.payload;
+    },
   },
 });
 
@@ -99,6 +103,7 @@ export const {
   addProcedures,
   addRedFalg,
   addAdvice,
+  addCheck_field,
 } = pastHistorySlice.actions;
 
 export const pastHistoryReducer = pastHistorySlice.reducer;

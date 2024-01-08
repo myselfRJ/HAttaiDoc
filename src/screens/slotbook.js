@@ -478,7 +478,7 @@ const SlotBook = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({term: item}));
-      setData([...snomed_data, {term: complaint}]);
+      setData([{term: complaint}, ...snomed_data]);
       // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
     } else {
       console.error('API call failed:', response.status, response);
