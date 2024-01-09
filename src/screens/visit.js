@@ -110,6 +110,9 @@ const Visit = ({navigation, route}) => {
     state => state?.pasthistory?.martialHistory,
   );
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
+  console.log('====================================');
+  console.log(commor, martialHistory);
+  console.log('====================================');
 
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
 
@@ -791,7 +794,24 @@ const Visit = ({navigation, route}) => {
   const Age =
     new Date().getFullYear() -
     parseInt(patient_data?.birth_date?.split('-')[0].toString());
-
+  console.log('====================================');
+  console.log(
+    commor,
+    socialHistory,
+    familyHistory,
+    medicationHistory,
+    menstrualHistory,
+    obstericHistory,
+    martialHistory,
+    commor?.length > 0 ||
+      socialHistory?.length > 0 ||
+      familyHistory?.length > 0 ||
+      medicationHistory ||
+      menstrualHistory?.length > 0 ||
+      JSON.stringify(obstericHistory) !== '{}' ||
+      JSON.stringify(martialHistory) !== '{}',
+  );
+  console.log('====================================');
   return (
     <View>
       <ScrollView>
