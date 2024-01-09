@@ -19,6 +19,7 @@ import {
 } from './src/utility/permissions';
 import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
+import Toast from 'react-native-toast-message';
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = React.useState(true);
@@ -133,6 +134,7 @@ function App() {
             />
           </Stack.Navigator>
           {/* <CombinedRoute /> */}
+          <Toast position="top" bottomOffset={20} />
         </NavigationContainer>
       </GestureHandlerRootView>
     </Provider>

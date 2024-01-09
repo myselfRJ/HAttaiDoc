@@ -65,7 +65,7 @@ import {mode} from '../redux/features/prescription/prescribeslice';
 import SelectionTab from '../components/selectiontab';
 import moment from 'moment';
 import {checkNumber} from '../utility/checks';
-import {handleCamera, handleGallery} from '../utility/const';
+import {handleCamera, handleGallery, showToast} from '../utility/const';
 
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
@@ -708,7 +708,8 @@ const AddClinic = ({navigation}) => {
         Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
     } else {
-      Alert.alert('Warning', '"Please Enter All Details"');
+      // Alert.alert('Warning', '"Please Enter All Details"');
+      showToast('error', 'Please Enter All Details');
     }
   };
   const [shows, setShows] = useState(false);
