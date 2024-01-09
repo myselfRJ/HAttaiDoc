@@ -33,7 +33,8 @@ import {validateInput} from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
 const VitalScreen = ({route, props}) => {
-  const vitalsData = useSelector(state => state.prescription.vitalsData);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
+  const vitalsDat = useSelector(state => state.prescription.vitalsData);
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -131,11 +132,23 @@ const VitalScreen = ({route, props}) => {
   };
   const handlePress = () => {
     setTimeout(() => {
-      dispatch(addVitals(vitals));
+      dispatch(
+        addVitals([
+          ...vitalsDat,
+          {vitals: vitals, appointment_id: appointmentID},
+        ]),
+      );
       nav.goBack();
     }, 500);
   };
   useEffect(() => {
+    const vital = vitalsDat;
+    const vitalsData =
+      vital?.length > 0
+        ? vital
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)[0]?.vitals
+        : [];
     if (vitalsData) {
       setheight(vitalsData?.height);
       setWeight(vitalsData?.weight);

@@ -13,11 +13,14 @@ import {language} from '../settings/userpreferences';
 import {useDispatch, useSelector} from 'react-redux';
 import {addAdvice} from '../redux/features/prescription/pastHistory';
 export const Advices = ({navigation}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const dispatch = useDispatch();
   const advices = useSelector(state => state?.pasthistory?.advice);
   const [advice, SetAdvice] = useState('');
   const onPress = () => {
-    dispatch(addAdvice(advice));
+    dispatch(
+      addAdvice([...advices, {advice: advice, appointment_id: appointmentID}]),
+    );
     navigation.goBack();
   };
   useEffect(() => {

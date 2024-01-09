@@ -65,23 +65,57 @@ const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
   const [prevLoad, setPrevLoad] = useState(false);
   const dispatch = useDispatch();
-  const date = useSelector(state => state?.dateTime?.date);
-  const diagnosis = useSelector(state => state?.diagnosis?.DiagnosisItems);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
+  const follow_up = useSelector(state => state?.dateTime?.date);
+  const date =
+    follow_up?.length > 0
+      ? follow_up
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)[0]?.date
+      : [];
+  const dia = useSelector(state => state?.diagnosis?.DiagnosisItems);
+  const diagnosis =
+    dia?.length > 0
+      ? dia?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const notes = useSelector(state => state?.prescription?.additional_notes);
-  const vitalsData = useSelector(state => state.prescription.vitalsData);
+  const vital = useSelector(state => state.prescription.vitalsData);
+  const vitalsData =
+    vital?.length > 0
+      ? vital
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.vitals
+      : {};
   const physical = useSelector(state => state.prescription.physicalExamination);
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
-  const note = useSelector(state => state.prescription.note);
+  const notess = useSelector(state => state.prescription.note);
+  const note =
+    notess?.length > 0
+      ? notess
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)[0]?.note
+      : '';
+  console.log(note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
   const selectedDoctor = useSelector(
     state => state?.prescription?.selectedDoctor,
   );
-  const Symptom = useSelector(state => state.symptoms.symptom);
-  const Prescribe = useSelector(state => state.pres.prescribeItems);
+  const symp = useSelector(state => state.symptoms.symptom);
+  const Symptom =
+    symp?.length > 0
+      ? symp?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+  const dummyPrescribe = useSelector(state => state.pres.prescribeItems);
+
+  const Prescribe =
+    dummyPrescribe?.length > 0
+      ? dummyPrescribe?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+  console.log(Prescribe);
   let prescribeCopy = Prescribe;
-  const [prescribe, setPrescribe] = useState(prescribeCopy);
+  // const [prescribe, setPrescribe] = useState(prescribeCopy);
 
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
@@ -89,8 +123,16 @@ const Visit = ({navigation, route}) => {
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
   );
-  const allergies = useSelector(state => state?.allergies?.allergies);
-  const labreport = useSelector(state => state?.labreport?.labReport);
+  const allergy = useSelector(state => state?.allergies?.allergies);
+  const allergies =
+    allergy?.length > 0
+      ? allergy?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+  const lab = useSelector(state => state?.labreport?.labReport);
+  const labreport =
+    lab?.length > 0
+      ? lab?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const hospitalization = useSelector(
     state => state?.pasthistory?.hospitalization,
@@ -119,10 +161,17 @@ const Visit = ({navigation, route}) => {
     service_fees?.length > 0 ? service_fees?.[service_fees?.length - 1] : null;
   const procedure = useSelector(state => state.pasthistory.procedures);
   const redflag = useSelector(state => state.pasthistory.red_flag);
-  const advices = useSelector(state => state?.pasthistory?.advice);
-  useEffect(() => {
-    setPrescribe(Prescribe);
-  }, [Prescribe]);
+  const adv = useSelector(state => state?.pasthistory?.advice);
+  const advices =
+    adv?.length > 0
+      ? adv
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)[0]?.advice
+      : '';
+  // const advices = useSelector(state => state?.pasthistory?.advice);
+  // useEffect(() => {
+  //   setPrescribe(Prescribe);
+  // }, [Prescribe]);
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
 
@@ -174,7 +223,7 @@ const Visit = ({navigation, route}) => {
           allergiesData?.findIndex(obj => obj.allergies === item?.allergies)
         );
       });
-      dispatch(addAllergies(uniqueArray));
+      dispatch(addAllergies([...allergy, ...uniqueArray]));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -223,20 +272,6 @@ const Visit = ({navigation, route}) => {
   };
   const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   const [data, setData] = useState();
-  const fetchDoctor = async () => {
-    const response = await fetchApi(URL.getPractitionerByNumber(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setData(jsonData?.data);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
 
   const UpdateVitals = {
     pulse_rate: vitalsData?.pulse_rate,
@@ -292,7 +327,12 @@ const Visit = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setVitals(jsonData?.data);
-      dispatch(UpadteVitals(jsonData?.data));
+      dispatch(
+        UpadteVitals([
+          ...vital,
+          {vitals: jsonData?.data, appointment_id: appointmentID},
+        ]),
+      );
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -1007,20 +1047,22 @@ const Visit = ({navigation, route}) => {
                         {String.fromCharCode(8451)}
                       </Text>
                     )}{' '}
-                    {vitalsData?.others &&
-                      Object?.keys(vitalsData?.others)[0] !== '' && (
+                    {(vitalsData?.others &&
+                      Object?.keys(vitalsData?.others)?.[0] !== 'null') ||
+                      (vitalsData?.others?.[0] !== '' && (
                         <Text>
                           {vitalsData?.others
-                            ? Object.keys(vitalsData?.others)[0]
-                            : null}{' '}
-                          :
+                            ? Object.keys(vitalsData?.others)?.[0]
+                            : null}
+                          {' :'}
+
                           <Text style={{fontWeight: '700'}}>
                             {vitalsData?.others
                               ? Object.values(vitalsData?.others)[0]
                               : null}
                           </Text>
                         </Text>
-                      )}
+                      ))}
                   </Text>
                 )}
 
@@ -1208,12 +1250,12 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'Prescribe Medicine' &&
-                    prescribe.length > 0 && (
+                    Prescribe.length > 0 && (
                       <View style={styles.basiccontainer}>
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                           <View style={styles.pres}>
                             <View>
-                              {prescribe?.map((item, ind) => (
+                              {Prescribe?.map((item, ind) => (
                                 <View key={ind} style={styles.pres1}>
                                   <Icon
                                     name="prescription"

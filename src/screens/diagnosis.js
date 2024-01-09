@@ -37,6 +37,7 @@ import {commonstyles} from '../styles/commonstyle';
 // import PlusButton from '../components';
 
 const Diagnosis = ({navigation}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const {phone} = useSelector(state => state?.phone?.data);
   const dia_types = ['Provisional', 'Confirmed'];
   const option = 'disorder';
@@ -56,7 +57,12 @@ const Diagnosis = ({navigation}) => {
 
   const HandleAddValue = () => {
     if (value) {
-      dispatch(addDiagnosis([...prev, {diagnosis: value}]));
+      dispatch(
+        addDiagnosis([
+          ...prev,
+          {diagnosis: value, appointment_id: appointmentID},
+        ]),
+      );
       setValue('');
     }
   };
@@ -105,7 +111,12 @@ const Diagnosis = ({navigation}) => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
+    dispatch(
+      addDiagnosis([
+        ...prev,
+        {diagnosis: value, appointment_id: appointmentID, mode: dia_type},
+      ]),
+    );
     if (sug?.length > 0) {
       UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
     }
@@ -121,7 +132,12 @@ const Diagnosis = ({navigation}) => {
   const selectChange = value => {
     // setValue(value);
     setSelected(value);
-    dispatch(addDiagnosis([...prev, {diagnosis: value, mode: dia_type}]));
+    dispatch(
+      addDiagnosis([
+        ...prev,
+        {diagnosis: value, appointment_id: appointmentID, mode: dia_type},
+      ]),
+    );
     if (sug?.length > 0) {
       UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
     }
@@ -142,8 +158,12 @@ const Diagnosis = ({navigation}) => {
     });
   }, []);
   const [dia_type, setDiaType] = useState(dia_types[1]);
-  const ConfirmedData = prev.filter(item => item.mode === 'Confirmed');
-  const ProvisionalData = prev.filter(item => item.mode === 'Provisional');
+  const ConfirmedData = prev
+    .filter(item => item.mode === 'Confirmed')
+    ?.filter(item => item?.appointment_id === appointmentID);
+  const ProvisionalData = prev
+    .filter(item => item.mode === 'Provisional')
+    ?.filter(item => item?.appointment_id === appointmentID);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Diagnosis" />

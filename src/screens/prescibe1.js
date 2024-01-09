@@ -46,6 +46,7 @@ import CustomModal from '../components/CustomModal';
 import {capitalizeWord} from '../utility/const';
 
 export default function Prescribe1({navigation}) {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const {phone} = useSelector(state => state?.phone?.data);
   const [data, setData] = useState([]);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -79,6 +80,10 @@ export default function Prescribe1({navigation}) {
   const [modal, setModal] = useState(false);
   const [template, setTemplate] = useState('');
   const prevPres = useSelector(state => state.pres.prescribeItems);
+  const redux =
+    prevPres?.length > 0
+      ? prevPres?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const [others, setOthers] = useState('');
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
@@ -123,6 +128,7 @@ export default function Prescribe1({navigation}) {
               }`,
               total_quantity: total_quantity,
               others: others ? others : '',
+              appointment_id: appointmentID,
             },
           ]),
         );
@@ -178,6 +184,7 @@ export default function Prescribe1({navigation}) {
           }`,
           total_quantity: total_quantity,
           others: others ? others : '',
+          appointment_id: appointmentID,
         },
       }),
     );
@@ -384,10 +391,21 @@ export default function Prescribe1({navigation}) {
   };
   const [loading, setLoading] = useState(false);
   const savingTemplate = async () => {
+    const previous_data = prevPres?.map(item => ({
+      medicine: item?.medicine,
+      mode: item?.mode,
+      dose_quantity: '',
+      timing: item?.timing,
+      frequency: item?.selectedDaysString,
+      dose_number: item?.dose_number,
+      duration: item?.duration,
+      total_quantity: item?.total_quantity,
+      others: item?.others,
+    }));
     const bodyData = {
       key: 'prescribe',
       temp_name: template,
-      temp_data: JSON.stringify(prevPres),
+      temp_data: JSON.stringify(previous_data),
       doc_phone: phone,
     };
     setLoading(true);
@@ -448,7 +466,11 @@ export default function Prescribe1({navigation}) {
     } else {
       setSelectedTemplate(data);
       const parsedData = JSON.parse(data);
-      dispatch(addPrescribe(parsedData));
+      const lstdata = parsedData?.map(item => ({
+        ...item,
+        appointment_id: appointmentID,
+      }));
+      dispatch(addPrescribe(lstdata));
     }
   };
   const DispatchEdit = (data, ind) => {
@@ -482,7 +504,7 @@ export default function Prescribe1({navigation}) {
       />
       <ScrollView contentContainerStyle={styles.prescribeConatiner}>
         <View>
-          {prevPres?.map((item, ind) => (
+          {redux?.map((item, ind) => (
             <ShowChip
               // main={{marginHorizontal: -10}}
               align={{width: '85%'}}

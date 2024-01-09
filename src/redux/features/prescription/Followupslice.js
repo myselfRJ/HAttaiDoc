@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const dateTimeSlice = createSlice({
   name: 'date',
   initialState: {
-    date: '',
+    date: [],
   },
   reducers: {
     addDate: (state, action) => {

@@ -48,6 +48,13 @@ import {capitalizeWord} from '../utility/const';
 const Symptoms = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
   const symptomsData = useSelector(state => state.symptoms.symptom);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
+  const symp =
+    symptomsData?.length > 0
+      ? symptomsData?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+
+  console.log(appointmentID);
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
   const [hr, setHr] = useState('');
@@ -71,6 +78,7 @@ const Symptoms = ({navigation}) => {
             symptom: symptom,
             days: symplist.join(' & '),
             severity: sevSelected,
+            appointment_id: appointmentID,
           },
         ]),
       );
@@ -391,7 +399,7 @@ const Symptoms = ({navigation}) => {
             onPress={handleAddSymptoms}
           />
 
-          {symptomsData?.map((item, ind) => (
+          {symp?.map((item, ind) => (
             <View key={ind} style={styles.reduxData}>
               <View style={styles.reduxData1}>
                 <Text style={styles.symText}>
