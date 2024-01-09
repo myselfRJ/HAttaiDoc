@@ -144,7 +144,6 @@ const MedicalHistory = ({navigation, route}) => {
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
   const procedure = useSelector(state => state.pasthistory.procedures);
   const redflag = useSelector(state => state.pasthistory.red_flag);
-  // console.log(redflag, 'medical=His===============', procedure);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -164,35 +163,23 @@ const MedicalHistory = ({navigation, route}) => {
   const handleAddReceiver = () => {
     if (comorbidities.trim() !== '') {
       dispatch(addcommorbiditis([...commor, {commorbities: comorbidities}]));
-      // if (commor?.length === 0 || commor == undefined) {
-      //   StoreAsyncData('commorbidities', commor);
-      // } else {
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
-      // }
       setComorbidities('');
     }
   };
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
-      // if (socialHistory?.length === 0 || socialHistory == undefined) {
-      //   StoreAsyncData('socialHistory', socialHistory);
-      // } else {
       UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
-      // }
       setSocial('');
     }
   };
   const handleFamily = () => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
-      // if (familyHistory?.length === 0 || familyHistory == undefined) {
-      //   StoreAsyncData('familyHistory', familyHistory);
-      // } else {
       UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
-      // }
       setFamily('');
     }
   };
@@ -260,8 +247,6 @@ const MedicalHistory = ({navigation, route}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
-        // setDate(jsonData?.data[0]);
-        // console.log('medication', jsonData?.data[0]);
         setUpdatedate(
           jsonData?.data[0]?.updated_at
             ? jsonData?.data[0]?.updated_at?.split('T')[0]
@@ -323,7 +308,6 @@ const MedicalHistory = ({navigation, route}) => {
   useEffect(() => {
     if (check_field?.length === 0) {
       fetchMedicalData();
-      console.log('indra');
     }
   }, []);
   return (

@@ -20,7 +20,6 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
 import {commonstyles} from '../styles/commonstyle';
 
@@ -149,7 +148,7 @@ export default function DateTime() {
             value={customDays}
             placeholder={'Enter Days'}
             setValue={val => handelvalue(val)}
-            keypad ='numeric'
+            keypad="numeric"
           />
         </View>
       </View>

@@ -27,20 +27,19 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import Prescribe from './prescribe';
 import PrescriptionHead from '../components/prescriptionHead';
 import {addSign} from '../redux/features/prescription/sign';
-import { commonstyles } from '../styles/commonstyle';
+import {commonstyles} from '../styles/commonstyle';
 
 export default function Valid() {
   const months = CONSTANTS.months;
-  const signature = useSelector(state=>state?.sign)
+  const signature = useSelector(state => state?.sign);
   const [saveSelected, setIsSaveSelected] = useState(false);
   const [resetSelected, setIsResetSelected] = useState(false);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('0');
-  const [doctorSign,setSign] = useState(false)
+  const [doctorSign, setSign] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -91,7 +90,6 @@ export default function Valid() {
 
   const sign = createRef();
 
-
   const saveSign = () => {
     sign.current.saveImage();
     // console.log('save====',sign.current.saveImage())
@@ -102,7 +100,7 @@ export default function Valid() {
 
   const resetSign = () => {
     sign.current.resetImage();
-    setSign(false)
+    setSign(false);
   };
 
   const _onSaveEvent = result => {
@@ -111,11 +109,11 @@ export default function Valid() {
 
     alert('Signature Captured Successfully');
     dispatch(addSign(result.encoded));
-    setSign(result.encoded)
+    setSign(result.encoded);
   };
 
   const _onDragEvent = () => {
-    setSign(!doctorSign)
+    setSign(!doctorSign);
   };
 
   return (
@@ -188,7 +186,7 @@ export default function Valid() {
           onPress={() => handleOptions('90')}
         />
       </View>
-      <View style={{gap:verticalScale(8)}}>
+      <View style={{gap: verticalScale(8)}}>
         <Text
           style={{
             fontWeight: 600,
@@ -202,10 +200,10 @@ export default function Valid() {
         <View
           style={{
             height: moderateScale(200),
-            width:'100%',
+            width: '100%',
             alignSelf: 'center',
-            borderWidth:0.5,
-            borderColor:CUSTOMCOLOR.primary
+            borderWidth: 0.5,
+            borderColor: CUSTOMCOLOR.primary,
           }}>
           <SignatureCapture
             style={styles.signature}
@@ -230,15 +228,23 @@ export default function Valid() {
           <TouchableHighlight
             style={[
               styles.buttonStyle,
-              doctorSign == true ? {backgroundColor: CUSTOMCOLOR.primary} : {backgroundColor:CUSTOMCOLOR.white},
+              doctorSign == true
+                ? {backgroundColor: CUSTOMCOLOR.primary}
+                : {backgroundColor: CUSTOMCOLOR.white},
             ]}
             onPress={() => {
               saveSign();
               setIsSaveSelected(true);
               setIsResetSelected(false);
             }}>
-            <Text style={
-            doctorSign ==  true ? {color: CUSTOMCOLOR.white} : {color:CUSTOMCOLOR.primary}}>Save</Text>
+            <Text
+              style={
+                doctorSign == true
+                  ? {color: CUSTOMCOLOR.white}
+                  : {color: CUSTOMCOLOR.primary}
+              }>
+              Save
+            </Text>
           </TouchableHighlight>
           {/* <HButton label='Save'
           type='addtype'
@@ -263,14 +269,14 @@ export default function Valid() {
               setIsResetSelected(true);
               setIsSaveSelected(false);
             }}>
-            <Text style={{color:CUSTOMCOLOR.primary}}>Reset</Text>
+            <Text style={{color: CUSTOMCOLOR.primary}}>Reset</Text>
           </TouchableHighlight>
         </View>
       </View>
       <View
         style={{
-          justifyContent:'flex-end',
-          flex:1
+          justifyContent: 'flex-end',
+          flex: 1,
         }}>
         <HButton
           btnstyles={commonstyles.activebtn}
@@ -286,11 +292,11 @@ export default function Valid() {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: horizontalScale(24),
     paddingVertical: verticalScale(24),
     gap: moderateScale(8),
-    backgroundColor:CUSTOMCOLOR.background
+    backgroundColor: CUSTOMCOLOR.background,
   },
   DateContainer: {
     borderRadius: moderateScale(4),
@@ -340,6 +346,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     margin: 10,
     width: 100,
-    paddingVertical:verticalScale(8)
+    paddingVertical: verticalScale(8),
   },
 });

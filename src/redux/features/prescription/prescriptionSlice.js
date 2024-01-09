@@ -3,23 +3,6 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   selectedComplaint: '',
   note: '',
-  doctors: [
-    {
-      doctor_name: 'Dr. Raju',
-      speciality: 'Cardiologists',
-      phone: '9878965678',
-    },
-    {
-      doctor_name: 'Dr. Muthu',
-      speciality: 'Gynecologist',
-      phone: '9767342167',
-    },
-    {
-      doctor_name: 'Dr. Chitti',
-      speciality: 'Endocrinologist',
-      phone: '9100765472',
-    },
-  ],
   selectedDoctor: [],
   vitalsData: {},
   physicalExamination: {},

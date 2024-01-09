@@ -15,7 +15,6 @@ const initialState = {
   advice: '',
   check_field: '',
 };
-
 const pastHistorySlice = createSlice({
   name: 'pastHistory',
   initialState,
