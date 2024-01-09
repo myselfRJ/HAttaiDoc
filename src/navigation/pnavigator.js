@@ -10,7 +10,7 @@ import Visit from '../screens/visit';
 import Patientlookup from '../screens/patientlookup';
 import PatientCreate from '../screens/patientcreate';
 import SlotBook from '../screens/slotbook';
-import Prescribe from '../screens/prescribe';
+// import Prescribe from '../screens/prescribe';
 import Date from '../screens/Follow-up';
 import Symptoms from '../screens/symptoms';
 import CheifComplaints from '../screens/cheif_complaint';
@@ -31,7 +31,7 @@ import {getAccessToken} from '../redux/features/authenticate/authenticateSlice';
 import Prescribe1 from '../screens/prescibe1';
 import Abha from '../screens/AddPatient';
 import AbhaExistDetails from '../screens/AbhaExistS';
-import Prescription from '../screens/prescription';
+// import Prescription from '../screens/prescription';
 import Diagnosis from '../screens/diagnosis';
 import Commorbities from '../screens/commorbities';
 import Allergies from '../screens/allergies';
@@ -45,7 +45,6 @@ import PatientHistory from '../screens/patientHistory';
 import ReferToDoctor from '../screens/Refer';
 import UpdateProfile from '../screens/updateProfile';
 import ClinicAddress from '../components/clinic_address';
-import Symptoms1 from '../screens/Symptom1';
 import UserDisplay from '../screens/userDisplay';
 import MyClinics from '../screens/MyClinics';
 import MedicalHistory from '../screens/medicalhistory';
@@ -376,7 +375,7 @@ const ProtectedRoute = () => {
         }}
       />
       <Stack.Screen name="authloading" component={AfterAuthLoadingScreen} />
-      <Stack.Screen name="prescribe" component={Prescribe} />
+      {/* <Stack.Screen name="prescribe" component={Prescribe} /> */}
       <Stack.Screen
         name="FollowUp"
         component={Date}
@@ -609,7 +608,7 @@ const ProtectedRoute = () => {
         component={AbhaExistDetails}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="prescription"
         component={Prescription}
         options={{
@@ -620,7 +619,7 @@ const ProtectedRoute = () => {
           },
           headerRight: () => header(),
         }}
-      />
+      /> */}
       <Stack.Screen
         name="diagnosis"
         component={Diagnosis}

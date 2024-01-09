@@ -1,20 +1,22 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {CONSTANTS} from '../../../utility/constant';
 
-const initialState = {
-  commorbidities: [],
-  hospitalization: '',
-  socialHistory: [],
-  familyHistory: [],
-  medicationHistory: '',
-  menstrualHistory: {},
-  obstericHistory: {},
-  martialHistory: {},
-  procedures: '',
-  red_flag: '',
-  advice: '',
-  check_field: '',
-};
+const initialState = [
+  {
+    commorbidities: [],
+    hospitalization: '',
+    socialHistory: [],
+    familyHistory: [],
+    medicationHistory: '',
+    menstrualHistory: {},
+    obstericHistory: {},
+    martialHistory: {},
+    procedures: '',
+    red_flag: '',
+    advice: '',
+    check_field: '',
+  },
+];
 
 const pastHistorySlice = createSlice({
   name: 'pastHistory',

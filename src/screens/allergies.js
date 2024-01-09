@@ -45,7 +45,6 @@ const Allergies = () => {
   const [sug, setSug] = useState([]);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.allergies?.allergies);
-
   const HandleAddValue = () => {
     if (value) {
       dispatch(addAllergies([...prev, {allergies: value}]));
@@ -55,7 +54,7 @@ const Allergies = () => {
   const selectChange = value => {
     setSelect(value);
     UpdateAsyncData(`allergies${phone}`, {allergies: value});
-    dispatch(addAllergies([...prev, {allergies: value}]));
+    dispatch(addAllergies([...prev, {allergies: value, appointment_id: '1'}]));
   };
   const handleDelete = index => {
     if (prev) {
