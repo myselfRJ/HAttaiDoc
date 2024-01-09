@@ -705,7 +705,7 @@ const AddClinic = ({navigation}) => {
         });
         // navigation.goBack();
       } else {
-        Alert.alert('Warning', '"Please Add Slots Details Also"', {});
+        Alert.alert('Warning', '"Please Add Slots Details Also"');
       }
     } else {
       Alert.alert('Warning', '"Please Enter All Details"');
