@@ -54,6 +54,8 @@ import {
   verticalScale,
   horizontalScale,
 } from '../utility/scaleDimension';
+import Geolocation from '@react-native-community/geolocation';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {updateslots, addslots} from '../redux/features/slots/slotData';
 // import {updateAddress} from '../redux/features/profiles/clinicAddress';
 import GalleryModel from '../components/GalleryModal';
@@ -70,6 +72,7 @@ import {handleCamera, handleGallery, showToast} from '../utility/const';
 const AddClinic = ({navigation}) => {
   const addressRef = useRef(null);
   const GlRef = useRef(null);
+  const google_api = useSelector(state => state?.phone?.googleApi);
   const [phramcyPhone, setPharmacyPhone] = useState('');
   const [apiStatus, setApiStatus] = useState({});
   const [visibleSlot, setVisibleSlot] = useState(true);
@@ -427,10 +430,11 @@ const AddClinic = ({navigation}) => {
         setConsultValue(consultType[0]);
         setDurationValue(durationMins[0]);
       } else {
-        Alert.alert(
-          'Warning',
-          'A slot with conflicting time already exists. or Already these slot added in any clinic',
-        );
+        // Alert.alert(
+        //   'Warning',
+        //   'A slot with conflicting time already exists. or Already these slot added in any clinic',
+        // );
+        showToast('error', 'A slot with conflicting time already exists');
       }
     }
   };
@@ -484,7 +488,8 @@ const AddClinic = ({navigation}) => {
       for (const day in prevSlots) {
         updatedSlots[day] = prevSlots[day].filter(slot => slot.index !== index);
       }
-      Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
+      // Alert.alert('Warning', `Slots are deleted for ${weekdays[dayTodelete]}`);
+      showToast('info', `Slots are deleted for ${weekdays[dayTodelete]}`);
       return updatedSlots;
     });
     setMergedSlots(prevSlots => {
@@ -543,7 +548,8 @@ const AddClinic = ({navigation}) => {
     setSlots(Slots);
     setMergedSlots(Slots);
     setselectSlot([]);
-    Alert.alert('Success', 'All Slots are cleared');
+    // Alert.alert('Success', 'All Slots are cleared');
+    showToast('info', 'All Slots are cleared');
   };
   const handleSelectedDelete = selectedIndices => {
     setAllSlots(prevAllSlots =>
@@ -598,10 +604,39 @@ const AddClinic = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
+  const checkLocationPermission = async () => {
+    const permissionStatus = await check(
+      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    );
+    if (permissionStatus !== RESULTS.GRANTED) {
+      const requestStatus = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      );
+      if (requestStatus === RESULTS.GRANTED) {
+        fetchCurrentLocation();
+      }
+    } else {
+      fetchCurrentLocation();
+    }
+  };
+  const fetchCurrentLocation = () => {
+    Geolocation.getCurrentPosition(function (position) {
+      const {latitude, longitude} = position.coords;
+      fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${google_api}`,
+        {
+          method: 'GET',
+        },
+      )
+        .then(response => response.json())
+        .then(data => dispatch(addAddress(data?.results[0].formatted_address)));
+    });
+  };
   useEffect(() => {
     if (id) {
       fetchClinic_slots();
     }
+    checkLocationPermission();
   }, []);
 
   const Update_Clinic_slots = async () => {
@@ -705,7 +740,8 @@ const AddClinic = ({navigation}) => {
         });
         // navigation.goBack();
       } else {
-        Alert.alert('Warning', '"Please Add Slots Details Also"');
+        // Alert.alert('Warning', '"Please Add Slots Details Also"');
+        showToast('error', 'Please Add Slots Details Also');
       }
     } else {
       // Alert.alert('Warning', '"Please Enter All Details"');
@@ -1058,8 +1094,12 @@ const AddClinic = ({navigation}) => {
                         if (isOk) {
                           handleAddSlot();
                         } else {
-                          Alert.alert(
-                            'Warning',
+                          // Alert.alert(
+                          //   'Warning',
+                          //   '"From time" and "To time" are same',
+                          // );
+                          showToast(
+                            'error',
                             '"From time" and "To time" are same',
                           );
                         }

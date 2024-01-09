@@ -43,7 +43,7 @@ import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
 import {commonstyles} from '../styles/commonstyle';
 import CustomModal from '../components/CustomModal';
-import {capitalizeWord} from '../utility/const';
+import {capitalizeWord, showToast} from '../utility/const';
 
 export default function Prescribe1({navigation}) {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -266,7 +266,8 @@ export default function Prescribe1({navigation}) {
     if (prevPres.length > 0) {
       navigation.goBack();
     } else {
-      Alert.alert('', 'Please give Atleast One Medication');
+      // Alert.alert('', 'Please give Atleast One Medication');
+      showToast('error', 'Please give Atleast One Medication');
     }
   };
   const snomedModeSearch =
@@ -404,16 +405,19 @@ export default function Prescribe1({navigation}) {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
           setModal(!modal);
-          Alert.alert('success', 'Succesfully saved');
+          // Alert.alert('success', 'Succesfully saved');
+          showToast('success', 'Succesfully saved');
           setLoading(false);
         } else {
-          Alert.alert('warn', jsonData?.message);
+          // Alert.alert('warn', jsonData?.message);
+          showToast('error', jsonData?.message);
           setLoading(false);
           setModal(!modal);
         }
       }
     } catch (error) {
-      Alert.alert('error', JSON.stringify(error));
+      // Alert.alert('error', JSON.stringify(error));
+      showToast('error', JSON.stringify(error));
       setLoading(false);
       setModal(!modal);
     }
@@ -421,7 +425,8 @@ export default function Prescribe1({navigation}) {
   const [templatesData, setTemplatesData] = useState([]);
   const HandleTemplates = () => {
     if (!template) {
-      Alert.alert('', 'Please Enter Template Name');
+      // Alert.alert('', 'Please Enter Template Name');
+      showToast('error', 'Please Enter Template Name');
     } else {
       savingTemplate();
     }

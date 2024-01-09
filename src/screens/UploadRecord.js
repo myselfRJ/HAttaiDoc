@@ -29,6 +29,7 @@ import {commonstyles} from '../styles/commonstyle';
 import {useRoute} from '@react-navigation/native';
 import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
+import {showToast} from '../utility/const';
 
 const Uploadrecord = ({navigation}) => {
   const route = useRoute();
@@ -166,11 +167,13 @@ const Uploadrecord = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert('Successfully saved');
+        // Alert.alert('Successfully saved');
+        showToast('success', 'Successfully saved');
         navigation.goBack();
       }
     } catch (error) {
-      Alert.alert(`${error}`);
+      // Alert.alert(`${error}`);
+      showToast('error', `${error}`);
       console.error('Error:', error);
     }
   };

@@ -34,6 +34,7 @@ import {authenticateActions} from '../redux/features/authenticate/authenticateSl
 import {updateheaderStatus} from '../redux/features/headerProgress/headerProgress';
 import ShowChip from '../components/showChip';
 import {RemoveKeyFromAsync} from '../utility/AsyncStorage';
+import {showToast} from '../utility/const';
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -151,10 +152,12 @@ const Account = () => {
         dispatch(authenticateActions.updateauthenticate(newTokens));
         dispatch(updateheaderStatus(updateStatus));
         RemoveKeyFromAsync('token_and_phone');
-        Alert.alert('Logout Sucessfull ');
+        // Alert.alert('Logout Sucessfully ');
+        showToast('success', 'Logout Sucessfully');
         navigation.navigate('entry');
       } else {
-        Alert.alert('error', 'Something went wrong');
+        // Alert.alert('error', 'Something went wrong');
+        showToast('error', 'Something went wrong');
       }
     }
   };

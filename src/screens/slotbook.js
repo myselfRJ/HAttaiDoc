@@ -40,7 +40,7 @@ import {
 } from '../utility/scaleDimension';
 import {disableBackButton} from '../utility/backDisable';
 import CustomIcon from '../components/icon';
-import {capitalizeWord} from '../utility/const';
+import {capitalizeWord, showToast} from '../utility/const';
 import {
   addPharmaPhone,
   addclinic_Address,
@@ -669,18 +669,27 @@ const SlotBook = ({navigation, route}) => {
                     if (id === undefined && !loading && !fee) {
                       selectedTypeAppointment
                         ? Appointment_Booking()
-                        : Alert.alert(
-                            'Warn',
+                        : // Alert.alert(
+                          //     'Warn',
+                          //     'Please Select Type Of Appointment',
+                          //   );
+                          showToast(
+                            'error',
                             'Please Select Type Of Appointment',
                           );
                     } else if (id === undefined && !loading && fee) {
                       !selectedTypeAppointment
-                        ? Alert.alert(
-                            'Warn',
+                        ? // Alert.alert(
+                          //     'Warn',
+                          //     'Please Select Type Of Appointment',
+                          //   )
+                          showToast(
+                            'error',
                             'Please Select Type Of Appointment',
                           )
                         : !paymentMode
-                        ? Alert.alert('Warn', 'Select Payment Mode')
+                        ? // Alert.alert('Warn', 'Select Payment Mode')
+                          showToast('error', 'Select Payment Mode')
                         : Appointment_Booking();
                     } else {
                       if (!loading) {

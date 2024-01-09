@@ -45,6 +45,7 @@ import {
   RetriveAsyncData,
 } from '../utility/AsyncStorage';
 import DropdownComponent from '../components/Dropdownbox';
+import {showToast} from '../utility/const';
 
 const ReferToDoctor = () => {
   const route = useRoute();
@@ -198,13 +199,15 @@ const ReferToDoctor = () => {
       const responseData = await response.json();
       if (responseData) {
         handleAddDoctors();
-        Alert.alert('', 'Successfully Shared to Patient');
+        // Alert.alert('', 'Successfully Shared to Patient');
+        showToast('success', 'Successfully Shared to Patient');
         setLoading(false);
         nav.goBack();
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('', 'Something went Wrong');
+      // Alert.alert('', 'Something went Wrong');
+      showToast('error', 'Something went Wrong');
       setLoading(false);
     }
   };

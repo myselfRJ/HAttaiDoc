@@ -42,6 +42,7 @@ import {
 } from '../utility/scaleDimension';
 import {Validators} from '../utils/FormUtils/Validators';
 import {StoreAsyncData} from '../utility/AsyncStorage';
+import {showToast} from '../utility/const';
 
 const OtpScreen = ({route}) => {
   const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
@@ -252,7 +253,8 @@ const OtpScreen = ({route}) => {
                     setIsTimerRunning(false);
                     clearInterval(timerRef.current);
                   } else {
-                    Alert.alert('Warn', 'Please Enter Correct Otp');
+                    // Alert.alert('Warn', 'Please Enter Correct Otp');
+                    showToast('error', 'Please enter correct otp');
                   }
                 }}
                 loading={loading}

@@ -17,7 +17,7 @@ import MapView, {
   Marker,
   AnimatedRegion,
 } from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {useDispatch} from 'react-redux';
 import {addAddress} from '../redux/features/profiles/clinicAddress';
@@ -70,17 +70,12 @@ const ClinicAddress = ({navigation}) => {
     };
     checkLocationPermission();
     const fetchCurrentLocation = () => {
-      Geolocation.getCurrentPosition(
-        position => {
-          const {latitude, longitude} = position.coords;
-          setCurrentLocation({latitude, longitude});
-          setMarkerCoordinates({latitude, longitude});
-          setRegiondata({...regionData, latitude, longitude});
-        },
-
-        error => {},
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
+      Geolocation.getCurrentPosition(function (position) {
+        const {latitude, longitude} = position.coords;
+        setCurrentLocation({latitude, longitude});
+        setMarkerCoordinates({latitude, longitude});
+        setRegiondata({...regionData, latitude, longitude});
+      });
     };
   }, []);
 

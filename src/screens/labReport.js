@@ -36,7 +36,7 @@ import {
   RetriveAsyncData,
   clearStorage,
 } from '../utility/AsyncStorage';
-import {CONSTANT} from '../utility/const';
+import {CONSTANT, showToast} from '../utility/const';
 import {commonstyles} from '../styles/commonstyle';
 import CustomModal from '../components/CustomModal';
 
@@ -177,16 +177,19 @@ const LabReports = () => {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
           setModal(!modal);
-          Alert.alert('success', 'Succesfully saved');
+          // Alert.alert('success', 'Succesfully saved');
+          showToast('success', 'Succesfully saved');
           setLoading(false);
         } else {
-          Alert.alert('warn', jsonData?.message);
+          // Alert.alert('warn', jsonData?.message);
+          showToast('error', jsonData?.message);
           setModal(!modal);
           setLoading(false);
         }
       }
     } catch (error) {
-      Alert.alert('error', JSON.stringify(error));
+      // Alert.alert('error', JSON.stringify(error));
+      showToast('error', JSON.stringify(error));
       setLoading(false);
       setModal(!modal);
     }
@@ -194,7 +197,8 @@ const LabReports = () => {
   const [templatesData, setTemplatesData] = useState([]);
   const HandleTemplates = () => {
     if (!template) {
-      Alert.alert('', 'Please Enter Template Name');
+      // Alert.alert('', 'Please Enter Template Name');
+      showToast('info', 'Please Enter Template Name');
     } else {
       savingTemplate();
     }

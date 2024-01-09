@@ -43,7 +43,7 @@ import CustomCalendar from '../components/calendar';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
-import {capitalizeWord} from '../utility/const';
+import {capitalizeWord, showToast} from '../utility/const';
 
 const Symptoms = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -75,7 +75,8 @@ const Symptoms = ({navigation}) => {
         ]),
       );
     } else {
-      Alert.alert('Warning', 'Enter all Fields');
+      // Alert.alert('Warning', 'Enter all Fields');
+      showToast('error', 'Enter all Fields');
     }
     setDays('');
     setSymptom('');
@@ -93,7 +94,8 @@ const Symptoms = ({navigation}) => {
       setSevSelected(null);
       navigation.goBack();
     } else {
-      Alert.alert('', 'Please Add Atleast One Symptom');
+      // Alert.alert('', 'Please Add Atleast One Symptom');
+      showToast('info', 'Please Add Atleast One Symptom');
     }
   };
 

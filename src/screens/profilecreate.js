@@ -53,7 +53,12 @@ import RNFS, {stat} from 'react-native-fs';
 import Modal from 'react-native-modal';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import CustomCalendar from '../components/calendar';
-import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
+import {
+  handleCamera,
+  handleGallery,
+  pickSingleFile,
+  showToast,
+} from '../utility/const';
 import DropdownComponent from '../components/Dropdownbox';
 
 const ProfileCreate = ({navigation}) => {
@@ -715,11 +720,14 @@ const ProfileCreate = ({navigation}) => {
           loading={loading}
           onPress={() => {
             if (!values.doctor_name) {
-              Alert.alert('Please enter Name');
+              // Alert.alert('Please enter Name');
+              showToast('error', 'Please enter name');
             } else if (!values.medical_number) {
-              Alert.alert('Please Enter Your Medical Number ');
+              // Alert.alert('Please Enter Your Medical Number ');
+              showToast('error', 'Please Enter Your Medical Number ');
             } else if (selectedState === 'Select') {
-              Alert.alert('Please select State');
+              // Alert.alert('Please select State');
+              showToast('error', 'Please select State');
             } else {
               fetchData();
             }

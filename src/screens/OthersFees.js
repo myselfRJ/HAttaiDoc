@@ -34,6 +34,7 @@ import {
 import ShowChip from '../components/showChip';
 import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
+import {showToast} from '../utility/const';
 
 // import {Icon} from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -95,10 +96,12 @@ const OthersFees = ({navigation}) => {
       } else {
         SaveFees();
 
-        Alert.alert('Success', 'Fees details added successfully');
+        // Alert.alert('Success', 'Fees details added successfully');
+        showToast('success', 'Fees details added successfully');
       }
     } else {
-      Alert.alert('Warning', 'Please Enter Correct Details');
+      // Alert.alert('Warning', 'Please Enter Correct Details');
+      showToast('error', 'Please Enter Correct Details');
     }
   };
   const [apiStatus, setApiStatus] = useState({});
@@ -165,10 +168,12 @@ const OthersFees = ({navigation}) => {
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData.status === 'success') {
-          Alert.alert('Success', jsonData?.message);
+          // Alert.alert('Success', jsonData?.message);
+          showToast('success', jsonData?.message);
           navigation.goBack();
         } else {
-          Alert.alert('warn', jsonData?.message);
+          // Alert.alert('warn', jsonData?.message);
+          showToast('error', jsonData?.message);
         }
       } else {
         console.error('API call failed:', response.status);

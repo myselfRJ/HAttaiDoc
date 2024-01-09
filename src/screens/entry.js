@@ -26,6 +26,7 @@ import {
   horizontalScale,
   moderateScale,
 } from '../utility/scaleDimension';
+import {showToast} from '../utility/const';
 
 const Entry = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -113,7 +114,8 @@ const Entry = ({navigation}) => {
                 if (phone.length === 10) {
                   phone ? fetchData() : null;
                 } else {
-                  Alert.alert('', 'Please enter correct number');
+                  // Alert.alert('', 'Please enter correct number');
+                  showToast('error', 'Please enter correct number');
                 }
               }}
             />

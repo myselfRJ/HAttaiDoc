@@ -51,7 +51,7 @@ import {useRoute} from '@react-navigation/native';
 import {checkNumber} from '../utility/checks';
 import GalleryModel from '../components/GalleryModal';
 import {mode} from '../redux/features/prescription/prescribeslice';
-import {handleCamera, handleGallery} from '../utility/const';
+import {handleCamera, handleGallery, showToast} from '../utility/const';
 
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
@@ -181,7 +181,8 @@ const AddUser = ({navigation}) => {
       setSelectedClinic('');
       setSelect('');
     } else {
-      Alert.alert('"Warning"', '"Please Enter Correct Details"');
+      // Alert.alert('"Warning"', '"Please Enter Correct Details"');
+      showToast('error', 'Please Enter Correct Details');
     }
   };
 

@@ -39,7 +39,12 @@ import {stopUpload} from 'react-native-fs';
 import CustomIcon from '../components/icon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AlertMessage from './Alerts';
-import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
+import {
+  handleCamera,
+  handleGallery,
+  pickSingleFile,
+  showToast,
+} from '../utility/const';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -84,12 +89,14 @@ const ExaminationFindings = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert('Success', 'Succesfully Saved');
+        // Alert.alert('Success', 'Succesfully Saved');
+        showToast('success', 'Succesfully Saved');
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
-      Alert.alert('Error', `${error}`);
+      // Alert.alert('Error', `${error}`);
+      showToast('error', `${error}`);
       console.error('Error:', error);
     }
   };

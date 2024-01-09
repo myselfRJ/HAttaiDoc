@@ -125,7 +125,7 @@ const KidsVaccine = props => {
 
 const styles = StyleSheet.create({
   VaccineName: {
-    fontSize: CUSTOMFONTSIZE.h1,
+    fontSize: CUSTOMFONTSIZE.h2,
     fontFamily: CUSTOMFONTFAMILY.body,
     color: CUSTOMCOLOR.black,
     fontWeight: '500',
