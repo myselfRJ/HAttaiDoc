@@ -134,7 +134,7 @@ function App() {
             />
           </Stack.Navigator>
           {/* <CombinedRoute /> */}
-          <Toast position="top" bottomOffset={20} />
+          <Toast position="bottom" bottomOffset={20} />
         </NavigationContainer>
       </GestureHandlerRootView>
     </Provider>

@@ -803,10 +803,13 @@ export const feeDataIneachday = (data, startDate, endDate) => {
 };
 
 import Toast from 'react-native-toast-message';
+import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
+import {moderateScale} from './scaleDimension';
 
 export const showToast = (type, text) => {
   Toast.show({
     type: type,
     text1: text,
+    text1Style: {fontSize: moderateScale(16)},
   });
 };
