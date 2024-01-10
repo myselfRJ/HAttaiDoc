@@ -435,7 +435,7 @@ const Visit = ({navigation, route}) => {
     fetchReport();
     fetchPatientData();
     GetFees();
-    fetchVitals();
+    // fetchVitals();
     fetchComplaint();
     // fetchDoctor();
     setData(doc_prof);
@@ -480,12 +480,12 @@ const Visit = ({navigation, route}) => {
       <style>
       body {width: 827px; height:1169px;}
       header {width:inherit;position:fixed;top:12px;left:12px;justify-content:center;align-items:center;}
-       text {font-size: 12px;padding:1px;font-weight: 500;}
+       text {font-size: 14px;padding:1px;font-weight: 300;letter-spacing:0.5px}
 
       h5 {margin: 1px;padding: 0px; font-size:14px;color:#4ba5fa}
       tr {display:flex;font-size:14px;justify-content: space-between;width:100%;padding:8px;align-items:flex-start;}
       td{justify-content: space-around;font-size: 10px;}
-      .doctor-head text {color:#4ba5fa}
+      .doctor-head text {color:#4ba5fa;font-weight:600}
       
       </style>
       
@@ -588,40 +588,49 @@ const Visit = ({navigation, route}) => {
               <text>
                   ${
                     vitalsData?.pulse_rate
-                      ? 'Pulse Rate' + ' ' + vitalsData.pulse_rate + 'bpm'
+                      ? 'Pulse Rate:' +
+                        ' ' +
+                        `<b>${vitalsData.pulse_rate}bpm,${' '} </b>`
                       : ''
                   }
                   ${
                     vitalsData?.systolic
-                      ? 'BP' +
+                      ? 'BP:' +
                         ' ' +
-                        vitalsData.systolic +
-                        '/' +
-                        vitalsData.diastolic +
-                        'bpm'
+                        `<b> ${
+                          vitalsData.systolic + '/' + vitalsData.diastolic + ','
+                        }</b>`
                       : ''
                   }
                   ${
                     vitalsData?.weight
-                      ? 'Weight' + ' ' + vitalsData.weight + 'Kgs'
+                      ? 'Weight:' + ' ' + `<b> ${vitalsData.weight}Kg,</b>`
                       : ''
                   }
                   ${
                     vitalsData?.height
-                      ? 'Height' + ' ' + vitalsData.height + 'cm'
+                      ? 'Height:' + ' ' + `<b>${vitalsData.height}'cm,</b>`
                       : ''
                   }
                   ${
                     vitalsData?.body_temperature
-                      ? 'Temp' + ' ' + vitalsData.body_temperature + '°C'
+                      ? 'Temp:' +
+                        ' ' +
+                        `<b>${vitalsData.body_temperature} °C,</b>`
                       : ''
                   }
                   ${
                     vitalsData?.rate
-                      ? 'Respiratory Rate' + ' ' + vitalsData.rate + 'brpm'
+                      ? 'Respiratory Rate:' +
+                        ' ' +
+                        `<b>${vitalsData.rate}brpm,</b>`
                       : ''
                   }
-                  ${vitalsData?.bmi ? 'BMI' + ' ' + vitalsData.bmi + '' : ''}
+                  ${
+                    vitalsData?.bmi
+                      ? 'BMI:' + ' ' + `<b> ${vitalsData.bmi} </b>` + ''
+                      : ''
+                  }
                   
                   
 
@@ -719,7 +728,7 @@ const Visit = ({navigation, route}) => {
           </div>
           ${
             advices?.length > 0
-              ? `<div>
+              ? `<div style="margin-top:18px">
               <h5>
                   Advices
               </h5>
@@ -731,7 +740,7 @@ const Visit = ({navigation, route}) => {
           } 
           ${
             date?.length > 0
-              ? `<div>
+              ? `<div style="margin-top:18px">
               <h5>
                   Follow Up
               </h5>
@@ -801,19 +810,21 @@ const Visit = ({navigation, route}) => {
 
       </div>
       <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
-          <p style="text-align:center">
+          <div style="display:flex;width:105vw; align-item:center">
+          <p style="text-align:center;width:100%; font-size:12px">
               This Prescription electronically signed by Dr. ${
                 data?.doctor_name
               },${' '}${data?.degree}, ${' '}${
           data?.medical_number
         }, ${' '}${new Date().toString()}
           </p>
-          <p style="text-align:center">
+          </div>
+          <p style="text-align:left;width:100%;margin:0px;font-weight:300;font-size:12px;">
               powered by
           </p>
           <img src=${
             CONSTANTS.pdf_footer
-          } style="align-self:center;width:104px;height:40px"></img>
+          } style="align-self:flex-start;width:28px;height:24px;margin-left:15px"></img>
       </footer>
         
       </body>

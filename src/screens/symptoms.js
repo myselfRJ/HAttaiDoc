@@ -43,7 +43,7 @@ import CustomCalendar from '../components/calendar';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
-import {capitalizeWord, showToast} from '../utility/const';
+import {capitalizeWord, showToast, sortTimeIntervals} from '../utility/const';
 
 const Symptoms = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -54,7 +54,6 @@ const Symptoms = ({navigation}) => {
       ? symptomsData?.filter(item => item?.appointment_id === appointmentID)
       : [];
 
-  console.log(appointmentID);
   const [symptom, setSymptom] = useState('');
   const [days, setDays] = useState('');
   const [hr, setHr] = useState('');
@@ -76,7 +75,7 @@ const Symptoms = ({navigation}) => {
           ...symptomsData,
           {
             symptom: symptom,
-            days: symplist.join(' & '),
+            days: sortTimeIntervals(symplist)?.join(' & '),
             severity: sevSelected,
             appointment_id: appointmentID,
           },
@@ -187,16 +186,16 @@ const Symptoms = ({navigation}) => {
       }
     });
   }, []);
-  const symplist = [];
+  let symplist = [];
   useEffect(() => {
-    if (days) {
-      symplist.push(`${days} ${parseInt(days) > 1 ? 'days' : 'day'}`);
-    }
     if (years) {
       symplist.push(`${years} ${parseInt(years) > 1 ? 'years' : 'year'}`);
     }
     if (months) {
-      symplist.push(`${months} ${parseInt(months) > 1 ? 'monthss' : 'months'}`);
+      symplist.push(`${months} ${parseInt(months) > 1 ? 'months' : 'month'}`);
+    }
+    if (days) {
+      symplist.push(`${days} ${parseInt(days) > 1 ? 'days' : 'day'}`);
     }
     if (hr) {
       symplist.push(`${hr} ${parseInt(hr) > 1 ? 'hrs' : 'hr'}`);
@@ -318,6 +317,28 @@ const Symptoms = ({navigation}) => {
             </View>
             <View style={styles.subvalues}>
               <View style={styles.timeFields}>
+                <Text style={styles.option}>Year :</Text>
+                <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
+                  style={styles.timeinput}
+                  placeholder="Enter Years"
+                  value={years}
+                  onChangeText={text => setYears(text)}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.timeFields}>
+                <Text style={styles.option}>Month :</Text>
+                <TextInput
+                  placeholderTextColor={CUSTOMCOLOR.disable}
+                  style={styles.timeinput}
+                  placeholder="Enter Months"
+                  value={months}
+                  onChangeText={text => setmonths(text)}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.timeFields}>
                 <Text style={styles.option}>Day :</Text>
                 <TextInput
                   placeholderTextColor={CUSTOMCOLOR.disable}
@@ -355,17 +376,7 @@ const Symptoms = ({navigation}) => {
                 }}>
                 (OR)
               </Text> */}
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Month :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Months"
-                  value={months}
-                  onChangeText={text => setmonths(text)}
-                  keyboardType="numeric"
-                />
-              </View>
+
               {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
@@ -374,17 +385,6 @@ const Symptoms = ({navigation}) => {
                 }}>
                 (OR)
               </Text> */}
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Year :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Years"
-                  value={years}
-                  onChangeText={text => setYears(text)}
-                  keyboardType="numeric"
-                />
-              </View>
             </View>
           </View>
           <HButton

@@ -230,7 +230,8 @@ const ProfileCreate = ({navigation}) => {
           dispatch(headerStatus({index: 0, status: true}));
           // setStatus(!status);
           setTimeout(() => {
-            navigation.navigate('clinic', {prevScrn});
+            setBottom(false);
+            navigation.navigate('clinic', {clinic: 'clinic'});
           }, 1000);
 
           setLoading(false);

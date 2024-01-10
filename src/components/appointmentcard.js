@@ -14,11 +14,7 @@ import {
   CUSTOMFONTFAMILY,
   CUSTOMFONTSIZE,
 } from '../settings/styles';
-import {language} from '../settings/userpreferences';
-import {Language} from '../settings/customlanguage';
-import BottomSheetView from './bottomSheet';
-import SelectionTab from '../components/selectiontab';
-import moment from 'moment';
+
 import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -159,87 +155,89 @@ const AppointmentCard = ({appointment, openVisit}) => {
             <Text style={styles.subText}>{appointment?.complaint}</Text>
           </View>
         </View>
-        <View>
-          <View style={{marginLeft: moderateScale(220)}}>
-            {notification?.length > 0 &&
-              length_ofNotification?.length !== 0 && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    backgroundColor: 'red',
-                    borderRadius: 10,
-                    paddingHorizontal: 5,
-                    zIndex: 1,
-                    marginBottom: 10,
-                  }}>
-                  <Text style={{color: CUSTOMCOLOR.white}}>
-                    {length_ofNotification?.length}
-                  </Text>
-                </View>
-              )}
+        {appointment?.status === 'pending' && (
+          <View>
+            <View style={{marginLeft: moderateScale(220)}}>
+              {notification?.length > 0 &&
+                length_ofNotification?.length !== 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      backgroundColor: 'red',
+                      borderRadius: 10,
+                      paddingHorizontal: 5,
+                      zIndex: 1,
+                      marginBottom: 10,
+                    }}>
+                    <Text style={{color: CUSTOMCOLOR.white}}>
+                      {length_ofNotification?.length}
+                    </Text>
+                  </View>
+                )}
 
-            <Pressable
-              style={styles.icon}
-              onPress={() => {
-                navigation.navigate('notify', {
-                  notification,
-                  name: patient_name,
-                  age: patient_age,
-                  gende: patient_gender,
-                  complaint: appointment.complaint,
-                  consultation_fees: appointment?.clinic_data?.fees,
-                });
-              }}>
-              <Icon
-                name={'message-processing'}
-                size={moderateScale(24)}
-                color={CUSTOMCOLOR.primary}
-              />
-            </Pressable>
-          </View>
-          {appointment?.status === 'pending' ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: moderateScale(16),
-                paddingTop: moderateScale(24),
-              }}>
-              <HButton
-                label={'Reschedule'}
-                btnstyles={{
-                  backgroundColor: CUSTOMCOLOR.white,
-                  borderWidth: moderateScale(0.5),
-                  borderColor: CUSTOMCOLOR.borderColor,
-                  paddingHorizontal: horizontalScale(24),
-                  paddingVertical: verticalScale(8),
-                }}
-                textStyle={{
-                  color: CUSTOMCOLOR.primary,
-                  fontSize: CUSTOMFONTFAMILY.h3,
-                }}
-                onPress={handleReschedule}
-              />
-              <HButton
-                btnstyles={{
-                  // backgroundColor: CUSTOMCOLOR.white,
-                  // borderWidth: moderateScale(0.5),
-                  // borderColor: CUSTOMCOLOR.borderColor,
-                  paddingHorizontal: horizontalScale(24),
-                  paddingVertical: verticalScale(12),
-                }}
-                textStyle={{
-                  color: CUSTOMCOLOR.white,
-                  fontSize: CUSTOMFONTFAMILY.h3,
-                }}
-                onPress={handleOnpress}
-                label={'Start Visit'}
-                // style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
-              />
+              <Pressable
+                style={styles.icon}
+                onPress={() => {
+                  navigation.navigate('notify', {
+                    notification,
+                    name: patient_name,
+                    age: patient_age,
+                    gende: patient_gender,
+                    complaint: appointment.complaint,
+                    consultation_fees: appointment?.clinic_data?.fees,
+                  });
+                }}>
+                <Icon
+                  name={'message-processing'}
+                  size={moderateScale(24)}
+                  color={CUSTOMCOLOR.primary}
+                />
+              </Pressable>
             </View>
-          ) : null}
-        </View>
+            {appointment?.status === 'pending' ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  paddingTop: moderateScale(24),
+                }}>
+                <HButton
+                  label={'Reschedule'}
+                  btnstyles={{
+                    backgroundColor: CUSTOMCOLOR.white,
+                    borderWidth: moderateScale(0.5),
+                    borderColor: CUSTOMCOLOR.borderColor,
+                    paddingHorizontal: horizontalScale(24),
+                    paddingVertical: verticalScale(8),
+                  }}
+                  textStyle={{
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: CUSTOMFONTFAMILY.h3,
+                  }}
+                  onPress={handleReschedule}
+                />
+                <HButton
+                  btnstyles={{
+                    // backgroundColor: CUSTOMCOLOR.white,
+                    // borderWidth: moderateScale(0.5),
+                    // borderColor: CUSTOMCOLOR.borderColor,
+                    paddingHorizontal: horizontalScale(24),
+                    paddingVertical: verticalScale(12),
+                  }}
+                  textStyle={{
+                    color: CUSTOMCOLOR.white,
+                    fontSize: CUSTOMFONTFAMILY.h3,
+                  }}
+                  onPress={handleOnpress}
+                  label={'Start Visit'}
+                  // style={[styles.btn, {backgroundColor: CUSTOMCOLOR.primary}]}>
+                />
+              </View>
+            ) : null}
+          </View>
+        )}
       </View>
 
       <View

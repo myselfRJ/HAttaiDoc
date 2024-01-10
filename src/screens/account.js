@@ -46,40 +46,6 @@ const Account = () => {
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
   const rtoken = useSelector(state => state.authenticate.auth.refresh);
-
-  // const fetchDoctor = async () => {
-  //   const response = await fetchApi(URL.getPractitionerByNumber(phone), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   // console.log('practitioner response====', response);
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     // console.log('----------------------------', jsonData);
-  //     setData(jsonData.data);
-  //     // dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
-  //   } else {
-  //     console.error('API call failed:', response.status, response);
-  //   }
-  // };
-  // const fetchData = async () => {
-  //   const response = await fetchApi(URL.getClinic(phone), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     // console.log('--------------clinics', jsonData);
-  //     setClinics(jsonData?.data);
-  //     setClinicId(jsonData?.data[0]?.id);
-  //   } else {
-  //     console.error('API call failed:', response.status, response);
-  //   }
-  // };
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const Clinic_data = useSelector(state => state?.clinic?.clinics);
@@ -196,6 +162,7 @@ const Account = () => {
         // Handle error or provide a fallback, as needed.
       });
   };
+
   return (
     <View style={styles.main}>
       <View>
@@ -315,6 +282,7 @@ const Account = () => {
             name={'pencil'}
             onPress={() => {
               // navigation.navigate('addclinic', {prevScrn});
+
               navigation.navigate('clinic', {prevScrn});
             }}
           />

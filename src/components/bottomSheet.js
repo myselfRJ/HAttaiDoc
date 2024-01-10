@@ -22,8 +22,9 @@ import StatusMessage from './statusMessage';
 const BottomSheetView = ({children, message, visible, setVisible, status}) => {
   useEffect(() => {
     setTimeout(() => {
+      console.log('sheet close');
       setVisible(false);
-    }, 1500);
+    }, 1000);
   }, []);
   return (
     <Modal

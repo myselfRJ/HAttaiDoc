@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  Keyboard,
 } from 'react-native';
 import {
   CUSTOMCOLOR,
@@ -92,8 +93,10 @@ const InputText = props => {
             onSubmitEditing={() => {
               if (props.onSubmit) {
                 props.onSubmit();
-              } else {
+              } else if (props?.re) {
                 props?.re?.current?.focus();
+              } else {
+                Keyboard.dismiss();
               }
             }}
             blurOnSubmit={false}

@@ -522,25 +522,6 @@ const Dashboard = ({navigation, route}) => {
           />
         </View>
       </View>
-
-      {/* </View> */}
-
-      {/* <BottomSheetView
-        bottomSheetRef={ClinicRef}
-        snapPoints={'50%'}
-        backgroundStyle={'#000000aa'}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.clinicText}>{Language[language]['clinic']}</Text>
-          {clinics &&
-            clinics?.map((clinic, index) => (
-              <Pressable
-                key={index}
-                onPress={() => handleClinicSelection(clinic)}>
-                <Text style={styles.modalfields}>{clinic.clinic_name}</Text>
-              </Pressable>
-            ))}
-        </View>
-      </BottomSheetView> */}
     </View>
   );
 };

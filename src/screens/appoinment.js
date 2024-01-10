@@ -332,13 +332,13 @@ const Appointment = ({navigation}) => {
           style={styles.appointmentCard}
         />
       </View>
-      <View style={{justifyContent: 'flex-end', flex: 1}}>
-        <HButton
-          label="Book Appointment"
-          btnstyles={{alignSelf: 'center'}}
-          onPress={handlePlusBUtton}
-        />
-      </View>
+
+      <HButton
+        label="Book Appointment"
+        btnstyles={{alignSelf: 'center'}}
+        onPress={handlePlusBUtton}
+      />
+
       {/* <BottomSheetView
         bottomSheetRef={ClinicRef}
         snapPoints={'50%'}

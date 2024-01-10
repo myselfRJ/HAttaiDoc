@@ -35,6 +35,12 @@ import {commonstyles} from '../styles/commonstyle';
 const VitalScreen = ({route, props}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const vitalsDat = useSelector(state => state.prescription.vitalsData);
+  const vitalsData =
+    vitalsDat?.length > 0
+      ? vitalsDat
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.vitals
+      : {};
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -147,8 +153,8 @@ const VitalScreen = ({route, props}) => {
       vital?.length > 0
         ? vital
             ?.filter(item => item?.appointment_id === appointmentID)
-            ?.slice(-1)[0]?.vitals
-        : [];
+            ?.slice(-1)?.[0]?.vitals
+        : {};
     if (vitalsData) {
       setheight(vitalsData?.height);
       setWeight(vitalsData?.weight);

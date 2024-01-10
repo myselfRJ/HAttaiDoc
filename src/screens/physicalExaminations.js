@@ -46,7 +46,12 @@ import DocumentPicker from 'react-native-document-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
 import {fileurl} from '../utility/urls';
-import {handleCamera, handleGallery, pickSingleFile} from '../utility/const';
+import {
+  handleCamera,
+  handleGallery,
+  pickSingleFile,
+  showToast,
+} from '../utility/const';
 const PhysicalExamination = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
@@ -89,12 +94,12 @@ const PhysicalExamination = ({navigation}) => {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
       if (responseData) {
-        Alert.alert('Success', 'Succesfully saved');
+        showToast('success', 'Succesfully saved');
         navigation.goBack();
         console.log('API Response:', responseData);
       }
     } catch (error) {
-      Alert.alert('Error', `${error}`);
+      showToast('error', `${error}`);
       console.error('Error:', error);
     }
   };

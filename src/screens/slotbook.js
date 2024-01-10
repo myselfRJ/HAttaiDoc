@@ -495,7 +495,7 @@ const SlotBook = ({navigation, route}) => {
 
   return (
     <View style={styles.main}>
-      <View style={styles.select}>
+      <View style={{gap: verticalScale(16)}}>
         <View>
           <SelectorBtn
             label={'Clinic :'}
@@ -507,9 +507,6 @@ const SlotBook = ({navigation, route}) => {
           />
           {clinicShow && (
             <View style={styles.modalContainer}>
-              {/* <Text style={styles.clinicText}>
-                {Language[language]['clinic']}
-              </Text> */}
               {Clinic_data &&
                 Clinic_data?.map((clinic, index) => (
                   <Pressable
@@ -521,8 +518,6 @@ const SlotBook = ({navigation, route}) => {
             </View>
           )}
         </View>
-      </View>
-      <View style={{gap: verticalScale(8)}}>
         <SelectorBtn
           label="Date"
           name="calendar"
@@ -595,20 +590,22 @@ const SlotBook = ({navigation, route}) => {
             onPress={() => handleOptions('Telephonic')}
           />
         </View>
-        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
-          Appointment Type{' '}
-          <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
-        </Text>
-        <View style={styles.selection}>
-          {selections?.map((val, ind) => (
-            <View key={ind}>
-              <SelectionTab
-                label={val}
-                onPress={() => handleSelectType(val)}
-                selected={selectedTypeAppointment === val}
-              />
-            </View>
-          ))}
+        <View style={{gap: moderateScale(6)}}>
+          <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>
+            Appointment Type{' '}
+            <Text style={{color: 'red', fontSize: CUSTOMFONTSIZE.h4}}>*</Text>
+          </Text>
+          <View style={styles.selection}>
+            {selections?.map((val, ind) => (
+              <View key={ind}>
+                <SelectionTab
+                  label={val}
+                  onPress={() => handleSelectType(val)}
+                  selected={selectedTypeAppointment === val}
+                />
+              </View>
+            ))}
+          </View>
         </View>
         <View>
           <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3}}>

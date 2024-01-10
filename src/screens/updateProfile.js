@@ -616,7 +616,7 @@ const UpdateProfile = ({navigation}) => {
                 />
                 {documents[1]?.aadhar && (
                   <TouchableOpacity
-                    onPress={() => handleDocuments(documents[0]?.aadhar)}
+                    onPress={() => handleDocuments(documents[1]?.aadhar)}
                     style={{marginTop: verticalScale(8)}}>
                     <ShowChip
                       text={
@@ -651,7 +651,7 @@ const UpdateProfile = ({navigation}) => {
                 />
                 {documents[2]?.degree && (
                   <TouchableOpacity
-                    onPress={() => handleDocuments(documents[0]?.degree)}
+                    onPress={() => handleDocuments(documents[2]?.degree)}
                     style={{marginTop: verticalScale(8)}}>
                     <ShowChip
                       text={

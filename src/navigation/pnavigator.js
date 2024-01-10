@@ -70,8 +70,9 @@ import {Advices} from '../screens/Avices';
 
 const Stack = createNativeStackNavigator();
 
-const ProtectedRoute = () => {
+const ProtectedRoute = route => {
   // console.log(getAccessToken(state => state));
+  console.log('..', route);
   const isAuth = useSelector(state => state.authenticate.auth.access);
   const access = useSelector(state => state.getAccessToken);
   // console.log('isAuth.....', isAuth);

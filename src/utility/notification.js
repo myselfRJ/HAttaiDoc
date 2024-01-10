@@ -2,6 +2,7 @@ import {Alert} from 'react-native';
 import {fetchApi} from '../api/fetchApi';
 import {URL} from './urls';
 import {useSelector} from 'react-redux';
+import {showToast} from './const';
 
 const sendNotification = async (
   token,
@@ -43,7 +44,7 @@ const sendNotification = async (
     // console.log(NotificationDetails);
     if (response.ok) {
       const jsonData = await response.json();
-      Alert.alert('success', 'Succesfully sent');
+      showToast('success', 'Succesfully sent');
       if (data_notification) {
         try {
           const savingNotificationdata = await fetchApi(URL.saveNotifications, {
@@ -59,13 +60,13 @@ const sendNotification = async (
           console.log(error);
         }
       } else {
-        Alert.alert('Warn', 'Try After sometime');
+        showToast('error', 'Try After sometime');
         console.error('API call failed:', response.status, response);
       }
     }
   } catch (error) {
-    console.error('Error occurred:', error);
-    Alert.alert('Error', 'Try After sometime');
+    // console.error('Error occurred:', error);
+    showToast('error', 'Try After sometime');
   }
 };
 

@@ -803,7 +803,6 @@ export const feeDataIneachday = (data, startDate, endDate) => {
 };
 
 import Toast from 'react-native-toast-message';
-import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {moderateScale} from './scaleDimension';
 
 export const showToast = (type, text) => {
@@ -812,4 +811,39 @@ export const showToast = (type, text) => {
     text1: text,
     text1Style: {fontSize: moderateScale(16)},
   });
+};
+
+export const sortTimeIntervals = timeIntervals => {
+  const sortedIntervals = timeIntervals.slice().sort((a, b) => {
+    const getUnitOrder = unit => {
+      switch (unit) {
+        case 'year':
+        case 'years':
+          return 0;
+        case 'month':
+        case 'months':
+          return 1;
+        case 'day':
+        case 'days':
+          return 2;
+        case 'hr':
+        case 'hrs':
+        case 'hour':
+        case 'hours':
+          return 3;
+        default:
+          return Infinity;
+      }
+    };
+
+    const unitA = a.toLowerCase().replace(/\d+/g, '');
+    const unitB = b.toLowerCase().replace(/\d+/g, '');
+
+    const orderA = getUnitOrder(unitA);
+    const orderB = getUnitOrder(unitB);
+
+    return orderA - orderB;
+  });
+
+  return sortedIntervals;
 };

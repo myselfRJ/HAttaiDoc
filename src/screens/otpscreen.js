@@ -157,6 +157,7 @@ const OtpScreen = ({route}) => {
           });
           setBottom(true);
           setTimeout(() => {
+            setBottom(false);
             nav.navigate('protected');
           }, 1000);
           setValue('');

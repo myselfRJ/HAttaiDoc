@@ -50,7 +50,7 @@ export default function Prescribe1({navigation}) {
   const {phone} = useSelector(state => state?.phone?.data);
   const [data, setData] = useState([]);
   const token = useSelector(state => state.authenticate.auth.access);
-  const option = 'real clinical drug';
+  const option = 'real clinical drug++clinical drug';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
   const [mode, setMode] = useState('');
@@ -519,7 +519,7 @@ export default function Prescribe1({navigation}) {
           ))}
         </View>
 
-        <View>
+        <View style={{gap: verticalScale(6)}}>
           <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
           <View style={styles.Modes}>
             {modes?.map(value => (
@@ -631,7 +631,10 @@ export default function Prescribe1({navigation}) {
                 fontSize: moderateScale(14),
                 color: CUSTOMCOLOR.black,
               }}
-              inputContainer={{paddingHorizontal: moderateScale(0)}}
+              inputContainer={{
+                gap: verticalScale(6),
+                paddingHorizontal: moderateScale(0),
+              }}
               label="Generic Name"
               placeholder="Medicine generic name"
               value={generic}
@@ -668,69 +671,13 @@ export default function Prescribe1({navigation}) {
               paddingHorizontal: moderateScale(0),
               paddingVertical: moderateScale(0),
               width: '24%',
+              gap: verticalScale(6),
             }}
             value={dose_number}
             setValue={value => setDose_number(value)}
           />
-          {/* {newMedicine != null && setgeneric === false ? (
-            <>
-              <InputText
-                label={Language[language]['dose']}
-                inputContainer={{paddingHorizontal: moderateScale(0)}}
-                value={mgs}
-                setValue={setmg}
-                placeholder={'Enter Dosage eg: 100mg,200mg 0r 10m1 ,20ml'}
-              />
-              <View style={styles.Modes}>
-                {medicine?.toLowerCase()?.includes('injection') ||
-                medicine?.toLowerCase()?.includes('syrup')
-                  ? ml?.map((value, mgIndex) => (
-                      <SelectorBtn
-                        input={value}
-                        key={mgIndex}
-                        onPress={() => setMG(value)}
-                        select={{
-                          backgroundColor:
-                            mgs === value
-                              ? CUSTOMCOLOR.primary
-                              : CUSTOMCOLOR.white,
-                        }}
-                        inputstyle={{
-                          color:
-                            mgs === value
-                              ? CUSTOMCOLOR.white
-                              : CUSTOMCOLOR.primary,
-                          fontSize: moderateScale(14),
-                          fontWeight: '600',
-                        }}
-                      />
-                    ))
-                  : mg?.map((value, mgIndex) => (
-                      <SelectorBtn
-                        input={value}
-                        key={mgIndex}
-                        onPress={() => setMG(value)}
-                        select={{
-                          backgroundColor:
-                            mgs === value
-                              ? CUSTOMCOLOR.primary
-                              : CUSTOMCOLOR.white,
-                        }}
-                        inputstyle={{
-                          color:
-                            mgs === value
-                              ? CUSTOMCOLOR.white
-                              : CUSTOMCOLOR.primary,
-                          fontSize: moderateScale(14),
-                          fontWeight: '600',
-                        }}
-                      />
-                    ))}
-              </View>
-            </>
-          ) : null} */}
         </View>
-        <View style={{top: moderateScale(8)}}>
+        <View style={{gap: moderateScale(6)}}>
           <Text style={[styles.ModeText, {paddingBottom: moderateScale(2)}]}>
             {Language[language]['timing']}
           </Text>
@@ -778,21 +725,25 @@ export default function Prescribe1({navigation}) {
             ))}
           </View>
         </View>
-        <View>
-          <Text style={styles.ModeText}>{Language[language]['duration']}</Text>
-          <View style={styles.radiogroup}>
-            <Option
-              label="days"
-              value="days"
-              selected={durationSelect === 'days'}
-              onPress={() => handleOptions('days')}
-            />
-            <Option
-              label="week"
-              value="week"
-              selected={durationSelect === 'week'}
-              onPress={() => handleOptions('week')}
-            />
+        <View style={{gap: verticalScale(12)}}>
+          <View style={{gap: verticalScale(6)}}>
+            <Text style={styles.ModeText}>
+              {Language[language]['duration']}
+            </Text>
+            <View style={styles.radiogroup}>
+              <Option
+                label="days"
+                value="days"
+                selected={durationSelect === 'days'}
+                onPress={() => handleOptions('days')}
+              />
+              <Option
+                label="week"
+                value="week"
+                selected={durationSelect === 'week'}
+                onPress={() => handleOptions('week')}
+              />
+            </View>
           </View>
 
           <InputText
@@ -808,18 +759,19 @@ export default function Prescribe1({navigation}) {
           />
         </View>
         {/* <View style={styles.ModeContainer}> */}
-        <Text style={[styles.ModeText, {marginTop: moderateScale(3)}]}>
-          {Language[language]['quantity']}
-        </Text>
-        <View style={styles.total_quantity}>
-          {isNaN(total_quantity) ? (
-            <Text style={styles.numText}>{'00'}</Text>
-          ) : (
-            <Text style={styles.numText}>{total_quantity}</Text>
-          )}
+
+        <View style={{gap: verticalScale(6)}}>
+          <Text style={[styles.ModeText]}>
+            {Language[language]['quantity']}
+          </Text>
+
+          <Text style={styles.numText}>
+            {isNaN(total_quantity) ? '00' : total_quantity}
+          </Text>
         </View>
         <InputText
           placeholder={'Enter any Remarks......'}
+          inputContainer={{gap: verticalScale(6)}}
           value={others}
           setValue={setOthers}
           label={'Others (optional):'}
@@ -943,7 +895,7 @@ export default function Prescribe1({navigation}) {
 
 const styles = StyleSheet.create({
   prescribeConatiner: {
-    gap: moderateScale(8),
+    gap: moderateScale(16),
     paddingBottom: verticalScale(24),
   },
   ModeContainer: {
@@ -955,7 +907,6 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     // top: moderateScale(6),
     color: CUSTOMCOLOR.black,
-    paddingBottom: moderateScale(2),
   },
   DoseText: {
     fontWeight: 400,
@@ -1025,6 +976,11 @@ const styles = StyleSheet.create({
   },
   numText: {
     padding: moderateScale(8),
+    paddingRight: horizontalScale(48),
+    alignSelf: 'flex-start',
+    borderWidth: 0.5,
+    borderRadius: 4,
+    borderColor: CUSTOMCOLOR.primary,
     fontWeight: 400,
     fontSize: CUSTOMFONTSIZE.h2,
     color: CUSTOMCOLOR.primary,
@@ -1050,8 +1006,6 @@ const styles = StyleSheet.create({
     // gap: moderateScale(24),
   },
   total_quantity: {
-    marginTop: moderateScale(2),
-    height: moderateScale(40),
     width: '25%',
     borderRadius: moderateScale(4),
     justifyContent: 'center',
@@ -1063,11 +1017,11 @@ const styles = StyleSheet.create({
   frequencys: {
     // paddingLeft: moderateScale(8),
     // top: moderateScale(8),
+    gap: verticalScale(6),
     paddingTop: moderateScale(12),
     // paddingVertical: verticalScale(16),
   },
   radiogroup: {
-    paddingVertical: moderateScale(8),
     flexDirection: 'row',
     gap: moderateScale(48),
 

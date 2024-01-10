@@ -98,6 +98,9 @@ const ReferToDoctor = () => {
         //Content to print
         html: `<!DOCTYPE html>
         <html>
+        <style>
+        p{margin: 0;letter-spacing:1px}
+        </style>
         <head>
             <title>Doctor Referral</title>
         </head>
@@ -108,37 +111,39 @@ const ReferToDoctor = () => {
             
             <section id="referral-details" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referral Details</h2>
-                <p style="margin: 0;">Referring Doctor:${data?.doctor_name}</p>
-                <p style="margin: 0;">Date: ${new Date().toString()}</p>
+                <p>Referring Doctor:${'     '}${data?.doctor_name}</p>
+                <p style="margin: 0;">Date:${'     '} ${new Date().toString()}</p>
             </section>
             
             <section id="patient-details" style="padding: 20px; background-color: #f5f5f5; margin: 0;">
                 <h2 style="margin: 0;">Patient Details</h2>
-                <p style="margin: 0;">Patient Name: ${patient_details?.name}</p>
-                <p style="margin: 0;">Age: ${patient_details?.age}</p>
-                <p style="margin: 0;">Phone: ${
-                  patient_details?.patient_phone
-                }</p>
+                <p style="margin: 0;">Patient Name: ${'     '}${
+          patient_details?.name
+        }</p>
+                <p style="margin: 0;">Age: ${'     '}${
+          patient_details?.age
+        }yrs</p>
+                <p style="margin: 0;">Phone: ${'     '}${
+          patient_details?.patient_phone
+        }</p>
             </section>
             
             <section id="referred-doctor" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referred Doctor</h2>
-                <p style="margin: 0;">Referred Doctor: Dr. ${
-                  selected === 'Clinic' || selected === 'Hospital'
-                    ? dr_name
-                    : name
-                }</p>
-                <p style="margin: 0;">Speciality:${speciality} </p>
-                <p style="margin: 0;">Contact Information:${
-                  selected === 'Clinic' || selected === 'Hospital'
-                    ? `${name} , ${phone}`
-                    : phone
-                } </p>
+                <p style="margin: 0;">Referred Doctor: Dr. ${'     '}${
+          selected === 'Clinic' || selected === 'Hospital' ? dr_name : name
+        }</p>
+                <p style="margin: 0;">Speciality:${'     '}${speciality} </p>
+                <p style="margin: 0;">Contact Information:${'     '}${
+          selected === 'Clinic' || selected === 'Hospital'
+            ? `${name} , ${phone}`
+            : phone
+        } </p>
             </section>
             
             <section id="additional-notes" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referral Notes</h2>
-                <p style="margin: 0;">${notes}</p>
+                <p style="margin: 0;">${'     '}${notes}</p>
             </section>
         
             <footer style="text-align: left; ; color: #000; padding: 10px; margin-top:140px;">
@@ -146,12 +151,13 @@ const ReferToDoctor = () => {
                 
                 <p style="text-align: center;margin: 36px;">For questions or more information, please contact Dr. ${
                   data?.doctor_name
-                } ,  ${data?.doctor_phone_number}.</p>
-                <p style="margin: 8px;text-align: center;font-weight:300;font-size:12px;">powered by</p>
-                <div  style="display: flex; justify-content: center; align-items: center;">
-                <img style="height: 50px;width:120px" src="${
+                } ,  ${'     '}${data?.doctor_phone_number}.</p>
+                
+                <div  style="display: flex;flex-direction:column; justify-content: flex-start; align-items: flex-start;">
+                <p style="margin: 2px;text-align: center;font-weight:300;font-size:12px;">powered by</p>
+                <img style="height: 24px;width:28px;align-self:flex-start;margin-left: 10px" src="${
                   CONSTANTS.pdf_footer
-                }" style="float: center; margin-right: 10px;margin-top: 48px" alt="Image Description">
+                }"alt="Image Description">
                 </div>
             </footer>
         </body>
@@ -214,7 +220,7 @@ const ReferToDoctor = () => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const handleAddDoctors = () => {
     selected && name && speciality
-      ? (dispatch(
+      ? dispatch(
           addDoctorRefer([
             ...doctor,
             {
@@ -227,14 +233,15 @@ const ReferToDoctor = () => {
               appointment_id: appointmentID,
             },
           ]),
-        ),
-        setName(''),
-        setSpeciality(''),
-        setPhone(''),
-        setSelected(''),
-        setNotes(''),
-        setDr_Name(''),
-        setNewPhone(''))
+
+          setName(''),
+          setSpeciality(''),
+          setPhone(''),
+          setSelected(''),
+          setNotes(''),
+          setDr_Name(''),
+          setNewPhone(''),
+        )
       : null;
     // nav.goBack();
   };

@@ -224,7 +224,7 @@ const PdfView = ({navigation}) => {
           formData.append('file_url', {
             uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf`,
             type: 'application/pdf',
-            name: `${patient_phone}.pdf`,
+            name: `prescription.pdf`,
           });
 
           const requestOptions = {
@@ -287,7 +287,7 @@ const PdfView = ({navigation}) => {
     formData.append('file_referral', {
       uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf`,
       type: 'application/pdf',
-      name: `${patient_phone}referal.pdf`,
+      name: `referal.pdf`,
     });
 
     const requestOptions = {

@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {InputText, HButton} from '../components';
 import {commonstyles} from '../styles/commonstyle';
 import {
@@ -69,46 +76,48 @@ const AdditionalNotes = ({navigation, route}) => {
   );
   const NoteCard = ({date, notes}) => {
     return (
-      <View
-        style={{
-          borderWidth: 1,
-          borderRadius: moderateScale(8),
-          gap: moderateScale(4),
-          marginBottom: verticalScale(8),
-        }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{
-            backgroundColor: CUSTOMCOLOR.borderColor,
-            height: verticalScale(50),
-            justifyContent: 'center',
-            paddingHorizontal: horizontalScale(16),
-            borderTopLeftRadius: moderateScale(8),
-            borderTopRightRadius: moderateScale(8),
+            borderWidth: 1,
+            borderRadius: moderateScale(8),
+            gap: moderateScale(4),
+            marginBottom: verticalScale(8),
           }}>
-          <Text
+          <View
             style={{
-              fontSize: CUSTOMFONTSIZE.h3,
-              color: CUSTOMCOLOR.black,
-              fontWeight: '600',
+              backgroundColor: CUSTOMCOLOR.borderColor,
+              height: verticalScale(50),
+              justifyContent: 'center',
+              paddingHorizontal: horizontalScale(16),
+              borderTopLeftRadius: moderateScale(8),
+              borderTopRightRadius: moderateScale(8),
             }}>
-            Date:{date}
-          </Text>
-        </View>
-        <View
-          style={{
-            paddingHorizontal: horizontalScale(16),
-            paddingVertical: verticalScale(8),
-          }}>
-          <Text
+            <Text
+              style={{
+                fontSize: CUSTOMFONTSIZE.h3,
+                color: CUSTOMCOLOR.black,
+                fontWeight: '600',
+              }}>
+              Date:{date}
+            </Text>
+          </View>
+          <View
             style={{
-              fontSize: CUSTOMFONTSIZE.h3,
-              color: CUSTOMCOLOR.black,
-              fontWeight: '400',
+              paddingHorizontal: horizontalScale(16),
+              paddingVertical: verticalScale(8),
             }}>
-            {notes}
-          </Text>
+            <Text
+              style={{
+                fontSize: CUSTOMFONTSIZE.h3,
+                color: CUSTOMCOLOR.black,
+                fontWeight: '400',
+              }}>
+              {notes}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
   return (

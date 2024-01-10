@@ -166,6 +166,11 @@ const MyClinics = ({navigation}) => {
       console.error('Error deleting clinic:', error);
     }
   };
+
+  navigation.setOptions({
+    headerLeft: () => <></>,
+  });
+
   useEffect(() => {
     fetchClinics();
   }, []);
@@ -225,7 +230,7 @@ const MyClinics = ({navigation}) => {
           <HButton
             btnstyles={styles.btnNext}
             textStyle={styles.input}
-            label={'Next'}
+            label={prevScrn === 'account' ? 'back' : 'Next'}
             onPress={handleNav}
             loading={loading}
           />
