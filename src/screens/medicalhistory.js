@@ -210,7 +210,6 @@ const MedicalHistory = ({navigation, route}) => {
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
-      // }
       setComorbidities('');
     }
   };
@@ -218,7 +217,6 @@ const MedicalHistory = ({navigation, route}) => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
       UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
-      // }
       setSocial('');
     }
   };
@@ -226,7 +224,6 @@ const MedicalHistory = ({navigation, route}) => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
       UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
-      // }
       setFamily('');
     }
   };
@@ -338,8 +335,6 @@ const MedicalHistory = ({navigation, route}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
-        // setDate(jsonData?.data[0]);
-        // console.log('medication', jsonData?.data[0]);
         setUpdatedate(
           jsonData?.data[0]?.updated_at
             ? jsonData?.data[0]?.updated_at?.split('T')[0]
