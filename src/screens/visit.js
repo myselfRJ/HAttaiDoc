@@ -72,13 +72,19 @@ const Visit = ({navigation, route}) => {
       ? follow_up
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)[0]?.date
-      : [];
+      : '';
   const dia = useSelector(state => state?.diagnosis?.DiagnosisItems);
   const diagnosis =
     dia?.length > 0
       ? dia?.filter(item => item?.appointment_id === appointmentID)
       : [];
-  const notes = useSelector(state => state?.prescription?.additional_notes);
+  const adn = useSelector(state => state?.prescription?.additional_notes);
+  const notes =
+    adn?.length > 0
+      ? adn
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.ad_notes
+      : '';
   const vital = useSelector(state => state.prescription.vitalsData);
   const vitalsData =
     vital?.length > 0
@@ -93,30 +99,28 @@ const Visit = ({navigation, route}) => {
     notess?.length > 0
       ? notess
           ?.filter(item => item?.appointment_id === appointmentID)
-          ?.slice(-1)[0]?.note
+          ?.slice(-1)?.[0]?.note
       : '';
-  console.log(note);
+  console.log('=================', note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
-  const selectedDoctor = useSelector(
-    state => state?.prescription?.selectedDoctor,
-  );
+  const selectedDoc = useSelector(state => state?.prescription?.selectedDoctor);
+  const selectedDoctor =
+    selectedDoc?.length > 0
+      ? selectedDoc?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const symp = useSelector(state => state.symptoms.symptom);
   const Symptom =
     symp?.length > 0
       ? symp?.filter(item => item?.appointment_id === appointmentID)
       : [];
   const dummyPrescribe = useSelector(state => state.pres.prescribeItems);
-
   const Prescribe =
     dummyPrescribe?.length > 0
       ? dummyPrescribe?.filter(item => item?.appointment_id === appointmentID)
       : [];
   console.log(Prescribe);
-  let prescribeCopy = Prescribe;
-  // const [prescribe, setPrescribe] = useState(prescribeCopy);
-
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -134,12 +138,23 @@ const Visit = ({navigation, route}) => {
       ? lab?.filter(item => item?.appointment_id === appointmentID)
       : [];
   const dateTimeRed = useSelector(state => state.valid?.valid);
-  const hospitalization = useSelector(
-    state => state?.pasthistory?.hospitalization,
-  );
-  const medicationHistory = useSelector(
+  const hosp = useSelector(state => state?.pasthistory?.hospitalization);
+  const hospitalization =
+    hosp?.length > 0
+      ? hosp
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.hospitalization
+      : '';
+  const medication_history = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
+  const medicationHistory =
+    medication_history?.length > 0
+      ? medication_history
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.medicationHistory
+      : '';
+
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
@@ -151,16 +166,39 @@ const Visit = ({navigation, route}) => {
   const martialHistory = useSelector(
     state => state?.pasthistory?.martialHistory,
   );
-  const commor = useSelector(state => state?.pasthistory?.commorbidities);
 
-  const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
-
-  const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
+  const com = useSelector(state => state?.pasthistory?.commorbidities);
+  const commor =
+    com?.length > 0
+      ? com?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+  const sochstry = useSelector(state => state?.pasthistory?.socialHistory);
+  const socialHistory =
+    sochstry?.length > 0
+      ? sochstry?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+  const fhstry = useSelector(state => state?.pasthistory?.familyHistory);
+  const familyHistory =
+    fhstry?.length > 0
+      ? fhstry?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
     service_fees?.length > 0 ? service_fees?.[service_fees?.length - 1] : null;
-  const procedure = useSelector(state => state.pasthistory.procedures);
-  const redflag = useSelector(state => state.pasthistory.red_flag);
+  const proce = useSelector(state => state.pasthistory.procedures);
+  const procedure =
+    proce?.length > 0
+      ? proce
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.procedure
+      : '';
+  const rflag = useSelector(state => state.pasthistory.red_flag);
+  const redflag =
+    rflag?.length > 0
+      ? rflag
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.redflag
+      : '';
   const adv = useSelector(state => state?.pasthistory?.advice);
   const advices =
     adv?.length > 0
@@ -636,9 +674,8 @@ const Visit = ({navigation, route}) => {
                   <th style="text-align:center;width:12%;">Quantity</th>
                   <th style="text-align:center;width:12%;">Remarks</th>
                 </tr>
-                ${prescribe
-                  ?.map(
-                    (value, index) => `
+                ${Prescribe?.map(
+                  (value, index) => `
                 <tr style=${
                   index === 10
                     ? 'page-break-before:always;margin-top:100px'
@@ -663,8 +700,7 @@ const Visit = ({navigation, route}) => {
                   <td style="text-align:center;width:12%">${value.others}</td>
                 </tr>
                 `,
-                  )
-                  .join('')}
+                ).join('')}
            
           </table>
           </div>

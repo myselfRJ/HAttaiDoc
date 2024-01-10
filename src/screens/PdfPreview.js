@@ -214,7 +214,7 @@ const PdfView = ({navigation}) => {
         if (jsonData?.status === 'success') {
           setApiStatus({status: 'success', message: 'Successfully created'});
           setBottom(true);
-          ResetRuduxState();
+          // ResetRuduxState();
           const formData = new FormData();
           formData.append('doctor_phone_number', `${doc_phone}`);
           formData.append('patient_phone_number', `${patient_phone}`);

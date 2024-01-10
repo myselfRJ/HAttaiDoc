@@ -1,5 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Modal,
@@ -20,6 +20,11 @@ import {
 import StatusMessage from './statusMessage';
 
 const BottomSheetView = ({children, message, visible, setVisible, status}) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setVisible(false);
+    }, 1500);
+  }, []);
   return (
     <Modal
       animationType="slide"

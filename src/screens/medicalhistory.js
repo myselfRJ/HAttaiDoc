@@ -58,6 +58,7 @@ import VitalField from '../components/vitalFields';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const medication = useRef(null);
   const pasthospital = useRef(null);
   const procedureref = useRef(null);
@@ -73,10 +74,20 @@ const MedicalHistory = ({navigation, route}) => {
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
-
+  const commotData = commor?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
-  const check_field = useSelector(state => state?.pasthistory.check_field);
+  const SocHstry = socialHistory?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
+  const check_field = useSelector(
+    state => state?.pasthistory.check_field,
+  )?.filter(item => item?.appointment_id === appointmentID);
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
+  const Fhstry = familyHistory?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
@@ -88,30 +99,45 @@ const MedicalHistory = ({navigation, route}) => {
   const [family, setFamily] = useState('');
   const [family_sug, setFamily_Sug] = useState([...CONSTANTS.family]);
   const [medical, setMedical] = useState('');
-  const [menstrual, setMenstrual] = useState('');
-  const [obstetric, setObstetric] = useState('');
-  const [getdata, setDate] = useState();
+  // const [menstrual, setMenstrual] = useState('');
+  // const [obstetric, setObstetric] = useState('');
+  // const [getdata, setDate] = useState();
   const [select, setSelect] = useState('');
   const [red_flag, setRed_Flag] = useState('');
   const [procedures, setprocedures] = useState('');
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
-    dispatch(addcommorbiditis([...commor, {commorbities: value}]));
+    dispatch(
+      addcommorbiditis([
+        ...commor,
+        {commorbities: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('commorbidities', {commorbities: value});
     setComorbidities('');
   };
   const handleSelectSocial = value => {
     setSelect(value);
     setSocial(value);
-    dispatch(addsocialHistory([...socialHistory, {social: value}]));
+    dispatch(
+      addsocialHistory([
+        ...socialHistory,
+        {social: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('socialHistory', {social: value});
     setSocial('');
   };
   const handleSelectFamily = value => {
     setSelect(value);
     setFamily(value);
-    dispatch(addfamilyHistory([...familyHistory, {family: value}]));
+    dispatch(
+      addfamilyHistory([
+        ...familyHistory,
+        {family: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('familyHistory', {family: value});
     setFamily('');
   };
@@ -127,9 +153,6 @@ const MedicalHistory = ({navigation, route}) => {
       dispatch(updatecommorbidities(updatedcommor));
     }
   };
-  const hospitalization = useSelector(
-    state => state?.pasthistory?.hospitalization,
-  );
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
@@ -143,8 +166,14 @@ const MedicalHistory = ({navigation, route}) => {
   );
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
   const procedure = useSelector(state => state.pasthistory.procedures);
+
   const redflag = useSelector(state => state.pasthistory.red_flag);
-  // console.log(redflag, 'medical=His===============', procedure);
+  const hospitalization = useSelector(
+    state => state?.pasthistory?.hospitalization,
+  );
+  console.log('====================================');
+  console.log(procedure, redflag, hospitalization, procedure);
+  console.log('====================================');
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -237,17 +266,61 @@ const MedicalHistory = ({navigation, route}) => {
   }, []);
 
   const handledata = () => {
-    dispatch(addpastHospitalization({...hospitalization, past}));
-    dispatch(addmedicationHistory({...medicationHistory, medical}));
-    dispatch(addProcedures(procedures));
-    dispatch(addRedFalg(red_flag));
+    dispatch(
+      addpastHospitalization([
+        ...hospitalization,
+        {hospitalization: past, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addmedicationHistory([
+        ...medicationHistory,
+        {medicationHistory: medical, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addProcedures([
+        ...procedure,
+        {procedure: procedures, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addRedFalg([
+        ...redflag,
+        {redflag: red_flag, appointment_id: appointmentID},
+      ]),
+    );
     nav.goBack();
   };
   useEffect(() => {
-    setRed_Flag(redflag);
-    setprocedures(procedure);
-    setMedical(medicationHistory?.medical);
-    setPast(hospitalization?.past);
+    setRed_Flag(
+      redflag?.length > 0
+        ? redflag
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.redflag
+        : '',
+    );
+    setprocedures(
+      procedure?.length > 0
+        ? procedure
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.procedure
+        : '',
+    );
+    setMedical(
+      medicationHistory?.length > 0
+        ? medicationHistory
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.medicationHistory
+        : '',
+    );
+    setPast(
+      hospitalization?.length > 0
+        ? hospitalization
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.hospitalization
+        : '',
+    );
   }, []);
   const fetchMedicalData = async () => {
     try {
@@ -269,25 +342,53 @@ const MedicalHistory = ({navigation, route}) => {
         );
         if (jsonData?.data[0]?.commoribities) {
           const commo = JSON.parse(jsonData.data[0].commoribities);
-          dispatch(addcommorbiditis(commo));
+          const mapdata = commo?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addcommorbiditis([...commor, ...mapdata]));
         }
         if (jsonData?.data[0]?.family_history) {
           const family = JSON.parse(jsonData.data[0].family_history);
-          dispatch(addfamilyHistory(family));
+          const mapdata = family?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addfamilyHistory([...familyHistory, ...mapdata]));
         }
         if (jsonData?.data[0]?.social_history) {
           const social = JSON.parse(jsonData.data[0].social_history);
-          dispatch(addsocialHistory(social));
+          const mapdata = social?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addsocialHistory([...mapdata, ...socialHistory]));
         }
         if (jsonData?.data[0]?.medication_history) {
           const medication = JSON.parse(jsonData.data[0].medication_history);
           setMedical(medication?.medical);
-          dispatch(addmedicationHistory(medication?.medical));
+          dispatch(
+            addmedicationHistory([
+              ...medicationHistory,
+              {
+                medicationHistory: medication?.medical,
+                appointment_id: appointmentID,
+              },
+            ]),
+          );
         }
         if (jsonData?.data[0]?.past_history) {
-          const hospitalization = JSON.parse(jsonData.data[0].past_history);
-          setPast(hospitalization?.past);
-          dispatch(addpastHospitalization(hospitalization?.past));
+          const hospitalizatio = JSON.parse(jsonData.data[0].past_history);
+          setPast(hospitalizatio?.past);
+          dispatch(
+            addpastHospitalization([
+              ...hospitalization,
+              {
+                hospitalization: hospitalizatio?.past,
+                appointment_id: appointmentID,
+              },
+            ]),
+          );
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
@@ -295,7 +396,6 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          // setObstetric(mens?.obstetric);
           dispatch(addobstericHistory(mens));
         }
         if (jsonData?.data[0]?.martial_history) {
@@ -304,11 +404,18 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.procedures) {
           setprocedures(jsonData?.data[0]?.procedures);
-          dispatch(addProcedures(jsonData?.data[0]?.procedures));
+          dispatch(
+            addProcedures([
+              ...procedure,
+              {procedure: jsonData?.data[0]?.procedures},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.red_flag) {
           setRed_Flag(jsonData?.data[0]?.red_flag);
-          dispatch(addRedFalg(jsonData?.data[0]?.red_flag));
+          dispatch(
+            addRedFalg([...redflag, {red_flag: jsonData?.data[0]?.red_flag}]),
+          );
         }
       } else {
         console.error('API call failed:', response.status, response);
@@ -318,12 +425,14 @@ const MedicalHistory = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    dispatch(addCheck_field('log'));
+    dispatch(addCheck_field([{appointment_id: appointmentID}]));
   }, []);
   useEffect(() => {
     if (check_field?.length === 0) {
+      console.log('====================================');
+      console.log('indraaa');
+      console.log('====================================');
       fetchMedicalData();
-      console.log('indra');
     }
   }, []);
   return (
@@ -545,7 +654,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Enter new comorbidities'}
             item={'commorbities'}
             label={'Comorbidities'}
-            data={commor}
+            data={commotData}
             value={comorbidities}
             setValue={setComorbidities}
             onSubmit={handleAddReceiver}
@@ -580,7 +689,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
-            data={familyHistory}
+            data={Fhstry}
             value={family}
             setValue={setFamily}
             onSubmit={handleFamily}
@@ -616,7 +725,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Eg : smoking, drinking'}
             item={'social'}
             label={'Social History'}
-            data={socialHistory}
+            data={SocHstry}
             value={social}
             setValue={setSocial}
             onSubmit={handleSocial}

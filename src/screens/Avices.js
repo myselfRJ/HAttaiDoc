@@ -23,8 +23,15 @@ export const Advices = ({navigation}) => {
     );
     navigation.goBack();
   };
+  console.log(advices);
   useEffect(() => {
-    SetAdvice(advices);
+    const adv =
+      advices?.length > 0
+        ? advices
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.advice
+        : '';
+    SetAdvice(adv);
   }, []);
   return (
     <View

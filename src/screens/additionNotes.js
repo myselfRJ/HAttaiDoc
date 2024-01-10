@@ -22,6 +22,8 @@ import {URL} from '../utility/urls';
 
 const AdditionalNotes = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
+  const adn = useSelector(state => state?.prescription?.additional_notes);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const {patient_phone} = route.params;
   const {phone} = useSelector(state => state?.phone?.data);
   const [additionalNote, setAdditionalNote] = useState([]);
@@ -29,7 +31,12 @@ const AdditionalNotes = ({navigation, route}) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
   const Handlepress = () => {
-    dispatch(addAdditionalNote(note));
+    dispatch(
+      addAdditionalNote([
+        ...adn,
+        {ad_notes: note, appointment_id: appointmentID},
+      ]),
+    );
     nav.goBack();
   };
 
@@ -49,6 +56,13 @@ const AdditionalNotes = ({navigation, route}) => {
   };
   useEffect(() => {
     GetNotes();
+    const adn_notes =
+      adn?.length > 0
+        ? adn
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.ad_notes
+        : '';
+    setNote(adn_notes);
   }, []);
   const filteredata = additionalNote.filter(
     item => JSON.parse(item?.notes_message)['additional_notes'] !== '',
