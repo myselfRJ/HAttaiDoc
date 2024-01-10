@@ -3,18 +3,19 @@ import {CONSTANTS} from '../../../utility/constant';
 
 const initialState = {
   commorbidities: [],
-  hospitalization: '',
+  hospitalization: [],
   socialHistory: [],
   familyHistory: [],
-  medicationHistory: '',
-  menstrualHistory: {},
-  obstericHistory: {},
-  martialHistory: {},
-  procedures: '',
-  red_flag: '',
-  advice: '',
-  check_field: '',
+  medicationHistory: [],
+  menstrualHistory: [],
+  obstericHistory: [],
+  martialHistory: [],
+  procedures: [],
+  red_flag: [],
+  advice: [],
+  check_field: [],
 };
+
 const pastHistorySlice = createSlice({
   name: 'pastHistory',
   initialState,

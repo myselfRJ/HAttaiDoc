@@ -23,23 +23,8 @@ const ObstetricHistory = ({route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone, patient_phone} = route.params;
   const nav = useNavigation();
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const obstetric = useSelector(state => state?.pasthistory?.obstericHistory);
-  // console.log('obstetric========================', obstetric);
-  // const [value, setvalue] = useState({
-  //   year: '',
-  //   anc: '',
-  //   delivery: '',
-  //   pn: '',
-  //   baby: '',
-  //   age: '',
-  //   others: '',
-  // });
-  // const handlevalue = (name, value) => {
-  //   setvalue(prev => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
   const [show, setShow] = useState(false);
   const [showTerm, setshowTerm] = useState(false);
   const [showPre, setshowpre] = useState(false);
@@ -87,13 +72,19 @@ const ObstetricHistory = ({route}) => {
   };
   const handledata = () => {
     dispatch(
-      addobstericHistory({
-        gravidity: gravidity,
-        term: term,
-        premature: premature,
-        abortions: abortions,
-        living: [...addChild, {living: living}],
-      }),
+      addobstericHistory([
+        ...obstetric,
+        {
+          mens: {
+            gravidity: gravidity,
+            term: term,
+            premature: premature,
+            abortions: abortions,
+            living: [...addChild, {living: living}],
+          },
+          appointment_id: appointmentID,
+        },
+      ]),
     );
     nav.goBack();
   };
@@ -140,128 +131,48 @@ const ObstetricHistory = ({route}) => {
       [field]: value,
     }));
   };
-  // console.log('living=================', addChild);
-  // const obstericHistory = useSelector(
-  //   state => state?.pasthistory?.obstericHistory,
-  // );
-  // console.log('==========>', typeof JSON.stringify(obstericHistory));
-  // console.log('pre============', premature);
-  const fetchObstetricData = async () => {
-    try {
-      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const jsonData = await response.json();
-
-        if (jsonData?.data[0]?.obsteric_history) {
-          const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          // console.log('get data=======================', mens);
-          setGravidity({
-            value: mens?.gravidity?.value,
-            desc: mens?.gravidity?.desc,
-          });
-          setTerm({
-            value: mens?.term?.value,
-            desc: mens?.term?.desc,
-          });
-          setPremature({
-            value: mens?.premature?.value,
-            desc: mens?.premature?.desc,
-          });
-          setAbortions({
-            value: mens?.abortions?.value,
-            desc: mens?.abortions?.desc,
-          });
-          // if (mens?.living?.length > 0) {
-          //   mens?.living?.map(item => {
-          //     setLiving(item?.living);
-          //   });
-          // if (mens?.living) {
-          //   setLiving(mens.living.map(item => item?.living));
-
-          //   setAddchild(prevChildren => [
-          //     ...prevChildren,
-          //     ...mens.living.map(item => ({
-          //       name: item?.name,
-          //       age: item?.age,
-          //       gender: item?.gender,
-          //     })),
-          //   ]);
-          // }
-          // console.log(
-          //   '==============>mens',
-          //   mens?.living[mens?.living?.length - 1]['living'],
-          // );
-          setLiving(mens?.living[mens?.living?.length - 1]['living']);
-          {
-            mens?.living?.forEach(element => {
-              if (element?.age && element?.gender && element?.name) {
-                setAddchild(prevChildren => [
-                  ...prevChildren,
-                  {
-                    name: element?.name,
-                    age: element?.age,
-                    gender: element?.gender,
-                  },
-                ]);
-              }
-            });
-          }
-
-          dispatch(addobstericHistory(mens));
-        }
-      } else {
-        console.error('API call failed:', response.status, response);
-      }
-    } catch (error) {
-      console.error('Error in fetchMedicalData:', error);
-    }
-  };
-
-  // useEffect(() => {
-  //   fetchObstetricData();
-  // }, []);
   useEffect(() => {
-    if (obstetric) {
+    const obs =
+      obstetric?.length > 0
+        ? obstetric
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.mens
+        : {};
+    if (obs) {
       setGravidity({
-        value: obstetric?.gravidity?.value,
-        desc: obstetric?.gravidity?.desc,
+        value: obs?.gravidity?.value,
+        desc: obs?.gravidity?.desc,
       });
-      if (obstetric?.gravidity?.desc) {
+      if (obs?.gravidity?.desc) {
         setShow(true);
       }
       setTerm({
-        value: obstetric?.term?.value,
-        desc: obstetric?.term?.desc,
+        value: obs?.term?.value,
+        desc: obs?.term?.desc,
       });
-      if (obstetric?.term?.desc) {
+      if (obs?.term?.desc) {
         setshowTerm(true);
       }
       setPremature({
-        value: obstetric?.premature?.value,
-        desc: obstetric?.premature?.desc,
+        value: obs?.premature?.value,
+        desc: obs?.premature?.desc,
       });
-      if (obstetric?.premature?.desc) {
+      if (obs?.premature?.desc) {
         setshowpre(true);
       }
       setAbortions({
-        value: obstetric?.abortions?.value,
-        desc: obstetric?.abortions?.desc,
+        value: obs?.abortions?.value,
+        desc: obs?.abortions?.desc,
       });
-      if (obstetric?.abortions?.desc) {
+      if (obs?.abortions?.desc) {
         setShowabor(true);
       }
-      if (obstetric?.living?.length > 0) {
-        // obstetric?.living?.map(item => {
-        setLiving(obstetric?.living[obstetric?.living?.length - 1]['living']);
+      if (obs?.living?.length > 0) {
+        // obs?.living?.map(item => {
+        setLiving(obs?.living[obs?.living?.length - 1]['living']);
         // });
         setChildShow(true);
-        obstetric?.living?.forEach(element => {
+        obs?.living?.forEach(element => {
           if (element?.age && element?.gender && element?.name) {
             setAddchild(prevChildren => [
               ...prevChildren,

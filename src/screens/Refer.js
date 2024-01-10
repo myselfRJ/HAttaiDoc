@@ -168,7 +168,6 @@ const ReferToDoctor = () => {
       // handle();
     }
   };
-
   const postData = async url => {
     const formData = new FormData();
     formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
@@ -212,7 +211,7 @@ const ReferToDoctor = () => {
     }
   };
   const apiUrl = URL.refer_doc_pdf;
-
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const handleAddDoctors = () => {
     selected && name && speciality
       ? (dispatch(
@@ -225,6 +224,7 @@ const ReferToDoctor = () => {
               speciality: speciality,
               phone: phone,
               notes: notes,
+              appointment_id: appointmentID,
             },
           ]),
         ),
@@ -336,7 +336,6 @@ const ReferToDoctor = () => {
             })
           );
         });
-        // console.log('===========>', uniqueArray);
         if (uniqueArray?.length > 5) {
           uniqueArray?.splice(5);
           setSug(uniqueArray);
@@ -441,49 +440,6 @@ const ReferToDoctor = () => {
                   setValue={val => setDr_Name(val)}
                 />
               ) : null}
-              {/* <View>
-                <SelectorBtn
-                  onPress={() => setShow(!show)}
-                  label={'Specialization'}
-                  input={
-                    speciality?.length > 0
-                      ? speciality
-                      : 'Select Specialization'
-                  }
-                  name={'chevron-down'}
-                />
-                {show && (
-                  <View
-                    style={[
-                      styles.dropdownContainer,
-                      // {
-                      //   top:
-                      //     selected === 'Clinic' || selected === 'Hospital'
-                      //       ? verticalScale(360)
-                      //       : verticalScale(270),
-                      // },
-                    ]}>
-                    <ScrollView>
-                      {CONSTANTS?.speciality?.map((val, index) => (
-                        <TouchableOpacity
-                          key={index}
-                          style={styles.touch}
-                          onPress={() => HandlePress(val?.value)}>
-                          <Text
-                            style={{
-                              fontSize: CUSTOMFONTSIZE.h3,
-                              padding: moderateScale(10),
-                              color: CUSTOMCOLOR.black,
-                            }}
-                            key={index}>
-                            {val?.value}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
-              </View> */}
               <DropdownComponent
                 searchPlaceholder={'Search Speciality.....'}
                 label={Language[language]['specialization']}

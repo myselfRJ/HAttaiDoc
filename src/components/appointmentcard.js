@@ -32,6 +32,7 @@ import HButton from './button';
 import {capitalizeWord} from '../utility/const';
 import {useDispatch, useSelector} from 'react-redux';
 import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
+import {addAppointmentID} from '../redux/features/profiles/clinicAddress';
 
 const AppointmentCard = ({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
@@ -66,6 +67,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
       complaint,
       consultation_fees,
     });
+    dispatch(addAppointmentID(appointment_id));
     appointmentCardRef?.current?.snapToIndex(0);
   };
   const paidOpt = {

@@ -20,7 +20,9 @@ import {fetchApi} from '../api/fetchApi';
 import {CONSTANTS} from '../utility/constant';
 const height = Dimensions.get('window')?.height;
 const width = Dimensions.get('window')?.width;
+
 const MaritalHistory = ({route}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const nav = useNavigation();
   const [maried, setMarried] = useState('');
   const [maritalstatus, setmaritalStatus] = useState('');
@@ -33,15 +35,20 @@ const MaritalHistory = ({route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const dispatch = useDispatch();
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
-  console.log('marital=============', marital);
   const handleDispatch = () => {
     dispatch(
-      addmartialHistory({
-        married: maried,
-        cons: status,
-        others: others,
-        maritalstatus: maritalstatus,
-      }),
+      addmartialHistory([
+        ...marital,
+        {
+          mens: {
+            married: maried,
+            cons: status,
+            others: others,
+            maritalstatus: maritalstatus,
+          },
+          appointment_id: appointmentID,
+        },
+      ]),
     );
     setMarried('');
     setCons('');
@@ -51,45 +58,20 @@ const MaritalHistory = ({route}) => {
   const HandleSelect = val => {
     setStatus(val);
   };
-  // console.log('marital', maritalstatus);
   const HandleSelectMarital = val => {
     setmaritalStatus(val);
   };
-
-  const fetchMaritalData = async () => {
-    try {
-      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const jsonData = await response.json();
-        if (jsonData?.data[0]?.martial_history) {
-          const mens = JSON.parse(jsonData.data[0].martial_history);
-          setMarried(mens?.married);
-          setCons(mens?.cons);
-          setOthers(mens?.others);
-          dispatch(addmartialHistory(mens));
-        }
-      } else {
-        console.error('API call failed:', response.status, response);
-      }
-    } catch (error) {
-      console.error('Error in fetchMedicalData:', error);
-    }
-  };
-
-  // useEffect(() => {
-  //   fetchMaritalData();
-  // }, []);
   useEffect(() => {
-    setmaritalStatus(marital?.maritalstatus);
-    setMarried(marital?.married);
-    setStatus(marital?.cons);
-    setOthers(marital?.others);
+    const mar =
+      marital?.length > 0
+        ? marital
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.mens
+        : {};
+    setmaritalStatus(mar?.maritalstatus);
+    setMarried(mar?.married);
+    setStatus(mar?.cons);
+    setOthers(mar?.others);
   }, []);
   return (
     <View style={styles.main}>

@@ -58,6 +58,7 @@ import VitalField from '../components/vitalFields';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 
 const MedicalHistory = ({navigation, route}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const medication = useRef(null);
   const pasthospital = useRef(null);
   const procedureref = useRef(null);
@@ -73,10 +74,20 @@ const MedicalHistory = ({navigation, route}) => {
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
-
+  const commotData = commor?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
   const socialHistory = useSelector(state => state?.pasthistory?.socialHistory);
-  const check_field = useSelector(state => state?.pasthistory.check_field);
+  const SocHstry = socialHistory?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
+  const check_field = useSelector(
+    state => state?.pasthistory.check_field,
+  )?.filter(item => item?.appointment_id === appointmentID);
   const familyHistory = useSelector(state => state?.pasthistory?.familyHistory);
+  const Fhstry = familyHistory?.filter(
+    item => item?.appointment_id === appointmentID,
+  );
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
@@ -88,30 +99,45 @@ const MedicalHistory = ({navigation, route}) => {
   const [family, setFamily] = useState('');
   const [family_sug, setFamily_Sug] = useState([...CONSTANTS.family]);
   const [medical, setMedical] = useState('');
-  const [menstrual, setMenstrual] = useState('');
-  const [obstetric, setObstetric] = useState('');
-  const [getdata, setDate] = useState();
+  // const [menstrual, setMenstrual] = useState('');
+  // const [obstetric, setObstetric] = useState('');
+  // const [getdata, setDate] = useState();
   const [select, setSelect] = useState('');
   const [red_flag, setRed_Flag] = useState('');
   const [procedures, setprocedures] = useState('');
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
-    dispatch(addcommorbiditis([...commor, {commorbities: value}]));
+    dispatch(
+      addcommorbiditis([
+        ...commor,
+        {commorbities: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('commorbidities', {commorbities: value});
     setComorbidities('');
   };
   const handleSelectSocial = value => {
     setSelect(value);
     setSocial(value);
-    dispatch(addsocialHistory([...socialHistory, {social: value}]));
+    dispatch(
+      addsocialHistory([
+        ...socialHistory,
+        {social: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('socialHistory', {social: value});
     setSocial('');
   };
   const handleSelectFamily = value => {
     setSelect(value);
     setFamily(value);
-    dispatch(addfamilyHistory([...familyHistory, {family: value}]));
+    dispatch(
+      addfamilyHistory([
+        ...familyHistory,
+        {family: value, appointment_id: appointmentID},
+      ]),
+    );
     // UpdateAsyncData('familyHistory', {family: value});
     setFamily('');
   };
@@ -127,9 +153,6 @@ const MedicalHistory = ({navigation, route}) => {
       dispatch(updatecommorbidities(updatedcommor));
     }
   };
-  const hospitalization = useSelector(
-    state => state?.pasthistory?.hospitalization,
-  );
   const medicationHistory = useSelector(
     state => state?.pasthistory?.medicationHistory,
   );
@@ -137,13 +160,34 @@ const MedicalHistory = ({navigation, route}) => {
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
-
+  const mesntrual =
+    menstrualHistory?.length > 0
+      ? menstrualHistory
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
   );
+  const obes =
+    obstericHistory?.length > 0
+      ? obstericHistory
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
+  const mar =
+    marital?.length > 0
+      ? marital
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const procedure = useSelector(state => state.pasthistory.procedures);
+
   const redflag = useSelector(state => state.pasthistory.red_flag);
+  const hospitalization = useSelector(
+    state => state?.pasthistory?.hospitalization,
+  );
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -224,17 +268,61 @@ const MedicalHistory = ({navigation, route}) => {
   }, []);
 
   const handledata = () => {
-    dispatch(addpastHospitalization({...hospitalization, past}));
-    dispatch(addmedicationHistory({...medicationHistory, medical}));
-    dispatch(addProcedures(procedures));
-    dispatch(addRedFalg(red_flag));
+    dispatch(
+      addpastHospitalization([
+        ...hospitalization,
+        {hospitalization: past, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addmedicationHistory([
+        ...medicationHistory,
+        {medicationHistory: medical, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addProcedures([
+        ...procedure,
+        {procedure: procedures, appointment_id: appointmentID},
+      ]),
+    );
+    dispatch(
+      addRedFalg([
+        ...redflag,
+        {redflag: red_flag, appointment_id: appointmentID},
+      ]),
+    );
     nav.goBack();
   };
   useEffect(() => {
-    setRed_Flag(redflag);
-    setprocedures(procedure);
-    setMedical(medicationHistory?.medical);
-    setPast(hospitalization?.past);
+    setRed_Flag(
+      redflag?.length > 0
+        ? redflag
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.redflag
+        : '',
+    );
+    setprocedures(
+      procedure?.length > 0
+        ? procedure
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.procedure
+        : '',
+    );
+    setMedical(
+      medicationHistory?.length > 0
+        ? medicationHistory
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.medicationHistory
+        : '',
+    );
+    setPast(
+      hospitalization?.length > 0
+        ? hospitalization
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.hospitalization
+        : '',
+    );
   }, []);
   const fetchMedicalData = async () => {
     try {
@@ -254,46 +342,95 @@ const MedicalHistory = ({navigation, route}) => {
         );
         if (jsonData?.data[0]?.commoribities) {
           const commo = JSON.parse(jsonData.data[0].commoribities);
-          dispatch(addcommorbiditis(commo));
+          const mapdata = commo?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addcommorbiditis([...commor, ...mapdata]));
         }
         if (jsonData?.data[0]?.family_history) {
           const family = JSON.parse(jsonData.data[0].family_history);
-          dispatch(addfamilyHistory(family));
+          const mapdata = family?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addfamilyHistory([...familyHistory, ...mapdata]));
         }
         if (jsonData?.data[0]?.social_history) {
           const social = JSON.parse(jsonData.data[0].social_history);
-          dispatch(addsocialHistory(social));
+          const mapdata = social?.map(item => ({
+            ...item,
+            appointment_id: appointmentID,
+          }));
+          dispatch(addsocialHistory([...mapdata, ...socialHistory]));
         }
         if (jsonData?.data[0]?.medication_history) {
           const medication = JSON.parse(jsonData.data[0].medication_history);
           setMedical(medication?.medical);
-          dispatch(addmedicationHistory(medication?.medical));
+          dispatch(
+            addmedicationHistory([
+              ...medicationHistory,
+              {
+                medicationHistory: medication?.medical,
+                appointment_id: appointmentID,
+              },
+            ]),
+          );
         }
         if (jsonData?.data[0]?.past_history) {
-          const hospitalization = JSON.parse(jsonData.data[0].past_history);
-          setPast(hospitalization?.past);
-          dispatch(addpastHospitalization(hospitalization?.past));
+          const hospitalizatio = JSON.parse(jsonData.data[0].past_history);
+          setPast(hospitalizatio?.past);
+          dispatch(
+            addpastHospitalization([
+              ...hospitalization,
+              {
+                hospitalization: hospitalizatio?.past,
+                appointment_id: appointmentID,
+              },
+            ]),
+          );
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          dispatch(addmenstrualHistory(mens));
+          dispatch(
+            addmenstrualHistory([
+              ...menstrualHistory,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          // setObstetric(mens?.obstetric);
-          dispatch(addobstericHistory(mens));
+          dispatch(
+            addobstericHistory([
+              ...obstericHistory,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.martial_history) {
           const mens = JSON.parse(jsonData.data[0].martial_history);
-          dispatch(addmartialHistory(mens));
+          dispatch(
+            addmartialHistory([
+              ...marital,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.procedures) {
           setprocedures(jsonData?.data[0]?.procedures);
-          dispatch(addProcedures(jsonData?.data[0]?.procedures));
+          dispatch(
+            addProcedures([
+              ...procedure,
+              {procedure: jsonData?.data[0]?.procedures},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.red_flag) {
           setRed_Flag(jsonData?.data[0]?.red_flag);
-          dispatch(addRedFalg(jsonData?.data[0]?.red_flag));
+          dispatch(
+            addRedFalg([...redflag, {red_flag: jsonData?.data[0]?.red_flag}]),
+          );
         }
       } else {
         console.error('API call failed:', response.status, response);
@@ -303,7 +440,7 @@ const MedicalHistory = ({navigation, route}) => {
     }
   };
   useEffect(() => {
-    dispatch(addCheck_field('log'));
+    dispatch(addCheck_field([{appointment_id: appointmentID}]));
   }, []);
   useEffect(() => {
     if (check_field?.length === 0) {
@@ -321,48 +458,39 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Menstrual History'}
-                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                icon={mesntrual !== '' ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                  borderWidth: mesntrual !== '' ? 0.5 : 0,
                 }}
-                size={
-                  menstrualHistory !== ''
-                    ? moderateScale(16)
-                    : moderateScale(32)
-                }
+                size={mesntrual !== '' ? moderateScale(16) : moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() =>
                   navigation.navigate('menstrual', {phone, patient_phone})
                 }
-                date={
-                  menstrualHistory != '' && updatedate !== ''
-                    ? updatedate
-                    : null
-                }
+                date={mesntrual != '' && updatedate !== '' ? updatedate : null}
               />
-              {JSON.stringify(menstrualHistory) !== '{}' && (
+              {JSON.stringify(mesntrual) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {menstrualHistory != '' && (
+                  {mesntrual != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        Menarche: {menstrualHistory?.age} Yrs,{' '}
-                        {menstrualHistory?.status}, Flow:{' '}
-                        {menstrualHistory?.flowdays} days, Cycle:{' '}
-                        {menstrualHistory?.cycledays} days
+                        Menarche: {mesntrual?.age} Yrs, {mesntrual?.status},
+                        Flow: {mesntrual?.flowdays} days, Cycle:{' '}
+                        {mesntrual?.cycledays} days
                         <Text>
                           ,{' '}
-                          {menstrualHistory?.pregnant !== ''
+                          {mesntrual?.pregnant !== ''
                             ? `Pregnant (Yes): LMP ${
-                                menstrualHistory?.pregnant.split('T')[0]
+                                mesntrual?.pregnant.split('T')[0]
                               }`
                             : 'Pregnant (No)'}
                         </Text>
                         <Text>
                           ,{' '}
-                          {menstrualHistory?.menopause !== ''
+                          {mesntrual?.menopause !== ''
                             ? `Menopause (Yes): LMP ${
-                                menstrualHistory?.menopause.split('T')[0]
+                                mesntrual?.menopause.split('T')[0]
                               }`
                             : 'Menopause (No)'}
                         </Text>
@@ -378,35 +506,32 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Obstetric History'}
-                icon={obstericHistory !== undefined ? 'pencil' : 'menu-right'}
+                icon={obes !== undefined ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: obstericHistory !== undefined ? 0.5 : 0,
+                  borderWidth: obes !== undefined ? 0.5 : 0,
                 }}
                 size={
-                  obstericHistory !== undefined
-                    ? moderateScale(16)
-                    : moderateScale(32)
+                  obes !== undefined ? moderateScale(16) : moderateScale(32)
                 }
                 textstyle={styles.text}
                 navigate={() =>
                   navigation.navigate('obstetric', {phone, patient_phone})
                 }
               />
-              {JSON.stringify(obstericHistory) !== '{}' && (
+              {JSON.stringify(obes) !== '{}' && (
                 <View style={styles.basiccontainer}>
-                  {obstericHistory != '' && (
+                  {obes != '' && (
                     <>
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
-                          G: {obstericHistory?.gravidity?.value}, T:{' '}
-                          {obstericHistory?.term?.value}, P:{' '}
-                          {obstericHistory?.premature?.value}, A:{' '}
-                          {obstericHistory?.abortions?.value}, L:{' '}
-                          {obstericHistory?.living?.map(item => item?.living)}
+                          G: {obes?.gravidity?.value}, T: {obes?.term?.value},
+                          P: {obes?.premature?.value}, A:{' '}
+                          {obes?.abortions?.value}, L:{' '}
+                          {obes?.living?.map(item => item?.living)}
                         </Text>
                       </View>
                       <View style={styles.symptomicon}>
-                        {obstericHistory?.living?.slice(0, -1)?.map(item => (
+                        {obes?.living?.slice(0, -1)?.map(item => (
                           <Text style={styles.pulse}>
                             {item?.name} {': '}
                             {item?.age} | {item?.gender}
@@ -415,21 +540,20 @@ const MedicalHistory = ({navigation, route}) => {
                       </View>
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
-                          {/* {obstericHistory?.gravidity?.desc ||
-                            obstericHistory?.term?.desc ||
-                            obstericHistory?.premature?.desc ||
-                            (obstericHistory?.abortions?.desc && (
+                          {/* {obes?.gravidity?.desc ||
+                            obes?.term?.desc ||
+                            obes?.premature?.desc ||
+                            (obes?.abortions?.desc && (
                               
                             ))} */}
                           <Text>Description : </Text>
-                          {obstericHistory?.gravidity?.desc &&
-                            `G - ${obstericHistory?.gravidity?.desc}`}
-                          {obstericHistory?.term?.desc &&
-                            `,${' '}T - ${obstericHistory?.term?.desc}`}
-                          {obstericHistory?.premature?.desc &&
-                            `,${' '}P - ${obstericHistory?.premature?.desc}`}
-                          {obstericHistory?.abortions?.desc &&
-                            `,${' '}A - ${obstericHistory?.abortions?.desc}`}
+                          {obes?.gravidity?.desc &&
+                            `G - ${obes?.gravidity?.desc}`}
+                          {obes?.term?.desc && `,${' '}T - ${obes?.term?.desc}`}
+                          {obes?.premature?.desc &&
+                            `,${' '}P - ${obes?.premature?.desc}`}
+                          {obes?.abortions?.desc &&
+                            `,${' '}A - ${obes?.abortions?.desc}`}
                         </Text>
                       </View>
                     </>
@@ -444,29 +568,29 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Marital History'}
-                icon={marital !== '' ? 'pencil' : 'menu-right'}
+                icon={mar !== '' ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: marital !== '' ? 0.5 : 0,
+                  borderWidth: mar !== '' ? 0.5 : 0,
                 }}
-                size={marital !== '' ? moderateScale(16) : moderateScale(32)}
+                size={mar !== '' ? moderateScale(16) : moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() => {
                   navigation.navigate('marital', {phone, patient_phone});
                 }}
               />
-              {JSON.stringify(marital) !== '{}' && (
+              {JSON.stringify(mar) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {marital != '' && (
+                  {mar != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        {`Marital Status: ${marital?.maritalstatus}`}
-                        {marital?.married
-                          ? `,${' '}Maried Since: ${marital?.married}`
+                        {`Marital Status: ${mar?.maritalstatus}`}
+                        {mar?.married
+                          ? `,${' '}Maried Since: ${mar?.married}`
                           : null}
 
-                        {marital?.cons
-                          ? `,${' '}Consanguinity: ${marital?.cons}`
+                        {mar?.cons
+                          ? `,${' '}Consanguinity: ${mar?.cons}`
                           : null}
                       </Text>
                     </View>
@@ -529,7 +653,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Enter new comorbidities'}
             item={'commorbities'}
             label={'Comorbidities'}
-            data={commor}
+            data={commotData}
             value={comorbidities}
             setValue={setComorbidities}
             onSubmit={handleAddReceiver}
@@ -564,7 +688,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
-            data={familyHistory}
+            data={Fhstry}
             value={family}
             setValue={setFamily}
             onSubmit={handleFamily}
@@ -600,7 +724,7 @@ const MedicalHistory = ({navigation, route}) => {
             placeholder={'Eg : smoking, drinking'}
             item={'social'}
             label={'Social History'}
-            data={socialHistory}
+            data={SocHstry}
             value={social}
             setValue={setSocial}
             onSubmit={handleSocial}

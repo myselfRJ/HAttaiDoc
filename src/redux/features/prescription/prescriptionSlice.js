@@ -2,13 +2,13 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   selectedComplaint: '',
-  note: '',
+  note: [],
   selectedDoctor: [],
-  vitalsData: {},
+  vitalsData: [],
   physicalExamination: {},
   eaxminationFindings: {},
   fees: [],
-  additional_notes: '',
+  additional_notes: [],
 };
 
 const prescriptionSlice = createSlice({

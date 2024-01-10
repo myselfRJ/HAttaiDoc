@@ -43,6 +43,7 @@ import CustomModal from '../components/CustomModal';
 const LabReports = () => {
   const {phone} = useSelector(state => state?.phone?.data);
   const token = useSelector(state => state.authenticate.auth.access);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const navigation = useNavigation();
   const option = 'procedure';
   const [value, setValue] = useState('');
@@ -52,12 +53,21 @@ const LabReports = () => {
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.labreport?.labReport);
+  const lab =
+    prev?.length > 0
+      ? prev?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const [sug, setSug] = useState([]);
   const [seletedType, setSelectedType] = useState();
   const [modal, setModal] = useState(false);
   const HandleAddValue = () => {
     if (value) {
-      dispatch(addLabReport([...prev, {lab_test: value}]));
+      dispatch(
+        addLabReport([
+          ...prev,
+          {lab_test: value, appointment_id: appointmentID},
+        ]),
+      );
       setValue('');
     }
   };
@@ -118,7 +128,9 @@ const LabReports = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    dispatch(addLabReport([...prev, {lab_test: value}]));
+    dispatch(
+      addLabReport([...prev, {lab_test: value, appointment_id: appointmentID}]),
+    );
     if (sug?.length > 0) {
       UpdateAsyncData(`labs${phone}`, {lab_test: value});
     }
@@ -133,7 +145,9 @@ const LabReports = () => {
   };
   const selectChange = value => {
     setSelected(value);
-    dispatch(addLabReport([...prev, {lab_test: value}]));
+    dispatch(
+      addLabReport([...prev, {lab_test: value, appointment_id: appointmentID}]),
+    );
     if (sug?.length > 0) {
       UpdateAsyncData(`labs${phone}`, {lab_test: value});
     }
@@ -157,10 +171,11 @@ const LabReports = () => {
   const [template, setTemplate] = useState('');
   const [loading, setLoading] = useState(false);
   const savingTemplate = async () => {
+    const lst_data = prev?.map(item => ({lab_test: item?.lab_test}));
     const bodyData = {
       key: 'tests',
       temp_name: template,
-      temp_data: JSON.stringify(prev),
+      temp_data: JSON.stringify(lst_data),
       doc_phone: phone,
     };
     setLoading(true);
@@ -220,14 +235,18 @@ const LabReports = () => {
   const handleDispatch = data => {
     if (selectedTemplate === data) {
       setSelectedTemplate('');
-      // const parsedData = JSON.parse(data);
       dispatch(addLabReport([]));
     } else {
       setSelectedTemplate(data);
       const parsedData = JSON.parse(data);
-      dispatch(addLabReport(parsedData));
+      const lstdata = parsedData?.map(item => ({
+        lab_test: item?.lab_test,
+        appointment_id: appointmentID,
+      }));
+      dispatch(addLabReport(lstdata));
     }
   };
+  console.log(prev);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
@@ -326,8 +345,8 @@ const LabReports = () => {
               ))}
             </View>
             <View style={{top: moderateScale(32), gap: moderateScale(4)}}>
-              {prev?.map((item, ind) =>
-                prev.length > 0 ? (
+              {lab?.map((item, ind) =>
+                lab.length > 0 ? (
                   <ShowChip
                     key={ind}
                     text={item?.lab_test}

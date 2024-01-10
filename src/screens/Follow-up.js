@@ -25,12 +25,11 @@ import {commonstyles} from '../styles/commonstyle';
 
 export default function DateTime() {
   const months = CONSTANTS.months;
-
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [customDays, setCustomDays] = useState('');
   const [selected, setSelected] = useState('30');
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -53,10 +52,14 @@ export default function DateTime() {
   };
 
   const handlePress = () => {
-    dispatch(addDate(handleDates(date)));
+    dispatch(
+      addDate([
+        ...dateTimeRed,
+        {date: handleDates(date), appointment_id: appointmentID},
+      ]),
+    );
     navigation.goBack();
   };
-
   const handelvalue = value => {
     setCustomDays(value);
     setSelected(value.length > 0 ? value : '30');

@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: moderateScale(16),
     // borderWidth: 1,
+    color: CUSTOMCOLOR.black,
   },
   fields: {
     flexDirection: 'row',

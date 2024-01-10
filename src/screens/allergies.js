@@ -34,6 +34,7 @@ import CustomCalendar from '../components/calendar';
 
 const Allergies = () => {
   const {phone} = useSelector(state => state?.phone?.data);
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const navigation = useNavigation();
   const [select, setSelect] = useState('');
   const option = 'substance';
@@ -45,16 +46,32 @@ const Allergies = () => {
   const [sug, setSug] = useState([]);
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.allergies?.allergies);
+  const allAllergy =
+    prev?.length > 0
+      ? prev?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const HandleAddValue = () => {
     if (value) {
-      dispatch(addAllergies([...prev, {allergies: value}]));
+      dispatch(
+        addAllergies([
+          ...prev,
+          {allergies: value, appointment_id: appointmentID},
+        ]),
+      );
       setValue('');
     }
   };
   const selectChange = value => {
     setSelect(value);
-    UpdateAsyncData(`allergies${phone}`, {allergies: value});
-    dispatch(addAllergies([...prev, {allergies: value, appointment_id: '1'}]));
+    UpdateAsyncData(`allergies${phone}`, {
+      allergies: value,
+    });
+    dispatch(
+      addAllergies([
+        ...prev,
+        {allergies: value, appointment_id: appointmentID},
+      ]),
+    );
   };
   const handleDelete = index => {
     if (prev) {
@@ -99,8 +116,15 @@ const Allergies = () => {
   const HandlePress = value => {
     setValue(value);
     setSelected(value);
-    UpdateAsyncData(`allergies${phone}`, {allergies: value});
-    dispatch(addAllergies([...prev, {allergies: value}]));
+    UpdateAsyncData(`allergies${phone}`, {
+      allergies: value,
+    });
+    dispatch(
+      addAllergies([
+        ...prev,
+        {allergies: value, appointment_id: appointmentID},
+      ]),
+    );
     setValue('');
   };
 
@@ -130,8 +154,8 @@ const Allergies = () => {
     <View style={styles.main}>
       <PrescriptionHead heading="Allergies" />
       <ScrollView>
-        {prev?.map((item, ind) =>
-          prev.length > 0 ? (
+        {allAllergy?.map((item, ind) =>
+          allAllergy.length > 0 ? (
             <ShowChip
               key={ind}
               text={item?.allergies}
