@@ -46,6 +46,7 @@ import {
   UpadateCheifComplaint,
   addCheifComplaint,
   addfees,
+  addFindings,
 } from '../redux/features/prescription/prescriptionSlice';
 import VitalScreen from './vitalscreen';
 import {CONSTANTS} from '../utility/constant';
@@ -101,7 +102,6 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.note
       : '';
-  console.log('=================', note);
   const selectedComplaint = useSelector(
     state => state.prescription.selectedComplaint,
   );
@@ -120,7 +120,6 @@ const Visit = ({navigation, route}) => {
     dummyPrescribe?.length > 0
       ? dummyPrescribe?.filter(item => item?.appointment_id === appointmentID)
       : [];
-  console.log(Prescribe);
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -154,33 +153,50 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.medicationHistory
       : '';
+  const mens = useSelector(state => state?.pasthistory?.menstrualHistory);
+  const menstrualHistory =
+    mens?.length > 0
+      ? mens
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
 
-  const menstrualHistory = useSelector(
-    state => state?.pasthistory?.menstrualHistory,
-  );
+  const obs = useSelector(state => state?.pasthistory?.obstericHistory);
+  const obstericHistory =
+    obs?.length > 0
+      ? obs
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
 
-  const obstericHistory = useSelector(
-    state => state?.pasthistory?.obstericHistory,
-  );
-
-  const martialHistory = useSelector(
-    state => state?.pasthistory?.martialHistory,
-  );
+  const mars = useSelector(state => state?.pasthistory?.martialHistory);
+  const martialHistory =
+    mars?.length > 0
+      ? mars
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
 
   const com = useSelector(state => state?.pasthistory?.commorbidities);
   const commor =
     com?.length > 0
-      ? com?.filter(item => item?.appointment_id === appointmentID)
+      ? com
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.map(item => ({commorbities: item?.commorbities}))
       : [];
   const sochstry = useSelector(state => state?.pasthistory?.socialHistory);
   const socialHistory =
     sochstry?.length > 0
-      ? sochstry?.filter(item => item?.appointment_id === appointmentID)
+      ? sochstry
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.map(item => ({social: item?.social}))
       : [];
   const fhstry = useSelector(state => state?.pasthistory?.familyHistory);
   const familyHistory =
     fhstry?.length > 0
-      ? fhstry?.filter(item => item?.appointment_id === appointmentID)
+      ? fhstry
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.map(item => ({family: item?.family}))
       : [];
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
@@ -206,10 +222,6 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)[0]?.advice
       : '';
-  // const advices = useSelector(state => state?.pasthistory?.advice);
-  // useEffect(() => {
-  //   setPrescribe(Prescribe);
-  // }, [Prescribe]);
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
 
@@ -414,6 +426,7 @@ const Visit = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setreport(jsonData?.data);
+      dispatch(addFindings({describe: jsonData?.data?.description}));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -795,6 +808,9 @@ const Visit = ({navigation, route}) => {
           data?.medical_number
         }, ${' '}${new Date().toString()}
           </p>
+          <p style="text-align:center">
+              powered by
+          </p>
           <img src=${
             CONSTANTS.pdf_footer
           } style="align-self:center;width:104px;height:40px"></img>
@@ -867,7 +883,6 @@ const Visit = ({navigation, route}) => {
   const Age =
     new Date().getFullYear() -
     parseInt(patient_data?.birth_date?.split('-')[0].toString());
-
   return (
     <View>
       <ScrollView>
@@ -1155,8 +1170,9 @@ const Visit = ({navigation, route}) => {
                       Prescribe?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value.label === 'Additional Recommendations/Notes' &&
-                      notes !== ''
+                      (value.label === 'Doctor Notes' &&
+                      notes !== '' &&
+                      notes !== undefined
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Diagnosis' && diagnosis?.length > 0

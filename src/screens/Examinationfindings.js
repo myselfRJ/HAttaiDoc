@@ -111,6 +111,7 @@ const ExaminationFindings = ({navigation}) => {
           : jsonData?.data?.description,
       );
       setreport(jsonData?.data);
+      dispatch(addFindings({describe: jsonData?.data?.description}));
     } else {
       console.error('API call failed:', response.status, response);
     }

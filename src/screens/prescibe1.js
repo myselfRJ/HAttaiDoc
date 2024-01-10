@@ -238,7 +238,6 @@ export default function Prescribe1({navigation}) {
       setFrequency([...frequency, index]);
     }
   };
-  console.log('===========>', frequency);
   const getSelectedDaysString = () => {
     const selectedDays = [];
 
@@ -495,7 +494,6 @@ export default function Prescribe1({navigation}) {
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
   };
-  console.log(medicine?.length > 1 && (medicine === setmedicine || show));
   return (
     <View style={styles.main}>
       <PrescriptionHead

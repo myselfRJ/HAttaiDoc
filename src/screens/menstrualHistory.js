@@ -31,14 +31,17 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {mode} from '../redux/features/prescription/prescribeslice';
 
 const MenstrualHistory = ({navigation, route}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const dispatch = useDispatch();
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
+  console.log('====================================');
+  console.log('mens=========', menstrualHistory);
+  console.log('====================================');
   const {phone, patient_phone} = route.params;
   const token = useSelector(state => state.authenticate.auth.access);
   const nav = useNavigation();
-  // console.log(',enstr==', menstrualHistory);
   const selction = ['Yes', 'No'];
   const [age, setAge] = useState('');
   const [status, setStatus] = useState('');
@@ -97,15 +100,21 @@ const MenstrualHistory = ({navigation, route}) => {
 
   const handledata = () => {
     dispatch(
-      addmenstrualHistory({
-        age: age,
-        status: status,
-        flowdays: flow,
-        cycledays: cycle,
-        pregnant: formatDate ? formatDate : '',
-        menopause: formatDate1 ? formatDate1 : '',
-        others: others,
-      }),
+      addmenstrualHistory([
+        ...menstrualHistory,
+        {
+          mens: {
+            age: age,
+            status: status,
+            flowdays: flow,
+            cycledays: cycle,
+            pregnant: formatDate ? formatDate : '',
+            menopause: formatDate1 ? formatDate1 : '',
+            others: others,
+          },
+          appointment_id: appointmentID,
+        },
+      ]),
     );
 
     setAge('');
@@ -119,61 +128,26 @@ const MenstrualHistory = ({navigation, route}) => {
     setOthers('');
     nav.goBack();
   };
-  const pregn = menstrualHistory?.pregnant;
-  // console.log(pregn), '================';
 
-  const fetchMenstrualData = async () => {
-    try {
-      const response = await fetchApi(URL.getMedical(phone, patient_phone), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const jsonData = await response.json();
-
-        if (jsonData?.data[0]?.mensutral_history) {
-          const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          // setMenstrual(mens);
-          setAge(mens?.age);
-          setStatus(mens?.status);
-          setFlow(mens?.flowdays);
-          setCycle(mens?.cycledays);
-          setformatDate(mens?.pregnant);
-          setformatDate1(mens?.menopause);
-          setOthers(mens?.others);
-          // console.log('mens================', mens);
-          dispatch(addmenstrualHistory(mens));
-        }
-      } else {
-        console.error('API call failed:', response.status, response);
-      }
-    } catch (error) {
-      console.error('Error in fetchMedicalData:', error);
-    }
-  };
-
-  // useEffect(() => {
-  //   fetchMenstrualData();
-  // }, []);
-  // console.log('preg===', menstrualHistory.pregnant);
   useEffect(() => {
-    if (menstrualHistory) {
-      setAge(menstrualHistory?.age);
-      setStatus(menstrualHistory?.status);
-      setCycle(menstrualHistory?.cycledays);
-      setFlow(menstrualHistory?.flowdays);
-      setformatDate(menstrualHistory?.pregnant);
-      setformatDate1(menstrualHistory?.menopause);
-      setOthers(menstrualHistory?.others);
+    const mens =
+      menstrualHistory?.length > 0
+        ? menstrualHistory
+            ?.filter(item => item?.appointment_id === appointmentID)
+            ?.slice(-1)?.[0]?.mens
+        : {};
+    if (mens) {
+      setAge(mens?.age);
+      setStatus(mens?.status);
+      setCycle(mens?.cycledays);
+      setFlow(mens?.flowdays);
+      setformatDate(mens?.pregnant);
+      setformatDate1(mens?.menopause);
+      setOthers(mens?.others);
     }
-    if (menstrualHistory?.pregnant) {
-      menstrualHistory?.pregnant !== '' ? setPreg('Yes') : setPreg('No');
-      menstrualHistory?.menopause !== ''
-        ? setMenopause('Yes')
-        : setMenopause('No');
+    if (mens?.pregnant) {
+      mens?.pregnant !== '' ? setPreg('Yes') : setPreg('No');
+      mens?.menopause !== '' ? setMenopause('Yes') : setMenopause('No');
     }
   }, []);
   return (

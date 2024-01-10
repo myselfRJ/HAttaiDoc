@@ -160,20 +160,34 @@ const MedicalHistory = ({navigation, route}) => {
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
-
+  const mesntrual =
+    menstrualHistory?.length > 0
+      ? menstrualHistory
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const obstericHistory = useSelector(
     state => state?.pasthistory?.obstericHistory,
   );
+  const obes =
+    obstericHistory?.length > 0
+      ? obstericHistory
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const marital = useSelector(state => state?.pasthistory?.martialHistory);
+  const mar =
+    marital?.length > 0
+      ? marital
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.mens
+      : {};
   const procedure = useSelector(state => state.pasthistory.procedures);
 
   const redflag = useSelector(state => state.pasthistory.red_flag);
   const hospitalization = useSelector(
     state => state?.pasthistory?.hospitalization,
   );
-  console.log('====================================');
-  console.log(procedure, redflag, hospitalization, procedure);
-  console.log('====================================');
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -193,9 +207,6 @@ const MedicalHistory = ({navigation, route}) => {
   const handleAddReceiver = () => {
     if (comorbidities.trim() !== '') {
       dispatch(addcommorbiditis([...commor, {commorbities: comorbidities}]));
-      // if (commor?.length === 0 || commor == undefined) {
-      //   StoreAsyncData('commorbidities', commor);
-      // } else {
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
@@ -206,9 +217,6 @@ const MedicalHistory = ({navigation, route}) => {
   const handleSocial = () => {
     if (social.trim() !== '') {
       dispatch(addsocialHistory([...socialHistory, {social: social}]));
-      // if (socialHistory?.length === 0 || socialHistory == undefined) {
-      //   StoreAsyncData('socialHistory', socialHistory);
-      // } else {
       UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
       // }
       setSocial('');
@@ -217,9 +225,6 @@ const MedicalHistory = ({navigation, route}) => {
   const handleFamily = () => {
     if (family.trim() !== '') {
       dispatch(addfamilyHistory([...familyHistory, {family: family}]));
-      // if (familyHistory?.length === 0 || familyHistory == undefined) {
-      //   StoreAsyncData('familyHistory', familyHistory);
-      // } else {
       UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
       // }
       setFamily('');
@@ -392,15 +397,30 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          dispatch(addmenstrualHistory(mens));
+          dispatch(
+            addmenstrualHistory([
+              ...menstrualHistory,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
-          dispatch(addobstericHistory(mens));
+          dispatch(
+            addobstericHistory([
+              ...obstericHistory,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.martial_history) {
           const mens = JSON.parse(jsonData.data[0].martial_history);
-          dispatch(addmartialHistory(mens));
+          dispatch(
+            addmartialHistory([
+              ...marital,
+              {mens: mens, appointment_id: appointmentID},
+            ]),
+          );
         }
         if (jsonData?.data[0]?.procedures) {
           setprocedures(jsonData?.data[0]?.procedures);
@@ -429,9 +449,6 @@ const MedicalHistory = ({navigation, route}) => {
   }, []);
   useEffect(() => {
     if (check_field?.length === 0) {
-      console.log('====================================');
-      console.log('indraaa');
-      console.log('====================================');
       fetchMedicalData();
     }
   }, []);
@@ -446,48 +463,39 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Menstrual History'}
-                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                icon={mesntrual !== '' ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                  borderWidth: mesntrual !== '' ? 0.5 : 0,
                 }}
-                size={
-                  menstrualHistory !== ''
-                    ? moderateScale(16)
-                    : moderateScale(32)
-                }
+                size={mesntrual !== '' ? moderateScale(16) : moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() =>
                   navigation.navigate('menstrual', {phone, patient_phone})
                 }
-                date={
-                  menstrualHistory != '' && updatedate !== ''
-                    ? updatedate
-                    : null
-                }
+                date={mesntrual != '' && updatedate !== '' ? updatedate : null}
               />
-              {JSON.stringify(menstrualHistory) !== '{}' && (
+              {JSON.stringify(mesntrual) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {menstrualHistory != '' && (
+                  {mesntrual != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        Menarche: {menstrualHistory?.age} Yrs,{' '}
-                        {menstrualHistory?.status}, Flow:{' '}
-                        {menstrualHistory?.flowdays} days, Cycle:{' '}
-                        {menstrualHistory?.cycledays} days
+                        Menarche: {mesntrual?.age} Yrs, {mesntrual?.status},
+                        Flow: {mesntrual?.flowdays} days, Cycle:{' '}
+                        {mesntrual?.cycledays} days
                         <Text>
                           ,{' '}
-                          {menstrualHistory?.pregnant !== ''
+                          {mesntrual?.pregnant !== ''
                             ? `Pregnant (Yes): LMP ${
-                                menstrualHistory?.pregnant.split('T')[0]
+                                mesntrual?.pregnant.split('T')[0]
                               }`
                             : 'Pregnant (No)'}
                         </Text>
                         <Text>
                           ,{' '}
-                          {menstrualHistory?.menopause !== ''
+                          {mesntrual?.menopause !== ''
                             ? `Menopause (Yes): LMP ${
-                                menstrualHistory?.menopause.split('T')[0]
+                                mesntrual?.menopause.split('T')[0]
                               }`
                             : 'Menopause (No)'}
                         </Text>
@@ -503,35 +511,32 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Obstetric History'}
-                icon={obstericHistory !== undefined ? 'pencil' : 'menu-right'}
+                icon={obes !== undefined ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: obstericHistory !== undefined ? 0.5 : 0,
+                  borderWidth: obes !== undefined ? 0.5 : 0,
                 }}
                 size={
-                  obstericHistory !== undefined
-                    ? moderateScale(16)
-                    : moderateScale(32)
+                  obes !== undefined ? moderateScale(16) : moderateScale(32)
                 }
                 textstyle={styles.text}
                 navigate={() =>
                   navigation.navigate('obstetric', {phone, patient_phone})
                 }
               />
-              {JSON.stringify(obstericHistory) !== '{}' && (
+              {JSON.stringify(obes) !== '{}' && (
                 <View style={styles.basiccontainer}>
-                  {obstericHistory != '' && (
+                  {obes != '' && (
                     <>
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
-                          G: {obstericHistory?.gravidity?.value}, T:{' '}
-                          {obstericHistory?.term?.value}, P:{' '}
-                          {obstericHistory?.premature?.value}, A:{' '}
-                          {obstericHistory?.abortions?.value}, L:{' '}
-                          {obstericHistory?.living?.map(item => item?.living)}
+                          G: {obes?.gravidity?.value}, T: {obes?.term?.value},
+                          P: {obes?.premature?.value}, A:{' '}
+                          {obes?.abortions?.value}, L:{' '}
+                          {obes?.living?.map(item => item?.living)}
                         </Text>
                       </View>
                       <View style={styles.symptomicon}>
-                        {obstericHistory?.living?.slice(0, -1)?.map(item => (
+                        {obes?.living?.slice(0, -1)?.map(item => (
                           <Text style={styles.pulse}>
                             {item?.name} {': '}
                             {item?.age} | {item?.gender}
@@ -540,21 +545,20 @@ const MedicalHistory = ({navigation, route}) => {
                       </View>
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
-                          {/* {obstericHistory?.gravidity?.desc ||
-                            obstericHistory?.term?.desc ||
-                            obstericHistory?.premature?.desc ||
-                            (obstericHistory?.abortions?.desc && (
+                          {/* {obes?.gravidity?.desc ||
+                            obes?.term?.desc ||
+                            obes?.premature?.desc ||
+                            (obes?.abortions?.desc && (
                               
                             ))} */}
                           <Text>Description : </Text>
-                          {obstericHistory?.gravidity?.desc &&
-                            `G - ${obstericHistory?.gravidity?.desc}`}
-                          {obstericHistory?.term?.desc &&
-                            `,${' '}T - ${obstericHistory?.term?.desc}`}
-                          {obstericHistory?.premature?.desc &&
-                            `,${' '}P - ${obstericHistory?.premature?.desc}`}
-                          {obstericHistory?.abortions?.desc &&
-                            `,${' '}A - ${obstericHistory?.abortions?.desc}`}
+                          {obes?.gravidity?.desc &&
+                            `G - ${obes?.gravidity?.desc}`}
+                          {obes?.term?.desc && `,${' '}T - ${obes?.term?.desc}`}
+                          {obes?.premature?.desc &&
+                            `,${' '}P - ${obes?.premature?.desc}`}
+                          {obes?.abortions?.desc &&
+                            `,${' '}A - ${obes?.abortions?.desc}`}
                         </Text>
                       </View>
                     </>
@@ -569,29 +573,29 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Marital History'}
-                icon={marital !== '' ? 'pencil' : 'menu-right'}
+                icon={mar !== '' ? 'pencil' : 'menu-right'}
                 iconstyle={{
-                  borderWidth: marital !== '' ? 0.5 : 0,
+                  borderWidth: mar !== '' ? 0.5 : 0,
                 }}
-                size={marital !== '' ? moderateScale(16) : moderateScale(32)}
+                size={mar !== '' ? moderateScale(16) : moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() => {
                   navigation.navigate('marital', {phone, patient_phone});
                 }}
               />
-              {JSON.stringify(marital) !== '{}' && (
+              {JSON.stringify(mar) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {marital != '' && (
+                  {mar != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        {`Marital Status: ${marital?.maritalstatus}`}
-                        {marital?.married
-                          ? `,${' '}Maried Since: ${marital?.married}`
+                        {`Marital Status: ${mar?.maritalstatus}`}
+                        {mar?.married
+                          ? `,${' '}Maried Since: ${mar?.married}`
                           : null}
 
-                        {marital?.cons
-                          ? `,${' '}Consanguinity: ${marital?.cons}`
+                        {mar?.cons
+                          ? `,${' '}Consanguinity: ${mar?.cons}`
                           : null}
                       </Text>
                     </View>

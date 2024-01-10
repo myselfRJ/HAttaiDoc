@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import {HButton, InputText} from '../components';
 import {CUSTOMCOLOR} from '../settings/styles';
 import {useEffect, useState} from 'react';
@@ -23,7 +23,6 @@ export const Advices = ({navigation}) => {
     );
     navigation.goBack();
   };
-  console.log(advices);
   useEffect(() => {
     const adv =
       advices?.length > 0
@@ -34,32 +33,35 @@ export const Advices = ({navigation}) => {
     SetAdvice(adv);
   }, []);
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: CUSTOMCOLOR.white,
-        paddingHorizontal: horizontalScale(24),
-        paddingVertical: verticalScale(16),
-      }}>
-      <InputText
-        label={'Advice'}
-        placeholder={'Enter Advice'}
-        value={advice}
-        setValue={txt => SetAdvice(txt)}
-        required={true}
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View
         style={{
-          padding: moderateScale(16),
-          justifyContent: 'flex-end',
           flex: 1,
+          backgroundColor: CUSTOMCOLOR.white,
+          paddingHorizontal: horizontalScale(24),
+          paddingVertical: verticalScale(16),
         }}>
-        <HButton
-          btnstyles={commonstyles.activebtn}
-          label={Language[language]['save']}
-          onPress={onPress}
+        <InputText
+          label={'Advice'}
+          placeholder={'Enter Advice'}
+          value={advice}
+          setValue={txt => SetAdvice(txt)}
+          required={true}
+          onSubmit={Keyboard.dismiss}
         />
+        <View
+          style={{
+            padding: moderateScale(16),
+            justifyContent: 'flex-end',
+            flex: 1,
+          }}>
+          <HButton
+            btnstyles={commonstyles.activebtn}
+            label={Language[language]['save']}
+            onPress={onPress}
+          />
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
