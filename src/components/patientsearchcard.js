@@ -37,17 +37,24 @@ const PatientSearchCard = patient_data => {
   const navigation = useNavigation();
   const patient_name = patient_data?.patient_data?.patient_name;
   const patient_age = patient_data?.patient_data?.birth_date;
-  const patient_phone = patient_data?.patient_data?.patient_phone_number;
   const patient_pic = patient_data?.patient_data?.patient_pic_url;
 
   const presentYear = new Date().toISOString().split('-')[0];
   const birthYear = patient_data?.patient_data?.birth_date.split('-')[0];
+  const gender = patient_data?.patient_data?.gender;
 
   const patient_phone_number = patient_data?.patient_data?.patient_phone_number;
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
-    navigation.navigate('patientrecord', {patient_phone});
+    navigation.navigate('patientrecord', {
+      patient_phone,
+      birthYea: birthYear,
+      patient_pic,
+      patient_age,
+      patient_name,
+      gender,
+    });
     patientSearchRef?.current?.snapToIndex(0);
   };
 

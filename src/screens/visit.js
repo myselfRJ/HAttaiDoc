@@ -224,9 +224,8 @@ const Visit = ({navigation, route}) => {
       : '';
 
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
-
-  const [patient_data, setPatientData] = useState();
   const {
+    bloodGroup,
     consultation_fees,
     name,
     gende,
@@ -234,26 +233,10 @@ const Visit = ({navigation, route}) => {
     patient_phone,
     appointment_id,
     complaint,
+    patient_profile_pic,
   } = route.params;
-  const fetchPatientData = async () => {
-    const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setPatientData(jsonData.data[0]);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
-  useEffect(() => {
-    dispatch(addCheifComplaint(complaint));
-  }, []);
+  const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
 
   const fetchAllergyData = async () => {
     const response = await fetchApi(URL.getAllergy(patient_phone), {
@@ -278,10 +261,6 @@ const Visit = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-
-  useEffect(() => {
-    fetchAllergyData();
-  }, []);
 
   const [chief_complaint, setComplaint] = useState('');
   const [vitals, setVitals] = useState({});
@@ -433,9 +412,8 @@ const Visit = ({navigation, route}) => {
   };
   useEffect(() => {
     fetchReport();
-    fetchPatientData();
     GetFees();
-    // fetchVitals();
+    fetchVitals();
     fetchComplaint();
     // fetchDoctor();
     setData(doc_prof);
@@ -448,12 +426,14 @@ const Visit = ({navigation, route}) => {
         {totalFees: parseInt(consultation_fees)},
       ]),
     );
+    dispatch(addCheifComplaint(complaint));
+    fetchAllergyData();
     // SetUploadDocument(report_findings)
   }, []);
   useFocusEffect(
     React.useCallback(() => {
       fetchReport();
-      fetchPatientData();
+      // fetchPatientData();
       GetFees();
       setData(doc_prof);
     }, []),
@@ -889,11 +869,9 @@ const Visit = ({navigation, route}) => {
     patient_phone: patient_phone,
     clinic_id: Clinic_id,
     appointment_id: appointment_id,
-    patient_name: patient_data?.patient_name,
+    patient_name: name,
   };
-  const Age =
-    new Date().getFullYear() -
-    parseInt(patient_data?.birth_date?.split('-')[0].toString());
+  const Age = age;
   return (
     <View>
       <ScrollView>
@@ -991,7 +969,7 @@ const Visit = ({navigation, route}) => {
                     borderColor: CUSTOMCOLOR.borderColor,
                   }}
                   source={{
-                    uri: `data:image/jpeg;base64,${patient_data?.patient_pic_url}`,
+                    uri: `data:image/jpeg;base64,${patient_profile_pic}`,
                   }}
                 />
                 <View>
@@ -1001,19 +979,12 @@ const Visit = ({navigation, route}) => {
                       fontWeight: 400,
                       fontSize: moderateScale(16),
                     }}>
-                    {patient_data?.patient_name} | {patient_data?.bloodgroup} |{' '}
-                    {patient_data?.patient_phone_number}
+                    {name} | {bloodGroup} | {patient_phone}
                   </Text>
                   <Text style={styles.patientText}>
-                    Age :{' '}
-                    {new Date().getFullYear() -
-                      parseInt(
-                        patient_data?.birth_date?.split('-')[0].toString(),
-                      )}{' '}
-                    | {patient_data?.gender}
+                    Age : {age} | {gende}
                   </Text>
-                  {(patient_data?.gender === 'female' ||
-                    patient_data?.gender === 'Female') &&
+                  {gende?.toLowerCase() === 'female' &&
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
                     <Text style={[styles.patientText, {fontWeight: '700'}]}>
@@ -1109,9 +1080,9 @@ const Visit = ({navigation, route}) => {
                         {String.fromCharCode(8451)}
                       </Text>
                     )}{' '}
-                    {(vitalsData?.others &&
-                      Object?.keys(vitalsData?.others)?.[0] !== 'null') ||
-                      (vitalsData?.others?.[0] !== '' && (
+                    {vitalsData?.others &&
+                      Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
+                      Object?.keys(vitalsData?.others)?.[0] !== '' && (
                         <Text>
                           {vitalsData?.others
                             ? Object.keys(vitalsData?.others)?.[0]
@@ -1124,7 +1095,7 @@ const Visit = ({navigation, route}) => {
                               : null}
                           </Text>
                         </Text>
-                      ))}
+                      )}
                   </Text>
                 )}
 
@@ -1339,30 +1310,34 @@ const Visit = ({navigation, route}) => {
                         </View>
                       </View>
                     )}
-                  {value.label === 'Follow-Up' && date !== '' && (
-                    <View style={styles.FollowUpcontainer}>
-                      <>
-                        <Icon
-                          name="file-document-edit"
-                          color={CUSTOMCOLOR.primary}
-                          size={moderateScale(16)}
-                        />
-                        <Text style={styles.pulse}>{date}</Text>
-                      </>
-                    </View>
-                  )}
-                  {value.label === 'Advice' && advices !== '' && (
-                    <View style={styles.FollowUpcontainer}>
-                      <>
-                        <Icon
-                          name="file-document-edit"
-                          color={CUSTOMCOLOR.primary}
-                          size={moderateScale(16)}
-                        />
-                        <Text style={styles.pulse}>{advices}</Text>
-                      </>
-                    </View>
-                  )}
+                  {value.label === 'Follow-Up' &&
+                    date !== '' &&
+                    date !== undefined && (
+                      <View style={styles.FollowUpcontainer}>
+                        <>
+                          <Icon
+                            name="file-document-edit"
+                            color={CUSTOMCOLOR.primary}
+                            size={moderateScale(16)}
+                          />
+                          <Text style={styles.pulse}>{date}</Text>
+                        </>
+                      </View>
+                    )}
+                  {value.label === 'Advice' &&
+                    advices !== '' &&
+                    advices !== undefined && (
+                      <View style={styles.FollowUpcontainer}>
+                        <>
+                          <Icon
+                            name="file-document-edit"
+                            color={CUSTOMCOLOR.primary}
+                            size={moderateScale(16)}
+                          />
+                          <Text style={styles.pulse}>{advices}</Text>
+                        </>
+                      </View>
+                    )}
                   {value.label === 'Validity' && dateTimeRed !== '' && (
                     <View style={styles.FollowUpcontainer}>
                       <>
@@ -1499,7 +1474,8 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
                   {value.label === 'History of Present Illness' &&
-                    note !== '' && (
+                    note !== '' &&
+                    note !== undefined && (
                       <View style={styles.complaintcontainer}>
                         <Icon
                           name="file-document-edit"
@@ -1509,16 +1485,18 @@ const Visit = ({navigation, route}) => {
                         <Text style={styles.pulse}>{note}</Text>
                       </View>
                     )}
-                  {value.label === 'Doctor Notes' && notes !== '' && (
-                    <View style={styles.complaintcontainer}>
-                      <Icon
-                        name="file-document-edit"
-                        color={CUSTOMCOLOR.primary}
-                        size={moderateScale(16)}
-                      />
-                      <Text style={styles.pulse}>{notes}</Text>
-                    </View>
-                  )}
+                  {value.label === 'Doctor Notes' &&
+                    notes !== '' &&
+                    notes !== undefined && (
+                      <View style={styles.complaintcontainer}>
+                        <Icon
+                          name="file-document-edit"
+                          color={CUSTOMCOLOR.primary}
+                          size={moderateScale(16)}
+                        />
+                        <Text style={styles.pulse}>{notes}</Text>
+                      </View>
+                    )}
 
                   {value.label === 'Diagnosis' && diagnosis.length > 0 && (
                     <View style={styles.basiccontainer}>

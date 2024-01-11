@@ -35,24 +35,31 @@ export default function MedicalRecordPatient({route, navigation}) {
   const [data, setData] = useState([]);
   const [consultation, setConsultation] = useState([]);
   const token = useSelector(state => state?.authenticate?.auth?.access);
-  const {patient_phone} = route.params;
-  const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setData(jsonData.data[0]);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const {
+    patient_phone,
+    birthYea,
+    patient_pic,
+    patient_age,
+    patient_name,
+    gender,
+  } = route.params;
+  // const fetchData = async () => {
+  //   const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     setData(jsonData.data[0]);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   const [date, setDate] = useState(new Date());
   const [handledate, sethandleDate] = useState('');
   const [open, setOpen] = useState(false);
@@ -139,17 +146,17 @@ export default function MedicalRecordPatient({route, navigation}) {
             <Image
               style={styles.img}
               source={{
-                uri: `data:image/jpeg;base64,${data?.patient_pic_url}`,
+                uri: `data:image/jpeg;base64,${patient_pic}`,
               }}
             />
             <View style={styles.patientinfo}>
-              <Text style={styles.name}>{data?.patient_name}</Text>
+              <Text style={styles.name}>{patient_name}</Text>
               <Text style={styles.age}>
-                {parseInt(presentYear) - parseInt(birthYear)} | {data?.gender}
+                {parseInt(presentYear) - parseInt(birthYea)} | {gender}
               </Text>
               <Text style={styles?.contact}>
                 contact:
-                {data?.patient_phone_number}
+                {patient_phone}
               </Text>
             </View>
           </View>

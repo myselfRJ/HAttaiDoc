@@ -444,6 +444,7 @@ export default function Prescribe1({navigation}) {
     if (!template) {
       // Alert.alert('', 'Please Enter Template Name');
       showToast('error', 'Please Enter Template Name');
+      setModal(true);
     } else {
       savingTemplate();
     }

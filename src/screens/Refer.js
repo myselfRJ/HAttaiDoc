@@ -69,23 +69,23 @@ const ReferToDoctor = () => {
   const [data, setData] = useState();
   const token = useSelector(state => state.authenticate.auth.access);
 
-  const fetchDoctor = async () => {
-    const response = await fetchApi(
-      URL.getPractitionerByNumber(patient_details?.doc_phone),
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    if (response.ok) {
-      const jsonData = await response.json();
-      setData(jsonData?.data);
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
+  // const fetchDoctor = async () => {
+  //   const response = await fetchApi(
+  //     URL.getPractitionerByNumber(patient_details?.doc_phone),
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     },
+  //   );
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     setData(jsonData?.data);
+  //   } else {
+  //     console.error('API call failed:', response.status, response);
+  //   }
+  // };
   const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   useEffect(() => {
     // fetchDoctor();

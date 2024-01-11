@@ -46,7 +46,6 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
-  // console.log(appointment.complaint);
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     const name = patient_name;
@@ -54,6 +53,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
     const age = patient_age;
     const complaint = appointment.complaint;
     const consultation_fees = appointment?.clinic_data?.fees;
+    const bloodGroup = appointment?.patient_data?.bloodgroup;
+    const patient_profile_pic = appointment?.patient_data?.patient_pic_url;
     navigation.navigate('visit', {
       name,
       gende,
@@ -62,6 +63,8 @@ const AppointmentCard = ({appointment, openVisit}) => {
       appointment_id,
       complaint,
       consultation_fees,
+      bloodGroup,
+      patient_profile_pic,
     });
     dispatch(addAppointmentID(appointment_id));
     appointmentCardRef?.current?.snapToIndex(0);

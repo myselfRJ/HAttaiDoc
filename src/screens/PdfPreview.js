@@ -102,59 +102,152 @@ const PdfView = ({navigation}) => {
   const pharmaphone = useSelector(
     state => state?.clinicid?.clinic_pharmacy_phone,
   );
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
+  const follow_up = useSelector(state => state?.dateTime?.date);
+  const date =
+    follow_up?.length > 0
+      ? follow_up?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const dia = useSelector(state => state?.diagnosis?.DiagnosisItems);
+  const diagnosis =
+    dia?.length > 0
+      ? dia?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const adn = useSelector(state => state?.prescription?.additional_notes);
+  const notes =
+    adn?.length > 0
+      ? adn?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const vital = useSelector(state => state.prescription.vitalsData);
+  const vitalsData =
+    vital?.length > 0
+      ? vital?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const physical = useSelector(state => state.prescription.physicalExamination);
+  const reptr = useSelector(state => state.prescription.eaxminationFindings);
+  const notess = useSelector(state => state.prescription.note);
+  const note =
+    notess?.length > 0
+      ? notess?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const selectedComplaint = useSelector(
+    state => state.prescription.selectedComplaint,
+  );
+  const selectedDoc = useSelector(state => state?.prescription?.selectedDoctor);
+  const selectedDoctor =
+    selectedDoc?.length > 0
+      ? selectedDoc?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const symp = useSelector(state => state.symptoms.symptom);
+  const Symptom =
+    symp?.length > 0
+      ? symp?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const dummyPrescribe = useSelector(state => state.pres.prescribeItems);
+  const Prescribe =
+    dummyPrescribe?.length > 0
+      ? dummyPrescribe?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const allergy = useSelector(state => state?.allergies?.allergies);
+  const allergies =
+    allergy?.length > 0
+      ? allergy?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const lab = useSelector(state => state?.labreport?.labReport);
+  const labreport =
+    lab?.length > 0
+      ? lab?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const hosp = useSelector(state => state?.pasthistory?.hospitalization);
+  const hospitalization =
+    hosp?.length > 0
+      ? hosp?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const medication_history = useSelector(
+    state => state?.pasthistory?.medicationHistory,
+  );
+  const medicationHistory =
+    medication_history?.length > 0
+      ? medication_history?.filter(
+          item => item?.appointment_id !== appointmentID,
+        )
+      : [];
+  const mens = useSelector(state => state?.pasthistory?.menstrualHistory);
+  const menstrualHistory =
+    mens?.length > 0
+      ? mens?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const obs = useSelector(state => state?.pasthistory?.obstericHistory);
+  const obstericHistory =
+    obs?.length > 0
+      ? obs?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+
+  const mars = useSelector(state => state?.pasthistory?.martialHistory);
+  const martialHistory =
+    mars?.length > 0
+      ? mars?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+
+  const com = useSelector(state => state?.pasthistory?.commorbidities);
+  const commor =
+    com?.length > 0
+      ? com?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const sochstry = useSelector(state => state?.pasthistory?.socialHistory);
+  const socialHistory =
+    sochstry?.length > 0
+      ? sochstry?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const fhstry = useSelector(state => state?.pasthistory?.familyHistory);
+  const familyHistory =
+    fhstry?.length > 0
+      ? fhstry?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const service_fees = useSelector(state => state.prescription.fees);
+  const proce = useSelector(state => state.pasthistory.procedures);
+  const procedure =
+    proce?.length > 0
+      ? proce?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const rflag = useSelector(state => state.pasthistory.red_flag);
+  const redflag =
+    rflag?.length > 0
+      ? rflag?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
+  const adv = useSelector(state => state?.pasthistory?.advice);
+  const advices =
+    adv?.length > 0
+      ? adv?.filter(item => item?.appointment_id !== appointmentID)
+      : [];
   const ResetRuduxState = () => {
-    const newPrescribe = [];
-    const newSymptoms = [];
-    const newDiagnosis = [];
-    const newLabhistory = [];
-    const newCommorbities = [];
-    const newAllregies = [];
-    const commorbidities = [];
-    const social = [];
-    const family = [];
-
-    const hospitalization = '';
-
-    const medicationHistory = '';
-    const menstrualHistory = {};
-    const obstericHistory = {};
-    const newDate = {
-      date: '',
-    };
-    const newValid = {
-      valid: '',
-    };
-    const newVitals = {};
-    const newDoctor = [];
-    const newComplaint = '';
-    const newNote = '';
-    // dispatch(updatesocialHistory(social));
-    // dispatch(updatefamilyHistory(family));
-    // dispatch(updatepastHospitalization(hospitalization));
-    // dispatch(updatemedicationHistory(medicationHistory));
-    // dispatch(updatemenstrualHistory(menstrualHistory));
-    // dispatch(updateobstericHistory(obstericHistory));
-    // dispatch(updatePrescribe1(newPrescribe));
-    // dispatch(updateAllergies(newAllregies));
-    // dispatch(updateCommorbities(newCommorbities));
-    // dispatch(updateDiagnosis(newDiagnosis));
-    // dispatch(updateLabReport(newLabhistory));
-    // dispatch(updateSymptom(newSymptoms));
-    // dispatch(updateDate(newDate?.date));
+    dispatch(updatesocialHistory(socialHistory));
+    dispatch(updatefamilyHistory(familyHistory));
+    dispatch(updatepastHospitalization(hospitalization));
+    dispatch(updatemedicationHistory(medicationHistory));
+    dispatch(updatemenstrualHistory(menstrualHistory));
+    dispatch(updateobstericHistory(obstericHistory));
+    dispatch(updatePrescribe1(Prescribe));
+    dispatch(updateAllergies(allergies));
+    dispatch(updateCommorbities(commor));
+    dispatch(updateDiagnosis(diagnosis));
+    dispatch(updateLabReport(labreport));
+    dispatch(updateSymptom(Symptom));
+    dispatch(updateDate(date));
     // dispatch(updateValid(newValid?.valid));
-    // dispatch(UpadteVitals(newVitals));
-    // dispatch(UpdateNote(newNote));
-    // dispatch(UpdateDoctorRefer(newDoctor));
+    dispatch(UpadteVitals(vitalsData));
+    dispatch(UpdateNote(note));
+    dispatch(UpdateDoctorRefer(selectedDoctor));
     // dispatch(UpadateCheifComplaint(newComplaint));
     // dispatch(updatecommorbidities(commorbidities));
     // dispatch(updatefees([]));
-    // dispatch(updateAdditionalNote(''));
+    dispatch(updateAdditionalNote(notes));
     dispatch(UpadteFindings({}));
     dispatch(UpadteExamination({}));
-    // dispatch(updatemartialHistory({}));
-    // dispatch(addRedFalg(''));
-    // dispatch(addProcedures(''));
-    // dispatch(addAdvice(''));
+    dispatch(updatemartialHistory(martialHistory));
+    dispatch(addRedFalg(redflag));
+    dispatch(addProcedures(procedure));
+    dispatch(addAdvice(advices));
     dispatch(addCheck_field([]));
   };
   const putComplaint = async () => {
