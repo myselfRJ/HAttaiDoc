@@ -3,8 +3,15 @@ import NotificationCard from '../components/notificationCard';
 import {horizontalScale, verticalScale} from '../utility/scaleDimension';
 import {CUSTOMCOLOR} from '../settings/styles';
 const Notifications = ({route}) => {
-  const {notification, age, name, gende, complaint, consultation_fees} =
-    route.params;
+  const {
+    notification,
+    age,
+    name,
+    gende,
+    complaint,
+    consultation_fees,
+    patient_pic_url,
+  } = route.params;
   return (
     <View style={styles.main}>
       {notification?.length > 0 &&
@@ -20,6 +27,7 @@ const Notifications = ({route}) => {
                 gende={gende}
                 complaint={complaint}
                 consultation_fees={consultation_fees}
+                patient_pic_url={patient_pic_url}
               />
             ),
         )}

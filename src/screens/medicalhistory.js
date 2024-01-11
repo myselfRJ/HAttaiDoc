@@ -56,6 +56,7 @@ import {updateDate} from '../redux/features/prescription/Followupslice';
 import VitalField from '../components/vitalFields';
 // import ShowChip from '../components/showChip';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
+import SelectorBtn from '../components/selector';
 
 const MedicalHistory = ({navigation, route}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -92,16 +93,13 @@ const MedicalHistory = ({navigation, route}) => {
   const nav = useNavigation();
   const [comorbidities, setComorbidities] = useState('');
   const [updatedate, setUpdatedate] = useState('');
-  const [commor_sug, setCommor_Sug] = useState([...CONSTANTS.commoribities]);
+  const [commor_sug, setCommor_Sug] = useState([]);
   const [past, setPast] = useState('');
   const [social, setSocial] = useState('');
   const [social_sug, setSocial_Sug] = useState([...CONSTANTS.social]);
   const [family, setFamily] = useState('');
-  const [family_sug, setFamily_Sug] = useState([...CONSTANTS.family]);
+  const [family_sug, setFamily_Sug] = useState([]);
   const [medical, setMedical] = useState('');
-  // const [menstrual, setMenstrual] = useState('');
-  // const [obstetric, setObstetric] = useState('');
-  // const [getdata, setDate] = useState();
   const [select, setSelect] = useState('');
   const [red_flag, setRed_Flag] = useState('');
   const [procedures, setprocedures] = useState('');
@@ -114,7 +112,7 @@ const MedicalHistory = ({navigation, route}) => {
         {commorbities: value, appointment_id: appointmentID},
       ]),
     );
-    // UpdateAsyncData('commorbidities', {commorbities: value});
+    UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {commorbities: value});
     setComorbidities('');
   };
   const handleSelectSocial = value => {
@@ -126,7 +124,7 @@ const MedicalHistory = ({navigation, route}) => {
         {social: value, appointment_id: appointmentID},
       ]),
     );
-    // UpdateAsyncData('socialHistory', {social: value});
+    UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: value});
     setSocial('');
   };
   const handleSelectFamily = value => {
@@ -138,7 +136,7 @@ const MedicalHistory = ({navigation, route}) => {
         {family: value, appointment_id: appointmentID},
       ]),
     );
-    // UpdateAsyncData('familyHistory', {family: value});
+    UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: value});
     setFamily('');
   };
   const handleSelectMedical = val => {
@@ -227,33 +225,38 @@ const MedicalHistory = ({navigation, route}) => {
       setFamily('');
     }
   };
-  // const handleAsyncStorage = () => {
-  //   RetriveAsyncData(`commorbidities${doc_phone?.phone}`).then(array => {
-  //     const uniqueArray = [...commor_sug, ...array]?.filter((item, index) => {
-  //       return (
-  //         index ===
-  //         array?.findIndex(obj => obj.commorbities === item?.commorbities)
-  //       );
-  //     });
-  //     setCommor_Sug([...commor_sug, ...uniqueArray]);
-  //   });
-  //   RetriveAsyncData(`socialHistory${doc_phone?.phone}`).then(array => {
-  //     const uniqueArray = [...social_sug, ...array]?.filter((item, index) => {
-  //       return index === array?.findIndex(obj => obj.social === item?.social);
-  //     });
-  //     setSocial_Sug([...social_sug, ...uniqueArray]);
-  //   });
-  //   RetriveAsyncData(`familyHistory${doc_phone?.phone}`).then(array => {
-  //     const uniqueArray = [...family_sug, ...array]?.filter((item, index) => {
-  //       return index === array?.findIndex(obj => obj.family === item?.family);
-  //     });
-  //     setFamily_Sug([...family_sug, ...uniqueArray]);
-  //   });
-  // };
-  // useEffect(() => {
-  //   // clearStorage();
-  //   handleAsyncStorage();
-  // }, []);
+  const handleAsyncStorage = () => {
+    RetriveAsyncData(`commorbidities${doc_phone?.phone}`).then(array => {
+      const uniqueArray = array?.filter((item, index) => {
+        return (
+          index ===
+          array?.findIndex(obj => obj.commorbities === item?.commorbities)
+        );
+      });
+      uniqueArray.splice(10);
+      setCommor_Sug(uniqueArray);
+    });
+    // RetriveAsyncData(`socialHistory${doc_phone?.phone}`).then(array => {
+    //   if (array) {
+    //     const uniqueArray = array?.filter((item, index) => {
+    //       return index === array?.findIndex(obj => obj.social === item?.social);
+    //     });
+    //     setSocial_Sug(uniqueArray);
+    //   }
+    // });
+    RetriveAsyncData(`familyHistory${doc_phone?.phone}`).then(array => {
+      const uniqueArray = array?.filter((item, index) => {
+        return index === array?.findIndex(obj => obj.family === item?.family);
+      });
+      uniqueArray.splice(10);
+      setFamily_Sug(uniqueArray);
+    });
+  };
+  useEffect(() => {
+    handleAsyncStorage();
+    StoreAsyncData(`commorbidities${doc_phone?.phone}`, []);
+    StoreAsyncData(`familyHistory${doc_phone?.phone}`, []);
+  }, []);
 
   useEffect(() => {
     if (commor_sug?.length === 0 || commor_sug == undefined) {
@@ -366,12 +369,12 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.medication_history) {
           const medication = JSON.parse(jsonData.data[0].medication_history);
-          setMedical(medication?.medical);
+          setMedical(medication);
           dispatch(
             addmedicationHistory([
               ...medicationHistory,
               {
-                medicationHistory: medication?.medical,
+                medicationHistory: medication,
                 appointment_id: appointmentID,
               },
             ]),
@@ -379,12 +382,12 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.past_history) {
           const hospitalizatio = JSON.parse(jsonData.data[0].past_history);
-          setPast(hospitalizatio?.past);
+          setPast(hospitalizatio);
           dispatch(
             addpastHospitalization([
               ...hospitalization,
               {
-                hospitalization: hospitalizatio?.past,
+                hospitalization: hospitalizatio,
                 appointment_id: appointmentID,
               },
             ]),
@@ -442,8 +445,40 @@ const MedicalHistory = ({navigation, route}) => {
   useEffect(() => {
     dispatch(addCheck_field([{appointment_id: appointmentID}]));
   }, []);
+  const [snomedCommor, setSnomedCommor] = useState([]);
+  const [snomedFamily, setSnomedFamily] = useState([]);
+  const fetchCommor_family = async value => {
+    const response = await fetchApi(
+      URL.snomed(value ? value : '1', 'disorder'),
+      {
+        method: 'GET',
+        headers: {},
+      },
+    );
+    if (response.ok) {
+      const jsonData = await response.json();
+      const snomed_data = jsonData?.map(item => ({term: item}));
+      snomed_data?.splice(10);
+      if (comorbidities) {
+        setSnomedCommor(snomed_data);
+      }
+      if (family) {
+        setSnomedFamily(snomed_data);
+      }
+    } else {
+      console.error('API call failed:', response.status, response);
+    }
+  };
   useEffect(() => {
-    if (check_field?.length === 0) {
+    if (comorbidities) {
+      fetchCommor_family(comorbidities);
+    }
+    if (family) {
+      fetchCommor_family(family);
+    }
+  }, [comorbidities, family]);
+  useEffect(() => {
+    if (check_field?.length > 0) {
       fetchMedicalData();
     }
   }, []);
@@ -600,54 +635,29 @@ const MedicalHistory = ({navigation, route}) => {
               )}
             </View>
           )}
-          {
-            Age <= 18 ? (
-              <View style={styles.visitOpenItem}>
-                <VisitOpen
-                  label={'Immunization Chart for Kids'}
-                  icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
-                  iconstyle={{
-                    borderWidth: menstrualHistory !== '' ? 0.5 : 0,
-                  }}
-                  size={
-                    menstrualHistory !== ''
-                      ? moderateScale(16)
-                      : moderateScale(32)
-                  }
-                  textstyle={styles.text}
-                  navigate={() =>
-                    navigation.navigate('kids', {phone, patient_phone})
-                  }
-                  // date={
-                  //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
-                  // }
-                />
-              </View>
-            ) : null
-            // (
-            //   <View style={styles.visitOpenItem}>
-            //     <VisitOpen
-            //       label={'Adult'}
-            //       icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
-            //       iconstyle={{
-            //         borderWidth: menstrualHistory !== '' ? 0.5 : 0,
-            //       }}
-            //       size={
-            //         menstrualHistory !== ''
-            //           ? moderateScale(16)
-            //           : moderateScale(32)
-            //       }
-            //       textstyle={styles.text}
-            //       navigate={() =>
-            //         navigation.navigate('adult', {phone, patient_phone})
-            //       }
-            //       // date={
-            //       //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
-            //       // }
-            //     />
-            //   </View>
-            // )
-          }
+          {Age <= 18 ? (
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={'Immunization Chart for Kids'}
+                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                iconstyle={{
+                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                }}
+                size={
+                  menstrualHistory !== ''
+                    ? moderateScale(16)
+                    : moderateScale(32)
+                }
+                textstyle={styles.text}
+                navigate={() =>
+                  navigation.navigate('kids', {phone, patient_phone})
+                }
+                // date={
+                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+                // }
+              />
+            </View>
+          ) : null}
 
           <ChipInput
             placeholder={'Enter new comorbidities'}
@@ -659,28 +669,45 @@ const MedicalHistory = ({navigation, route}) => {
             onSubmit={handleAddReceiver}
             delete={handleDeleteCommorbities}
           />
+          {snomedCommor?.length > 0 ? (
+            <View style={styles.suggestion}>
+              {snomedCommor?.map((item, ind) => (
+                <SelectorBtn
+                  select={{
+                    paddingHorizontal: horizontalScale(4),
+                    paddingVertical: verticalScale(8),
+                    borderWidth: 1,
+                    backgroundColor: CUSTOMCOLOR.white,
+                  }}
+                  onPress={() => handleSelectComorbidities(item?.term)}
+                  key={ind}
+                  inputstyle={{
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: moderateScale(14),
+                    fontWeight: '400',
+                  }}
+                  input={item?.term}></SelectorBtn>
+              ))}
+            </View>
+          ) : null}
           {commor_sug?.length > 0 ? (
             <View style={styles.suggestion}>
               {commor_sug?.map((item, ind) => (
-                <TouchableOpacity
+                <SelectorBtn
+                  select={{
+                    paddingHorizontal: horizontalScale(4),
+                    paddingVertical: verticalScale(8),
+                    borderWidth: 1,
+                    backgroundColor: CUSTOMCOLOR.recent,
+                  }}
+                  onPress={() => handleSelectComorbidities(item?.commorbities)}
                   key={ind}
-                  style={[
-                    styles.sug,
-                    // item?.commorbities == select
-                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
-                    //   : {backgroundColor: CUSTOMCOLOR.white},
-                  ]}
-                  onPress={() => handleSelectComorbidities(item?.commorbities)}>
-                  <Text
-                    style={[
-                      styles.sugtxt,
-                      // item?.commorbities == select
-                      //   ? {color: CUSTOMCOLOR.white}
-                      //   : {color: CUSTOMCOLOR.primary},
-                    ]}>
-                    {item?.commorbities}
-                  </Text>
-                </TouchableOpacity>
+                  inputstyle={{
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: moderateScale(14),
+                    fontWeight: '400',
+                  }}
+                  input={item?.commorbities}></SelectorBtn>
               ))}
             </View>
           ) : null}
@@ -694,28 +721,45 @@ const MedicalHistory = ({navigation, route}) => {
             onSubmit={handleFamily}
             delete={handleDeleteFamliy}
           />
+          {snomedFamily?.length > 0 ? (
+            <View style={styles.suggestion}>
+              {snomedFamily?.map((item, ind) => (
+                <SelectorBtn
+                  select={{
+                    paddingHorizontal: horizontalScale(4),
+                    paddingVertical: verticalScale(8),
+                    borderWidth: 1,
+                    backgroundColor: CUSTOMCOLOR.white,
+                  }}
+                  onPress={() => handleSelectFamily(item?.term)}
+                  key={ind}
+                  inputstyle={{
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: moderateScale(14),
+                    fontWeight: '400',
+                  }}
+                  input={item?.term}></SelectorBtn>
+              ))}
+            </View>
+          ) : null}
           {family_sug?.length > 0 ? (
             <View style={styles.suggestion}>
               {family_sug?.map((item, ind) => (
-                <TouchableOpacity
+                <SelectorBtn
+                  select={{
+                    paddingHorizontal: horizontalScale(4),
+                    paddingVertical: verticalScale(8),
+                    borderWidth: 1,
+                    backgroundColor: CUSTOMCOLOR.recent,
+                  }}
+                  onPress={() => handleSelectFamily(item?.family)}
                   key={ind}
-                  style={[
-                    styles.sug,
-                    // item?.family == select
-                    //   ? {backgroundColor: CUSTOMCOLOR.primary}
-                    //   : {backgroundColor: CUSTOMCOLOR.white},
-                  ]}
-                  onPress={() => handleSelectFamily(item?.family)}>
-                  <Text
-                    style={[
-                      styles.sugtxt,
-                      item?.family == select,
-                      // ? {color: CUSTOMCOLOR.white}
-                      // : {color: CUSTOMCOLOR.primary},
-                    ]}>
-                    {item?.family}
-                  </Text>
-                </TouchableOpacity>
+                  inputstyle={{
+                    color: CUSTOMCOLOR.primary,
+                    fontSize: moderateScale(14),
+                    fontWeight: '400',
+                  }}
+                  input={item?.family}></SelectorBtn>
               ))}
             </View>
           ) : null}

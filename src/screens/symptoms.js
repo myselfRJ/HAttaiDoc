@@ -169,9 +169,9 @@ const Symptoms = ({navigation}) => {
     setSelected(value);
     setSymptom(value);
     // dispatch(addSymptom([...symptomsData, {symptom: value}]));
-    if (sug?.length > 0) {
-      UpdateAsyncData(`symptom${phone}`, {symptom: value});
-    }
+    // if (sug?.length > 0) {
+    //   UpdateAsyncData(`symptom${phone}`, {symptom: value});
+    // }
   };
   useEffect(() => {
     RetriveAsyncData(`symptom${phone}`).then(array => {
@@ -563,6 +563,7 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     top: moderateScale(70),
+    gap: moderateScale(16),
     position: 'absolute',
     zIndex: 4,
     width: '100%',

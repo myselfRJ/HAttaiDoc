@@ -145,59 +145,89 @@ const ClinicCard = props => {
         <View style={styles.slot}>
           <View>
             <Text style={styles.daytime}>M</Text>
-            {slots?.M?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.M?.length > 0 ? (
+              slots?.M?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>T</Text>
-            {slots?.T?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.T?.length > 0 ? (
+              slots?.T?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>W</Text>
-            {slots?.W?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.W?.length > 0 ? (
+              slots?.W?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>Th</Text>
-            {slots?.TH?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.TH?.length > 0 ? (
+              slots?.TH?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>F</Text>
-            {slots?.F?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.F?.length > 0 ? (
+              slots?.F?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>Sa</Text>
-            {slots?.Sa?.map((item, ind) => (
+            {slots?.Sa?.length > 0 ? (
+              slots?.Sa?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
               <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
+                -
               </Text>
-            ))}
+            )}
           </View>
           <View>
             <Text style={styles.daytime}>S</Text>
-            {slots?.Su?.map((item, ind) => (
-              <Text key={ind} style={styles.slotTime}>
-                {item?.fromTime}-{item?.toTime}
-              </Text>
-            ))}
+            {slots?.Su?.length > 0 ? (
+              slots?.Su?.map((item, ind) => (
+                <Text key={ind} style={styles.slotTime}>
+                  {item?.fromTime}-{item?.toTime}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.slotTime}>-</Text>
+            )}
           </View>
         </View>
       </View>

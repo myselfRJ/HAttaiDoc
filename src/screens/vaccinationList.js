@@ -8,9 +8,37 @@ import {
 } from '../utility/scaleDimension';
 import {CUSTOMCOLOR} from '../settings/styles';
 import {useRoute} from '@react-navigation/native';
+import {URL} from '../utility/urls';
+import {useSelector} from 'react-redux';
+import {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+
 const Vaccination_List = ({navigation}) => {
   const route = useRoute();
   const patient_phone = route.params?.patient_phone;
+  const token = useSelector(state => state.authenticate.auth.access);
+  const [ages, setAges] = useState([]);
+  const [Vaccinedata, setVaccinedata] = useState([]);
+  const fetchImmunization = async () => {
+    const response = await fetch(URL.getImmunizationPatient(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsonData = await response.json();
+    const jsonAges = jsonData?.data?.map(item => item?.age);
+    setAges(jsonAges);
+    setVaccinedata(jsonData?.data);
+  };
+  useEffect(() => {
+    fetchImmunization();
+  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchImmunization();
+    }, [patient_phone]),
+  );
   const vaccinationData = [
     {
       id: 1,
@@ -112,7 +140,18 @@ const Vaccination_List = ({navigation}) => {
               label={item.label}
               image={item.image}
               navigation={navigation}
+              Vaccinedata={Vaccinedata}
               patient_phone={patient_phone}
+              lbl={{
+                backgroundColor: ages.includes(item?.label)
+                  ? CUSTOMCOLOR.fadeGreen
+                  : CUSTOMCOLOR.fadeYellow,
+              }}
+              lbltxt={{
+                color: ages.includes(item?.label)
+                  ? CUSTOMCOLOR.success
+                  : CUSTOMCOLOR.warn,
+              }}
             />
           ))}
         </View>

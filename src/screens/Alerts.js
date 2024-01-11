@@ -133,7 +133,7 @@ const AlertMessage = props => {
       }}>
       <View>
         <Text style={commonstyles.subhead}>Select Admin:</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', gap: horizontalScale(16)}}>
           {users?.map((item, index) => (
             <SelectorBtn
               inputstyle={{

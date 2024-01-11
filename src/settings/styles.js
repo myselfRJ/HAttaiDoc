@@ -20,6 +20,8 @@ let CUSTOMCOLOR = {
   borderColor: '#C0DFFC',
   backgroundColor: '#D0E8FF',
   recent: '#e5e5e5',
+  fadeGreen: '#2CBB1530',
+  fadeYellow: '#FFEEAC61',
 };
 const DARKCOLOR = {
   primary: 'red',

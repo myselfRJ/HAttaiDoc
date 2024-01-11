@@ -25,6 +25,7 @@ import {fetchApi} from '../api/fetchApi';
 import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
 import ShowChip from '../components/showChip';
+import {showToast} from '../utility/const';
 
 const VaccinationKids = ({navigation}) => {
   const route = useRoute();
@@ -32,6 +33,23 @@ const VaccinationKids = ({navigation}) => {
   const selectedStatus = route.params.label;
   const [data, setData] = useState();
   const patient_phone = route.params?.patient_phone;
+  const {vacdata} = route.params;
+  const vaccinatiofilleddata = vacdata?.filter(
+    item => item?.age === selectedStatus,
+  )[0];
+
+  const handlevaccination = async () => {
+    try {
+      const data = await JSON.parse(vaccinatiofilleddata?.vaccineDetails);
+      setVaccineState(selectedStatus, data?.vaccineDetails);
+    } catch (error) {
+      console.error();
+    }
+  };
+  useEffect(() => {
+    handlevaccination();
+  }, []);
+  console.log(vaccinatiofilleddata);
   const [expanded, setExpanded] = useState(false);
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -424,7 +442,7 @@ const VaccinationKids = ({navigation}) => {
       if (response?.ok) {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
-          Alert.alert('Success', jsonData?.message);
+          showToast('success', jsonData?.message);
           navigation.goBack();
           setLoading(false);
         }
@@ -463,9 +481,9 @@ const VaccinationKids = ({navigation}) => {
       console.error('Error fetching or updating data:', error);
     }
   };
-  useEffect(() => {
-    getData();
-  }, [selectedStatus]);
+  // useEffect(() => {
+  //   getData();
+  // }, [selectedStatus]);
   return (
     <ImageBackground
       source={require('../assets/images/imbg.png')}

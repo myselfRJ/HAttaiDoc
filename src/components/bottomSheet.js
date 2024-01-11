@@ -24,8 +24,8 @@ const BottomSheetView = ({children, message, visible, setVisible, status}) => {
     setTimeout(() => {
       console.log('sheet close');
       setVisible(false);
-    }, 1000);
-  }, []);
+    }, 2000);
+  }, [visible]);
   return (
     <Modal
       animationType="slide"

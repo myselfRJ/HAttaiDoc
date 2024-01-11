@@ -20,6 +20,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
 import Toast from 'react-native-toast-message';
+import {showToast} from './src/utility/const';
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = React.useState(true);
@@ -49,10 +50,7 @@ const HomeScreen = () => {
         setLoading(false);
       });
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(
-        'Notification',
-        JSON.stringify(remoteMessage?.notification?.body),
-      );
+      showToast('success', JSON.stringify(remoteMessage?.notification?.body));
     });
 
     return unsubscribe;

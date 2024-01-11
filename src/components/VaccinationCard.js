@@ -24,13 +24,19 @@ const VaccinationCard = props => {
         props.navigation.navigate('vaccination', {
           label: props.label,
           patient_phone: props.patient_phone,
+          vacdata: props.Vaccinedata,
         })
       }>
       {/* <View style={{paddingVertical:10}}> */}
       <Image source={props.image} style={styles.image} />
       {/* </View> */}
-      <View style={styles.txt}>
-        <Text style={{color: CUSTOMCOLOR.primary, fontWeight: '500'}}>
+      <View style={{...styles.txt, ...props.lbl}}>
+        <Text
+          style={{
+            color: CUSTOMCOLOR.primary,
+            fontWeight: '500',
+            ...props.lbltxt,
+          }}>
           {props.label}
         </Text>
       </View>

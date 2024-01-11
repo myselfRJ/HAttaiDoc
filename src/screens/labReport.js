@@ -148,9 +148,9 @@ const LabReports = () => {
     dispatch(
       addLabReport([...prev, {lab_test: value, appointment_id: appointmentID}]),
     );
-    if (sug?.length > 0) {
-      UpdateAsyncData(`labs${phone}`, {lab_test: value});
-    }
+    // if (sug?.length > 0) {
+    //   UpdateAsyncData(`labs${phone}`, {lab_test: value});
+    // }
   };
   useEffect(() => {
     RetriveAsyncData(`labs${phone}`).then(array => {

@@ -46,6 +46,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
   const appointment_id = appointment?.id;
   const birthYear = appointment?.patient_data?.birth_date.split('-')[0];
   const patient_age = parseInt(presentYear) - parseInt(birthYear);
+  const patient_profile_pic = appointment?.patient_data?.patient_pic_url;
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
     const name = patient_name;
@@ -54,7 +55,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
     const complaint = appointment.complaint;
     const consultation_fees = appointment?.clinic_data?.fees;
     const bloodGroup = appointment?.patient_data?.bloodgroup;
-    const patient_profile_pic = appointment?.patient_data?.patient_pic_url;
+
     navigation.navigate('visit', {
       name,
       gende,
@@ -190,6 +191,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
                     gende: patient_gender,
                     complaint: appointment.complaint,
                     consultation_fees: appointment?.clinic_data?.fees,
+                    patient_pic_url: patient_profile_pic,
                   });
                 }}>
                 <Icon

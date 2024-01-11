@@ -63,6 +63,7 @@ const PhysicalExamination = ({navigation}) => {
   const [uploaddocument, SetUploadDocument] = useState([]);
   const [report, setreport] = useState('');
   // const [selectedFilename, setSelectedFilename] = useState([]);
+  const [consent, setConsent] = useState(false);
 
   const postData = async url => {
     const formData = new FormData();
@@ -97,6 +98,22 @@ const PhysicalExamination = ({navigation}) => {
         showToast('success', 'Succesfully saved');
         navigation.goBack();
         console.log('API Response:', responseData);
+        const statusCosent = await fetch(URL.consent, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            status: consent,
+            doctor_phone_number: examinationDetails?.doc_phone,
+            patient_phone_number: examinationDetails?.patient_phone,
+            clinic_id: examinationDetails?.clinic_id,
+            appointment_id: examinationDetails?.appointment_id,
+          }),
+        });
+        const json = await statusCosent.json();
+        console.log(json);
       }
     } catch (error) {
       showToast('error', `${error}`);
@@ -109,8 +126,12 @@ const PhysicalExamination = ({navigation}) => {
     if (report != undefined) {
       navigation?.goBack();
     } else {
-      postData(apiUrl);
-      handlePress();
+      if (consent) {
+        postData(apiUrl);
+        handlePress();
+      } else {
+        showToast('error', 'Please take Declaration from Patient');
+      }
     }
   };
 
@@ -292,6 +313,18 @@ const PhysicalExamination = ({navigation}) => {
           )}
         </View>
       ) : null}
+      <TouchableOpacity
+        onPress={() => setConsent(!consent)}
+        style={{
+          alignSelf: 'flex-end',
+          paddingHorizontal: horizontalScale(16),
+          paddingVertical: verticalScale(16),
+        }}>
+        <Icon
+          name={consent ? 'eye' : 'eye-circle-outline'}
+          color={CUSTOMCOLOR.primary}
+          size={moderateScale(36)}></Icon>
+      </TouchableOpacity>
       <PlusButton
         size={moderateScale(40)}
         style={{

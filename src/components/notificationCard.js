@@ -18,6 +18,7 @@ const NotificationCard = ({
   gende,
   complaint,
   consultation_fees,
+  patient_pic_url,
 }) => {
   const navigation = useNavigation();
   const token = useSelector(state => state.authenticate.auth.access);
@@ -85,6 +86,7 @@ const NotificationCard = ({
         doctor_phone_number,
         appointment_id,
         clinic_id,
+        patient_profile_pic: patient_pic_url,
       });
     }
     VisibleOfNotification(data?.id);

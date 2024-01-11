@@ -63,9 +63,9 @@ const Allergies = () => {
   };
   const selectChange = value => {
     setSelect(value);
-    UpdateAsyncData(`allergies${phone}`, {
-      allergies: value,
-    });
+    // UpdateAsyncData(`allergies${phone}`, {
+    //   allergies: value,
+    // });
     dispatch(
       addAllergies([
         ...prev,

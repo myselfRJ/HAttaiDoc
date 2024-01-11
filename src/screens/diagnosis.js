@@ -138,9 +138,9 @@ const Diagnosis = ({navigation}) => {
         {diagnosis: value, appointment_id: appointmentID, mode: dia_type},
       ]),
     );
-    if (sug?.length > 0) {
-      UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
-    }
+    // if (sug?.length > 0) {
+    //   UpdateAsyncData(`diagnosis${phone}`, {diagnosis: value});
+    // }
   };
   useEffect(() => {
     RetriveAsyncData(`diagnosis${phone}`).then(array => {
@@ -169,7 +169,7 @@ const Diagnosis = ({navigation}) => {
       <PrescriptionHead heading="Diagnosis" />
       <ScrollView>
         <View style={{gap: verticalScale(12)}}>
-          <View style={{flexDirection: 'row', gap: moderateScale(24)}}>
+          <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
             {dia_types?.map((value, ind) => (
               <SelectorBtn
                 key={ind}

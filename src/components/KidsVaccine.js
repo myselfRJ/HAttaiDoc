@@ -25,7 +25,7 @@ const KidsVaccine = props => {
         paddingHorizontal: horizontalScale(8),
         paddingVertical: verticalScale(12),
         borderRadius: moderateScale(8),
-        borderColor: '#C0DFFC',
+        borderColor: props.option === 'Yes' ? CUSTOMCOLOR.success : '#C0DFFC',
         borderWidth: moderateScale(2),
         // height: moderateScale(112),
       }}>

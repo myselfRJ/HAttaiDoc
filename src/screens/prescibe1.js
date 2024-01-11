@@ -152,6 +152,7 @@ export default function Prescribe1({navigation}) {
       setFrequency([]);
       setDuration('1');
       setmg('');
+      setOthers('');
     }
   };
   const updateIndexvaluePrescribe = () => {
@@ -489,7 +490,7 @@ export default function Prescribe1({navigation}) {
     setTiming(data?.timing);
     let frequencyList = data?.frequency?.split('-');
     let newVal = [];
-    for (let i = 0; i < frequencyList.length; i++) {
+    for (let i = 0; i < frequencyList?.length; i++) {
       if (frequencyList[i] !== '0') {
         newVal.push(i);
       }
