@@ -5,6 +5,7 @@ import {
   View,
   Image,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import moment, {min} from 'moment';
 import React, {useState, useEffect, useRef} from 'react';
@@ -66,6 +67,7 @@ import {
   WeekdaysData,
 } from '../utility/const';
 import {addpastHospitalization} from '../redux/features/prescription/pastHistory';
+import {LoadingElement} from '../components/LoadingElement';
 
 const Dashboard = ({navigation, route}) => {
   const months = CONSTANTS.months;
@@ -79,6 +81,7 @@ const Dashboard = ({navigation, route}) => {
   const [rangeAppointment, setRangeAppointment] = useState('Monthly');
   const [rangeFees, setRangeFees] = useState('Monthly');
   const [visible, setVisible] = useState(false);
+  const [LoadAppoData, setLoadAppoData] = useState(false);
 
   const handleChart = () => {
     setVisible(!visible);
@@ -100,6 +103,7 @@ const Dashboard = ({navigation, route}) => {
   const handleConfirm = date => {
     setDate(date);
     setOpen(false);
+    setLoadAppoData(false);
   };
 
   const handleCancel = () => {
@@ -201,13 +205,16 @@ const Dashboard = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setDataAppointment(jsonData.data);
+      setLoadAppoData(true);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
-    fetchAppointment();
-  }, [formatDate, Clinic_id]);
+    setTimeout(() => {
+      fetchAppointment();
+    }, 1000);
+  }, [formatDate, Clinic_id, clinicid]);
 
   const AppointmentChartData = {
     labels:
@@ -250,8 +257,10 @@ const Dashboard = ({navigation, route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchAppointment();
-    }, [Clinic_id, appointment_date]),
+      setTimeout(() => {
+        fetchAppointment();
+      }, 1000);
+    }, [Clinic_id, appointment_date, clinicid]),
   );
   useEffect(() => {
     disableBackButton();
@@ -493,24 +502,29 @@ const Dashboard = ({navigation, route}) => {
           {Language[language]['appointments']}
         </Text>
 
-        {/* <View style={styles.appointment}> */}
-        <ScrollView
-          style={styles.appointmentcard}
-          contentContainerStyle={{gap: moderateScale(8)}}>
-          {AppointmentFilterdata?.length > 0 ? (
-            AppointmentFilterdata?.map((value, index) => {
-              return (
-                <AppointmentCard
-                  key={index}
-                  appointment={value}
-                  // openVisit={() => navigation.navigate('visit')}
-                />
-              );
-            })
+        <View style={styles.appointmentcard}>
+          {!LoadAppoData ? (
+            <LoadingElement />
           ) : (
-            <CustomIcon label="Add Your Appointments" />
+            <ScrollView
+              style={styles.appointmentcard}
+              contentContainerStyle={{gap: moderateScale(8)}}>
+              {AppointmentFilterdata?.length > 0 ? (
+                AppointmentFilterdata?.map((value, index) => {
+                  return (
+                    <AppointmentCard
+                      key={index}
+                      appointment={value}
+                      // openVisit={() => navigation.navigate('visit')}
+                    />
+                  );
+                })
+              ) : (
+                <CustomIcon label="Add Your Appointments" />
+              )}
+            </ScrollView>
           )}
-        </ScrollView>
+        </View>
         <View>
           <HButton
             // type="addtype"
@@ -576,7 +590,10 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(8),
   },
   appointmentcard: {
-    height: moderateScale(400),
+    height:
+      Dimensions.get('window').height >= 900
+        ? moderateScale(492)
+        : moderateScale(350),
     paddingHorizontal: horizontalScale(8),
     gap: moderateScale(16),
   },

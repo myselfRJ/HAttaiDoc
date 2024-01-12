@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {useState, useRef, useEffect} from 'react';
 import React from 'react';
 import {
@@ -37,6 +44,7 @@ import {
 } from '../utility/scaleDimension';
 import {useFocusEffect} from '@react-navigation/native';
 import CustomIcon from '../components/icon';
+import {LoadingElement} from '../components/LoadingElement';
 
 const PatientSearch = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
@@ -47,6 +55,7 @@ const PatientSearch = ({navigation}) => {
   const dispatch = useDispatch();
   const [selectedClinic, setSelectedClinic] = useState();
   const [clinicID, setClinicId] = useState('');
+  const [pending, setPending] = useState(false);
 
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -94,6 +103,7 @@ const PatientSearch = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setData(jsonData.data);
+      setPending(true);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -102,7 +112,7 @@ const PatientSearch = ({navigation}) => {
     if (Clinic_id) {
       setTimeout(() => {
         fetchData();
-      }, 80);
+      }, 1000);
     }
   }, [Clinic_id]);
 
@@ -143,10 +153,23 @@ const PatientSearch = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       if (Clinic_id) {
-        fetchData();
+        setTimeout(() => {
+          fetchData();
+        }, 1000);
       }
     }, [Clinic_id]),
   );
+
+  const renderItems = ({item, index}) => {
+    return (
+      <PatientSearchCard
+        doctor={true}
+        meta={'value'}
+        key={index}
+        patient_data={item}
+      />
+    );
+  };
   const [show, setShow] = useState(false);
   return (
     <View style={styles.main}>
@@ -190,27 +213,21 @@ const PatientSearch = ({navigation}) => {
         <Icon name="search" size={20} style={styles.searchIcon} />
       </View> */}
       <Text style={styles.h2}>My Patients</Text>
-      <View style={styles.appointment}>
-        {filteredData?.length > 0 ? (
-          <ScrollView
-            contentContainerStyle={{
-              gap: moderateScale(8),
-              paddingBottom: verticalScale(180),
-            }}>
-            {filteredData?.map((val, ind) => (
-              <PatientSearchCard
-                doctor={true}
-                meta={'value'}
-                key={ind}
-                patient_data={val}
-                // onPress={() => navigation.navigate('visit')}
-              />
-            ))}
-          </ScrollView>
-        ) : (
-          <CustomIcon label="No Patients Found" />
-        )}
-      </View>
+      {!pending ? (
+        <LoadingElement />
+      ) : (
+        <View>
+          {filteredData?.length > 0 ? (
+            <FlatList
+              data={filteredData}
+              renderItem={renderItems}
+              style={styles.appointmentCard}
+            />
+          ) : (
+            <CustomIcon label="No Patients Found" />
+          )}
+        </View>
+      )}
 
       {/* <PlusButton icon='plus'style={{position:'absolute',right:24,bottom:24}}/> */}
       {/* <BottomSheetView
@@ -278,7 +295,15 @@ const styles = StyleSheet.create({
     gap: moderateScale(24),
   },
   appointment: {
-    gap: moderateScale(4),
+    marginBottom: moderateScale(28),
+  },
+  appointmentCard: {
+    height:
+      Dimensions.get('window').height >= 900
+        ? moderateScale(800)
+        : moderateScale(600),
+    marginHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
   },
   h2: {
     fontSize: CUSTOMFONTSIZE.h2,

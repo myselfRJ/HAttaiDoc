@@ -48,6 +48,7 @@ import {
 import CustomIcon from '../components/icon';
 import {disableBackButton} from '../utility/backDisable';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
+import {LoadingElement} from '../components/LoadingElement';
 
 const Appointment = ({navigation}) => {
   const [name, setName] = useState('');
@@ -60,6 +61,7 @@ const Appointment = ({navigation}) => {
   const [seletedType, setSelectedType] = useState(selections[0]);
 
   const {phone} = useSelector(state => state?.phone?.data);
+  const [pending, setPending] = useState(false);
 
   const handleChangeValue = e => {
     setClinic(e);
@@ -77,6 +79,7 @@ const Appointment = ({navigation}) => {
   const handleConfirm = date => {
     setDOB(date);
     setOpen(false);
+    setPending(false);
   };
 
   const handleCancel = () => {
@@ -153,14 +156,16 @@ const Appointment = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-
       setDataAppointment(jsonData.data);
+      setPending(true);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
-    fetchAppointment();
+    setTimeout(() => {
+      fetchAppointment();
+    }, 1000);
   }, [formatDate, Clinic_id]);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -224,7 +229,9 @@ const Appointment = ({navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchAppointment();
+      setTimeout(() => {
+        fetchAppointment();
+      }, 1000);
     }, [Clinic_id, appointment_date]),
   );
   // useFocusEffect(
@@ -326,11 +333,23 @@ const Appointment = ({navigation}) => {
         <Text style={[commonstyles.h2, styles.appointment]}>
           {Language[language]['appointments']}
         </Text>
-        <FlatList
-          data={AppointmentFilterResult}
-          renderItem={renderItems}
-          style={styles.appointmentCard}
-        />
+        <View style={styles.appointmentCard}>
+          {!pending ? (
+            <LoadingElement />
+          ) : (
+            <>
+              {AppointmentFilterResult?.length > 0 ? (
+                <FlatList
+                  data={AppointmentFilterResult}
+                  renderItem={renderItems}
+                  style={styles.appointmentCard}
+                />
+              ) : (
+                <CustomIcon label="Add Your Appointments" />
+              )}
+            </>
+          )}
+        </View>
       </View>
 
       <HButton

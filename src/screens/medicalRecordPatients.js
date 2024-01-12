@@ -28,11 +28,13 @@ import ConsultationCard from '../components/ConsultationCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomIcon from '../components/icon';
 import {commonstyles} from '../styles/commonstyle';
+import {LoadingElement} from '../components/LoadingElement';
 
 export default function MedicalRecordPatient({route, navigation}) {
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
+  const [pending, setPending] = useState(false);
   const [consultation, setConsultation] = useState([]);
   const token = useSelector(state => state?.authenticate?.auth?.access);
   const {
@@ -85,12 +87,15 @@ export default function MedicalRecordPatient({route, navigation}) {
       setConsultation(
         handledate ? filterData?.reverse() : jsonData?.data?.reverse(),
       );
+      setPending(true);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
   useEffect(() => {
-    fetchPrescribe();
+    setTimeout(() => {
+      fetchPrescribe();
+    }, 1000);
   }, [date, handledate]);
 
   const [vitals, setVitals] = useState({
@@ -188,17 +193,21 @@ export default function MedicalRecordPatient({route, navigation}) {
           Prescription
         </Text>
 
-        <View>
-          {consultation?.length > 0 ? (
-            <FlatList
-              style={styles.appointmentcard}
-              renderItem={renderItems}
-              data={consultation}
-            />
-          ) : (
-            <CustomIcon label={'No History'} />
-          )}
-        </View>
+        {!pending ? (
+          <LoadingElement />
+        ) : (
+          <View>
+            {consultation?.length > 0 ? (
+              <FlatList
+                style={styles.appointmentcard}
+                renderItem={renderItems}
+                data={consultation}
+              />
+            ) : (
+              <CustomIcon label={'No History'} />
+            )}
+          </View>
+        )}
 
         {/* <View
           style={{

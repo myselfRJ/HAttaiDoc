@@ -664,7 +664,10 @@ const Visit = ({navigation, route}) => {
           <h5 style="font-size:14px">
           Prescribe
           </h5>
-          <table style="width:100%;;">
+          ${Prescribe?.map(item =>
+            item?.mode !== 'Others'
+              ? `
+            <table style="width:100%;;">
           
 
               <tr>
@@ -704,7 +707,9 @@ const Visit = ({navigation, route}) => {
                 `,
                 ).join('')}
            
-          </table>
+          </table>`
+              : `<text>${item?.othersMed}</text>`,
+          )}
           </div>
           ${
             advices?.length > 0
@@ -1289,22 +1294,41 @@ const Visit = ({navigation, route}) => {
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                           <View style={styles.pres}>
                             <View>
-                              {Prescribe?.map((item, ind) => (
-                                <View key={ind} style={styles.pres1}>
-                                  <Icon
-                                    name="prescription"
-                                    size={moderateScale(16)}
-                                    color={CUSTOMCOLOR.primary}
-                                  />
-                                  <View>
-                                    <Text style={styles.pulse}>
-                                      {item.medicine} | {item.timing} |
-                                      {item.frequency} | {item.duration} |{' '}
-                                      {item.total_quantity} | {item.others}
-                                    </Text>
-                                  </View>
-                                </View>
-                              ))}
+                              {Prescribe?.map((item, ind) => {
+                                if (item?.mode === 'Others') {
+                                  return (
+                                    <View key={ind} style={styles.pres1}>
+                                      <Icon
+                                        name="prescription"
+                                        size={moderateScale(16)}
+                                        color={CUSTOMCOLOR.primary}
+                                      />
+                                      <View>
+                                        <Text style={styles.pulse}>
+                                          {item.othersMed}
+                                        </Text>
+                                      </View>
+                                    </View>
+                                  );
+                                } else {
+                                  return (
+                                    <View key={ind} style={styles.pres1}>
+                                      <Icon
+                                        name="prescription"
+                                        size={moderateScale(16)}
+                                        color={CUSTOMCOLOR.primary}
+                                      />
+                                      <View>
+                                        <Text style={styles.pulse}>
+                                          {item.medicine} | {item.timing} |
+                                          {item.frequency} | {item.duration} |{' '}
+                                          {item.total_quantity} | {item.others}
+                                        </Text>
+                                      </View>
+                                    </View>
+                                  );
+                                }
+                              })}
                             </View>
                           </View>
                         </View>

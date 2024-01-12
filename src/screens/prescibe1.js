@@ -79,6 +79,7 @@ export default function Prescribe1({navigation}) {
   const [filtered, setFilteredData] = useState([]);
   const [modal, setModal] = useState(false);
   const [template, setTemplate] = useState('');
+  const [othersMed, setOthersMed] = useState('');
   const prevPres = useSelector(state => state.pres.prescribeItems);
   const redux =
     prevPres?.length > 0
@@ -88,7 +89,7 @@ export default function Prescribe1({navigation}) {
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
   const handleAddPrescribe = () => {
-    if (medicine && timing && frequency) {
+    if ((medicine && timing && frequency) || othersMed) {
       if (newMedicine?.length > 1) {
         // const new1 = newMedicine?.filter((item)=> item?.term)
         const newmed = `${medicine} ${mgs}`;
@@ -129,6 +130,7 @@ export default function Prescribe1({navigation}) {
               total_quantity: total_quantity,
               others: others ? others : '',
               appointment_id: appointmentID,
+              othersMed: othersMed,
             },
           ]),
         );
@@ -501,6 +503,7 @@ export default function Prescribe1({navigation}) {
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
   };
+  console.log('===============>', prevPres);
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -509,16 +512,30 @@ export default function Prescribe1({navigation}) {
       />
       <ScrollView contentContainerStyle={styles.prescribeConatiner}>
         <View>
-          {redux?.map((item, ind) => (
-            <ShowChip
-              // main={{marginHorizontal: -10}}
-              align={{width: '85%'}}
-              key={ind}
-              text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
-              onPress={() => handleDelete(ind)}
-              onEdit={() => DispatchEdit(item, ind)}
-            />
-          ))}
+          {redux?.map((item, ind) => {
+            if (mode === 'Others') {
+              return (
+                <ShowChip
+                  align={{width: '85%'}}
+                  key={ind}
+                  text={`${item.othersMed}`}
+                  onPress={() => handleDelete(ind)}
+                  onEdit={() => DispatchEdit(item, ind)}
+                />
+              );
+            } else {
+              return (
+                <ShowChip
+                  // main={{marginHorizontal: -10}}
+                  align={{width: '85%'}}
+                  key={ind}
+                  text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
+                  onPress={() => handleDelete(ind)}
+                  onEdit={() => DispatchEdit(item, ind)}
+                />
+              );
+            }
+          })}
         </View>
 
         <View style={{gap: verticalScale(6)}}>
@@ -550,234 +567,260 @@ export default function Prescribe1({navigation}) {
             ))}
           </View>
         </View>
-        <View>
-          <InputText
-            lbltext={{fontSize: moderateScale(14)}}
-            inputContainer={{paddingHorizontal: 0, paddingVertical: 0}}
-            label={Language[language]['medicine']}
-            placeholder="Ex : paracetamol  oral tablet"
-            multiline={true}
-            value={medicine}
-            setValue={val => {
-              setMedicine(val);
-              setShow(false);
-            }}
-            search={true}
-            IconName={
-              (show && filtered.length > 0) ||
-              medicine === setmedicine ||
-              medicine.length === 0
-                ? 'magnify'
-                : medicine?.length > 0 && 'close'
-            }
-            onPress={() => {
-              // setShow(!show);
-              setMedicine('');
-            }}
-          />
-          {medicine?.length > 1 &&
-            (medicine === setmedicine || show ? null : (
-              <View style={styles.dropdownContainer}>
-                <ScrollView persistentScrollbar={true}>
-                  {data?.map((val, index) => (
-                    <SelectorBtn
-                      select={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(8),
-                        borderWidth: 0,
-                        backgroundColor: null,
-                      }}
-                      onPress={() => HandlePress(val)}
-                      key={index}
-                      input={val?.term}></SelectorBtn>
-                  ))}
-                </ScrollView>
-              </View>
-            ))}
-          {sug?.length >= 1 ? (
-            <Text style={styles.RecommdationText}>Recently Used</Text>
-          ) : null}
+        {mode !== 'Others' ? (
+          <>
+            <View>
+              <InputText
+                lbltext={{fontSize: moderateScale(14)}}
+                inputContainer={{paddingHorizontal: 0, paddingVertical: 0}}
+                label={Language[language]['medicine']}
+                placeholder="Ex : paracetamol  oral tablet"
+                multiline={true}
+                value={medicine}
+                setValue={val => {
+                  setMedicine(val);
+                  setShow(false);
+                }}
+                search={true}
+                IconName={
+                  (show && filtered.length > 0) ||
+                  medicine === setmedicine ||
+                  medicine.length === 0
+                    ? 'magnify'
+                    : medicine?.length > 0 && 'close'
+                }
+                onPress={() => {
+                  // setShow(!show);
+                  setMedicine('');
+                }}
+              />
+              {medicine?.length > 1 &&
+                (medicine === setmedicine || show ? null : (
+                  <View style={styles.dropdownContainer}>
+                    <ScrollView persistentScrollbar={true}>
+                      {data?.map((val, index) => (
+                        <SelectorBtn
+                          select={{
+                            paddingHorizontal: horizontalScale(4),
+                            paddingVertical: verticalScale(8),
+                            borderWidth: 0,
+                            backgroundColor: null,
+                          }}
+                          onPress={() => HandlePress(val)}
+                          key={index}
+                          input={val?.term}></SelectorBtn>
+                      ))}
+                    </ScrollView>
+                  </View>
+                ))}
+              {sug?.length >= 1 ? (
+                <Text style={styles.RecommdationText}>Recently Used</Text>
+              ) : null}
 
-          {sug?.length > 0 && (
-            <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
-              {sug?.map(value => (
-                <SelectorBtn
-                  key={value?.medicine}
-                  onPress={() => setMedicineValue(value?.medicine)}
-                  input={value?.medicine}
-                  select={{
-                    backgroundColor:
-                      medicine === value?.medicine
-                        ? CUSTOMCOLOR.primary
-                        : CUSTOMCOLOR.recent,
+              {sug?.length > 0 && (
+                <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
+                  {sug?.map(value => (
+                    <SelectorBtn
+                      key={value?.medicine}
+                      onPress={() => setMedicineValue(value?.medicine)}
+                      input={value?.medicine}
+                      select={{
+                        backgroundColor:
+                          medicine === value?.medicine
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.recent,
+                      }}
+                      inputstyle={{
+                        color:
+                          medicine === value?.medicine
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.primary,
+                        fontSize: moderateScale(14),
+                        fontWeight: '700',
+                      }}
+                    />
+                  ))}
+                  {/* </ScrollView> */}
+                </View>
+              )}
+            </View>
+
+            {newMedicine != null && setgeneric === false ? (
+              <View>
+                <InputText
+                  lbltext={{
+                    fontSize: moderateScale(14),
+                    color: CUSTOMCOLOR.black,
                   }}
-                  inputstyle={{
-                    color:
-                      medicine === value?.medicine
+                  inputContainer={{
+                    gap: verticalScale(6),
+                    paddingHorizontal: moderateScale(0),
+                  }}
+                  label="Generic Name"
+                  placeholder="Medicine generic name"
+                  value={generic}
+                  setValue={txt => setGeneric(txt)}
+                />
+                {generic?.length > 1 &&
+                  (generic === selectedgeneric || show ? null : (
+                    <View style={styles.dropdownContainer}>
+                      <ScrollView persistentScrollbar={true}>
+                        {data?.map((val, index) => (
+                          <SelectorBtn
+                            select={{
+                              paddingHorizontal: horizontalScale(4),
+                              paddingVertical: verticalScale(8),
+                              borderWidth: 0,
+                              backgroundColor: null,
+                            }}
+                            onPress={() => HandleSelectGeneric(val)}
+                            key={index}
+                            input={val?.term}></SelectorBtn>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  ))}
+              </View>
+            ) : null}
+
+            <View style={styles.ModeContainer}>
+              <InputText
+                keypad="numeric"
+                // style={styles.durationInput}
+                label={Language[language]['number']}
+                inputContainer={{
+                  paddingHorizontal: moderateScale(0),
+                  paddingVertical: moderateScale(0),
+                  width: '24%',
+                  gap: verticalScale(6),
+                }}
+                value={dose_number}
+                setValue={value => setDose_number(value)}
+              />
+            </View>
+            <View style={{gap: moderateScale(6)}}>
+              <Text
+                style={[styles.ModeText, {paddingBottom: moderateScale(2)}]}>
+                {Language[language]['timing']}
+              </Text>
+              <View style={styles.Modes}>
+                {timings?.map((value, timeIndex) => (
+                  <SelectorBtn
+                    input={value}
+                    key={timeIndex}
+                    onPress={() => setTime(value)}
+                    select={{
+                      backgroundColor:
+                        timing === value
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                        timing === value
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
+                      fontSize: moderateScale(14),
+                      fontWeight: '600',
+                    }}></SelectorBtn>
+                ))}
+              </View>
+            </View>
+            <View style={styles.frequencys}>
+              <Text style={styles.ModeText}>
+                {Language[language]['frequency']}
+              </Text>
+              <View style={styles.Modes}>
+                {frequencys?.map((value, frequencyIndex) => (
+                  <SelectorBtn
+                    select={{
+                      backgroundColor: frequency.includes(frequencyIndex)
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color: frequency.includes(frequencyIndex)
                         ? CUSTOMCOLOR.white
                         : CUSTOMCOLOR.primary,
-                    fontSize: moderateScale(14),
-                    fontWeight: '700',
-                  }}
-                />
-              ))}
-              {/* </ScrollView> */}
+                      fontSize: moderateScale(14),
+                      fontWeight: '600',
+                    }}
+                    input={value}
+                    key={frequencyIndex}
+                    onPress={() => {
+                      FrequencySelection(frequencyIndex);
+                    }}></SelectorBtn>
+                ))}
+              </View>
             </View>
-          )}
-        </View>
-
-        {newMedicine != null && setgeneric === false ? (
-          <View>
-            <InputText
-              lbltext={{
-                fontSize: moderateScale(14),
-                color: CUSTOMCOLOR.black,
-              }}
-              inputContainer={{
-                gap: verticalScale(6),
-                paddingHorizontal: moderateScale(0),
-              }}
-              label="Generic Name"
-              placeholder="Medicine generic name"
-              value={generic}
-              setValue={txt => setGeneric(txt)}
-            />
-            {generic?.length > 1 &&
-              (generic === selectedgeneric || show ? null : (
-                <View style={styles.dropdownContainer}>
-                  <ScrollView persistentScrollbar={true}>
-                    {data?.map((val, index) => (
-                      <SelectorBtn
-                        select={{
-                          paddingHorizontal: horizontalScale(4),
-                          paddingVertical: verticalScale(8),
-                          borderWidth: 0,
-                          backgroundColor: null,
-                        }}
-                        onPress={() => HandleSelectGeneric(val)}
-                        key={index}
-                        input={val?.term}></SelectorBtn>
-                    ))}
-                  </ScrollView>
+            <View style={{gap: verticalScale(12)}}>
+              <View style={{gap: verticalScale(6)}}>
+                <Text style={styles.ModeText}>
+                  {Language[language]['duration']}
+                </Text>
+                <View style={styles.radiogroup}>
+                  <Option
+                    label="days"
+                    value="days"
+                    selected={durationSelect === 'days'}
+                    onPress={() => handleOptions('days')}
+                  />
+                  <Option
+                    label="week"
+                    value="week"
+                    selected={durationSelect === 'week'}
+                    onPress={() => handleOptions('week')}
+                  />
                 </View>
-              ))}
-          </View>
-        ) : null}
+              </View>
 
-        <View style={styles.ModeContainer}>
-          <InputText
-            keypad="numeric"
-            // style={styles.durationInput}
-            label={Language[language]['number']}
-            inputContainer={{
-              paddingHorizontal: moderateScale(0),
-              paddingVertical: moderateScale(0),
-              width: '24%',
-              gap: verticalScale(6),
-            }}
-            value={dose_number}
-            setValue={value => setDose_number(value)}
-          />
-        </View>
-        <View style={{gap: moderateScale(6)}}>
-          <Text style={[styles.ModeText, {paddingBottom: moderateScale(2)}]}>
-            {Language[language]['timing']}
-          </Text>
-          <View style={styles.Modes}>
-            {timings?.map((value, timeIndex) => (
-              <SelectorBtn
-                input={value}
-                key={timeIndex}
-                onPress={() => setTime(value)}
-                select={{
-                  backgroundColor:
-                    timing === value ? CUSTOMCOLOR.primary : CUSTOMCOLOR.white,
+              <InputText
+                keypad="numeric"
+                // style={styles.durationInput}
+                // label={Language[language]['duration']}
+                inputContainer={{
+                  width: '24%',
                 }}
-                inputstyle={{
-                  color:
-                    timing === value ? CUSTOMCOLOR.white : CUSTOMCOLOR.primary,
-                  fontSize: moderateScale(14),
-                  fontWeight: '600',
-                }}></SelectorBtn>
-            ))}
-          </View>
-        </View>
-        <View style={styles.frequencys}>
-          <Text style={styles.ModeText}>{Language[language]['frequency']}</Text>
-          <View style={styles.Modes}>
-            {frequencys?.map((value, frequencyIndex) => (
-              <SelectorBtn
-                select={{
-                  backgroundColor: frequency.includes(frequencyIndex)
-                    ? CUSTOMCOLOR.primary
-                    : CUSTOMCOLOR.white,
-                }}
-                inputstyle={{
-                  color: frequency.includes(frequencyIndex)
-                    ? CUSTOMCOLOR.white
-                    : CUSTOMCOLOR.primary,
-                  fontSize: moderateScale(14),
-                  fontWeight: '600',
-                }}
-                input={value}
-                key={frequencyIndex}
-                onPress={() => {
-                  FrequencySelection(frequencyIndex);
-                }}></SelectorBtn>
-            ))}
-          </View>
-        </View>
-        <View style={{gap: verticalScale(12)}}>
-          <View style={{gap: verticalScale(6)}}>
-            <Text style={styles.ModeText}>
-              {Language[language]['duration']}
-            </Text>
-            <View style={styles.radiogroup}>
-              <Option
-                label="days"
-                value="days"
-                selected={durationSelect === 'days'}
-                onPress={() => handleOptions('days')}
-              />
-              <Option
-                label="week"
-                value="week"
-                selected={durationSelect === 'week'}
-                onPress={() => handleOptions('week')}
+                value={duration}
+                placeholder="Enter Days"
+                setValue={value => setDuration(value)}
               />
             </View>
-          </View>
+            {/* <View style={styles.ModeContainer}> */}
 
+            <View style={{gap: verticalScale(6)}}>
+              <Text style={[styles.ModeText]}>
+                {Language[language]['quantity']}
+              </Text>
+
+              <Text style={styles.numText}>
+                {isNaN(total_quantity) ? '00' : total_quantity}
+              </Text>
+            </View>
+            <InputText
+              placeholder={'Enter any Remarks......'}
+              inputContainer={{gap: verticalScale(6)}}
+              value={others}
+              setValue={setOthers}
+              label={'Others (optional):'}
+            />
+          </>
+        ) : (
           <InputText
-            keypad="numeric"
-            // style={styles.durationInput}
-            // label={Language[language]['duration']}
-            inputContainer={{
-              width: '24%',
+            value={othersMed}
+            setValue={setOthersMed}
+            label={'medicine'}
+            required={true}
+            multiline={true}
+            placeholder={'Enter freeText Medicine.....'}
+            textStyle={{
+              height: moderateScale(200),
+              textAlignVertical: 'top',
+              color: CUSTOMCOLOR.black,
+              fontWeight: '700',
             }}
-            value={duration}
-            placeholder="Enter Days"
-            setValue={value => setDuration(value)}
           />
-        </View>
-        {/* <View style={styles.ModeContainer}> */}
-
-        <View style={{gap: verticalScale(6)}}>
-          <Text style={[styles.ModeText]}>
-            {Language[language]['quantity']}
-          </Text>
-
-          <Text style={styles.numText}>
-            {isNaN(total_quantity) ? '00' : total_quantity}
-          </Text>
-        </View>
-        <InputText
-          placeholder={'Enter any Remarks......'}
-          inputContainer={{gap: verticalScale(6)}}
-          value={others}
-          setValue={setOthers}
-          label={'Others (optional):'}
-        />
+        )}
         <HButton
           type="addtype"
           label={'Add'}
@@ -786,7 +829,7 @@ export default function Prescribe1({navigation}) {
           onPress={handleAddPrescribe}
           btnstyles={{
             backgroundColor:
-              medicine && timing && frequency
+              (medicine && timing && frequency) || othersMed
                 ? CUSTOMCOLOR.success
                 : CUSTOMCOLOR.disable,
             alignSelf: 'flex-end',
