@@ -147,7 +147,11 @@ export default function Prescribe1({navigation}) {
         });
       }
       setMedicine('');
-      setMode('');
+      if (mode === 'Others') {
+        setOthersMed('');
+      } else {
+        setMode('');
+      }
       setDose_number('1');
       setDose_quantity('');
       setTiming('');
@@ -486,7 +490,11 @@ export default function Prescribe1({navigation}) {
     setselectedGeneric(true);
     setShow(!false);
     selectedMedicine('');
-    setMedicine(data?.medicine);
+    if (mode === 'Others') {
+      setOthersMed(data?.medicine);
+    } else {
+      setMedicine(data?.medicine);
+    }
     setnewMedicine(data?.medicine);
     setDose_number(data?.dose_number);
     setTiming(data?.timing);
@@ -503,7 +511,6 @@ export default function Prescribe1({navigation}) {
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
   };
-  console.log('===============>', prevPres);
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -545,10 +552,14 @@ export default function Prescribe1({navigation}) {
               <SelectorBtn
                 key={value}
                 onPress={() => {
-                  if (mode == value) {
-                    setMode('');
+                  if (mode == 'Others') {
+                    showToast('error', 'Please Go back and come Again');
                   } else {
-                    setMode(value);
+                    if (mode === value) {
+                      setMode('');
+                    } else {
+                      setMode(value);
+                    }
                   }
                 }}
                 input={value}

@@ -198,29 +198,44 @@ const MedicalHistory = ({navigation, route}) => {
       const updatedfamilyHistory = familyHistory?.filter(
         (item, ind) => ind !== index,
       );
-
       dispatch(updatefamilyHistory(updatedfamilyHistory));
     }
   };
   const handleAddReceiver = () => {
     if (comorbidities.trim() !== '') {
-      dispatch(addcommorbiditis([...commor, {commorbities: comorbidities}]));
+      dispatch(
+        addcommorbiditis([
+          ...commor,
+          {commorbities: comorbidities, appointment_id: appointmentID},
+        ]),
+      );
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
+      console.log(comorbidities);
       setComorbidities('');
     }
   };
   const handleSocial = () => {
     if (social.trim() !== '') {
-      dispatch(addsocialHistory([...socialHistory, {social: social}]));
+      dispatch(
+        addsocialHistory([
+          ...socialHistory,
+          {social: social, appointment_id: appointmentID},
+        ]),
+      );
       UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
       setSocial('');
     }
   };
   const handleFamily = () => {
     if (family.trim() !== '') {
-      dispatch(addfamilyHistory([...familyHistory, {family: family}]));
+      dispatch(
+        addfamilyHistory([
+          ...familyHistory,
+          {family: family, appointment_id: appointmentID},
+        ]),
+      );
       UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
       setFamily('');
     }
@@ -478,7 +493,7 @@ const MedicalHistory = ({navigation, route}) => {
     }
   }, [comorbidities, family]);
   useEffect(() => {
-    if (check_field?.length > 0) {
+    if (check_field?.length === 0) {
       fetchMedicalData();
     }
   }, []);

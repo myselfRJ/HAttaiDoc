@@ -151,7 +151,7 @@ const Account = () => {
       });
   };
   const PhoneCall = () => {
-    const url = `tel:${'7305998993'}`;
+    const url = `tel:${'9538002347'}`;
 
     Linking.openURL(url)
       .then(data => {

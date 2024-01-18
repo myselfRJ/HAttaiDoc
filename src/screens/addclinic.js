@@ -90,20 +90,23 @@ const AddClinic = ({navigation}) => {
   const [mergedSlots, setMergedSlots] = useState({});
   const [bottom, setBottom] = useState(false);
   const processClinics = () => {
-    const mergedData = clinics?.reduce((acc, clinic) => {
-      const AllslotData = JSON.parse(clinic?.slot_data?.slot);
-      const keys = Object.keys(AllslotData);
-
-      keys.forEach(key => {
-        if (acc[key]) {
-          acc[key].push(...AllslotData[key]);
-        } else {
-          acc[key] = [...AllslotData[key]];
-        }
-      });
-      return acc;
-    }, {});
-    setMergedSlots(mergedData);
+    try {
+      const mergedData = clinics?.reduce((acc, clinic) => {
+        const AllslotData = JSON.parse(clinic?.slot_data?.slot);
+        const keys = Object.keys(AllslotData);
+        keys.forEach(key => {
+          if (acc[key]) {
+            acc[key].push(...AllslotData[key]);
+          } else {
+            acc[key] = [...AllslotData[key]];
+          }
+        });
+        return acc;
+      }, {});
+      setMergedSlots(mergedData);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     processClinics();
