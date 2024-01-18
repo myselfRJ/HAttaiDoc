@@ -1176,7 +1176,8 @@ const Visit = ({navigation, route}) => {
                       note?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Report Findings' && report
+                      (value?.label === 'Report Findings' &&
+                      report !== undefined
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Referral' && selectedDoctor?.length > 0
@@ -1186,15 +1187,15 @@ const Visit = ({navigation, route}) => {
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Medical History' &&
-                        (commor?.length > 0 ||
+                      (commor?.length > 0 ||
                         socialHistory?.length > 0 ||
                         familyHistory?.length > 0 ||
                         medicationHistory ||
                         menstrualHistory?.length > 0 ||
-                        JSON.stringify(obstericHistory) !== '{}' ||
-                        JSON.stringify(martialHistory) !== '{}'
-                          ? 'check-circle'
-                          : '')) ||
+                        obstericHistory?.length > 0 ||
+                        martialHistory?.length > 0)
+                        ? 'check-circle'
+                        : '') ||
                       (value?.label === 'Physical Examinations' &&
                       physi !== '{}' &&
                       physical?.value !== '' &&
