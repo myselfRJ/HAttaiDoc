@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Alert,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import PrescriptionHead from '../components/prescriptionHead';
@@ -36,9 +37,16 @@ import {
   RetriveAsyncData,
   clearStorage,
 } from '../utility/AsyncStorage';
-import {CONSTANT, showToast} from '../utility/const';
+import {
+  CONSTANT,
+  formatdate,
+  handleAddDates,
+  showToast,
+} from '../utility/const';
 import {commonstyles} from '../styles/commonstyle';
 import CustomModal from '../components/CustomModal';
+import Option from '../components/option';
+import DatePicker from 'react-native-date-picker';
 
 const LabReports = () => {
   const {phone} = useSelector(state => state?.phone?.data);
@@ -51,6 +59,13 @@ const LabReports = () => {
   const [filtered, setFilteredData] = useState([]);
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [customDays, setCustomDays] = useState('');
+  const [selectedDays, setSelectedDays] = useState('3');
+  const [returnDate, setReturnDate] = useState(
+    formatdate(handleAddDates(date, selectedDays)),
+  );
   const dispatch = useDispatch();
   const prev = useSelector(state => state?.labreport?.labReport);
   const lab =
@@ -71,15 +86,38 @@ const LabReports = () => {
       setValue('');
     }
   };
+
+  const handleOptions = value => {
+    setSelectedDays(value);
+    setReturnDate(formatdate(handleAddDates(date, value)));
+  };
+
+  const handleDate = () => {
+    setOpen(true);
+  };
+
+  const handleConfirm = selectedDate => {
+    setDate(selectedDate);
+    const date = selectedDate?.toISOString()?.split('T')[0];
+    console.log(date);
+    setReturnDate(formatdate(date));
+    setOpen(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handelvalue = value => {
+    setCustomDays(value);
+    setSelectedDays(value.length > 0 ? value : '30');
+  };
   const handleDelete = index => {
     if (prev) {
       const updatedPrescriptions = prev?.filter((item, ind) => ind !== index);
 
       dispatch(updateLabReport(updatedPrescriptions));
     }
-  };
-  const handleSelect = value => {
-    setSelectedType(value);
   };
 
   const term = 'test';
@@ -124,6 +162,7 @@ const LabReports = () => {
       setFilteredData(filtering_data);
     }
   }, [data, value]);
+  console.log(prev);
 
   const HandlePress = value => {
     setValue(value);
@@ -141,6 +180,8 @@ const LabReports = () => {
     if (sug?.length === 0 || !sug) {
       StoreAsyncData(`labs${phone}`, prev);
     }
+    const values = prev?.map(item => ({...item, date: returnDate}));
+    dispatch(addLabReport(values));
     navigation.goBack();
   };
   const selectChange = value => {
@@ -148,9 +189,6 @@ const LabReports = () => {
     dispatch(
       addLabReport([...prev, {lab_test: value, appointment_id: appointmentID}]),
     );
-    // if (sug?.length > 0) {
-    //   UpdateAsyncData(`labs${phone}`, {lab_test: value});
-    // }
   };
   useEffect(() => {
     RetriveAsyncData(`labs${phone}`).then(array => {
@@ -246,11 +284,13 @@ const LabReports = () => {
       dispatch(addLabReport(lstdata));
     }
   };
-  console.log(prev);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Investigation Prescribed" />
-      <ScrollView contentContainerStyle={{flex: 1}}>
+      <ScrollView
+        style={styles.appointmentcard}
+        contentContainerStyle={{gap: 16}}
+        persistentScrollbar={true}>
         <View>
           {/* <View style={styles.tab}>
             {CONSTANT.test?.map((val, ind) => (
@@ -356,7 +396,86 @@ const LabReports = () => {
                 ) : null,
               )}
             </View>
+            <View
+              style={{
+                marginTop: verticalScale(36),
+                gap: moderateScale(4),
+              }}>
+              <View>
+                <SelectorBtn
+                  onPress={handleDate}
+                  label={'Date'}
+                  name={'calendar'}
+                  input={returnDate}
+                />
 
+                {open && (
+                  <DatePicker
+                    modal
+                    open={open}
+                    date={date}
+                    theme="auto"
+                    mode="datetime"
+                    onConfirm={handleConfirm}
+                    onCancel={handleCancel}
+                  />
+                )}
+              </View>
+              <Text style={styles.dateText}>Days:</Text>
+              <View style={styles.radiogroup}>
+                <Option
+                  label="3 Days"
+                  value="3"
+                  selected={selectedDays === '3'}
+                  onPress={() => handleOptions('3')}
+                />
+                <Option
+                  label="7 Days"
+                  value="7"
+                  selected={selectedDays === '7'}
+                  onPress={() => handleOptions('7')}
+                />
+                <Option
+                  label="15 Days"
+                  value="15"
+                  selected={selectedDays === '15'}
+                  onPress={() => handleOptions('15')}
+                />
+                <Option
+                  label="30 Days"
+                  value="30"
+                  selected={selectedDays === '30'}
+                  onPress={() => handleOptions('30')}
+                />
+                <Option
+                  label="60 Days"
+                  value="60"
+                  selected={selectedDays === '60'}
+                  onPress={() => handleOptions('60')}
+                />
+                <Option
+                  label="90 Days"
+                  value="90"
+                  selected={selectedDays === '90'}
+                  onPress={() => handleOptions('90')}
+                />
+                <View style={{width: moderateScale(100)}}>
+                  <InputText
+                    value={customDays}
+                    placeholder={'Enter Days'}
+                    setValue={val => {
+                      handelvalue(val);
+                      setReturnDate(
+                        formatdate(
+                          handleAddDates(date, val ? val : selectedDays),
+                        ),
+                      );
+                    }}
+                    keypad="numeric"
+                  />
+                </View>
+              </View>
+            </View>
             {templatesData?.length > 0 && (
               <View
                 style={{
@@ -465,7 +584,14 @@ const styles = StyleSheet.create({
     gap: moderateScale(8),
     backgroundColor: CUSTOMCOLOR.background,
   },
-
+  appointmentcard: {
+    height:
+      Dimensions.get('window').height >= 900
+        ? moderateScale(492)
+        : moderateScale(350),
+    paddingHorizontal: horizontalScale(8),
+    gap: moderateScale(16),
+  },
   inputtext: {
     paddingVertical: verticalScale(0),
     // borderWidth:1
@@ -492,5 +618,21 @@ const styles = StyleSheet.create({
     // paddingHorizontal:horizontalScale(8),
     paddingVertical: verticalScale(16),
     // top:moderateScale(24)
+  },
+  // DateContainer: {
+  //   borderRadius: moderateScale(4),
+  //   // justifyContent: 'space-between',
+  // },
+  radiogroup: {
+    padding: moderateScale(8),
+    flexDirection: 'row',
+    gap: moderateScale(36),
+    flexWrap: 'wrap',
+  },
+  dateText: {
+    fontFamily: CUSTOMFONTFAMILY.body,
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '400',
   },
 });

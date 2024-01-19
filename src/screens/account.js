@@ -367,7 +367,7 @@ const Account = () => {
         <Text style={styles.contact}>
           Phone:{' '}
           <Text style={styles.link} onPress={PhoneCall}>
-            7305998993
+            9538002347
           </Text>
         </Text>
       </View>

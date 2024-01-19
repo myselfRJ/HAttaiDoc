@@ -10,7 +10,6 @@ import {
 } from '../utility/scaleDimension';
 
 const PlusButton = props => {
-  //props -> label, action
   return (
     <>
       <Pressable

@@ -17,7 +17,13 @@ import {useState, useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {addVitals} from '../redux/features/prescription/prescriptionSlice';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {HButton, InputText, SelectorBtn} from '../components';
+import {
+  HButton,
+  InputText,
+  Option,
+  PlusButton,
+  SelectorBtn,
+} from '../components';
 import {CONSTANTS} from '../utility/constant';
 import DatePicker from 'react-native-date-picker';
 import PrescriptionHead from '../components/prescriptionHead';
@@ -32,6 +38,12 @@ import VitalField from '../components/vitalFields';
 import {validateInput} from '../utils/FormUtils/Validators';
 import Seperator from '../components/seperator';
 import {commonstyles} from '../styles/commonstyle';
+import ShowChip from '../components/showChip';
+import {
+  calculateWeeksAndDaysFromDate,
+  formatdate,
+  handleAddDates,
+} from '../utility/const';
 const VitalScreen = ({route, props}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const vitalsDat = useSelector(state => state.prescription.vitalsData);
@@ -55,23 +67,41 @@ const VitalScreen = ({route, props}) => {
   const dispatch = useDispatch();
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [eddOpen, setEddopen] = useState(false);
+  const [lddweek, setLddWeek] = useState('');
   const [edd, setEdd] = useState();
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
   const {gende} = route.params;
-  const handleDate = () => {
-    setOpen(!open);
+  const handleEddConfirm = selectedDate => {
+    setDate(selectedDate);
+    const updateLDD = handleAddDates(
+      selectedDate?.toISOString().split('T')[0],
+      -280,
+    );
+    setLddWeek(updateLDD);
+    setLDD(formatdate(updateLDD));
+    const updateEDD = selectedDate?.toISOString().split('T')[0];
+    setEdd(formatdate(updateEDD));
+    setEddopen(false);
   };
-
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = selectedDate?.toISOString().split('T')[0];
-    setLDD(updateLDD);
-    const updateEDD = handleEdd(selectedDate);
-    setEdd(updateEDD);
+    setLddWeek(updateLDD);
+    setLDD(formatdate(updateLDD));
+    const updateEDD = handleAddDates(
+      selectedDate?.toISOString().split('T')[0],
+      280,
+    );
+    setEdd(formatdate(updateEDD));
+    setOpen(false);
   };
   const handleCancel = () => {
-    setOpen(open);
+    setOpen(false);
+  };
+  const handleEddCancel = () => {
+    setEddopen(false);
   };
 
   const lmpdate = date.toISOString().split('T')[0];
@@ -92,7 +122,81 @@ const VitalScreen = ({route, props}) => {
   const [systolic, setsystolic] = useState('');
   const [ldd, setLDD] = useState('');
   const [spo2, setSpo2] = useState('');
+  const [bp, setBP] = useState([]);
+  const [indexbp, setIndexbp] = useState('');
+  const [vits, setVits] = useState([]);
+  const [indexVit, setIndexVit] = useState('');
+  const [timeSys, setTimeSys] = useState('');
 
+  const handleBp = () => {
+    {
+      indexbp?.toString()?.length > 0
+        ? (bp[indexbp] = {
+            diastolic: diastolic,
+            systolic: systolic,
+            time: new Date().toString()?.split('G')[0],
+          })
+        : setBP([
+            ...bp,
+            {
+              diastolic: diastolic,
+              systolic: systolic,
+              time: new Date().toString()?.split('G')[0],
+            },
+          ]);
+      setdiastolic('');
+      setsystolic('');
+      setIndexbp('');
+    }
+  };
+  const handleDelBp = ind => {
+    const updatedBp = bp?.filter((_, index) => index !== ind);
+    setBP(updatedBp);
+  };
+  const BPedit = (data, index) => {
+    setIndexbp(index);
+    setsystolic(data?.systolic);
+    setdiastolic(data?.diastolic);
+  };
+  const handleVit = () => {
+    {
+      indexVit?.toString()?.length > 0
+        ? (vits[indexVit] = {
+            pulse: pulse,
+            temp: temp,
+            spo2: spo2,
+            rate: rate,
+            time: new Date().toString()?.split('G')[0],
+          })
+        : setVits([
+            ...vits,
+            {
+              pulse: pulse,
+              temp: temp,
+              spo2: spo2,
+              rate: rate,
+              time: new Date().toString()?.split('G')[0],
+            },
+          ]);
+      setPulse('');
+      setTemp('');
+      setSpo2('');
+      setRate('');
+      setIndexVit('');
+    }
+  };
+  const handleDelVIT = ind => {
+    const updatedvit = vits?.filter((_, index) => index !== ind);
+    setVits(updatedvit);
+  };
+  const Vitedit = (data, index) => {
+    setIndexVit(index);
+    setPulse(data?.pulse);
+    setTemp(data?.temp);
+    setRate(data?.rate);
+    setSpo2(data?.spo2);
+    setdiastolic(data?.diastolic);
+  };
   const handleBMI = () => {
     const height = (parseInt(vitals.height) / 100) ** 2;
     const weight = parseFloat(vitals.weight);
@@ -108,44 +212,65 @@ const VitalScreen = ({route, props}) => {
   useEffect(() => {
     handleBMI();
   }, [height, weight]);
-
-  const handleEdd = selectedDate => {
-    let startDate = new Date(selectedDate);
-
-    let numberOfDaysToAdd = 280;
-    let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
-    let formattedEndDate = endDate.toISOString().substring(0, 10);
-    const day = formattedEndDate.split('-')[2];
-    const year = formattedEndDate.split('-')[0];
-    const month = months[`${formattedEndDate.split('-')[1]}`];
-    const EDD = `${day}-${month}-${year}`;
-    return EDD;
-  };
   const vitals = {
-    pulse_rate: pulse,
     weight: weight,
     height: height,
-    body_temperature: temp,
-    rate: rate,
     bmi: bmi,
-    diastolic: diastolic,
-    systolic: systolic,
     LDD: ldd,
     EDD: edd,
-    oxygen_level: spo2,
+    bp: {bp: bp},
+    vits: {vitals: vits},
     others: {[othresKey]: othersValue},
   };
   const handlePress = () => {
-    setTimeout(() => {
+    if (vits?.length === 0 && bp?.length == 0) {
+      dispatch(
+        addVitals([
+          ...vitalsDat,
+          {
+            vitals: {
+              weight: weight,
+              height: height,
+              bmi: bmi,
+              LDD: ldd,
+              EDD: edd,
+              bp: {
+                bp: [
+                  ...bp,
+                  {
+                    diastolic: diastolic,
+                    systolic: systolic,
+                    time: new Date().toString()?.split('G')[0],
+                  },
+                ],
+              },
+              vits: {
+                vitals: [
+                  ...vits,
+                  {
+                    pulse: pulse,
+                    temp: temp,
+                    spo2: spo2,
+                    rate: rate,
+                    time: new Date().toString()?.split('G')[0],
+                  },
+                ],
+              },
+              others: {[othresKey]: othersValue},
+            },
+            appointment_id: appointmentID,
+          },
+        ]),
+      );
+    } else {
       dispatch(
         addVitals([
           ...vitalsDat,
           {vitals: vitals, appointment_id: appointmentID},
         ]),
       );
-      nav.goBack();
-    }, 500);
+    }
+    nav.goBack();
   };
   useEffect(() => {
     const vital = vitalsDat;
@@ -159,12 +284,14 @@ const VitalScreen = ({route, props}) => {
       setheight(vitalsData?.height);
       setWeight(vitalsData?.weight);
       setBmi(vitalsData?.bmi);
-      setPulse(vitalsData?.pulse_rate);
-      setTemp(vitalsData?.body_temperature);
-      setRate(vitalsData?.rate);
-      setdiastolic(vitalsData?.diastolic);
-      setsystolic(vitalsData?.systolic);
-      setSpo2(vitalsData?.oxygen_level);
+      // setPulse(vitalsData?.pulse_rate);
+      // setTemp(vitalsData?.body_temperature);
+      // setRate(vitalsData?.rate);
+      // setdiastolic(vitalsData?.diastolic);
+      // setsystolic(vitalsData?.systolic);
+      // setSpo2(vitalsData?.oxygen_level);
+      setBP(vitalsData?.bp?.bp);
+      setVits(vitalsData?.vits?.vitals);
       setOthersKey(
         vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null,
       );
@@ -177,7 +304,7 @@ const VitalScreen = ({route, props}) => {
       }
     }
   }, []);
-
+  const week_days = calculateWeeksAndDaysFromDate(lddweek);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Vitals" />
@@ -212,38 +339,84 @@ const VitalScreen = ({route, props}) => {
               ) : (
                 <VitalField name="BMI" value="00" />
               )}
-              <VitalField
-                point={pulseRef}
-                re={tempRef}
-                name="Pulse"
-                placeholder="bpm"
-                value={pulse}
-                setvalue={text => setPulse(text)}
-              />
-              <VitalField
-                point={tempRef}
-                re={spoRef}
-                name="Temp"
-                placeholder="°C"
-                value={temp}
-                setvalue={text => setTemp(text)}
-              />
-              <VitalField
-                point={spoRef}
-                re={rateRef}
-                name="SPO2"
-                placeholder="%"
-                value={spo2}
-                setvalue={text => setSpo2(text)}
-              />
-              <VitalField
-                point={rateRef}
-                re={sysRef}
-                name="Resp.rate"
-                placeholder="brpm"
-                value={rate}
-                setvalue={text => setRate(text)}
-              />
+            </View>
+            <View style={styles.section}>
+              <View>
+                {/* <Text style={commonstyles.subhead}>Blood Pressure</Text> */}
+                <Seperator />
+              </View>
+              {vits?.length > 0
+                ? vits?.map((item, index) => (
+                    <ShowChip
+                      key={index}
+                      text={`SPO2:${item?.spo2}%${'  '}Pulse: ${
+                        item?.pulse
+                      }bpm Temp: ${item?.temp}°F Time: ${item.time}`}
+                      onPress={() => {
+                        handleDelVIT(index);
+                      }}
+                      onEdit={() => {
+                        Vitedit(item, index);
+                      }}
+                      color={
+                        parseInt(indexVit) === index
+                          ? CUSTOMCOLOR.success
+                          : CUSTOMCOLOR.primary
+                      }
+                    />
+                  ))
+                : null}
+              <View style={styles.fields}>
+                <VitalField
+                  point={pulseRef}
+                  re={tempRef}
+                  name="Pulse"
+                  placeholder="bpm"
+                  value={pulse}
+                  setvalue={text => setPulse(text)}
+                />
+                <VitalField
+                  point={tempRef}
+                  re={spoRef}
+                  name="Temp"
+                  placeholder="°C"
+                  value={temp}
+                  setvalue={text => setTemp(text)}
+                />
+                <VitalField
+                  point={spoRef}
+                  re={rateRef}
+                  name="SPO2"
+                  placeholder="%"
+                  value={spo2}
+                  setvalue={text => setSpo2(text)}
+                />
+                <VitalField
+                  point={rateRef}
+                  re={sysRef}
+                  name="Resp.rate"
+                  placeholder="brpm"
+                  value={rate}
+                  setvalue={text => setRate(text)}
+                />
+                <SelectorBtn
+                  input={
+                    timeSys ? timeSys : new Date().toString()?.split('G')[0]
+                  }
+                  select={{
+                    paddingHorizontal: moderateScale(8),
+                    paddingVertical: moderateScale(6),
+                    marginLeft: moderateScale(8),
+                  }}
+                />
+                <PlusButton
+                  icon={indexVit?.toString()?.length > 0 ? 'pencil' : 'plus'}
+                  size={moderateScale(24)}
+                  onPress={() => {
+                    handleVit();
+                  }}
+                />
+              </View>
             </View>
           </View>
 
@@ -252,6 +425,27 @@ const VitalScreen = ({route, props}) => {
               <Text style={commonstyles.subhead}>Blood Pressure</Text>
               <Seperator />
             </View>
+            {bp?.length > 0
+              ? bp?.map((item, index) => (
+                  <ShowChip
+                    key={index}
+                    text={`BP:${item?.systolic}/${
+                      item?.diastolic
+                    }${'  '} Time: ${item.time}`}
+                    onPress={() => {
+                      handleDelBp(index);
+                    }}
+                    onEdit={() => {
+                      BPedit(item, index);
+                    }}
+                    color={
+                      parseInt(indexbp) === index
+                        ? CUSTOMCOLOR.success
+                        : CUSTOMCOLOR.primary
+                    }
+                  />
+                ))
+              : null}
 
             <View style={styles.fields}>
               <VitalField
@@ -270,6 +464,21 @@ const VitalScreen = ({route, props}) => {
                 value={diastolic}
                 setvalue={text => setdiastolic(text)}
               />
+              <SelectorBtn
+                input={timeSys ? timeSys : new Date().toString()?.split('G')[0]}
+                select={{
+                  paddingHorizontal: moderateScale(8),
+                  paddingVertical: moderateScale(6),
+                  marginLeft: moderateScale(8),
+                }}
+              />
+              <PlusButton
+                icon={indexbp?.toString()?.length > 0 ? 'pencil' : 'plus'}
+                size={moderateScale(24)}
+                onPress={() => {
+                  handleBp();
+                }}
+              />
             </View>
           </View>
           {gende === 'Female' || gende === 'female' ? (
@@ -281,15 +490,16 @@ const VitalScreen = ({route, props}) => {
 
               <View style={styles.fields}>
                 <View style={styles.preg}>
-                  <Text style={styles.name}>LMP</Text>
+                  {/* <Text style={styles.name}>LMP</Text> */}
                   <SelectorBtn
-                    size={20}
+                    label={'LMP'}
+                    size={moderateScale(20)}
                     inputstyle={{fontSize: CUSTOMFONTSIZE.h4}}
                     onPress={() => {
-                      handleDate();
+                      setOpen(true);
                     }}
                     name={'calendar'}
-                    input={vitalsData?.LDD ? vitalsData?.LDD : lmpdates}
+                    input={ldd ? ldd : lmpdates}
                   />
                   {open && (
                     <DatePicker
@@ -304,10 +514,32 @@ const VitalScreen = ({route, props}) => {
                   )}
 
                   {/* <View style={{borderWidth:1,alignItems:'center'}}> */}
-                  <VitalField name="EDD" value={edd} />
-                  {/* </View> */}
+
+                  <SelectorBtn
+                    selectContainer={{marginLeft: moderateScale(16)}}
+                    label={'EDD'}
+                    size={moderateScale(20)}
+                    inputstyle={{fontSize: CUSTOMFONTSIZE.h4}}
+                    onPress={() => {
+                      setEddopen(true);
+                    }}
+                    name={'calendar'}
+                    input={edd ? edd : lmpdates}
+                  />
+                  {eddOpen && (
+                    <DatePicker
+                      modal
+                      open={eddOpen}
+                      date={date}
+                      theme="auto"
+                      mode="date"
+                      onConfirm={handleEddConfirm}
+                      onCancel={handleEddCancel}
+                    />
+                  )}
                 </View>
               </View>
+              <Text></Text>
             </View>
           ) : null}
           {show == true ? (

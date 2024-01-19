@@ -126,12 +126,8 @@ const PhysicalExamination = ({navigation}) => {
     if (report != undefined) {
       navigation?.goBack();
     } else {
-      if (consent) {
-        postData(apiUrl);
-        handlePress();
-      } else {
-        showToast('error', 'Please take Declaration from Patient');
-      }
+      postData(apiUrl);
+      handlePress();
     }
   };
 
@@ -340,7 +336,11 @@ const PhysicalExamination = ({navigation}) => {
           if (report != undefined) {
             setModal(false);
           } else {
-            handleModal();
+            if (consent) {
+              handleModal();
+            } else {
+              showToast('error', 'Please take consent from patient');
+            }
           }
         }}
       />
@@ -359,6 +359,9 @@ const PhysicalExamination = ({navigation}) => {
           justifyContent: 'flex-end',
           flex: 1,
         }}>
+        <Text>
+          Note: You can upload Upto 5 Files and each file less than 1mb
+        </Text>
         <HButton
           btnstyles={commonstyles.activebtn}
           onPress={handle}

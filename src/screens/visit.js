@@ -120,6 +120,11 @@ const Visit = ({navigation, route}) => {
     dummyPrescribe?.length > 0
       ? dummyPrescribe?.filter(item => item?.appointment_id === appointmentID)
       : [];
+  const checkOthersmed =
+    Prescribe?.length > 0
+      ? Prescribe?.filter(item => item?.mode === 'Others')
+      : [];
+  console.log(checkOthersmed?.[0]?.medicine?.split(',')?.map(val => val));
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -136,6 +141,12 @@ const Visit = ({navigation, route}) => {
     lab?.length > 0
       ? lab?.filter(item => item?.appointment_id === appointmentID)
       : [];
+  console.log(
+    '========labtest',
+    labreport?.map(item => ({
+      lab_test: {lab_test: item?.lab_test, date: item?.date},
+    })),
+  );
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const hosp = useSelector(state => state?.pasthistory?.hospitalization);
   const hospitalization =
@@ -276,7 +287,9 @@ const Visit = ({navigation, route}) => {
     follow_up: date,
     note: JSON.stringify({note: note, additional_notes: notes}),
     diagnosis: diagnosis,
-    labReports: labreport,
+    labReports: labreport?.map(item => ({
+      lab_test: JSON.stringify({lab_test: item?.lab_test, date: item?.date}),
+    })),
     // commoribities: commorbities,
     allergies: allergies,
     pastHistory: {
@@ -664,52 +677,52 @@ const Visit = ({navigation, route}) => {
           <h5 style="font-size:14px">
           Prescribe
           </h5>
-          ${Prescribe?.map(item =>
-            item?.mode !== 'Others'
-              ? `
-            <table style="width:100%;;">
-          
+          ${
+            checkOthersmed?.length > 0
+              ? `<div style="display:flex;flex-direction:column;">${checkOthersmed?.[0]?.medicine
+                  ?.split(',')
+                  ?.map(val => {
+                    if (val === ',') {
+                    } else {
+                      return `<text>${val}</text>`;
+                    }
+                  })}
+                </div>`
+              : `
+          <table style="width:100%;">
+        
 
-              <tr>
-                  <th style="text-align:center;width:4%;">S.NO</th>
-                  <th style="text-align:center;width:45%;">Medicine</th>
-                  <th style="text-align:center;width:12%;">Timing</th>
-                  <th style="text-align:center;width:12%;">Frequency</th>
-                  <th style="text-align:center;width:12%;">Duration</th>
-                  <th style="text-align:center;width:12%;">Quantity</th>
-                  <th style="text-align:center;width:12%;">Remarks</th>
-                </tr>
-                ${Prescribe?.map(
-                  (value, index) => `
-                <tr style=${
-                  index === 10
-                    ? 'page-break-before:always;margin-top:100px'
-                    : ''
-                }>
-                  <td style="text-align:center;width:4%">${
-                    parseInt(index) + 1
-                  }</td>
-                  <td style="text-align:center;width:45%">${
-                    value?.medicine
-                  }</td>
-                  <td style="text-align:center;width:12%">${value?.timing}</td>
-                  <td style="text-align:center;width:12%">${
-                    value?.frequency
-                  }</td>
-                  <td style="text-align:center;width:12%">${
-                    value?.duration
-                  }</td>
-                  <td style="text-align:center;width:12%">${
-                    value.total_quantity
-                  }</td>
-                  <td style="text-align:center;width:12%">${value.others}</td>
-                </tr>
-                `,
-                ).join('')}
-           
-          </table>`
-              : `<text>${item?.othersMed}</text>`,
-          )}
+            <tr>
+                <th style="text-align:center;width:4%;">S.NO</th>
+                <th style="text-align:center;width:45%;">Medicine</th>
+                <th style="text-align:center;width:12%;">Timing</th>
+                <th style="text-align:center;width:12%;">Frequency</th>
+                <th style="text-align:center;width:12%;">Duration</th>
+                <th style="text-align:center;width:12%;">Quantity</th>
+                <th style="text-align:center;width:12%;">Remarks</th>
+              </tr>
+              ${Prescribe?.map(
+                (value, index) => `
+              <tr style=${
+                index === 10 ? 'page-break-before:always;margin-top:100px' : ''
+              }>
+                <td style="text-align:center;width:4%">${
+                  parseInt(index) + 1
+                }</td>
+                <td style="text-align:center;width:45%">${value?.medicine}</td>
+                <td style="text-align:center;width:12%">${value?.timing}</td>
+                <td style="text-align:center;width:12%">${value?.frequency}</td>
+                <td style="text-align:center;width:12%">${value?.duration}</td>
+                <td style="text-align:center;width:12%">${
+                  value.total_quantity
+                }</td>
+                <td style="text-align:center;width:12%">${value.others}</td>
+              </tr>
+              `,
+              ).join('')}
+         
+        </table>`
+          }
           </div>
           ${
             advices?.length > 0
@@ -744,6 +757,7 @@ const Visit = ({navigation, route}) => {
               <text>
                   ${labreport?.map(value => value.lab_test).join(', ')}
               </text>
+              <b>Return Date: ${labreport?.[0]?.date}</b>
           </div>`
               : ''
           } 
@@ -912,7 +926,14 @@ const Visit = ({navigation, route}) => {
                   }}
                   textStyle={{color: CUSTOMCOLOR.primary}}
                   onPress={() => {
-                    navigation.navigate('patientrecord', {patient_phone});
+                    navigation.navigate('patientrecord', {
+                      patient_phone: patient_phone,
+                      birthYea: age,
+                      patient_pic: patient_profile_pic,
+                      patient_age: age,
+                      patient_name: name,
+                      gender: gende,
+                    });
                   }}
                 />
               </View>
@@ -993,8 +1014,7 @@ const Visit = ({navigation, route}) => {
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
                     <Text style={[styles.patientText, {fontWeight: '700'}]}>
-                      Pregnant (LMP: {`${day}-${months[month]}-${Year}`} | EDD:{' '}
-                      {vitalsData.EDD})
+                      Pregnant (LMP: {vitalsData?.LDD} | EDD: {vitalsData.EDD})
                     </Text>
                   ) : null}
                 </View>
@@ -1306,7 +1326,7 @@ const Visit = ({navigation, route}) => {
                                       />
                                       <View>
                                         <Text style={styles.pulse}>
-                                          {item.othersMed}
+                                          {item.medicine}
                                         </Text>
                                       </View>
                                     </View>

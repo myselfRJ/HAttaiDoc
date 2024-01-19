@@ -157,7 +157,7 @@ export default function MedicalRecordPatient({route, navigation}) {
             <View style={styles.patientinfo}>
               <Text style={styles.name}>{patient_name}</Text>
               <Text style={styles.age}>
-                {parseInt(presentYear) - parseInt(birthYea)} | {gender}
+                {patient_age} | {gender}
               </Text>
               <Text style={styles?.contact}>
                 contact:

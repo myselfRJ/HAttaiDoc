@@ -85,6 +85,11 @@ export default function Prescribe1({navigation}) {
     prevPres?.length > 0
       ? prevPres?.filter(item => item?.appointment_id === appointmentID)
       : [];
+  const checkOthersmed =
+    prevPres?.length > 0
+      ? prevPres?.filter(item => item?.mode === 'Others')
+      : [];
+  console.log(checkOthersmed?.length);
   const [others, setOthers] = useState('');
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
@@ -102,21 +107,24 @@ export default function Prescribe1({navigation}) {
           addPrescribe([
             ...prevPres,
             {
-              medicine: generic
-                ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
-                    generic &&
-                    (generic.includes('mg') ||
-                      generic.includes('ml') ||
-                      generic.includes('g'))
-                      ? ''
-                      : `${generic.toUpperCase()} ${mgs}`
-                  }`
-                : medicine &&
-                  (medicine.includes('mg') ||
-                    medicine.includes('ml') ||
-                    medicine.includes('g'))
-                ? medicine.toUpperCase()
-                : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
+              medicine:
+                mode === 'Others'
+                  ? othersMed
+                  : generic
+                  ? `${medicine.toUpperCase()} (${generic.toUpperCase()}) ${
+                      generic &&
+                      (generic.includes('mg') ||
+                        generic.includes('ml') ||
+                        generic.includes('g'))
+                        ? ''
+                        : `${generic.toUpperCase()} ${mgs}`
+                    }`
+                  : medicine &&
+                    (medicine.includes('mg') ||
+                      medicine.includes('ml') ||
+                      medicine.includes('g'))
+                  ? medicine.toUpperCase()
+                  : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
               mode: mode,
               dose_quantity: '',
               timing: timing,
@@ -130,7 +138,6 @@ export default function Prescribe1({navigation}) {
               total_quantity: total_quantity,
               others: others ? others : '',
               appointment_id: appointmentID,
-              othersMed: othersMed,
             },
           ]),
         );
@@ -391,6 +398,7 @@ export default function Prescribe1({navigation}) {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
+    checkOthersmed?.length > 0 ? setMode('Others') : setMode('');
   }, []);
 
   const handleOptions = value => {
@@ -485,7 +493,9 @@ export default function Prescribe1({navigation}) {
       dispatch(addPrescribe(lstdata));
     }
   };
+  console.log(indexToUpdate);
   const DispatchEdit = (data, ind) => {
+    setMode(data?.mode);
     setIndextoUpdate(ind);
     setselectedGeneric(true);
     setShow(!false);
@@ -511,6 +521,14 @@ export default function Prescribe1({navigation}) {
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
   };
+  const [info, setInfo] = useState(false);
+  const ShowInfo = () => {
+    // showToast(
+    //   'error',
+    //   'Enter medicine format "name <>space<> dosage <>space<> frequency,',
+    // );
+    setInfo(!info);
+  };
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -525,9 +543,14 @@ export default function Prescribe1({navigation}) {
                 <ShowChip
                   align={{width: '85%'}}
                   key={ind}
-                  text={`${item.othersMed}`}
+                  text={`${item.medicine}`}
                   onPress={() => handleDelete(ind)}
                   onEdit={() => DispatchEdit(item, ind)}
+                  color={
+                    parseInt(indexToUpdate) === ind
+                      ? CUSTOMCOLOR.success
+                      : CUSTOMCOLOR.primary
+                  }
                 />
               );
             } else {
@@ -539,6 +562,11 @@ export default function Prescribe1({navigation}) {
                   text={`${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`}
                   onPress={() => handleDelete(ind)}
                   onEdit={() => DispatchEdit(item, ind)}
+                  color={
+                    parseInt(indexToUpdate) === ind
+                      ? CUSTOMCOLOR.success
+                      : CUSTOMCOLOR.primary
+                  }
                 />
               );
             }
@@ -576,6 +604,15 @@ export default function Prescribe1({navigation}) {
                 }}
               />
             ))}
+            {mode === 'Others' && (
+              <TouchableOpacity onPress={ShowInfo}>
+                <Icon
+                  name={info ? 'information' : 'information-outline'}
+                  size={moderateScale(16)}
+                  color={CUSTOMCOLOR.primary}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         {mode !== 'Others' ? (
@@ -817,24 +854,42 @@ export default function Prescribe1({navigation}) {
             />
           </>
         ) : (
-          <InputText
-            value={othersMed}
-            setValue={setOthersMed}
-            label={'medicine'}
-            required={true}
-            multiline={true}
-            placeholder={'Enter freeText Medicine.....'}
-            textStyle={{
-              height: moderateScale(200),
-              textAlignVertical: 'top',
-              color: CUSTOMCOLOR.black,
-              fontWeight: '700',
-            }}
-          />
+          <>
+            {info && (
+              <View
+                style={{
+                  // borderWidth: 1,
+                  position: 'absolute',
+                  top: moderateScale(56),
+                  right: 0,
+                  left: moderateScale(200),
+                  bottom: moderateScale(512),
+                }}>
+                <Text
+                  style={{
+                    color: CUSTOMCOLOR.disable,
+                  }}>{`Enter medicine format "name <>space<> dosage <>space<> frequency,`}</Text>
+              </View>
+            )}
+            <InputText
+              value={othersMed}
+              setValue={setOthersMed}
+              label={'medicine'}
+              required={true}
+              multiline={true}
+              placeholder={'Enter freeText Medicine.....'}
+              textStyle={{
+                height: moderateScale(200),
+                textAlignVertical: 'top',
+                color: CUSTOMCOLOR.black,
+                fontWeight: '700',
+              }}
+            />
+          </>
         )}
         <HButton
           type="addtype"
-          label={'Add'}
+          label={indexToUpdate?.length > 0 ? 'Update' : 'Add'}
           icon="plus"
           // size={moderateScale(16)}
           onPress={handleAddPrescribe}
@@ -945,6 +1000,11 @@ export default function Prescribe1({navigation}) {
           </View>
         </CustomModal>
       )}
+      {/* {info && (
+        <CustomModal visible={info} Close={setInfo}>
+          <Text>{`Enter medicine format "name <>space<> dosage <>space<> frequency, `}</Text>
+        </CustomModal>
+      )} */}
     </View>
   );
 }
