@@ -222,6 +222,7 @@ const VitalScreen = ({route, props}) => {
     vits: {vitals: vits},
     others: {[othresKey]: othersValue},
   };
+  console.log(vits, bp);
   const handlePress = () => {
     if (vits?.length === 0 && bp?.length == 0) {
       dispatch(
@@ -290,8 +291,8 @@ const VitalScreen = ({route, props}) => {
       // setdiastolic(vitalsData?.diastolic);
       // setsystolic(vitalsData?.systolic);
       // setSpo2(vitalsData?.oxygen_level);
-      setBP(vitalsData?.bp?.bp);
-      setVits(vitalsData?.vits?.vitals);
+      setBP(vitalsData?.bp?.bp ? vitalsData?.bp?.bp : []);
+      setVits(vitalsData?.vits?.vitals ? vitalsData?.vits?.vitals : []);
       setOthersKey(
         vitalsData?.others ? Object.keys(vitalsData?.others)[0] : null,
       );
@@ -322,7 +323,7 @@ const VitalScreen = ({route, props}) => {
                 re={weightRef}
                 //   onSubmitEditing={() => weightRef.current && weightRef.current.focus()}
                 name="Height"
-                placeholder="Cm"
+                placeholder="cm"
                 setvalue={text => setheight(text)}
               />
               <VitalField
@@ -379,7 +380,7 @@ const VitalScreen = ({route, props}) => {
                   point={tempRef}
                   re={spoRef}
                   name="Temp"
-                  placeholder="°C"
+                  placeholder="°F"
                   value={temp}
                   setvalue={text => setTemp(text)}
                 />

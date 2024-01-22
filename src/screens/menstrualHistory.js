@@ -29,6 +29,11 @@ import {URL} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {ScrollView} from 'react-native-gesture-handler';
 import {mode} from '../redux/features/prescription/prescribeslice';
+import {
+  calculateWeeksAndDaysFromDate,
+  formatdate,
+  handleAddDates,
+} from '../utility/const';
 
 const MenstrualHistory = ({navigation, route}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -36,9 +41,6 @@ const MenstrualHistory = ({navigation, route}) => {
   const menstrualHistory = useSelector(
     state => state?.pasthistory?.menstrualHistory,
   );
-  console.log('====================================');
-  console.log('mens=========', menstrualHistory);
-  console.log('====================================');
   const {phone, patient_phone} = route.params;
   const token = useSelector(state => state.authenticate.auth.access);
   const nav = useNavigation();
@@ -52,23 +54,39 @@ const MenstrualHistory = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [formatDate, setformatDate] = useState('');
+  const [eddDate, setEdddate] = useState('');
+  const [eddOpen, setEddOpen] = useState(false);
   const [formatDate1, setformatDate1] = useState('');
-  // const formatDate = moment(date).format('YYYY-MM-DD');
+  const [lmpweek, setLmpWeek] = useState('');
   const [date1, setDate1] = useState(new Date());
   const [open1, setOpen1] = useState(false);
   const [others, setOthers] = useState('');
-  // const formatDate1 = moment(date1).format('YYYY-MM-DD');
   const formattedDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
-  const handleConfirm = date => {
-    setDate(date);
+  const handleConfirm = lmpdate => {
+    setDate(lmpdate);
     setOpen(false);
-    setformatDate(moment(date).format('YYYY-MM-DD'));
+    const lmpdat = moment(lmpdate).format('YYYY-MM-DD');
+    setformatDate(lmpdat);
+    const Edddate = handleAddDates(lmpdat, 280);
+    setEdddate(Edddate);
+  };
+  const handleEddConfirm = edddate => {
+    setDate(edddate);
+    setEddOpen(false);
+    const Edddate = moment(edddate).format('YYYY-MM-DD');
+    setEdddate(Edddate);
+    const lmpdate = handleAddDates(Edddate, -280);
+    setformatDate(lmpdate);
+    setLmpWeek(calculateWeeksAndDaysFromDate(lmpdate));
   };
   const handleCancel = () => {
+    setOpen(false);
+  };
+  const handleEddCancel = () => {
     setOpen(false);
   };
   const handleConfirm1 = date => {
@@ -108,7 +126,10 @@ const MenstrualHistory = ({navigation, route}) => {
             status: status,
             flowdays: flow,
             cycledays: cycle,
-            pregnant: formatDate ? formatDate : '',
+            pregnant: {
+              lmp: formatDate ? formatDate : '',
+              edd: eddDate ? eddDate : '',
+            },
             menopause: formatDate1 ? formatDate1 : '',
             others: others,
           },
@@ -141,7 +162,9 @@ const MenstrualHistory = ({navigation, route}) => {
       setStatus(mens?.status);
       setCycle(mens?.cycledays);
       setFlow(mens?.flowdays);
-      setformatDate(mens?.pregnant);
+      setformatDate(mens?.pregnant?.lmp);
+      setEdddate(mens?.pregnant?.edd);
+      setLmpWeek(calculateWeeksAndDaysFromDate(mens?.pregnant?.lmp));
       setformatDate1(mens?.menopause);
       setOthers(mens?.others);
     }
@@ -150,6 +173,7 @@ const MenstrualHistory = ({navigation, route}) => {
       mens?.menopause !== '' ? setMenopause('Yes') : setMenopause('No');
     }
   }, []);
+  console.log(lmpweek);
   return (
     <View style={styles.main}>
       <ScrollView
@@ -215,12 +239,12 @@ const MenstrualHistory = ({navigation, route}) => {
           </View>
         </View>
         {preg === 'Yes' && (
-          <>
+          <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
             <SelectorBtn
               label={'LMP(Last month period)'}
               name="calendar"
-              onPress={() => setOpen('to')}
-              input={formatDate ? formatDate : 'Select Date'}
+              onPress={() => setOpen(true)}
+              input={formatDate ? formatdate(formatDate) : 'Select Date'}
               style={styles.DOBselect}
             />
             <DatePicker
@@ -232,7 +256,34 @@ const MenstrualHistory = ({navigation, route}) => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             />
-          </>
+            <SelectorBtn
+              label={'EDD(Estimated Delivery Date)'}
+              name="calendar"
+              onPress={() => setEddOpen(true)}
+              input={eddDate ? formatdate(eddDate) : 'Select Date'}
+              style={styles.DOBselect}
+            />
+            <DatePicker
+              modal
+              open={eddOpen !== false}
+              date={date}
+              theme="auto"
+              mode="date"
+              onConfirm={handleEddConfirm}
+              onCancel={handleEddCancel}
+            />
+            {lmpweek && (
+              <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+                <Text style={{color: CUSTOMCOLOR.black}}>
+                  {' '}
+                  Weeks: <Text style={styles.lmpweek}>{lmpweek?.weeks}</Text>
+                </Text>
+                <Text style={{color: CUSTOMCOLOR.black}}>
+                  Days: <Text style={styles.lmpweek}>{lmpweek?.days}</Text>
+                </Text>
+              </View>
+            )}
+          </View>
         )}
         {preg === 'No' && (
           <>
@@ -309,6 +360,11 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontWeight: '400',
+  },
+  lmpweek: {
+    color: CUSTOMCOLOR.black,
+    fontWeight: '600',
+    fontSize: CUSTOMFONTSIZE.h3,
   },
 });
 export default MenstrualHistory;

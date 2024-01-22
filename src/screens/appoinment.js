@@ -295,7 +295,7 @@ const Appointment = ({navigation}) => {
             }}
             //label={Language[language]['dob']}
             name="calendar"
-            onPress={() => setOpen('to')}
+            onPress={() => setOpen(true)}
             input={formattedDate}
             style={styles.DOBselect}
           />

@@ -124,7 +124,6 @@ const Visit = ({navigation, route}) => {
     Prescribe?.length > 0
       ? Prescribe?.filter(item => item?.mode === 'Others')
       : [];
-  console.log(checkOthersmed?.[0]?.medicine?.split(',')?.map(val => val));
   const token = useSelector(state => state.authenticate.auth.access);
   const {phone} = useSelector(state => state?.phone?.data);
 
@@ -141,12 +140,6 @@ const Visit = ({navigation, route}) => {
     lab?.length > 0
       ? lab?.filter(item => item?.appointment_id === appointmentID)
       : [];
-  console.log(
-    '========labtest',
-    labreport?.map(item => ({
-      lab_test: {lab_test: item?.lab_test, date: item?.date},
-    })),
-  );
   const dateTimeRed = useSelector(state => state.valid?.valid);
   const hosp = useSelector(state => state?.pasthistory?.hospitalization);
   const hospitalization =
@@ -280,8 +273,8 @@ const Visit = ({navigation, route}) => {
 
     symptoms: Symptom,
 
-    chief_complaint: chief_complaint ? {} : selectedComplaint,
-    vitals: vitals ? {} : vitalsData,
+    chief_complaint: selectedComplaint,
+    vitals: vitalsData,
     refer_to_doctor: selectedDoctor,
     // ?selectedDoctor:JSON.stringify( {"doctor_name": "", "phone": "", "speciality": ""}),
     follow_up: date,
@@ -316,15 +309,8 @@ const Visit = ({navigation, route}) => {
   const [data, setData] = useState();
 
   const UpdateVitals = {
-    pulse_rate: vitalsData?.pulse_rate,
     weight: vitalsData?.weight,
     height: vitalsData?.height,
-    body_temperature: vitalsData?.body_temperature,
-    rate: vitalsData?.rate,
-    diastolic: vitalsData?.diastolic,
-    systolic: vitalsData?.systolic,
-    EDD: vitalsData?.EDD,
-    LDD: vitalsData?.LDD,
     bmi: vitalsData?.bmi,
     patient_phone_number: patient_phone,
     doctor_phone_number: phone,
@@ -369,12 +355,17 @@ const Visit = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setVitals(jsonData?.data);
-      dispatch(
-        UpadteVitals([
-          ...vital,
-          {vitals: jsonData?.data, appointment_id: appointmentID},
-        ]),
+      const data = vital?.filter(
+        item => item?.appointment_id === appointmentID,
       );
+      if (data?.length === 0) {
+        dispatch(
+          UpadteVitals([
+            ...vital,
+            {vitals: jsonData?.data, appointment_id: appointmentID},
+          ]),
+        );
+      }
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -568,11 +559,10 @@ const Visit = ({navigation, route}) => {
               : ''
           }
           ${
-            vitalsData?.pulse_rate ||
             vitalsData?.weight ||
             vitalsData?.height ||
-            vitalsData?.body_temperature ||
-            vitalsData?.rate ||
+            vitalsData?.bp?.bp?.length > 0 ||
+            vitalsData?.vits?.vitals > 0 ||
             vitalsData?.bmi
               ? `<div>
               <h5>
@@ -580,19 +570,26 @@ const Visit = ({navigation, route}) => {
               </h5>
               <text>
                   ${
-                    vitalsData?.pulse_rate
+                    vitalsData?.vits?.vitals?.[0]?.pulse
                       ? 'Pulse Rate:' +
                         ' ' +
-                        `<b>${vitalsData.pulse_rate}bpm,${' '} </b>`
+                        `<b>${
+                          vitalsData?.vits?.vitals?.[0]?.pulse
+                        }bpm,${' '} </b>`
                       : ''
                   }
                   ${
-                    vitalsData?.systolic
-                      ? 'BP:' +
-                        ' ' +
-                        `<b> ${
-                          vitalsData.systolic + '/' + vitalsData.diastolic + ','
-                        }</b>`
+                    vitalsData?.bp?.bp?.length === 1
+                      ? vitalsData?.systolic
+                        ? 'BP:' +
+                          ' ' +
+                          `<b> ${
+                            vitalsData?.bp?.bp?.[0]?.systolic +
+                            '/' +
+                            vitalsData?.bp?.bp?.[0]?.diastolic +
+                            ','
+                          }</b>`
+                        : ''
                       : ''
                   }
                   ${
@@ -606,17 +603,17 @@ const Visit = ({navigation, route}) => {
                       : ''
                   }
                   ${
-                    vitalsData?.body_temperature
+                    vitalsData?.vits?.vitals?.[0]?.temp
                       ? 'Temp:' +
                         ' ' +
-                        `<b>${vitalsData.body_temperature} °C,</b>`
+                        `<b>${vitalsData?.vits?.vitals?.[0]?.temp} °F,</b>`
                       : ''
                   }
                   ${
-                    vitalsData?.rate
+                    vitalsData?.vits?.vitals?.[0]?.rate
                       ? 'Respiratory Rate:' +
                         ' ' +
-                        `<b>${vitalsData.rate}brpm,</b>`
+                        `<b>${vitalsData?.vits?.vitals?.[0]?.rate}brpm,</b>`
                       : ''
                   }
                   ${
@@ -839,13 +836,169 @@ const Visit = ({navigation, route}) => {
       setFilePath(file.filePath);
     }
   };
+  const createPharmacyPDF = async () => {
+    if (await PermmisionStorage()) {
+      // setPrevLoad(!prevLoad)
+
+      let options = {
+        html: `<!DOCTYPE html>
+      <style>
+      body {width: 827px; height:1169px;}
+      header {width:inherit;position:fixed;top:12px;left:12px;justify-content:center;align-items:center;}
+       text {font-size: 14px;padding:1px;font-weight: 300;letter-spacing:0.5px}
+
+      h5 {margin: 1px;padding: 0px; font-size:14px;color:#4ba5fa}
+      tr {display:flex;font-size:14px;justify-content: space-between;width:100%;padding:8px;align-items:flex-start;}
+      td{justify-content: space-around;font-size: 10px;}
+      .doctor-head text {color:#4ba5fa;font-weight:600}
+      
+      </style>
+      
+      <body >
+          <header >
+          <div style="display:flex;height:80px;width:inherit;flex-direction:row;justify-content:space-between;align-items:center;border-bottom:2px solid black">
+              <div style="display:flex;flex-direction: row; gap:1rem; position:absolute";left:16px;border:1px solid black>
+                  <img src=${
+                    logo === CONSTANTS.default_image
+                      ? CONSTANTS.default_clinic_logo
+                      : logo_url
+                  }
+                  style="height:48px;width:48px">
+              </img>
+              <div class="doctor-head" style="display:flex;flex-direction: column;align-items:flex-start;">
+                  <text>
+                     Dr.${data?.doctor_name}
+                  </text>
+                  <text>
+                      ${data?.specialization}
+                  </text>
+                  <text>
+                     Reg No. ${data?.medical_number}
+                  </text>
+              </div>
+          
+          
+              </div>
+              <div style="display:flex;flex-direction: column;gap:2px; align-items: flex-end;position:absolute;right:12px">
+                 <h5>
+                  ${clinic_name}
+                 <h5>
+                 <text style="font-size: 10px;">
+                  Phone: ${clinic_phone} / Address: ${clinic_Address}
+                 </text>
+              </div>
+              </div>
+          
+          </header>
+          <div style="page-break-after: auto;padding:1rem;gap:8px;margin-top:100px">
+              <div style="gap:8px;" >
+          <div style="display:flex;justify-content: space-between;align-items:center;">
+              <img src=${CONSTANTS.prescription_logo}
+              style="height:28px;width:24px;">
+          </img>
+          <text style="font-size: 10px;">
+             Date: ${new Date().toISOString().split('T')[0]} Time:${
+          new Date().toString().split(' ')[4]
+        }
+             </text>
+          </div>
+          <div>
+              <text>${name}  | ${gende} | ${age} | ${patient_phone}</text>
+          </div>
+      </div>
+          <div style="margin-top:16px;" >
+          <h5 style="font-size:14px">
+          Prescribe
+          </h5>
+          ${
+            checkOthersmed?.length > 0
+              ? `<div style="display:flex;flex-direction:column;">${checkOthersmed?.[0]?.medicine
+                  ?.split(',')
+                  ?.map(val => {
+                    if (val === ',') {
+                    } else {
+                      return `<text>${val}</text>`;
+                    }
+                  })}
+                </div>`
+              : `
+          <table style="width:100%;">
+        
+
+            <tr>
+                <th style="text-align:center;width:4%;">S.NO</th>
+                <th style="text-align:center;width:45%;">Medicine</th>
+                <th style="text-align:center;width:12%;">Timing</th>
+                <th style="text-align:center;width:12%;">Frequency</th>
+                <th style="text-align:center;width:12%;">Duration</th>
+                <th style="text-align:center;width:12%;">Quantity</th>
+                <th style="text-align:center;width:12%;">Remarks</th>
+              </tr>
+              ${Prescribe?.map(
+                (value, index) => `
+              <tr style=${
+                index === 10 ? 'page-break-before:always;margin-top:100px' : ''
+              }>
+                <td style="text-align:center;width:4%">${
+                  parseInt(index) + 1
+                }</td>
+                <td style="text-align:center;width:45%">${value?.medicine}</td>
+                <td style="text-align:center;width:12%">${value?.timing}</td>
+                <td style="text-align:center;width:12%">${value?.frequency}</td>
+                <td style="text-align:center;width:12%">${value?.duration}</td>
+                <td style="text-align:center;width:12%">${
+                  value.total_quantity
+                }</td>
+                <td style="text-align:center;width:12%">${value.others}</td>
+              </tr>
+              `,
+              ).join('')}
+         
+        </table>`
+          }
+      <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
+          <div style="display:flex;width:105vw; align-item:center">
+          <p style="text-align:center;width:100%; font-size:12px">
+              This Prescription electronically signed by Dr. ${
+                data?.doctor_name
+              },${' '}${data?.degree}, ${' '}${
+          data?.medical_number
+        }, ${' '}${new Date().toString()}
+          </p>
+          </div>
+          <p style="text-align:left;width:100%;margin:0px;font-weight:300;font-size:12px;">
+              powered by
+          </p>
+          <img src=${
+            CONSTANTS.pdf_footer
+          } style="align-self:flex-start;width:28px;height:24px;margin-left:15px"></img>
+      </footer>
+        
+      </body>
+      
+      
+      
+      </html>`,
+        fileName: 'phrma',
+        //     //File directory
+        directory: 'pharmacy',
+      };
+      let file = await RNHTMLtoPDF.convert(options);
+      console.log(file);
+    }
+  };
   const handlePreview = async () => {
     const prevScreen = 'visit';
     const doc_phone = data?.doctor_phone_number;
     setPrevLoad(true);
     const path =
       'file:///storage/emulated/0/Android/data/com.hattaidoc/files/docs/test.pdf';
-    createPDF();
+    try {
+      await createPDF();
+      await createPharmacyPDF();
+    } catch (error) {
+      console.error('Error creating PDFs:', error);
+    }
     if (await PermmisionStorage()) {
       setTimeout(() => {
         navigation.navigate('pdf', {
@@ -862,15 +1015,6 @@ const Visit = ({navigation, route}) => {
       }, 2000);
     }
   };
-  const handlePDf = async () => {
-    createPDF();
-    if (await isPermitted()) {
-      setTimeout(() => {
-        handle();
-      }, 3000);
-    }
-  };
-  let lastKey, lastValue;
   if (vitalsData?.others) {
     const jsonObject = vitalsData?.others;
 
@@ -891,6 +1035,7 @@ const Visit = ({navigation, route}) => {
     patient_name: name,
   };
   const Age = age;
+  console.log(vitalsData?.vits);
   return (
     <View>
       <ScrollView>
@@ -1060,69 +1205,72 @@ const Visit = ({navigation, route}) => {
                     />
                   </Pressable>
                 </View>
-                {vitalsData && (
-                  <Text style={styles.patientText}>
-                    {vitalsData?.systolic && (
-                      <Text>
-                        BP:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.systolic}/{vitalsData.diastolic}
-                        </Text>
-                      </Text>
-                    )}{' '}
-                    {vitalsData?.oxygen_level && (
-                      <Text>
-                        SPO2:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.oxygen_level}
-                        </Text>
-                        %
-                      </Text>
-                    )}{' '}
-                    {vitalsData?.bmi !== 'NaN' && (
-                      <Text>
-                        BMI:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.bmi}
-                        </Text>
-                      </Text>
-                    )}{' '}
-                    {vitalsData?.pulse_rate && (
-                      <Text>
-                        Pulse:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.pulse_rate}{' '}
-                        </Text>
-                        bpm
-                      </Text>
-                    )}{' '}
-                    {vitalsData?.body_temperature && (
-                      <Text>
-                        Temp:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.body_temperature}
-                        </Text>
-                        {String.fromCharCode(8451)}
-                      </Text>
-                    )}{' '}
-                    {vitalsData?.others &&
-                      Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
-                      Object?.keys(vitalsData?.others)?.[0] !== '' && (
+                {vitalsData &&
+                  vitalsData?.bp?.bp?.length == 1 &&
+                  vitalsData?.vits?.vitals?.length === 1 && (
+                    <Text style={styles.patientText}>
+                      {vitalsData?.bp?.bp?.[0]?.systolic && (
                         <Text>
-                          {vitalsData?.others
-                            ? Object.keys(vitalsData?.others)?.[0]
-                            : null}
-                          {' :'}
-
+                          BP:{' '}
                           <Text style={{fontWeight: '700'}}>
-                            {vitalsData?.others
-                              ? Object.values(vitalsData?.others)[0]
-                              : null}
+                            {vitalsData?.bp?.bp?.[0]?.systolic}/
+                            {vitalsData?.bp?.bp?.[0]?.diastolic}
                           </Text>
                         </Text>
-                      )}
-                  </Text>
-                )}
+                      )}{' '}
+                      {vitalsData?.vits?.vitals?.[0]?.spo2 && (
+                        <Text>
+                          SPO2:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.vits?.vitals?.[0]?.spo2}
+                          </Text>
+                          %
+                        </Text>
+                      )}{' '}
+                      {vitalsData?.bmi !== 'NaN' && (
+                        <Text>
+                          BMI:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData.bmi}
+                          </Text>
+                        </Text>
+                      )}{' '}
+                      {vitalsData?.vits?.vitals?.[0]?.pulse && (
+                        <Text>
+                          Pulse:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.vits?.vitals?.[0]?.pulse}{' '}
+                          </Text>
+                          bpm
+                        </Text>
+                      )}{' '}
+                      {vitalsData?.vits?.vitals?.[0]?.temp && (
+                        <Text>
+                          Temp:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.vits?.vitals?.[0]?.temp}
+                          </Text>
+                          °F
+                        </Text>
+                      )}{' '}
+                      {vitalsData?.others &&
+                        Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
+                        Object?.keys(vitalsData?.others)?.[0] !== '' && (
+                          <Text>
+                            {vitalsData?.others
+                              ? Object.keys(vitalsData?.others)?.[0]
+                              : null}
+                            {' :'}
+
+                            <Text style={{fontWeight: '700'}}>
+                              {vitalsData?.others
+                                ? Object.values(vitalsData?.others)[0]
+                                : null}
+                            </Text>
+                          </Text>
+                        )}
+                    </Text>
+                  )}
 
                 <Seperator />
               </View>

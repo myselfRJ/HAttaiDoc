@@ -1,10 +1,10 @@
-const baseUrl = 'http://10.9.79.239:8000/api/v1/';
-// const baseUrl = 'http://65.0.12.213/api/v1/';
+// const baseUrl = 'http://10.9.79.239:8000/api/v1/';
+const baseUrl = 'http://65.0.12.213/api/v1/';
 // const baseUrl = 'http://3.6.40.67/api/v1/';
 // const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'https://healthattai.com/';
-export const fileurl = `http://10.9.79.239:8000`;
-// export const fileurl = `http://65.0.12.213`;
+// export const fileurl = `http://10.9.79.239:8000`;
+export const fileurl = `http://65.0.12.213`;
 // export const fileurl = `http://3.6.40.67`;
 // export const fileurl = `http://13.200.15.208`;
 
@@ -99,6 +99,7 @@ export const URL = {
   getTemplates: (key, phone) =>
     `${baseUrl}templates/get_temp?key=${key}&phone=${phone}`,
   consent: `${baseUrl}consult/consent`,
+  uploadPharmaPdf: `${baseUrl}consult/uploadPharmacyPdf`,
   logout: `${baseUrl}doctor-authenticate/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

@@ -468,7 +468,7 @@ const Dashboard = ({navigation, route}) => {
           <SelectorBtn
             label={'Select Date :'}
             name="calendar"
-            onPress={() => setOpen('to')}
+            onPress={() => setOpen(true)}
             input={formatDate}
             style={styles.DOBselect}
           />

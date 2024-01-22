@@ -57,6 +57,7 @@ import VitalField from '../components/vitalFields';
 // import ShowChip from '../components/showChip';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 import SelectorBtn from '../components/selector';
+import {formatdate} from '../utility/const';
 
 const MedicalHistory = ({navigation, route}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -497,6 +498,7 @@ const MedicalHistory = ({navigation, route}) => {
       fetchMedicalData();
     }
   }, []);
+  console.log(mesntrual?.pregnant);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -522,7 +524,7 @@ const MedicalHistory = ({navigation, route}) => {
               {JSON.stringify(mesntrual) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {mesntrual != '' && (
+                  {JSON.stringify(mesntrual) != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
                         Menarche: {mesntrual?.age} Yrs, {mesntrual?.status},
@@ -531,9 +533,9 @@ const MedicalHistory = ({navigation, route}) => {
                         <Text>
                           ,{' '}
                           {mesntrual?.pregnant !== ''
-                            ? `Pregnant (Yes): LMP ${
-                                mesntrual?.pregnant.split('T')[0]
-                              }`
+                            ? `Pregnant (Yes): LMP ${formatdate(
+                                mesntrual?.pregnant?.lmp,
+                              )} EDD ${formatdate(mesntrual?.pregnant.edd)}`
                             : 'Pregnant (No)'}
                         </Text>
                         <Text>

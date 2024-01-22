@@ -41,6 +41,7 @@ import {handleCamera, handleGallery} from '../utility/const';
 
 const PatientCreate = ({navigation, route}) => {
   const {phoneRoute} = route.params;
+  const {phone} = useSelector(state => state?.phone?.data);
 
   const token = useSelector(state => state.authenticate.auth.access);
   const [selected, setSelected] = useState('male');
@@ -146,6 +147,7 @@ const PatientCreate = ({navigation, route}) => {
     patient_phone_number: patient_phone_number,
     birth_date: formatDate,
     // age: age,
+    doctor_phone_number: phone,
     bloodgroup: blood_group,
     spouse_name: spouse_name,
     // ABHA_ID: ABHA_ID,
