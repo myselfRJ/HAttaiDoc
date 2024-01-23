@@ -52,6 +52,7 @@ import {
   pickSingleFile,
   showToast,
 } from '../utility/const';
+import Examination_Fields from '../components/examinationFields';
 const PhysicalExamination = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();

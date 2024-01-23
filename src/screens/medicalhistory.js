@@ -736,15 +736,11 @@ const MedicalHistory = ({navigation, route}) => {
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Immunization Chart for Kids'}
-                icon={menstrualHistory !== '' ? 'pencil' : 'menu-right'}
+                icon={'menu-right'}
                 iconstyle={{
-                  borderWidth: menstrualHistory !== '' ? 0.5 : 0,
+                  borderWidth: 0,
                 }}
-                size={
-                  menstrualHistory !== ''
-                    ? moderateScale(16)
-                    : moderateScale(32)
-                }
+                size={moderateScale(32)}
                 textstyle={styles.text}
                 navigate={() =>
                   navigation.navigate('kids', {phone, patient_phone})
@@ -754,7 +750,28 @@ const MedicalHistory = ({navigation, route}) => {
                 // }
               />
             </View>
-          ) : null}
+          ) : (
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={'Adult Vaccination Details'}
+                icon={'menu-right'}
+                iconstyle={{
+                  borderWidth: 0,
+                }}
+                size={moderateScale(32)}
+                textstyle={styles.text}
+                navigate={() =>
+                  navigation.navigate('adult', {
+                    type: 'Adult',
+                    phone: patient_phone,
+                  })
+                }
+                // date={
+                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
+                // }
+              />
+            </View>
+          )}
 
           <ChipInput
             placeholder={'Enter new comorbidities'}

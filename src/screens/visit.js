@@ -101,6 +101,9 @@ const Visit = ({navigation, route}) => {
       : {};
   console.log(vitalsData?.bp?.bp);
   const physical = useSelector(state => state.prescription.physicalExamination);
+  console.log('====================================');
+  console.log('physical', physical);
+  console.log('====================================');
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const notess = useSelector(state => state.prescription.note);
   const note =
@@ -1504,9 +1507,7 @@ const Visit = ({navigation, route}) => {
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Physical Examinations' &&
-                      physi !== '{}' &&
-                      physical?.value !== '' &&
-                      physical?.value !== undefined
+                      physi !== '{}'
                         ? 'check-circle'
                         : '')
                     }
@@ -1551,7 +1552,8 @@ const Visit = ({navigation, route}) => {
                           clinic_id: Clinic_id,
                         };
                       } else if (
-                        value.navigate === 'examination' ||
+                        // value.navigate === 'examination'
+                        value.navigate === 'physical' ||
                         value.navigate === 'findings'
                       ) {
                         params.examinationDetails = {

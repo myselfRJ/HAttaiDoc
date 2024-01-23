@@ -12,7 +12,7 @@ export const CONSTANT = {
     {
       label: 'Physical Examinations',
       icon: 'pencil',
-      navigate: 'examination',
+      navigate: 'physical',
     },
     {
       label: 'Medical History',
@@ -55,6 +55,34 @@ export const CONSTANT = {
     //   icon: 'chevron-right',
     //   navigate: 'valid',
     // },
+  ],
+  physical1: [
+    'Consciousness',
+    'Orientation',
+    'Build',
+    'Nutrition',
+    'Hydration',
+  ],
+  physical2: [
+    'Anemia',
+    'Jaundice',
+    'Clubbing',
+    'Cynosis',
+    'Lymphadenopathy',
+    'Edema',
+  ],
+  physical3: [
+    'Acne',
+    'Hirsutism',
+    'HEENT',
+    'Breast',
+    'Thyroid',
+    'C.V.S',
+    'RS',
+    'CNS',
+    'P/A',
+    'P/V',
+    'Speculam',
   ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
   test: ['Lab', 'Radiology', 'Procedure'],
@@ -465,7 +493,13 @@ export const handleGallery = async () => {
         reject(response.error);
       } else {
         const responsedData = response?.assets?.[0];
-        const fileSizeLimit = 1 * 1024 * 1024;
+        // console.log('====================================');
+        // console.log(
+        //   '========================filesize',
+        //   responsedData?.fileSize,
+        // );
+        // console.log('====================================');
+        const fileSizeLimit = 1 * 1024 * 1000;
         if (responsedData?.fileSize > fileSizeLimit) {
           Alert.alert('File size exceeds 1MB. Please select a smaller file.'),
             reject(
@@ -507,6 +541,12 @@ export const handleCamera = async () => {
         reject(response.error);
       } else {
         const responsedData = response?.assets?.[0];
+        // console.log('====================================');
+        // console.log(
+        //   '========================filesize',
+        //   responsedData?.fileSize,
+        // );
+        // console.log('====================================');
         const fileSizeLimit = 1 * 1024 * 1024;
         if (responsedData?.fileSize > fileSizeLimit) {
           Alert.alert('File size exceeds 1MB. Please select a smaller file.'),
@@ -550,7 +590,7 @@ export const pickSingleFile = async () => {
     });
     const originalFilename = result[0]?.name || '';
     const fileSize = result[0]?.size || 0;
-    const maxSizeInBytes = 1 * 1024 * 1024;
+    const maxSizeInBytes = 1 * 1024 * 1000;
 
     if (fileSize > maxSizeInBytes) {
       alert('File size exceeds 1MB. Please select a smaller file.');
