@@ -17,14 +17,14 @@ const ShowChip = props => {
     <View style={{...styles.main, ...props.main}}>
       {/* <View key={props.ind} style={styles.child}> */}
 
-      {props.nameIcon && (
-        <Icon
-          name={props.nameIcon}
-          size={moderateScale(16)}
-          color={CUSTOMCOLOR.primary}
-        />
-      )}
       <View style={[styles.alignchild, props.align]}>
+        {props.nameIcon && (
+          <Icon
+            name={props.nameIcon}
+            size={moderateScale(16)}
+            color={props.iconcolor ? props.iconcolor : CUSTOMCOLOR.primary}
+          />
+        )}
         <Text
           style={{
             color: CUSTOMCOLOR.primary,

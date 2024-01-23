@@ -67,6 +67,7 @@ import VaccinationKids from '../screens/VaccinationKids';
 import Adult from '../screens/Adult';
 import {moderateScale} from '../utility/scaleDimension';
 import {Advices} from '../screens/Avices';
+import Physical from '../screens/newphysical';
 
 const Stack = createNativeStackNavigator();
 
@@ -258,6 +259,19 @@ const ProtectedRoute = route => {
       <Stack.Screen
         name="examination"
         component={PhysicalExamination}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Physical Examination',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+
+      <Stack.Screen
+        name="physical"
+        component={Physical}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Physical Examination',
