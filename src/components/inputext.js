@@ -70,13 +70,13 @@ const InputText = props => {
         ) : null}
         <View>
           <TextInput
-            style={[
-              styles.textinput,
-              errorStyles,
-              props.textStyle,
-              props.search ? styles.bottom : styles.textinput,
+            style={{
+              ...styles.textinput,
+              ...errorStyles,
+              ...props.textStyle,
+              ...(props.search ? styles.bottom : styles.textinput),
               // (props.doubleCheck && props.check) ? styles.numStyle : styles.textinput
-            ]}
+            }}
             textAlign={props.textAlign ?? 'left'}
             ref={props.point}
             // underlineColorAndroid="transparent"

@@ -239,7 +239,7 @@ const OtpScreen = ({route}) => {
                 </View>
               </View>
             </View>
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', gap: horizontalScale(42)}}>
               <HButton
                 btnstyles={{
                   backgroundColor:
@@ -260,7 +260,14 @@ const OtpScreen = ({route}) => {
                 }}
                 loading={loading}
               />
+              <Text style={{color: CUSTOMCOLOR.black}}>
+                Note:{' '}
+                <Text style={{fontWeight: '600', fontSize: CUSTOMFONTSIZE.h3}}>
+                  Please Check Your Whatsapp for OTP
+                </Text>
+              </Text>
             </View>
+            <View style={{}}></View>
           </View>
         </View>
       </ScrollView>

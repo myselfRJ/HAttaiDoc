@@ -33,7 +33,11 @@ import {fetchApi} from '../api/fetchApi';
 import HButton from '../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {BottomSheetView, StatusMessage} from '../components';
-import {CONSTANT} from '../utility/const';
+import {
+  CONSTANT,
+  calculateWeeksAndDaysFromDate,
+  formatdate,
+} from '../utility/const';
 import {
   moderateScale,
   verticalScale,
@@ -62,6 +66,8 @@ import {
 } from '../redux/features/prescription/pastHistory';
 
 const Visit = ({navigation, route}) => {
+  const token = useSelector(state => state.authenticate.auth.access);
+  const {phone} = useSelector(state => state?.phone?.data);
   const [visible, setVisible] = useState(false);
   const [filePath, setFilePath] = useState('');
   const [prevLoad, setPrevLoad] = useState(false);
@@ -93,6 +99,7 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
+  console.log(vitalsData?.bp?.bp);
   const physical = useSelector(state => state.prescription.physicalExamination);
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const notess = useSelector(state => state.prescription.note);
@@ -124,8 +131,6 @@ const Visit = ({navigation, route}) => {
     Prescribe?.length > 0
       ? Prescribe?.filter(item => item?.mode === 'Others')
       : [];
-  const token = useSelector(state => state.authenticate.auth.access);
-  const {phone} = useSelector(state => state?.phone?.data);
 
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
@@ -200,7 +205,7 @@ const Visit = ({navigation, route}) => {
     fhstry?.length > 0
       ? fhstry
           ?.filter(item => item?.appointment_id === appointmentID)
-          ?.map(item => ({family: item?.family}))
+          ?.map(item => ({family: item?.family, relation: item?.relation}))
       : [];
   const service_fees = useSelector(state => state.prescription.fees);
   const charge =
@@ -455,6 +460,7 @@ const Visit = ({navigation, route}) => {
   //   ? `data:image/jpeg;base64,${sign}`
   //   : data?.doctor_name;
   const Sign_base64 = `${data?.doctor_name}`;
+  const week_days = calculateWeeksAndDaysFromDate(vitalsData?.LDD);
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
@@ -559,10 +565,10 @@ const Visit = ({navigation, route}) => {
               : ''
           }
           ${
-            vitalsData?.weight ||
-            vitalsData?.height ||
-            vitalsData?.bp?.bp?.length > 0 ||
-            vitalsData?.vits?.vitals > 0 ||
+            vitalsData?.weight &&
+            vitalsData?.height &&
+            vitalsData?.bp?.bp?.length === 1 &&
+            vitalsData?.vits?.vitals === 1 &&
             vitalsData?.bmi
               ? `<div>
               <h5>
@@ -627,6 +633,62 @@ const Visit = ({navigation, route}) => {
 
               </text>
           </div>`
+              : `<div>
+              <h5>
+                  Vitals
+              </h5>
+              <text style="margin-bottom:4px">
+              ${
+                vitalsData?.bmi
+                  ? 'BMI:' + ' ' + `<b> ${vitalsData.bmi} </b>` + ''
+                  : ''
+              }</text>
+              <div style="display:flex;flex-direction:column;">
+              ${vitalsData?.bp?.bp
+                ?.map(
+                  (item, index) =>
+                    `<text style="margin-bottom:4px">Bp:${'  '}<b>${
+                      item?.systolic
+                    }/${item?.diastolic}</b>${'  '}Time:${'  '}<b>${
+                      item?.time
+                    }</b></text>`,
+                )
+                .join('')}
+              </div>
+              <div style="display:flex;flex-direction:column;">
+              ${vitalsData?.vits?.vitals
+                ?.map(
+                  (item, index) =>
+                    `<text style="margin-bottom:4px">SPO2:${'  '}<b>${
+                      item?.spo2
+                    }%</b>${'  '}Pulse:${'   '}:<b>${
+                      item?.pulse
+                    }</b>bpm${'  '}Respiration.rate:${'  '}<b>${
+                      item?.rate
+                    }</b>brpm${'  '}Temp:${'  '}<b>${
+                      item?.temp
+                    }</b>°F${'  '}Time:${'  '}<b>${item?.time}</b></text>`,
+                )
+                .join('')}
+              </div>
+          </div>`
+          }
+          ${
+            vitalsData?.LDD?.length > 0
+              ? `<div>
+          <h5>
+              Pregnant
+          </h5>
+          <text>
+             LMP:${'  '} <b>${formatdate(
+                  vitalsData?.LDD,
+                )}</b> EDD:${'  '} <b>${formatdate(
+                  vitalsData?.EDD,
+                )}</b> Weeks:${'  '}<b>${week_days?.weeks}</b> Days:${'  '}<b>${
+                  week_days?.days
+                }</b>
+          </text>
+      </div>`
               : ''
           }
           ${
@@ -754,7 +816,7 @@ const Visit = ({navigation, route}) => {
               <text>
                   ${labreport?.map(value => value.lab_test).join(', ')}
               </text>
-              <b>Return Date: ${labreport?.[0]?.date}</b>
+              <text><b>Date: ${labreport?.[0]?.date}</b></text>
           </div>`
               : ''
           } 
@@ -1035,7 +1097,7 @@ const Visit = ({navigation, route}) => {
     patient_name: name,
   };
   const Age = age;
-  console.log(vitalsData?.vits);
+
   return (
     <View>
       <ScrollView>
@@ -1159,7 +1221,22 @@ const Visit = ({navigation, route}) => {
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
                     <Text style={[styles.patientText, {fontWeight: '700'}]}>
-                      Pregnant (LMP: {vitalsData?.LDD} | EDD: {vitalsData.EDD})
+                      Pregnant (LMP: {formatdate(vitalsData?.LDD)} | EDD:{' '}
+                      {formatdate(vitalsData.EDD)})
+                      <Text
+                        style={{
+                          color: CUSTOMCOLOR.black,
+                        }}>
+                        Week:{' '}
+                        <Text style={styles.weeks}>
+                          {isNaN(week_days?.weeks) ? '0' : week_days?.weeks}
+                          {'  '}
+                        </Text>
+                        Days :{' '}
+                        <Text style={styles.weeks}>
+                          {week_days?.days !== NaN ? week_days?.days : '0'}
+                        </Text>
+                      </Text>
                     </Text>
                   ) : null}
                 </View>
@@ -1196,7 +1273,9 @@ const Visit = ({navigation, route}) => {
                   <Text style={styles.patientHead}>Vitals</Text>
                   <Pressable
                     style={styles.gap}
-                    onPress={() => navigation.navigate('vitalscreen', {gende})}>
+                    onPress={() =>
+                      navigation.navigate('vitalscreen', {gende, patient_phone})
+                    }>
                     <Icon
                       name={'pencil'}
                       size={moderateScale(18)}
@@ -1206,71 +1285,131 @@ const Visit = ({navigation, route}) => {
                   </Pressable>
                 </View>
                 {vitalsData &&
-                  vitalsData?.bp?.bp?.length == 1 &&
-                  vitalsData?.vits?.vitals?.length === 1 && (
-                    <Text style={styles.patientText}>
-                      {vitalsData?.bp?.bp?.[0]?.systolic && (
-                        <Text>
-                          BP:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {vitalsData?.bp?.bp?.[0]?.systolic}/
-                            {vitalsData?.bp?.bp?.[0]?.diastolic}
-                          </Text>
+                vitalsData?.bp?.bp?.length == 1 &&
+                vitalsData?.vits?.vitals?.length === 1 ? (
+                  <Text style={styles.patientText}>
+                    {vitalsData?.bp?.bp?.[0]?.systolic && (
+                      <Text>
+                        BP:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData?.bp?.bp?.[0]?.systolic}/
+                          {vitalsData?.bp?.bp?.[0]?.diastolic}
                         </Text>
-                      )}{' '}
-                      {vitalsData?.vits?.vitals?.[0]?.spo2 && (
-                        <Text>
-                          SPO2:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {vitalsData?.vits?.vitals?.[0]?.spo2}
-                          </Text>
-                          %
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.vits?.vitals?.[0]?.spo2 && (
+                      <Text>
+                        SPO2:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData?.vits?.vitals?.[0]?.spo2}
                         </Text>
-                      )}{' '}
-                      {vitalsData?.bmi !== 'NaN' && (
-                        <Text>
-                          BMI:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {vitalsData.bmi}
-                          </Text>
+                        %
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.bmi !== 'NaN' && (
+                      <Text>
+                        BMI:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.bmi}
                         </Text>
-                      )}{' '}
-                      {vitalsData?.vits?.vitals?.[0]?.pulse && (
-                        <Text>
-                          Pulse:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {vitalsData?.vits?.vitals?.[0]?.pulse}{' '}
-                          </Text>
-                          bpm
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.vits?.vitals?.[0]?.pulse && (
+                      <Text>
+                        Pulse:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData?.vits?.vitals?.[0]?.pulse}{' '}
                         </Text>
-                      )}{' '}
-                      {vitalsData?.vits?.vitals?.[0]?.temp && (
-                        <Text>
-                          Temp:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {vitalsData?.vits?.vitals?.[0]?.temp}
-                          </Text>
-                          °F
+                        bpm
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.vits?.vitals?.[0]?.rate && (
+                      <Text>
+                        Res.rate:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData?.vits?.vitals?.[0]?.rate}{' '}
                         </Text>
-                      )}{' '}
-                      {vitalsData?.others &&
-                        Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
-                        Object?.keys(vitalsData?.others)?.[0] !== '' && (
-                          <Text>
-                            {vitalsData?.others
-                              ? Object.keys(vitalsData?.others)?.[0]
-                              : null}
-                            {' :'}
+                        brpm
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.vits?.vitals?.[0]?.temp && (
+                      <Text>
+                        Temp:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData?.vits?.vitals?.[0]?.temp}
+                        </Text>
+                        °F
+                      </Text>
+                    )}{' '}
+                    {vitalsData?.others &&
+                      Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
+                      Object?.keys(vitalsData?.others)?.[0] !== '' && (
+                        <Text>
+                          {vitalsData?.others
+                            ? Object.keys(vitalsData?.others)?.[0]
+                            : null}
+                          {' :'}
 
-                            <Text style={{fontWeight: '700'}}>
-                              {vitalsData?.others
-                                ? Object.values(vitalsData?.others)[0]
-                                : null}
-                            </Text>
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.others
+                              ? Object.values(vitalsData?.others)[0]
+                              : null}
                           </Text>
-                        )}
-                    </Text>
-                  )}
+                        </Text>
+                      )}
+                  </Text>
+                ) : (
+                  <View>
+                    {vitalsData?.bmi !== 'NaN' && (
+                      <Text style={styles.patientText}>
+                        BMI:{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {vitalsData.bmi}
+                        </Text>
+                      </Text>
+                    )}
+                    {vitalsData?.bp?.bp?.map((item, index) => (
+                      <Text style={styles.patientText}>
+                        Bp :{' '}
+                        <Text style={{fontWeight: '700'}}>
+                          {item?.systolic}/{item?.diastolic}{' '}
+                          <Text style={styles.patientText}>Time</Text> :{' '}
+                          {item?.time}
+                        </Text>
+                      </Text>
+                    ))}
+                    {vitalsData?.vits?.vitals?.map((item, index) => (
+                      <Text style={styles.patientText}>
+                        SPO2 :{' '}
+                        <Text style={{fontWeight: '700'}}>{item?.spo2}</Text>%{' '}
+                        Pulse :{' '}
+                        <Text style={{fontWeight: '700'}}>{item?.pulse}</Text>
+                        bpm Res.rate :{' '}
+                        <Text style={{fontWeight: '700'}}>{item?.rate}</Text>
+                        brpm Temp :{' '}
+                        <Text style={{fontWeight: '700'}}>{item?.temp}</Text>°F
+                        Time :{' '}
+                        <Text style={{fontWeight: '700'}}>{item?.time}</Text>
+                      </Text>
+                    ))}
+                    {vitalsData?.others &&
+                      Object?.keys(vitalsData?.others)?.[0] !== 'null' &&
+                      Object?.keys(vitalsData?.others)?.[0] !== '' && (
+                        <Text style={styles.patientText}>
+                          {vitalsData?.others
+                            ? Object.keys(vitalsData?.others)?.[0]
+                            : null}
+                          {' :'}
+
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData?.others
+                              ? Object.values(vitalsData?.others)[0]
+                              : null}
+                          </Text>
+                        </Text>
+                      )}
+                  </View>
+                )}
 
                 <Seperator />
               </View>
@@ -1387,7 +1526,10 @@ const Visit = ({navigation, route}) => {
                       } else if (value.navigate === 'FollowUp') {
                         params.date = date;
                       } else if (value.navigate === 'vitalscreen') {
-                        params.gende = gende;
+                        params.details = {
+                          gende: gende,
+                          patient_phone: patient_phone,
+                        };
                       } else if (value.navigate === 'service_fees') {
                         params.consultation_fees = consultation
                           ? null

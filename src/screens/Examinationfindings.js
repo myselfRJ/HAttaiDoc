@@ -8,6 +8,7 @@ import {
   Pressable,
   Modal,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
 import {
   addFindings,
@@ -366,37 +367,21 @@ const ExaminationFindings = ({navigation}) => {
           onDocument={handleSelectFilename}
         />
       )}
-      {/* <Modal
-        visible={visible}
-        onRequestClose={() => {
-          setVisible(!visible);
-        }}
-        transparent={true}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#000000aa',
-          }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisible(!visible);
-            }}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-          <View
-            style={{
-              backgroundColor: CUSTOMCOLOR.white,
-              borderTopEndRadius: moderateScale(16),
-              borderTopLeftRadius: moderateScale(16),
-            }}>
-            <AlertMessage
-              data={examinationDetails}
-              onPress={() => setVisible(!visible)}
-            />
-          </View>
-        </View>
-      </Modal> */}
       <View
+        style={{
+          justifyContent: 'flex-end',
+          flex: 1,
+        }}>
+        <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h5}}>
+          Note: You can upload Upto 5 Files and each file less than 5mb
+        </Text>
+        <HButton
+          btnstyles={commonstyles.activebtn}
+          onPress={handle}
+          label={'Save'}
+        />
+      </View>
+      {/* <View
         style={{
           justifyContent: 'flex-end',
           // alignSelf:'center',
@@ -408,7 +393,7 @@ const ExaminationFindings = ({navigation}) => {
           onPress={handle}
           label={'Save'}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

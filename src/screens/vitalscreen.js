@@ -44,7 +44,11 @@ import {
   formatdate,
   handleAddDates,
 } from '../utility/const';
+import {fetchApi} from '../api/fetchApi';
+import {URL} from '../utility/urls';
 const VitalScreen = ({route, props}) => {
+  const token = useSelector(state => state.authenticate.auth.access);
+  const {phone} = useSelector(state => state?.phone?.data);
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const vitalsDat = useSelector(state => state.prescription.vitalsData);
   const vitalsData =
@@ -53,6 +57,7 @@ const VitalScreen = ({route, props}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
+  console.log(vitalsData);
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -72,29 +77,28 @@ const VitalScreen = ({route, props}) => {
   const [edd, setEdd] = useState();
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
-  const {gende} = route.params;
+  const {gende, patient_phone} = route.params;
+  console.log(gende, patient_phone);
   const handleEddConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = handleAddDates(
       selectedDate?.toISOString().split('T')[0],
       -280,
     );
-    setLddWeek(updateLDD);
-    setLDD(formatdate(updateLDD));
+    setLDD(updateLDD);
     const updateEDD = selectedDate?.toISOString().split('T')[0];
-    setEdd(formatdate(updateEDD));
+    setEdd(updateEDD);
     setEddopen(false);
   };
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = selectedDate?.toISOString().split('T')[0];
-    setLddWeek(updateLDD);
-    setLDD(formatdate(updateLDD));
+    setLDD(updateLDD);
     const updateEDD = handleAddDates(
       selectedDate?.toISOString().split('T')[0],
       280,
     );
-    setEdd(formatdate(updateEDD));
+    setEdd(updateEDD);
     setOpen(false);
   };
   const handleCancel = () => {
@@ -209,6 +213,25 @@ const VitalScreen = ({route, props}) => {
     }
   };
 
+  const fetchUpdatevitals = async () => {
+    const response = await fetchApi(URL.getVitals(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsondata = await response.json();
+      setheight(jsondata?.data?.height);
+    }
+  };
+
+  useEffect(() => {
+    if (vitalsData?.height === '') {
+      fetchUpdatevitals();
+    }
+  }, []);
+
   useEffect(() => {
     handleBMI();
   }, [height, weight]);
@@ -222,7 +245,6 @@ const VitalScreen = ({route, props}) => {
     vits: {vitals: vits},
     others: {[othresKey]: othersValue},
   };
-  console.log(vits, bp);
   const handlePress = () => {
     if (vits?.length === 0 && bp?.length == 0) {
       dispatch(
@@ -305,7 +327,7 @@ const VitalScreen = ({route, props}) => {
       }
     }
   }, []);
-  const week_days = calculateWeeksAndDaysFromDate(lddweek);
+  const week_days = calculateWeeksAndDaysFromDate(ldd);
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Vitals" />
@@ -482,7 +504,7 @@ const VitalScreen = ({route, props}) => {
               />
             </View>
           </View>
-          {gende === 'Female' || gende === 'female' ? (
+          {gende?.toLowerCase() === 'female' ? (
             <View style={styles.section}>
               <View>
                 <Text style={commonstyles.subhead}>Pregnancy</Text>
@@ -499,8 +521,13 @@ const VitalScreen = ({route, props}) => {
                     onPress={() => {
                       setOpen(true);
                     }}
+                    select={{
+                      backgroundColor: ldd
+                        ? CUSTOMCOLOR.selector
+                        : CUSTOMCOLOR.white,
+                    }}
                     name={'calendar'}
-                    input={ldd ? ldd : lmpdates}
+                    input={ldd ? formatdate(ldd) : 'Select Date'}
                   />
                   {open && (
                     <DatePicker
@@ -524,8 +551,13 @@ const VitalScreen = ({route, props}) => {
                     onPress={() => {
                       setEddopen(true);
                     }}
+                    select={{
+                      backgroundColor: edd
+                        ? CUSTOMCOLOR.selector
+                        : CUSTOMCOLOR.white,
+                    }}
                     name={'calendar'}
-                    input={edd ? edd : lmpdates}
+                    input={edd ? formatdate(edd) : 'Select Date'}
                   />
                   {eddOpen && (
                     <DatePicker
@@ -538,9 +570,24 @@ const VitalScreen = ({route, props}) => {
                       onCancel={handleEddCancel}
                     />
                   )}
+                  <Text
+                    style={{
+                      color: CUSTOMCOLOR.black,
+                      paddingHorizontal: horizontalScale(24),
+                      paddingTop: verticalScale(24),
+                    }}>
+                    Week:{' '}
+                    <Text style={styles.weeks}>
+                      {isNaN(week_days?.weeks) ? '0' : week_days?.weeks}
+                      {'  '}
+                    </Text>
+                    Days :{' '}
+                    <Text style={styles.weeks}>
+                      {isNaN(week_days?.days) ? '0' : week_days?.days}
+                    </Text>
+                  </Text>
                 </View>
               </View>
-              <Text></Text>
             </View>
           ) : null}
           {show == true ? (
@@ -619,6 +666,7 @@ const styles = StyleSheet.create({
   section: {
     gap: verticalScale(4),
   },
+  weeks: {color: CUSTOMCOLOR.black, fontWeight: '600'},
 });
 
 export default VitalScreen;

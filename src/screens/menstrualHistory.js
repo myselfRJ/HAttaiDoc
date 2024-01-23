@@ -273,7 +273,12 @@ const MenstrualHistory = ({navigation, route}) => {
               onCancel={handleEddCancel}
             />
             {lmpweek && (
-              <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  paddingTop: moderateScale(32),
+                }}>
                 <Text style={{color: CUSTOMCOLOR.black}}>
                   {' '}
                   Weeks: <Text style={styles.lmpweek}>{lmpweek?.weeks}</Text>
