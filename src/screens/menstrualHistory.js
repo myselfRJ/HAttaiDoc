@@ -71,6 +71,7 @@ const MenstrualHistory = ({navigation, route}) => {
     setOpen(false);
     const lmpdat = moment(lmpdate).format('YYYY-MM-DD');
     setformatDate(lmpdat);
+    setLmpWeek(calculateWeeksAndDaysFromDate(lmpdat));
     const Edddate = handleAddDates(lmpdat, 280);
     setEdddate(Edddate);
   };
@@ -173,7 +174,6 @@ const MenstrualHistory = ({navigation, route}) => {
       mens?.menopause !== '' ? setMenopause('Yes') : setMenopause('No');
     }
   }, []);
-  console.log(lmpweek);
   return (
     <View style={styles.main}>
       <ScrollView
@@ -281,10 +281,16 @@ const MenstrualHistory = ({navigation, route}) => {
                 }}>
                 <Text style={{color: CUSTOMCOLOR.black}}>
                   {' '}
-                  Weeks: <Text style={styles.lmpweek}>{lmpweek?.weeks}</Text>
+                  Weeks:{' '}
+                  <Text style={styles.lmpweek}>
+                    {isNaN(lmpweek?.weeks) ? '0' : lmpweek?.weeks}
+                  </Text>
                 </Text>
                 <Text style={{color: CUSTOMCOLOR.black}}>
-                  Days: <Text style={styles.lmpweek}>{lmpweek?.days}</Text>
+                  Days:{' '}
+                  <Text style={styles.lmpweek}>
+                    {isNaN(lmpweek?.days) ? '0' : lmpweek?.days}
+                  </Text>
                 </Text>
               </View>
             )}

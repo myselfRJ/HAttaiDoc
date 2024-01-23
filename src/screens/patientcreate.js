@@ -73,6 +73,7 @@ const PatientCreate = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [formatDate, setFormatDate] = useState('');
   const formattedDate = date.toISOString().split('T')[0];
+  const [reference_id, setReference_id] = useState('');
 
   const onImagePress = async () => {
     try {
@@ -277,6 +278,15 @@ const PatientCreate = ({navigation, route}) => {
               maxLength={10}
               doubleCheck={[true, false]}
               check={checkNumber}
+            />
+            <InputText
+              label="Patient Reference Id"
+              placeholder="Eg:xxxxxxxxxx"
+              value={reference_id}
+              setValue={setReference_id}
+              // keypad={'numeric'}
+              numeric={true}
+              maxLength={16}
             />
             {/* <InputText
               label="Age"

@@ -38,7 +38,7 @@ const Physical = ({navigation}) => {
       desc: '',
     },
     {
-      label: 'orientation',
+      label: 'Orientation',
       status: '',
       desc: '',
     },
@@ -247,12 +247,8 @@ const Physical = ({navigation}) => {
     if (report != '') {
       navigation?.goBack();
     } else {
-      if (consent) {
-        postData(apiUrl);
-        handlePress();
-      } else {
-        showToast('error', 'Please take Declaration from Patient');
-      }
+      postData(apiUrl);
+      handlePress();
     }
   };
 
@@ -318,25 +314,29 @@ const Physical = ({navigation}) => {
     }
   };
   const handleAlert = () => {
-    Alert.alert('warning', 'Kindly obtain patient consent before proceeding', [
-      {
-        text: 'OK',
-        onPress: () => {
-          Alert.alert(
-            'warning',
-            'Upload up to 5 files, each file size under 1MB',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  setModal(!modal);
+    Alert.alert(
+      'warning !',
+      'Kindly obtain patient consent to capture their image before proceeding.',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            Alert.alert(
+              'warning !',
+              'Upload up to 5 files, each file size under 1MB',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    setModal(!modal);
+                  },
                 },
-              },
-            ],
-          );
+              ],
+            );
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
   const handleModal = () => {
     setConsent(true);
@@ -409,9 +409,7 @@ const Physical = ({navigation}) => {
         }}>
         <View>
           <PrescriptionHead heading={'Physical Examination'} />
-          <Text style={styles.subText}>
-            {'General Examination (N-Normal / A-abnormal)'}
-          </Text>
+          <Text style={styles.subText}>{' (N-Normal / A-abnormal)'}</Text>
         </View>
         <View style={styles.fields}>
           {data1?.map(

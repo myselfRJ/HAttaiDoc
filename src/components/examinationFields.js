@@ -22,7 +22,7 @@ const Examination_Fields = props => {
         <View>
           <Text style={styles.text}>{props.label}</Text>
         </View>
-        <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
+        <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
           <Option
             label="N"
             selected={props.option === 'N'}
@@ -40,6 +40,7 @@ const Examination_Fields = props => {
           style={styles.textinput}
           placeholder="Description"
           value={props.value}
+          multiline={true}
           onChangeText={props.setvalue}></TextInput>
       )}
     </View>
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: CUSTOMCOLOR.black,
-    fontSize: CUSTOMFONTSIZE.h2,
+    fontSize: CUSTOMFONTSIZE.h3,
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,

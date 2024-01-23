@@ -384,7 +384,13 @@ const LabReports = () => {
                 </TouchableOpacity>
               ))}
             </View>
-            <View style={{top: moderateScale(32), gap: moderateScale(4)}}>
+            <View
+              style={{
+                top: moderateScale(32),
+                gap: moderateScale(4),
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
               {lab?.map((item, ind) =>
                 lab.length > 0 ? (
                   <ShowChip

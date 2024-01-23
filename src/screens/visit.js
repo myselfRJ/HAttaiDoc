@@ -1100,7 +1100,9 @@ const Visit = ({navigation, route}) => {
     patient_name: name,
   };
   const Age = age;
-
+  console.log('====================================');
+  console.log(vitalsData?.bmi);
+  console.log('====================================');
   return (
     <View>
       <ScrollView>
@@ -1224,13 +1226,13 @@ const Visit = ({navigation, route}) => {
                   vitalsData?.LDD &&
                   vitalsData?.EDD ? (
                     <Text style={[styles.patientText, {fontWeight: '700'}]}>
-                      Pregnant (LMP: {formatdate(vitalsData?.LDD)} | EDD:{' '}
-                      {formatdate(vitalsData.EDD)})
+                      Pregnant (LMP : {formatdate(vitalsData?.LDD)} | EDD :{' '}
+                      {formatdate(vitalsData.EDD)}){'  '}
                       <Text
                         style={{
                           color: CUSTOMCOLOR.black,
                         }}>
-                        Week:{' '}
+                        Week :{' '}
                         <Text style={styles.weeks}>
                           {isNaN(week_days?.weeks) ? '0' : week_days?.weeks}
                           {'  '}
@@ -1309,14 +1311,15 @@ const Visit = ({navigation, route}) => {
                         %
                       </Text>
                     )}{' '}
-                    {vitalsData?.bmi !== 'NaN' && (
-                      <Text>
-                        BMI:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.bmi}
+                    {vitalsData?.bmi !== 'NaN' &&
+                      vitalsData?.bmi !== undefined && (
+                        <Text>
+                          BMI:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData.bmi}
+                          </Text>
                         </Text>
-                      </Text>
-                    )}{' '}
+                      )}{' '}
                     {vitalsData?.vits?.vitals?.[0]?.pulse && (
                       <Text>
                         Pulse:{' '}
@@ -1363,14 +1366,15 @@ const Visit = ({navigation, route}) => {
                   </Text>
                 ) : (
                   <View>
-                    {vitalsData?.bmi !== 'NaN' && (
-                      <Text style={styles.patientText}>
-                        BMI:{' '}
-                        <Text style={{fontWeight: '700'}}>
-                          {vitalsData.bmi}
+                    {vitalsData?.bmi !== 'NaN' &&
+                      vitalsData?.bmi !== undefined && (
+                        <Text style={styles.patientText}>
+                          BMI:{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {vitalsData.bmi}
+                          </Text>
                         </Text>
-                      </Text>
-                    )}
+                      )}
                     {vitalsData?.bp?.bp?.map((item, index) => (
                       <Text style={styles.patientText}>
                         Bp :{' '}

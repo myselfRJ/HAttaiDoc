@@ -14,13 +14,13 @@ const Option = ({label, selected, onPress, value}) => {
         {selected ? (
           <Icon
             name="radio-button-checked"
-            size={24}
+            size={moderateScale(24)}
             color={CUSTOMCOLOR.primary}
           />
         ) : (
           <Icon
             name="radio-button-unchecked"
-            size={24}
+            size={moderateScale(24)}
             color={CUSTOMCOLOR.primary}
           />
         )}
@@ -33,7 +33,7 @@ const Option = ({label, selected, onPress, value}) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    gap: moderateScale(8),
+    gap: moderateScale(4),
     alignItems: 'center',
   },
   options: {

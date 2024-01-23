@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: CUSTOMCOLOR.primary,
     flexWrap: 'wrap',
+    gap: moderateScale(8),
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(4),
     borderRadius: moderateScale(4),

@@ -134,7 +134,7 @@ const ReferToDoctor = () => {
                   selected === 'Doctor'
                     ? `<p style="margin: 0;">Referred Doctor: Dr. ${'     '}${name}</p>`
                     : `<div>
-                      <p>Reffer To : ${name}</p>
+                      <p>Refer To : ${name}</p>
                       <p>Contact : ${newPhone}</p>
                       <p>Reffered Doctor : ${name}</p>
                       <p>Doctor Phone : ${phone}</p>

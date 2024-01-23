@@ -267,31 +267,45 @@ const Diagnosis = ({navigation}) => {
             {ConfirmedData?.length > 0 && (
               <Text style={styles.filterText}>Confirmed</Text>
             )}
-            {ConfirmedData?.map((item, ind) =>
-              prev.length > 0 ? (
-                <ShowChip
-                  main={{marginHorizontal: 0}}
-                  key={ind}
-                  text={item?.diagnosis}
-                  onPress={() => handleDelete(ind)}
-                  ind={ind}
-                />
-              ) : null,
-            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(8),
+                flexWrap: 'wrap',
+              }}>
+              {ConfirmedData?.map((item, ind) =>
+                prev.length > 0 ? (
+                  <ShowChip
+                    main={{marginHorizontal: 0}}
+                    key={ind}
+                    text={item?.diagnosis}
+                    onPress={() => handleDelete(ind)}
+                    ind={ind}
+                  />
+                ) : null,
+              )}
+            </View>
             {ProvisionalData?.length > 0 && (
               <Text style={styles.filterText}>Provisional</Text>
             )}
-            {ProvisionalData?.map((item, ind) =>
-              prev.length > 0 ? (
-                <ShowChip
-                  key={ind}
-                  main={{marginHorizontal: 0}}
-                  text={item?.diagnosis}
-                  onPress={() => handleDelete(ind)}
-                  ind={ind}
-                />
-              ) : null,
-            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: moderateScale(8),
+                flexWrap: 'wrap',
+              }}>
+              {ProvisionalData?.map((item, ind) =>
+                prev.length > 0 ? (
+                  <ShowChip
+                    key={ind}
+                    main={{marginHorizontal: 0}}
+                    text={item?.diagnosis}
+                    onPress={() => handleDelete(ind)}
+                    ind={ind}
+                  />
+                ) : null,
+              )}
+            </View>
           </View>
         </View>
       </ScrollView>

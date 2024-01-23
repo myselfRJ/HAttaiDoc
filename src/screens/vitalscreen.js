@@ -321,6 +321,7 @@ const VitalScreen = ({route, props}) => {
       setOthersValue(
         vitalsData?.others ? Object.values(vitalsData?.others)[0] : null,
       );
+      setLDD(vitalsData?.LDD);
       setEdd(vitalsData?.EDD);
       if (vitalsData?.others) {
         setShow(!show);
