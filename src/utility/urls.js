@@ -98,10 +98,12 @@ export const URL = {
   savingTemplate: `${baseUrl}templates/savingTemp`,
   getTemplates: (key, phone) =>
     `${baseUrl}templates/get_temp?key=${key}&phone=${phone}`,
+  getVitals: phone => `${baseUrl}consult/updatedVitals?phone=${phone}`,
   uploadVaccination: `${baseUrl}custompatient/uploadPatientVaccination`,
   GetVaccination: phone =>
     `${baseUrl}custompatient/getVaccination?phone=${phone}`,
   consent: `${baseUrl}consult/consent`,
+  uploadPharmaPdf: `${baseUrl}consult/uploadPharmacyPdf`,
   logout: `${baseUrl}doctor-authenticate/logout`,
   AbhaGatewayAuth: 'https://dev.abdm.gov.in/gateway/v0.5/sessions',
   AbhaAadhargenerateOtp:

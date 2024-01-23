@@ -130,14 +130,19 @@ const ReferToDoctor = () => {
             
             <section id="referred-doctor" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referred Doctor</h2>
-                <p style="margin: 0;">Referred Doctor: Dr. ${'     '}${
-          selected === 'Clinic' || selected === 'Hospital' ? dr_name : name
-        }</p>
+                ${
+                  selected === 'Doctor'
+                    ? `<p style="margin: 0;">Referred Doctor: Dr. ${'     '}${name}</p>`
+                    : `<div>
+                      <p>Reffer To : ${name}</p>
+                      <p>Contact : ${newPhone}</p>
+                      <p>Reffered Doctor : ${name}</p>
+                      <p>Doctor Phone : ${phone}</p>
+                    </div>`
+                }
                 <p style="margin: 0;">Speciality:${'     '}${speciality} </p>
                 <p style="margin: 0;">Contact Information:${'     '}${
-          selected === 'Clinic' || selected === 'Hospital'
-            ? `${name} , ${phone}`
-            : phone
+          selected !== 'Doctor' ? `${name} , ${newPhone}` : phone
         } </p>
             </section>
             

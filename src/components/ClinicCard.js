@@ -212,9 +212,7 @@ const ClinicCard = props => {
                 </Text>
               ))
             ) : (
-              <Text key={ind} style={styles.slotTime}>
-                -
-              </Text>
+              <Text style={styles.slotTime}>-</Text>
             )}
           </View>
           <View>

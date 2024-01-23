@@ -290,6 +290,62 @@ const PdfView = ({navigation}) => {
       console.error('An error occurred:', error);
     }
   };
+  const uploadPharmapdf = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchApi(URL.savePrescription, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(consultationData),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData?.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully created'});
+          ResetRuduxState();
+          const formData = new FormData();
+          formData.append('doctor_phone_number', `${doc_phone}`);
+          formData.append('patient_phone_number', `${patient_phone}`);
+          formData.append('clinic_id', `${Clinic_id}`);
+          formData.append('appointment_id', `${appointment_id}`);
+          formData.append('pharmacyPhone', `${pharmaphone}`);
+          formData.append('file_url', {
+            uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/pharmacy/phrma.pdf`,
+            type: 'application/pdf',
+            name: `prescription.pdf`,
+          });
+
+          const requestOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          };
+
+          try {
+            const response = await fetch(URL.uploadPharmaPdf, requestOptions);
+            const responseData = await response.json();
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        } else {
+          setApiStatus({status: 'warning', message: 'Enter all Values'});
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      setLoading(false);
+    }
+  };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -332,7 +388,7 @@ const PdfView = ({navigation}) => {
           try {
             const response = await fetch(URL.uploadPDF, requestOptions);
             const responseData = await response.json();
-            // console.log('API Response:', responseData);
+            uploadPharmapdf();
             const data = {
               user_phone: '',
               Clinic_id: Clinic_id,
@@ -356,9 +412,6 @@ const PdfView = ({navigation}) => {
           }
 
           setLoading(false);
-          // setTimeout(() => {
-          //   SuccesRef?.current?.snapToIndex(0);
-          // }, 1500);
         } else {
           setApiStatus({status: 'warning', message: 'Enter all Values'});
           console.error('API call failed:', response.status, response);
@@ -371,6 +424,7 @@ const PdfView = ({navigation}) => {
       setLoading(false);
     }
   };
+
   const postReferalPdf = async url => {
     const formData = new FormData();
     formData.append('doctor_phone_number', `${doc_phone}`);
@@ -416,8 +470,8 @@ const PdfView = ({navigation}) => {
   const handleConfirm = () => {
     if (prevScreen === 'visit') {
       // handlePrescribePDF();
-      putComplaint();
-      putVitals();
+      // putComplaint();
+      // putVitals();
       fetchData();
     } else if (prevScreen === 'refer') {
       handle();

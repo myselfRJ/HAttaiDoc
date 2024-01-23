@@ -16,12 +16,12 @@ import {
 const ChipInput = props => {
   const data = props.data;
   const item = props.item;
-
   return (
     <View style={styles.main}>
       <Text style={{...styles.labeltext, ...props.labelStyle}}>
         {props.label}
       </Text>
+
       <View style={styles.child}>
         {data?.map((value, index) => (
           <ShowChip

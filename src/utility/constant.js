@@ -1,4 +1,5 @@
 export const CONSTANTS = {
+  // modes: ['Injection', 'Capsule', 'Syrup', 'Tablet', 'Others'],
   modes: ['Injection', 'Capsule', 'Syrup', 'Tablet'],
   medicine_recomendation: ['Avil', 'Paracetmol', 'Dolo650', 'Citrizen'],
   dose: ['250mg', '300mg', '500mg', '1000mg'],

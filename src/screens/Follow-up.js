@@ -22,6 +22,7 @@ import {
 } from '../settings/styles';
 import PrescriptionHead from '../components/prescriptionHead';
 import {commonstyles} from '../styles/commonstyle';
+import {formatdate, handleAddDates} from '../utility/const';
 
 export default function DateTime() {
   const months = CONSTANTS.months;
@@ -29,61 +30,61 @@ export default function DateTime() {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [customDays, setCustomDays] = useState('');
-  const [selected, setSelected] = useState('30');
+  const [selected, setSelected] = useState('3');
+  const [returnDate, setReturnDate] = useState(
+    formatdate(handleAddDates(date, selected)),
+  );
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const handleOptions = value => {
     setSelected(value);
+    setReturnDate(formatdate(handleAddDates(date, value)));
   };
 
   const handleDate = () => {
-    setOpen(!open);
+    setOpen(true);
   };
 
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
+    const date = selectedDate?.toISOString()?.split('T')[0];
+    setReturnDate(formatdate(date));
+    setOpen(false);
   };
 
   const dateTimeRed = useSelector(state => state.dateTime?.date);
+  const follow_up_date =
+    dateTimeRed?.length > 0
+      ? dateTimeRed
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)[0]?.date
+      : '';
 
   const handleCancel = () => {
-    setOpen(open);
+    setOpen(false);
   };
 
   const handlePress = () => {
     dispatch(
       addDate([
         ...dateTimeRed,
-        {date: handleDates(date), appointment_id: appointmentID},
+        {
+          date: returnDate,
+          appointment_id: appointmentID,
+        },
       ]),
     );
     navigation.goBack();
   };
-  const handelvalue = value => {
-    setCustomDays(value);
-    setSelected(value.length > 0 ? value : '30');
-  };
-
-  const day = date?.toString()?.split(' ')[2];
-  const month = date?.toString().split(' ')[1];
-  const year = date?.toString().split(' ')[3];
-  const follow_upTime = date?.toString().split(' ')[4].substring(0, 5);
-
-  const follow_upDateTime = `${day} ${month} ${year} at ${follow_upTime}`;
-  const handleDates = selectedDate => {
-    let startDate = new Date(selectedDate);
-
-    let numberOfDaysToAdd = parseInt(customDays ? customDays : selected);
-    let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
-    let formattedEndDate = endDate.toISOString().substring(0, 10);
-    const day = formattedEndDate.split('-')[2];
-    const year = formattedEndDate.split('-')[0];
-    const month = months[`${formattedEndDate.split('-')[1]}`];
-    const Follow_UP = `${day}-${month}-${year}`;
-    return Follow_UP;
-  };
+  useEffect(() => {
+    setReturnDate(
+      follow_up_date !== undefined && follow_up_date
+        ? follow_up_date
+        : returnDate,
+    );
+  }, []);
 
   return (
     <View style={styles.MainContainer}>
@@ -93,7 +94,7 @@ export default function DateTime() {
         <SelectorBtn
           onPress={handleDate}
           name={'calendar'}
-          input={handleDates(date)}
+          input={returnDate}
         />
 
         {open && (
@@ -150,7 +151,10 @@ export default function DateTime() {
           <InputText
             value={customDays}
             placeholder={'Enter Days'}
-            setValue={val => handelvalue(val)}
+            setValue={val => {
+              setCustomDays(val);
+              setReturnDate(formatdate(handleAddDates(date, val ? val : 0)));
+            }}
             keypad="numeric"
           />
         </View>

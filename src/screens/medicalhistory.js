@@ -57,6 +57,7 @@ import VitalField from '../components/vitalFields';
 // import ShowChip from '../components/showChip';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 import SelectorBtn from '../components/selector';
+import {calculateWeeksAndDaysFromDate, formatdate} from '../utility/const';
 
 const MedicalHistory = ({navigation, route}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -103,6 +104,9 @@ const MedicalHistory = ({navigation, route}) => {
   const [select, setSelect] = useState('');
   const [red_flag, setRed_Flag] = useState('');
   const [procedures, setprocedures] = useState('');
+  const rel = ['Father', 'Mother', 'Others'];
+  const [relation, setRelation] = useState('');
+  const [othersrelation, setOthersRelation] = useState('');
   const handleSelectComorbidities = value => {
     setSelect(value);
     setComorbidities(value);
@@ -133,7 +137,11 @@ const MedicalHistory = ({navigation, route}) => {
     dispatch(
       addfamilyHistory([
         ...familyHistory,
-        {family: value, appointment_id: appointmentID},
+        {
+          family: value,
+          relation: relation ? relation : othersrelation,
+          appointment_id: appointmentID,
+        },
       ]),
     );
     UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: value});
@@ -186,6 +194,37 @@ const MedicalHistory = ({navigation, route}) => {
   const hospitalization = useSelector(
     state => state?.pasthistory?.hospitalization,
   );
+  const vital = useSelector(state => state.prescription.vitalsData);
+  const vitalsData =
+    vital?.length > 0
+      ? vital
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.vitals
+      : {};
+  useEffect(() => {
+    if (vitalsData?.LDD !== '') {
+      dispatch(
+        addmenstrualHistory([
+          ...menstrualHistory,
+          {
+            mens: {
+              age: '',
+              status: '',
+              flowdays: '',
+              cycledays: '',
+              pregnant: {
+                lmp: vitalsData?.LDD,
+                edd: vitalsData?.EDD,
+              },
+              menopause: '',
+              others: '',
+            },
+            appointment_id: appointmentID,
+          },
+        ]),
+      );
+    }
+  }, []);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -196,31 +235,50 @@ const MedicalHistory = ({navigation, route}) => {
   const handleDeleteFamliy = index => {
     if (familyHistory) {
       const updatedfamilyHistory = familyHistory?.filter(
-        (item, ind) => ind !== index,
+        (item, ind) => item !== index,
       );
-
       dispatch(updatefamilyHistory(updatedfamilyHistory));
     }
   };
   const handleAddReceiver = () => {
     if (comorbidities.trim() !== '') {
-      dispatch(addcommorbiditis([...commor, {commorbities: comorbidities}]));
+      dispatch(
+        addcommorbiditis([
+          ...commor,
+          {commorbities: comorbidities, appointment_id: appointmentID},
+        ]),
+      );
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
+      console.log(comorbidities);
       setComorbidities('');
     }
   };
   const handleSocial = () => {
     if (social.trim() !== '') {
-      dispatch(addsocialHistory([...socialHistory, {social: social}]));
+      dispatch(
+        addsocialHistory([
+          ...socialHistory,
+          {social: social, appointment_id: appointmentID},
+        ]),
+      );
       UpdateAsyncData(`socialHistory${doc_phone?.phone}`, {social: social});
       setSocial('');
     }
   };
   const handleFamily = () => {
     if (family.trim() !== '') {
-      dispatch(addfamilyHistory([...familyHistory, {family: family}]));
+      dispatch(
+        addfamilyHistory([
+          ...familyHistory,
+          {
+            family: family,
+            relation: relation ? relation : othersrelation,
+            appointment_id: appointmentID,
+          },
+        ]),
+      );
       UpdateAsyncData(`familyHistory${doc_phone?.phone}`, {family: family});
       setFamily('');
     }
@@ -395,12 +453,35 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          dispatch(
-            addmenstrualHistory([
-              ...menstrualHistory,
-              {mens: mens, appointment_id: appointmentID},
-            ]),
-          );
+          if (vitalsData?.LDD !== '') {
+            dispatch(
+              addmenstrualHistory([
+                ...menstrualHistory,
+                {
+                  mens: {
+                    ...mens,
+                    ...{
+                      pregnant: {
+                        lmp: vitalsData?.LDD,
+                        edd: vitalsData?.EDD,
+                      },
+                    },
+                  },
+                  appointment_id: appointmentID,
+                },
+              ]),
+            );
+          } else {
+            dispatch(
+              addmenstrualHistory([
+                ...menstrualHistory,
+                {
+                  mens: mens,
+                  appointment_id: appointmentID,
+                },
+              ]),
+            );
+          }
         }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
@@ -478,10 +559,22 @@ const MedicalHistory = ({navigation, route}) => {
     }
   }, [comorbidities, family]);
   useEffect(() => {
-    if (check_field?.length > 0) {
+    if (check_field?.length === 0) {
       fetchMedicalData();
     }
   }, []);
+  const lmp_week = calculateWeeksAndDaysFromDate(mesntrual?.pregnant?.lmp);
+  const motherHis = Fhstry?.filter(
+    item => item?.relation?.toLowerCase() === 'mother',
+  );
+  const fatherHis = Fhstry?.filter(
+    item => item?.relation?.toLowerCase() === 'father',
+  );
+  const othersHis = Fhstry?.filter(
+    item =>
+      item?.relation?.toLowerCase() !== 'father' &&
+      item?.relation?.toLowerCase() !== 'mother',
+  );
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -507,7 +600,7 @@ const MedicalHistory = ({navigation, route}) => {
               {JSON.stringify(mesntrual) !== '{}' && (
                 <View style={styles.basiccontainer}>
                   {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {mesntrual != '' && (
+                  {JSON.stringify(mesntrual) != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
                         Menarche: {mesntrual?.age} Yrs, {mesntrual?.status},
@@ -516,8 +609,12 @@ const MedicalHistory = ({navigation, route}) => {
                         <Text>
                           ,{' '}
                           {mesntrual?.pregnant !== ''
-                            ? `Pregnant (Yes): LMP ${
-                                mesntrual?.pregnant.split('T')[0]
+                            ? `Pregnant (Yes): LMP :  ${formatdate(
+                                mesntrual?.pregnant?.lmp,
+                              )} EDD : ${formatdate(
+                                mesntrual?.pregnant.edd,
+                              )} Week:${' '}${lmp_week?.weeks} Days:${' '}${
+                                lmp_week?.days
                               }`
                             : 'Pregnant (No)'}
                         </Text>
@@ -686,27 +783,31 @@ const MedicalHistory = ({navigation, route}) => {
             onSubmit={handleAddReceiver}
             delete={handleDeleteCommorbities}
           />
-          {snomedCommor?.length > 0 ? (
-            <View style={styles.suggestion}>
-              {snomedCommor?.map((item, ind) => (
-                <SelectorBtn
-                  select={{
-                    paddingHorizontal: horizontalScale(4),
-                    paddingVertical: verticalScale(8),
-                    borderWidth: 1,
-                    backgroundColor: CUSTOMCOLOR.white,
-                  }}
-                  onPress={() => handleSelectComorbidities(item?.term)}
-                  key={ind}
-                  inputstyle={{
-                    color: CUSTOMCOLOR.primary,
-                    fontSize: moderateScale(14),
-                    fontWeight: '400',
-                  }}
-                  input={item?.term}></SelectorBtn>
-              ))}
-            </View>
-          ) : null}
+          {comorbidities?.length > 0 && (
+            <>
+              {snomedCommor?.length > 0 ? (
+                <View style={styles.suggestion}>
+                  {snomedCommor?.map((item, ind) => (
+                    <SelectorBtn
+                      select={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(8),
+                        borderWidth: 1,
+                        backgroundColor: CUSTOMCOLOR.white,
+                      }}
+                      onPress={() => handleSelectComorbidities(item?.term)}
+                      key={ind}
+                      inputstyle={{
+                        color: CUSTOMCOLOR.primary,
+                        fontSize: moderateScale(14),
+                        fontWeight: '400',
+                      }}
+                      input={item?.term}></SelectorBtn>
+                  ))}
+                </View>
+              ) : null}
+            </>
+          )}
           {commor_sug?.length > 0 ? (
             <View style={styles.suggestion}>
               {commor_sug?.map((item, ind) => (
@@ -728,7 +829,101 @@ const MedicalHistory = ({navigation, route}) => {
               ))}
             </View>
           ) : null}
-          <ChipInput
+
+          <View style={{gap: 4}}>
+            <Text style={{color: CUSTOMCOLOR.black}}>Family history</Text>
+            {motherHis?.length > 0 && (
+              <>
+                <Text style={{color: CUSTOMCOLOR.black}}>Mother</Text>
+                <View style={{flexDirection: 'row'}}>
+                  {motherHis?.map((value, index) => (
+                    <ShowChip
+                      key={index}
+                      text={`${value?.family}`}
+                      onPress={() => handleDeleteFamliy(value)}
+                    />
+                  ))}
+                </View>
+              </>
+            )}
+            {fatherHis?.length > 0 && (
+              <>
+                <Text style={{color: CUSTOMCOLOR.black}}>Father</Text>
+                <View style={{flexDirection: 'row'}}>
+                  {fatherHis?.map((value, index) => (
+                    <ShowChip
+                      key={index}
+                      text={`${value?.family}`}
+                      onPress={() => handleDeleteFamliy(value)}
+                    />
+                  ))}
+                </View>
+              </>
+            )}
+            {othersHis?.length > 0 && (
+              <>
+                <Text style={{color: CUSTOMCOLOR.black}}>Others</Text>
+                <View style={{flexDirection: 'row'}}>
+                  {othersHis?.map((value, index) => (
+                    <ShowChip
+                      key={index}
+                      text={`${value?.family}`}
+                      onPress={() => handleDeleteFamliy(value)}
+                    />
+                  ))}
+                </View>
+              </>
+            )}
+            <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+              {rel?.map((item, index) => (
+                <SelectorBtn
+                  key={index}
+                  input={item}
+                  onPress={() => {
+                    if (relation === item) {
+                      setRelation('');
+                    } else {
+                      setRelation(item);
+                    }
+                  }}
+                  select={{
+                    backgroundColor:
+                      relation === item
+                        ? CUSTOMCOLOR.primary
+                        : CUSTOMCOLOR.white,
+                  }}
+                  inputstyle={{
+                    color:
+                      relation === item ? CUSTOMCOLOR.white : CUSTOMCOLOR.black,
+                  }}
+                />
+              ))}
+              {relation === 'Others' && (
+                <InputText
+                  // ={{paddingVertical: verticalScale(44)}}
+                  textStyle={{
+                    paddingHorizontal: 0,
+                    paddingVertical: 54,
+                    width: '30%',
+                  }}
+                  value={othersrelation}
+                  setValue={setOthersRelation}
+                  placeholder={'Enter Relation.....'}
+                />
+              )}
+            </View>
+
+            <InputText
+              value={family}
+              inputContainer={{paddingHorizontal: 0, paddingVertical: 0}}
+              setValue={setFamily}
+              onSubmit={handleFamily}
+              delete={handleDeleteFamliy}
+              placeholder={'Eg : Heart diseases, sugar'}
+            />
+          </View>
+
+          {/* <ChipInput
             placeholder={'Eg : Heart diseases, sugar'}
             item={'family'}
             label={'Family History'}
@@ -737,28 +932,34 @@ const MedicalHistory = ({navigation, route}) => {
             setValue={setFamily}
             onSubmit={handleFamily}
             delete={handleDeleteFamliy}
-          />
-          {snomedFamily?.length > 0 ? (
-            <View style={styles.suggestion}>
-              {snomedFamily?.map((item, ind) => (
-                <SelectorBtn
-                  select={{
-                    paddingHorizontal: horizontalScale(4),
-                    paddingVertical: verticalScale(8),
-                    borderWidth: 1,
-                    backgroundColor: CUSTOMCOLOR.white,
-                  }}
-                  onPress={() => handleSelectFamily(item?.term)}
-                  key={ind}
-                  inputstyle={{
-                    color: CUSTOMCOLOR.primary,
-                    fontSize: moderateScale(14),
-                    fontWeight: '400',
-                  }}
-                  input={item?.term}></SelectorBtn>
-              ))}
-            </View>
-          ) : null}
+            input={true}>
+            <Text style={{color: CUSTOMCOLOR.black}}>indra</Text>
+          </ChipInput> */}
+          {family?.length > 0 && (
+            <>
+              {snomedFamily?.length > 0 ? (
+                <View style={styles.suggestion}>
+                  {snomedFamily?.map((item, ind) => (
+                    <SelectorBtn
+                      select={{
+                        paddingHorizontal: horizontalScale(4),
+                        paddingVertical: verticalScale(8),
+                        borderWidth: 1,
+                        backgroundColor: CUSTOMCOLOR.white,
+                      }}
+                      onPress={() => handleSelectFamily(item?.term)}
+                      key={ind}
+                      inputstyle={{
+                        color: CUSTOMCOLOR.primary,
+                        fontSize: moderateScale(14),
+                        fontWeight: '400',
+                      }}
+                      input={item?.term}></SelectorBtn>
+                  ))}
+                </View>
+              ) : null}
+            </>
+          )}
           {family_sug?.length > 0 ? (
             <View style={styles.suggestion}>
               {family_sug?.map((item, ind) => (

@@ -55,7 +55,7 @@ const ShowChip = props => {
             <Icon
               name="pen"
               size={props.size ? props.size : moderateScale(20)}
-              color={CUSTOMCOLOR.primary}
+              color={props.color ? props.color : CUSTOMCOLOR.primary}
             />
 
             {/* </View> */}

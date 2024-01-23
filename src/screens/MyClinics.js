@@ -45,6 +45,7 @@ import {headerStatus} from '../redux/features/headerProgress/headerProgress';
 import ProgresHeader from '../components/progressheader';
 import {useFocusEffect} from '@react-navigation/native';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
+import {LoadingElement} from '../components/LoadingElement';
 
 const MyClinics = ({navigation}) => {
   const prevScrn1 = 'undefineed';
@@ -56,7 +57,7 @@ const MyClinics = ({navigation}) => {
   const clinics = useSelector(state => state.clinic?.clinics);
   const [loading, setLoading] = useState(false);
   const [apiStatus, setApiStatus] = useState({});
-  const [ind, setInd] = useState('');
+  const [pending, setpending] = useState(false);
   const SuccesRef = useRef(null);
   useEffect(() => {
     SuccesRef?.current?.snapToIndex(1);
@@ -131,18 +132,24 @@ const MyClinics = ({navigation}) => {
   const {phone} = useSelector(state => state?.phone?.data);
   const [clinicData, setClinicData] = useState([]);
   const fetchClinics = async () => {
-    const response = await fetchApi(URL.get_clinics_slots(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setClinicData(jsonData?.data);
-      dispatch(addclinic_data(jsonData?.data));
-    } else {
-      console.error('API call failed:', response.status, response);
+    try {
+      const response = await fetchApi(URL.get_clinics_slots(phone), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        setClinicData(jsonData?.data);
+        setpending(true);
+        dispatch(addclinic_data(jsonData?.data));
+      } else {
+        setpending(true);
+        console.error('API call failed:', response.status, response);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const deleteClinic = async id => {
@@ -172,11 +179,15 @@ const MyClinics = ({navigation}) => {
   });
 
   useEffect(() => {
-    fetchClinics();
+    setTimeout(() => {
+      fetchClinics();
+    }, 1000);
   }, []);
   useFocusEffect(
     React.useCallback(() => {
-      fetchClinics();
+      setTimeout(() => {
+        fetchClinics();
+      }, 1000);
     }, [phone]),
   );
   const handleDelete = value => {
@@ -184,7 +195,9 @@ const MyClinics = ({navigation}) => {
     setDel_id(value);
   };
   useEffect(() => {
-    fetchClinics();
+    setTimeout(() => {
+      fetchClinics();
+    }, 1000);
   }, [visible]);
 
   return (
@@ -214,18 +227,22 @@ const MyClinics = ({navigation}) => {
             }}
           />
         </View>
-        <ScrollView>
-          {clinicData?.map((item, index) => (
-            <View key={index} style={{marginBottom: moderateScale(8)}}>
-              <ClinicCard
-                key={item.id}
-                index={item.id}
-                data={item}
-                cancel={() => handleDelete(item?.id)}
-              />
-            </View>
-          ))}
-        </ScrollView>
+        {!pending ? (
+          <LoadingElement />
+        ) : (
+          <ScrollView>
+            {clinicData?.map((item, index) => (
+              <View key={index} style={{marginBottom: moderateScale(8)}}>
+                <ClinicCard
+                  key={item.id}
+                  index={item.id}
+                  data={item}
+                  cancel={() => handleDelete(item?.id)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        )}
         {clinicData?.length > 0 ? (
           <HButton
             btnstyles={styles.btnNext}

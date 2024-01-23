@@ -887,3 +887,32 @@ export const sortTimeIntervals = timeIntervals => {
 
   return sortedIntervals;
 };
+
+export const handleAddDates = (selectedDate, daysToAdd) => {
+  let startDate = new Date(selectedDate);
+  let numberOfDaysToAdd = parseInt(daysToAdd);
+  let endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + numberOfDaysToAdd);
+  let formattedEndDate = endDate.toISOString().substring(0, 10);
+  const day = formattedEndDate.split('-')[2];
+  const year = formattedEndDate.split('-')[0];
+  const month = `${formattedEndDate.split('-')[1]}`;
+  const updateDate = `${year}-${month}-${day}`;
+  return updateDate;
+};
+
+export const calculateWeeksAndDaysFromDate = startDateStr => {
+  const startDate = new Date(startDateStr);
+  const today = new Date();
+  const diffInMilliseconds = today - startDate;
+  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+  const weeks = Math.floor(diffInDays / 7);
+  const days = diffInDays % 7;
+  return {weeks, days};
+};
+export const formatdate = strdate => {
+  const date = `${strdate.split('-')[2]}-${months[strdate.split('-')[1]]}-${
+    strdate.split('-')[0]
+  }`;
+  return date;
+};

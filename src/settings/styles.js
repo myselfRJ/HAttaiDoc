@@ -22,6 +22,7 @@ let CUSTOMCOLOR = {
   recent: '#e5e5e5',
   fadeGreen: '#2CBB1530',
   fadeYellow: '#FFEEAC61',
+  selector: '#F4F7Fa',
 };
 const DARKCOLOR = {
   primary: 'red',

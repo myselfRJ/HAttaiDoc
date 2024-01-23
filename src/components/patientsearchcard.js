@@ -51,7 +51,8 @@ const PatientSearchCard = patient_data => {
       patient_phone,
       birthYea: birthYear,
       patient_pic,
-      patient_age,
+      patient_age:
+        parseInt(new Date().getFullYear().toString()) - parseInt(birthYear),
       patient_name,
       gender,
     });
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     gap: moderateScale(8),
     justifyContent: 'space-between',
+    marginBottom: moderateScale(8),
   },
   name: {
     // borderWidth: 1,

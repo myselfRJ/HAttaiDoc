@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 
   select: {
     flexDirection: 'row',
-    backgroundColor: '#F4F7Fa',
+    backgroundColor: CUSTOMCOLOR.selector,
     paddingVertical: verticalScale(8),
     paddingHorizontal: horizontalScale(8),
     alignItems: 'center',
