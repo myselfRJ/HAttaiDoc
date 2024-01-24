@@ -408,10 +408,16 @@ const Dashboard = ({navigation, route}) => {
         <View style={styles.main}>
           <View>
             <Logo />
-            <Text style={styles.title}>
-              {Language[language]['welcome']},{Language[language]['dr']}
-              {doc_name?.doctor_name}
-            </Text>
+            {doc_name?.doctor_name?.includes('Dr') ? (
+              <Text style={styles.title}>
+                {Language[language]['welcome']},{doc_name?.doctor_name}
+              </Text>
+            ) : (
+              <Text style={styles.title}>
+                {Language[language]['welcome']},{Language[language]['dr']}
+                {doc_name?.doctor_name}
+              </Text>
+            )}
           </View>
           <HeaderAvatar data={doc_name} />
         </View>

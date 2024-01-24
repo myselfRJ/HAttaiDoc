@@ -102,7 +102,7 @@ const PatientSearch = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setData(jsonData.data);
+      setData(jsonData.data?.reverse());
       setPending(true);
     } else {
       console.error('API call failed:', response.status, response);

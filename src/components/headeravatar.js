@@ -23,7 +23,11 @@ const HeaderAvatar = ({data}) => {
           }}
         />
         <View>
-          <Text style={styles.name}>Dr. {data?.doctor_name}</Text>
+          {data?.doctor_name?.includes('Dr') ? (
+            <Text style={styles.name}>{data?.doctor_name}</Text>
+          ) : (
+            <Text style={styles.name}>Dr. {data?.doctor_name}</Text>
+          )}
           <Text style={styles.speciality}>{data?.specialization}</Text>
         </View>
       </View>
