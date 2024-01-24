@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   labeltext: {
     paddingBottom: moderateScale(1),
-    fontWeight: '400',
+    fontWeight: '700',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,

@@ -29,7 +29,12 @@ import {commonstyles} from '../styles/commonstyle';
 import {useRoute} from '@react-navigation/native';
 import {URL} from '../utility/urls';
 import {useSelector} from 'react-redux';
-import {showToast} from '../utility/const';
+import {
+  handleCamera,
+  handleGallery,
+  pickSingleFile,
+  showToast,
+} from '../utility/const';
 
 const Uploadrecord = ({navigation}) => {
   const route = useRoute();
@@ -50,79 +55,50 @@ const Uploadrecord = ({navigation}) => {
   // const [selectedFilename, setSelectedFilename] = useState();
   const [uploaddocument, SetUploadDocument] = useState([]);
   const [modal, setModal] = useState(false);
-  // console.log('========>', date, description, recordstype, uploaddocument);
-  const onImagePress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.5,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        SetUploadDocument([
-          ...uploaddocument,
-          {
-            name: response?.assets?.[0]?.fileName,
-            type: response?.assets?.[0]?.type,
-            uri: response?.assets?.[0]?.uri,
-          },
-        ]);
-      }
-    });
-    setModal(!modal);
-  };
-
-  const openCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: true,
-    };
-
-    launchCamera(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        // console.log("=======>",response?.assets);
-        SetUploadDocument([
-          ...uploaddocument,
-          {
-            name: response?.assets?.[0]?.fileName,
-            type: response?.assets?.[0]?.type,
-            uri: response?.assets?.[0]?.uri,
-          },
-        ]);
-      }
-    });
-    setModal(!modal);
-  };
-
-  const pickSingleFile = async () => {
+  const onImagePress = async () => {
     try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-        allowMultiSelection: true,
-      });
-      // setSelectedFilename(result[0]?.name);
-      // SetUploadDocument(result[0]?.uri);
+      const data = await handleGallery();
       SetUploadDocument([
         ...uploaddocument,
-        {name: result[0]?.name, type: result[0]?.type, uri: result[0]?.uri},
+        {
+          name: data?.name,
+          type: data?.type,
+          uri: data?.uri,
+        },
       ]);
-      // console.log('result===', result[0]);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-      } else {
-        // Handle other errors
-      }
+    } catch (error) {
+      console.error('Error capturing data:', error);
     }
-    setModal(!modal);
+    setModal(false);
   };
 
+  const openCamera = async () => {
+    try {
+      const data = await handleCamera();
+      SetUploadDocument([
+        ...uploaddocument,
+        {
+          name: data?.name,
+          type: data?.type,
+          uri: data?.uri,
+        },
+      ]);
+    } catch (error) {
+      console.error('Error capturing data:', error);
+    }
+    setModal(false);
+  };
+
+  const handleSelectFilename = async () => {
+    try {
+      const file = await pickSingleFile();
+      SetUploadDocument([
+        ...uploaddocument,
+        {name: file?.name, type: file?.type, uri: file?.uri},
+      ]);
+    } catch (error) {}
+    setModal(!modal);
+  };
   const handleDelete = index => {
     if (uploaddocument.length > 0) {
       const updatedfiles = uploaddocument?.filter((item, ind) => ind !== index);
@@ -290,7 +266,7 @@ const Uploadrecord = ({navigation}) => {
           OnGallery={onImagePress}
           OnCamera={openCamera}
           document={true}
-          onDocument={pickSingleFile}
+          onDocument={handleSelectFilename}
         />
       )}
       <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>

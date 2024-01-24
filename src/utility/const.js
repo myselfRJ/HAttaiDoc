@@ -56,34 +56,6 @@ export const CONSTANT = {
     //   navigate: 'valid',
     // },
   ],
-  physical1: [
-    'Consciousness',
-    'Orientation',
-    'Build',
-    'Nutrition',
-    'Hydration',
-  ],
-  physical2: [
-    'Anemia',
-    'Jaundice',
-    'Clubbing',
-    'Cynosis',
-    'Lymphadenopathy',
-    'Edema',
-  ],
-  physical3: [
-    'Acne',
-    'Hirsutism',
-    'HEENT',
-    'Breast',
-    'Thyroid',
-    'C.V.S',
-    'RS',
-    'CNS',
-    'P/A',
-    'P/V',
-    'Speculam',
-  ],
   API_KEY: 'AIzaSyCdshQ6BDrl4SZzdo52cGRxjhSzlNdexOQ',
   test: ['Lab', 'Radiology', 'Procedure'],
   micro_biology: [
@@ -469,6 +441,122 @@ export const CONSTANT = {
     'Report Finding',
     'Physical Examination',
   ],
+  physicaldata1: [
+    {
+      label: 'Consciousness',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Orientation',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Build',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Nutrition',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Hydration',
+      status: 'N',
+      desc: '',
+    },
+  ],
+  physicaldata2: [
+    {
+      label: 'Pallor',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Icterus',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Cynosis',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Clubbing',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Lymphadenopathy',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Edema',
+      status: 'N',
+      desc: '',
+    },
+  ],
+  physicaldata3: [
+    {
+      label: 'Acne',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Hirsutism',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'HEENT',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Breast',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Thyroid',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'C.V.S',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'RS',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'CNS',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'P/A',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'P/V',
+      status: 'N',
+      desc: '',
+    },
+    {
+      label: 'Speculam',
+      status: 'N',
+      desc: '',
+    },
+  ],
 };
 
 export const capitalizeWord = word => {
@@ -613,7 +701,6 @@ export const pickSingleFile = async () => {
   }
 };
 export const AppointmentDatafilterAndSortData = data => {
-  const completedItems = data?.filter(item => item.status === 'completed');
   const pendingItems = data?.filter(item => item.status === 'pending');
   const sortedData = pendingItems;
   sortedData?.sort((a, b) => {
@@ -622,7 +709,19 @@ export const AppointmentDatafilterAndSortData = data => {
 
     return timeA - timeB;
   });
-  const sorteddata = sortedData?.concat(completedItems);
+  const sorteddata = sortedData;
+  return sorteddata;
+};
+export const CompletedAppointmentDatafilterAndSortData = data => {
+  const completedItems = data?.filter(item => item.status === 'completed');
+  const sortedData = completedItems;
+  sortedData?.sort((a, b) => {
+    const timeA = new Date(`2023-01-01T${a.appointment_time?.split('-')[0]}`);
+    const timeB = new Date(`2023-01-01T${b.appointment_time?.split('-')[0]}`);
+
+    return timeA - timeB;
+  });
+  const sorteddata = sortedData;
   return sorteddata;
 };
 import {CONSTANTS} from './constant';
