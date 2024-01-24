@@ -445,8 +445,8 @@ const ReferToDoctor = () => {
               selected === 'Hospital' ||
               selected === 'Lab / Imaging Center' ? (
                 <InputText
-                  label={'Dr.Name'}
-                  placeholder="Dr.Name"
+                  label={'Dr. Name'}
+                  placeholder="Dr. Name"
                   inputContainer={{paddingHorizontal: 0}}
                   value={dr_name}
                   setValue={val => setDr_Name(val)}

@@ -263,6 +263,10 @@ const Appointment = ({navigation}) => {
     seletedType !== 'Completed'
       ? AppointmentDatafilterAndSortData(filteredData)
       : CompletedAppointmentDatafilterAndSortData(filteredData);
+  const AllData = [
+    ...AppointmentDatafilterAndSortData(setAppointment),
+    ...CompletedAppointmentDatafilterAndSortData(setAppointment),
+  ];
   const renderItems = ({item, index}) => {
     return (
       <AppointmentCard
@@ -358,7 +362,9 @@ const Appointment = ({navigation}) => {
             <>
               {AppointmentFilterResult?.length > 0 ? (
                 <FlatList
-                  data={AppointmentFilterResult}
+                  data={
+                    seletedType === 'All' ? AllData : AppointmentFilterResult
+                  }
                   renderItem={renderItems}
                   style={styles.appointmentCard}
                 />

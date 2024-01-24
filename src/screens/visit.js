@@ -849,7 +849,7 @@ const Visit = ({navigation, route}) => {
             labreport?.length > 0
               ? `<div style="margin-top:16px">
               <h5>
-                  Test Prescribed
+              Prescribe Investigation
               </h5>
               <text>
                   ${labreport?.map(value => value.lab_test).join(', ')}
@@ -1511,7 +1511,7 @@ const Visit = ({navigation, route}) => {
                       (value?.label === 'Diagnosis' && diagnosis?.length > 0
                         ? 'check-circle'
                         : '') ||
-                      (value?.label === 'Test Prescribe' &&
+                      (value?.label === 'Prescribe Investigation' &&
                       labreport?.length > 0
                         ? 'check-circle'
                         : '') ||
@@ -1978,30 +1978,31 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Test Prescribe' && labreport.length > 0 && (
-                    <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View style={styles.common}>
-                          <View>
-                            {labreport?.map((item, ind) => (
-                              <View key={ind} style={styles.common}>
-                                <Icon
-                                  name="prescription"
-                                  size={moderateScale(16)}
-                                  color={CUSTOMCOLOR.primary}
-                                />
-                                <View>
-                                  <Text style={styles.pulse}>
-                                    {item?.lab_test}
-                                  </Text>
+                  {value.label === 'Prescribe Investigation' &&
+                    labreport.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View style={styles.common}>
+                            <View>
+                              {labreport?.map((item, ind) => (
+                                <View key={ind} style={styles.common}>
+                                  <Icon
+                                    name="prescription"
+                                    size={moderateScale(16)}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={styles.pulse}>
+                                      {item?.lab_test}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
-                            ))}
+                              ))}
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  )}
+                    )}
 
                   {value.label === 'Referral' &&
                     (selectedDoctor?.length > 0 ? (

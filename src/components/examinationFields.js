@@ -35,7 +35,7 @@ const Examination_Fields = props => {
           />
         </View>
       </View>
-      {props.option === 'A' && (
+      {props.option !== '' && (
         <TextInput
           placeholderTextColor={CUSTOMCOLOR.disable}
           style={styles.textinput}

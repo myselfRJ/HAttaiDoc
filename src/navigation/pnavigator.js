@@ -687,7 +687,7 @@ const ProtectedRoute = route => {
         component={LabReports}
         options={{
           headerTintColor: CUSTOMCOLOR.white,
-          title: 'Test Prescribe',
+          title: 'Prescribe Investigation',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

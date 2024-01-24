@@ -154,16 +154,6 @@ const Allergies = () => {
     <View style={styles.main}>
       <PrescriptionHead heading="Allergies" />
       <ScrollView>
-        {allAllergy?.map((item, ind) =>
-          allAllergy.length > 0 ? (
-            <ShowChip
-              key={ind}
-              text={item?.allergies}
-              onPress={() => handleDelete(ind)}
-              ind={ind}
-            />
-          ) : null,
-        )}
         <View style={{marginBottom: moderateScale(16)}}>
           <View style={styles.input}>
             <InputText
@@ -245,6 +235,23 @@ const Allergies = () => {
               ))}
             </View>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: horizontalScale(8),
+          }}>
+          {allAllergy?.map((item, ind) =>
+            allAllergy.length > 0 ? (
+              <ShowChip
+                key={ind}
+                text={item?.allergies}
+                onPress={() => handleDelete(ind)}
+                ind={ind}
+              />
+            ) : null,
+          )}
         </View>
       </ScrollView>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>

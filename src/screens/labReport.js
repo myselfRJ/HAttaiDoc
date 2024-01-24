@@ -286,7 +286,7 @@ const LabReports = () => {
   };
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Investigation Prescribed" />
+      <PrescriptionHead heading="Prescribe Investigation" />
       <ScrollView
         style={styles.appointmentcard}
         contentContainerStyle={{gap: 16}}

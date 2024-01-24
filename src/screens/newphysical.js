@@ -285,15 +285,12 @@ const Physical = ({navigation}) => {
   };
   const handleNewField = () => {
     if (value.trim() !== '') {
-      const newdata = [...data3, {label: value, status: '', desc: ''}];
+      const newdata = [...data3, {label: value, status: 'N', desc: ''}];
       setData3(newdata);
       StoreAsyncData(`physicaldata${examinationDetails?.doc_phone}`, {
         data1: CONSTANT.physicaldata1,
         data2: CONSTANT.physicaldata2,
-        data3: [
-          ...CONSTANT.physicaldata3,
-          {label: value, status: '', desc: ''},
-        ],
+        data3: [...data3, {label: value, status: 'N', desc: ''}],
       });
     }
     setValue('');

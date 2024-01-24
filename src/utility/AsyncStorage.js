@@ -3,11 +3,6 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 async function StoreAsyncData(key, body) {
   try {
-    const existingValue = await EncryptedStorage.getItem(key);
-
-    if (existingValue) {
-      return;
-    }
     await EncryptedStorage.setItem(key, JSON.stringify(body));
     console.log('Value saved successfully');
   } catch (error) {

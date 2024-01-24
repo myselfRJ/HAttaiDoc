@@ -408,7 +408,7 @@ const Dashboard = ({navigation, route}) => {
         <View style={styles.main}>
           <View>
             <Logo />
-            {doc_name?.doctor_name?.includes('Dr') ? (
+            {doc_name && doc_name?.doctor_name?.includes('Dr') ? (
               <Text style={styles.title}>
                 {Language[language]['welcome']},{doc_name?.doctor_name}
               </Text>

@@ -870,48 +870,7 @@ const MedicalHistory = ({navigation, route}) => {
             <Text style={{color: CUSTOMCOLOR.black, fontWeight: '600'}}>
               Family history
             </Text>
-            {motherHis?.length > 0 && (
-              <>
-                <Text style={{color: CUSTOMCOLOR.black}}>Mother</Text>
-                <View style={styles.his}>
-                  {motherHis?.map((value, index) => (
-                    <ShowChip
-                      key={index}
-                      text={`${value?.family}`}
-                      onPress={() => handleDeleteFamliy(value)}
-                    />
-                  ))}
-                </View>
-              </>
-            )}
-            {fatherHis?.length > 0 && (
-              <>
-                <Text style={{color: CUSTOMCOLOR.black}}>Father</Text>
-                <View style={styles.his}>
-                  {fatherHis?.map((value, index) => (
-                    <ShowChip
-                      key={index}
-                      text={`${value?.family}`}
-                      onPress={() => handleDeleteFamliy(value)}
-                    />
-                  ))}
-                </View>
-              </>
-            )}
-            {othersHis?.length > 0 && (
-              <>
-                <Text style={{color: CUSTOMCOLOR.black}}>Others</Text>
-                <View style={styles.his}>
-                  {othersHis?.map((value, index) => (
-                    <ShowChip
-                      key={index}
-                      text={`${value?.family}`}
-                      onPress={() => handleDeleteFamliy(value)}
-                    />
-                  ))}
-                </View>
-              </>
-            )}
+
             <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
               {rel?.map((item, index) => (
                 <SelectorBtn
@@ -1019,6 +978,48 @@ const MedicalHistory = ({navigation, route}) => {
               ))}
             </View>
           ) : null}
+          {motherHis?.length > 0 && (
+            <View style={{paddingHorizontal: horizontalScale(16)}}>
+              <Text style={{color: CUSTOMCOLOR.black}}>Mother</Text>
+              <View style={styles.his}>
+                {motherHis?.map((value, index) => (
+                  <ShowChip
+                    key={index}
+                    text={`${value?.family}`}
+                    onPress={() => handleDeleteFamliy(value)}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
+          {fatherHis?.length > 0 && (
+            <View style={{paddingHorizontal: horizontalScale(16)}}>
+              <Text style={{color: CUSTOMCOLOR.black}}>Father</Text>
+              <View style={styles.his}>
+                {fatherHis?.map((value, index) => (
+                  <ShowChip
+                    key={index}
+                    text={`${value?.family}`}
+                    onPress={() => handleDeleteFamliy(value)}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
+          {othersHis?.length > 0 && (
+            <View style={{paddingHorizontal: horizontalScale(16)}}>
+              <Text style={{color: CUSTOMCOLOR.black}}>Others</Text>
+              <View style={styles.his}>
+                {othersHis?.map((value, index) => (
+                  <ShowChip
+                    key={index}
+                    text={`${value?.family}`}
+                    onPress={() => handleDeleteFamliy(value)}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
 
           <ChipInput
             placeholder={'Eg : smoking, drinking'}
@@ -1255,6 +1256,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
   },
-  his: {flexDirection: 'row', flexWrap: 'wrap', gap: moderateScale(8)},
+  his: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: moderateScale(8),
+    // paddingHorizontal: horizontalScale(16),
+  },
 });
 export default MedicalHistory;
