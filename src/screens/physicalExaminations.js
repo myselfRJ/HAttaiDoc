@@ -91,7 +91,6 @@ const PhysicalExamination = ({navigation}) => {
       },
       body: formData,
     };
-
     try {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();

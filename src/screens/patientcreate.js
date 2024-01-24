@@ -148,6 +148,7 @@ const PatientCreate = ({navigation, route}) => {
     patient_phone_number: patient_phone_number,
     birth_date: formatDate,
     // age: age,
+    reference_id: reference_id,
     doctor_phone_number: phone,
     bloodgroup: blood_group,
     spouse_name: spouse_name,
@@ -156,7 +157,6 @@ const PatientCreate = ({navigation, route}) => {
     patient_address: address,
     patient_pic_url: selectedImage ? selectedImage : default_image,
   };
-
   const [apiStatus, setApiStatus] = useState({});
   const RoleRef = useRef(null);
   const [bottom, setBottom] = useState(false);

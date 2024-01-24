@@ -30,123 +30,11 @@ import {URL, fileurl} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {addExamination} from '../redux/features/prescription/prescriptionSlice';
 import CustomModal from '../components/CustomModal';
+import {RetriveAsyncData, StoreAsyncData} from '../utility/AsyncStorage';
 const Physical = ({navigation}) => {
-  const [data1, setData1] = useState([
-    {
-      label: 'Consciousness',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Orientation',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Build',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Nutrition',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Hydration',
-      status: '',
-      desc: '',
-    },
-  ]);
-  const [data2, setData2] = useState([
-    {
-      label: 'Pallor',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Icterus',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Cynosis',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Clubbing',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Lymphadenopathy',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Edema',
-      status: '',
-      desc: '',
-    },
-  ]);
-  const [data3, setData3] = useState([
-    {
-      label: 'Acne',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Hirsutism',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'HEENT',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Breast',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Thyroid',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'C.V.S',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'RS',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'CNS',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'P/A',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'P/V',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Speculam',
-      status: '',
-      desc: '',
-    },
-  ]);
+  const [data1, setData1] = useState(CONSTANT.physicaldata1);
+  const [data2, setData2] = useState(CONSTANT.physicaldata2);
+  const [data3, setData3] = useState(CONSTANT.physicaldata3);
 
   const handledata1 = (index, newstatus, newdesc) => {
     const newdata1 = [...data1];
@@ -166,22 +54,18 @@ const Physical = ({navigation}) => {
     newdata3[index].desc = newdesc;
     setData3(newdata3);
   };
-
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
   const {examinationDetails} = route.params;
   const appointment_id = examinationDetails?.appointment_id;
-  console.log('appointment-id', appointment_id);
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
-  console.log('====================================');
-  console.log('modal', modal);
-  console.log('====================================');
   const [show, setShow] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
-  const [report, setreport] = useState('');
+  const [report, setreport] = useState([]);
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
+  const [documents, setDocuments] = useState('');
 
   const postData = async url => {
     const formData = new FormData();
@@ -217,8 +101,9 @@ const Physical = ({navigation}) => {
       const responseData = await response.json();
       if (responseData) {
         showToast('success', 'Succesfully saved');
+        dispatch(addExamination(responseData?.data));
         navigation.goBack();
-        console.log('API Response:', responseData);
+
         // const statusCosent = await fetch(URL.consent, {
         //   method: 'POST',
         //   headers: {
@@ -358,16 +243,24 @@ const Physical = ({navigation}) => {
       setValue(
         jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes,
       );
-      const general = JSON.parse(jsonData?.data?.generalExamination);
-      setData1(general);
-      const piccle = JSON.parse(jsonData?.data?.piccle);
-      setData2(piccle);
-      const bodyParts = JSON.parse(jsonData?.data?.body_parts_examination);
-      setData3(bodyParts);
+      setDocuments(jsonData?.data);
+      try {
+        const general = JSON.parse(jsonData?.data?.generalExamination);
+        setData1(general);
+        setreport([...report, ...general]);
+        const piccle = JSON.parse(jsonData?.data?.piccle);
+        setData2(piccle);
+        setreport([...report, ...piccle]);
+        const bodyParts = JSON.parse(jsonData?.data?.body_parts_examination);
+        setData3(bodyParts);
+        setreport([...report, ...bodyParts]);
+        dispatch(addExamination(jsonData?.data));
+      } catch (err) {
+        console.error(err);
+      }
       //   const value =
       //     jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes;
       //   dispatch(addExamination({value: value}));
-      setreport(jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -376,11 +269,11 @@ const Physical = ({navigation}) => {
     fetchPhysical();
   }, []);
   const report_findings = [
-    {name: report?.file1 ? report?.file1 : null},
-    {name: report?.file2 ? report?.file2 : null},
-    {name: report?.file3 ? report?.file3 : null},
-    {name: report?.file4 ? report?.file4 : null},
-    {name: report?.file5 ? report?.file5 : null},
+    {name: documents?.file1 ? documents?.file1 : null},
+    {name: documents?.file2 ? documents?.file2 : null},
+    {name: documents?.file3 ? documents?.file3 : null},
+    {name: documents?.file4 ? documents?.file4 : null},
+    {name: documents?.file5 ? documents?.file5 : null},
   ];
   const handleReports_Physical = filepath => {
     const path = `${fileurl}${filepath}`;
@@ -394,12 +287,33 @@ const Physical = ({navigation}) => {
     if (value.trim() !== '') {
       const newdata = [...data3, {label: value, status: '', desc: ''}];
       setData3(newdata);
+      StoreAsyncData(`physicaldata${examinationDetails?.doc_phone}`, {
+        data1: CONSTANT.physicaldata1,
+        data2: CONSTANT.physicaldata2,
+        data3: [
+          ...CONSTANT.physicaldata3,
+          {label: value, status: '', desc: ''},
+        ],
+      });
     }
     setValue('');
   };
-  console.log('====================================');
-  console.log('report', report);
-  console.log('====================================');
+  const handleAsync = () => {
+    RetriveAsyncData(`physicaldata${examinationDetails?.doc_phone}`).then(
+      array => {
+        console.log(array);
+        if (array) {
+          setData1(array?.data1);
+          setData2(array?.data2);
+          setData3(array?.data3);
+        }
+      },
+    );
+  };
+  useEffect(() => {
+    handleAsync();
+  }, []);
+
   return (
     <View style={styles.main}>
       <ScrollView
@@ -519,7 +433,7 @@ const Physical = ({navigation}) => {
             up to 5 files, each file size under 5MB
           </Text> */}
         </View>
-        {!report ? (
+        {report?.length === 0 ? (
           uploaddocument?.length > 0 ? (
             <View style={{marginTop: verticalScale(16)}}>
               {uploaddocument?.map((item, index) => (
@@ -600,7 +514,7 @@ const Physical = ({navigation}) => {
             alignSelf: 'flex-end',
             // marginTop: verticalScale(16),
             backgroundColor:
-              uploaddocument?.length === 5 || report != ''
+              uploaddocument?.length === 5 || report?.length > 0
                 ? CUSTOMCOLOR.disable
                 : CUSTOMCOLOR.primary,
           }}
@@ -638,6 +552,7 @@ const Physical = ({navigation}) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   main: {
     flex: 1,

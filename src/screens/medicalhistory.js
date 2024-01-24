@@ -202,7 +202,7 @@ const MedicalHistory = ({navigation, route}) => {
           ?.slice(-1)?.[0]?.vitals
       : {};
   useEffect(() => {
-    if (vitalsData?.LDD !== '') {
+    if (vitalsData && vitalsData?.LDD !== '') {
       dispatch(
         addmenstrualHistory([
           ...menstrualHistory,
@@ -228,7 +228,6 @@ const MedicalHistory = ({navigation, route}) => {
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
-
       dispatch(updatesocialHistory(updatedSocial));
     }
   };
@@ -453,24 +452,26 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
-          if (vitalsData?.LDD !== '') {
-            dispatch(
-              addmenstrualHistory([
-                ...menstrualHistory,
-                {
-                  mens: {
-                    ...mens,
-                    ...{
-                      pregnant: {
-                        lmp: vitalsData?.LDD,
-                        edd: vitalsData?.EDD,
+          if (vitalsData) {
+            if (vitalsData?.LDD !== '') {
+              dispatch(
+                addmenstrualHistory([
+                  ...menstrualHistory,
+                  {
+                    mens: {
+                      ...mens,
+                      ...{
+                        pregnant: {
+                          lmp: vitalsData?.LDD,
+                          edd: vitalsData?.EDD,
+                        },
                       },
                     },
+                    appointment_id: appointmentID,
                   },
-                  appointment_id: appointmentID,
-                },
-              ]),
-            );
+                ]),
+              );
+            }
           } else {
             dispatch(
               addmenstrualHistory([
@@ -866,11 +867,13 @@ const MedicalHistory = ({navigation, route}) => {
           ) : null}
 
           <View style={{gap: 4}}>
-            <Text style={{color: CUSTOMCOLOR.black}}>Family history</Text>
+            <Text style={{color: CUSTOMCOLOR.black, fontWeight: '600'}}>
+              Family history
+            </Text>
             {motherHis?.length > 0 && (
               <>
                 <Text style={{color: CUSTOMCOLOR.black}}>Mother</Text>
-                <View style={{flexDirection: 'row'}}>
+                <View style={styles.his}>
                   {motherHis?.map((value, index) => (
                     <ShowChip
                       key={index}
@@ -884,7 +887,7 @@ const MedicalHistory = ({navigation, route}) => {
             {fatherHis?.length > 0 && (
               <>
                 <Text style={{color: CUSTOMCOLOR.black}}>Father</Text>
-                <View style={{flexDirection: 'row'}}>
+                <View style={styles.his}>
                   {fatherHis?.map((value, index) => (
                     <ShowChip
                       key={index}
@@ -898,7 +901,7 @@ const MedicalHistory = ({navigation, route}) => {
             {othersHis?.length > 0 && (
               <>
                 <Text style={{color: CUSTOMCOLOR.black}}>Others</Text>
-                <View style={{flexDirection: 'row'}}>
+                <View style={styles.his}>
                   {othersHis?.map((value, index) => (
                     <ShowChip
                       key={index}
@@ -1063,6 +1066,7 @@ const MedicalHistory = ({navigation, route}) => {
             value={medical}
             setValue={txt => setMedical(txt)}
             blur={false}
+            lbltext={{fontWeight: '700'}}
           />
           {data?.length > 0 ? (
             <View style={styles.suggestion}>
@@ -1099,6 +1103,7 @@ const MedicalHistory = ({navigation, route}) => {
             value={past}
             setValue={txt => setPast(txt)}
             blur={false}
+            lbltext={{fontWeight: '700'}}
           />
           <InputText
             point={procedureref}
@@ -1109,6 +1114,7 @@ const MedicalHistory = ({navigation, route}) => {
             value={procedures}
             setValue={txt => setprocedures(txt)}
             blur={false}
+            lbltext={{fontWeight: '700'}}
           />
           <InputText
             point={redflagref}
@@ -1118,6 +1124,7 @@ const MedicalHistory = ({navigation, route}) => {
             value={red_flag}
             setValue={txt => setRed_Flag(txt)}
             blur={false}
+            lbltext={{fontWeight: '700'}}
           />
           {/* {(medicaldata?.gende == 'Female' ||
             medicaldata?.gende == 'female') && (
@@ -1184,7 +1191,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
   },
   text: {
-    fontWeight: '400',
+    fontWeight: '700',
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.black,
     fontFamily: CUSTOMFONTFAMILY.body,
@@ -1248,5 +1255,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
   },
+  his: {flexDirection: 'row', flexWrap: 'wrap', gap: moderateScale(8)},
 });
 export default MedicalHistory;

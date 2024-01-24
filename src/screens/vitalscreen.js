@@ -78,6 +78,7 @@ const VitalScreen = ({route, props}) => {
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
   const {gende, patient_phone} = route.params;
+  console.log(patient_phone);
   console.log(gende, patient_phone);
   const handleEddConfirm = selectedDate => {
     setDate(selectedDate);
@@ -223,11 +224,11 @@ const VitalScreen = ({route, props}) => {
     if (response.ok) {
       const jsondata = await response.json();
       setheight(jsondata?.data?.height);
+      console.log(jsondata?.data);
     }
   };
-
   useEffect(() => {
-    if (vitalsData?.height === '') {
+    if (!vitalsData?.height) {
       fetchUpdatevitals();
     }
   }, []);

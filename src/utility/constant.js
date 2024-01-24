@@ -410,7 +410,7 @@ export const CONSTANTS = {
   iwO/1C8y56egzKSw44GAtEpbAkTNEEfK5H5R0QnVBIXOvfeF4tzGvmkfOO6nNXU3
   o/WAdOyV3xSQ9dqLY5MEL4sJCGY1iJBIAQ452s8v0ynJG5Yq+8hNhsCVnklCzAls
   IzQpnSVDUVEzv17grVAw078CAwEAAQ==`,
-  selection: ['All', 'New', 'Followup', 'Routine'],
+  selection: ['All', 'New', 'Followup', 'Routine', 'Completed'],
   months: {
     '01': 'Jan',
     '02': 'feb',

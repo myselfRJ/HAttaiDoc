@@ -50,6 +50,11 @@ const History = ({route, navigation}) => {
   const [physical, setPhysical] = useState({});
   const [selectedType, setSelectedType] = useState();
   const [reportspatient, setReportsPatient] = useState([]);
+  const [physicalExamination, setPhysicalExamination] = useState({
+    body_parts: '',
+    general: '',
+    piccle: '',
+  });
   const images_path = [
     {image: require('../assets/images/rxhistory.png'), text: 'Prescription'},
     {image: require('../assets/images/report.png'), text: 'Referral'},
@@ -133,8 +138,19 @@ const History = ({route, navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      setPhysical(jsonData?.data);
-      // console.log('======>data', jsonData?.data?.notes);
+      const data = jsonData?.data;
+      try {
+        const body_parts = JSON.parse(data?.body_parts_examination);
+        const general = JSON.parse(data?.generalExamination);
+        const piccle = JSON.parse(data?.piccle);
+        setPhysicalExamination({
+          body_parts: body_parts,
+          general: general,
+          piccle: piccle,
+        });
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -185,6 +201,20 @@ const History = ({route, navigation}) => {
       fetchExamination();
     }, [selectedType]),
   );
+  // const handlePhysical = data => {
+  //   try {
+  //     const body_parts = JSON.parse(data?.body_parts_examination);
+  //     const general = JSON.parse(data?.generalExamination);
+  //     const piccle = JSON.parse(data?.piccle);
+  //     setPhysicalExamination({
+  //       body_parts: body_parts,
+  //       general: general,
+  //       piccle: piccle,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Rx History'} />
@@ -275,7 +305,7 @@ const History = ({route, navigation}) => {
               </Text>
             </View>
           )}
-          {reports_finding[0]?.report_url !== null ||
+          {reports_finding?.[0]?.report_url !== null ||
           reports?.description ||
           reportspatient?.length > 0 ? (
             [...reports_finding, ...reportspatient]?.map(
@@ -314,14 +344,28 @@ const History = ({route, navigation}) => {
       {selectedType === 'Physical Examinations' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          {physical?.notes && (
-            <View>
-              <Text style={styles.head}>
-                Description:
-                <Text style={styles.notes}>{physical?.notes}</Text>
-              </Text>
-            </View>
-          )}
+          {physicalExamination?.body_parts !== '' &&
+            physicalExamination?.general !== '' &&
+            physicalExamination?.piccle !== '' && (
+              <View>
+                <Text style={styles.head}>
+                  Examinations:{'  '}
+                  {[
+                    ...physicalExamination?.body_parts,
+                    ...physicalExamination?.general,
+                    ...physicalExamination?.piccle,
+                  ]?.map((item, index) => {
+                    if (item?.status !== '' && item?.status !== 'N') {
+                      return (
+                        <Text key={index} style={styles.notes}>
+                          {item?.label} ({item?.desc}){'    '}
+                        </Text>
+                      );
+                    }
+                  })}
+                </Text>
+              </View>
+            )}
           {physical_reports[0] !== null || physical?.notes ? (
             physical_reports?.map(
               (item, index) =>
@@ -371,7 +415,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   head: {color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h4},
-  notes: {color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h3},
+  notes: {
+    color: CUSTOMCOLOR.black,
+    fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '600',
+  },
 });
 
 export default History;

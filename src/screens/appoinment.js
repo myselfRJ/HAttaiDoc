@@ -27,7 +27,11 @@ import {Icon, InputText} from '../components';
 import DatePicker from 'react-native-date-picker';
 import BottomSheetView from '../components/bottomSheet';
 import {CONSTANTS} from '../utility/constant';
-import {AppointmentDatafilterAndSortData, CONSTANT} from '../utility/const';
+import {
+  AppointmentDatafilterAndSortData,
+  CONSTANT,
+  CompletedAppointmentDatafilterAndSortData,
+} from '../utility/const';
 import {ChartCard, HeaderAvatar} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchApi} from '../api/fetchApi';
@@ -175,10 +179,14 @@ const Appointment = ({navigation}) => {
         const filtered = setAppointment?.filter(
           item =>
             item?.patient_data?.patient_name &&
-            item?.patient_name.toLowerCase().startsWith(name.toLowerCase()),
+            item?.patient_name?.toLowerCase()?.startsWith(name?.toLowerCase()),
         );
         setFilteredData(filtered);
-      } else if (seletedType && seletedType !== 'All') {
+      } else if (
+        seletedType &&
+        seletedType !== 'All' &&
+        seletedType !== 'Completed'
+      ) {
         const filtered = setAppointment?.filter(
           item =>
             item?.appointment_type &&
@@ -188,6 +196,14 @@ const Appointment = ({navigation}) => {
         setFilteredData(filtered);
       } else {
         setFilteredData(setAppointment);
+      }
+      if (seletedType === 'Completed') {
+        const filtered = setAppointment?.filter(
+          item =>
+            item?.appointment_type &&
+            item?.status?.toLowerCase() === seletedType?.toLowerCase(),
+        );
+        setFilteredData(filtered);
       }
     } catch (error) {
       console.error('Error in useEffect:', error);
@@ -244,7 +260,9 @@ const Appointment = ({navigation}) => {
     disableBackButton();
   }, []);
   const AppointmentFilterResult =
-    AppointmentDatafilterAndSortData(filteredData);
+    seletedType !== 'Completed'
+      ? AppointmentDatafilterAndSortData(filteredData)
+      : CompletedAppointmentDatafilterAndSortData(filteredData);
   const renderItems = ({item, index}) => {
     return (
       <AppointmentCard

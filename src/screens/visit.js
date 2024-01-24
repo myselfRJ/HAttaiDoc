@@ -72,6 +72,11 @@ const Visit = ({navigation, route}) => {
   const [filePath, setFilePath] = useState('');
   const [prevLoad, setPrevLoad] = useState(false);
   const dispatch = useDispatch();
+  const [physicalExamination, setPhysicalExamination] = useState({
+    body_parts: '',
+    general: '',
+    piccle: '',
+  });
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const follow_up = useSelector(state => state?.dateTime?.date);
   const date =
@@ -99,11 +104,7 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  console.log(vitalsData?.bp?.bp);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  console.log('====================================');
-  console.log('physical', physical);
-  console.log('====================================');
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const notess = useSelector(state => state.prescription.note);
   const note =
@@ -249,6 +250,22 @@ const Visit = ({navigation, route}) => {
   } = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
+
+  const handlePhysical = data => {
+    try {
+      const body_parts = JSON.parse(data?.body_parts_examination);
+      const general = JSON.parse(data?.generalExamination);
+      const piccle = JSON.parse(data?.piccle);
+      setPhysicalExamination({
+        body_parts: body_parts,
+        general: general,
+        piccle: piccle,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(physicalExamination);
 
   const fetchAllergyData = async () => {
     const response = await fetchApi(URL.getAllergy(patient_phone), {
@@ -427,7 +444,7 @@ const Visit = ({navigation, route}) => {
     GetFees();
     fetchVitals();
     fetchComplaint();
-    // fetchDoctor();
+    handlePhysical(physical);
     setData(doc_prof);
     dispatch(
       addfees([
@@ -445,7 +462,7 @@ const Visit = ({navigation, route}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchReport();
-      // fetchPatientData();
+      handlePhysical(physical);
       GetFees();
       setData(doc_prof);
     }, []),
@@ -571,7 +588,7 @@ const Visit = ({navigation, route}) => {
             vitalsData?.weight &&
             vitalsData?.height &&
             vitalsData?.bp?.bp?.length === 1 &&
-            vitalsData?.vits?.vitals === 1 &&
+            vitalsData?.vits?.vitals?.length === 1 &&
             vitalsData?.bmi
               ? `<div>
               <h5>
@@ -626,26 +643,26 @@ const Visit = ({navigation, route}) => {
                       : ''
                   }
                   ${
-                    vitalsData?.bmi
+                    !isNaN(vitalsData?.bmi)
                       ? 'BMI:' + ' ' + `<b> ${vitalsData.bmi} </b>` + ''
                       : ''
                   }
-                  
-                  
-
-
               </text>
           </div>`
               : `<div>
               <h5>
                   Vitals
               </h5>
-              <text style="margin-bottom:4px">
               ${
-                vitalsData?.bmi
+                !isNaN(vitalsData?.bmi)
+                  ? `<text style="margin-bottom:4px">
+              ${
+                !isNaN(vitalsData?.bmi)
                   ? 'BMI:' + ' ' + `<b> ${vitalsData.bmi} </b>` + ''
                   : ''
-              }</text>
+              }</text>`
+                  : ''
+              }
               <div style="display:flex;flex-direction:column;">
               ${vitalsData?.bp?.bp
                 ?.map(
@@ -695,6 +712,38 @@ const Visit = ({navigation, route}) => {
               : ''
           }
           ${
+            JSON?.stringify(physical) !== '{}'
+              ? `<div>
+              <h5>
+                  Physical Examination
+              </h5>
+             <div>
+             ${
+               physicalExamination?.body_parts !== '' &&
+               physicalExamination?.piccle !== '' &&
+               physicalExamination?.general
+                 ? `<div>
+             ${[
+               ...physicalExamination.body_parts,
+               ...physicalExamination?.general,
+               ...physicalExamination?.piccle,
+             ]
+               ?.map((item, index) => {
+                 if (item?.status !== '' && item?.status !== 'N') {
+                   return `<text>${item?.label}${'  '}(${
+                     item?.desc
+                   })${'     '}</text>`;
+                 }
+               })
+               .join('')}
+             </div>`
+                 : ''
+             }
+             </div>
+          </div>`
+              : ''
+          } 
+          ${
             diagnosis?.length > 0
               ? `<div>
               <h5>
@@ -714,20 +763,6 @@ const Visit = ({navigation, route}) => {
               </h5>
               <text>
                   ${reptr?.describe}
-              </text>
-          </div>`
-              : ''
-          } 
-          ${
-            JSON?.stringify(physical) !== '{}' &&
-            physical?.value !== '' &&
-            physical?.value !== undefined
-              ? `<div>
-              <h5>
-                  Physical Examination
-              </h5>
-              <text>
-                  ${physical?.value}
               </text>
           </div>`
               : ''
@@ -1100,9 +1135,6 @@ const Visit = ({navigation, route}) => {
     patient_name: name,
   };
   const Age = age;
-  console.log('====================================');
-  console.log(vitalsData?.bmi);
-  console.log('====================================');
   return (
     <View>
       <ScrollView>
