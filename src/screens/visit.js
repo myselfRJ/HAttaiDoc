@@ -729,7 +729,7 @@ const Visit = ({navigation, route}) => {
                ...physicalExamination?.piccle,
              ]
                ?.map((item, index) => {
-                 if (item?.status !== '' && item?.status !== 'N') {
+                 if (item?.desc !== '') {
                    return `<text>${item?.label}${'  '}(${
                      item?.desc
                    })${'     '}</text>`;
@@ -1037,7 +1037,7 @@ const Visit = ({navigation, route}) => {
               ${Prescribe?.map(
                 (value, index) => `
               <tr style=${
-                index === 10 ? 'page-break-before:always;margin-top:100px' : ''
+                index === 18 ? 'page-break-before:always;margin-top:100px' : ''
               }>
                 <td style="text-align:center;width:4%">${
                   parseInt(index) + 1
@@ -1135,6 +1135,33 @@ const Visit = ({navigation, route}) => {
     patient_name: name,
   };
   const Age = age;
+
+  const SaveFees = async () => {
+    const feeDetails = JSON.stringify(service_fees);
+    const FeesSaving = {
+      fees: feeDetails,
+      patient_phone_number: patient_phone,
+      doctor_phone_number: phone,
+      clinic_id: Clinic_id,
+      appointment_id: appointment_id,
+    };
+    try {
+      const response = await fetchApi(URL.savefees, {
+        method: 'POST',
+        headers: {
+          Prefer: '',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json, application/xml',
+        },
+        body: JSON.stringify(FeesSaving),
+      });
+      if (response.ok) {
+        const jsonDAta = await response.json();
+        console.log(jsonDAta?.data);
+      }
+    } catch (error) {}
+  };
   return (
     <View>
       <ScrollView>
@@ -2052,6 +2079,7 @@ const Visit = ({navigation, route}) => {
               label="Save"
               onPress={() => {
                 handlePreview();
+                SaveFees();
               }}
               loading={prevLoad}
             />

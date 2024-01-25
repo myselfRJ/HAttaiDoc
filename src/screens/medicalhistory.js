@@ -208,16 +208,10 @@ const MedicalHistory = ({navigation, route}) => {
           ...menstrualHistory,
           {
             mens: {
-              age: '',
-              status: '',
-              flowdays: '',
-              cycledays: '',
               pregnant: {
                 lmp: vitalsData?.LDD,
                 edd: vitalsData?.EDD,
               },
-              menopause: '',
-              others: '',
             },
             appointment_id: appointmentID,
           },
@@ -561,6 +555,9 @@ const MedicalHistory = ({navigation, route}) => {
   }, [comorbidities, family]);
   useEffect(() => {
     if (check_field?.length === 0) {
+      console.log('====================================');
+      console.log('indra');
+      console.log('====================================');
       fetchMedicalData();
     }
   }, []);

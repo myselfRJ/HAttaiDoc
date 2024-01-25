@@ -111,52 +111,54 @@ const ReferToDoctor = () => {
             
             <section id="referral-details" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referral Details</h2>
-                <p>Referring Doctor:${'     '}${
+                <p>Referring Doctor:<b>${'     '}${
           data?.doctor_name?.includes('Dr')
             ? data?.doctor_name
             : `Dr. ${data?.doctor_name}`
-        }</p>
-                <p style="margin: 0;">Date:${'     '} ${new Date().toString()}</p>
+        }</b></p>
+                <p style="margin: 0;">Date:<b>${'     '} ${new Date().toString()}</b></p>
             </section>
             
             <section id="patient-details" style="padding: 20px; background-color: #f5f5f5; margin: 0;">
                 <h2 style="margin: 0;">Patient Details</h2>
-                <p style="margin: 0;">Patient Name: ${'     '}${
+                <p style="margin: 0;">Patient Name: <b>${'     '}${
           patient_details?.name
-        }</p>
-                <p style="margin: 0;">Age: ${'     '}${
+        }</b></p>
+                <p style="margin: 0;">Age: <b>${'     '}${
           patient_details?.age
-        }yrs</p>
-                <p style="margin: 0;">Phone: ${'     '}${
+        }</b>yrs</p>
+                <p style="margin: 0;">Phone: <b>${'     '}${
           patient_details?.patient_phone
-        }</p>
+        }</b></p>
             </section>
             
             <section id="referred-doctor" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referred Doctor</h2>
                 ${
                   selected === 'Doctor'
-                    ? `<p style="margin: 0;">Referred Doctor: ${
+                    ? `<p style="margin: 0;">Referred Doctor: <b>${
                         !name?.toLowerCase()?.includes('dr')
                           ? name
                           : `Dr. ${name}`
-                      }</p>`
+                      }</b></p>`
                     : `<div>
-                      <p>Refer To : ${
+                      <p>Refer To :<b> ${
                         dr_name?.toLowerCase()?.includes('dr')
                           ? dr_name
                           : `${`Dr. ${dr_name}`}`
-                      }</p>
-                      <p>Contact : ${newPhone}</p>
-                      <p>Reffered Doctor : ${
+                      }</b></p>
+                      <p>Contact : <b> ${newPhone}</b></p>
+                      <p>Reffered Doctor : <b>${
                         name?.toLowerCase()?.includes('dr') ? name : `${name}`
-                      }</p>
-                      <p>Doctor Phone : ${phone}</p>
+                      }</b></p>
+                      <p>Doctor Phone : <b>${phone}</b></p>
                     </div>`
                 }
-                <p style="margin: 0;">Speciality:${'     '}${speciality} </p>
+                <p style="margin: 0;">Speciality<b>:${'     '}${speciality}</b> </p>
                 <p style="margin: 0;">Contact Information:${'     '}${
-          selected !== 'Doctor' ? `${name} , ${newPhone}` : phone
+          selected !== 'Doctor'
+            ? `<b>${name} , ${newPhone}</b`
+            : `<b>${phone}</b>`
         } </p>
             </section>
             

@@ -205,7 +205,7 @@ const Adult = ({route, navigation}) => {
             : latest;
         }, jsonData?.data[0]);
         const newdata = JSON.parse(latestData?.vaccinationDetails);
-        setUpToData(newdata);
+        setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
       }
       setSelectedStatus(jsonData?.data[0]?.status);
       setsearch(jsonData?.data[0]?.name);
@@ -333,7 +333,7 @@ const Adult = ({route, navigation}) => {
               label={'Select Date'}
               placeholder={'Date'}
               input={updateValue || 'Date'}
-              setValue={setUpDateValue}
+              // setValue={setUpDateValue}
               name={'calendar'}
               onPress={() => setDateOpen(true)}
             />

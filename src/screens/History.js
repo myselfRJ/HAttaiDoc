@@ -355,10 +355,11 @@ const History = ({route, navigation}) => {
                     ...physicalExamination?.general,
                     ...physicalExamination?.piccle,
                   ]?.map((item, index) => {
-                    if (item?.status !== '' && item?.status !== 'N') {
+                    if (item?.desc !== '') {
                       return (
                         <Text key={index} style={styles.notes}>
-                          {item?.label} ({item?.desc}){'    '}
+                          {`${item?.label}-${item?.status}`} ({item?.desc})
+                          {'    '}
                         </Text>
                       );
                     }
