@@ -49,7 +49,7 @@ const VaccinationKids = ({navigation}) => {
   useEffect(() => {
     handlevaccination();
   }, []);
-  console.log(vaccinatiofilleddata);
+  // console.log(vaccinatiofilleddata);
   const [expanded, setExpanded] = useState(false);
   const toggleExpand = () => {
     setExpanded(!expanded);

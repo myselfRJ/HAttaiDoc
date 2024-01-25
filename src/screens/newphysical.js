@@ -298,7 +298,7 @@ const Physical = ({navigation}) => {
   const handleAsync = () => {
     RetriveAsyncData(`physicaldata${examinationDetails?.doc_phone}`).then(
       array => {
-        console.log(array);
+        // console.log(array);
         if (array) {
           setData1(array?.data1);
           setData2(array?.data2);

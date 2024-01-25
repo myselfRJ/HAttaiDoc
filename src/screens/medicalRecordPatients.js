@@ -147,7 +147,7 @@ export default function MedicalRecordPatient({route, navigation}) {
   const renderItems = ({item, index}) => {
     return <ConsultationCard data={item?.consultation} />;
   };
-  console.log(CompletedData);
+  // console.log(CompletedData);
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32), gap: moderateScale(8)}}>

@@ -57,7 +57,7 @@ const VitalScreen = ({route, props}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  console.log(vitalsData);
+  // console.log(vitalsData);
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -78,8 +78,8 @@ const VitalScreen = ({route, props}) => {
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
   const {gende, patient_phone} = route.params;
-  console.log(patient_phone);
-  console.log(gende, patient_phone);
+  // console.log(patient_phone);
+  // console.log(gende, patient_phone);
   const handleEddConfirm = selectedDate => {
     setDate(selectedDate);
     const updateLDD = handleAddDates(
@@ -224,7 +224,7 @@ const VitalScreen = ({route, props}) => {
     if (response.ok) {
       const jsondata = await response.json();
       setheight(jsondata?.data?.height);
-      console.log(jsondata?.data);
+      // console.log(jsondata?.data);
     }
   };
   useEffect(() => {

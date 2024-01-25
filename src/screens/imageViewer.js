@@ -4,7 +4,7 @@ import {verticalScale} from '../utility/scaleDimension';
 
 const ImageViewer = ({route}) => {
   const {path} = route.params;
-  console.log(path);
+  // console.log(path);
   return (
     <View style={styles.main}>
       <Image

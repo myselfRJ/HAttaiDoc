@@ -25,7 +25,6 @@ const TextStyle = props => {
             },
             props.container,
           ]}>
-          {/* {console.log(id)} */}
           <View style={{flexDirection: 'row', gap: moderateScale(40)}}>
             {Array.isArray(item) ? (
               item.map((temp, id) => (

@@ -250,7 +250,7 @@ const MedicalHistory = ({navigation, route}) => {
       UpdateAsyncData(`commorbidities${doc_phone?.phone}`, {
         commorbities: comorbidities,
       });
-      console.log(comorbidities);
+      // console.log(comorbidities);
       setComorbidities('');
     }
   };

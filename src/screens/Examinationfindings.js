@@ -93,7 +93,7 @@ const ExaminationFindings = ({navigation}) => {
         // Alert.alert('Success', 'Succesfully Saved');
         showToast('success', 'Succesfully Saved');
         navigation.goBack();
-        console.log('API Response:', responseData);
+        // console.log('API Response:', responseData);
       }
     } catch (error) {
       // Alert.alert('Error', `${error}`);

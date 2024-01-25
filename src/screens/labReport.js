@@ -99,7 +99,7 @@ const LabReports = () => {
   const handleConfirm = selectedDate => {
     setDate(selectedDate);
     const date = selectedDate?.toISOString()?.split('T')[0];
-    console.log(date);
+    // console.log(date);
     setReturnDate(formatdate(date));
     setOpen(false);
   };
@@ -162,7 +162,7 @@ const LabReports = () => {
       setFilteredData(filtering_data);
     }
   }, [data, value]);
-  console.log(prev);
+  // console.log(prev);
 
   const HandlePress = value => {
     setValue(value);

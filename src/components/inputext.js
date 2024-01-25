@@ -22,7 +22,6 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const InputText = props => {
-  console.log(props.lbltext);
   //props-> check, label, placeholder , action, secure, padtype
   const [visible, setVisible] = React.useState(props.secure || true);
   const [errorStyles, setErrorStyle] = React.useState({

@@ -97,7 +97,7 @@ const PhysicalExamination = ({navigation}) => {
       if (responseData) {
         showToast('success', 'Succesfully saved');
         navigation.goBack();
-        console.log('API Response:', responseData);
+        // console.log('API Response:', responseData);
         const statusCosent = await fetch(URL.consent, {
           method: 'POST',
           headers: {
@@ -113,7 +113,7 @@ const PhysicalExamination = ({navigation}) => {
           }),
         });
         const json = await statusCosent.json();
-        console.log(json);
+        // console.log(json);
       }
     } catch (error) {
       showToast('error', `${error}`);

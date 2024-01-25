@@ -95,7 +95,6 @@ const AddUser = ({navigation}) => {
 
   const progressData = useSelector(state => state.progress?.status);
   const {prevScrn} = route.params;
-  // console.log('----prevvvv', prevScrn);
   const [modal, setModal] = useState(false);
   const [bottom, setBottom] = useState(false);
   const ModalVisible = () => {

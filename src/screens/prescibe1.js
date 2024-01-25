@@ -89,7 +89,7 @@ export default function Prescribe1({navigation}) {
     prevPres?.length > 0
       ? prevPres?.filter(item => item?.mode === 'Others')
       : [];
-  console.log(checkOthersmed?.length);
+  // console.log(checkOthersmed?.length);
   const [others, setOthers] = useState('');
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
@@ -493,7 +493,7 @@ export default function Prescribe1({navigation}) {
       dispatch(addPrescribe(lstdata));
     }
   };
-  console.log(indexToUpdate);
+  // console.log(indexToUpdate);
   const DispatchEdit = (data, ind) => {
     setMode(data?.mode);
     setIndextoUpdate(ind);

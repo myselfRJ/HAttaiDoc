@@ -265,7 +265,7 @@ const Visit = ({navigation, route}) => {
       console.log(error);
     }
   };
-  console.log(physicalExamination);
+  // console.log(physicalExamination);
 
   const fetchAllergyData = async () => {
     const response = await fetchApi(URL.getAllergy(patient_phone), {
