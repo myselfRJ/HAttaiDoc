@@ -68,7 +68,7 @@ import {
 } from '../utility/const';
 import {addpastHospitalization} from '../redux/features/prescription/pastHistory';
 import {LoadingElement} from '../components/LoadingElement';
-
+console.log(Dimensions.get('window').height);
 const Dashboard = ({navigation, route}) => {
   const months = CONSTANTS.months;
   const ClinicRef = useRef(null);
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
     height:
       Dimensions.get('window').height >= 900
         ? moderateScale(492)
-        : moderateScale(350),
+        : moderateScale(400),
     paddingHorizontal: horizontalScale(8),
     gap: moderateScale(16),
   },

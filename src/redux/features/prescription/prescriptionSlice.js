@@ -5,7 +5,7 @@ const initialState = {
   note: [],
   selectedDoctor: [],
   vitalsData: [],
-  physicalExamination: {},
+  physicalExamination: [],
   eaxminationFindings: {},
   fees: [],
   additional_notes: [],

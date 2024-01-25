@@ -137,19 +137,17 @@ const ReferToDoctor = () => {
                 ${
                   selected === 'Doctor'
                     ? `<p style="margin: 0;">Referred Doctor: <b>${
-                        !name?.toLowerCase()?.includes('dr')
-                          ? name
-                          : `Dr. ${name}`
+                        name?.includes('Dr') ? name : `Dr. ${name}`
                       }</b></p>`
                     : `<div>
                       <p>Refer To :<b> ${
                         dr_name?.toLowerCase()?.includes('dr')
                           ? dr_name
-                          : `${`Dr. ${dr_name}`}`
+                          : `${dr_name}`
                       }</b></p>
                       <p>Contact : <b> ${newPhone}</b></p>
                       <p>Reffered Doctor : <b>${
-                        name?.toLowerCase()?.includes('dr') ? name : `${name}`
+                        name?.includes('Dr') ? name : `Dr. ${name}`
                       }</b></p>
                       <p>Doctor Phone : <b>${phone}</b></p>
                     </div>`
@@ -308,6 +306,7 @@ const ReferToDoctor = () => {
           doctor_or_name: name,
           speciality: speciality,
           phone: phone,
+          newPhone: newPhone,
           notes: notes,
         },
       ]);
@@ -318,6 +317,7 @@ const ReferToDoctor = () => {
         doctor_or_name: name,
         speciality: speciality,
         phone: phone,
+        newPhone: newPhone,
         notes: notes,
       });
     }
@@ -379,6 +379,7 @@ const ReferToDoctor = () => {
   }, []);
 
   const handlePress = value => {
+    console.log(value);
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
     setDr_Name(value?.dr_name);

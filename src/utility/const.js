@@ -1016,3 +1016,15 @@ export const formatdate = strdate => {
   }`;
   return date;
 };
+import {Dimensions, PixelRatio} from 'react-native';
+
+export const isTablet = () => {
+  const window = Dimensions.get('window');
+  const scale = PixelRatio.get();
+  const windowWidthInches = window.width / scale / 160;
+  const windowHeightInches = window.height / scale / 160;
+  const screenDiagonal = Math.sqrt(
+    windowWidthInches ** 2 + windowHeightInches ** 2,
+  );
+  return screenDiagonal >= 3;
+};

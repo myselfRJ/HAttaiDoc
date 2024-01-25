@@ -220,6 +220,9 @@ const PdfView = ({navigation}) => {
     adv?.length > 0
       ? adv?.filter(item => item?.appointment_id !== appointmentID)
       : [];
+  const phy = useSelector(
+    state => state.prescription.physicalExamination,
+  )?.filter(item => item?.appointment_id !== appointmentID);
   const ResetRuduxState = () => {
     dispatch(updatesocialHistory(socialHistory));
     dispatch(updatefamilyHistory(familyHistory));
@@ -243,7 +246,7 @@ const PdfView = ({navigation}) => {
     // dispatch(updatefees([]));
     dispatch(updateAdditionalNote(notes));
     dispatch(UpadteFindings({}));
-    dispatch(UpadteExamination({}));
+    dispatch(UpadteExamination(phy));
     dispatch(updatemartialHistory(martialHistory));
     dispatch(addRedFalg(redflag));
     dispatch(addProcedures(procedure));

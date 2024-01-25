@@ -25,7 +25,7 @@ import {
 } from '../utility/scaleDimension';
 import PlusButton from './plusbtn';
 import HButton from './button';
-import {capitalizeWord} from '../utility/const';
+import {capitalizeWord, isTablet} from '../utility/const';
 import {useDispatch, useSelector} from 'react-redux';
 import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
 import {addAppointmentID} from '../redux/features/profiles/clinicAddress';
@@ -161,7 +161,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
         </View>
         {appointment?.status === 'pending' && (
           <View>
-            <View style={{marginLeft: moderateScale(220)}}>
+            <View style={{marginLeft: isTablet() ? '50%' : '25%'}}>
               {notification?.length > 0 &&
                 length_ofNotification?.length !== 0 && (
                   <View
@@ -204,7 +204,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
             {appointment?.status === 'pending' ? (
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: isTablet() ? 'row' : 'column',
                   gap: moderateScale(16),
                   paddingTop: moderateScale(24),
                 }}>

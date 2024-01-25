@@ -201,20 +201,11 @@ const History = ({route, navigation}) => {
       fetchExamination();
     }, [selectedType]),
   );
-  // const handlePhysical = data => {
-  //   try {
-  //     const body_parts = JSON.parse(data?.body_parts_examination);
-  //     const general = JSON.parse(data?.generalExamination);
-  //     const piccle = JSON.parse(data?.piccle);
-  //     setPhysicalExamination({
-  //       body_parts: body_parts,
-  //       general: general,
-  //       piccle: piccle,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const physicalFilter = [
+    ...physicalExamination?.body_parts,
+    ...physicalExamination?.general,
+    ...physicalExamination?.piccle,
+  ]?.filter(item => item?.status !== '');
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Rx History'} />
@@ -350,16 +341,21 @@ const History = ({route, navigation}) => {
               <View>
                 <Text style={styles.head}>
                   Examinations:{'  '}
-                  {[
-                    ...physicalExamination?.body_parts,
-                    ...physicalExamination?.general,
-                    ...physicalExamination?.piccle,
-                  ]?.map((item, index) => {
-                    if (item?.desc !== '') {
+                  {physicalFilter?.map((item, index) => {
+                    if (physicalFilter[physicalFilter?.length - 1] === item) {
                       return (
                         <Text key={index} style={styles.notes}>
-                          {`${item?.label}-${item?.status}`} ({item?.desc})
+                          {`${item?.label}-${item?.status}`}{' '}
+                          {item?.desc !== '' ? item?.desc : ''}
                           {'    '}
+                        </Text>
+                      );
+                    } else {
+                      return (
+                        <Text key={index} style={styles.notes}>
+                          {`${item?.label}-${item?.status}`}{' '}
+                          {item?.desc !== '' ? item?.desc : ''}
+                          {' , '}
                         </Text>
                       );
                     }

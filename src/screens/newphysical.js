@@ -35,7 +35,7 @@ const Physical = ({navigation}) => {
   const [data1, setData1] = useState(CONSTANT.physicaldata1);
   const [data2, setData2] = useState(CONSTANT.physicaldata2);
   const [data3, setData3] = useState(CONSTANT.physicaldata3);
-
+  const physical = useSelector(state => state.prescription.physicalExamination);
   const handledata1 = (index, newstatus, newdesc) => {
     const newdata1 = [...data1];
     newdata1[index].status = newstatus;
@@ -66,7 +66,7 @@ const Physical = ({navigation}) => {
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
   const [documents, setDocuments] = useState('');
-
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const postData = async url => {
     const formData = new FormData();
     formData.append('notes', 'Physical');
@@ -101,7 +101,12 @@ const Physical = ({navigation}) => {
       const responseData = await response.json();
       if (responseData) {
         showToast('success', 'Succesfully saved');
-        dispatch(addExamination(responseData?.data));
+        dispatch(
+          addExamination([
+            ...physical,
+            {data: responseData?.data, appointment_id: appointmentID},
+          ]),
+        );
         navigation.goBack();
 
         // const statusCosent = await fetch(URL.consent, {
@@ -189,7 +194,7 @@ const Physical = ({navigation}) => {
       body_parts: JSON.stringify(data3),
       documents: JSON.stringify(uploaddocument),
     };
-    dispatch(addExamination(examinations));
+    // dispatch(addExamination(examinations));
     setValue('');
   };
   const handleDelete = index => {
@@ -254,7 +259,12 @@ const Physical = ({navigation}) => {
         const bodyParts = JSON.parse(jsonData?.data?.body_parts_examination);
         setData3(bodyParts);
         setreport([...report, ...bodyParts]);
-        dispatch(addExamination(jsonData?.data));
+        dispatch(
+          addExamination([
+            ...physical,
+            {data: jsonData?.data, appointment_id: appointmentID},
+          ]),
+        );
       } catch (err) {
         console.error(err);
       }

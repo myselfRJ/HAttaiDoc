@@ -104,7 +104,10 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  const physical = useSelector(state => state.prescription.physicalExamination);
+  const phy = useSelector(
+    state => state.prescription.physicalExamination,
+  )?.filter(item => item?.appointment_id === appointmentID);
+  const physical = phy?.length > 0 ? phy?.slice(-1)?.[0]?.data : {};
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const notess = useSelector(state => state.prescription.note);
   const note =
@@ -481,6 +484,11 @@ const Visit = ({navigation, route}) => {
   //   : data?.doctor_name;
   const Sign_base64 = `${data?.doctor_name}`;
   const week_days = calculateWeeksAndDaysFromDate(vitalsData?.LDD);
+  const physicalFilter = [
+    ...physicalExamination.body_parts,
+    ...physicalExamination?.general,
+    ...physicalExamination?.piccle,
+  ]?.filter(item => item?.status !== '');
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
@@ -625,7 +633,7 @@ const Visit = ({navigation, route}) => {
                   }
                   ${
                     vitalsData?.height
-                      ? 'Height:' + ' ' + `<b>${vitalsData.height}'cm,</b>`
+                      ? 'Height:' + ' ' + `<b>${vitalsData.height}cm,</b>`
                       : ''
                   }
                   ${
@@ -723,16 +731,16 @@ const Visit = ({navigation, route}) => {
                physicalExamination?.piccle !== '' &&
                physicalExamination?.general
                  ? `<div>
-             ${[
-               ...physicalExamination.body_parts,
-               ...physicalExamination?.general,
-               ...physicalExamination?.piccle,
-             ]
+             ${physicalFilter
                ?.map((item, index) => {
-                 if (item?.desc !== '') {
-                   return `<text>${item?.label}${'  '}(${
-                     item?.desc
-                   })${'     '}</text>`;
+                 if (physicalFilter?.[physicalFilter?.length - 1] === item) {
+                   return `<text>${`${item?.label}-${item?.status}`}${'  '}${
+                     item?.desc !== '' ? `(${item?.desc})` : ''
+                   }</text>`;
+                 } else {
+                   return `<text>${`${item?.label}-${item?.status}`}${'  '}${
+                     item?.desc !== '' ? `(${item?.desc})` : ''
+                   } , </text>`;
                  }
                })
                .join('')}
