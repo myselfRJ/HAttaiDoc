@@ -111,7 +111,11 @@ const ReferToDoctor = () => {
             
             <section id="referral-details" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referral Details</h2>
-                <p>Referring Doctor:${'     '}${data?.doctor_name}</p>
+                <p>Referring Doctor:${'     '}${
+          data?.doctor_name?.includes('Dr')
+            ? data?.doctor_name
+            : `Dr. ${data?.doctor_name}`
+        }</p>
                 <p style="margin: 0;">Date:${'     '} ${new Date().toString()}</p>
             </section>
             
@@ -132,11 +136,21 @@ const ReferToDoctor = () => {
                 <h2 style="margin: 0;">Referred Doctor</h2>
                 ${
                   selected === 'Doctor'
-                    ? `<p style="margin: 0;">Referred Doctor: Dr. ${'     '}${name}</p>`
+                    ? `<p style="margin: 0;">Referred Doctor: ${
+                        !name?.toLowerCase()?.includes('dr')
+                          ? name
+                          : `Dr. ${name}`
+                      }</p>`
                     : `<div>
-                      <p>Refer To : ${name}</p>
+                      <p>Refer To : ${
+                        dr_name?.toLowerCase()?.includes('dr')
+                          ? dr_name
+                          : `${`Dr. ${dr_name}`}`
+                      }</p>
                       <p>Contact : ${newPhone}</p>
-                      <p>Reffered Doctor : ${name}</p>
+                      <p>Reffered Doctor : ${
+                        name?.toLowerCase()?.includes('dr') ? name : `${name}`
+                      }</p>
                       <p>Doctor Phone : ${phone}</p>
                     </div>`
                 }
@@ -154,8 +168,10 @@ const ReferToDoctor = () => {
             <footer style="text-align: left; ; color: #000; padding: 10px; margin-top:140px;">
                 
                 
-                <p style="text-align: center;margin: 36px;">For questions or more information, please contact Dr. ${
-                  data?.doctor_name
+                <p style="text-align: center;margin: 36px;">For questions or more information, please contact ${
+                  !data?.doctor_name?.includes('Dr')
+                    ? `Dr. ${data?.doctor_name}`
+                    : data?.doctor_name
                 } ,  ${'     '}${data?.doctor_phone_number}.</p>
                 
                 <div  style="display: flex;flex-direction:column; justify-content: flex-start; align-items: flex-start;">
@@ -364,7 +380,7 @@ const ReferToDoctor = () => {
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
     setDr_Name(value?.dr_name);
-    setNewPhone(value?.newPhone);
+    setNewPhone(value?.newPhone ? value?.newPhone : '');
     setSpeciality(value?.speciality);
     setPhone(value?.phone);
     setNotes(value?.notes);

@@ -30,6 +30,7 @@ import {useSelector} from 'react-redux';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fileurl} from '../utility/urls';
+import {pickSingleFile} from '../utility/const';
 const Adult = ({route, navigation}) => {
   const status = ['Up to date', 'Pending Vaccination', 'Covid Vaccine'];
   const [selectedStatus, setSelectedStatus] = useState('');
@@ -75,6 +76,16 @@ const Adult = ({route, navigation}) => {
     setshow(!show);
     setvisible(false);
   }, []);
+
+  const handleSelectFilename = async () => {
+    try {
+      const file = await pickSingleFile();
+      setdocument([
+        ...document,
+        {name: file?.name, type: file?.type, uri: file?.uri},
+      ]);
+    } catch (error) {}
+  };
 
   const openImagePicker = () => {
     const options = {
@@ -444,7 +455,7 @@ const Adult = ({route, navigation}) => {
                 label={'Upload Covid Vaccination Document'}
                 // required={true}
                 input={'Select Document'}
-                onPress={() => setvisible(!visible)}
+                onPress={() => handleSelectFilename()}
               />
             ) : (
               ''

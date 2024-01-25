@@ -789,7 +789,7 @@ const MedicalHistory = ({navigation, route}) => {
           ) : (
             <View style={styles.visitOpenItem}>
               <VisitOpen
-                label={'Adult Vaccination Details'}
+                label={'Vaccination Details'}
                 icon={'menu-right'}
                 iconstyle={{
                   borderWidth: 0,

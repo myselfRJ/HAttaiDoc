@@ -139,10 +139,15 @@ export default function MedicalRecordPatient({route, navigation}) {
     const patient_phone = data?.patient_phone_number;
     navigation.navigate('bookslot', {patient_phone});
   };
-
+  const CompletedData = consultation?.filter(
+    item =>
+      item?.consultation?.chief_complaint?.complaint_message !== '' &&
+      item?.consultation?.chief_complaint?.complaint_message !== undefined,
+  );
   const renderItems = ({item, index}) => {
     return <ConsultationCard data={item?.consultation} />;
   };
+  console.log(CompletedData);
   return (
     <View style={styles.container}>
       <View style={{top: moderateScale(32), gap: moderateScale(8)}}>
@@ -197,14 +202,14 @@ export default function MedicalRecordPatient({route, navigation}) {
           <LoadingElement />
         ) : (
           <View>
-            {consultation?.length > 0 ? (
+            {CompletedData?.length > 0 ? (
               <FlatList
                 style={styles.appointmentcard}
                 renderItem={renderItems}
-                data={consultation}
+                data={CompletedData}
               />
             ) : (
-              <CustomIcon label={'No History'} />
+              <CustomIcon label={'Consultation still underway'} />
             )}
           </View>
         )}

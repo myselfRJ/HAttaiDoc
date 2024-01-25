@@ -187,7 +187,11 @@ const Account = () => {
           />
           <View style={styles.card}>
             <View>
-              <Text style={styles.docname}>{data?.doctor_name}</Text>
+              <Text style={styles.docname}>
+                {data?.doctor_name?.includes('Dr')
+                  ? data?.doctor_name
+                  : `Dr. ${data?.doctor_name}`}
+              </Text>
               <Text style={styles.subinfo}>
                 Age: {age} | {data?.gender}
               </Text>

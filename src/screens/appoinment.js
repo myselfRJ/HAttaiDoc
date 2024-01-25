@@ -70,7 +70,7 @@ const Appointment = ({navigation}) => {
   const handleChangeValue = e => {
     setClinic(e);
   };
-  const [setAppointment, setDataAppointment] = useState();
+  const [setAppointment, setDataAppointment] = useState([]);
 
   const [DOB, setDOB] = useState(new Date());
   const [open, setOpen] = useState(false);
