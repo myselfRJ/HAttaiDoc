@@ -253,95 +253,34 @@ const PdfView = ({navigation}) => {
     dispatch(addAdvice(advices));
     dispatch(addCheck_field([]));
   };
-  const putComplaint = async () => {
-    try {
-      const response = await fetchApi(URL.updateComplaints(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(UpdateComplaint),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-  };
-  const putVitals = async () => {
-    try {
-      const response = await fetchApi(URL.updatevitlas(appointment_id), {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(UpdateVitals),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-      } else {
-        console.error('API call failed:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-  };
   const uploadPharmapdf = async () => {
     try {
-      setLoading(true);
-      const response = await fetchApi(URL.savePrescription, {
+      const formData = new FormData();
+      formData.append('doctor_phone_number', `${doc_phone}`);
+      formData.append('patient_phone_number', `${patient_phone}`);
+      formData.append('clinic_id', `${Clinic_id}`);
+      formData.append('appointment_id', `${appointment_id}`);
+      formData.append('pharmacyPhone', `${pharmaphone}`);
+      formData.append('file_url', {
+        uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/pharmacy/phrma.pdf`,
+        type: 'application/pdf',
+        name: `prescription.pdf`,
+      });
+
+      const requestOptions = {
         method: 'POST',
         headers: {
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
         },
-        body: JSON.stringify(consultationData),
-      });
-      if (response.ok) {
-        const jsonData = await response.json();
-        if (jsonData?.status === 'success') {
-          setApiStatus({status: 'success', message: 'Successfully created'});
-          ResetRuduxState();
-          const formData = new FormData();
-          formData.append('doctor_phone_number', `${doc_phone}`);
-          formData.append('patient_phone_number', `${patient_phone}`);
-          formData.append('clinic_id', `${Clinic_id}`);
-          formData.append('appointment_id', `${appointment_id}`);
-          formData.append('pharmacyPhone', `${pharmaphone}`);
-          formData.append('file_url', {
-            uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/pharmacy/phrma.pdf`,
-            type: 'application/pdf',
-            name: `prescription.pdf`,
-          });
+        body: formData,
+      };
 
-          const requestOptions = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          };
-
-          try {
-            const response = await fetch(URL.uploadPharmaPdf, requestOptions);
-            const responseData = await response.json();
-          } catch (error) {
-            console.error('Error:', error);
-          }
-        } else {
-          setApiStatus({status: 'warning', message: 'Enter all Values'});
-          console.error('API call failed:', response.status, response);
-          setLoading(false);
-        }
+      try {
+        const response = await fetch(URL.uploadPharmaPdf, requestOptions);
+        const responseData = await response.json();
+      } catch (error) {
+        console.error('Error:', error);
       }
     } catch (error) {
       console.error('Error occurred:', error);

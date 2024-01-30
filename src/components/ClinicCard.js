@@ -75,7 +75,7 @@ const ClinicCard = props => {
               </Text>
               {Clinic_details?.pharmacyPhone && (
                 <Text style={styles.text}>
-                  Pharmacy PhoneNumber:{Clinic_details?.pharmacyPhone}
+                  Pharmacy Phone Number : {Clinic_details?.pharmacyPhone}
                 </Text>
               )}
             </View>

@@ -50,6 +50,10 @@ const Account = () => {
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
+  const pharmaphone = useSelector(
+    state => state?.clinicid?.clinic_pharmacy_phone,
+  );
+  console.log(pharmaphone);
   useEffect(() => {
     // fetchData();
     setData(doc_prof);

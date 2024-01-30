@@ -136,7 +136,12 @@ export default function Prescribe1({navigation}) {
                   ? 'Week (once in a Week)'
                   : durationSelect
               }`,
-              total_quantity: total_quantity,
+              total_quantity:
+                mode?.toLowerCase() === 'syrup'
+                  ? 1
+                  : isNaN(total_quantity)
+                  ? '00'
+                  : total_quantity,
               others: others ? others : '',
               appointment_id: appointmentID,
             },
@@ -197,7 +202,12 @@ export default function Prescribe1({navigation}) {
           duration: `${duration} ${
             durationSelect === 'week' ? 'Week (once in a Week)' : durationSelect
           }`,
-          total_quantity: total_quantity,
+          total_quantity:
+            mode?.toLowerCase() === 'syrup'
+              ? 1
+              : isNaN(total_quantity)
+              ? '00'
+              : total_quantity,
           others: others ? others : '',
           appointment_id: appointmentID,
         },

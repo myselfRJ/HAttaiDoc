@@ -46,6 +46,14 @@ import ProgresHeader from '../components/progressheader';
 import {useFocusEffect} from '@react-navigation/native';
 import {addclinic_data} from '../redux/features/profiles/clinicData';
 import {LoadingElement} from '../components/LoadingElement';
+import {
+  addclinic_Address,
+  addclinic_id,
+  addclinic_name,
+  addPharmaPhone,
+  addclinic_logo,
+  addclinic_phone,
+} from '../redux/features/profiles/clinicId';
 
 const MyClinics = ({navigation}) => {
   const prevScrn1 = 'undefineed';
@@ -144,6 +152,12 @@ const MyClinics = ({navigation}) => {
         setClinicData(jsonData?.data);
         setpending(true);
         dispatch(addclinic_data(jsonData?.data));
+        dispatch(addclinic_id(jsonData.data[0]?.id));
+        dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
+        dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
+        dispatch(addclinic_logo(jsonData?.data[0]?.clinic_logo_url));
+        dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
+        dispatch(addPharmaPhone(jsonData?.data[0]?.pharmacyPhone));
       } else {
         setpending(true);
         console.error('API call failed:', response.status, response);
