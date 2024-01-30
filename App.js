@@ -63,6 +63,7 @@ const HomeScreen = () => {
   return <View></View>;
 };
 function App() {
+  const [connection, setConnection] = React.useState(false);
   axios
     .get('http://10.9.78.38:8000')
     .then(function (response) {
@@ -81,6 +82,30 @@ function App() {
     PermmisionStorage();
     NotificationPermission();
   });
+  const checkNetworkSpeed = () => {
+    const startTime = new Date().getTime();
+    const url =
+      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const endTime = new Date().getTime();
+        const duration = (endTime - startTime) / 1000; // Duration in seconds
+        const fileSizeInBytes = blob.size;
+        const speedKbPerSec = fileSizeInBytes / 1024 / duration; // Speed in KB/s
+
+        if (speedKbPerSec > 250) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch(error => {
+        console.error('Error in network speed check:', error);
+      });
+  };
+  setInterval(checkNetworkSpeed, 1000);
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{flex: 1}}>

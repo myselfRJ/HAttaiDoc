@@ -1,9 +1,9 @@
-// const baseUrl = 'http://10.9.64.201:8000/api/v1/';
+// const baseUrl = 'http://10.9.64.77:8000/api/v1/';
 const baseUrl = 'http://65.0.12.213/api/v1/';
 // const baseUrl = 'https://healthattai.com/api/v1/';
 // const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'https://healthattai.com/';
-// export const fileurl = `http://10.9.64.201:8000`;
+// export const fileurl = `http://10.9.64.77:8000`;
 export const fileurl = `http://65.0.12.213`;
 // export const fileurl = `https://healthattai.com`;
 // export const fileurl = `http://13.200.15.208`;

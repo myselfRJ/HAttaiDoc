@@ -878,7 +878,11 @@ export default function Prescribe1({navigation}) {
               </Text>
 
               <Text style={styles.numText}>
-                {isNaN(total_quantity) ? '00' : total_quantity}
+                {mode?.toLowerCase() === 'syrup'
+                  ? 1
+                  : isNaN(total_quantity)
+                  ? '00'
+                  : total_quantity}
               </Text>
             </View>
             <InputText
