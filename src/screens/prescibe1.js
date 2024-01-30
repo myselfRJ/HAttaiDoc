@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Pressable,
 } from 'react-native';
 import SelectorBtn from '../components/selector';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -529,6 +530,31 @@ export default function Prescribe1({navigation}) {
     // );
     setInfo(!info);
   };
+
+  // const renderItems = ({item, index}) => {
+  //   return (
+  //     <SelectorBtn
+  //       key={item?.medicine}
+  //       onPress={() => setMedicineValue(item?.medicine)}
+  //       input={item?.medicine}
+  //       select={{
+  //         backgroundColor:
+  //           medicine === item?.medicine
+  //             ? CUSTOMCOLOR.primary
+  //             : CUSTOMCOLOR.recent,
+  //       }}
+  //       inputstyle={{
+  //         color:
+  //           medicine === item?.medicine
+  //             ? CUSTOMCOLOR.white
+  //             : CUSTOMCOLOR.primary,
+  //         fontSize: moderateScale(14),
+  //         fontWeight: '700',
+  //       }}
+  //     />
+  //   );
+  // };
+
   return (
     <View style={styles.main}>
       <PrescriptionHead
@@ -666,30 +692,40 @@ export default function Prescribe1({navigation}) {
               ) : null}
 
               {sug?.length > 0 && (
-                <View style={[styles.Modes, {flexWrap: 'wrap'}]}>
+                <ScrollView
+                  horizontal={true}
+                  contentContainerStyle={{
+                    ...styles.Modes,
+                    // flexWrap: 'wrap',
+                    // height: moderateScale(100),
+                    borderWidth: 1,
+                  }}>
                   {sug?.map(value => (
-                    <SelectorBtn
+                    <Pressable
                       key={value?.medicine}
                       onPress={() => setMedicineValue(value?.medicine)}
-                      input={value?.medicine}
-                      select={{
+                      style={{
+                        padding: verticalScale(8),
+                        borderRadius: 8,
                         backgroundColor:
                           medicine === value?.medicine
                             ? CUSTOMCOLOR.primary
                             : CUSTOMCOLOR.recent,
-                      }}
-                      inputstyle={{
-                        color:
-                          medicine === value?.medicine
-                            ? CUSTOMCOLOR.white
-                            : CUSTOMCOLOR.primary,
-                        fontSize: moderateScale(14),
-                        fontWeight: '700',
-                      }}
-                    />
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: CUSTOMFONTSIZE.h4,
+                          fontFamily: CUSTOMFONTFAMILY.heading,
+                          color:
+                            medicine === value?.medicine
+                              ? CUSTOMCOLOR.white
+                              : CUSTOMCOLOR.primary,
+                        }}>
+                        {value?.medicine}
+                      </Text>
+                    </Pressable>
                   ))}
-                  {/* </ScrollView> */}
-                </View>
+                </ScrollView>
               )}
             </View>
 
@@ -1039,7 +1075,7 @@ const styles = StyleSheet.create({
   },
   Modes: {
     flexDirection: 'row',
-    gap: moderateScale(16),
+    gap: moderateScale(8),
   },
   MedicineHead: {
     gap: moderateScale(10),

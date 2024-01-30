@@ -57,7 +57,7 @@ const VitalScreen = ({route, props}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  // console.log(vitalsData);
+  // console.log(vitalsData?.vits);
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const pulseRef = useRef(null);
@@ -128,19 +128,16 @@ const VitalScreen = ({route, props}) => {
   const [ldd, setLDD] = useState('');
   const [spo2, setSpo2] = useState('');
   const [bp, setBP] = useState([]);
-  const [indexbp, setIndexbp] = useState('');
+  const [indexbp, setIndexbp] = useState();
   const [vits, setVits] = useState([]);
-  const [indexVit, setIndexVit] = useState('');
+  console.log('=========,', vits);
+  const [indexVit, setIndexVit] = useState();
   const [timeSys, setTimeSys] = useState('');
 
   const handleBp = () => {
     {
-      indexbp?.toString()?.length > 0
-        ? (bp[indexbp] = {
-            diastolic: diastolic,
-            systolic: systolic,
-            time: new Date().toString()?.split('G')[0],
-          })
+      indexbp >= 0 && indexbp !== undefined
+        ? handleBpedit()
         : setBP([
             ...bp,
             {
@@ -151,28 +148,47 @@ const VitalScreen = ({route, props}) => {
           ]);
       setdiastolic('');
       setsystolic('');
-      setIndexbp('');
+      setIndexbp();
     }
   };
   const handleDelBp = ind => {
     const updatedBp = bp?.filter((_, index) => index !== ind);
     setBP(updatedBp);
   };
+
+  const handleBpedit = () => {
+    let othersBp = [...bp];
+    othersBp[indexbp] = {
+      diastolic: diastolic,
+      systolic: systolic,
+      time: new Date().toString()?.split('G')[0],
+    };
+    setBP(othersBp);
+  };
+
   const BPedit = (data, index) => {
     setIndexbp(index);
     setsystolic(data?.systolic);
     setdiastolic(data?.diastolic);
   };
+
+  const handleVitedit = () => {
+    let updating = [...vits];
+    updating[indexVit] = {
+      pulse: pulse,
+      temp: temp,
+      spo2: spo2,
+      rate: rate,
+      time: new Date().toString()?.split('G')[0],
+    };
+    setVits(updating);
+  };
+
   const handleVit = () => {
+    console.log(typeof indexVit, indexVit);
     {
-      indexVit?.toString()?.length > 0
-        ? (vits[indexVit] = {
-            pulse: pulse,
-            temp: temp,
-            spo2: spo2,
-            rate: rate,
-            time: new Date().toString()?.split('G')[0],
-          })
+      indexVit >= 0 && indexVit !== undefined
+        ? handleVitedit()
         : setVits([
             ...vits,
             {
@@ -187,7 +203,7 @@ const VitalScreen = ({route, props}) => {
       setTemp('');
       setSpo2('');
       setRate('');
-      setIndexVit('');
+      setIndexVit();
     }
   };
   const handleDelVIT = ind => {
