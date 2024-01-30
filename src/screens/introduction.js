@@ -34,7 +34,6 @@ const Introduction = ({navigation}) => {
   useEffect(() => {
     getTokenFcm();
   }, []);
-
   useEffect(() => {
     RetriveAsyncData(`token_and_phone`).then(array => {
       if (array?.time) {

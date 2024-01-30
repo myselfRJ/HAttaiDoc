@@ -555,9 +555,6 @@ const MedicalHistory = ({navigation, route}) => {
   }, [comorbidities, family]);
   useEffect(() => {
     if (check_field?.length === 0) {
-      console.log('====================================');
-      console.log('indra');
-      console.log('====================================');
       fetchMedicalData();
     }
   }, []);
@@ -641,25 +638,40 @@ const MedicalHistory = ({navigation, route}) => {
                     {JSON.stringify(mesntrual) != '' && (
                       <View style={styles.symptomicon}>
                         <Text style={styles.pulse}>
-                          Menarche:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {mesntrual?.age}
-                          </Text>{' '}
-                          Yrs,{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {mesntrual?.status}
-                          </Text>
-                          , Flow:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {mesntrual?.flowdays}
-                          </Text>{' '}
-                          days, Cycle:{' '}
-                          <Text style={{fontWeight: '700'}}>
-                            {mesntrual?.cycledays}
-                          </Text>{' '}
-                          days
+                          {mesntrual?.age && mesntrual?.age !== undefined && (
+                            <Text>
+                              Menarche:{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {mesntrual?.age}
+                              </Text>{' '}
+                              Yrs,
+                            </Text>
+                          )}{' '}
+                          {mesntrual?.status && (
+                            <Text style={{fontWeight: '700'}}>
+                              {mesntrual?.status}
+                            </Text>
+                          )}
+                          {mesntrual?.flowdays && (
+                            <Text>
+                              , Flow:{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {mesntrual?.flowdays}
+                              </Text>{' '}
+                              days,
+                            </Text>
+                          )}{' '}
+                          {mesntrual?.cycledays && (
+                            <Text>
+                              Cycle:{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {mesntrual?.cycledays}
+                              </Text>{' '}
+                              days
+                            </Text>
+                          )}
                           <Text>
-                            ,{' '}
+                            {' '}
                             {mesntrual?.pregnant !== '' ? (
                               <Text>
                                 Pregnant (Yes): LMP :{' '}
@@ -684,12 +696,13 @@ const MedicalHistory = ({navigation, route}) => {
                                 </Text>
                               </Text>
                             ) : (
-                              'Pregnant (No)'
+                              ', Pregnant (No)'
                             )}
                           </Text>
                           <Text>
                             {' '}
-                            {mesntrual?.menopause !== ''
+                            {mesntrual?.menopause !== '' &&
+                            mesntrual?.menopause !== undefined
                               ? `Menopause (Yes): LMP ${
                                   mesntrual?.menopause?.split('T')[0]
                                 }`
