@@ -130,7 +130,6 @@ const VitalScreen = ({route, props}) => {
   const [bp, setBP] = useState([]);
   const [indexbp, setIndexbp] = useState();
   const [vits, setVits] = useState([]);
-  console.log('=========,', vits);
   const [indexVit, setIndexVit] = useState();
   const [timeSys, setTimeSys] = useState('');
 
