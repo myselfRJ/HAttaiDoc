@@ -152,12 +152,12 @@ const MyClinics = ({navigation}) => {
         setClinicData(jsonData?.data);
         setpending(true);
         dispatch(addclinic_data(jsonData?.data));
-        dispatch(addclinic_id(jsonData.data[0]?.id));
-        dispatch(addclinic_name(jsonData.data[0]?.clinic_name));
-        dispatch(addclinic_Address(jsonData.data[0]?.clinic_Address));
-        dispatch(addclinic_logo(jsonData?.data[0]?.clinic_logo_url));
-        dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
-        dispatch(addPharmaPhone(jsonData?.data[0]?.pharmacyPhone));
+        dispatch(addclinic_id(jsonData.data?.[0]?.id));
+        dispatch(addclinic_name(jsonData.data?.[0]?.clinic_name));
+        dispatch(addclinic_Address(jsonData.data?.[0]?.clinic_Address));
+        dispatch(addclinic_logo(jsonData?.data?.[0]?.clinic_logo_url));
+        dispatch(addclinic_phone(jsonData?.data?.[0]?.clinic_phone_number));
+        dispatch(addPharmaPhone(jsonData?.data?.[0]?.pharmacyPhone));
       } else {
         setpending(true);
         console.error('API call failed:', response.status, response);
@@ -191,12 +191,6 @@ const MyClinics = ({navigation}) => {
   navigation.setOptions({
     headerLeft: () => <></>,
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      fetchClinics();
-    }, 1000);
-  }, []);
   useFocusEffect(
     React.useCallback(() => {
       setTimeout(() => {
