@@ -45,7 +45,7 @@ import {StoreAsyncData} from '../utility/AsyncStorage';
 import {showToast} from '../utility/const';
 
 const OtpScreen = ({route}) => {
-  const [timer, setTimer] = useState(30); // Set the initial timer value (in seconds)
+  const [timer, setTimer] = useState(180); // Set the initial timer value (in seconds)
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const timerRef = useRef(null);
   const CELL_COUNT = 6;
@@ -77,7 +77,7 @@ const OtpScreen = ({route}) => {
     }, 1000);
   };
   const resetTimer = () => {
-    setTimer(30);
+    setTimer(180);
     setIsTimerRunning(false);
     clearInterval(timerRef.current);
   };
