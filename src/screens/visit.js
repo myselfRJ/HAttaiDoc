@@ -520,7 +520,11 @@ const Visit = ({navigation, route}) => {
               </img>
               <div class="doctor-head" style="display:flex;flex-direction: column;align-items:flex-start;">
                   <text>
-                     Dr.${data?.doctor_name}
+                  ${`${
+                    data?.doctor_name?.includes('Dr')
+                      ? `${data?.doctor_name}`
+                      : `Dr. ${data?.doctor_name}`
+                  }`}
                   </text>
                   <text>
                       ${data?.specialization}
@@ -916,9 +920,11 @@ const Visit = ({navigation, route}) => {
       <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
           <div style="display:flex;width:105vw; align-item:center">
           <p style="text-align:center;width:100%; font-size:12px">
-              This Prescription electronically signed by Dr. ${
-                data?.doctor_name
-              },${' '}${data?.degree}, ${' '}${
+              This Prescription electronically signed by ${`${
+                data?.doctor_name?.includes('Dr')
+                  ? `${data?.doctor_name}`
+                  : `Dr. ${data?.doctor_name}`
+              }`},${' '}${data?.degree}, ${' '}${
           data?.medical_number
         }, ${' '}${new Date().toString()}
           </p>
@@ -975,7 +981,11 @@ const Visit = ({navigation, route}) => {
               </img>
               <div class="doctor-head" style="display:flex;flex-direction: column;align-items:flex-start;">
                   <text>
-                     Dr.${data?.doctor_name}
+                  ${`${
+                    data?.doctor_name?.includes('Dr')
+                      ? `${data?.doctor_name}`
+                      : `Dr. ${data?.doctor_name}`
+                  }`}
                   </text>
                   <text>
                       ${data?.specialization}

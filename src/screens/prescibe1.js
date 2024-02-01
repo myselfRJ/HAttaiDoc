@@ -95,7 +95,7 @@ export default function Prescribe1({navigation}) {
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
   const handleAddPrescribe = () => {
-    if ((medicine && timing && frequency) || othersMed) {
+    if ((medicine && frequency) || othersMed) {
       if (newMedicine?.length > 1) {
         // const new1 = newMedicine?.filter((item)=> item?.term)
         const newmed = `${medicine} ${mgs}`;
@@ -945,7 +945,7 @@ export default function Prescribe1({navigation}) {
           onPress={handleAddPrescribe}
           btnstyles={{
             backgroundColor:
-              (medicine && timing && frequency) || othersMed
+              (medicine && frequency) || othersMed
                 ? CUSTOMCOLOR.success
                 : CUSTOMCOLOR.disable,
             alignSelf: 'flex-end',
