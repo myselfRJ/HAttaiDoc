@@ -139,10 +139,22 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       const data = jsonData?.data;
+      console.log(data);
       try {
-        const body_parts = JSON.parse(data?.body_parts_examination);
-        const general = JSON.parse(data?.generalExamination);
-        const piccle = JSON.parse(data?.piccle);
+        const body_parts = JSON.parse(
+          data?.body_parts_examination &&
+            data?.body_parts_examination !== undefined
+            ? datadata?.body_parts_examination
+            : [],
+        );
+        const general = JSON.parse(
+          data?.generalExamination && data?.generalExamination !== undefined
+            ? data?.generalExamination
+            : [],
+        );
+        const piccle = JSON.parse(
+          data?.piccle && data?.piccle !== undefined ? data?.piccle : [],
+        );
         setPhysicalExamination({
           body_parts: body_parts,
           general: general,
