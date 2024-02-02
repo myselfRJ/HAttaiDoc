@@ -170,7 +170,11 @@ const MenstrualHistory = ({navigation, route}) => {
       setOthers(mens?.others);
     }
     if (mens?.pregnant) {
-      mens?.pregnant !== '' ? setPreg('Yes') : setPreg('No');
+      mens?.pregnant !== '' &&
+      mens?.pregnant?.lmp !== '' &&
+      mens?.pregnant?.edd !== ''
+        ? setPreg('Yes')
+        : setPreg('No');
       mens?.menopause !== '' ? setMenopause('Yes') : setMenopause('No');
     }
   }, []);

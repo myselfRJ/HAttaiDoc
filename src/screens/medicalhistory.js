@@ -572,6 +572,9 @@ const MedicalHistory = ({navigation, route}) => {
       item?.relation?.toLowerCase() !== 'father' &&
       item?.relation?.toLowerCase() !== 'mother',
   );
+  console.log('====================================');
+  console.log(mesntrual?.pregnant);
+  console.log('====================================');
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -631,88 +634,88 @@ const MedicalHistory = ({navigation, route}) => {
                 }
                 date={mesntrual != '' && updatedate !== '' ? updatedate : null}
               />
-              {JSON.stringify(mesntrual) !== '{}' &&
-                mesntrual?.pregnant?.lmp !== '' && (
-                  <View style={styles.basiccontainer}>
-                    {/* <View style={{flexWrap: 'wrap'}}> */}
-                    {JSON.stringify(mesntrual) != '' && (
-                      <View style={styles.symptomicon}>
-                        <Text style={styles.pulse}>
-                          {mesntrual?.age && mesntrual?.age !== undefined && (
-                            <Text>
-                              Menarche:{' '}
-                              <Text style={{fontWeight: '700'}}>
-                                {mesntrual?.age}
-                              </Text>{' '}
-                              Yrs,
-                            </Text>
-                          )}{' '}
-                          {mesntrual?.status && (
+              {JSON.stringify(mesntrual) !== '{}' && (
+                <View style={styles.basiccontainer}>
+                  {/* <View style={{flexWrap: 'wrap'}}> */}
+                  {JSON.stringify(mesntrual) != '' && (
+                    <View style={styles.symptomicon}>
+                      <Text style={styles.pulse}>
+                        {mesntrual?.age && mesntrual?.age !== undefined && (
+                          <Text>
+                            Menarche:{' '}
                             <Text style={{fontWeight: '700'}}>
-                              {mesntrual?.status}
-                            </Text>
-                          )}
-                          {mesntrual?.flowdays && (
-                            <Text>
-                              , Flow:{' '}
-                              <Text style={{fontWeight: '700'}}>
-                                {mesntrual?.flowdays}
-                              </Text>{' '}
-                              days,
-                            </Text>
-                          )}{' '}
-                          {mesntrual?.cycledays && (
-                            <Text>
-                              Cycle:{' '}
-                              <Text style={{fontWeight: '700'}}>
-                                {mesntrual?.cycledays}
-                              </Text>{' '}
-                              days
-                            </Text>
-                          )}
+                              {mesntrual?.age}
+                            </Text>{' '}
+                            Yrs,
+                          </Text>
+                        )}{' '}
+                        {mesntrual?.status && (
+                          <Text style={{fontWeight: '700'}}>
+                            {mesntrual?.status}
+                          </Text>
+                        )}
+                        {mesntrual?.flowdays && (
                           <Text>
-                            {' '}
-                            {mesntrual?.pregnant !== '' ? (
-                              <Text>
-                                Pregnant (Yes): LMP :{' '}
-                                <Text style={{fontWeight: '700'}}>
-                                  {mesntrual?.pregnant?.lmp
-                                    ? formatdate(mesntrual?.pregnant?.lmp)
-                                    : ''}
-                                </Text>{' '}
-                                EDD :{' '}
-                                <Text style={{fontWeight: '700'}}>
-                                  {mesntrual?.pregnant?.edd
-                                    ? formatdate(mesntrual?.pregnant?.edd)
-                                    : ''}
-                                </Text>{' '}
-                                Week:{' '}
-                                <Text style={{fontWeight: '700'}}>
-                                  {lmp_week?.weeks}
-                                </Text>{' '}
-                                Days:{' '}
-                                <Text style={{fontWeight: '700'}}>
-                                  {lmp_week?.days}
-                                </Text>
+                            , Flow:{' '}
+                            <Text style={{fontWeight: '700'}}>
+                              {mesntrual?.flowdays}
+                            </Text>{' '}
+                            days,
+                          </Text>
+                        )}{' '}
+                        {mesntrual?.cycledays && (
+                          <Text>
+                            Cycle:{' '}
+                            <Text style={{fontWeight: '700'}}>
+                              {mesntrual?.cycledays}
+                            </Text>{' '}
+                            days
+                          </Text>
+                        )}
+                        <Text>
+                          {' '}
+                          {mesntrual?.pregnant !== '' &&
+                          mesntrual?.pregnant?.lmp !== '' ? (
+                            <Text>
+                              Pregnant (Yes): LMP :{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {mesntrual?.pregnant?.lmp
+                                  ? formatdate(mesntrual?.pregnant?.lmp)
+                                  : ''}
+                              </Text>{' '}
+                              EDD :{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {mesntrual?.pregnant?.edd
+                                  ? formatdate(mesntrual?.pregnant?.edd)
+                                  : ''}
+                              </Text>{' '}
+                              Week:{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {lmp_week?.weeks}
+                              </Text>{' '}
+                              Days:{' '}
+                              <Text style={{fontWeight: '700'}}>
+                                {lmp_week?.days}
                               </Text>
-                            ) : (
-                              ', Pregnant (No)'
-                            )}
-                          </Text>
-                          <Text>
-                            {' '}
-                            {mesntrual?.menopause !== '' &&
-                            mesntrual?.menopause !== undefined
-                              ? `Menopause (Yes): LMP ${
-                                  mesntrual?.menopause?.split('T')[0]
-                                }`
-                              : ''}
-                          </Text>
+                            </Text>
+                          ) : (
+                            ', Pregnant (No)'
+                          )}
                         </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
+                        <Text>
+                          {' '}
+                          {mesntrual?.menopause !== '' &&
+                          mesntrual?.menopause !== undefined
+                            ? `, Menopause (Yes): LMP ${
+                                mesntrual?.menopause?.split('T')[0]
+                              }`
+                            : `, Menopause (No)`}
+                        </Text>
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              )}
             </View>
           )}
 
