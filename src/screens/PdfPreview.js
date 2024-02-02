@@ -46,6 +46,7 @@ import {
   updateAdditionalNote,
   UpadteExamination,
   UpadteFindings,
+  addDoctorRefer,
 } from '../redux/features/prescription/prescriptionSlice';
 import {
   CUSTOMCOLOR,
@@ -92,9 +93,11 @@ const PdfView = ({navigation}) => {
     doc_phone,
     patient_phone,
     prevScreen,
+    refer_datails,
   } = route.params;
 
-  // console.log('data==', consultationData?.pastHistory?.martial_history);
+  console.log('data==', refer_datails);
+  const doctor = useSelector(state => state?.prescription?.selectedDoctor);
 
   const dispatch = useDispatch();
   const token = useSelector(state => state.authenticate.auth.access);
@@ -407,6 +410,7 @@ const PdfView = ({navigation}) => {
 
   const handle = () => {
     postReferalPdf(URL.refer_doc_pdf);
+    dispatch(addDoctorRefer([...doctor, refer_datails]));
   };
 
   const handleConfirm = () => {

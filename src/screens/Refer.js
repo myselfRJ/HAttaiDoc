@@ -141,13 +141,11 @@ const ReferToDoctor = () => {
                       }</b></p>`
                     : `<div>
                       <p>Refer To :<b> ${
-                        dr_name?.toLowerCase()?.includes('dr')
-                          ? dr_name
-                          : `${dr_name}`
+                        name?.toLowerCase()?.includes('dr') ? name : `${name}`
                       }</b></p>
                       <p>Contact : <b> ${newPhone}</b></p>
                       <p>Reffered Doctor : <b>${
-                        name?.includes('Dr') ? name : `Dr. ${name}`
+                        dr_name?.includes('Dr') ? dr_name : `Dr. ${dr_name}`
                       }</b></p>
                       <p>Doctor Phone : <b>${phone}</b></p>
                     </div>`
@@ -195,76 +193,15 @@ const ReferToDoctor = () => {
       // handle();
     }
   };
-  const postData = async url => {
-    const formData = new FormData();
-    formData.append('doctor_phone_number', `${data?.doctor_phone_number}`);
-    formData.append(
-      'patient_phone_number',
-      `${patient_details?.patient_phone}`,
-    );
-    formData.append('clinic_id', `${patient_details?.clinic_id}`);
-    formData.append('appointment_id', `${patient_details?.appointment_id}`);
-    formData.append('file_referral', {
-      uri: `file:///storage/emulated/0/Android/data/com.hattaidoc/files/refer/refer.pdf`,
-      type: 'application/pdf',
-      name: `${patient_details?.patient_phone}referal.pdf`,
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    };
-
-    try {
-      setLoading(true);
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.json();
-      if (responseData) {
-        handleAddDoctors();
-        // Alert.alert('', 'Successfully Shared to Patient');
-        showToast('success', 'Successfully Shared to Patient');
-        setLoading(false);
-        nav.goBack();
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      // Alert.alert('', 'Something went Wrong');
-      showToast('error', 'Something went Wrong');
-      setLoading(false);
-    }
-  };
-  const apiUrl = URL.refer_doc_pdf;
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const handleAddDoctors = () => {
-    selected && name && speciality
-      ? dispatch(
-          addDoctorRefer([
-            ...doctor,
-            {
-              refer_to: selected,
-              dr_name: dr_name ? dr_name : null,
-              doctor_or_name: name,
-              speciality: speciality,
-              phone: phone,
-              notes: notes,
-              appointment_id: appointmentID,
-            },
-          ]),
-
-          setName(''),
-          setSpeciality(''),
-          setPhone(''),
-          setSelected(''),
-          setNotes(''),
-          setDr_Name(''),
-          setNewPhone(''),
-        )
-      : null;
-    // nav.goBack();
+    setName('');
+    setSpeciality('');
+    setPhone('');
+    setSelected('');
+    setNotes('');
+    setDr_Name('');
+    setNewPhone('');
   };
 
   const handleSelect = val => {
@@ -314,7 +251,10 @@ const ReferToDoctor = () => {
       UpdateAsyncData(`referals${patient_details?.doc_phone}`, {
         refer_to: selected,
         dr_name: dr_name ? dr_name : null,
-        doctor_or_name: name,
+        doctor_or_name:
+          selected === 'Doctor'
+            ? `${name?.includes('Dr') ? name : `Dr. ${name}`}`
+            : name,
         speciality: speciality,
         phone: phone,
         newPhone: newPhone,
@@ -337,6 +277,15 @@ const ReferToDoctor = () => {
           appointment_id,
           patient_phone,
           prevScreen,
+          refer_datails: {
+            refer_to: selected,
+            dr_name: dr_name ? dr_name : null,
+            doctor_or_name: name,
+            speciality: speciality,
+            phone: phone,
+            notes: notes,
+            appointment_id: appointmentID,
+          },
         });
         // handleAddDoctors();
         setPrevLoad(false);
@@ -347,16 +296,14 @@ const ReferToDoctor = () => {
     RetriveAsyncData(`referals${patient_details?.doc_phone}`)
       .then(array => {
         const uniqueArray = array?.filter((item, index) => {
-          const name = item?.dr_name ? item?.dr_name : item?.doctor_or_name;
+          const name = item?.doctor_or_name;
           const speciality = item?.speciality;
           const currentDocName = name.toLowerCase();
           const currentSpeciality = speciality.toLowerCase();
           return (
             index ===
             array.findIndex(obj => {
-              const Currentname = obj?.dr_name
-                ? obj?.dr_name
-                : obj?.doctor_or_name;
+              const Currentname = obj?.doctor_or_name;
               const CurrentSpeciality = obj?.speciality;
 
               return (
@@ -519,9 +466,7 @@ const ReferToDoctor = () => {
                       }}
                       key={index}
                       onPress={() => handlePress(item)}
-                      input={
-                        item?.dr_name ? item?.dr_name : item?.doctor_or_name
-                      }
+                      input={item?.doctor_or_name}
                     />
                   ))}
                 </View>
