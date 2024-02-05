@@ -46,6 +46,14 @@ import {commonstyles} from '../styles/commonstyle';
 import CustomModal from '../components/CustomModal';
 import {capitalizeWord, showToast} from '../utility/const';
 
+const useDebouncedEffect = (effect, deps, delay) => {
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
+
+    return () => clearTimeout(handler);
+  }, [...deps, effect, delay]);
+};
+
 export default function Prescribe1({navigation}) {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const {phone} = useSelector(state => state?.phone?.data);
@@ -90,7 +98,6 @@ export default function Prescribe1({navigation}) {
     prevPres?.length > 0
       ? prevPres?.filter(item => item?.mode === 'Others')
       : [];
-  // console.log(checkOthersmed?.length);
   const [others, setOthers] = useState('');
 
   const [indexToUpdate, setIndextoUpdate] = useState('');
@@ -256,7 +263,6 @@ export default function Prescribe1({navigation}) {
 
   const FrequencySelection = index => {
     const isSelected = frequency.includes(index);
-
     if (isSelected) {
       setFrequency(frequency.filter(i => i !== index));
     } else {
@@ -265,7 +271,6 @@ export default function Prescribe1({navigation}) {
   };
   const getSelectedDaysString = () => {
     const selectedDays = [];
-
     for (let i = 0; i < CONSTANTS.frequency.length; i++) {
       if (frequency.includes(i)) {
         selectedDays.push('1');
@@ -331,32 +336,53 @@ export default function Prescribe1({navigation}) {
     if (response.ok) {
       const jsonData = await response.json();
       const snomed_data = jsonData?.map(item => ({type: 'sno', term: item}));
-      setData([
-        {term: generic ? generic : medicine, type: 'nsno'},
-        ...snomed_data,
-        ...CONSTANTS.medicine,
-      ]);
+      setData(snomed_data);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
+  const [Allmed, SetAllmed] = useState([]);
+  const fetchAllmed = async () => {
+    try {
+      const response = await fetch(URL.getAllmed(medicine), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const jsonData = await response.json();
+      const data =
+        jsonData?.data?.length > 0
+          ? jsonData?.data?.map(item => ({
+              term: item?.medicine?.toLowerCase(),
+              type: 'sno',
+            }))
+          : [];
+      SetAllmed(data);
+    } catch (error) {}
+  };
   useEffect(() => {
     fetchMedicine();
+    fetchAllmed();
   }, [medicine, generic, mode]);
 
-  const FetchFilterDataofSnomed = value => {
+  const fetchFilterDataofSnomed = value => {
+    let combinedData = CONSTANTS.medicine;
     if (medicine || generic) {
-      const filtered = [...data, ...CONSTANTS.medicine]?.filter(
-        item =>
-          item?.term && item?.term.toLowerCase().includes(value.toLowerCase()),
+      const filtered = combinedData.filter(item =>
+        item?.term?.toLowerCase().includes(value.toLowerCase()),
       );
-      setFilteredData([...filtered, {term: value, type: 'nsno'}]);
+      setFilteredData(filtered);
     } else {
       setFilteredData(data);
     }
   };
+
   useEffect(() => {
-    FetchFilterDataofSnomed(generic ? generic : medicine);
+    const searchTerm = generic || medicine;
+    if (searchTerm) {
+      fetchFilterDataofSnomed(searchTerm);
+    }
   }, [medicine, generic]);
   useEffect(() => {
     if (
@@ -682,7 +708,12 @@ export default function Prescribe1({navigation}) {
                 (medicine === setmedicine || show ? null : (
                   <View style={styles.dropdownContainer}>
                     <ScrollView persistentScrollbar={true}>
-                      {data?.map((val, index) => (
+                      {[
+                        {term: medicine, type: 'nsno'},
+                        ...data,
+                        ...Allmed,
+                        ...filtered,
+                      ]?.map((val, index) => (
                         <SelectorBtn
                           select={{
                             paddingHorizontal: horizontalScale(4),

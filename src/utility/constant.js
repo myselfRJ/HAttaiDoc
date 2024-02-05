@@ -323,10 +323,6 @@ export const CONSTANTS = {
     },
     {
       type: 'nsno',
-      term: 'Tapal ER 50',
-    },
-    {
-      type: 'nsno',
       term: 'Tendoease',
     },
     {
