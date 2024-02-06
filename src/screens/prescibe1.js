@@ -363,7 +363,7 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     fetchMedicine();
-    fetchAllmed();
+    // fetchAllmed();
   }, [medicine, generic, mode]);
 
   const fetchFilterDataofSnomed = value => {
@@ -711,7 +711,6 @@ export default function Prescribe1({navigation}) {
                       {[
                         {term: medicine, type: 'nsno'},
                         ...data,
-                        ...Allmed,
                         ...filtered,
                       ]?.map((val, index) => (
                         <SelectorBtn
