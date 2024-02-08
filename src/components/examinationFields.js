@@ -16,6 +16,8 @@ import Option from './option';
 
 const Examination_Fields = props => {
   const status = ['N', 'A'];
+  console.log(props.check);
+  const check = props.check !== undefined ? true : false;
   return (
     <View style={styles.main}>
       <View style={styles.container}>
@@ -24,26 +26,28 @@ const Examination_Fields = props => {
         </View>
         <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
           <Option
-            label="N"
-            selected={props.option === 'N'}
-            onPress={() => props.setOption('N')}
+            label={check ? 'N' : 'N'}
+            selected={props.option === (check ? 'Y' : 'N')}
+            onPress={() => props.setOption(check ? 'Y' : 'N')}
           />
           <Option
-            label="A"
-            selected={props.option === 'A'}
-            onPress={() => props.setOption('A')}
+            label={check ? 'Y' : 'A'}
+            selected={props.option === (check ? 'N' : 'A')}
+            onPress={() => props.setOption(check ? 'N' : 'A')}
           />
         </View>
       </View>
-      {props.option !== '' && (
-        <TextInput
-          placeholderTextColor={CUSTOMCOLOR.disable}
-          style={styles.textinput}
-          placeholder="Description"
-          value={props.value}
-          multiline={true}
-          onChangeText={props.setvalue}></TextInput>
-      )}
+      {!check
+        ? props.option !== '' && (
+            <TextInput
+              placeholderTextColor={CUSTOMCOLOR.disable}
+              style={styles.textinput}
+              placeholder="Description"
+              value={props.value}
+              multiline={true}
+              onChangeText={props.setvalue}></TextInput>
+          )
+        : null}
     </View>
   );
 };

@@ -358,6 +358,7 @@ const Physical = ({navigation}) => {
             (item, index) =>
               item?.label && (
                 <Examination_Fields
+                  check={true}
                   key={index}
                   label={item?.label}
                   value={item?.desc}

@@ -64,6 +64,7 @@ import {
   addmedicationHistory,
   addsocialHistory,
 } from '../redux/features/prescription/pastHistory';
+import {clearStorage} from '../utility/AsyncStorage';
 
 const Visit = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -104,10 +105,13 @@ const Visit = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  const phy = useSelector(
-    state => state.prescription.physicalExamination,
-  )?.filter(item => item?.appointment_id === appointmentID);
-  const physical = phy?.length > 0 ? phy?.slice(-1)?.[0]?.data : {};
+  const phy = useSelector(state => state.prescription.physicalExamination);
+  const physical =
+    phy?.length > 0
+      ? phy
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.data
+      : {};
   const reptr = useSelector(state => state.prescription.eaxminationFindings);
   const notess = useSelector(state => state.prescription.note);
   const note =
@@ -268,7 +272,6 @@ const Visit = ({navigation, route}) => {
       console.log(error);
     }
   };
-  // console.log(physicalExamination);
 
   const fetchAllergyData = async () => {
     const response = await fetchApi(URL.getAllergy(patient_phone), {
@@ -443,11 +446,15 @@ const Visit = ({navigation, route}) => {
     }
   };
   useEffect(() => {
+    handlePhysical(physical);
+  }, [physical]);
+
+  useEffect(() => {
+    clearStorage();
     fetchReport();
     GetFees();
     fetchVitals();
     fetchComplaint();
-    handlePhysical(physical);
     setData(doc_prof);
     dispatch(
       addfees([
@@ -465,8 +472,8 @@ const Visit = ({navigation, route}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchReport();
-      handlePhysical(physical);
       GetFees();
+      handlePhysical(physical);
       setData(doc_prof);
     }, []),
   );
@@ -1178,7 +1185,6 @@ const Visit = ({navigation, route}) => {
       });
       if (response.ok) {
         const jsonDAta = await response.json();
-        console.log(jsonDAta?.data);
       }
     } catch (error) {}
   };

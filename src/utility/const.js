@@ -500,8 +500,6 @@ export const CONSTANT = {
       status: '',
       desc: '',
     },
-  ],
-  physicaldata3: [
     {
       label: 'Acne',
       status: '',
@@ -512,11 +510,8 @@ export const CONSTANT = {
       status: '',
       desc: '',
     },
-    {
-      label: 'HEENT',
-      status: '',
-      desc: '',
-    },
+  ],
+  physicaldata3: [
     {
       label: 'Breast',
       status: '',
