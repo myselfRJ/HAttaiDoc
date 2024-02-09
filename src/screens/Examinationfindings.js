@@ -46,6 +46,9 @@ import {
   pickSingleFile,
   showToast,
 } from '../utility/const';
+import DropdownComponent from '../components/Dropdownbox';
+import SelectorBtn from '../components/selector';
+import DatePicker from 'react-native-date-picker';
 
 const ExaminationFindings = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -58,11 +61,39 @@ const ExaminationFindings = ({navigation}) => {
   const [uploaddocument, SetUploadDocument] = useState([]);
   const [report, setreport] = useState();
   const appointment_id = examinationDetails?.appointment_id;
-  // const [selectedFilename, setSelectedFilename] = useState([]);
+  const [recordstype, setRecordsType] = useState('');
+  const recordItems = [
+    {label: 'Prescription', value: 'Prescription'},
+    {label: 'Scan', value: 'Scan'},
+    {label: 'Lab', value: 'Lab'},
+    {label: 'Others', value: 'Others'},
+  ];
+  const [otherstype, setOthersType] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [files, setFiles] = useState([]);
+  const handleFiles = () => {
+    setFiles([
+      ...files,
+      {
+        type: recordstype === 'Others' ? otherstype : recordstype,
+        date: date?.toISOString()?.split('T')[0],
+        describe: describe,
+      },
+    ]);
+    setOthersType('');
+    setRecordsType('');
+    setDate(new Date());
+    setDescribe('');
+  };
+  const handleFilterFiles = ind => {
+    const filesfilter = files?.filter((item, _) => ind !== _);
+    setFiles(filesfilter);
+  };
   const postData = async url => {
     const formData = new FormData();
     formData.append('finding', `${value ? value : 'NaN'}`);
-    formData.append('description', `${describe}`);
+    formData.append('description', `${JSON.stringify(files)}`);
     formData.append('doctor_phone_number', `${examinationDetails?.doc_phone}`);
     formData.append(
       'patient_phone_number',
@@ -71,7 +102,7 @@ const ExaminationFindings = ({navigation}) => {
     formData.append('clinic_id', `${examinationDetails?.clinic_id}`);
     formData.append('appointment_id', `${examinationDetails?.appointment_id}`);
     for (let i = 0; i < uploaddocument.length; i++) {
-      formData.append(`file${i + 1}`, {
+      formData.append(`file${i + 1 + report_filter?.length}`, {
         uri: `${uploaddocument[i]?.uri}`,
         type: `${uploaddocument[i]?.type}`,
         name: `${uploaddocument[i]?.name}`,
@@ -113,11 +144,12 @@ const ExaminationFindings = ({navigation}) => {
       setValue(
         jsonData?.data?.finding === undefined ? '' : jsonData?.data?.finding,
       );
-      setDescribe(
-        jsonData?.data?.description === undefined
-          ? ''
-          : jsonData?.data?.description,
-      );
+      try {
+        const parsed = JSON.parse(jsonData?.data?.description);
+        setFiles(parsed?.length > 0 ? parsed : []);
+      } catch (err) {
+        console.log(err);
+      }
       setreport(jsonData?.data);
       dispatch(addFindings({describe: jsonData?.data?.description}));
     } else {
@@ -136,16 +168,15 @@ const ExaminationFindings = ({navigation}) => {
     {name: report?.file4 ? report?.file4 : null},
     {name: report?.file5 ? report?.file5 : null},
   ];
-
+  const report_filter = report_findings?.filter(
+    item => item?.name !== undefined && item?.name !== null,
+  );
+  // console.log([...uploaddocument, ...report_filter]);
   const apiUrl = URL.uploadExaminations;
 
   const handle = () => {
-    if (report != undefined) {
-      nav?.goBack();
-    } else {
-      postData(apiUrl);
-      handlePress();
-    }
+    postData(apiUrl);
+    handlePress();
   };
 
   const onImagePress = async () => {
@@ -187,7 +218,12 @@ const ExaminationFindings = ({navigation}) => {
       const file = await pickSingleFile();
       SetUploadDocument([
         ...uploaddocument,
-        {name: file?.name, type: file?.type, uri: file?.uri},
+        {
+          name: file?.name,
+          type: file?.type,
+          uri: file?.uri,
+          base64: file?.base64uri,
+        },
       ]);
     } catch (error) {}
     setModal(!modal);
@@ -212,21 +248,22 @@ const ExaminationFindings = ({navigation}) => {
   };
 
   const handleModal = () => {
-    if (uploaddocument?.length >= 5) {
+    if ([...uploaddocument, ...report_filter]?.length >= 5) {
+      setModal(false);
     } else {
-      setModal(!modal);
+      setModal(true);
     }
   };
-  // console.log('upload==',uploaddocument);
   const handleReports_Physical = filepath => {
-    const path = `${fileurl}${filepath}`;
-    if (filepath?.includes('pdf')) {
+    const path = `${filepath}`;
+    if (filepath?.includes('pdf') || filepath?.length > 250) {
       navigation.navigate('pdfhistory', {path});
     } else {
       navigation.navigate('img', {path});
     }
   };
-  const [visible, setVisible] = useState(false);
+
+  const colorCheck = [...uploaddocument, ...report_filter];
   return (
     <View style={styles.main}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -235,55 +272,97 @@ const ExaminationFindings = ({navigation}) => {
           headtext={{fontWeight: 'bold'}}
           head={{paddingHorizontal: 0}}
         />
-        {/* <Pressable
-          onPress={() => {
-            setVisible(!visible);
-          }}>
-          <Icon
-            name={'bell'}
-            color={CUSTOMCOLOR.primary}
-            size={moderateScale(36)}
-          />
-        </Pressable> */}
       </View>
-      {/* <InputText
-        value={value}
-        label={'Report Finding'}
-        setValue={setValue}
-        multiline={true}
-        placeholder={'Write Your Notes.......'}
-        textStyle={{
-          //   height: moderateScale(200),
-          //   textAlignVertical: 'top',
-
-          color: CUSTOMCOLOR.black,
-          fontWeight: '700',
-        }}
-        lbltext={{
-          fontSize: CUSTOMFONTSIZE.h3,
-        }}
-      /> */}
-      <InputText
-        value={describe}
-        label={'Report Findings'}
-        setValue={setDescribe}
-        multiline={true}
-        placeholder={'Write Your Report findings.......'}
-        textStyle={{
-          height: moderateScale(200),
-          textAlignVertical: 'top',
-          color: CUSTOMCOLOR.black,
-          fontWeight: '700',
-        }}
-        lbltext={{
-          fontSize: CUSTOMFONTSIZE.h3,
-        }}
+      {files?.map((item, index) => (
+        <ShowChip
+          text={`${item?.type ? `Type: ${item?.type} |` : ''} ${item?.date} ${
+            item?.describe ? ` | Describe: ${item?.describe} ` : ''
+          }`}
+          onPress={() => handleFilterFiles(index)}
+        />
+      ))}
+      <DropdownComponent
+        style={{paddingHorizontal: 0}}
+        value={recordstype}
+        select={value => setRecordsType(value)}
+        placeholder="Type of Record"
+        data={recordItems}
       />
-      {!report ? (
-        uploaddocument?.length > 0 ? (
-          <View style={{marginTop: verticalScale(16)}}>
-            {uploaddocument?.map((item, index) => (
+      {recordstype === 'Others' ? (
+        <InputText
+          label={'Enter Type'}
+          value={otherstype}
+          setValue={setOthersType}
+          placeholder="Enter Type of Record"
+        />
+      ) : null}
+      <View>
+        <SelectorBtn
+          label={'Issue Date'}
+          select={{
+            borderWidth: 1,
+            borderColor: CUSTOMCOLOR.primary,
+            // marginHorizontal: horizontalScale(4),
+          }}
+          input={date.toISOString().split('T')[0]}
+          setValue={setDate}
+          name={'calendar'}
+          onPress={() => setOpen(true)}
+        />
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          mode="date"
+          onConfirm={date => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+      </View>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <InputText
+          value={describe}
+          label={'Description'}
+          setValue={setDescribe}
+          multiline={true}
+          placeholder={'Write Your Report findings.......'}
+          textStyle={{
+            height: moderateScale(100),
+            textAlignVertical: 'top',
+            color: CUSTOMCOLOR.black,
+            fontWeight: '700',
+          }}
+          inputContainer={{width: '85%'}}
+          lbltext={{
+            fontSize: CUSTOMFONTSIZE.h3,
+          }}
+        />
+        <PlusButton
+          type={'add'}
+          onPress={handleFiles}
+          style={{marginTop: moderateScale(72)}}
+          icon={'plus'}
+          size={moderateScale(32)}
+        />
+      </View>
+      {[...uploaddocument, ...report_filter]?.length > 0 ? (
+        <View style={{marginTop: verticalScale(16)}}>
+          {[...uploaddocument, ...report_filter]?.map((item, index) =>
+            item?.type !== undefined ? (
               <ShowChip
+                onNav={() =>
+                  handleReports_Physical(
+                    item?.type === 'application/pdf'
+                      ? `data:application/pdf;base64,${item?.base64}`
+                      : item?.type !== undefined
+                      ? item?.uri
+                      : `${fileurl}${item?.name}`,
+                  )
+                }
                 key={index}
                 onPress={() => handleDelete(index)}
                 text={
@@ -304,37 +383,37 @@ const ExaminationFindings = ({navigation}) => {
                 }
                 main={{marginHorizontal: 0}}
               />
-            ))}
-          </View>
-        ) : null
-      ) : report_findings?.length > 0 ? (
-        <View style={{marginTop: verticalScale(16)}}>
-          {report_findings?.map(
-            (item, index) =>
-              item?.name !== null && (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleReports_Physical(item?.name)}>
-                  <ShowChip
-                    key={index}
-                    text={
-                      <>
-                        <Icon
-                          color={CUSTOMCOLOR.error}
-                          size={moderateScale(20)}
-                          name={
-                            item?.name?.includes('pdf')
-                              ? 'file-pdf-box'
-                              : 'image'
-                          }
-                        />{' '}
-                        {item?.name}
-                      </>
-                    }
-                    main={{marginHorizontal: 0}}
-                  />
-                </TouchableOpacity>
-              ),
+            ) : (
+              <ShowChip
+                onNav={() =>
+                  handleReports_Physical(
+                    item?.type === 'application/pdf'
+                      ? `data:application/pdf;base64,${item?.base64}`
+                      : item?.type !== undefined
+                      ? item?.uri
+                      : `${fileurl}${item?.name}`,
+                  )
+                }
+                key={index}
+                text={
+                  <>
+                    <Icon
+                      color={CUSTOMCOLOR.error}
+                      size={moderateScale(20)}
+                      name={
+                        item?.type === 'application/pdf'
+                          ? 'file-pdf-box'
+                          : 'image'
+                      }
+                    />{' '}
+                    {item?.name?.includes('temp')
+                      ? item?.name?.split('temp_')[1]?.toString()
+                      : item?.name}
+                  </>
+                }
+                main={{paddingVertical: verticalScale(6)}}
+              />
+            ),
           )}
         </View>
       ) : null}
@@ -344,17 +423,13 @@ const ExaminationFindings = ({navigation}) => {
           alignSelf: 'flex-end',
           marginTop: verticalScale(48),
           backgroundColor:
-            uploaddocument?.length === 5 || report != undefined
+            colorCheck?.length === 5
               ? CUSTOMCOLOR.disable
               : CUSTOMCOLOR.primary,
         }}
         icon={'file-document-outline'}
         onPress={() => {
-          if (report != undefined) {
-            setModal(false);
-          } else {
-            handleModal();
-          }
+          handleModal();
         }}
       />
       {modal && (

@@ -193,7 +193,6 @@ const Uploadrecord = ({navigation}) => {
             // marginHorizontal: horizontalScale(4),
           }}
           input={date.toISOString().split('T')[0]}
-          setValue={setDate}
           name={'calendar'}
           onPress={() => setOpen(true)}
         />

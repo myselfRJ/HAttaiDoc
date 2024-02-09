@@ -440,7 +440,12 @@ const Visit = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setreport(jsonData?.data);
-      dispatch(addFindings({describe: jsonData?.data?.description}));
+      try {
+        const parsed = JSON.parse(jsonData?.data?.description);
+        dispatch(addFindings({describe: parsed}));
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -450,7 +455,7 @@ const Visit = ({navigation, route}) => {
   }, [physical]);
 
   useEffect(() => {
-    clearStorage();
+    // clearStorage();
     fetchReport();
     GetFees();
     fetchVitals();
@@ -780,9 +785,13 @@ const Visit = ({navigation, route}) => {
               <h5>
                   Report Finding
               </h5>
-              <text>
-                  ${reptr?.describe}
-              </text>
+           
+                  ${reptr?.describe?.map(
+                    item => `<text>Type: ${item?.type},
+                    Date: ${item?.date},
+                    Describe: ${item?.describe}</text>`,
+                  )}
+    
           </div>`
               : ''
           } 
@@ -1596,7 +1605,8 @@ const Visit = ({navigation, route}) => {
                         ? 'check-circle'
                         : '') ||
                       (value?.label === 'Physical Examinations' &&
-                      physi !== '{}'
+                      physi !== '{}' &&
+                      physi !== undefined
                         ? 'check-circle'
                         : '')
                     }

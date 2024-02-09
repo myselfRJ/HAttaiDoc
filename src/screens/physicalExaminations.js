@@ -283,28 +283,23 @@ const PhysicalExamination = ({navigation}) => {
           {report_findings?.map(
             (item, index) =>
               item?.name !== null && (
-                <TouchableOpacity
+                <ShowChip
+                  onNav={() => handleReports_Physical(item?.name)}
                   key={index}
-                  onPress={() => handleReports_Physical(item?.name)}>
-                  <ShowChip
-                    key={index}
-                    text={
-                      <>
-                        <Icon
-                          color={CUSTOMCOLOR.error}
-                          size={moderateScale(20)}
-                          name={
-                            item?.name?.includes('pdf')
-                              ? 'file-pdf-box'
-                              : 'image'
-                          }
-                        />{' '}
-                        {item?.name}
-                      </>
-                    }
-                    main={{marginHorizontal: 0}}
-                  />
-                </TouchableOpacity>
+                  text={
+                    <>
+                      <Icon
+                        color={CUSTOMCOLOR.error}
+                        size={moderateScale(20)}
+                        name={
+                          item?.name?.includes('pdf') ? 'file-pdf-box' : 'image'
+                        }
+                      />{' '}
+                      {item?.name}
+                    </>
+                  }
+                  main={{marginHorizontal: 0}}
+                />
               ),
           )}
         </View>

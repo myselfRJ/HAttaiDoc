@@ -81,6 +81,18 @@ const Symptoms = ({navigation}) => {
           },
         ]),
       );
+    } else if (symptom?.toLowerCase() === 'no complaints') {
+      dispatch(
+        addSymptom([
+          ...symptomsData,
+          {
+            symptom: symptom,
+            days: 0,
+            severity: '',
+            appointment_id: appointmentID,
+          },
+        ]),
+      );
     } else {
       // Alert.alert('Warning', 'Enter all Fields');
       showToast('error', 'Enter all Fields');
@@ -281,75 +293,77 @@ const Symptoms = ({navigation}) => {
               ))}
             </View>
           </View>
-          <View style={{...styles.input, zIndex: 1}}>
-            <View style={{gap: moderateScale(10)}}>
-              <Text style={commonstyles.subhead}>
-                {Language[language]['severity']}:
-              </Text>
-              <Seperator />
-            </View>
-            <View style={styles.subvalues}>
-              <Option
-                label={Language[language]['low']}
-                value="low"
-                selected={sevSelected === 'low'}
-                onPress={() => setSevSelected('low')}
-              />
-              <Option
-                label={Language[language]['medium']}
-                value="medium"
-                selected={sevSelected === 'medium'}
-                onPress={() => setSevSelected('medium')}
-              />
-              <Option
-                label={Language[language]['high']}
-                value="high"
-                selected={sevSelected === 'high'}
-                onPress={() => setSevSelected('high')}
-              />
-            </View>
-          </View>
+          {symptom?.toLowerCase() === 'no complaints' ? null : (
+            <>
+              <View style={{...styles.input, zIndex: 1}}>
+                <View style={{gap: moderateScale(10)}}>
+                  <Text style={commonstyles.subhead}>
+                    {Language[language]['severity']}:
+                  </Text>
+                  <Seperator />
+                </View>
+                <View style={styles.subvalues}>
+                  <Option
+                    label={Language[language]['low']}
+                    value="low"
+                    selected={sevSelected === 'low'}
+                    onPress={() => setSevSelected('low')}
+                  />
+                  <Option
+                    label={Language[language]['medium']}
+                    value="medium"
+                    selected={sevSelected === 'medium'}
+                    onPress={() => setSevSelected('medium')}
+                  />
+                  <Option
+                    label={Language[language]['high']}
+                    value="high"
+                    selected={sevSelected === 'high'}
+                    onPress={() => setSevSelected('high')}
+                  />
+                </View>
+              </View>
 
-          <View style={{...styles.input, zIndex: 1}}>
-            <View style={{gap: moderateScale(10)}}>
-              <Text style={commonstyles.subhead}>Time Period</Text>
-              <Seperator />
-            </View>
-            <View style={styles.subvalues}>
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Year :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Years"
-                  value={years}
-                  onChangeText={text => setYears(text)}
-                  keyboardType="numeric"
-                />
-              </View>
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Month :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Months"
-                  value={months}
-                  onChangeText={text => setmonths(text)}
-                  keyboardType="numeric"
-                />
-              </View>
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Day :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Days"
-                  value={days}
-                  onChangeText={text => setDays(text)}
-                  keyboardType="numeric"
-                />
-              </View>
-              {/* <Text
+              <View style={{...styles.input, zIndex: 1}}>
+                <View style={{gap: moderateScale(10)}}>
+                  <Text style={commonstyles.subhead}>Time Period</Text>
+                  <Seperator />
+                </View>
+                <View style={styles.subvalues}>
+                  <View style={styles.timeFields}>
+                    <Text style={styles.option}>Year :</Text>
+                    <TextInput
+                      placeholderTextColor={CUSTOMCOLOR.disable}
+                      style={styles.timeinput}
+                      placeholder="Enter Years"
+                      value={years}
+                      onChangeText={text => setYears(text)}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  <View style={styles.timeFields}>
+                    <Text style={styles.option}>Month :</Text>
+                    <TextInput
+                      placeholderTextColor={CUSTOMCOLOR.disable}
+                      style={styles.timeinput}
+                      placeholder="Enter Months"
+                      value={months}
+                      onChangeText={text => setmonths(text)}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  <View style={styles.timeFields}>
+                    <Text style={styles.option}>Day :</Text>
+                    <TextInput
+                      placeholderTextColor={CUSTOMCOLOR.disable}
+                      style={styles.timeinput}
+                      placeholder="Enter Days"
+                      value={days}
+                      onChangeText={text => setDays(text)}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
@@ -357,18 +371,18 @@ const Symptoms = ({navigation}) => {
                 }}>
                 (OR)
               </Text> */}
-              <View style={styles.timeFields}>
-                <Text style={styles.option}>Hr :</Text>
-                <TextInput
-                  placeholderTextColor={CUSTOMCOLOR.disable}
-                  style={styles.timeinput}
-                  placeholder="Enter Hr"
-                  value={hr}
-                  onChangeText={text => setHr(text)}
-                  keyboardType="numeric"
-                />
-              </View>
-              {/* <Text
+                  <View style={styles.timeFields}>
+                    <Text style={styles.option}>Hr :</Text>
+                    <TextInput
+                      placeholderTextColor={CUSTOMCOLOR.disable}
+                      style={styles.timeinput}
+                      placeholder="Enter Hr"
+                      value={hr}
+                      onChangeText={text => setHr(text)}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
@@ -377,7 +391,7 @@ const Symptoms = ({navigation}) => {
                 (OR)
               </Text> */}
 
-              {/* <Text
+                  {/* <Text
                 style={{
                   color: CUSTOMCOLOR.black,
                   fontWeight: '400',
@@ -385,14 +399,18 @@ const Symptoms = ({navigation}) => {
                 }}>
                 (OR)
               </Text> */}
-            </View>
-          </View>
+                </View>
+              </View>
+            </>
+          )}
           <HButton
             icon="plus"
             type="addtype"
             btnstyles={{
               backgroundColor:
                 symptom && (days || hr || months || years)
+                  ? CUSTOMCOLOR.success
+                  : symptom?.toLowerCase() === 'no complaints'
                   ? CUSTOMCOLOR.success
                   : CUSTOMCOLOR.disable,
               alignSelf: 'flex-end',

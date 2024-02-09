@@ -15,8 +15,6 @@ import {mode} from '../redux/features/prescription/prescribeslice';
 import Option from './option';
 
 const Examination_Fields = props => {
-  const status = ['N', 'A'];
-  console.log(props.check);
   const check = props.check !== undefined ? true : false;
   return (
     <View style={styles.main}>

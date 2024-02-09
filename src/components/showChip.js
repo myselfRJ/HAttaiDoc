@@ -15,26 +15,26 @@ import {mode} from '../redux/features/prescription/prescribeslice';
 const ShowChip = props => {
   return (
     <View style={{...styles.main, ...props.main}}>
-      {/* <View key={props.ind} style={styles.child}> */}
-
-      <View style={[styles.alignchild, props.align]}>
-        {props.nameIcon && (
-          <Icon
-            name={props.nameIcon}
-            size={moderateScale(16)}
-            color={props.iconcolor ? props.iconcolor : CUSTOMCOLOR.primary}
-          />
-        )}
-        <Text
-          style={{
-            color: CUSTOMCOLOR.primary,
-            fontFamily: CUSTOMFONTFAMILY.body,
-            fontWeight: '400',
-            fontSize: CUSTOMFONTSIZE.h4,
-          }}>
-          {props.text}
-        </Text>
-      </View>
+      <TouchableOpacity onPress={props.onNav}>
+        <View style={[styles.alignchild, props.align]}>
+          {props.nameIcon && (
+            <Icon
+              name={props.nameIcon}
+              size={moderateScale(16)}
+              color={props.iconcolor ? props.iconcolor : CUSTOMCOLOR.primary}
+            />
+          )}
+          <Text
+            style={{
+              color: CUSTOMCOLOR.primary,
+              fontFamily: CUSTOMFONTFAMILY.body,
+              fontWeight: '400',
+              fontSize: CUSTOMFONTSIZE.h4,
+            }}>
+            {props.text}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <View style={{flexDirection: 'row', gap: moderateScale(14)}}>
         {props.onEdit && (
           <TouchableOpacity

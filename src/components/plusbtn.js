@@ -10,10 +10,22 @@ import {
 } from '../utility/scaleDimension';
 
 const PlusButton = props => {
+  const type = props.type;
   return (
     <>
       <Pressable
-        style={{...styles.plus, ...props.style}}
+        style={
+          type === 'add'
+            ? {
+                ...styles.plus,
+                ...props.style,
+                backgroundColor: CUSTOMCOLOR.success,
+              }
+            : {
+                ...styles.plus,
+                ...props.style,
+              }
+        }
         onPress={props.onPress}>
         <Icon
           name={props.icon}

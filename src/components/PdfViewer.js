@@ -21,7 +21,7 @@ const PDFViewer = props => {
         console.log(error);
       }}
       onPressLink={uri => {
-        console.log(`Link pressed: ${uri}`);
+        console.log(`Link pressed: ${'hattai'}`);
       }}
       style={styles.pdf}
     />

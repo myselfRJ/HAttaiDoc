@@ -145,7 +145,7 @@ export default function MedicalRecordPatient({route, navigation}) {
       item?.consultation?.chief_complaint?.complaint_message !== undefined,
   );
   const renderItems = ({item, index}) => {
-    return <ConsultationCard data={item?.consultation} />;
+    return <ConsultationCard data={item?.consultation} phone={patient_phone} />;
   };
   // console.log(CompletedData);
   return (

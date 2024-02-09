@@ -572,15 +572,29 @@ const MedicalHistory = ({navigation, route}) => {
       item?.relation?.toLowerCase() !== 'father' &&
       item?.relation?.toLowerCase() !== 'mother',
   );
-  console.log('====================================');
-  console.log(mesntrual?.pregnant);
-  console.log('====================================');
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
 
       <ScrollView>
         <View style={styles.input}>
+          {Age <= 18 && (
+            <View style={styles.visitOpenItem}>
+              <VisitOpen
+                label={'Immunization Chart for Kids'}
+                icon={'menu-right'}
+                iconstyle={{
+                  borderWidth: 0,
+                }}
+                size={moderateScale(32)}
+                textstyle={styles.text}
+                navigate={() =>
+                  navigation.navigate('kids', {phone, patient_phone})
+                }
+              />
+            </View>
+          )}
+
           {(medicaldata?.gende == 'Female' ||
             medicaldata?.gende == 'female') && (
             <View style={styles.visitOpenItem}>
@@ -602,14 +616,28 @@ const MedicalHistory = ({navigation, route}) => {
                   {mar != '' && (
                     <View style={styles.symptomicon}>
                       <Text style={styles.pulse}>
-                        {`Marital Status: ${mar?.maritalstatus}`}
-                        {mar?.married
-                          ? `,${' '}Maried Since: ${mar?.married}`
-                          : null}
+                        {`Marital Status:`}
+                        <Text style={{fontWeight: '600'}}>
+                          {' '}
+                          {mar?.maritalstatus}
+                        </Text>
+                        {mar?.married ? (
+                          <Text>
+                            {', '}
+                            Maried Since:{' '}
+                            <Text style={{fontWeight: '600'}}>
+                              {mar?.married}
+                            </Text>
+                          </Text>
+                        ) : null}
 
-                        {mar?.cons
-                          ? `,${' '}Consanguinity: ${mar?.cons}`
-                          : null}
+                        {mar?.cons ? (
+                          <Text>
+                            {', '}
+                            ,Consanguinity:{' '}
+                            <Text style={{fontWeight: '600'}}>{mar?.cons}</Text>
+                          </Text>
+                        ) : null}
                       </Text>
                     </View>
                   )}
@@ -643,21 +671,21 @@ const MedicalHistory = ({navigation, route}) => {
                         {mesntrual?.age && mesntrual?.age !== undefined && (
                           <Text>
                             Menarche:{' '}
-                            <Text style={{fontWeight: '700'}}>
+                            <Text style={{fontWeight: '600'}}>
                               {mesntrual?.age}
                             </Text>{' '}
                             Yrs,
                           </Text>
                         )}{' '}
                         {mesntrual?.status && (
-                          <Text style={{fontWeight: '700'}}>
+                          <Text style={{fontWeight: '600'}}>
                             {mesntrual?.status}
                           </Text>
                         )}
                         {mesntrual?.flowdays && (
                           <Text>
                             , Flow:{' '}
-                            <Text style={{fontWeight: '700'}}>
+                            <Text style={{fontWeight: '600'}}>
                               {mesntrual?.flowdays}
                             </Text>{' '}
                             days,
@@ -666,7 +694,7 @@ const MedicalHistory = ({navigation, route}) => {
                         {mesntrual?.cycledays && (
                           <Text>
                             Cycle:{' '}
-                            <Text style={{fontWeight: '700'}}>
+                            <Text style={{fontWeight: '600'}}>
                               {mesntrual?.cycledays}
                             </Text>{' '}
                             days
@@ -678,23 +706,23 @@ const MedicalHistory = ({navigation, route}) => {
                           mesntrual?.pregnant?.lmp !== '' ? (
                             <Text>
                               Pregnant (Yes): LMP :{' '}
-                              <Text style={{fontWeight: '700'}}>
+                              <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.pregnant?.lmp
                                   ? formatdate(mesntrual?.pregnant?.lmp)
                                   : ''}
                               </Text>{' '}
                               EDD :{' '}
-                              <Text style={{fontWeight: '700'}}>
+                              <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.pregnant?.edd
                                   ? formatdate(mesntrual?.pregnant?.edd)
                                   : ''}
                               </Text>{' '}
                               Week:{' '}
-                              <Text style={{fontWeight: '700'}}>
+                              <Text style={{fontWeight: '600'}}>
                                 {lmp_week?.weeks}
                               </Text>{' '}
                               Days:{' '}
-                              <Text style={{fontWeight: '700'}}>
+                              <Text style={{fontWeight: '600'}}>
                                 {lmp_week?.days}
                               </Text>
                             </Text>
@@ -781,25 +809,7 @@ const MedicalHistory = ({navigation, route}) => {
               )}
             </View>
           )}
-          {Age <= 18 ? (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Immunization Chart for Kids'}
-                icon={'menu-right'}
-                iconstyle={{
-                  borderWidth: 0,
-                }}
-                size={moderateScale(32)}
-                textstyle={styles.text}
-                navigate={() =>
-                  navigation.navigate('kids', {phone, patient_phone})
-                }
-                // date={
-                //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
-                // }
-              />
-            </View>
-          ) : (
+          {Age > 18 && (
             <View style={styles.visitOpenItem}>
               <VisitOpen
                 label={'Vaccination Details'}
@@ -836,23 +846,25 @@ const MedicalHistory = ({navigation, route}) => {
             <>
               {snomedCommor?.length > 0 ? (
                 <View style={styles.suggestion}>
-                  {snomedCommor?.map((item, ind) => (
-                    <SelectorBtn
-                      select={{
-                        paddingHorizontal: horizontalScale(4),
-                        paddingVertical: verticalScale(8),
-                        borderWidth: 1,
-                        backgroundColor: CUSTOMCOLOR.white,
-                      }}
-                      onPress={() => handleSelectComorbidities(item?.term)}
-                      key={ind}
-                      inputstyle={{
-                        color: CUSTOMCOLOR.primary,
-                        fontSize: moderateScale(14),
-                        fontWeight: '400',
-                      }}
-                      input={item?.term}></SelectorBtn>
-                  ))}
+                  {[{term: comorbidities}, ...snomedCommor]?.map(
+                    (item, ind) => (
+                      <SelectorBtn
+                        select={{
+                          paddingHorizontal: horizontalScale(4),
+                          paddingVertical: verticalScale(8),
+                          borderWidth: 1,
+                          backgroundColor: CUSTOMCOLOR.white,
+                        }}
+                        onPress={() => handleSelectComorbidities(item?.term)}
+                        key={ind}
+                        inputstyle={{
+                          color: CUSTOMCOLOR.primary,
+                          fontSize: moderateScale(14),
+                          fontWeight: '400',
+                        }}
+                        input={item?.term}></SelectorBtn>
+                    ),
+                  )}
                 </View>
               ) : null}
             </>
@@ -947,7 +959,7 @@ const MedicalHistory = ({navigation, route}) => {
           </ChipInput> */}
           {family?.length > 0 && (
             <>
-              {snomedFamily?.length > 0 ? (
+              {[{term: family}, ...snomedFamily]?.length > 0 ? (
                 <View style={styles.suggestion}>
                   {snomedFamily?.map((item, ind) => (
                     <SelectorBtn

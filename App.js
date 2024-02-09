@@ -16,6 +16,7 @@ import {moderateScale} from './src/utility/scaleDimension';
 import {
   PermmisionStorage,
   NotificationPermission,
+  PermmisionReadStorage,
 } from './src/utility/permissions';
 import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
@@ -81,7 +82,8 @@ function App() {
   React.useEffect(() => {
     PermmisionStorage();
     NotificationPermission();
-  });
+    PermmisionReadStorage();
+  }, []);
   const checkNetworkSpeed = () => {
     const startTime = new Date().getTime();
     const url =

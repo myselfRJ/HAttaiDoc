@@ -1023,3 +1023,20 @@ export const isTablet = () => {
   );
   return screenDiagonal >= 3;
 };
+import BlobUtil from 'react-native-blob-util';
+
+export const fetchPdfAndSaveToLocalFile = async contentUri => {
+  try {
+    // Fetch the content from the URI
+    const response = await BlobUtil.fetch('GET', contentUri);
+
+    // Convert the content to a base64 string
+    const base64String = response.data;
+
+    // Return the base64 string
+    return base64String;
+  } catch (error) {
+    console.error('Error fetching document:', error);
+    return null;
+  }
+};
