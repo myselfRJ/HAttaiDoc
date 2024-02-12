@@ -699,21 +699,25 @@ export const pickSingleFile = async () => {
 export const AppointmentDatafilterAndSortData = data => {
   const pendingItems = data?.filter(item => item.status === 'pending');
   const sortedData = pendingItems;
-  sortedData?.sort((a, b) => {
-    const timeA = new Date(`2023-01-01T${a.appointment_time?.split('-')[0]}`);
-    const timeB = new Date(`2023-01-01T${b.appointment_time?.split('-')[0]}`);
-
-    return timeA - timeB;
+  const filterdata = sortedData?.sort((a, b) => {
+    const startTimeA = parseInt(
+      a?.appointment_slot?.split('-')[0].replace(':', ''),
+      10,
+    );
+    const startTimeB = parseInt(
+      b?.appointment_slot?.split('-')[0].replace(':', ''),
+      10,
+    );
+    return startTimeA - startTimeB;
   });
-  const sorteddata = sortedData;
-  return sorteddata;
+  return filterdata;
 };
 export const CompletedAppointmentDatafilterAndSortData = data => {
   const completedItems = data?.filter(item => item.status === 'completed');
   const sortedData = completedItems;
   sortedData?.sort((a, b) => {
-    const timeA = new Date(`2023-01-01T${a.appointment_time?.split('-')[0]}`);
-    const timeB = new Date(`2023-01-01T${b.appointment_time?.split('-')[0]}`);
+    const timeA = new Date(`2023-01-01T${a.appointment_slot?.split('-')[0]}`);
+    const timeB = new Date(`2023-01-01T${b.appointment_slot?.split('-')[0]}`);
 
     return timeA - timeB;
   });

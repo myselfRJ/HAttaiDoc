@@ -82,6 +82,7 @@ const Dashboard = ({navigation, route}) => {
   const [rangeFees, setRangeFees] = useState('Monthly');
   const [visible, setVisible] = useState(false);
   const [LoadAppoData, setLoadAppoData] = useState(false);
+  const [AppointmentFilterdata, setAppointmentFilterData] = useState([]);
 
   const handleChart = () => {
     setVisible(!visible);
@@ -205,6 +206,9 @@ const Dashboard = ({navigation, route}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setDataAppointment(jsonData.data);
+      setAppointmentFilterData(
+        AppointmentDatafilterAndSortData(jsonData?.data),
+      );
       setLoadAppoData(true);
     } else {
       console.error('API call failed:', response.status, response);
@@ -394,8 +398,8 @@ const Dashboard = ({navigation, route}) => {
       setDoc_name(doc_prof);
     }, [doc_prof]),
   );
-  const AppointmentFilterdata =
-    AppointmentDatafilterAndSortData(setAppointment);
+  // const AppointmentFilterdata =
+  //   AppointmentDatafilterAndSortData(setAppointment);
 
   const handleSelectRange = value => {
     const newRange = rangeAppointment === value ? '' : value;

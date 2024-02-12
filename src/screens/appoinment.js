@@ -63,6 +63,8 @@ const Appointment = ({navigation}) => {
   const [clinics, setDataClinic] = useState();
   const selections = CONSTANTS.selection;
   const [seletedType, setSelectedType] = useState(selections[0]);
+  const [AppointmentFilterResult, setAppointmentFilterData] = useState([]);
+  const [AllData, setAllData] = useState([]);
 
   const {phone} = useSelector(state => state?.phone?.data);
   const [pending, setPending] = useState(false);
@@ -161,6 +163,13 @@ const Appointment = ({navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       setDataAppointment(jsonData.data);
+      setAppointmentFilterData(
+        AppointmentDatafilterAndSortData(jsonData?.data),
+      );
+      setAllData([
+        ...AppointmentDatafilterAndSortData(jsonData?.data),
+        ...CompletedAppointmentDatafilterAndSortData(jsonData?.data),
+      ]);
       setPending(true);
     } else {
       console.error('API call failed:', response.status, response);
@@ -259,14 +268,7 @@ const Appointment = ({navigation}) => {
   useEffect(() => {
     disableBackButton();
   }, []);
-  const AppointmentFilterResult =
-    seletedType !== 'Completed'
-      ? AppointmentDatafilterAndSortData(filteredData)
-      : CompletedAppointmentDatafilterAndSortData(filteredData);
-  const AllData = [
-    ...AppointmentDatafilterAndSortData(setAppointment),
-    ...CompletedAppointmentDatafilterAndSortData(setAppointment),
-  ];
+
   const renderItems = ({item, index}) => {
     return (
       <AppointmentCard
