@@ -36,8 +36,8 @@ export const URL = {
   getInitScreen: `${baseUrl}practioner/init`,
   getUsers: phoneId =>
     `${baseUrl}customuser/getUsers/?doctor_phone_number=${phoneId}`,
-  getConsultationByPatientPhone: phoneId =>
-    `${baseUrl}consult/pres?patient_phone_number=${phoneId}`,
+  getConsultationByPatientPhone: (phoneId, doctorId) =>
+    `${baseUrl}consult/pres?patient_phone_number=${phoneId}&doctor_phone_number=${doctorId}`,
   getConsultationByAppointmentId: id => `${baseUrl}consult/byId?id=${id}`,
   updatevitlas: Id => `${baseUrl}consult/vi?id=${Id}`,
   updateComplaints: Id => `${baseUrl}consult/id?id=${Id}`,

@@ -31,6 +31,7 @@ import {commonstyles} from '../styles/commonstyle';
 import {LoadingElement} from '../components/LoadingElement';
 
 export default function MedicalRecordPatient({route, navigation}) {
+  const {phone} = useSelector(state => state?.phone?.data);
   const Views = CONSTANTS.prescription;
   const [selectedView, setSelectedView] = useState(Views[0]);
   const [data, setData] = useState([]);
@@ -67,7 +68,7 @@ export default function MedicalRecordPatient({route, navigation}) {
   const [open, setOpen] = useState(false);
   const fetchPrescribe = async () => {
     const response = await fetchApi(
-      URL.getConsultationByPatientPhone(patient_phone),
+      URL.getConsultationByPatientPhone(patient_phone, phone),
       {
         method: 'GET',
         headers: {

@@ -201,24 +201,6 @@ const MedicalHistory = ({navigation, route}) => {
           ?.filter(item => item?.appointment_id === appointmentID)
           ?.slice(-1)?.[0]?.vitals
       : {};
-  useEffect(() => {
-    if (vitalsData && vitalsData?.LDD !== '') {
-      dispatch(
-        addmenstrualHistory([
-          ...menstrualHistory,
-          {
-            mens: {
-              pregnant: {
-                lmp: vitalsData?.LDD,
-                edd: vitalsData?.EDD,
-              },
-            },
-            appointment_id: appointmentID,
-          },
-        ]),
-      );
-    }
-  }, []);
   const handleDeleteSocial = index => {
     if (socialHistory) {
       const updatedSocial = socialHistory?.filter((item, ind) => ind !== index);
@@ -497,6 +479,7 @@ const MedicalHistory = ({navigation, route}) => {
           );
         }
         if (jsonData?.data[0]?.procedures) {
+          console.log(jsonData?.data[0]?.procedures);
           setprocedures(jsonData?.data[0]?.procedures);
           dispatch(
             addProcedures([
@@ -507,6 +490,7 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.red_flag) {
           setRed_Flag(jsonData?.data[0]?.red_flag);
+          console.log(jsonData?.data[0]?.red_flag);
           dispatch(
             addRedFalg([...redflag, {red_flag: jsonData?.data[0]?.red_flag}]),
           );

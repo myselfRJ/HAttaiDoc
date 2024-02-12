@@ -396,6 +396,7 @@ const Dashboard = ({navigation, route}) => {
   );
   const AppointmentFilterdata =
     AppointmentDatafilterAndSortData(setAppointment);
+
   const handleSelectRange = value => {
     const newRange = rangeAppointment === value ? '' : value;
     const newRangeFees = rangeFees === value ? '' : value;
