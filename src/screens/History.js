@@ -538,76 +538,179 @@ const History = ({route, navigation}) => {
             <Text style={styles.mens}>
               Menstrual History:{' '}
               <Text style={styles.textHis}>
-                Menarche: <Text style={styles.textDat}>{menstrual?.age}</Text>,
-                Mensturation Status:{' '}
-                <Text style={styles.textDat}> {menstrual?.status}, </Text>Flow
-                days:
-                <Text style={styles.textDat}>{menstrual?.flowdays}</Text> Cycle
-                days:
-                <Text style={styles.textDat}>
-                  {menstrual?.cycledays},{' '}
-                </Text>{' '}
-                Pregnant:
-                <Text style={styles.textDat}>
-                  {menstrual?.pregnant?.lmp !== '' ? 'Yes' : 'No'},{' '}
-                </Text>
-                Lmp:
-                <Text style={styles.textDat}>{menstrual?.pregnant?.lmp}, </Text>
-                Edd:{' '}
-                <Text style={styles.textDat}>{menstrual?.pregnant?.edd}</Text>
+                {menstrual?.age && (
+                  <Text>
+                    Menarche:{' '}
+                    <Text style={styles.textDat}>{menstrual?.age}</Text>,
+                  </Text>
+                )}
+                {menstrual?.status && (
+                  <Text>
+                    Mensturation Status:{' '}
+                    <Text style={styles.textDat}> {menstrual?.status}, </Text>
+                  </Text>
+                )}
+                {menstrual?.flowdays && (
+                  <Text>
+                    Flow days:
+                    <Text style={styles.textDat}>{menstrual?.flowdays}</Text>
+                  </Text>
+                )}
+                {menstrual?.cycledays && (
+                  <Text>
+                    Cycle days:
+                    <Text style={styles.textDat}>
+                      {menstrual?.cycledays},{' '}
+                    </Text>{' '}
+                  </Text>
+                )}
+                {menstrual?.pregnant?.lmp && (
+                  <Text>
+                    Pregnant:
+                    <Text style={styles.textDat}>
+                      {menstrual?.pregnant?.lmp !== '' ? 'Yes' : 'No'},{' '}
+                    </Text>
+                  </Text>
+                )}
+                {menstrual?.pregnant?.lmp && (
+                  <Text>
+                    Lmp:
+                    <Text style={styles.textDat}>
+                      {menstrual?.pregnant?.lmp},{' '}
+                    </Text>
+                  </Text>
+                )}
+                {menstrual?.pregnant?.edd && (
+                  <Text>
+                    Edd:{' '}
+                    <Text style={styles.textDat}>
+                      {menstrual?.pregnant?.edd}
+                    </Text>
+                  </Text>
+                )}
               </Text>
             </Text>
             <Text style={styles.mens}>
               Obstetric History:{' '}
               <Text style={styles.textHis}>
-                G:{' '}
-                <Text style={styles.textDat}>{obsteric?.gravidity?.value}</Text>{' '}
-                T: <Text style={styles.textDat}>{obsteric?.term?.value},</Text>{' '}
-                P:{' '}
-                <Text style={styles.textDat}>
-                  {obsteric?.premature?.value},
-                </Text>{' '}
-                A:{' '}
-                <Text style={styles.textDat}>
-                  {obsteric?.abortions?.value},
-                </Text>{' '}
-                L:{' '}
-                <Text style={styles.textDat}>{obsteric?.living?.length},</Text>
+                {obsteric?.gravidity?.value && (
+                  <Text>
+                    G:{' '}
+                    <Text style={styles.textDat}>
+                      {obsteric?.gravidity?.value}
+                    </Text>{' '}
+                  </Text>
+                )}
+                {obsteric?.term?.value && (
+                  <Text>
+                    {' '}
+                    T:{' '}
+                    <Text style={styles.textDat}>
+                      {obsteric?.term?.value},
+                    </Text>{' '}
+                  </Text>
+                )}
+                {obsteric?.premature?.value && (
+                  <Text>
+                    P:{' '}
+                    <Text style={styles.textDat}>
+                      {obsteric?.premature?.value},
+                    </Text>{' '}
+                  </Text>
+                )}
+                {obsteric?.abortions?.value && (
+                  <Text>
+                    A:{' '}
+                    <Text style={styles.textDat}>
+                      {obsteric?.abortions?.value},
+                    </Text>{' '}
+                  </Text>
+                )}
+                {obsteric?.living?.length && (
+                  <Text>
+                    L:{' '}
+                    <Text style={styles.textDat}>
+                      {obsteric?.living?.length}
+                    </Text>
+                  </Text>
+                )}
               </Text>
             </Text>
             <Text style={styles.mens}>
               Martial History:{' '}
               <Text style={styles.textHis}>
-                Married Since:
-                <Text style={styles.textDat}> {martial?.married}, </Text>
-                Consanguinity:{' '}
-                <Text style={styles.textDat}>{martial?.cons},</Text> Others:
-                <Text style={styles.textDat}> {martial?.others}</Text>
+                {martial?.married && (
+                  <Text>
+                    {' '}
+                    Married Since:
+                    <Text style={styles.textDat}> {martial?.married}, </Text>
+                  </Text>
+                )}
+                {martial?.cons && (
+                  <Text>
+                    Consanguinity:{' '}
+                    <Text style={styles.textDat}>{martial?.cons}</Text>
+                  </Text>
+                )}
+                {martial?.others && (
+                  <Text>
+                    , Others:
+                    <Text style={styles.textDat}> {martial?.others}</Text>
+                  </Text>
+                )}
               </Text>
             </Text>
-            <Text style={styles.mens}>
-              Comorbidities: <Text style={styles.textDat}>{commor}</Text>
-            </Text>
-            <Text style={styles.mens}>
-              Past Hospitalization: <Text style={styles.textDat}>{past}</Text>
-            </Text>
-            <Text style={styles.mens}>
-              Social History: <Text style={styles.textDat}>{social}</Text>
-            </Text>
+            {commor && (
+              <Text style={styles.mens}>
+                Comorbidities: <Text style={styles.textDat}>{commor}</Text>
+              </Text>
+            )}
+            {past && (
+              <Text style={styles.mens}>
+                Past Hospitalization: <Text style={styles.textDat}>{past}</Text>
+              </Text>
+            )}
+            {social && (
+              <Text style={styles.mens}>
+                Social History: <Text style={styles.textDat}>{social}</Text>
+              </Text>
+            )}
             <Text style={styles.mens}>
               Family History:{' '}
               <Text style={styles.textHis}>
-                Father:{' '}
-                <Text style={styles.textDat}>{fatherFamily?.join(', ')},</Text>{' '}
-                Mother:{' '}
-                <Text style={styles.textDat}>{motherfamily?.join(', ')},</Text>{' '}
-                Others:{' '}
-                <Text style={styles.textDat}>{othersfamily?.join(', ')}</Text>
+                {fatherFamily && (
+                  <Text>
+                    {' '}
+                    Father:{' '}
+                    <Text style={styles.textDat}>
+                      {fatherFamily?.join(', ')},
+                    </Text>
+                  </Text>
+                )}{' '}
+                {motherfamily && (
+                  <Text>
+                    Mother:{' '}
+                    <Text style={styles.textDat}>
+                      {motherfamily?.join(', ')}
+                    </Text>
+                  </Text>
+                )}{' '}
+                {othersfamily && (
+                  <Text>
+                    , Others:{' '}
+                    <Text style={styles.textDat}>
+                      {othersfamily?.join(', ')}
+                    </Text>
+                  </Text>
+                )}
               </Text>
             </Text>
-            <Text style={styles.mens}>
-              Medication History: <Text style={styles.textDat}>{medical}</Text>
-            </Text>
+            {medical && (
+              <Text style={styles.mens}>
+                Medication History:{' '}
+                <Text style={styles.textDat}>{medical}</Text>
+              </Text>
+            )}
           </View>
         </View>
       )}
