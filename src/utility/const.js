@@ -696,6 +696,31 @@ export const pickSingleFile = async () => {
     }
   }
 };
+
+import RNImageToPdf from 'react-native-image-to-pdf';
+export const myAsyncPDFFunction = async (...data) => {
+  try {
+    const options = {
+      imagePaths: data,
+      name: 'healthrecords.pdf',
+      maxSize: {
+        // optional maximum image dimension - larger images will be resized
+        width: 900,
+        height: Math.round(
+          (Dimensions.get('window').height / Dimensions.get('window').width) *
+            900,
+        ),
+      },
+      quality: 0.7, // optional compression paramter
+    };
+    const pdf = await RNImageToPdf.createPDFbyImages(options);
+
+    console.log(pdf.filePath);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const AppointmentDatafilterAndSortData = data => {
   const pendingItems = data?.filter(item => item.status === 'pending');
   const sortedData = pendingItems;

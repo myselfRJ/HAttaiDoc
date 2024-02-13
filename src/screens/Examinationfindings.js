@@ -167,6 +167,16 @@ const ExaminationFindings = ({navigation}) => {
     {name: report?.file3 ? report?.file3 : null},
     {name: report?.file4 ? report?.file4 : null},
     {name: report?.file5 ? report?.file5 : null},
+    {name: report?.file6 ? report?.file6 : null},
+    {name: report?.file7 ? report?.file7 : null},
+    {name: report?.file8 ? report?.file8 : null},
+    {name: report?.file9 ? report?.file9 : null},
+    {name: report?.file10 ? report?.file10 : null},
+    {name: report?.file11 ? report?.file11 : null},
+    {name: report?.file12 ? report?.file12 : null},
+    {name: report?.file13 ? report?.file13 : null},
+    {name: report?.file14 ? report?.file14 : null},
+    {name: report?.file15 ? report?.file15 : null},
   ];
   const report_filter = report_findings?.filter(
     item => item?.name !== undefined && item?.name !== null,
@@ -182,14 +192,16 @@ const ExaminationFindings = ({navigation}) => {
   const onImagePress = async () => {
     try {
       const data = await handleGallery();
-      SetUploadDocument([
-        ...uploaddocument,
-        {
-          name: data?.name,
-          type: data?.type,
-          uri: data?.uri,
-        },
-      ]);
+      if (data?.name !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: data?.name,
+            type: data?.type,
+            uri: data?.uri,
+          },
+        ]);
+      }
     } catch (error) {
       console.error('Error capturing data:', error);
     }
@@ -199,14 +211,16 @@ const ExaminationFindings = ({navigation}) => {
   const openCamera = async () => {
     try {
       const data = await handleCamera();
-      SetUploadDocument([
-        ...uploaddocument,
-        {
-          name: data?.name,
-          type: data?.type,
-          uri: data?.uri,
-        },
-      ]);
+      if (data?.name !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: data?.name,
+            type: data?.type,
+            uri: data?.uri,
+          },
+        ]);
+      }
     } catch (error) {
       console.error('Error capturing data:', error);
     }
@@ -216,15 +230,17 @@ const ExaminationFindings = ({navigation}) => {
   const handleSelectFilename = async () => {
     try {
       const file = await pickSingleFile();
-      SetUploadDocument([
-        ...uploaddocument,
-        {
-          name: file?.name,
-          type: file?.type,
-          uri: file?.uri,
-          base64: file?.base64uri,
-        },
-      ]);
+      if (file?.type !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: file?.name,
+            type: file?.type,
+            uri: file?.uri,
+            base64: file?.base64uri,
+          },
+        ]);
+      }
     } catch (error) {}
     setModal(!modal);
   };
@@ -248,7 +264,7 @@ const ExaminationFindings = ({navigation}) => {
   };
 
   const handleModal = () => {
-    if ([...uploaddocument, ...report_filter]?.length >= 5) {
+    if ([...uploaddocument, ...report_filter]?.length >= 15) {
       setModal(false);
     } else {
       setModal(true);
@@ -423,7 +439,7 @@ const ExaminationFindings = ({navigation}) => {
           alignSelf: 'flex-end',
           marginTop: verticalScale(48),
           backgroundColor:
-            colorCheck?.length === 5
+            colorCheck?.length === 15
               ? CUSTOMCOLOR.disable
               : CUSTOMCOLOR.primary,
         }}

@@ -197,12 +197,23 @@ const History = ({route, navigation}) => {
     const path = `${fileurl}${filepath}`;
     navigation.navigate('pdfhistory', {path});
   };
+
   const reports_finding = [
     reports?.file1 ? {report_url: reports?.file1} : null,
     reports?.file2 ? {report_url: reports?.file2} : null,
     reports?.file3 ? {report_url: reports?.file3} : null,
     reports?.file4 ? {report_url: reports?.file4} : null,
     reports?.file5 ? {report_url: reports?.file5} : null,
+    reports?.file6 ? {report_url: reports?.file6} : null,
+    reports?.file7 ? {report_url: reports?.file7} : null,
+    reports?.file8 ? {report_url: reports?.file8} : null,
+    reports?.file9 ? {report_url: reports?.file9} : null,
+    reports?.file10 ? {report_url: reports?.file10} : null,
+    reports?.file11 ? {report_url: reports?.file11} : null,
+    reports?.file12 ? {report_url: reports?.file12} : null,
+    reports?.file13 ? {report_url: reports?.file13} : null,
+    reports?.file14 ? {report_url: reports?.file14} : null,
+    reports?.file15 ? {report_url: reports?.file15} : null,
   ];
   const physical_reports = [
     physical?.file1 ? physical?.file1 : null,
@@ -311,6 +322,7 @@ const History = ({route, navigation}) => {
       fetchConsultation();
       fetchreports();
       fetchExamination();
+      fetchReports();
       fetchMedicalData();
     }, [selectedType]),
   );
