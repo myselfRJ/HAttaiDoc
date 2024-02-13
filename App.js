@@ -83,6 +83,7 @@ function App() {
     PermmisionStorage();
     NotificationPermission();
     PermmisionReadStorage();
+    // myAsyncPDFFunction();
   }, []);
   const checkNetworkSpeed = () => {
     const startTime = new Date().getTime();

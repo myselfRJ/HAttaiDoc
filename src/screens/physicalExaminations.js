@@ -134,14 +134,16 @@ const PhysicalExamination = ({navigation}) => {
   const onImagePress = async () => {
     try {
       const data = await handleGallery();
-      SetUploadDocument([
-        ...uploaddocument,
-        {
-          name: data?.name,
-          type: data?.type,
-          uri: data?.uri,
-        },
-      ]);
+      if (data?.name !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: data?.name,
+            type: data?.type,
+            uri: data?.uri,
+          },
+        ]);
+      }
     } catch (error) {
       console.error('Error capturing data:', error);
     }
@@ -151,14 +153,16 @@ const PhysicalExamination = ({navigation}) => {
   const openCamera = async () => {
     try {
       const data = await handleCamera();
-      SetUploadDocument([
-        ...uploaddocument,
-        {
-          name: data?.name,
-          type: data?.type,
-          uri: data?.uri,
-        },
-      ]);
+      if (data?.name !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {
+            name: data?.name,
+            type: data?.type,
+            uri: data?.uri,
+          },
+        ]);
+      }
     } catch (error) {
       console.error('Error capturing data:', error);
     }
@@ -168,10 +172,12 @@ const PhysicalExamination = ({navigation}) => {
   const handleSelectFilename = async () => {
     try {
       const file = await pickSingleFile();
-      SetUploadDocument([
-        ...uploaddocument,
-        {name: file?.name, type: file?.type, uri: file?.uri},
-      ]);
+      if (file?.name !== undefined) {
+        SetUploadDocument([
+          ...uploaddocument,
+          {name: file?.name, type: file?.type, uri: file?.uri},
+        ]);
+      }
     } catch (error) {}
     setModal(!modal);
   };
