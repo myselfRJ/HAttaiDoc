@@ -456,8 +456,8 @@ const Visit = ({navigation, route}) => {
 
   useEffect(() => {
     // clearStorage();
-    fetchReport();
-    GetFees();
+    // fetchReport();
+    // GetFees();
     fetchVitals();
     fetchComplaint();
     setData(doc_prof);

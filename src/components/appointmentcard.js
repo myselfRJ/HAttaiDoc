@@ -30,7 +30,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addCheifComplaint} from '../redux/features/prescription/prescriptionSlice';
 import {addAppointmentID} from '../redux/features/profiles/clinicAddress';
 
-const AppointmentCard = ({appointment, openVisit}) => {
+const AppointmentCard = React.memo(({appointment, openVisit}) => {
   const [visible, setVisible] = useState(false);
   const appointmentCardRef = useRef(null);
   const dispatch = useDispatch();
@@ -102,9 +102,9 @@ const AppointmentCard = ({appointment, openVisit}) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    NotificationData();
-  }, []);
+  // useEffect(() => {
+  //   NotificationData();
+  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       NotificationData();
@@ -306,7 +306,7 @@ const AppointmentCard = ({appointment, openVisit}) => {
       </View>
     </View>
   );
-};
+});
 
 export default AppointmentCard;
 

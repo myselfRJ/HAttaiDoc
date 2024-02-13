@@ -126,19 +126,19 @@ const UserDisplay = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       fetchUsers();
-    }, []),
+    }, [visible]),
   );
   const [del_id, setDel_id] = useState();
-  useEffect(() => {
-    fetchUsers();
-  }, [visible]);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [visible]);
   const handleDeleteuser = value => {
     setVisible(!visible);
     setDel_id(value);

@@ -40,9 +40,9 @@ const NotificationCard = ({
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchDoctor();
-  }, []);
+  // useEffect(() => {
+  //   fetchDoctor();
+  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       fetchDoctor();
