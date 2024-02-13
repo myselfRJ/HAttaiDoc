@@ -297,14 +297,14 @@ const History = ({route, navigation}) => {
       console.error('Error in fetchMedicalData:', error);
     }
   };
-  useEffect(() => {
-    fetchRefferal();
-    fetchConsultation();
-    fetchreports();
-    fetchExamination();
-    fetchReports();
-    fetchMedicalData();
-  }, []);
+  // useEffect(() => {
+  //   fetchRefferal();
+  //   fetchConsultation();
+  //   fetchreports();
+  //   fetchExamination();
+  //   fetchReports();
+  //   fetchMedicalData();
+  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       fetchRefferal();

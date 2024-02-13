@@ -92,7 +92,7 @@ const ExaminationFindings = ({navigation}) => {
   };
   const postData = async url => {
     const formData = new FormData();
-    formData.append('finding', `${value ? value : 'NaN'}`);
+    formData.append('finding', `${value ? value : 'Reports'}`);
     formData.append('description', `${JSON.stringify(files)}`);
     formData.append('doctor_phone_number', `${examinationDetails?.doc_phone}`);
     formData.append(
@@ -344,7 +344,7 @@ const ExaminationFindings = ({navigation}) => {
         <PlusButton
           type={'add'}
           onPress={handleFiles}
-          style={{marginTop: moderateScale(72)}}
+          style={{alignSelf: 'flex-end', marginTop: verticalScale(48)}}
           icon={'plus'}
           size={moderateScale(32)}
         />

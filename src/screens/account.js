@@ -53,13 +53,13 @@ const Account = () => {
   const pharmaphone = useSelector(
     state => state?.clinicid?.clinic_pharmacy_phone,
   );
-  console.log(pharmaphone);
-  useEffect(() => {
-    // fetchData();
-    setData(doc_prof);
-    setClinicId(Clinic_id);
-    setClinics(Clinic_data);
-  }, [doc_prof]);
+  // console.log(pharmaphone);
+  // useEffect(() => {
+  //   // fetchData();
+  //   setData(doc_prof);
+  //   setClinicId(Clinic_id);
+  //   setClinics(Clinic_data);
+  // }, [doc_prof]);
 
   const fetchUsers = async () => {
     const response = await fetchApi(URL.getUsers(phone), {
@@ -76,9 +76,9 @@ const Account = () => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchUsers();
-  }, [phone]);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [phone]);
 
   const today = moment().toISOString().split('-')[0];
   const BirthYear = data?.DOB.split('-')[0];
@@ -95,7 +95,7 @@ const Account = () => {
       setClinics(Clinic_data);
       fetchUsers();
       setData(doc_prof);
-    }, [doc_prof]),
+    }, [doc_prof, phone]),
   );
   const userLogout = async () => {
     const response = await fetch(URL.logout, {

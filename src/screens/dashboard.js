@@ -64,12 +64,13 @@ import {
   AppointmentsInAYear,
   feeDataIneachday,
   feeDataInyear,
+  generateMonthSeries,
   WeekdaysData,
 } from '../utility/const';
 import {addpastHospitalization} from '../redux/features/prescription/pastHistory';
 import {LoadingElement} from '../components/LoadingElement';
-console.log(Dimensions.get('window').height);
-const Dashboard = ({navigation, route}) => {
+
+const Dashboard = React.memo(({navigation, route}) => {
   const months = CONSTANTS.months;
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
@@ -138,9 +139,7 @@ const Dashboard = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchClinic();
-  }, [phone]);
+
   const [doc_name, setDoc_name] = useState();
   const Clinic_data = useSelector(state => state?.clinic?.clinics);
   const fetchDoctors = async () => {
@@ -181,12 +180,6 @@ const Dashboard = ({navigation, route}) => {
     }
   };
 
-  useEffect(() => {
-    fetchDoctors();
-    setDoc_name(doc_prof);
-    savingFcmToken();
-  }, []);
-
   const appointment_date = formatDate;
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
@@ -217,11 +210,11 @@ const Dashboard = ({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    setTimeout(() => {
-      fetchAppointment();
-    }, 1000);
-  }, [formatDate, Clinic_id, clinicid]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     fetchAppointment();
+  //   }, 1000);
+  // }, [formatDate, Clinic_id, clinicid]);
 
   const AppointmentChartData = {
     labels:
@@ -298,7 +291,7 @@ const Dashboard = ({navigation, route}) => {
     );
     try {
       const response = await fetchApi(
-        URL.getAppointmentsInRange(start_date, end_date, phone),
+        URL.getAppointmentsForStats(start_date, end_date, phone),
         {
           method: 'GET',
           headers: {
@@ -340,7 +333,6 @@ const Dashboard = ({navigation, route}) => {
       console.log(error);
     }
   };
-
   const FetchRangeFees = async () => {
     const start_date = encodeURIComponent(
       rangeAppointment === 'Monthly'
@@ -387,23 +379,25 @@ const Dashboard = ({navigation, route}) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
-  useEffect(() => {
-    FetchRangeAppointments();
-    FetchRangeFees();
-  }, [rangeAppointment]);
   useFocusEffect(
     React.useCallback(() => {
       FetchRangeAppointments();
       FetchRangeFees();
       setDoc_name(doc_prof);
-    }, [doc_prof]),
+      fetchClinic();
+    }, [doc_prof, rangeAppointment, rangeFees]),
   );
-  // const AppointmentFilterdata =
-  //   AppointmentDatafilterAndSortData(setAppointment);
-
+  useEffect(() => {
+    FetchRangeFees();
+    FetchRangeAppointments();
+    fetchDoctors();
+    setDoc_name(doc_prof);
+    savingFcmToken();
+  }, [rangeAppointment, rangeFees]);
+  // console.log(fees);
   const handleSelectRange = value => {
     const newRange = rangeAppointment === value ? '' : value;
     const newRangeFees = rangeFees === value ? '' : value;
@@ -552,7 +546,7 @@ const Dashboard = ({navigation, route}) => {
       </View>
     </View>
   );
-};
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

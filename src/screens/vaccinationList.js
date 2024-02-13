@@ -31,9 +31,9 @@ const Vaccination_List = ({navigation}) => {
     setAges(jsonAges);
     setVaccinedata(jsonData?.data);
   };
-  useEffect(() => {
-    fetchImmunization();
-  }, []);
+  // useEffect(() => {
+  //   fetchImmunization();
+  // }, []);
   useFocusEffect(
     useCallback(() => {
       fetchImmunization();

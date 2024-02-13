@@ -59,7 +59,7 @@ const Appointment = ({navigation}) => {
   const ClinicRef = useRef(null);
   const [selectedClinic, setSelectedClinic] = useState('');
   const [clinicID, setClinic] = useState('');
-  const [clinicName, setClinicName] = useState('');
+  const [completedAppointments, setCompletedAppointments] = useState([]);
   const [clinics, setDataClinic] = useState();
   const selections = CONSTANTS.selection;
   const [seletedType, setSelectedType] = useState(selections[0]);
@@ -120,31 +120,6 @@ const Appointment = ({navigation}) => {
   }, []);
 
   const token = useSelector(state => state.authenticate.auth.access);
-
-  const fetchClinic = async () => {
-    const response = await fetchApi(URL.getClinic(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      setDataClinic(jsonData.data);
-      setSelectedClinic(jsonData.data[0].clinic_name);
-      setClinic(jsonData?.data[0]?.id);
-      dispatch(addclinic_id(jsonData?.data[0]?.id));
-      dispatch(addclinic_name(jsonData?.data[0]?.clinic_name));
-      dispatch(addclinic_Address(jsonData?.data[0]?.clinic_Address));
-      dispatch(addclinic_phone(jsonData?.data[0]?.clinic_phone_number));
-      dispatch(addPharmaPhone(jsonData?.data[0]?.pharmacyPhone));
-    } else {
-      console.error('API call failed:', response.status, response);
-    }
-  };
-  // useEffect(() => {
-  //   fetchClinic();
-  // }, [phone]);
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const appointment_date = formatDate;
@@ -166,26 +141,20 @@ const Appointment = ({navigation}) => {
       setAppointmentFilterData(
         AppointmentDatafilterAndSortData(jsonData?.data),
       );
-      setAllData([
-        ...AppointmentDatafilterAndSortData(jsonData?.data),
-        ...CompletedAppointmentDatafilterAndSortData(jsonData?.data),
-      ]);
+      setCompletedAppointments(
+        CompletedAppointmentDatafilterAndSortData(jsonData?.data),
+      );
       setPending(true);
     } else {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    setTimeout(() => {
-      fetchAppointment();
-    }, 1000);
-  }, [formatDate, Clinic_id]);
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     try {
       if (name) {
-        const filtered = setAppointment?.filter(
+        const filtered = AppointmentFilterResult?.filter(
           item =>
             item?.patient_data?.patient_name &&
             item?.patient_name?.toLowerCase()?.startsWith(name?.toLowerCase()),
@@ -196,7 +165,7 @@ const Appointment = ({navigation}) => {
         seletedType !== 'All' &&
         seletedType !== 'Completed'
       ) {
-        const filtered = setAppointment?.filter(
+        const filtered = AppointmentFilterResult?.filter(
           item =>
             item?.appointment_type &&
             item?.appointment_type?.toLowerCase() ===
@@ -204,45 +173,16 @@ const Appointment = ({navigation}) => {
         );
         setFilteredData(filtered);
       } else {
-        setFilteredData(setAppointment);
+        setFilteredData(AppointmentFilterResult);
       }
       if (seletedType === 'Completed') {
-        const filtered = setAppointment?.filter(
-          item =>
-            item?.appointment_type &&
-            item?.status?.toLowerCase() === seletedType?.toLowerCase(),
-        );
-        setFilteredData(filtered);
+        setFilteredData(completedAppointments);
       }
     } catch (error) {
       console.error('Error in useEffect:', error);
     }
-  }, [setAppointment, name, seletedType]);
-
-  const [doc_name, setDoc_name] = useState();
-
-  // const fetchname = async () => {
-  //   const response = await fetchApi(URL.getPractitionerByNumber(phone), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     // setDoc_name(jsonData.data);
-  //   } else {
-  //     console.error('API call failed:', response.status, response);
-  //   }
-  // };
-  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
-  useEffect(() => {
-    // fetchname();
-    setDoc_name(doc_prof);
-  }, []);
-
+  }, [AppointmentFilterResult, name, seletedType]);
   const clinics_data = useSelector(state => state?.clinic?.clinics);
-
   const handlePlusBUtton = () => {
     dispatch(addclinic_id(Clinic_id));
     navigation.navigate('addnew');
@@ -259,16 +199,10 @@ const Appointment = ({navigation}) => {
       }, 1000);
     }, [Clinic_id, appointment_date]),
   );
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchClinic();
-  //   }, []),
-  // );
 
   useEffect(() => {
     disableBackButton();
   }, []);
-
   const renderItems = ({item, index}) => {
     return (
       <AppointmentCard
@@ -362,10 +296,12 @@ const Appointment = ({navigation}) => {
             <LoadingElement />
           ) : (
             <>
-              {AppointmentFilterResult?.length > 0 ? (
+              {filteredData?.length > 0 ? (
                 <FlatList
                   data={
-                    seletedType === 'All' ? AllData : AppointmentFilterResult
+                    seletedType === 'All'
+                      ? [...AppointmentFilterResult, ...completedAppointments]
+                      : filteredData
                   }
                   renderItem={renderItems}
                   style={styles.appointmentCard}

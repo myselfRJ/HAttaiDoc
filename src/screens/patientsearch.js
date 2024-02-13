@@ -108,13 +108,13 @@ const PatientSearch = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    if (Clinic_id) {
-      setTimeout(() => {
-        fetchData();
-      }, 1000);
-    }
-  }, [Clinic_id]);
+  // useEffect(() => {
+  //   if (Clinic_id) {
+  //     setTimeout(() => {
+  //       fetchData();
+  //     }, 1000);
+  //   }
+  // }, [Clinic_id]);
 
   useEffect(() => {
     if (name) {

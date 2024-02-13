@@ -714,82 +714,71 @@ export const AppointmentDatafilterAndSortData = data => {
 };
 export const CompletedAppointmentDatafilterAndSortData = data => {
   const completedItems = data?.filter(item => item.status === 'completed');
-  const sortedData = completedItems;
-  sortedData?.sort((a, b) => {
-    const timeA = new Date(`2023-01-01T${a.appointment_slot?.split('-')[0]}`);
-    const timeB = new Date(`2023-01-01T${b.appointment_slot?.split('-')[0]}`);
-
-    return timeA - timeB;
+  const filterdata = completedItems?.sort((a, b) => {
+    const startTimeA = parseInt(
+      a?.appointment_slot?.split('-')[0].replace(':', ''),
+      10,
+    );
+    const startTimeB = parseInt(
+      b?.appointment_slot?.split('-')[0].replace(':', ''),
+      10,
+    );
+    return startTimeA - startTimeB;
   });
-  const sorteddata = sortedData;
-  return sorteddata;
+  return filterdata;
 };
 import {CONSTANTS} from './constant';
 import {Alert} from 'react-native';
 const months = CONSTANTS.months;
+export function generateMonthSeries(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const monthSeries = [];
+  while (start <= end) {
+    const month = start.toLocaleString('default', {month: 'short'});
+    const year = start.getFullYear();
+    const monthString = `${month}-${year}`;
 
-export const AppointmentsInAYear = (data, start_date, end_date) => {
-  function generateMonthSeries(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const monthSeries = [];
-    while (start <= end) {
-      const month = start.toLocaleString('default', {month: 'short'});
-      const year = start.getFullYear();
-      const monthString = `${month}-${year}`;
-
-      monthSeries.push(monthString);
-      start.setMonth(start.getMonth() + 1);
-    }
-
-    return monthSeries;
+    monthSeries.push(monthString);
+    start.setMonth(start.getMonth() + 1);
   }
-  const result = generateMonthSeries(start_date, end_date);
-  const monthlyCounts = [];
+  return monthSeries;
+}
+export const AppointmentsInAYear = (data, start_date, end_date) => {
+  const monthSeries = generateMonthSeries(start_date, end_date);
+  const monthlyCounts = monthSeries.map(month => ({month, count: 0}));
   data.forEach(appointment => {
     const date = new Date(appointment.appointment_date);
-    const monthYear = `${months[date.getMonth() + 1]}-${date.getFullYear()}`;
-    const existingMonth = monthlyCounts.find(
-      entry => entry.month === monthYear,
-    );
-    if (existingMonth) {
-      existingMonth.count++;
-    } else {
-      monthlyCounts.push({month: monthYear, count: 1});
+    const monthYear = `${date.toLocaleString('default', {
+      month: 'short',
+    })}-${date.getFullYear()}`;
+    const monthIndex = monthSeries.indexOf(monthYear);
+    if (monthIndex !== -1) {
+      monthlyCounts[monthIndex].count++;
     }
   });
-  if (monthlyCounts?.length > 0) {
-    let dummyvariable = result?.map((item, _) => {
-      let obj = monthlyCounts.filter(e => e.month === item);
-      if (obj.length > 0) {
-        return {month: obj[0]?.month, count: obj[0]?.count};
-      } else {
-        return {month: item, count: 0};
-      }
-    });
-    return dummyvariable;
-  }
+
+  return monthlyCounts;
 };
 
 export const AppointmentsInAMonth = (data, startDate, endDate) => {
-  const dailyCounts = {};
-  data.forEach(appointment => {
-    const date = new Date(appointment.appointment_date);
-    const dayKey = date.toISOString().split('T')[0];
-    if (!dailyCounts[dayKey]) {
-      dailyCounts[dayKey] = 0;
-    }
-    dailyCounts[dayKey]++;
-  });
-  const EveryDayresult = {};
-  const currentDate = new Date(startDate);
-  const endDateTime = new Date(endDate).getTime();
-  while (currentDate.getTime() <= endDateTime) {
+  const dailyCounts = data.reduce((acc, appointment) => {
+    const dayKey = appointment.appointment_date.split('T')[0];
+    acc[dayKey] = (acc[dayKey] || 0) + 1;
+    return acc;
+  }, {});
+
+  let result = {};
+  let currentDate = new Date(startDate);
+  const end = new Date(endDate);
+
+  while (currentDate <= end) {
     const formattedDate = currentDate.toISOString().split('T')[0];
-    EveryDayresult[formattedDate] = dailyCounts[formattedDate] || 0;
+    result[formattedDate] = dailyCounts[formattedDate] || 0;
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  return EveryDayresult;
+
+  return result;
 };
 
 export const WeekdaysData = data => {
@@ -810,20 +799,6 @@ export const WeekdaysData = data => {
 };
 
 export const feeDataInyear = (data, startDate, endDate) => {
-  function generateMonthSeries(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const monthSeries = [];
-    while (start <= end) {
-      const month = start.toLocaleString('default', {month: 'short'});
-      const year = start.getFullYear();
-      const monthString = `${month}-${year}`;
-
-      monthSeries.push(monthString);
-      start.setMonth(start.getMonth() + 1);
-    }
-    return monthSeries;
-  }
   const result = generateMonthSeries(startDate, endDate);
   function filterDataByDateRange(startDate, endDate) {
     return data.filter(entry => {
@@ -881,19 +856,7 @@ export const feeDataInyear = (data, startDate, endDate) => {
 };
 
 export const feeDataIneachday = (data, startDate, endDate) => {
-  // function filterDataByDateRange(startDate, endDate) {
-  //   return data.filter(entry => {
-  //     const entryDate = new Date(entry.created_at);
-  //     return entryDate >= startDate;
-  //   });
-  // }
-
-  // const feesDataInRange = filterDataByDateRange(
-  //   new Date(startDate),
-  //   new Date(endDate),
-  // );
   const dailyData = {};
-
   data.forEach(entry => {
     const entryDate = new Date(entry.created_at);
     const year = entryDate.getFullYear().toString();

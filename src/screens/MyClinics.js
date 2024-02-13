@@ -196,17 +196,17 @@ const MyClinics = ({navigation}) => {
       setTimeout(() => {
         fetchClinics();
       }, 1000);
-    }, [phone]),
+    }, [phone, visible]),
   );
   const handleDelete = value => {
     setVisible(!visible);
     setDel_id(value);
   };
-  useEffect(() => {
-    setTimeout(() => {
-      fetchClinics();
-    }, 1000);
-  }, [visible]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     fetchClinics();
+  //   }, 1000);
+  // }, [visible]);
 
   return (
     <>

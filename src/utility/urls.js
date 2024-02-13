@@ -16,6 +16,8 @@ export const URL = {
   get_all_appointments_of_clinic: `${baseUrl}customappointment/get/appointment/`,
   getAppointmentsInRange: (start, end, phone) =>
     `${baseUrl}customappointment/app?start_date=${start}&end_date=${end}&doctor_phone=${phone}`,
+  getAppointmentsForStats: (start, end, phone) =>
+    `${baseUrl}customappointment/range?start_date=${start}&end_date=${end}&doctor_phone=${phone}`,
   Appointment_Booking: `${baseUrl}customappointment/book-appointment/`,
   SlotsAvailable: clinicId => `${baseUrl}clinic/get-slot/${clinicId}/`,
   addclinic: `${baseUrl}clinic/clinic-save`,
