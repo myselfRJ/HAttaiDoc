@@ -107,6 +107,9 @@ const Dashboard = React.memo(({navigation, route}) => {
     setOpen(false);
     setLoadAppoData(false);
   };
+  console.log('====================================');
+  console.log('Open', open);
+  console.log('====================================');
 
   const handleCancel = () => {
     setOpen(false);
