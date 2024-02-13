@@ -89,6 +89,7 @@ const AdditionalNotes = ({navigation, route}) => {
               backgroundColor: CUSTOMCOLOR.borderColor,
               height: verticalScale(50),
               justifyContent: 'center',
+              marginHorizontal: 1,
               paddingHorizontal: horizontalScale(16),
               borderTopLeftRadius: moderateScale(8),
               borderTopRightRadius: moderateScale(8),
@@ -148,7 +149,7 @@ const AdditionalNotes = ({navigation, route}) => {
         </>
       )}
 
-      <View style={{justifyContent: 'flex-end', flex: 1}}>
+      <View style={{justifyContent: 'flex-end'}}>
         <HButton
           label={Language[language]['save']}
           onPress={Handlepress}

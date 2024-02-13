@@ -24,14 +24,16 @@ const Examination_Fields = props => {
         </View>
         <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
           <Option
-            label={check ? 'N' : 'N'}
-            selected={props.option === (check ? 'Y' : 'N')}
-            onPress={() => props.setOption(check ? 'Y' : 'N')}
+            // style={{width: horizontalScale(32)}}
+            label={check ? 'No' : 'N'}
+            selected={props.option === (check ? 'Yes' : 'N')}
+            onPress={() => props.setOption(check ? 'Yes' : 'N')}
           />
           <Option
-            label={check ? 'Y' : 'A'}
-            selected={props.option === (check ? 'N' : 'A')}
-            onPress={() => props.setOption(check ? 'N' : 'A')}
+            // style={{width: horizontalScale(32)}}
+            label={check ? 'Yes' : 'A'}
+            selected={props.option === (check ? 'No' : 'A')}
+            onPress={() => props.setOption(check ? 'No' : 'A')}
           />
         </View>
       </View>

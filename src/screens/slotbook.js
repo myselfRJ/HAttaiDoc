@@ -429,12 +429,12 @@ const SlotBook = ({navigation, route}) => {
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',
-            message: jsonData.mesaage,
+            message: 'Successfully Booked',
           });
           setBottom(true);
           setTimeout(() => {
             navigation.navigate('dashboard');
-          }, 1000);
+          }, 2000);
           setLoading(false);
         } else {
           setApiStatus({

@@ -45,11 +45,15 @@ const PatientCreate = ({navigation, route}) => {
 
   const token = useSelector(state => state.authenticate.auth.access);
   const [selected, setSelected] = useState('male');
+  const [check, setCheck] = useState('');
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
   const default_image = CONSTANTS.default_image;
 
   const handleOptions = value => {
     setSelected(value);
+  };
+  const handleCheck = value => {
+    setCheck(value);
   };
   const selectedBtn = value => {
     setSelectedAbha(value);
@@ -61,6 +65,7 @@ const PatientCreate = ({navigation, route}) => {
   const [birth_date, setBirth_date] = useState('');
   const [age, setAge] = useState('');
   const [blood_group, setBlood_group] = useState('');
+  const [spouseBloodGroup, setSpouseBloodGrp] = useState('');
   const [find, setFind] = useState([]);
   const [refer, setRefer] = useState('');
   const [spouse_name, setSpouse_nmae] = useState('');
@@ -156,6 +161,7 @@ const PatientCreate = ({navigation, route}) => {
     aadhar_no: aadhar_no,
     patient_address: address,
     patient_pic_url: selectedImage ? selectedImage : default_image,
+    spousegroup: spouseBloodGroup,
   };
   const [apiStatus, setApiStatus] = useState({});
   const RoleRef = useRef(null);
@@ -178,6 +184,9 @@ const PatientCreate = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
+          console.log('====================================');
+          console.log('json===', jsonData?.data);
+          console.log('====================================');
           setApiStatus({status: 'success', message: 'Successfully created'});
           setBottom(true);
           setTimeout(() => {
@@ -220,7 +229,6 @@ const PatientCreate = ({navigation, route}) => {
       setFind([...find, value]);
     }
   };
-
   return (
     <View style={styles.main}>
       <ScrollView>
@@ -420,12 +428,7 @@ const PatientCreate = ({navigation, route}) => {
                 />
               )}
             </View> */}
-            <InputText
-              label="Father / Husband Name"
-              placeholder="Enter Father/husband Name"
-              value={spouse_name}
-              setValue={setSpouse_nmae}
-            />
+
             {/* <View style={{flexDirection: 'row', gap: 8}}>
               {CONSTANTS.blood_Groups?.map((bld_grp, index) => (
                 <SelectorBtn
@@ -482,6 +485,80 @@ const PatientCreate = ({navigation, route}) => {
                     key={index}
                     input={bld_grp}
                     onPress={() => setBlood_group(bld_grp)}
+                  />
+                ))}
+              </View>
+            </View>
+            <View style={styles.alignchild}>
+              <Text style={styles.genderText}>Relation Name</Text>
+              <View style={styles.radiogroup}>
+                <Option
+                  label="Father"
+                  value="father"
+                  selected={check === 'father'}
+                  onPress={() => handleCheck('father')}
+                />
+                <Option
+                  label="Husband"
+                  value="husband"
+                  selected={check === 'husband'}
+                  onPress={() => handleCheck('husband')}
+                />
+              </View>
+            </View>
+            {check && (
+              <InputText
+                // label="Father / Husband Name"
+                placeholder={
+                  check === 'father'
+                    ? 'Enter Father Name'
+                    : 'Enter Husband Name'
+                }
+                value={spouse_name}
+                setValue={setSpouse_nmae}
+              />
+            )}
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                gap: verticalScale(4),
+              }}>
+              <Text
+                style={{
+                  alignSelf: 'flex-start',
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h3,
+                }}>
+                Spouse Blood Group
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  alignSelf: 'flex-start',
+                }}>
+                {CONSTANTS.blood_Groups?.map((bld_grp, index) => (
+                  <SelectorBtn
+                    selectContainer={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                    }}
+                    select={{
+                      backgroundColor:
+                        spouseBloodGroup === bld_grp
+                          ? CUSTOMCOLOR.primary
+                          : CUSTOMCOLOR.white,
+                    }}
+                    inputstyle={{
+                      color:
+                        spouseBloodGroup === bld_grp
+                          ? CUSTOMCOLOR.white
+                          : CUSTOMCOLOR.primary,
+                    }}
+                    // label="Blood Group"
+                    key={index}
+                    input={bld_grp}
+                    onPress={() => setSpouseBloodGrp(bld_grp)}
                   />
                 ))}
               </View>

@@ -533,7 +533,7 @@ const Dashboard = React.memo(({navigation, route}) => {
             </ScrollView>
           )}
         </View>
-        <View>
+        <View style={{bottom: 100}}>
           <HButton
             // type="addtype"
             label="Book Appointment"
