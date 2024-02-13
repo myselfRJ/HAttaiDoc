@@ -6740,11 +6740,6 @@ react-native-image-picker@^5.6.0:
   resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-5.7.0.tgz"
   integrity sha512-LGBrFQzKEAt/u4z+IcY7COZA7N6lCeLQ2dMu1PubK10+d9YBRS8n/ABNj48CJhEpUhcRPt7H3iWbwIuOlcZrDA==
 
-react-native-image-to-pdf@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-image-to-pdf/-/react-native-image-to-pdf-1.2.0.tgz#b672603e43e1978f2a3b0b3ecf0e9fe20525170b"
-  integrity sha512-EgrdcrHHBrL6gwDFwL9S7Ztd211RZuC1csLnXNpz2pBN385OR33fODzmNwlrpZwwviLVEIURO0vCjxCXyyjdcQ==
-
 react-native-maps@^1.7.1:
   version "1.8.4"
   resolved "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.8.4.tgz"
