@@ -40,6 +40,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useFocusEffect} from '@react-navigation/native';
 import CustomIcon from '../components/icon';
 import {fileurl} from '../utility/urls';
+import {loadAndroidRawResource} from 'react-native-svg/lib/typescript/LocalSvg';
 
 const History = ({route, navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -246,6 +247,7 @@ const History = ({route, navigation}) => {
   const [menstrual, setmenstrual] = useState({});
   const [martial, setMartial] = useState({});
   const [obsteric, setObsteric] = useState({});
+
   const fetchMedicalData = async () => {
     try {
       const response = await fetchApi(URL.getMedical(phone, patient_phone), {
@@ -257,6 +259,9 @@ const History = ({route, navigation}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
+        console.log('====================================');
+        console.log(jsonData?.data);
+        console.log('====================================');
         const filter_data = jsonData?.data?.filter(
           item => item?.appointment_id === appointment_id,
         );
@@ -264,24 +269,35 @@ const History = ({route, navigation}) => {
           const commo = JSON.parse(jsonData.data[0].commoribities);
           const mapdata = commo?.map(item => item?.commorbities);
           setCommor(mapdata?.join(', '));
+          console.log('comm=', mapdata);
         }
         if (filter_data?.[0]?.family_history) {
           const family = JSON.parse(jsonData.data[0].family_history);
           const mapdata = family?.map(item => item);
           setFamily(mapdata);
+          console.log('family=', mapdata);
         }
         if (filter_data?.[0]?.social_history) {
           const social = JSON.parse(jsonData.data[0].social_history);
           const mapdata = social?.map(item => item?.social);
           setSocial(mapdata?.join(', '));
+          console.log('social=', mapdata);
         }
         if (filter_data?.[0]?.medication_history) {
           const medication = JSON.parse(jsonData.data[0].medication_history);
-          setMedical(medication);
+          if (medication?.medical !== undefined) {
+            setMedical(medication?.medical);
+          } else {
+            setMedical(medication);
+          }
         }
         if (filter_data?.[0]?.past_history) {
           const hospitalizatio = JSON.parse(jsonData.data[0].past_history);
-          setPast(hospitalizatio);
+          if (hospitalizatio?.past !== undefined) {
+            setPast(hospitalizatio?.past);
+          } else {
+            setPast(hospitalizatio);
+          }
         }
         if (filter_data?.[0]?.mensutral_history) {
           const mens = JSON.parse(jsonData.data[0].mensutral_history);
@@ -290,10 +306,12 @@ const History = ({route, navigation}) => {
         if (filter_data?.[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
           setObsteric(mens);
+          console.log('obste=', mens);
         }
         if (filter_data?.[0]?.martial_history) {
           const mens = JSON.parse(jsonData.data[0].martial_history);
           setMartial(mens);
+          console.log('marital=', mens);
         }
         if (filter_data?.[0]?.procedures) {
           setProcedure(filter_data?.[0]?.procedures);
@@ -602,6 +620,7 @@ const History = ({route, navigation}) => {
                 )}
               </Text>
             </Text>
+
             <Text style={styles.mens}>
               Obstetric History:{' '}
               <Text style={styles.textHis}>
@@ -690,7 +709,7 @@ const History = ({route, navigation}) => {
             <Text style={styles.mens}>
               Family History:{' '}
               <Text style={styles.textHis}>
-                {fatherFamily && (
+                {fatherFamily?.length > 0 && (
                   <Text>
                     {' '}
                     Father:{' '}
@@ -699,7 +718,7 @@ const History = ({route, navigation}) => {
                     </Text>
                   </Text>
                 )}{' '}
-                {motherfamily && (
+                {motherfamily?.length > 0 && (
                   <Text>
                     Mother:{' '}
                     <Text style={styles.textDat}>
@@ -707,7 +726,7 @@ const History = ({route, navigation}) => {
                     </Text>
                   </Text>
                 )}{' '}
-                {othersfamily && (
+                {othersfamily?.length > 0 && (
                   <Text>
                     , Others:{' '}
                     <Text style={styles.textDat}>

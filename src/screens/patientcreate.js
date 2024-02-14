@@ -156,7 +156,14 @@ const PatientCreate = ({navigation, route}) => {
     reference_id: reference_id,
     doctor_phone_number: phone,
     bloodgroup: blood_group,
-    spouse_name: spouse_name,
+    spouse_name:
+      selected === 'male' && check === 'father'
+        ? `S/o ${spouse_name}`
+        : selected === 'female' && check === 'father'
+        ? `D/o ${spouse_name}`
+        : check === 'husband'
+        ? `W/o ${spouse_name}`
+        : spouse_name,
     // ABHA_ID: ABHA_ID,
     aadhar_no: aadhar_no,
     patient_address: address,
@@ -184,9 +191,6 @@ const PatientCreate = ({navigation, route}) => {
       if (response.ok) {
         const jsonData = await response.json();
         if (jsonData?.status === 'success') {
-          console.log('====================================');
-          console.log('json===', jsonData?.data);
-          console.log('====================================');
           setApiStatus({status: 'success', message: 'Successfully created'});
           setBottom(true);
           setTimeout(() => {
