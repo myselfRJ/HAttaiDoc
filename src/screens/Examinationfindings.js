@@ -38,7 +38,7 @@ import {fetchApi} from '../api/fetchApi';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {stopUpload} from 'react-native-fs';
 import CustomIcon from '../components/icon';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import AlertMessage from './Alerts';
 import {
   handleCamera,
@@ -365,74 +365,76 @@ const ExaminationFindings = ({navigation}) => {
           size={moderateScale(32)}
         />
       </View>
-      {[...uploaddocument, ...report_filter]?.length > 0 ? (
-        <View style={{marginTop: verticalScale(16)}}>
-          {[...uploaddocument, ...report_filter]?.map((item, index) =>
-            item?.type !== undefined ? (
-              <ShowChip
-                onNav={() =>
-                  handleReports_Physical(
-                    item?.type === 'application/pdf'
-                      ? `data:application/pdf;base64,${item?.base64}`
-                      : item?.type !== undefined
-                      ? item?.uri
-                      : `${fileurl}${item?.name}`,
-                  )
-                }
-                key={index}
-                onPress={() => handleDelete(index)}
-                text={
-                  <>
-                    <Icon
-                      color={CUSTOMCOLOR.error}
-                      size={moderateScale(20)}
-                      name={
-                        item?.type === 'application/pdf'
-                          ? 'file-pdf-box'
-                          : 'image'
-                      }
-                    />{' '}
-                    {item?.name?.includes('temp')
-                      ? item?.name?.split('temp_')[1]?.toString()
-                      : item?.name}
-                  </>
-                }
-                main={{marginHorizontal: 0}}
-              />
-            ) : (
-              <ShowChip
-                onNav={() =>
-                  handleReports_Physical(
-                    item?.type === 'application/pdf'
-                      ? `data:application/pdf;base64,${item?.base64}`
-                      : item?.type !== undefined
-                      ? item?.uri
-                      : `${fileurl}${item?.name}`,
-                  )
-                }
-                key={index}
-                text={
-                  <>
-                    <Icon
-                      color={CUSTOMCOLOR.error}
-                      size={moderateScale(20)}
-                      name={
-                        item?.type === 'application/pdf'
-                          ? 'file-pdf-box'
-                          : 'image'
-                      }
-                    />{' '}
-                    {item?.name?.includes('temp')
-                      ? item?.name?.split('temp_')[1]?.toString()
-                      : item?.name}
-                  </>
-                }
-                main={{paddingVertical: verticalScale(6)}}
-              />
-            ),
-          )}
-        </View>
-      ) : null}
+      <ScrollView>
+        {[...uploaddocument, ...report_filter]?.length > 0 ? (
+          <View style={{marginTop: verticalScale(16)}}>
+            {[...uploaddocument, ...report_filter]?.map((item, index) =>
+              item?.type !== undefined ? (
+                <ShowChip
+                  onNav={() =>
+                    handleReports_Physical(
+                      item?.type === 'application/pdf'
+                        ? `data:application/pdf;base64,${item?.base64}`
+                        : item?.type !== undefined
+                        ? item?.uri
+                        : `${fileurl}${item?.name}`,
+                    )
+                  }
+                  key={index}
+                  onPress={() => handleDelete(index)}
+                  text={
+                    <>
+                      <Icon
+                        color={CUSTOMCOLOR.error}
+                        size={moderateScale(20)}
+                        name={
+                          item?.type === 'application/pdf'
+                            ? 'file-pdf-box'
+                            : 'image'
+                        }
+                      />{' '}
+                      {item?.name?.includes('temp')
+                        ? item?.name?.split('temp_')[1]?.toString()
+                        : item?.name}
+                    </>
+                  }
+                  main={{marginHorizontal: 0}}
+                />
+              ) : (
+                <ShowChip
+                  onNav={() =>
+                    handleReports_Physical(
+                      item?.type === 'application/pdf'
+                        ? `data:application/pdf;base64,${item?.base64}`
+                        : item?.type !== undefined
+                        ? item?.uri
+                        : `${fileurl}${item?.name}`,
+                    )
+                  }
+                  key={index}
+                  text={
+                    <>
+                      <Icon
+                        color={CUSTOMCOLOR.error}
+                        size={moderateScale(20)}
+                        name={
+                          item?.type === 'application/pdf'
+                            ? 'file-pdf-box'
+                            : 'image'
+                        }
+                      />{' '}
+                      {item?.name?.includes('temp')
+                        ? item?.name?.split('temp_')[1]?.toString()
+                        : item?.name}
+                    </>
+                  }
+                  main={{paddingVertical: verticalScale(6)}}
+                />
+              ),
+            )}
+          </View>
+        ) : null}
+      </ScrollView>
       <PlusButton
         size={moderateScale(40)}
         style={{
@@ -461,7 +463,7 @@ const ExaminationFindings = ({navigation}) => {
       <View
         style={{
           justifyContent: 'flex-end',
-          flex: 1,
+          // flex: 1,
         }}>
         <Text style={{color: CUSTOMCOLOR.black, fontSize: CUSTOMFONTSIZE.h5}}>
           Note: You can upload Upto 5 Files and each file less than 5mb

@@ -96,7 +96,7 @@ const PdfView = ({navigation}) => {
     refer_datails,
   } = route.params;
 
-  console.log('data==', refer_datails);
+  // console.log('data==', refer_datails);
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
 
   const dispatch = useDispatch();

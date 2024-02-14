@@ -104,9 +104,6 @@ const Dashboard = React.memo(({navigation, route}) => {
   });
   const handleConfirm = date => {
     setDate(date);
-    console.log('====================================');
-    console.log(date);
-    console.log('====================================');
     setOpen(false);
     setLoadAppoData(false);
   };

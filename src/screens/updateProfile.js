@@ -301,7 +301,7 @@ const UpdateProfile = ({navigation}) => {
           dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
           setApiStatus({
             status: 'success',
-            message: 'Successfully created',
+            message: 'Successfully updated',
           });
           setBottom(true);
           setTimeout(() => {

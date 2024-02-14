@@ -32,7 +32,7 @@ import {
 import HButton from './button';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
-const ConsultationCard = ({data, phone}) => {
+const ConsultationCard = ({data, phone, gender}) => {
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
@@ -58,7 +58,11 @@ const ConsultationCard = ({data, phone}) => {
     const appointment_id = data?.chief_complaint?.appointment_id;
     patientSearchRef?.current?.snapToIndex(0);
     // navigation.navigate('pdfhistory', {appointment_id});
-    navigation.navigate('history', {appointment_id, patient_phone: phone});
+    navigation.navigate('history', {
+      appointment_id,
+      patient_phone: phone,
+      gender: gender,
+    });
   };
   const date = data
     ? data?.chief_complaint?.created_at?.split('T')[0]?.split('-')

@@ -1124,7 +1124,7 @@ const Visit = ({navigation, route}) => {
         directory: 'pharmacy',
       };
       let file = await RNHTMLtoPDF.convert(options);
-      console.log(file);
+      // console.log(file);
     }
   };
   const handlePreview = async () => {

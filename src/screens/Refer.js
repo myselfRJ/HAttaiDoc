@@ -326,7 +326,7 @@ const ReferToDoctor = () => {
   }, []);
 
   const handlePress = value => {
-    console.log(value);
+    // console.log(value);
     setSelected(value?.refer_to);
     setName(value?.doctor_or_name);
     setDr_Name(value?.dr_name);

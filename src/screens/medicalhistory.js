@@ -479,7 +479,7 @@ const MedicalHistory = ({navigation, route}) => {
           );
         }
         if (jsonData?.data[0]?.procedures) {
-          console.log(jsonData?.data[0]?.procedures);
+          // console.log(jsonData?.data[0]?.procedures);
           setprocedures(jsonData?.data[0]?.procedures);
           dispatch(
             addProcedures([
@@ -490,7 +490,7 @@ const MedicalHistory = ({navigation, route}) => {
         }
         if (jsonData?.data[0]?.red_flag) {
           setRed_Flag(jsonData?.data[0]?.red_flag);
-          console.log(jsonData?.data[0]?.red_flag);
+          // console.log(jsonData?.data[0]?.red_flag);
           dispatch(
             addRedFalg([...redflag, {red_flag: jsonData?.data[0]?.red_flag}]),
           );

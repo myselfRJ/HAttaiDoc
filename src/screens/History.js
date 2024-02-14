@@ -44,7 +44,7 @@ import {loadAndroidRawResource} from 'react-native-svg/lib/typescript/LocalSvg';
 
 const History = ({route, navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
-  const {appointment_id, patient_phone} = route.params;
+  const {appointment_id, patient_phone, gender} = route.params;
   const {phone} = useSelector(state => state?.phone?.data);
   const [prescription, setPrescription] = useState();
   const [referral, setReferral] = useState([]);
@@ -259,9 +259,6 @@ const History = ({route, navigation}) => {
 
       if (response.ok) {
         const jsonData = await response.json();
-        console.log('====================================');
-        console.log(jsonData?.data);
-        console.log('====================================');
         const filter_data = jsonData?.data?.filter(
           item => item?.appointment_id === appointment_id,
         );
@@ -269,19 +266,16 @@ const History = ({route, navigation}) => {
           const commo = JSON.parse(jsonData.data[0].commoribities);
           const mapdata = commo?.map(item => item?.commorbities);
           setCommor(mapdata?.join(', '));
-          console.log('comm=', mapdata);
         }
         if (filter_data?.[0]?.family_history) {
           const family = JSON.parse(jsonData.data[0].family_history);
           const mapdata = family?.map(item => item);
           setFamily(mapdata);
-          console.log('family=', mapdata);
         }
         if (filter_data?.[0]?.social_history) {
           const social = JSON.parse(jsonData.data[0].social_history);
           const mapdata = social?.map(item => item?.social);
           setSocial(mapdata?.join(', '));
-          console.log('social=', mapdata);
         }
         if (filter_data?.[0]?.medication_history) {
           const medication = JSON.parse(jsonData.data[0].medication_history);
@@ -306,12 +300,10 @@ const History = ({route, navigation}) => {
         if (filter_data?.[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
           setObsteric(mens);
-          console.log('obste=', mens);
         }
         if (filter_data?.[0]?.martial_history) {
           const mens = JSON.parse(jsonData.data[0].martial_history);
           setMartial(mens);
-          console.log('marital=', mens);
         }
         if (filter_data?.[0]?.procedures) {
           setProcedure(filter_data?.[0]?.procedures);
@@ -565,132 +557,138 @@ const History = ({route, navigation}) => {
             Medical History Summary:
           </Text>
           <View style={{gap: moderateScale(6)}}>
-            <Text style={styles.mens}>
-              Menstrual History:{' '}
-              <Text style={styles.textHis}>
-                {menstrual?.age && (
-                  <Text>
-                    Menarche:{' '}
-                    <Text style={styles.textDat}>{menstrual?.age}</Text>,
-                  </Text>
-                )}
-                {menstrual?.status && (
-                  <Text>
-                    Mensturation Status:{' '}
-                    <Text style={styles.textDat}> {menstrual?.status}, </Text>
-                  </Text>
-                )}
-                {menstrual?.flowdays && (
-                  <Text>
-                    Flow days:
-                    <Text style={styles.textDat}>{menstrual?.flowdays}</Text>
-                  </Text>
-                )}
-                {menstrual?.cycledays && (
-                  <Text>
-                    Cycle days:
-                    <Text style={styles.textDat}>
-                      {menstrual?.cycledays},{' '}
-                    </Text>{' '}
-                  </Text>
-                )}
-                {menstrual?.pregnant?.lmp && (
-                  <Text>
-                    Pregnant:
-                    <Text style={styles.textDat}>
-                      {menstrual?.pregnant?.lmp !== '' ? 'Yes' : 'No'},{' '}
+            {gender !== 'male' && (
+              <Text style={styles.mens}>
+                Menstrual History:{' '}
+                <Text style={styles.textHis}>
+                  {menstrual?.age && (
+                    <Text>
+                      Menarche:{' '}
+                      <Text style={styles.textDat}>{menstrual?.age}</Text>,
                     </Text>
-                  </Text>
-                )}
-                {menstrual?.pregnant?.lmp && (
-                  <Text>
-                    Lmp:
-                    <Text style={styles.textDat}>
-                      {menstrual?.pregnant?.lmp},{' '}
+                  )}
+                  {menstrual?.status && (
+                    <Text>
+                      Mensturation Status:{' '}
+                      <Text style={styles.textDat}> {menstrual?.status}, </Text>
                     </Text>
-                  </Text>
-                )}
-                {menstrual?.pregnant?.edd && (
-                  <Text>
-                    Edd:{' '}
-                    <Text style={styles.textDat}>
-                      {menstrual?.pregnant?.edd}
+                  )}
+                  {menstrual?.flowdays && (
+                    <Text>
+                      Flow days:
+                      <Text style={styles.textDat}>{menstrual?.flowdays}</Text>
                     </Text>
-                  </Text>
-                )}
+                  )}
+                  {menstrual?.cycledays && (
+                    <Text>
+                      Cycle days:
+                      <Text style={styles.textDat}>
+                        {menstrual?.cycledays},{' '}
+                      </Text>{' '}
+                    </Text>
+                  )}
+                  {menstrual?.pregnant?.lmp && (
+                    <Text>
+                      Pregnant:
+                      <Text style={styles.textDat}>
+                        {menstrual?.pregnant?.lmp !== '' ? 'Yes' : 'No'},{' '}
+                      </Text>
+                    </Text>
+                  )}
+                  {menstrual?.pregnant?.lmp && (
+                    <Text>
+                      Lmp:
+                      <Text style={styles.textDat}>
+                        {menstrual?.pregnant?.lmp},{' '}
+                      </Text>
+                    </Text>
+                  )}
+                  {menstrual?.pregnant?.edd && (
+                    <Text>
+                      Edd:{' '}
+                      <Text style={styles.textDat}>
+                        {menstrual?.pregnant?.edd}
+                      </Text>
+                    </Text>
+                  )}
+                </Text>
               </Text>
-            </Text>
+            )}
 
-            <Text style={styles.mens}>
-              Obstetric History:{' '}
-              <Text style={styles.textHis}>
-                {obsteric?.gravidity?.value && (
-                  <Text>
-                    G:{' '}
-                    <Text style={styles.textDat}>
-                      {obsteric?.gravidity?.value}
-                    </Text>{' '}
-                  </Text>
-                )}
-                {obsteric?.term?.value && (
-                  <Text>
-                    {' '}
-                    T:{' '}
-                    <Text style={styles.textDat}>
-                      {obsteric?.term?.value},
-                    </Text>{' '}
-                  </Text>
-                )}
-                {obsteric?.premature?.value && (
-                  <Text>
-                    P:{' '}
-                    <Text style={styles.textDat}>
-                      {obsteric?.premature?.value},
-                    </Text>{' '}
-                  </Text>
-                )}
-                {obsteric?.abortions?.value && (
-                  <Text>
-                    A:{' '}
-                    <Text style={styles.textDat}>
-                      {obsteric?.abortions?.value},
-                    </Text>{' '}
-                  </Text>
-                )}
-                {obsteric?.living?.length && (
-                  <Text>
-                    L:{' '}
-                    <Text style={styles.textDat}>
-                      {obsteric?.living?.length}
+            {gender !== 'male' && (
+              <Text style={styles.mens}>
+                Obstetric History:{' '}
+                <Text style={styles.textHis}>
+                  {obsteric?.gravidity?.value && (
+                    <Text>
+                      G:{' '}
+                      <Text style={styles.textDat}>
+                        {obsteric?.gravidity?.value}
+                      </Text>{' '}
                     </Text>
-                  </Text>
-                )}
+                  )}
+                  {obsteric?.term?.value && (
+                    <Text>
+                      {' '}
+                      T:{' '}
+                      <Text style={styles.textDat}>
+                        {obsteric?.term?.value},
+                      </Text>{' '}
+                    </Text>
+                  )}
+                  {obsteric?.premature?.value && (
+                    <Text>
+                      P:{' '}
+                      <Text style={styles.textDat}>
+                        {obsteric?.premature?.value},
+                      </Text>{' '}
+                    </Text>
+                  )}
+                  {obsteric?.abortions?.value && (
+                    <Text>
+                      A:{' '}
+                      <Text style={styles.textDat}>
+                        {obsteric?.abortions?.value},
+                      </Text>{' '}
+                    </Text>
+                  )}
+                  {obsteric?.living?.length && (
+                    <Text>
+                      L:{' '}
+                      <Text style={styles.textDat}>
+                        {obsteric?.living?.length}
+                      </Text>
+                    </Text>
+                  )}
+                </Text>
               </Text>
-            </Text>
-            <Text style={styles.mens}>
-              Martial History:{' '}
-              <Text style={styles.textHis}>
-                {martial?.married && (
-                  <Text>
-                    {' '}
-                    Married Since:
-                    <Text style={styles.textDat}> {martial?.married}, </Text>
-                  </Text>
-                )}
-                {martial?.cons && (
-                  <Text>
-                    Consanguinity:{' '}
-                    <Text style={styles.textDat}>{martial?.cons}</Text>
-                  </Text>
-                )}
-                {martial?.others && (
-                  <Text>
-                    , Others:
-                    <Text style={styles.textDat}> {martial?.others}</Text>
-                  </Text>
-                )}
+            )}
+            {gender !== 'male' && (
+              <Text style={styles.mens}>
+                Martial History:{' '}
+                <Text style={styles.textHis}>
+                  {martial?.married && (
+                    <Text>
+                      {' '}
+                      Married Since:
+                      <Text style={styles.textDat}> {martial?.married}, </Text>
+                    </Text>
+                  )}
+                  {martial?.cons && (
+                    <Text>
+                      Consanguinity:{' '}
+                      <Text style={styles.textDat}>{martial?.cons}</Text>
+                    </Text>
+                  )}
+                  {martial?.others && (
+                    <Text>
+                      , Others:
+                      <Text style={styles.textDat}> {martial?.others}</Text>
+                    </Text>
+                  )}
+                </Text>
               </Text>
-            </Text>
+            )}
             {commor && (
               <Text style={styles.mens}>
                 Comorbidities: <Text style={styles.textDat}>{commor}</Text>

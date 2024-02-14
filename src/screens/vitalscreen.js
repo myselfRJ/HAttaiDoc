@@ -184,7 +184,7 @@ const VitalScreen = ({route, props}) => {
   };
 
   const handleVit = () => {
-    console.log(typeof indexVit, indexVit);
+    // console.log(typeof indexVit, indexVit);
     {
       indexVit >= 0 && indexVit !== undefined
         ? handleVitedit()

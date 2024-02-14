@@ -363,11 +363,11 @@ export default function Prescribe1({navigation}) {
   };
   useEffect(() => {
     fetchMedicine();
-    // fetchAllmed();
+    fetchAllmed();
   }, [medicine, generic, mode]);
 
   const fetchFilterDataofSnomed = value => {
-    let combinedData = CONSTANTS.medicine;
+    let combinedData = [...CONSTANTS.medicine, ...Allmed];
     if (medicine || generic) {
       const filtered = combinedData.filter(item =>
         item?.term?.toLowerCase().includes(value.toLowerCase()),
