@@ -104,12 +104,12 @@ const Dashboard = React.memo(({navigation, route}) => {
   });
   const handleConfirm = date => {
     setDate(date);
+    console.log('====================================');
+    console.log(date);
+    console.log('====================================');
     setOpen(false);
     setLoadAppoData(false);
   };
-  console.log('====================================');
-  console.log('Open', open);
-  console.log('====================================');
 
   const handleCancel = () => {
     setOpen(false);
@@ -210,11 +210,6 @@ const Dashboard = React.memo(({navigation, route}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetchAppointment();
-  //   }, 1000);
-  // }, [formatDate, Clinic_id, clinicid]);
 
   const AppointmentChartData = {
     labels:
