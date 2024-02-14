@@ -257,7 +257,6 @@ const Visit = ({navigation, route}) => {
   } = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
-
   const handlePhysical = data => {
     try {
       const body_parts = JSON.parse(data?.body_parts_examination);
@@ -481,6 +480,11 @@ const Visit = ({navigation, route}) => {
       handlePhysical(physical);
       setData(doc_prof);
     }, []),
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      handlePhysical(physical);
+    }, [physical]),
   );
   const months = CONSTANTS.months;
   const month = vitalsData?.LDD ? vitalsData?.LDD.split('-')[1] : '';

@@ -32,9 +32,12 @@ import {addExamination} from '../redux/features/prescription/prescriptionSlice';
 import CustomModal from '../components/CustomModal';
 import {RetriveAsyncData, StoreAsyncData} from '../utility/AsyncStorage';
 const Physical = ({navigation}) => {
-  const [data1, setData1] = useState(CONSTANT.physicaldata1);
-  const [data2, setData2] = useState(CONSTANT.physicaldata2);
-  const [data3, setData3] = useState(CONSTANT.physicaldata3);
+  const [phys1, setPhsy1] = useState(CONSTANT.physicaldata1);
+  const [phys2, setPhsy2] = useState(CONSTANT.physicaldata2);
+  const [phys3, setPhsy3] = useState(CONSTANT.physicaldata3);
+  const [data1, setData1] = useState(phys1);
+  const [data2, setData2] = useState(phys2);
+  const [data3, setData3] = useState(phys3);
   const physical = useSelector(state => state.prescription.physicalExamination);
   const handledata1 = (index, newstatus, newdesc) => {
     const newdata1 = [...data1];
@@ -99,32 +102,18 @@ const Physical = ({navigation}) => {
     try {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
-      if (responseData) {
-        showToast('success', 'Succesfully saved');
+
+      if (responseData?.status === 'success') {
         dispatch(
           addExamination([
             ...physical,
             {data: responseData?.data, appointment_id: appointmentID},
           ]),
         );
+        showToast('success', 'Succesfully saved');
         navigation.goBack();
-
-        // const statusCosent = await fetch(URL.consent, {
-        //   method: 'POST',
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     status: consent,
-        //     doctor_phone_number: examinationDetails?.doc_phone,
-        //     patient_phone_number: examinationDetails?.patient_phone,
-        //     clinic_id: examinationDetails?.clinic_id,
-        //     appointment_id: examinationDetails?.appointment_id,
-        //   }),
-        // });
-        // const json = await statusCosent.json();
-        // console.log(json);
+      } else {
+        showToast('error', 'Something went wrong');
       }
     } catch (error) {
       showToast('error', `${error}`);
@@ -314,7 +303,6 @@ const Physical = ({navigation}) => {
   const handleAsync = () => {
     RetriveAsyncData(`physicaldata${examinationDetails?.doc_phone}`).then(
       array => {
-        // console.log(array);
         if (array) {
           setData1(array?.data1);
           setData2(array?.data2);
@@ -326,7 +314,7 @@ const Physical = ({navigation}) => {
   useEffect(() => {
     handleAsync();
   }, []);
-
+  // console.log(data1, data2, data3);
   return (
     <View style={styles.main}>
       <ScrollView
