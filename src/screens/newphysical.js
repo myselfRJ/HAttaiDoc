@@ -314,7 +314,6 @@ const Physical = ({navigation}) => {
   useEffect(() => {
     handleAsync();
   }, []);
-  // console.log(data1, data2, data3);
   return (
     <View style={styles.main}>
       <ScrollView
