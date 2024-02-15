@@ -547,7 +547,7 @@ const History = ({route, navigation}) => {
         </>
       )}
       {selectedType === 'Medical History' && (
-        <View style={{gap: moderateScale(8)}}>
+        <View style={{gap: moderateScale(16)}}>
           <Text
             style={{
               fontSize: moderateScale(16),
@@ -558,13 +558,14 @@ const History = ({route, navigation}) => {
           </Text>
           <View style={{gap: moderateScale(6)}}>
             {gender !== 'male' && (
-              <Text style={styles.mens}>
-                Menstrual History:{' '}
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Menstrual History: </Text>
                 <Text style={styles.textHis}>
                   {menstrual?.age && (
                     <Text>
                       Menarche:{' '}
                       <Text style={styles.textDat}>{menstrual?.age}</Text>,
+                      {'  '}
                     </Text>
                   )}
                   {menstrual?.status && (
@@ -575,21 +576,23 @@ const History = ({route, navigation}) => {
                   )}
                   {menstrual?.flowdays && (
                     <Text>
-                      Flow days:
-                      <Text style={styles.textDat}>{menstrual?.flowdays}</Text>
+                      Flow days:{' '}
+                      <Text style={styles.textDat}>{menstrual?.flowdays},</Text>
                     </Text>
                   )}
                   {menstrual?.cycledays && (
                     <Text>
+                      {'  '}
                       Cycle days:
                       <Text style={styles.textDat}>
+                        {' '}
                         {menstrual?.cycledays},{' '}
                       </Text>{' '}
                     </Text>
                   )}
                   {menstrual?.pregnant?.lmp && (
                     <Text>
-                      Pregnant:
+                      Pregnant:{' '}
                       <Text style={styles.textDat}>
                         {menstrual?.pregnant?.lmp !== '' ? 'Yes' : 'No'},{' '}
                       </Text>
@@ -597,7 +600,7 @@ const History = ({route, navigation}) => {
                   )}
                   {menstrual?.pregnant?.lmp && (
                     <Text>
-                      Lmp:
+                      Lmp:{' '}
                       <Text style={styles.textDat}>
                         {menstrual?.pregnant?.lmp},{' '}
                       </Text>
@@ -612,12 +615,12 @@ const History = ({route, navigation}) => {
                     </Text>
                   )}
                 </Text>
-              </Text>
+              </View>
             )}
 
             {gender !== 'male' && (
-              <Text style={styles.mens}>
-                Obstetric History:{' '}
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Obstetric History: </Text>
                 <Text style={styles.textHis}>
                   {obsteric?.gravidity?.value && (
                     <Text>
@@ -661,11 +664,11 @@ const History = ({route, navigation}) => {
                     </Text>
                   )}
                 </Text>
-              </Text>
+              </View>
             )}
             {gender !== 'male' && (
-              <Text style={styles.mens}>
-                Martial History:{' '}
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Martial History: </Text>
                 <Text style={styles.textHis}>
                   {martial?.married && (
                     <Text>
@@ -687,58 +690,65 @@ const History = ({route, navigation}) => {
                     </Text>
                   )}
                 </Text>
-              </Text>
+              </View>
             )}
             {commor && (
-              <Text style={styles.mens}>
-                Comorbidities: <Text style={styles.textDat}>{commor}</Text>
-              </Text>
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Comorbidities:</Text>
+                <Text style={styles.textDat}>{commor}</Text>
+              </View>
             )}
             {past && (
-              <Text style={styles.mens}>
-                Past Hospitalization: <Text style={styles.textDat}>{past}</Text>
-              </Text>
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Past Hospitalization:</Text>
+                <Text style={styles.textDat}>{past}</Text>
+              </View>
             )}
             {social && (
-              <Text style={styles.mens}>
-                Social History: <Text style={styles.textDat}>{social}</Text>
-              </Text>
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Social History:</Text>
+                <Text style={styles.textDat}>{social}</Text>
+              </View>
             )}
-            <Text style={styles.mens}>
-              Family History:{' '}
-              <Text style={styles.textHis}>
-                {fatherFamily?.length > 0 && (
-                  <Text>
-                    {' '}
-                    Father:{' '}
-                    <Text style={styles.textDat}>
-                      {fatherFamily?.join(', ')},
+            {(fatherFamily?.length > 0 ||
+              motherfamily?.length > 0 ||
+              othersfamily?.length > 0) && (
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Family History: </Text>
+                <Text style={styles.textHis}>
+                  {fatherFamily?.length > 0 && (
+                    <Text>
+                      {' '}
+                      Father:{' '}
+                      <Text style={styles.textDat}>
+                        {fatherFamily?.join(', ')},
+                      </Text>
                     </Text>
-                  </Text>
-                )}{' '}
-                {motherfamily?.length > 0 && (
-                  <Text>
-                    Mother:{' '}
-                    <Text style={styles.textDat}>
-                      {motherfamily?.join(', ')}
+                  )}{' '}
+                  {motherfamily?.length > 0 && (
+                    <Text>
+                      Mother:{' '}
+                      <Text style={styles.textDat}>
+                        {motherfamily?.join(', ')}
+                      </Text>
                     </Text>
-                  </Text>
-                )}{' '}
-                {othersfamily?.length > 0 && (
-                  <Text>
-                    , Others:{' '}
-                    <Text style={styles.textDat}>
-                      {othersfamily?.join(', ')}
+                  )}{' '}
+                  {othersfamily?.length > 0 && (
+                    <Text>
+                      , Others:{' '}
+                      <Text style={styles.textDat}>
+                        {othersfamily?.join(', ')}
+                      </Text>
                     </Text>
-                  </Text>
-                )}
-              </Text>
-            </Text>
+                  )}
+                </Text>
+              </View>
+            )}
             {medical && (
-              <Text style={styles.mens}>
-                Medication History:{' '}
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Medication History: </Text>
                 <Text style={styles.textDat}>{medical}</Text>
-              </Text>
+              </View>
             )}
           </View>
         </View>
@@ -771,16 +781,24 @@ const styles = StyleSheet.create({
     fontSize: CUSTOMFONTSIZE.h3,
     color: CUSTOMCOLOR.primary,
     fontWeight: '600',
+    width: '20%',
   },
   textHis: {
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE?.h3,
     color: CUSTOMCOLOR?.black,
+    flexWrap: 'wrap',
+    width: '80%',
+    lineHeight: moderateScale(24),
   },
   textDat: {
     fontWeight: '600',
     fontSize: CUSTOMFONTSIZE?.h3,
     color: CUSTOMCOLOR?.black,
+  },
+  viewhis: {
+    flexDirection: 'row',
+    gap: moderateScale(10),
   },
 });
 
