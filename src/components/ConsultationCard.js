@@ -74,7 +74,7 @@ const ConsultationCard = ({data, phone, gender}) => {
           <View style={{flexDirection: 'row', gap: moderateScale(8)}}>
             <Image
               style={styles.img}
-              source={require('../assets/images/RX.png')}
+              source={require('../assets/images/rximage1.png')}
             />
             <View style={styles.patientinfo}>
               <Text style={styles?.contact}>
