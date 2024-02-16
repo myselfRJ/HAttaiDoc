@@ -750,6 +750,20 @@ const History = ({route, navigation}) => {
                 <Text style={styles.textDat}>{medical}</Text>
               </View>
             )}
+            {procedure && (
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Procedure: </Text>
+                <Text style={styles.textDat}>{procedure}</Text>
+              </View>
+            )}
+            {red_flag && (
+              <View style={styles.viewhis}>
+                <Text style={styles.mens}>Red Flag 🚩: </Text>
+                <Text style={{...styles.textDat, color: CUSTOMCOLOR.warn}}>
+                  {red_flag}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       )}
