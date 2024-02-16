@@ -32,30 +32,43 @@ import {addExamination} from '../redux/features/prescription/prescriptionSlice';
 import CustomModal from '../components/CustomModal';
 import {RetriveAsyncData, StoreAsyncData} from '../utility/AsyncStorage';
 const Physical = ({navigation}) => {
-  const [phys1, setPhsy1] = useState(CONSTANT.physicaldata1);
-  const [phys2, setPhsy2] = useState(CONSTANT.physicaldata2);
-  const [phys3, setPhsy3] = useState(CONSTANT.physicaldata3);
-  const [data1, setData1] = useState(phys1);
-  const [data2, setData2] = useState(phys2);
-  const [data3, setData3] = useState(phys3);
+  const phys1 = CONSTANT.physicaldata1;
+  const phys2 = CONSTANT.physicaldata2;
+  const phys3 = CONSTANT.physicaldata3;
+  const [data1, setData1] = useState([...phys1]);
+  const [data2, setData2] = useState([...phys2]);
+  const [data3, setData3] = useState([...phys3]);
   const physical = useSelector(state => state.prescription.physicalExamination);
-  const handledata1 = (index, newstatus, newdesc) => {
-    const newdata1 = [...data1];
-    newdata1[index].status = newstatus;
-    newdata1[index].desc = newdesc;
-    setData1(newdata1);
+  const handledata1 = (index, newStatus, newDesc) => {
+    setData1(data1 => {
+      const updatedData1 = [...data1];
+      const updatedItem = {...updatedData1[index]};
+      updatedItem.status = newStatus;
+      updatedItem.desc = newDesc;
+      updatedData1[index] = updatedItem;
+      return updatedData1;
+    });
   };
-  const handledata2 = (index, newstatus, newdesc) => {
-    const newdata2 = [...data2];
-    newdata2[index].status = newstatus;
-    newdata2[index].desc = newdesc;
-    setData2(newdata2);
+
+  const handledata2 = (index, newStatus, newDesc) => {
+    setData2(data2 => {
+      const updatedData1 = [...data2];
+      const updatedItem = {...updatedData1[index]};
+      updatedItem.status = newStatus;
+      updatedItem.desc = newDesc;
+      updatedData1[index] = updatedItem;
+      return updatedData1;
+    });
   };
-  const handledata3 = (index, newstatus, newdesc) => {
-    const newdata3 = [...data3];
-    newdata3[index].status = newstatus;
-    newdata3[index].desc = newdesc;
-    setData3(newdata3);
+  const handledata3 = (index, newStatus, newDesc) => {
+    setData3(data3 => {
+      const updatedData1 = [...data3];
+      const updatedItem = {...updatedData1[index]};
+      updatedItem.status = newStatus;
+      updatedItem.desc = newDesc;
+      updatedData1[index] = updatedItem;
+      return updatedData1;
+    });
   };
   const token = useSelector(state => state.authenticate.auth.access);
   const route = useRoute();
@@ -111,6 +124,10 @@ const Physical = ({navigation}) => {
           ]),
         );
         showToast('success', 'Succesfully saved');
+
+        setData1([]);
+        setData2([]);
+        setData3([]);
         navigation.goBack();
       } else {
         showToast('error', 'Something went wrong');
@@ -224,14 +241,16 @@ const Physical = ({navigation}) => {
       setModal(!modal);
     }
   };
-
   const fetchPhysical = async () => {
-    const response = await fetchApi(URL.get_physical(appointment_id), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetchApi(
+      URL.get_physical(examinationDetails?.appointment_id),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     if (response.ok) {
       const jsonData = await response.json();
       setValue(
@@ -264,9 +283,7 @@ const Physical = ({navigation}) => {
       console.error('API call failed:', response.status, response);
     }
   };
-  useEffect(() => {
-    fetchPhysical();
-  }, []);
+
   const report_findings = [
     {name: documents?.file1 ? documents?.file1 : null},
     {name: documents?.file2 ? documents?.file2 : null},
@@ -312,6 +329,7 @@ const Physical = ({navigation}) => {
     );
   };
   useEffect(() => {
+    fetchPhysical();
     handleAsync();
   }, []);
   return (
