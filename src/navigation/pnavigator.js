@@ -68,6 +68,7 @@ import Adult from '../screens/Adult';
 import {moderateScale} from '../utility/scaleDimension';
 import {Advices} from '../screens/Avices';
 import Physical from '../screens/newphysical';
+import {NewSymptoms} from '../screensV2/symptoms';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,18 @@ const ProtectedRoute = route => {
       initialRouteName="initscreen"
       // screenOptions={{headerShown: false}}
     >
+      <Stack.Screen
+        name="syp"
+        component={NewSymptoms}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Symptoms',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
       <Stack.Screen
         name="tab"
         component={BottomTab}

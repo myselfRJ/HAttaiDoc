@@ -542,8 +542,8 @@ const Dashboard = React.memo(({navigation, route}) => {
             label="Book Appointment"
             btnstyles={commonstyles.activebtn}
             // textStyle={{bottom:verticalScale(4),borderWidth:1}}
-            onPress={() => navigation.navigate('addnew')}
-            // onPress={() => navigation.navigate('alert')}
+            // onPress={() => navigation.navigate('addnew')}
+            onPress={() => navigation.navigate('syp')}
           />
         </View>
       </View>
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   appointmentcard: {
     height:
       Dimensions.get('window').height >= 900
-        ? moderateScale(492)
+        ? moderateScale(292)
         : moderateScale(400),
     paddingHorizontal: horizontalScale(8),
     gap: moderateScale(16),
