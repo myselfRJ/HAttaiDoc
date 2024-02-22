@@ -148,7 +148,7 @@ const PatientCreate = ({navigation, route}) => {
   const DOB = `${dayOfBirth}-${dayOfMonth}-${dayOfYear}`;
   const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const patientDetails = {
-    patient_name: name,
+    patient_name: name?.toLowerCase(),
     gender: gender,
     patient_phone_number: patient_phone_number,
     birth_date: formatDate,

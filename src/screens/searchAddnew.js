@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import {useState, useEffect} from 'react';
 import {
   CUSTOMCOLOR,
@@ -25,6 +25,7 @@ import {
   verticalScale,
 } from '../utility/scaleDimension';
 import CustomIcon from '../components/icon';
+const screenWidth = Dimensions.get('window').width;
 
 const SearchAddnew = ({navigation}) => {
   const token = useSelector(state => state.authenticate.auth.access);
@@ -32,14 +33,19 @@ const SearchAddnew = ({navigation}) => {
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [reference_id, setReference_id] = useState('');
+  const [name, setName] = useState('');
 
   const fetchData = async () => {
-    const response = await fetchApi(URL.getPatientsAll(phoneNumber), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetchApi(
+      URL.getPatientsAll(phoneNumber, name, reference_id),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     if (response.ok) {
       const jsonData = await response.json();
       setData(jsonData.data);
@@ -49,10 +55,10 @@ const SearchAddnew = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (phoneNumber) {
+    if (phoneNumber || name || reference_id) {
       fetchData();
     }
-  }, [phoneNumber]);
+  }, [phoneNumber, name, reference_id]);
 
   useEffect(() => {
     if (phoneNumber) {
@@ -78,14 +84,35 @@ const SearchAddnew = ({navigation}) => {
 
   return (
     <View style={styles.main}>
-      <InputText
-        label="Search"
-        placeholder="Enter Phone Number"
-        value={phoneNumber}
-        setValue={ChangePhoneValue}
-        search={true}
-        IconName="magnify"
-      />
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <InputText
+          inputContainer={{width: screenWidth / 3.5}}
+          label="Search"
+          placeholder="Enter Phone Number"
+          value={phoneNumber}
+          setValue={ChangePhoneValue}
+          search={true}
+          IconName="magnify"
+        />
+        <InputText
+          inputContainer={{width: screenWidth / 3.5}}
+          label="Search"
+          placeholder="Enter Name"
+          value={name}
+          setValue={setName}
+          search={true}
+          IconName="magnify"
+        />
+        <InputText
+          inputContainer={{width: screenWidth / 3.5}}
+          label="Search"
+          placeholder="Enter id"
+          value={reference_id}
+          setValue={setReference_id}
+          search={true}
+          IconName="magnify"
+        />
+      </View>
       <HButton
         btnstyles={{paddingVertical: verticalScale(8), alignSelf: 'flex-end'}}
         label="Add"
@@ -101,7 +128,10 @@ const SearchAddnew = ({navigation}) => {
           paddingBottom: verticalScale(24),
         }}>
         <View style={styles.appointment}>
-          {data?.length > 0 && phoneNumber?.length > 1 ? (
+          {data?.length > 0 &&
+          (phoneNumber?.length > 1 ||
+            name?.length > 0 ||
+            reference_id?.length > 0) ? (
             data?.map((val, ind) => (
               <PatientSearchCard
                 key={ind}

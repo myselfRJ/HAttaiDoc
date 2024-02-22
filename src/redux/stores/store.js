@@ -22,8 +22,9 @@ import {allergiesReducer} from '../features/prescription/allergies';
 import {labReportReducer} from '../features/prescription/labreport';
 import {pastHistoryReducer} from '../features/prescription/pastHistory';
 import {validityReducer} from '../features/prescription/valid';
-import { signatureReducer } from '../features/prescription/sign';
-import { addressReducer } from '../features/profiles/clinicAddress';
+import {signatureReducer} from '../features/prescription/sign';
+import {addressReducer} from '../features/profiles/clinicAddress';
+import {refreshReducer} from '../features/refreshApis/refreshApi';
 
 const store = configureStore({
   reducer: {
@@ -50,7 +51,8 @@ const store = configureStore({
     pasthistory: pastHistoryReducer,
     valid: validityReducer,
     sign: signatureReducer,
-    address: addressReducer
+    address: addressReducer,
+    refreshApi: refreshReducer,
   },
 });
 

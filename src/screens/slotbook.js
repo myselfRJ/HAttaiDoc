@@ -49,6 +49,11 @@ import {
   addclinic_name,
   addclinic_phone,
 } from '../redux/features/profiles/clinicId';
+import {
+  RetriveAsyncData,
+  StoreAsyncData,
+  UpdateAsyncData,
+} from '../utility/AsyncStorage';
 
 const SlotBook = ({navigation, route}) => {
   const option = 'procedure++situation++finding';
@@ -60,6 +65,7 @@ const SlotBook = ({navigation, route}) => {
   const [show, setShow] = useState(false);
   const [complaint, setComplaint] = useState('');
   const [token_id, setTokenID] = useState('');
+  const [sugs, setSugs] = useState([]);
 
   const [bookedSlots, setBookedSlots] = useState([]);
 
@@ -255,11 +261,11 @@ const SlotBook = ({navigation, route}) => {
     const PresentTime = new Date().toString().split(' ')[4].substring(0, 5);
     const startTime = item?.slot?.split('-')[0]?.toString();
     const bookedSlot = bookedSlots;
-
     return (
       <View key={item.id} style={styles.item}>
         {!bookedSlot?.includes(item?.slot) &&
-        (formatDate !== Today || startTime >= PresentTime) ? (
+        ((formatDate === Today && startTime >= PresentTime) ||
+          formatDate > Today) ? (
           <SelectionTab
             id={(parseInt(index) + 1).toString().padStart(2, '0')}
             label={item?.slot}
@@ -268,12 +274,24 @@ const SlotBook = ({navigation, route}) => {
           />
         ) : (
           <SelectionTab
-            selectContainer={{backgroundColor: CUSTOMCOLOR.disable}}
-            text={{color: CUSTOMCOLOR.white}}
+            selectContainer={{
+              backgroundColor: bookedSlot?.includes(item?.slot)
+                ? CUSTOMCOLOR.lightgreen
+                : CUSTOMCOLOR.disableslot,
+              borderColor: CUSTOMCOLOR.white,
+            }}
+            text={{
+              color: bookedSlot?.includes(item?.slot)
+                ? CUSTOMCOLOR.success
+                : CUSTOMCOLOR?.disableslotText,
+            }}
+            tokenContainer={{
+              backgroundColor: bookedSlot?.includes(item?.slot)
+                ? CUSTOMCOLOR.success
+                : CUSTOMCOLOR?.disable,
+            }}
             id={(parseInt(index) + 1).toString().padStart(2, '0')}
             label={item?.slot}
-            // onPress={() => handleSelectSlot(item)}
-            // selected={selectedSlot?.slot === item?.slot}
           />
         )}
       </View>
@@ -492,7 +510,42 @@ const SlotBook = ({navigation, route}) => {
     setComplaint(value);
     setSelected(value);
   };
-
+  useEffect(() => {
+    RetriveAsyncData(`complaint${phone}`).then(array => {
+      const uniqueComplaints = array.filter(
+        (value, index, self) =>
+          index === self.findIndex(t => t.complaint === value.complaint),
+      );
+      uniqueComplaints?.splice(10);
+      setSugs(uniqueComplaints);
+    });
+  }, []);
+  const handleSave = () => {
+    if (id === undefined && !loading && !fee) {
+      selectedTypeAppointment
+        ? Appointment_Booking()
+        : showToast('error', 'Please Select Type Of Appointment');
+    } else if (id === undefined && !loading && fee) {
+      !selectedTypeAppointment
+        ? showToast('error', 'Please Select Type Of Appointment')
+        : !paymentMode
+        ? showToast('error', 'Select Payment Mode')
+        : Appointment_Booking();
+    } else {
+      if (!loading) {
+        updateAppointment();
+      }
+    }
+    if (sugs?.length <= 0) {
+      StoreAsyncData(`complaint${phone}`, [
+        {complaint: capitalizeWord(complaint)},
+      ]);
+    } else {
+      UpdateAsyncData(`complaint${phone}`, {
+        complaint: capitalizeWord(complaint),
+      });
+    }
+  };
   return (
     <View style={styles.main}>
       <View style={{gap: verticalScale(16)}}>
@@ -551,6 +604,26 @@ const SlotBook = ({navigation, route}) => {
             }
             onPress={() => setShow(!show)}
           />
+          {sugs?.length > 0 && (
+            <ScrollView horizontal={true} style={{marginTop: 4}}>
+              {sugs?.map((val, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.recent}
+                  onPress={() => HandlePress(val?.complaint)}>
+                  <Text
+                    style={{
+                      fontSize: CUSTOMFONTSIZE.h3,
+                      padding: moderateScale(10),
+                      color: CUSTOMCOLOR.black,
+                    }}
+                    key={index}>
+                    {val.complaint}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
           {complaint.length > 1 &&
             (complaint === selected || show ? null : (
               <View style={styles.dropdownContainer}>
@@ -662,38 +735,7 @@ const SlotBook = ({navigation, route}) => {
                 <HButton
                   label="Book Slot"
                   //onPress={() => navigation.navigate('dashboard')}
-                  onPress={() => {
-                    if (id === undefined && !loading && !fee) {
-                      selectedTypeAppointment
-                        ? Appointment_Booking()
-                        : // Alert.alert(
-                          //     'Warn',
-                          //     'Please Select Type Of Appointment',
-                          //   );
-                          showToast(
-                            'error',
-                            'Please Select Type Of Appointment',
-                          );
-                    } else if (id === undefined && !loading && fee) {
-                      !selectedTypeAppointment
-                        ? // Alert.alert(
-                          //     'Warn',
-                          //     'Please Select Type Of Appointment',
-                          //   )
-                          showToast(
-                            'error',
-                            'Please Select Type Of Appointment',
-                          )
-                        : !paymentMode
-                        ? // Alert.alert('Warn', 'Select Payment Mode')
-                          showToast('error', 'Select Payment Mode')
-                        : Appointment_Booking();
-                    } else {
-                      if (!loading) {
-                        updateAppointment();
-                      }
-                    }
-                  }}
+                  onPress={handleSave}
                   loading={loading}
                 />
               </View>
@@ -801,6 +843,13 @@ const styles = StyleSheet.create({
   touch: {
     paddingHorizontal: horizontalScale(8),
     paddingVertical: verticalScale(4),
+  },
+  recent: {
+    paddingHorizontal: moderateScale(4),
+    borderWidth: 1,
+    borderRadius: 4,
+    marginRight: moderateScale(4),
+    borderColor: CUSTOMCOLOR.borderColor,
   },
 });
 

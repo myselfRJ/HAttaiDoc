@@ -45,6 +45,7 @@ export default function MedicalRecordPatient({route, navigation}) {
     patient_age,
     patient_name,
     gender,
+    reference_id,
   } = route.params;
   // const fetchData = async () => {
   //   const response = await fetchApi(URL.getPatientByNumber(patient_phone), {
@@ -175,6 +176,12 @@ export default function MedicalRecordPatient({route, navigation}) {
                 contact:
                 {patient_phone}
               </Text>
+              {reference_id && (
+                <Text style={styles?.contact}>
+                  reference_id:
+                  {reference_id}
+                </Text>
+              )}
             </View>
           </View>
         </View>

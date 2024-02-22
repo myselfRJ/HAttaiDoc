@@ -254,6 +254,7 @@ const Visit = ({navigation, route}) => {
     appointment_id,
     complaint,
     patient_profile_pic,
+    reference_id,
   } = route.params;
 
   const Clinic_id = useSelector(state => state?.clinicid?.clinic_id);
@@ -505,6 +506,7 @@ const Visit = ({navigation, route}) => {
     ...physicalExamination?.general,
     ...physicalExamination?.piccle,
   ]?.filter(item => item?.status !== '');
+
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
@@ -576,7 +578,9 @@ const Visit = ({navigation, route}) => {
              </text>
           </div>
           <div>
-              <text>${name}  | ${gende} | ${age} | ${patient_phone}</text>
+              <text>${name}  | ${gende} | ${age} | ${patient_phone} ${
+          reference_id ? `| ${reference_id}` : ''
+        }</text>
           </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:16px;margin-top:16px">
@@ -677,7 +681,9 @@ const Visit = ({navigation, route}) => {
                   }
               </text>
           </div>`
-              : `<div>
+              : `${
+                  vitalsData
+                    ? `<div>
               <h5>
                   Vitals
               </h5>
@@ -720,6 +726,8 @@ const Visit = ({navigation, route}) => {
                 .join('')}
               </div>
           </div>`
+                    : ''
+                }`
           }
           ${
             vitalsData?.LDD?.length > 0
@@ -823,7 +831,7 @@ const Visit = ({navigation, route}) => {
 
             <tr>
                 <th style="text-align:center;width:4%;">S.NO</th>
-                <th style="text-align:center;width:45%;">Medicine</th>
+                <th style="text-align:left;width:45%;padding-left:20px">Medicine</th>
                 <th style="text-align:center;width:12%;">Timing</th>
                 <th style="text-align:center;width:12%;">Frequency</th>
                 <th style="text-align:center;width:12%;">Duration</th>
@@ -838,7 +846,9 @@ const Visit = ({navigation, route}) => {
                 <td style="text-align:center;width:4%">${
                   parseInt(index) + 1
                 }</td>
-                <td style="text-align:center;width:45%">${value?.medicine}</td>
+                <td style="text-align:left;width:45%;padding-left:20px">${
+                  value?.medicine
+                }</td>
                 <td style="text-align:center;width:12%">${value?.timing}</td>
                 <td style="text-align:center;width:12%">${value?.frequency}</td>
                 <td style="text-align:center;width:12%">${value?.duration}</td>
@@ -1041,7 +1051,9 @@ const Visit = ({navigation, route}) => {
              </text>
           </div>
           <div>
-              <text>${name}  | ${gende} | ${age} | ${patient_phone}</text>
+              <text>${name}  | ${gende} | ${age} | ${patient_phone}  ${
+          reference_id ? `| ${reference_id}` : ''
+        }</text>
           </div>
       </div>
           <div style="margin-top:16px;" >
@@ -1230,11 +1242,11 @@ const Visit = ({navigation, route}) => {
                   type={'addtype'}
                   label={'Rx History'}
                   btnstyles={{
-                    backgroundColor: CUSTOMCOLOR.white,
+                    backgroundColor: CUSTOMCOLOR.primary,
                     borderWidth: 0.5,
-                    borderColor: CUSTOMCOLOR.borderColor,
+                    borderColor: CUSTOMCOLOR.lightgreen,
                   }}
-                  textStyle={{color: CUSTOMCOLOR.primary}}
+                  textStyle={{color: CUSTOMCOLOR.white}}
                   onPress={() => {
                     navigation.navigate('patientrecord', {
                       patient_phone: patient_phone,
@@ -1243,6 +1255,7 @@ const Visit = ({navigation, route}) => {
                       patient_age: age,
                       patient_name: name,
                       gender: gende,
+                      reference_id: reference_id,
                     });
                   }}
                 />
@@ -1318,7 +1331,8 @@ const Visit = ({navigation, route}) => {
                     {name} | {bloodGroup} | {patient_phone}
                   </Text>
                   <Text style={styles.patientText}>
-                    Age : {age} | {gende}
+                    Age : {age} | {gende}{' '}
+                    {reference_id ? `| ${reference_id}` : ''}
                   </Text>
                   {gende?.toLowerCase() === 'female' &&
                   vitalsData?.LDD &&

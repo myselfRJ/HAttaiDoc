@@ -30,7 +30,7 @@ import {language} from '../settings/userpreferences';
 import DatePicker from 'react-native-date-picker';
 import SlotCreate from './SlotCreate';
 import {URL} from '../utility/urls';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {fetchApi} from '../api/fetchApi';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -72,6 +72,10 @@ import {LoadingElement} from '../components/LoadingElement';
 
 const Dashboard = React.memo(({navigation, route}) => {
   const months = CONSTANTS.months;
+  const [refresh, setRefresh] = useState(false);
+  const refreshAppointmentApi = useSelector(
+    state => state?.refreshApi.appointment,
+  );
   const ClinicRef = useRef(null);
   const token = useSelector(state => state.authenticate.auth.access);
   const [clinic, setClinic] = useState('');
@@ -185,6 +189,7 @@ const Dashboard = React.memo(({navigation, route}) => {
   const [fesscollection, setFesscollection] = useState([]);
   const [feescollectionmonth, setFeescollectionMonth] = useState([]);
   const fetchAppointment = async () => {
+    setRefresh(true);
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
@@ -203,6 +208,7 @@ const Dashboard = React.memo(({navigation, route}) => {
         AppointmentDatafilterAndSortData(jsonData?.data),
       );
       setLoadAppoData(true);
+      setRefresh(false);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -252,7 +258,7 @@ const Dashboard = React.memo(({navigation, route}) => {
       setTimeout(() => {
         fetchAppointment();
       }, 1000);
-    }, [Clinic_id, appointment_date, clinicid]),
+    }, [Clinic_id, appointment_date, refreshAppointmentApi]),
   );
   useEffect(() => {
     disableBackButton();
@@ -396,6 +402,15 @@ const Dashboard = React.memo(({navigation, route}) => {
     setRangeFees(newRangeFees);
     setRangeAppointment(newRange);
   };
+  const renderItems = ({item, index}) => {
+    return (
+      <AppointmentCard
+        key={index}
+        appointment={item}
+        // openVisit={() => navigation.navigate('visit')}
+      />
+    );
+  };
   return (
     <View style={{flex: 1, backgroundColor: CUSTOMCOLOR.background}}>
       <View style={styles.container}>
@@ -503,26 +518,22 @@ const Dashboard = React.memo(({navigation, route}) => {
         </Text>
 
         <View style={styles.appointmentcard}>
-          {!LoadAppoData ? (
+          {!LoadAppoData && AppointmentFilterdata?.length <= 0 ? (
             <LoadingElement />
           ) : (
-            <ScrollView
-              style={styles.appointmentcard}
-              contentContainerStyle={{gap: moderateScale(8)}}>
+            <>
               {AppointmentFilterdata?.length > 0 ? (
-                AppointmentFilterdata?.map((value, index) => {
-                  return (
-                    <AppointmentCard
-                      key={index}
-                      appointment={value}
-                      // openVisit={() => navigation.navigate('visit')}
-                    />
-                  );
-                })
+                <FlatList
+                  data={AppointmentFilterdata}
+                  renderItem={renderItems}
+                  style={styles.appointment}
+                  refreshing={refresh}
+                  onRefresh={fetchAppointment}
+                />
               ) : (
                 <CustomIcon label="Add Your Appointments" />
               )}
-            </ScrollView>
+            </>
           )}
         </View>
         <View>

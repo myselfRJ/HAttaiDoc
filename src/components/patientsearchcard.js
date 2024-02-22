@@ -55,6 +55,7 @@ const PatientSearchCard = patient_data => {
         parseInt(new Date().getFullYear().toString()) - parseInt(birthYear),
       patient_name,
       gender,
+      reference_id: patient_data?.patient_data?.reference_id,
     });
     patientSearchRef?.current?.snapToIndex(0);
   };
@@ -88,6 +89,11 @@ const PatientSearchCard = patient_data => {
               {Language[language]['contact']}:{' '}
               {patient_data?.patient_data?.patient_phone_number}
             </Text>
+            {patient_data?.patient_data?.reference_id && (
+              <Text style={styles?.contact}>
+                Reference Id: {patient_data?.patient_data?.reference_id}
+              </Text>
+            )}
           </View>
         </View>
         {/* <Pressable

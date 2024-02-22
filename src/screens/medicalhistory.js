@@ -579,219 +579,238 @@ const MedicalHistory = ({navigation, route}) => {
             </View>
           )}
 
-          {(medicaldata?.gende == 'Female' ||
-            medicaldata?.gende == 'female') && (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Marital History'}
-                icon={mar !== '' ? 'pencil' : 'menu-right'}
-                iconstyle={{
-                  borderWidth: mar !== '' ? 0.5 : 0,
-                }}
-                size={mar !== '' ? moderateScale(16) : moderateScale(32)}
-                textstyle={styles.text}
-                navigate={() => {
-                  navigation.navigate('marital', {phone, patient_phone});
-                }}
-              />
-              {JSON.stringify(mar) !== '{}' && (
-                <View style={styles.basiccontainer}>
-                  {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {mar != '' && (
-                    <View style={styles.symptomicon}>
-                      <Text style={styles.pulse}>
-                        {`Marital Status:`}
-                        <Text style={{fontWeight: '600'}}>
-                          {' '}
-                          {mar?.maritalstatus}
-                        </Text>
-                        {mar?.married ? (
-                          <Text>
-                            {', '}
-                            Maried Since:{' '}
-                            <Text style={{fontWeight: '600'}}>
-                              {mar?.married}
-                            </Text>
-                          </Text>
-                        ) : null}
-
-                        {mar?.cons ? (
-                          <Text>
-                            {', '}
-                            ,Consanguinity:{' '}
-                            <Text style={{fontWeight: '600'}}>{mar?.cons}</Text>
-                          </Text>
-                        ) : null}
-                      </Text>
-                    </View>
-                  )}
-                  {/* </View> */}
-                </View>
-              )}
-            </View>
-          )}
-          {(medicaldata?.gende == 'Female' ||
-            medicaldata?.gende == 'female') && (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Menstrual History'}
-                icon={mesntrual !== '' ? 'pencil' : 'menu-right'}
-                iconstyle={{
-                  borderWidth: mesntrual !== '' ? 0.5 : 0,
-                }}
-                size={mesntrual !== '' ? moderateScale(16) : moderateScale(32)}
-                textstyle={styles.text}
-                navigate={() =>
-                  navigation.navigate('menstrual', {phone, patient_phone})
-                }
-                date={mesntrual != '' && updatedate !== '' ? updatedate : null}
-              />
-              {JSON.stringify(mesntrual) !== '{}' && (
-                <View style={styles.basiccontainer}>
-                  {/* <View style={{flexWrap: 'wrap'}}> */}
-                  {JSON.stringify(mesntrual) != '' && (
-                    <View style={styles.symptomicon}>
-                      <Text style={styles.pulse}>
-                        {mesntrual?.age && mesntrual?.age !== undefined && (
-                          <Text>
-                            Menarche:{' '}
-                            <Text style={{fontWeight: '600'}}>
-                              {mesntrual?.age}
-                            </Text>{' '}
-                            Yrs,
-                          </Text>
-                        )}{' '}
-                        {mesntrual?.status && (
-                          <Text style={{fontWeight: '600'}}>
-                            {mesntrual?.status}
-                          </Text>
-                        )}
-                        {mesntrual?.flowdays && (
-                          <Text>
-                            , Flow:{' '}
-                            <Text style={{fontWeight: '600'}}>
-                              {mesntrual?.flowdays}
-                            </Text>{' '}
-                            days,
-                          </Text>
-                        )}{' '}
-                        {mesntrual?.cycledays && (
-                          <Text>
-                            Cycle:{' '}
-                            <Text style={{fontWeight: '600'}}>
-                              {mesntrual?.cycledays}
-                            </Text>{' '}
-                            days
-                          </Text>
-                        )}
-                        <Text>
-                          {' '}
-                          {mesntrual?.pregnant !== '' &&
-                          mesntrual?.pregnant?.lmp !== '' ? (
-                            <Text>
-                              Pregnant (Yes): LMP :{' '}
-                              <Text style={{fontWeight: '600'}}>
-                                {mesntrual?.pregnant?.lmp
-                                  ? formatdate(mesntrual?.pregnant?.lmp)
-                                  : ''}
-                              </Text>{' '}
-                              EDD :{' '}
-                              <Text style={{fontWeight: '600'}}>
-                                {mesntrual?.pregnant?.edd
-                                  ? formatdate(mesntrual?.pregnant?.edd)
-                                  : ''}
-                              </Text>{' '}
-                              Week:{' '}
-                              <Text style={{fontWeight: '600'}}>
-                                {lmp_week?.weeks}
-                              </Text>{' '}
-                              Days:{' '}
-                              <Text style={{fontWeight: '600'}}>
-                                {lmp_week?.days}
-                              </Text>
-                            </Text>
-                          ) : (
-                            ', Pregnant (No)'
-                          )}
-                        </Text>
-                        <Text>
-                          {' '}
-                          {mesntrual?.menopause !== '' &&
-                          mesntrual?.menopause !== undefined
-                            ? `, Menopause (Yes): LMP ${
-                                mesntrual?.menopause?.split('T')[0]
-                              }`
-                            : `, Menopause (No)`}
-                        </Text>
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-          )}
-
-          {(medicaldata?.gende == 'Female' ||
-            medicaldata?.gende == 'female') && (
-            <View style={styles.visitOpenItem}>
-              <VisitOpen
-                label={'Obstetric History'}
-                icon={obes !== undefined ? 'pencil' : 'menu-right'}
-                iconstyle={{
-                  borderWidth: obes !== undefined ? 0.5 : 0,
-                }}
-                size={
-                  obes !== undefined ? moderateScale(16) : moderateScale(32)
-                }
-                textstyle={styles.text}
-                navigate={() =>
-                  navigation.navigate('obstetric', {phone, patient_phone})
-                }
-              />
-              {JSON.stringify(obes) !== '{}' && (
-                <View style={styles.basiccontainer}>
-                  {obes != '' && (
-                    <>
-                      <View style={styles.symptomicon}>
-                        <Text style={styles.pulse}>
-                          G: {obes?.gravidity?.value}, T: {obes?.term?.value},
-                          P: {obes?.premature?.value}, A:{' '}
-                          {obes?.abortions?.value}, L:{' '}
-                          {obes?.living?.map(item => item?.living)}
-                        </Text>
-                      </View>
-                      <View style={styles.symptomicon}>
-                        {obes?.living?.slice(0, -1)?.map(item => (
+          {Age >= 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Marital History'}
+                    icon={mar !== '' ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: mar !== '' ? 0.5 : 0,
+                    }}
+                    size={mar !== '' ? moderateScale(16) : moderateScale(32)}
+                    textstyle={styles.text}
+                    navigate={() => {
+                      navigation.navigate('marital', {phone, patient_phone});
+                    }}
+                  />
+                  {JSON.stringify(mar) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {/* <View style={{flexWrap: 'wrap'}}> */}
+                      {mar != '' && (
+                        <View style={styles.symptomicon}>
                           <Text style={styles.pulse}>
-                            {item?.name} {': '}
-                            {item?.age} | {item?.gender}
+                            {`Marital Status:`}
+                            <Text style={{fontWeight: '600'}}>
+                              {' '}
+                              {mar?.maritalstatus}
+                            </Text>
+                            {mar?.married ? (
+                              <Text>
+                                {', '}
+                                Maried Since:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mar?.married}
+                                </Text>
+                              </Text>
+                            ) : null}
+
+                            {mar?.cons ? (
+                              <Text>
+                                {', '}
+                                ,Consanguinity:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mar?.cons}
+                                </Text>
+                              </Text>
+                            ) : null}
                           </Text>
-                        ))}
-                      </View>
-                      <View style={styles.symptomicon}>
-                        <Text style={styles.pulse}>
-                          {/* {obes?.gravidity?.desc ||
+                        </View>
+                      )}
+                      {/* </View> */}
+                    </View>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+          {Age >= 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Menstrual History'}
+                    icon={mesntrual !== '' ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: mesntrual !== '' ? 0.5 : 0,
+                    }}
+                    size={
+                      mesntrual !== '' ? moderateScale(16) : moderateScale(32)
+                    }
+                    textstyle={styles.text}
+                    navigate={() =>
+                      navigation.navigate('menstrual', {phone, patient_phone})
+                    }
+                    date={
+                      mesntrual != '' && updatedate !== '' ? updatedate : null
+                    }
+                  />
+                  {JSON.stringify(mesntrual) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {/* <View style={{flexWrap: 'wrap'}}> */}
+                      {JSON.stringify(mesntrual) != '' && (
+                        <View style={styles.symptomicon}>
+                          <Text style={styles.pulse}>
+                            {mesntrual?.age && mesntrual?.age !== undefined && (
+                              <Text>
+                                Menarche:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.age}
+                                </Text>{' '}
+                                Yrs,
+                              </Text>
+                            )}{' '}
+                            {mesntrual?.status && (
+                              <Text style={{fontWeight: '600'}}>
+                                {mesntrual?.status}
+                              </Text>
+                            )}
+                            {mesntrual?.flowdays && (
+                              <Text>
+                                , Flow:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.flowdays}
+                                </Text>{' '}
+                                days,
+                              </Text>
+                            )}{' '}
+                            {mesntrual?.cycledays && (
+                              <Text>
+                                Cycle:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.cycledays}
+                                </Text>{' '}
+                                days
+                              </Text>
+                            )}
+                            <Text>
+                              {' '}
+                              {mesntrual?.pregnant !== '' &&
+                              mesntrual?.pregnant?.lmp !== '' ? (
+                                <Text>
+                                  Pregnant (Yes): LMP :{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.pregnant?.lmp
+                                      ? formatdate(mesntrual?.pregnant?.lmp)
+                                      : ''}
+                                  </Text>{' '}
+                                  EDD :{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.pregnant?.edd
+                                      ? formatdate(mesntrual?.pregnant?.edd)
+                                      : ''}
+                                  </Text>{' '}
+                                  Week:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {lmp_week?.weeks}
+                                  </Text>{' '}
+                                  Days:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {lmp_week?.days}
+                                  </Text>
+                                </Text>
+                              ) : (
+                                ', Pregnant (No)'
+                              )}
+                            </Text>
+                            <Text>
+                              {' '}
+                              {mesntrual?.menopause !== '' &&
+                              mesntrual?.menopause !== undefined
+                                ? `, Menopause (Yes): LMP ${
+                                    mesntrual?.menopause?.split('T')[0]
+                                  }`
+                                : `, Menopause (No)`}
+                            </Text>
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+
+          {Age >= 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Obstetric History'}
+                    icon={obes !== undefined ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: obes !== undefined ? 0.5 : 0,
+                    }}
+                    size={
+                      obes !== undefined ? moderateScale(16) : moderateScale(32)
+                    }
+                    textstyle={styles.text}
+                    navigate={() =>
+                      navigation.navigate('obstetric', {phone, patient_phone})
+                    }
+                  />
+                  {JSON.stringify(obes) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {obes != '' && (
+                        <>
+                          <View style={styles.symptomicon}>
+                            <Text style={styles.pulse}>
+                              G: {obes?.gravidity?.value}, T:{' '}
+                              {obes?.term?.value}, P: {obes?.premature?.value},
+                              A: {obes?.abortions?.value}, L:{' '}
+                              {obes?.living?.map(item => item?.living)}
+                            </Text>
+                          </View>
+                          <View style={styles.symptomicon}>
+                            {obes?.living?.slice(0, -1)?.map(item => (
+                              <Text style={styles.pulse}>
+                                {item?.name} {': '}
+                                {item?.age} | {item?.gender}
+                              </Text>
+                            ))}
+                          </View>
+                          <View style={styles.symptomicon}>
+                            <Text style={styles.pulse}>
+                              {/* {obes?.gravidity?.desc ||
                             obes?.term?.desc ||
                             obes?.premature?.desc ||
                             (obes?.abortions?.desc && (
                               
                             ))} */}
-                          <Text>Description : </Text>
-                          {obes?.gravidity?.desc &&
-                            `G - ${obes?.gravidity?.desc}`}
-                          {obes?.term?.desc && `,${' '}T - ${obes?.term?.desc}`}
-                          {obes?.premature?.desc &&
-                            `,${' '}P - ${obes?.premature?.desc}`}
-                          {obes?.abortions?.desc &&
-                            `,${' '}A - ${obes?.abortions?.desc}`}
-                        </Text>
-                      </View>
-                    </>
+                              <Text>Description : </Text>
+                              {obes?.gravidity?.desc &&
+                                `G - ${obes?.gravidity?.desc}`}
+                              {obes?.term?.desc &&
+                                `,${' '}T - ${obes?.term?.desc}`}
+                              {obes?.premature?.desc &&
+                                `,${' '}P - ${obes?.premature?.desc}`}
+                              {obes?.abortions?.desc &&
+                                `,${' '}A - ${obes?.abortions?.desc}`}
+                            </Text>
+                          </View>
+                        </>
+                      )}
+                      {/* </View> */}
+                    </View>
                   )}
-                  {/* </View> */}
                 </View>
               )}
-            </View>
+            </>
           )}
           {Age > 18 && (
             <View style={styles.visitOpenItem}>
@@ -1136,6 +1155,239 @@ const MedicalHistory = ({navigation, route}) => {
             blur={false}
             lbltext={{fontWeight: '700'}}
           />
+          {Age < 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Marital History'}
+                    icon={mar !== '' ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: mar !== '' ? 0.5 : 0,
+                    }}
+                    size={mar !== '' ? moderateScale(16) : moderateScale(32)}
+                    textstyle={styles.text}
+                    navigate={() => {
+                      navigation.navigate('marital', {phone, patient_phone});
+                    }}
+                  />
+                  {JSON.stringify(mar) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {/* <View style={{flexWrap: 'wrap'}}> */}
+                      {mar != '' && (
+                        <View style={styles.symptomicon}>
+                          <Text style={styles.pulse}>
+                            {`Marital Status:`}
+                            <Text style={{fontWeight: '600'}}>
+                              {' '}
+                              {mar?.maritalstatus}
+                            </Text>
+                            {mar?.married ? (
+                              <Text>
+                                {', '}
+                                Maried Since:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mar?.married}
+                                </Text>
+                              </Text>
+                            ) : null}
+
+                            {mar?.cons ? (
+                              <Text>
+                                {', '}
+                                ,Consanguinity:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mar?.cons}
+                                </Text>
+                              </Text>
+                            ) : null}
+                          </Text>
+                        </View>
+                      )}
+                      {/* </View> */}
+                    </View>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+          {Age < 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Menstrual History'}
+                    icon={mesntrual !== '' ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: mesntrual !== '' ? 0.5 : 0,
+                    }}
+                    size={
+                      mesntrual !== '' ? moderateScale(16) : moderateScale(32)
+                    }
+                    textstyle={styles.text}
+                    navigate={() =>
+                      navigation.navigate('menstrual', {phone, patient_phone})
+                    }
+                    date={
+                      mesntrual != '' && updatedate !== '' ? updatedate : null
+                    }
+                  />
+                  {JSON.stringify(mesntrual) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {/* <View style={{flexWrap: 'wrap'}}> */}
+                      {JSON.stringify(mesntrual) != '' && (
+                        <View style={styles.symptomicon}>
+                          <Text style={styles.pulse}>
+                            {mesntrual?.age && mesntrual?.age !== undefined && (
+                              <Text>
+                                Menarche:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.age}
+                                </Text>{' '}
+                                Yrs,
+                              </Text>
+                            )}{' '}
+                            {mesntrual?.status && (
+                              <Text style={{fontWeight: '600'}}>
+                                {mesntrual?.status}
+                              </Text>
+                            )}
+                            {mesntrual?.flowdays && (
+                              <Text>
+                                , Flow:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.flowdays}
+                                </Text>{' '}
+                                days,
+                              </Text>
+                            )}{' '}
+                            {mesntrual?.cycledays && (
+                              <Text>
+                                Cycle:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.cycledays}
+                                </Text>{' '}
+                                days
+                              </Text>
+                            )}
+                            <Text>
+                              {' '}
+                              {mesntrual?.pregnant !== '' &&
+                              mesntrual?.pregnant?.lmp !== '' ? (
+                                <Text>
+                                  Pregnant (Yes): LMP :{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.pregnant?.lmp
+                                      ? formatdate(mesntrual?.pregnant?.lmp)
+                                      : ''}
+                                  </Text>{' '}
+                                  EDD :{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.pregnant?.edd
+                                      ? formatdate(mesntrual?.pregnant?.edd)
+                                      : ''}
+                                  </Text>{' '}
+                                  Week:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {lmp_week?.weeks}
+                                  </Text>{' '}
+                                  Days:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {lmp_week?.days}
+                                  </Text>
+                                </Text>
+                              ) : (
+                                ', Pregnant (No)'
+                              )}
+                            </Text>
+                            <Text>
+                              {' '}
+                              {mesntrual?.menopause !== '' &&
+                              mesntrual?.menopause !== undefined
+                                ? `, Menopause (Yes): LMP ${
+                                    mesntrual?.menopause?.split('T')[0]
+                                  }`
+                                : `, Menopause (No)`}
+                            </Text>
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+
+          {Age < 18 && (
+            <>
+              {(medicaldata?.gende == 'Female' ||
+                medicaldata?.gende == 'female') && (
+                <View style={styles.visitOpenItem}>
+                  <VisitOpen
+                    label={'Obstetric History'}
+                    icon={obes !== undefined ? 'pencil' : 'menu-right'}
+                    iconstyle={{
+                      borderWidth: obes !== undefined ? 0.5 : 0,
+                    }}
+                    size={
+                      obes !== undefined ? moderateScale(16) : moderateScale(32)
+                    }
+                    textstyle={styles.text}
+                    navigate={() =>
+                      navigation.navigate('obstetric', {phone, patient_phone})
+                    }
+                  />
+                  {JSON.stringify(obes) !== '{}' && (
+                    <View style={styles.basiccontainer}>
+                      {obes != '' && (
+                        <>
+                          <View style={styles.symptomicon}>
+                            <Text style={styles.pulse}>
+                              G: {obes?.gravidity?.value}, T:{' '}
+                              {obes?.term?.value}, P: {obes?.premature?.value},
+                              A: {obes?.abortions?.value}, L:{' '}
+                              {obes?.living?.map(item => item?.living)}
+                            </Text>
+                          </View>
+                          <View style={styles.symptomicon}>
+                            {obes?.living?.slice(0, -1)?.map(item => (
+                              <Text style={styles.pulse}>
+                                {item?.name} {': '}
+                                {item?.age} | {item?.gender}
+                              </Text>
+                            ))}
+                          </View>
+                          <View style={styles.symptomicon}>
+                            <Text style={styles.pulse}>
+                              {/* {obes?.gravidity?.desc ||
+                            obes?.term?.desc ||
+                            obes?.premature?.desc ||
+                            (obes?.abortions?.desc && (
+                              
+                            ))} */}
+                              <Text>Description : </Text>
+                              {obes?.gravidity?.desc &&
+                                `G - ${obes?.gravidity?.desc}`}
+                              {obes?.term?.desc &&
+                                `,${' '}T - ${obes?.term?.desc}`}
+                              {obes?.premature?.desc &&
+                                `,${' '}P - ${obes?.premature?.desc}`}
+                              {obes?.abortions?.desc &&
+                                `,${' '}A - ${obes?.abortions?.desc}`}
+                            </Text>
+                          </View>
+                        </>
+                      )}
+                      {/* </View> */}
+                    </View>
+                  )}
+                </View>
+              )}
+            </>
+          )}
           {/* {(medicaldata?.gende == 'Female' ||
             medicaldata?.gende == 'female') && (
             <InputText

@@ -56,6 +56,7 @@ const SelectionTab = props => {
               backgroundColor: props.selected
                 ? CUSTOMCOLOR.white
                 : CUSTOMCOLOR.primary,
+              ...props.tokenContainer,
             },
           ]}>
           <Text
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     // backgroundColor: CUSTOMCOLOR.primary,
     borderWidth: 0.5,
-    borderColor:CUSTOMCOLOR.primary,
+    borderColor: CUSTOMCOLOR.primary,
     borderRadius: moderateScale(4),
   },
   tabtext: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     // borderWidth: 0.5,
     padding: moderateScale(2),
     borderBottomRightRadius: moderateScale(8),
-    borderTopLeftRadius:moderateScale(4),
+    borderTopLeftRadius: moderateScale(4),
     borderColor: CUSTOMCOLOR.black,
     backgroundColor: CUSTOMCOLOR.primary,
   },

@@ -55,6 +55,10 @@ import {addclinic_data} from '../redux/features/profiles/clinicData';
 import {LoadingElement} from '../components/LoadingElement';
 
 const Appointment = ({navigation}) => {
+  const refreshAppointmentApi = useSelector(
+    state => state?.refreshApi.appointment,
+  );
+  const [refresh, setRefresh] = useState(false);
   const [name, setName] = useState('');
   const ClinicRef = useRef(null);
   const [selectedClinic, setSelectedClinic] = useState('');
@@ -124,6 +128,7 @@ const Appointment = ({navigation}) => {
   const Clinic_name = useSelector(state => state?.clinicid?.clinic_name);
   const appointment_date = formatDate;
   const fetchAppointment = async () => {
+    setRefresh(true);
     const apiUrl = `${
       URL.get_all_appointments_of_clinic
     }?appointment_date=${encodeURIComponent(
@@ -145,6 +150,7 @@ const Appointment = ({navigation}) => {
         CompletedAppointmentDatafilterAndSortData(jsonData?.data),
       );
       setPending(true);
+      setRefresh(false);
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -197,7 +203,7 @@ const Appointment = ({navigation}) => {
       setTimeout(() => {
         fetchAppointment();
       }, 1000);
-    }, [Clinic_id, appointment_date]),
+    }, [Clinic_id, appointment_date, refreshAppointmentApi]),
   );
 
   useEffect(() => {
@@ -292,7 +298,7 @@ const Appointment = ({navigation}) => {
           {Language[language]['appointments']}
         </Text>
         <View style={styles.appointmentCard}>
-          {!pending ? (
+          {!pending && filteredData <= 0 ? (
             <LoadingElement />
           ) : (
             <>
@@ -305,6 +311,8 @@ const Appointment = ({navigation}) => {
                   }
                   renderItem={renderItems}
                   style={styles.appointmentCard}
+                  refreshing={refresh}
+                  onRefresh={fetchAppointment}
                 />
               ) : (
                 <CustomIcon label="Add Your Appointments" />

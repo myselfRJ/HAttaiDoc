@@ -66,6 +66,7 @@ const AppointmentCard = React.memo(({appointment, openVisit}) => {
       consultation_fees,
       bloodGroup,
       patient_profile_pic,
+      reference_id: appointment?.patient_data?.reference_id,
     });
     dispatch(addAppointmentID(appointment_id));
     appointmentCardRef?.current?.snapToIndex(0);

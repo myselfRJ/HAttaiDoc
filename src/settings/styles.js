@@ -23,6 +23,9 @@ let CUSTOMCOLOR = {
   fadeGreen: '#2CBB1530',
   fadeYellow: '#FFEEAC61',
   selector: '#F4F7Fa',
+  lightgreen: '#DFFFDA',
+  disableslot: '#EEEEEE',
+  disableslotText: '#9E9E9E',
 };
 const DARKCOLOR = {
   primary: 'red',

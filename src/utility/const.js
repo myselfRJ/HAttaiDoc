@@ -468,6 +468,16 @@ export const CONSTANT = {
       status: '',
       desc: '',
     },
+    {
+      label: 'Acne',
+      status: '',
+      desc: '',
+    },
+    {
+      label: 'Hirsutism',
+      status: '',
+      desc: '',
+    },
   ],
   physicaldata2: [
     {
@@ -497,16 +507,6 @@ export const CONSTANT = {
     },
     {
       label: 'Edema',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Acne',
-      status: '',
-      desc: '',
-    },
-    {
-      label: 'Hirsutism',
       status: '',
       desc: '',
     },

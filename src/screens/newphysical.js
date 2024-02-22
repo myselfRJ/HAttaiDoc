@@ -30,14 +30,51 @@ import {URL, fileurl} from '../utility/urls';
 import {fetchApi} from '../api/fetchApi';
 import {addExamination} from '../redux/features/prescription/prescriptionSlice';
 import CustomModal from '../components/CustomModal';
-import {RetriveAsyncData, StoreAsyncData} from '../utility/AsyncStorage';
+import {
+  RemoveKeyFromAsync,
+  RetriveAsyncData,
+  StoreAsyncData,
+} from '../utility/AsyncStorage';
+import {clearStorage} from '../utils/storage/storage';
 const Physical = ({navigation}) => {
+  const appointmentID = useSelector(state => state?.address?.appointment_id);
+  const vitalsDat = useSelector(state => state.prescription.vitalsData);
+  const vitalsData =
+    vitalsDat?.length > 0
+      ? vitalsDat
+          ?.filter(item => item?.appointment_id === appointmentID)
+          ?.slice(-1)?.[0]?.vitals
+      : {};
   const phys1 = CONSTANT.physicaldata1;
   const phys2 = CONSTANT.physicaldata2;
   const phys3 = CONSTANT.physicaldata3;
-  const [data1, setData1] = useState([...phys1]);
-  const [data2, setData2] = useState([...phys2]);
-  const [data3, setData3] = useState([...phys3]);
+  const handlebuild = (data = []) => {
+    if (vitalsData?.bmi !== '' && vitalsData?.bmi !== undefined) {
+      const index = phys1.findIndex(item => item.label === 'Build');
+      const editBuild = [...data];
+      const updatedItem = {...editBuild[index]};
+      const bmiInt = parseFloat(vitalsData?.bmi);
+      if (bmiInt < 18) {
+        updatedItem.status = 'A';
+        updatedItem.desc = `Under Weight ${bmiInt?.toString()}`;
+      } else if (bmiInt >= 18 && bmiInt <= 25) {
+        updatedItem.status = 'N';
+        updatedItem.desc = `Normal Weight ${bmiInt?.toString()}`;
+      } else {
+        updatedItem.status = 'A';
+        updatedItem.desc = `Over Weight ${bmiInt?.toString()}`;
+      }
+      editBuild[index] = updatedItem;
+      return editBuild;
+    } else {
+      return phys1;
+    }
+  };
+  const [data1, setData1] = useState(
+    handlebuild(JSON.parse(JSON.stringify([...phys1]))),
+  );
+  const [data2, setData2] = useState(JSON.parse(JSON.stringify([...phys2])));
+  const [data3, setData3] = useState(JSON.parse(JSON.stringify([...phys3])));
   const physical = useSelector(state => state.prescription.physicalExamination);
   const handledata1 = (index, newStatus, newDesc) => {
     setData1(data1 => {
@@ -49,7 +86,6 @@ const Physical = ({navigation}) => {
       return updatedData1;
     });
   };
-
   const handledata2 = (index, newStatus, newDesc) => {
     setData2(data2 => {
       const updatedData1 = [...data2];
@@ -82,7 +118,6 @@ const Physical = ({navigation}) => {
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
   const [documents, setDocuments] = useState('');
-  const appointmentID = useSelector(state => state?.address?.appointment_id);
   const postData = async url => {
     const formData = new FormData();
     formData.append('notes', 'Physical');
@@ -276,9 +311,6 @@ const Physical = ({navigation}) => {
       } catch (err) {
         console.error(err);
       }
-      //   const value =
-      //     jsonData?.data?.notes === undefined ? '' : jsonData?.data?.notes;
-      //   dispatch(addExamination({value: value}));
     } else {
       console.error('API call failed:', response.status, response);
     }
@@ -310,18 +342,41 @@ const Physical = ({navigation}) => {
         desc: '',
       }));
       StoreAsyncData(`physicaldata${examinationDetails?.doc_phone}`, {
-        data1: CONSTANT.physicaldata1,
-        data2: CONSTANT.physicaldata2,
-        data3: [...datatostore, {label: value, status: '', desc: ''}],
+        data1: JSON.parse(JSON.stringify([...CONSTANT.physicaldata1])),
+        data2: JSON.parse(JSON.stringify([...CONSTANT.physicaldata2])),
+        data3: JSON.parse(
+          JSON.stringify([
+            ...datatostore,
+            {label: value, status: '', desc: ''},
+          ]),
+        ),
       });
     }
     setValue('');
   };
   const handleAsync = () => {
+    RemoveKeyFromAsync(`physicaldata${examinationDetails?.doc_phone}`);
     RetriveAsyncData(`physicaldata${examinationDetails?.doc_phone}`).then(
       array => {
         if (array) {
-          setData1(array?.data1);
+          const acneInc =
+            array?.data2?.some(item => item?.label === 'Acne') &&
+            array?.data2?.some(item => item?.label === 'Hirsutism');
+          const removedElements = array?.data2.splice(-2, 2);
+          const addto1 = array?.data1.concat(removedElements);
+          if (vitalsData?.bmi !== '') {
+            if (acneInc) {
+              setData1(handlebuild([...addto1]));
+            } else {
+              setData1(handlebuild([...array?.data1]));
+            }
+          } else {
+            if (acneInc) {
+              setData1(addto1);
+            } else {
+              setData1(array?.data1);
+            }
+          }
           setData2(array?.data2);
           setData3(array?.data3);
         }

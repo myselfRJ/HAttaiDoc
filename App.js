@@ -2,16 +2,16 @@
 
 import * as React from 'react';
 import {View, Text, Alert} from 'react-native';
-import {Provider} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CombinedRoute from './src/navigation/combinednavigator';
 import store from './src/redux/stores/store';
 import axios from 'axios';
 import {urlActions} from './src/redux/features/url/urlSlice';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {GestureHandlerRootView, State} from 'react-native-gesture-handler';
 import {CUSTOMCOLOR, CUSTOMFONTFAMILY} from './src/settings/styles';
-import {useNetInfo} from '@react-native-community/netinfo';
+import {refresh, useNetInfo} from '@react-native-community/netinfo';
 import {moderateScale} from './src/utility/scaleDimension';
 import {
   PermmisionStorage,
@@ -22,10 +22,15 @@ import messaging from '@react-native-firebase/messaging';
 const Stack = createNativeStackNavigator();
 import Toast from 'react-native-toast-message';
 import {showToast} from './src/utility/const';
+import {refreshAppointment} from './src/redux/features/refreshApis/refreshApi';
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [loading, setLoading] = React.useState(true);
   const [initialRoute, setInitialRoute] = React.useState('');
+  let refreshAppointmentApi = useSelector(
+    state => state?.refreshApi.appointment,
+  );
   React.useEffect(() => {
     navigation.navigate('up');
   }, []);
@@ -51,6 +56,7 @@ const HomeScreen = () => {
         setLoading(false);
       });
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      dispatch(refreshAppointment((refreshAppointmentApi += 'app')));
       showToast('success', JSON.stringify(remoteMessage?.notification?.body));
     });
 
