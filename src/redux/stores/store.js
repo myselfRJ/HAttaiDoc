@@ -25,6 +25,7 @@ import {validityReducer} from '../features/prescription/valid';
 import {signatureReducer} from '../features/prescription/sign';
 import {addressReducer} from '../features/profiles/clinicAddress';
 import {refreshReducer} from '../features/refreshApis/refreshApi';
+import {AdultReducer} from '../features/prescription/adult';
 
 const store = configureStore({
   reducer: {
@@ -53,6 +54,7 @@ const store = configureStore({
     sign: signatureReducer,
     address: addressReducer,
     refreshApi: refreshReducer,
+    adult: AdultReducer,
   },
 });
 

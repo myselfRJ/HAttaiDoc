@@ -72,7 +72,10 @@ const MedicalHistory = ({navigation, route}) => {
   const patient_phone = medicaldata?.patient_phone;
   const Age = medicaldata?.Age;
   // console.log('phone', phone, patient_phone, Age);
-
+  const adultData = useSelector(state => state?.adult?.adult);
+  console.log('====================================');
+  console.log('data=', adultData);
+  console.log('====================================');
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
@@ -556,6 +559,38 @@ const MedicalHistory = ({navigation, route}) => {
       item?.relation?.toLowerCase() !== 'father' &&
       item?.relation?.toLowerCase() !== 'mother',
   );
+
+  // const fetchData = async () => {
+  //   const response = await fetch(URL.GetVaccination(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     if (jsonData?.data && jsonData?.data?.length > 0) {
+  //       const latestData = jsonData?.data?.reduce((latest, current) => {
+  //         return new Date(current.updated_at) > new Date(latest.updated_at)
+  //           ? current
+  //           : latest;
+  //       }, jsonData?.data[0]);
+  //       const newdata = JSON.parse(latestData?.vaccinationDetails);
+  //       console.log('====================================');
+  //       console.log('new===========', newdata);
+  //       console.log('====================================');
+  //       // setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
+  //     }
+  //     // setSelectedStatus(jsonData?.data[0]?.status);
+  //     // setsearch(jsonData?.data[0]?.name);
+  //     // setvalue(jsonData?.data[0]?.date);
+  //     // setdocument1(jsonData?.data[0]);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading="Medical History" />
@@ -771,15 +806,51 @@ const MedicalHistory = ({navigation, route}) => {
                           <View style={styles.symptomicon}>
                             <Text style={styles.pulse}>
                               G: {obes?.gravidity?.value}, T:{' '}
-                              {obes?.term?.value}, P: {obes?.premature?.value},
-                              A: {obes?.abortions?.value}, L:{' '}
-                              {obes?.living?.map(item => item?.living)}
+                              {obes?.term?.value
+                                ? obes?.term?.value
+                                : obes?.term?.map(item => item?.para)}
+                              , A:{' '}
+                              {obes?.abortions?.value
+                                ? obes?.abortions?.value
+                                : obes?.abortions?.map(item => item?.abotions)}
+                              , L: {obes?.living?.map(item => item?.living)}
                             </Text>
                           </View>
+                          {obes?.term?.value
+                            ? null
+                            : obes?.term?.slice(0, -1)?.map(item => (
+                                <View style={styles.symptomicon}>
+                                  <Text style={styles.pulse}>
+                                    <Text style={{fontWeight: 600}}>
+                                      {item?.name} {': '}
+                                    </Text>
+                                    {item?.year} | {item?.anc} |{' '}
+                                    {item?.delivery} | {item?.gestation} |{' '}
+                                    {item?.pn}
+                                  </Text>
+                                </View>
+                              ))}
+                          {obes?.abortions?.value
+                            ? null
+                            : obes?.abortions?.slice(0, -1)?.map(item => (
+                                <View style={styles.symptomicon}>
+                                  <Text style={styles.pulse}>
+                                    <Text style={{fontWeight: 600}}>
+                                      {' '}
+                                      {item?.name} {': '}
+                                    </Text>
+                                    {item?.year} | {item?.reason} |{' '}
+                                    {item?.place} | {item?.period} |{' '}
+                                    {item?.treatment}
+                                  </Text>
+                                </View>
+                              ))}
                           <View style={styles.symptomicon}>
                             {obes?.living?.slice(0, -1)?.map(item => (
                               <Text style={styles.pulse}>
-                                {item?.name} {': '}
+                                <Text style={{fontWeight: 600}}>
+                                  {item?.name} {': '}
+                                </Text>
                                 {item?.age} | {item?.gender}
                               </Text>
                             ))}
@@ -792,15 +863,20 @@ const MedicalHistory = ({navigation, route}) => {
                             (obes?.abortions?.desc && (
                               
                             ))} */}
-                              <Text>Description : </Text>
-                              {obes?.gravidity?.desc &&
-                                `G - ${obes?.gravidity?.desc}`}
-                              {obes?.term?.desc &&
-                                `,${' '}T - ${obes?.term?.desc}`}
-                              {obes?.premature?.desc &&
-                                `,${' '}P - ${obes?.premature?.desc}`}
-                              {obes?.abortions?.desc &&
-                                `,${' '}A - ${obes?.abortions?.desc}`}
+                              {(obes?.gravidity?.desc ||
+                                obes?.term?.desc ||
+                                obes?.abortions?.desc) && (
+                                <Text>Description : </Text>
+                              )}
+                              {obes?.gravidity?.desc
+                                ? `G - ${obes?.gravidity?.desc}`
+                                : null}
+                              {obes?.term?.desc
+                                ? `,${' '}T - ${obes?.term?.desc}`
+                                : null}
+                              {obes?.abortions?.desc
+                                ? `,${' '}A - ${obes?.abortions?.desc}`
+                                : null}
                             </Text>
                           </View>
                         </>
@@ -832,6 +908,15 @@ const MedicalHistory = ({navigation, route}) => {
                 //   menstrualHistory != '' && updatedate !== '' ? updatedate : null
                 // }
               />
+              {adultData &&
+                adultData?.uptovaccination?.map((item, index) => (
+                  <View style={styles.basiccontainer} key={index}>
+                    <Text style={styles?.pulse}>
+                      Vaccine Name: {item?.vaccineName} | Date: {item?.date} |
+                      Batch No: {item?.batch}
+                    </Text>
+                  </View>
+                ))}
             </View>
           )}
 

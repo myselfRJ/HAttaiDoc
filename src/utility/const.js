@@ -27,7 +27,7 @@ export const CONSTANT = {
     {label: 'Diagnosis', icon: 'pencil', navigate: 'diagnosis'},
     {label: 'Prescribe Investigation', icon: 'pencil', navigate: 'labreport'},
 
-    {label: 'Prescribe Medicine', icon: 'pencil', navigate: 'pres'},
+    {label: 'Prescribe Medicine', icon: 'pencil', navigate: 'newpres'}, //pres
     {label: 'Doctor Notes', icon: 'stethoscope', navigate: 'additional'},
 
     {label: 'Follow-Up', icon: 'pencil', navigate: 'FollowUp'},

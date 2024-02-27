@@ -577,8 +577,8 @@ const PatientCreate = ({navigation, route}) => {
 
             <InputText
               keypad="numeric"
-              label="Aadhar Number"
-              placeholder="12-digit Aadhar Number"
+              label="Aadhaar Number"
+              placeholder="12-digit Aadhaar Number"
               value={aadhar_no}
               setValue={setAadhar_no}
               // keypad={'numeric'}

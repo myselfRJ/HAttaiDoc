@@ -26,12 +26,14 @@ import DocumentPicker, {types} from 'react-native-document-picker';
 import InputText from '../components/inputext';
 import HButton from '../components/button';
 import {URL} from '../utility/urls';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fileurl} from '../utility/urls';
 import {pickSingleFile} from '../utility/const';
+import {addAdult} from '../redux/features/prescription/adult';
 const Adult = ({route, navigation}) => {
+  const dispatch = useDispatch();
   const status = ['Up to date', 'Pending Vaccination', 'Covid Vaccine'];
   const [selectedStatus, setSelectedStatus] = useState('');
   const [search, setsearch] = useState('');
@@ -189,6 +191,7 @@ const Adult = ({route, navigation}) => {
   //     `${fileurl}/media/uploads/vaccination/sample_PzD3eLI.pdf`,
   //   ),
   // );
+
   const fetchData = async () => {
     const response = await fetch(URL.GetVaccination(phone), {
       method: 'GET',
@@ -206,28 +209,12 @@ const Adult = ({route, navigation}) => {
         }, jsonData?.data[0]);
         const newdata = JSON.parse(latestData?.vaccinationDetails);
         setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
+        dispatch(addAdult({data: latestData, uptovaccination: newdata}));
       }
       setSelectedStatus(jsonData?.data[0]?.status);
       setsearch(jsonData?.data[0]?.name);
       setvalue(jsonData?.data[0]?.date);
       setdocument1(jsonData?.data[0]);
-
-      // const files = [];
-      // for (let i = 1; i <= 5; i++) {
-      //   const fileField = `file${i}`;
-      //   const fileUrl = jsonData?.data[0][fileField];
-      //   if (fileUrl) {
-      //     files.push({
-      //       uri: fileUrl,
-      //       type: 'application/pdf',
-      //       name: fileUrl
-      //         .split('/')
-      //         .pop()
-      //         .replace(/_.*(?=\..+$)/, ''),
-      //     });
-      //   }
-      // }
-      // setdocument(files);
     }
   };
   useEffect(() => {

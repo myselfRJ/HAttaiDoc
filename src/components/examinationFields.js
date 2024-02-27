@@ -13,9 +13,23 @@ import {
 } from '../settings/styles';
 import {mode} from '../redux/features/prescription/prescribeslice';
 import Option from './option';
+import {useEffect, useState} from 'react';
 
 const Examination_Fields = props => {
-  const check = props.check !== undefined ? true : false;
+  const [col, setCol] = useState('');
+  const handleRemoveString = str => {
+    const inputString = str;
+    const extractedNumbers =
+      str !== undefined && str ? inputString.match(/[\d.]+/g) : '';
+    if (extractedNumbers) {
+      const numbers = extractedNumbers.map(str => parseFloat(str));
+      return numbers[0];
+    } else {
+      return 'No';
+    }
+  };
+  const buildWeigth = handleRemoveString(props.value);
+  const check = props.check !== undefined ? props.check : false;
   return (
     <View style={styles.main}>
       <View style={styles.container}>
@@ -25,23 +39,53 @@ const Examination_Fields = props => {
         <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
           <Option
             // style={{width: horizontalScale(32)}}
-            label={check ? 'No' : 'N'}
-            selected={props.option === (check ? 'No' : 'N')}
-            onPress={() => props.setOption(check ? 'No' : 'N')}
+            label={
+              check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N'
+            }
+            selected={
+              props.option ===
+              (check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N')
+            }
+            onPress={() =>
+              props.setOption(
+                check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N',
+              )
+            }
           />
           <Option
             // style={{width: horizontalScale(32)}}
-            label={check ? 'Yes' : 'A'}
-            selected={props.option === (check ? 'Yes' : 'A')}
-            onPress={() => props.setOption(check ? 'Yes' : 'A')}
+            label={
+              check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A'
+            }
+            selected={
+              props.option ===
+              (check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A')
+            }
+            onPress={() =>
+              props.setOption(
+                check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A',
+              )
+            }
           />
         </View>
       </View>
-      {!check
+      {check === 'present' || !check
         ? props.option !== '' && (
             <TextInput
               placeholderTextColor={CUSTOMCOLOR.disable}
-              style={styles.textinput}
+              style={{
+                ...styles.textinput,
+                color:
+                  props.label === 'Build' && parseInt(buildWeigth) < 18
+                    ? '#f93'
+                    : props.label === 'Build' &&
+                      parseInt(buildWeigth) >= 18 &&
+                      parseInt(buildWeigth) <= 25
+                    ? CUSTOMCOLOR.success
+                    : props.label === 'Build' && parseInt(buildWeigth) > 25
+                    ? CUSTOMCOLOR.delete
+                    : CUSTOMCOLOR.black,
+              }}
               placeholder="Description"
               value={props.value}
               multiline={true}
@@ -64,6 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: moderateScale(24),
+    // width: '40%',
   },
   text: {
     color: CUSTOMCOLOR.black,
@@ -77,7 +122,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(6),
     fontWeight: '400',
     fontSize: CUSTOMFONTSIZE.h3,
-    color: CUSTOMCOLOR.black,
+    // color: CUSTOMCOLOR.black,
     borderRadius: 4,
     fontFamily: CUSTOMFONTFAMILY.body,
   },

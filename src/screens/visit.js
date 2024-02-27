@@ -146,6 +146,11 @@ const Visit = ({navigation, route}) => {
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
   );
+  const red = useSelector(state => state?.pasthistory?.red_flag);
+  const redFlag =
+    red?.length > 0
+      ? red?.filter(item => item?.appointment_id === appointmentID)
+      : [];
   const allergy = useSelector(state => state?.allergies?.allergies);
   const allergies =
     allergy?.length > 0
@@ -236,13 +241,18 @@ const Visit = ({navigation, route}) => {
           ?.slice(-1)?.[0]?.redflag
       : '';
   const adv = useSelector(state => state?.pasthistory?.advice);
+
   const advices =
+    adv?.length > 0
+      ? adv?.filter(item => item?.appointment_id === appointmentID)
+      : [];
+
+  const status =
     adv?.length > 0
       ? adv
           ?.filter(item => item?.appointment_id === appointmentID)
-          ?.slice(-1)[0]?.advice
+          ?.slice(-1)[0]?.status
       : '';
-
   const logo = useSelector(state => state?.clinicid?.clinic_logo);
   const {
     bloodGroup,
@@ -864,16 +874,20 @@ const Visit = ({navigation, route}) => {
           }
           </div>
           ${
-            advices?.length > 0
-              ? `<div style="margin-top:18px">
+            advices?.length > 0 &&
+            `<div style="margin-top:18px">
               <h5>
                   Advices
               </h5>
-              <text>
-                  ${advices}
-              </text>
+              ${advices
+                ?.map(
+                  (val, ind) => `<text>
+                ${val?.status} - ${val?.advice}
+                </text>`,
+                )
+                .join(', ')}
+              
           </div>`
-              : ''
           } 
           ${
             date?.length > 0
@@ -1564,7 +1578,47 @@ const Visit = ({navigation, route}) => {
                       ))
                     : null}
                 </View>
+                {redFlag?.length > 0 && <Seperator />}
               </View>
+
+              {redFlag?.length > 0 && (
+                <View style={styles.line}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={[styles.patientHead, {color: CUSTOMCOLOR.error}]}>
+                      Red Flag
+                    </Text>
+                    {/* <Pressable
+                    style={styles.gap}
+                    onPress={() => navigation.navigate('allergies')}>
+                    <Icon
+                      name={'pencil'}
+                      size={moderateScale(18)}
+                      color={CUSTOMCOLOR.primary}
+                      style={styles.pencilIcon}
+                    />
+                  </Pressable> */}
+                  </View>
+
+                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                    {redFlag?.length > 0
+                      ? redFlag?.map((item, index) => (
+                          <React.Fragment key={index}>
+                            <Text style={styles.patientText}>
+                              {item?.redflag}
+                              {/* {index < allergies.length - 1 ? ',  ' : ''} */}
+                            </Text>
+                          </React.Fragment>
+                        ))
+                      : null}
+                  </View>
+                </View>
+              )}
             </View>
             {CONSTANT.ConsultationList.map((value, index) => (
               <View key={index}>
@@ -1780,7 +1834,8 @@ const Visit = ({navigation, route}) => {
                     )}
                   {value.label === 'Advice' &&
                     advices !== '' &&
-                    advices !== undefined && (
+                    advices !== undefined &&
+                    advices?.map((item, ind) => (
                       <View style={styles.FollowUpcontainer}>
                         <>
                           <Icon
@@ -1788,10 +1843,13 @@ const Visit = ({navigation, route}) => {
                             color={CUSTOMCOLOR.primary}
                             size={moderateScale(16)}
                           />
-                          <Text style={styles.pulse}>{advices}</Text>
+                          <Text
+                            style={
+                              styles.pulse
+                            }>{`${item?.status} - ${item?.advice}`}</Text>
                         </>
                       </View>
-                    )}
+                    ))}
                   {value.label === 'Validity' && dateTimeRed !== '' && (
                     <View style={styles.FollowUpcontainer}>
                       <>
@@ -2266,7 +2324,7 @@ const styles = StyleSheet.create({
   patientHead: {
     color: CUSTOMCOLOR.black,
     fontWeight: 700,
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(14),
   },
   line: {
     // borderWidth:1,

@@ -13,9 +13,10 @@ import {
 import {mode} from '../redux/features/prescription/prescribeslice';
 
 const ShowChip = props => {
+  // props.onNav
   return (
     <View style={{...styles.main, ...props.main}}>
-      <TouchableOpacity onPress={props.onNav}>
+      <TouchableOpacity onPress={props.edit}>
         <View style={[styles.alignchild, props.align]}>
           {props.nameIcon && (
             <Icon
@@ -30,6 +31,7 @@ const ShowChip = props => {
               fontFamily: CUSTOMFONTFAMILY.body,
               fontWeight: '400',
               fontSize: CUSTOMFONTSIZE.h4,
+              flexWrap: 'wrap',
             }}>
             {props.text}
           </Text>

@@ -68,6 +68,7 @@ import Adult from '../screens/Adult';
 import {moderateScale} from '../utility/scaleDimension';
 import {Advices} from '../screens/Avices';
 import Physical from '../screens/newphysical';
+import NewPrescribe from '../screens/newprescribe';
 
 const Stack = createNativeStackNavigator();
 
@@ -610,6 +611,18 @@ const ProtectedRoute = route => {
         options={{
           headerTintColor: CUSTOMCOLOR.white,
           title: 'Prescribe',
+          headerStyle: {
+            backgroundColor: CUSTOMCOLOR.primary,
+          },
+          headerRight: () => header(),
+        }}
+      />
+      <Stack.Screen
+        name="newpres"
+        component={NewPrescribe}
+        options={{
+          headerTintColor: CUSTOMCOLOR.white,
+          title: 'Prescribe Medicine',
           headerStyle: {
             backgroundColor: CUSTOMCOLOR.primary,
           },

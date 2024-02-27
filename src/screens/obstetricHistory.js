@@ -30,6 +30,12 @@ const ObstetricHistory = ({route}) => {
   const [showPre, setshowpre] = useState(false);
   const [showAbor, setShowabor] = useState(false);
   const [living, setLiving] = useState('');
+  const [para, setpara] = useState('');
+  const [paraShow, setParaShow] = useState(false);
+  const [addpara, setAddPara] = useState([]);
+  const [abor, setAbor] = useState('');
+  const [aborShow, setAborShow] = useState(false);
+  const [addAbor, setAddAbor] = useState([]);
   const [gravidity, setGravidity] = useState({
     value: '',
     desc: '',
@@ -70,36 +76,47 @@ const ObstetricHistory = ({route}) => {
       [name]: value,
     }));
   };
-  const handledata = () => {
-    dispatch(
-      addobstericHistory([
-        ...obstetric,
-        {
-          mens: {
-            gravidity: gravidity,
-            term: term,
-            premature: premature,
-            abortions: abortions,
-            living: [...addChild, {living: living}],
-          },
-          appointment_id: appointmentID,
-        },
-      ]),
-    );
-    nav.goBack();
-  };
+
   const [child, setChild] = useState({
     name: 'Child',
     age: '',
     gender: '',
   });
+  const [aborData, setAborData] = useState({
+    name: 'Abortion',
+    year: '',
+    reason: '',
+    place: '',
+    period: '',
+    treatment: '',
+  });
+  const [paraData, setParaData] = useState({
+    name: 'Para',
+    year: '',
+    anc: '',
+    delivery: '',
+    gestation: '',
+    pn: '',
+  });
   const [ind, setInd] = useState(parseInt(1));
+  const [aborInd, setAborInd] = useState(parseInt(1));
+  const [paraInd, setparaInd] = useState(parseInt(1));
   const [addChild, setAddchild] = useState([]);
   const [childShow, setChildShow] = useState(false);
   const handleDeleteChild = index => {
     const newChild = addChild?.filter((_, ind) => ind !== index);
     setAddchild(newChild);
     setInd(index + parseInt(1));
+  };
+  const handleDeleteAbor = index => {
+    const newChild = addAbor?.filter((_, ind) => ind !== index);
+    setAddAbor(newChild);
+    setAborInd(index + parseInt(1));
+  };
+  const handleDeletePara = index => {
+    const newpara = addpara?.filter((_, ind) => ind !== index);
+    setAddPara(newpara);
+    setparaInd(index + parseInt(1));
   };
   const handlePlus = () => {
     const parsedLiving = parseInt(living, 10);
@@ -120,6 +137,46 @@ const ObstetricHistory = ({route}) => {
     setChild({age: '', gender: ''});
     setInd(prevInd => prevInd + 1);
   };
+  const handleAbortionPlus = () => {
+    const parsedAbor = parseInt(abor, 10);
+    setAddAbor(prev => {
+      if (prev?.length <= parsedAbor - 1) {
+        return [
+          ...prev,
+          {
+            name: `Abortion ${aborInd}`,
+            year: aborData?.year,
+            reason: aborData?.reason,
+            place: aborData?.place,
+            period: aborData?.period,
+            treatment: aborData?.treatment,
+          },
+        ];
+      }
+    });
+    setAborData({year: '', reason: '', place: '', period: '', treatment: ''});
+    setAborInd(prevInd => prevInd + 1);
+  };
+  const handleParaPlus = () => {
+    const parsedPara = parseInt(para, 10);
+    setAddPara(prev => {
+      if (prev?.length <= parsedPara - 1) {
+        return [
+          ...prev,
+          {
+            name: `Para ${paraInd}`,
+            year: paraData?.year,
+            anc: paraData?.anc,
+            delivery: paraData?.delivery,
+            gestation: paraData?.gestation,
+            pn: paraData?.pn,
+          },
+        ];
+      }
+    });
+    setParaData({year: '', anc: '', delivery: '', gestation: '', pn: ''});
+    setparaInd(prev => prev + 1);
+  };
 
   const handleOptions = value => {
     handleChangeValue('gender', value);
@@ -130,6 +187,21 @@ const ObstetricHistory = ({route}) => {
       ...prevValues,
       [field]: value,
     }));
+  };
+  const handleAborData = (field, value) => {
+    setAborData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  const handleparaData = (field, value) => {
+    setParaData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  const handleparaOptions = value => {
+    handleparaData('gestation', value);
   };
   useEffect(() => {
     const obs =
@@ -146,31 +218,72 @@ const ObstetricHistory = ({route}) => {
       if (obs?.gravidity?.desc) {
         setShow(true);
       }
-      setTerm({
-        value: obs?.term?.value,
-        desc: obs?.term?.desc,
-      });
-      if (obs?.term?.desc) {
-        setshowTerm(true);
+      if (obs?.term?.length > 0) {
+        setpara(obs?.term[obs?.term?.length - 1]['para']);
+        setParaShow(true);
+        obs?.term?.forEach(element => {
+          if (
+            element?.year &&
+            element?.anc &&
+            element?.delivery &&
+            element?.gestation &&
+            element?.pn
+          ) {
+            setAddPara(prevChildren => [
+              ...prevChildren,
+              {
+                name: element?.name,
+                year: element?.year,
+                anc: element?.anc,
+                delivery: element?.delivery,
+                gestation: element?.gestation,
+                pn: element?.pn,
+              },
+            ]);
+          }
+        });
       }
-      setPremature({
-        value: obs?.premature?.value,
-        desc: obs?.premature?.desc,
-      });
-      if (obs?.premature?.desc) {
-        setshowpre(true);
-      }
-      setAbortions({
-        value: obs?.abortions?.value,
-        desc: obs?.abortions?.desc,
-      });
-      if (obs?.abortions?.desc) {
-        setShowabor(true);
+      // setPremature({
+      //   value: obs?.premature?.value,
+      //   desc: obs?.premature?.desc,
+      // });
+      // if (obs?.premature?.desc) {
+      //   setshowpre(true);
+      // }
+      // setAbortions({
+      //   value: obs?.abortions?.value,
+      //   desc: obs?.abortions?.desc,
+      // });
+      // if (obs?.abortions?.desc) {
+      //   setShowabor(true);
+      // }
+      if (obs?.abortions?.length > 0) {
+        setAbor(obs?.abortions[obs?.abortions?.length - 1]['abotions']);
+        setAborShow(true);
+        obs?.abortions?.forEach(element => {
+          if (
+            element?.year &&
+            element?.reason &&
+            element?.place &&
+            element?.period &&
+            element?.treatment
+          ) {
+            setAddAbor(prevChildren => [
+              ...prevChildren,
+              {
+                name: element?.name,
+                year: element?.year,
+                reason: element?.reason,
+                place: element?.place,
+                period: element?.period,
+                treatment: element?.treatment,
+              },
+            ]);
+          }
+        });
       }
       if (obs?.living?.length > 0) {
-        // obs?.living?.map(item => {
         setLiving(obs?.living[obs?.living?.length - 1]['living']);
-        // });
         setChildShow(true);
         obs?.living?.forEach(element => {
           if (element?.age && element?.gender && element?.name) {
@@ -187,7 +300,24 @@ const ObstetricHistory = ({route}) => {
       }
     }
   }, []);
-  // console.log('addchild===', addChild);
+  // console.log('addchild===', addpara);
+  const handledata = () => {
+    dispatch(
+      addobstericHistory([
+        ...obstetric,
+        {
+          mens: {
+            gravidity: gravidity,
+            term: [...addpara, {para: para}],
+            abortions: [...addAbor, {abotions: abor}],
+            living: [...addChild, {living: living}],
+          },
+          appointment_id: appointmentID,
+        },
+      ]),
+    );
+    nav.goBack();
+  };
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Past Obstetric History (GPAL)'} />
@@ -261,7 +391,141 @@ const ObstetricHistory = ({route}) => {
             setGravidity({...gravidity, desc: ''});
           }}
         />
-        <ObstetricField
+        <View style={styles.field}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: horizontalScale(4),
+              alignItems: 'center',
+            }}>
+            <Text style={styles.text}>{'Para/Term'}</Text>
+            <Text style={styles.def}>
+              {'(Number of pregnancies carried 37+ weeks)'}
+            </Text>
+          </View>
+          <TextInput
+            placeholderTextColor={CUSTOMCOLOR.disable}
+            placeholder="Enter"
+            style={styles.inputtext}
+            value={para}
+            onChangeText={val => {
+              setpara(val), setParaShow(true);
+            }}
+          />
+        </View>
+        {paraShow
+          ? addpara?.length <= parseInt(para) && (
+              <View
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: CUSTOMCOLOR.primary,
+                  paddingHorizontal: horizontalScale(8),
+                  paddingVertical: verticalScale(16),
+                  borderRadius: moderateScale(4),
+                  gap: verticalScale(16),
+                }}>
+                {addpara.length > 0 &&
+                  addpara?.map((item, ind) => (
+                    <ShowChip
+                      align={{
+                        width: '95%',
+                      }}
+                      main={{marginBottom: verticalScale(-4)}}
+                      key={ind}
+                      text={`${item.name} | Year : ${item.year} | ANC : ${item.anc} | Delivery : ${item.delivery} | Gestation : ${item.gestation} | PN : ${item.pn}`}
+                      onPress={() => handleDeletePara(ind)}
+                      size={moderateScale(20)}
+                      style={{
+                        height: moderateScale(24),
+                        width: moderateScale(24),
+                      }}
+                      ind={ind}
+                    />
+                  ))}
+                {addpara?.length <= parseInt(para) - 1 ? (
+                  <>
+                    <Text style={styles.text1}>Pregnancy {paraInd}</Text>
+                    <View
+                      style={{
+                        // flexDirection: 'row',
+                        paddingHorizontal: horizontalScale(16),
+                        gap: verticalScale(8),
+                        alignItems: 'center',
+                        // flexWrap: 'wrap',
+                        justifyContent: 'center',
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', gap: moderateScale(24)}}>
+                        <InputText
+                          label="Year"
+                          placeholder="Eg: 2003"
+                          inputContainer={styles.parafields}
+                          value={paraData?.year}
+                          setValue={val => handleparaData('year', val)}
+                        />
+                        <InputText
+                          label="ANC"
+                          placeholder="ANC"
+                          inputContainer={styles.parafields}
+                          value={paraData?.anc}
+                          setValue={val => handleparaData('anc', val)}
+                        />
+                      </View>
+
+                      <View style={styles.radiogroupcontainer}>
+                        <Text
+                          style={{
+                            fontSize: CUSTOMFONTSIZE.h3,
+                            color: CUSTOMCOLOR.black,
+                          }}>
+                          Select
+                        </Text>
+                        <View style={styles.radiogroup}>
+                          <Option
+                            label="Term"
+                            value="Term"
+                            selected={paraData?.gestation === 'Term'}
+                            onPress={() => handleparaOptions('Term')}
+                          />
+                          <Option
+                            label="Preterm"
+                            value="Preterm"
+                            selected={paraData?.gestation === 'Preterm'}
+                            onPress={() => handleparaOptions('Preterm')}
+                          />
+                        </View>
+                      </View>
+                      <View
+                        style={{flexDirection: 'row', gap: moderateScale(24)}}>
+                        <InputText
+                          label="Delivery"
+                          placeholder="Delivery"
+                          inputContainer={styles.parafields}
+                          value={paraData?.delivery}
+                          setValue={val => handleparaData('delivery', val)}
+                        />
+
+                        <InputText
+                          label="PN"
+                          placeholder="PN"
+                          inputContainer={styles.parafields}
+                          value={paraData?.pn}
+                          setValue={val => handleparaData('pn', val)}
+                        />
+                      </View>
+                      <PlusButton
+                        icon={'plus'}
+                        size={moderateScale(20)}
+                        style={{alignSelf: 'flex-end'}}
+                        onPress={handleParaPlus}
+                      />
+                    </View>
+                  </>
+                ) : null}
+              </View>
+            )
+          : null}
+        {/* <ObstetricField
           numeric={true}
           label={'Para / Term'}
           definition={'(Number of pregnancies carried to 37+ weeks)'}
@@ -276,8 +540,8 @@ const ObstetricHistory = ({route}) => {
             setshowTerm(!showTerm);
             setTerm({...term, desc: ''});
           }}
-        />
-        <ObstetricField
+        /> */}
+        {/* <ObstetricField
           numeric={true}
           label={'Premature'}
           definition={
@@ -294,8 +558,8 @@ const ObstetricHistory = ({route}) => {
             setshowpre(!showPre);
             setPremature({...premature, desc: ''});
           }}
-        />
-        <ObstetricField
+        /> */}
+        {/* <ObstetricField
           numeric={true}
           label={'Abortions'}
           definition={'(Number of losses before 20 weeks)'}
@@ -310,7 +574,132 @@ const ObstetricHistory = ({route}) => {
             setShowabor(!showAbor);
             setAbortions({...abortions, desc: ''});
           }}
-        />
+        /> */}
+        <View style={styles.field}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: horizontalScale(4),
+              alignItems: 'center',
+            }}>
+            <Text style={styles.text}>{'Abortions'}</Text>
+            <Text style={styles.def}>
+              {'(Number of losses before 20 weeks)'}
+            </Text>
+          </View>
+          <TextInput
+            placeholderTextColor={CUSTOMCOLOR.disable}
+            placeholder="Enter"
+            style={styles.inputtext}
+            value={abor}
+            onChangeText={val => {
+              setAbor(val), setAborShow(true);
+            }}
+          />
+        </View>
+        {aborShow
+          ? addAbor?.length <= parseInt(abor) && (
+              <View
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: CUSTOMCOLOR.primary,
+                  paddingHorizontal: horizontalScale(8),
+                  paddingVertical: verticalScale(16),
+                  borderRadius: moderateScale(4),
+                  gap: verticalScale(16),
+                }}>
+                {addAbor.length > 0 &&
+                  addAbor?.map((item, ind) => (
+                    <ShowChip
+                      align={{
+                        width: '95%',
+                      }}
+                      main={{marginBottom: verticalScale(-4)}}
+                      key={ind}
+                      text={`${item.name} | Year : ${item.year} | Reason : ${item.reason} | Place : ${item.place} | Period : ${item.period} | Treatment : ${item.treatment}`}
+                      onPress={() => handleDeleteAbor(ind)}
+                      size={moderateScale(20)}
+                      style={{
+                        height: moderateScale(24),
+                        width: moderateScale(24),
+                      }}
+                      ind={ind}
+                    />
+                  ))}
+                {addAbor?.length <= parseInt(abor) - 1 ? (
+                  <>
+                    <Text style={styles.text1}>Abortion {aborInd}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        paddingHorizontal: horizontalScale(16),
+                        gap: verticalScale(12),
+                        // alignItems: 'center',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                        // borderWidth: 1,
+                      }}>
+                      {/* <View
+                        style={{flexDirection: 'row', gap: moderateScale(24)}}> */}
+                      <InputText
+                        label="Year"
+                        placeholder="Eg: 2004"
+                        inputContainer={styles.parafields}
+                        value={aborData?.year}
+                        setValue={val => handleAborData('year', val)}
+                      />
+                      <InputText
+                        label="Reason"
+                        placeholder="Reason"
+                        inputContainer={styles.parafields}
+                        value={aborData?.reason}
+                        setValue={val => handleAborData('reason', val)}
+                      />
+                      {/* </View> */}
+                      {/* <View
+                        style={{flexDirection: 'row', gap: moderateScale(24)}}> */}
+                      <InputText
+                        label="Place"
+                        placeholder="Place"
+                        inputContainer={styles.parafields}
+                        value={aborData?.place}
+                        setValue={val => handleAborData('place', val)}
+                      />
+                      <InputText
+                        label="Period"
+                        placeholder="Period"
+                        inputContainer={styles.parafields}
+                        value={aborData?.period}
+                        setValue={val => handleAborData('period', val)}
+                      />
+                      {/* </View> */}
+                      {/* <View
+                        style={{
+                          flexDirection: 'row',
+                          alignSelf: 'flex-start',
+                          marginLeft: horizontalScale(52),
+                          borderWidth: 1,
+                        }}> */}
+                      <InputText
+                        label="Treatment"
+                        placeholder="Treatment"
+                        inputContainer={styles.parafields}
+                        value={aborData?.treatment}
+                        setValue={val => handleAborData('treatment', val)}
+                      />
+                      {/* </View> */}
+                      <PlusButton
+                        icon={'plus'}
+                        size={moderateScale(24)}
+                        style={{alignSelf: 'flex-end'}}
+                        onPress={handleAbortionPlus}
+                      />
+                    </View>
+                  </>
+                ) : null}
+              </View>
+            )
+          : null}
         <View style={styles.field}>
           <View
             style={{
@@ -345,6 +734,9 @@ const ObstetricHistory = ({route}) => {
                 {addChild.length > 0 &&
                   addChild?.map((item, ind) => (
                     <ShowChip
+                      align={{
+                        width: '95%',
+                      }}
                       main={{marginBottom: verticalScale(-4)}}
                       key={ind}
                       text={`${item.name} | Age : ${item.age} | Gender : ${item.gender}`}
@@ -465,12 +857,23 @@ const styles = StyleSheet.create({
     color: CUSTOMCOLOR.black,
   },
   radiogroup: {
-    paddingHorizontal: moderateScale(8),
-    paddingVertical: moderateScale(6),
+    // paddingHorizontal: moderateScale(48),
+    // paddingVertical: moderateScale(6),
     flexDirection: 'row',
     gap: moderateScale(24),
     // borderWidth:1,
-    // justifyContent: 'flex-start',
+    // alignSelf: 'flex-start',
+  },
+  radiogroupcontainer: {
+    // paddingHorizontal: moderateScale(52),
+    // paddingVertical: moderateScale(6),
+    // flexDirection: 'row',
+    gap: moderateScale(4),
+    // borderWidth:1,
+    alignSelf: 'flex-start',
+  },
+  parafields: {
+    width: '48%',
   },
 });
 export default ObstetricHistory;

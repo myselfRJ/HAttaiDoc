@@ -26,6 +26,10 @@ let CUSTOMCOLOR = {
   lightgreen: '#DFFFDA',
   disableslot: '#EEEEEE',
   disableslotText: '#9E9E9E',
+  selectionTab: '#0069CB',
+  selectionText: '#C2C2C2',
+  fadeBlue: '#EAF5FF',
+  darkgreen: '#399B29',
 };
 const DARKCOLOR = {
   primary: 'red',

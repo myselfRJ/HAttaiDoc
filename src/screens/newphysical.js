@@ -48,6 +48,7 @@ const Physical = ({navigation}) => {
   const phys1 = CONSTANT.physicaldata1;
   const phys2 = CONSTANT.physicaldata2;
   const phys3 = CONSTANT.physicaldata3;
+  const [txtcolor, settxtcolor] = useState(false);
   const handlebuild = (data = []) => {
     if (vitalsData?.bmi !== '' && vitalsData?.bmi !== undefined) {
       const index = phys1.findIndex(item => item.label === 'Build');
@@ -65,6 +66,7 @@ const Physical = ({navigation}) => {
         updatedItem.desc = `Over Weight ${bmiInt?.toString()}`;
       }
       editBuild[index] = updatedItem;
+
       return editBuild;
     } else {
       return phys1;
@@ -387,6 +389,9 @@ const Physical = ({navigation}) => {
     fetchPhysical();
     handleAsync();
   }, []);
+  console.log('====================================');
+  console.log(data1);
+  console.log('====================================');
   return (
     <View style={styles.main}>
       <ScrollView
@@ -403,12 +408,14 @@ const Physical = ({navigation}) => {
             (item, index) =>
               item?.label && (
                 <Examination_Fields
+                  check={'present'}
                   key={index}
                   label={item?.label}
                   value={item?.desc}
                   option={item?.status}
                   setOption={value => handledata1(index, value, item?.desc)}
                   setvalue={value => handledata1(index, item?.status, value)}
+                  txt={txtcolor}
                 />
               ),
           )}
@@ -418,7 +425,7 @@ const Physical = ({navigation}) => {
             (item, index) =>
               item?.label && (
                 <Examination_Fields
-                  check={true}
+                  check={'yes'}
                   key={index}
                   label={item?.label}
                   value={item?.desc}

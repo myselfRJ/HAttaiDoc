@@ -630,7 +630,7 @@ const History = ({route, navigation}) => {
                       </Text>{' '}
                     </Text>
                   )}
-                  {obsteric?.term?.value && (
+                  {obsteric?.term?.value ? (
                     <Text>
                       {' '}
                       T:{' '}
@@ -638,22 +638,41 @@ const History = ({route, navigation}) => {
                         {obsteric?.term?.value},
                       </Text>{' '}
                     </Text>
+                  ) : (
+                    obsteric?.term?.length > 0 && (
+                      <Text>
+                        {' '}
+                        T:{' '}
+                        <Text style={styles.textDat}>
+                          {obsteric?.term?.map(item => item?.para)},
+                        </Text>{' '}
+                      </Text>
+                    )
                   )}
-                  {obsteric?.premature?.value && (
+                  {/* {obsteric?.premature?.value && (
                     <Text>
                       P:{' '}
                       <Text style={styles.textDat}>
                         {obsteric?.premature?.value},
                       </Text>{' '}
                     </Text>
-                  )}
-                  {obsteric?.abortions?.value && (
+                  )} */}
+                  {obsteric?.abortions?.value ? (
                     <Text>
                       A:{' '}
                       <Text style={styles.textDat}>
                         {obsteric?.abortions?.value},
                       </Text>{' '}
                     </Text>
+                  ) : (
+                    obsteric?.abortions?.length > 0 && (
+                      <Text>
+                        A:{' '}
+                        <Text style={styles.textDat}>
+                          {obsteric?.abortions?.map(item => item?.abotions)},
+                        </Text>{' '}
+                      </Text>
+                    )
                   )}
                   {obsteric?.living?.length && (
                     <Text>

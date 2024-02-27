@@ -77,6 +77,9 @@ const pastHistorySlice = createSlice({
     addAdvice: (state, action) => {
       state.advice = action.payload;
     },
+    updateAdvice: (state, action) => {
+      state.advice = action.payload;
+    },
     addCheck_field: (state, action) => {
       state.check_field = action.payload;
     },
@@ -103,6 +106,7 @@ export const {
   addProcedures,
   addRedFalg,
   addAdvice,
+  updateAdvice,
   addCheck_field,
 } = pastHistorySlice.actions;
 
