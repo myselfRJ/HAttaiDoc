@@ -5,7 +5,7 @@ const baseUrl = 'http://43.205.206.181/api/v1/';
 // const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'https://attai.healthattai.com/';
 // export const fileurl = `http://192.168.1.22:8000`;
-export const fileurl = `http://43.205.206.181`;
+export const fileurl = ``;
 // export const fileurl = `https://attai.healthattai.com`;
 // export const fileurl = `http://13.200.15.208`;
 

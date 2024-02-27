@@ -39,6 +39,7 @@ import {
   RetriveAsyncData,
   UpdateAsyncData,
   clearStorage,
+  RemoveKeyFromAsync,
 } from '../utility/AsyncStorage';
 import CustomIcon from '../components/icon';
 import ShowChip from '../components/showChip';
@@ -148,7 +149,7 @@ export default function NewPrescribe({navigation}) {
           ]),
         );
       }
-      if (sug?.length > 0) {
+      if (prevPres?.length > 0) {
         const medicineName = `${medicine} ${mgs}`;
         UpdateAsyncData(`prescribe${phone}`, {
           medicine: generic
@@ -158,6 +159,8 @@ export default function NewPrescribe({navigation}) {
             : medicineName,
           mode: mode,
         });
+      } else {
+        StoreAsyncData(`prescribe${phone}`, prevPres);
       }
       setMedicine('');
       if (mode === 'Others') {
@@ -1200,5 +1203,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: moderateScale(16),
     justifyContent: 'flex-start',
+  },
+  dropdownContainer: {
+    // top: moderateScale(130),
+    // position: 'absolute',
+    // zIndex: 1,
+    width: '100%',
+    height: moderateScale(300),
+    backgroundColor: CUSTOMCOLOR.white,
+    paddingHorizontal: horizontalScale(8),
+    borderWidth: 1,
+    borderColor: CUSTOMCOLOR.borderColor,
   },
 });
