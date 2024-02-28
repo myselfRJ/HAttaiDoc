@@ -699,15 +699,16 @@ const MedicalHistory = ({navigation, route}) => {
                       {JSON.stringify(mesntrual) != '' && (
                         <View style={styles.symptomicon}>
                           <Text style={styles.pulse}>
-                            {mesntrual?.age && mesntrual?.age !== undefined && (
-                              <Text>
-                                Menarche:{' '}
-                                <Text style={{fontWeight: '600'}}>
-                                  {mesntrual?.age}
-                                </Text>{' '}
-                                Yrs,
-                              </Text>
-                            )}{' '}
+                            {mesntrual?.age &&
+                              mesntrual?.age !== undefined && (
+                                <Text>
+                                  Menarche:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.age}
+                                  </Text>{' '}
+                                  Yrs,
+                                </Text>
+                              )}{' '}
                             {mesntrual?.status && (
                               <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.status}
@@ -808,17 +809,22 @@ const MedicalHistory = ({navigation, route}) => {
                               G: {obes?.gravidity?.value}, T:{' '}
                               {obes?.term?.value
                                 ? obes?.term?.value
-                                : obes?.term?.map(item => item?.para)}
+                                : Array.isArray(obes?.term)
+                                ? obes?.term?.map(item => item?.para)
+                                : ''}
                               , A:{' '}
                               {obes?.abortions?.value
                                 ? obes?.abortions?.value
-                                : obes?.abortions?.map(item => item?.abotions)}
+                                : Array.isArray(obes?.abortions)
+                                ? obes?.abortions?.map(item => item?.abotions)
+                                : ''}
                               , L: {obes?.living?.map(item => item?.living)}
                             </Text>
                           </View>
                           {obes?.term?.value
                             ? null
-                            : obes?.term?.slice(0, -1)?.map(item => (
+                            : Array.isArray(obes?.term)
+                            ? obes?.term?.slice(0, -1)?.map(item => (
                                 <View style={styles.symptomicon}>
                                   <Text style={styles.pulse}>
                                     <Text style={{fontWeight: 600}}>
@@ -829,10 +835,12 @@ const MedicalHistory = ({navigation, route}) => {
                                     {item?.pn}
                                   </Text>
                                 </View>
-                              ))}
+                              ))
+                            : ''}
                           {obes?.abortions?.value
                             ? null
-                            : obes?.abortions?.slice(0, -1)?.map(item => (
+                            : Array.isArray(obes?.abortions)
+                            ? obes?.abortions?.slice(0, -1)?.map(item => (
                                 <View style={styles.symptomicon}>
                                   <Text style={styles.pulse}>
                                     <Text style={{fontWeight: 600}}>
@@ -844,7 +852,8 @@ const MedicalHistory = ({navigation, route}) => {
                                     {item?.treatment}
                                   </Text>
                                 </View>
-                              ))}
+                              ))
+                            : ''}
                           <View style={styles.symptomicon}>
                             {obes?.living?.slice(0, -1)?.map(item => (
                               <Text style={styles.pulse}>
@@ -1325,15 +1334,16 @@ const MedicalHistory = ({navigation, route}) => {
                       {JSON.stringify(mesntrual) != '' && (
                         <View style={styles.symptomicon}>
                           <Text style={styles.pulse}>
-                            {mesntrual?.age && mesntrual?.age !== undefined && (
-                              <Text>
-                                Menarche:{' '}
-                                <Text style={{fontWeight: '600'}}>
-                                  {mesntrual?.age}
-                                </Text>{' '}
-                                Yrs,
-                              </Text>
-                            )}{' '}
+                            {mesntrual?.age &&
+                              mesntrual?.age !== undefined && (
+                                <Text>
+                                  Menarche:{' '}
+                                  <Text style={{fontWeight: '600'}}>
+                                    {mesntrual?.age}
+                                  </Text>{' '}
+                                  Yrs,
+                                </Text>
+                              )}{' '}
                             {mesntrual?.status && (
                               <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.status}
