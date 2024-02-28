@@ -10,6 +10,7 @@ import {
 import {CUSTOMCOLOR, CUSTOMFONTSIZE} from '../settings/styles';
 import {
   CONSTANT,
+  giveFileName,
   handleCamera,
   handleGallery,
   pickSingleFile,
@@ -116,6 +117,9 @@ const Physical = ({navigation}) => {
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
+  console.log('====================================');
+  console.log('upload', uploaddocument);
+  console.log('====================================');
   const [report, setreport] = useState([]);
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
@@ -389,9 +393,6 @@ const Physical = ({navigation}) => {
     fetchPhysical();
     handleAsync();
   }, []);
-  console.log('====================================');
-  console.log(data1);
-  console.log('====================================');
   return (
     <View style={styles.main}>
       <ScrollView
@@ -517,29 +518,32 @@ const Physical = ({navigation}) => {
         {report?.length === 0 ? (
           uploaddocument?.length > 0 ? (
             <View style={{marginTop: verticalScale(16)}}>
-              {uploaddocument?.map((item, index) => (
-                <ShowChip
-                  key={index}
-                  onPress={() => handleDelete(index)}
-                  text={
-                    <>
-                      <Icon
-                        color={CUSTOMCOLOR.error}
-                        size={moderateScale(20)}
-                        name={
-                          item?.type === 'application/pdf'
-                            ? 'file-pdf-box'
-                            : 'image'
-                        }
-                      />{' '}
-                      {item?.name?.includes('temp')
-                        ? item?.name?.split('temp_')[1]?.toString()
-                        : item?.name}
-                    </>
-                  }
-                  main={{marginHorizontal: 0}}
-                />
-              ))}
+              {uploaddocument?.map(
+                (item, index) =>
+                  item?.name !== undefined && (
+                    <ShowChip
+                      key={index}
+                      onPress={() => handleDelete(index)}
+                      text={
+                        <>
+                          <Icon
+                            color={CUSTOMCOLOR.error}
+                            size={moderateScale(20)}
+                            name={
+                              item?.type === 'application/pdf'
+                                ? 'file-pdf-box'
+                                : 'image'
+                            }
+                          />{' '}
+                          {item?.name?.includes('temp')
+                            ? item?.name?.split('temp_')[1]?.toString()
+                            : item?.name}
+                        </>
+                      }
+                      main={{marginHorizontal: 0}}
+                    />
+                  ),
+              )}
             </View>
           ) : null
         ) : report_findings?.length > 0 ? (
@@ -563,7 +567,7 @@ const Physical = ({navigation}) => {
                                 : 'image'
                             }
                           />{' '}
-                          {item?.name}
+                          {giveFileName(item?.name)}
                         </>
                       }
                       main={{marginHorizontal: 0}}

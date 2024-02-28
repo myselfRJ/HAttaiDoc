@@ -64,10 +64,10 @@ export default function NewPrescribe({navigation}) {
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
   const [frequency, setFrequency] = useState([]);
-  const [dose_number, setDose_number] = useState(0);
+  const [dose_number, setDose_number] = useState(1);
   const [generic, setGeneric] = useState('');
   const [setgeneric, setselectedGeneric] = useState(false);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(1);
   const recommdations = CONSTANTS.medicine_recomendation;
   const mg = CONSTANTS.dose;
   const ml = CONSTANTS.dose_ml;
@@ -168,11 +168,11 @@ export default function NewPrescribe({navigation}) {
       } else {
         setMode('');
       }
-      setDose_number(0);
+      setDose_number(1);
       setDose_quantity('');
       setTiming('');
       setFrequency([]);
-      setDuration(0);
+      setDuration(1);
       setmg('');
       setOthers('');
     }
@@ -282,7 +282,6 @@ export default function NewPrescribe({navigation}) {
   const totoal_quantity = () => {
     const quantity =
       parseInt(dose_number) * parseInt(duration) * parseInt(frequency.length);
-
     if (quantity !== 'NaN') {
       setTotalQuantity(quantity);
     } else {
@@ -526,7 +525,6 @@ export default function NewPrescribe({navigation}) {
       dispatch(addPrescribe(lstdata));
     }
   };
-  console.log(dose_number, duration);
   const DispatchEdit = (data, ind) => {
     setMode(data?.mode);
     setIndextoUpdate(ind);
@@ -898,7 +896,7 @@ export default function NewPrescribe({navigation}) {
                 label={durationSelect === 'days' ? 'Days' : 'Week'}
                 value={duration}
                 setValue={setDuration}
-                max={10}
+                max={durationSelect === 'days' ? 31 : 10}
                 text={true}
               />
             </View>
@@ -972,13 +970,14 @@ export default function NewPrescribe({navigation}) {
                         }}
                         key={ind}
                         text={
-                          <View>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                gap: horizontalScale(4),
-                              }}>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              //   flexWrap: 'wrap',
+                              gap: horizontalScale(4),
+                              width: horizontalScale(300),
+                            }}>
+                            <View>
                               <Icon
                                 name={
                                   item?.medicine?.includes(
@@ -995,9 +994,17 @@ export default function NewPrescribe({navigation}) {
                                     ? 'pill'
                                     : 'minus-circle'
                                 }
-                                size={moderateScale(16)}
+                                size={moderateScale(14)}
                                 color={CUSTOMCOLOR.primary}
                               />
+                            </View>
+                            <View
+                            //   style={{
+                            //     flexDirection: 'row',
+                            //     flexWrap: 'wrap',
+                            //     gap: horizontalScale(4),
+                            //   }}
+                            >
                               <Text
                                 style={{
                                   ...styles.medText,
@@ -1005,12 +1012,13 @@ export default function NewPrescribe({navigation}) {
                                 }}>
                                 {item.medicine}
                               </Text>
+
+                              <Text style={styles.subText}>
+                                {item.timing} | {item.frequency} |{' '}
+                                {item.dose_number} | {item.duration} | Quantity:{' '}
+                                {item.total_quantity}
+                              </Text>
                             </View>
-                            <Text style={styles.subText}>
-                              {item.timing} | {item.frequency} |{' '}
-                              {item.dose_number} | {item.duration} | Quantity:{' '}
-                              {item.total_quantity}
-                            </Text>
                             <Text style={styles.subText}>{item.others}</Text>
                           </View>
                           // `${item.medicine} | ${item.timing} | ${item.frequency} | ${item.dose_number} | ${item.duration} | ${item.total_quantity} | ${item.others}`

@@ -19,6 +19,7 @@ import {
   CUSTOMFONTSIZE,
 } from '../settings/styles';
 import SelectorBtn from '../components/selector';
+import {useFocusEffect} from '@react-navigation/native';
 import DatePicker from 'react-native-date-picker';
 import GalleryModel from '../components/GalleryModal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -30,11 +31,19 @@ import {useDispatch, useSelector} from 'react-redux';
 import ShowChip from '../components/showChip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fileurl} from '../utility/urls';
-import {pickSingleFile} from '../utility/const';
+import {giveFileName, pickSingleFile} from '../utility/const';
 import {addAdult} from '../redux/features/prescription/adult';
 const Adult = ({route, navigation}) => {
   const dispatch = useDispatch();
   const status = ['Up to date', 'Pending Vaccination', 'Covid Vaccine'];
+  const {type, phone} = route.params;
+
+  const adultdat = useSelector(state => state?.adult?.adult);
+  const adultData =
+    adultdat?.length > 0
+      ? adultdat?.filter(item => item?.patient_phone === phone)?.slice(-1)?.[0]
+      : {};
+
   const [selectedStatus, setSelectedStatus] = useState('');
   const [search, setsearch] = useState('');
   const datee = new Date();
@@ -43,9 +52,10 @@ const Adult = ({route, navigation}) => {
   const [show, setshow] = useState(false);
   const [visible, setvisible] = useState(false);
   const [document, setdocument] = useState([]);
+  console.log('document', document);
   const [document1, setdocument1] = useState('');
   const token = useSelector(state => state.authenticate.auth.access);
-  const {type, phone} = route.params;
+
   const [upToVaccineName, setUpToVaccineName] = useState('');
   const uptodate = new Date();
   const [updateValue, setUpDateValue] = useState('');
@@ -180,6 +190,7 @@ const Adult = ({route, navigation}) => {
       console.error('Error during API request:', error);
     }
   };
+  console.log('data=====', JSON?.stringify(upToData));
   // const fetchUploadReport = async url => {
   //   const response = await fetch(`${fileurl}${url}`);
   //   const blob = await response.blob();
@@ -192,34 +203,57 @@ const Adult = ({route, navigation}) => {
   //   ),
   // );
 
-  const fetchData = async () => {
-    const response = await fetch(URL.GetVaccination(phone), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      const jsonData = await response.json();
-      if (jsonData?.data && jsonData?.data?.length > 0) {
-        const latestData = jsonData?.data?.reduce((latest, current) => {
-          return new Date(current.updated_at) > new Date(latest.updated_at)
-            ? current
-            : latest;
-        }, jsonData?.data[0]);
-        const newdata = JSON.parse(latestData?.vaccinationDetails);
-        setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
-        dispatch(addAdult({data: latestData, uptovaccination: newdata}));
+  // const fetchData = async () => {
+  //   const response = await fetch(URL.GetVaccination(phone), {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (response.ok) {
+  //     const jsonData = await response.json();
+  //     if (jsonData?.data && jsonData?.data?.length > 0) {
+  //       const latestData = jsonData?.data?.reduce((latest, current) => {
+  //         return new Date(current.updated_at) > new Date(latest.updated_at)
+  //           ? current
+  //           : latest;
+  //       }, jsonData?.data[0]);
+  //       const newdata = JSON.parse(latestData?.vaccinationDetails);
+  //       console.log('====================================');
+  //       console.log('==============', newdata, '=============');
+  //       console.log('====================================');
+  //       setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
+  //       dispatch(addAdult({data: latestData, uptovaccination: newdata}));
+  //     }
+  //     setSelectedStatus(jsonData?.data[0]?.status);
+  //     setsearch(jsonData?.data[0]?.name);
+  //     setvalue(jsonData?.data[0]?.date);
+  //     setdocument1(jsonData?.data[0]);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (adultData) {
+        setUpToData(
+          adultData?.uptovaccination !== null &&
+            adultData?.uptovaccination !== undefined
+            ? adultData?.uptovaccination
+            : [],
+        );
+        setSelectedStatus(adultData?.data?.status);
+        setsearch(
+          adultData?.data?.name !== 'undefined' ? adultData?.data?.name : '',
+        );
+        setvalue(
+          adultData?.data?.date !== 'undefined' ? adultData?.data?.date : '',
+        );
+        setdocument1(adultData?.data);
       }
-      setSelectedStatus(jsonData?.data[0]?.status);
-      setsearch(jsonData?.data[0]?.name);
-      setvalue(jsonData?.data[0]?.date);
-      setdocument1(jsonData?.data[0]);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+    }, []),
+  );
 
   const reportData = [
     {file: document1?.file1 ? document1?.file1 : ''},
@@ -227,7 +261,7 @@ const Adult = ({route, navigation}) => {
     {file: document1?.file3 ? document1?.file3 : ''},
     {file: document1?.file4 ? document1?.file4 : ''},
     {file: document1?.file5 ? document1?.file5 : ''},
-  ];
+  ]?.filter(item => item?.file !== '');
 
   const handleDelete = index => {
     if (document?.length > 0) {
@@ -245,6 +279,7 @@ const Adult = ({route, navigation}) => {
 
   const handlevaccineReport = filepath => {
     const path = `${fileurl}${filepath}`;
+
     if (filepath?.includes('pdf')) {
       navigation.navigate('pdfhistory', {path});
     } else {
@@ -436,7 +471,7 @@ const Adult = ({route, navigation}) => {
 
         {selectedStatus === 'Covid Vaccine' && (
           <View style={{gap: moderateScale(12)}}>
-            {!document1 ? (
+            {reportData?.length <= 0 ? (
               <SelectorBtn
                 select={{alignSelf: 'flex-start'}}
                 label={'Upload Covid Vaccination Document'}
@@ -448,59 +483,59 @@ const Adult = ({route, navigation}) => {
               ''
             )}
 
-            {!document1
-              ? document.length > 0 &&
-                document.map((item, ind) => (
-                  <TouchableOpacity
-                    // onPress={() => handlevaccineReport(item?.uri)}
-                    style={{top: verticalScale(18)}}>
-                    <ShowChip
-                      iconcolor={CUSTOMCOLOR.delete}
-                      key={ind}
-                      main={{
-                        gap: 4,
-                        paddingHorizontal: 8,
-                        borderColor: CUSTOMCOLOR.primary,
-                      }}
-                      nameIcon={
-                        item?.type === 'application/pdf'
-                          ? 'file-pdf-box'
-                          : 'image'
-                      }
-                      onPress={() => handleDelete(ind)}
-                      color={CUSTOMCOLOR.delete}
-                      text={item?.name}
-                    />
-                  </TouchableOpacity>
-                ))
-              : reportData?.length > 0 &&
-                reportData?.map(
-                  (item, ind) =>
-                    item?.file !== '' && (
-                      <View style={{top: verticalScale(18)}}>
-                        <TouchableOpacity
-                          key={ind}
-                          onPress={() => handlevaccineReport(item?.file)}>
-                          <ShowChip
-                            iconcolor={CUSTOMCOLOR.delete}
-                            main={{
-                              gap: 4,
-                              paddingHorizontal: 8,
-                              borderColor: CUSTOMCOLOR.primary,
-                            }}
-                            nameIcon={
-                              item?.file?.includes('pdf')
-                                ? 'file-pdf-box'
-                                : 'image'
-                            }
-                            // onPress={() => handleDelete(ind)}
-                            color={CUSTOMCOLOR.delete}
-                            text={item?.file?.split('/').pop()}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    ),
-                )}
+            {document.length > 0 &&
+              document.map(
+                (item, ind) =>
+                  item?.name !== undefined && (
+                    <TouchableOpacity
+                      // onPress={() => handlevaccineReport(item?.uri)}
+                      style={{top: verticalScale(18)}}>
+                      <ShowChip
+                        iconcolor={CUSTOMCOLOR.delete}
+                        key={ind}
+                        main={{
+                          gap: 4,
+                          paddingHorizontal: 8,
+                          borderColor: CUSTOMCOLOR.primary,
+                        }}
+                        nameIcon={
+                          item?.type === 'application/pdf'
+                            ? 'file-pdf-box'
+                            : 'image'
+                        }
+                        onPress={() => handleDelete(ind)}
+                        color={CUSTOMCOLOR.delete}
+                        text={item?.name}
+                      />
+                    </TouchableOpacity>
+                  ),
+              )}
+
+            {reportData?.length > 0 &&
+              reportData?.map(
+                (item, ind) =>
+                  item?.file !== '' && (
+                    <View style={{top: verticalScale(18)}}>
+                      <ShowChip
+                        key={ind}
+                        onNav={() => handlevaccineReport(item?.file)}
+                        edit={() => handlevaccineReport(item?.file)}
+                        iconcolor={CUSTOMCOLOR.delete}
+                        main={{
+                          gap: 4,
+                          paddingHorizontal: 8,
+                          borderColor: CUSTOMCOLOR.primary,
+                        }}
+                        nameIcon={
+                          item?.file?.includes('pdf') ? 'file-pdf-box' : 'image'
+                        }
+                        // onPress={() => handleDelete(ind)}
+                        color={CUSTOMCOLOR.delete}
+                        text={giveFileName(item?.file)}
+                      />
+                    </View>
+                  ),
+              )}
           </View>
         )}
         {/* )} */}

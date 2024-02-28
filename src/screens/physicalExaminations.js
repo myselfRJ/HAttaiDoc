@@ -47,6 +47,7 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
 import {fileurl} from '../utility/urls';
 import {
+  giveFileName,
   handleCamera,
   handleGallery,
   pickSingleFile,
@@ -62,6 +63,7 @@ const PhysicalExamination = ({navigation}) => {
   const [value, setValue] = useState();
   const [modal, setModal] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
+
   const [report, setreport] = useState('');
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
@@ -301,7 +303,7 @@ const PhysicalExamination = ({navigation}) => {
                           item?.name?.includes('pdf') ? 'file-pdf-box' : 'image'
                         }
                       />{' '}
-                      {item?.name}
+                      {giveFileName(item?.name)}
                     </>
                   }
                   main={{marginHorizontal: 0}}

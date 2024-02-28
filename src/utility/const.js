@@ -656,8 +656,13 @@ export const handleCamera = async () => {
   });
 };
 
+export const giveFileName = file => {
+  return file?.split('/').pop().split('?')[0];
+};
+
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+
 const convertUriToBase64 = async documentUri => {
   try {
     const base64Data = await RNFS.readFile(documentUri, 'base64');

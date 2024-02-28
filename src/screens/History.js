@@ -383,21 +383,23 @@ const History = ({route, navigation}) => {
       {selectedType === 'Prescription' && (
         <>
           <Text style={styles.subhead}>{selectedType}</Text>
-          <TouchableOpacity onPress={handlePrescription}>
-            <ShowChip
-              text={
-                <>
-                  <Icon
-                    color={CUSTOMCOLOR.error}
-                    size={moderateScale(20)}
-                    name={'file-pdf-box'}
-                  />
-                  {<Text>{prescription?.file_url?.split('/')[4]}</Text>}
-                </>
-              }
-              main={{marginHorizontal: 0}}
-            />
-          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={handlePrescription}> */}
+          <ShowChip
+            onNav={handlePrescription}
+            edit={handlePrescription}
+            text={
+              <>
+                <Icon
+                  color={CUSTOMCOLOR.error}
+                  size={moderateScale(20)}
+                  name={'file-pdf-box'}
+                />
+                {<Text>{prescription?.file_url?.split('/')[4]}</Text>}
+              </>
+            }
+            main={{marginHorizontal: 0}}
+          />
+          {/* </TouchableOpacity> */}
         </>
       )}
       {selectedType === 'Referral' && (
@@ -407,6 +409,7 @@ const History = ({route, navigation}) => {
             referral?.map((item, index) => (
               <ShowChip
                 onNav={() => handleReferral(item?.file_referral)}
+                edit={() => handleReferral(item?.file_referral)}
                 key={index}
                 text={
                   <>
@@ -458,8 +461,11 @@ const History = ({route, navigation}) => {
                   <TouchableOpacity
                     style={{marginTop: moderateScale(15)}}
                     key={index}
-                    onPress={() => handleReports_Physical(item?.report_url)}>
+                    // onPress={() => handleReports_Physical(item?.report_url)}
+                  >
                     <ShowChip
+                      onNav={() => handleReports_Physical(item?.report_url)}
+                      edit={() => handleReports_Physical(item?.report_url)}
                       text={
                         <>
                           <Icon
@@ -522,8 +528,11 @@ const History = ({route, navigation}) => {
                 item !== null && (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => handleReports_Physical(item)}>
+                    // onPress={() => handleReports_Physical(item)}
+                  >
                     <ShowChip
+                      onNav={() => handleReports_Physical(item)}
+                      edit={() => handleReports_Physical(item)}
                       text={
                         <>
                           <Icon

@@ -41,6 +41,7 @@ import CustomIcon from '../components/icon';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import AlertMessage from './Alerts';
 import {
+  giveFileName,
   handleCamera,
   handleGallery,
   pickSingleFile,
@@ -423,9 +424,10 @@ const ExaminationFindings = ({navigation}) => {
                             : 'image'
                         }
                       />{' '}
-                      {item?.name?.includes('temp')
+                      {/* {item?.name?.includes('temp')
                         ? item?.name?.split('temp_')[1]?.toString()
-                        : item?.name}
+                        : item?.name} */}
+                      {giveFileName(item?.name)}
                     </>
                   }
                   main={{paddingVertical: verticalScale(6)}}

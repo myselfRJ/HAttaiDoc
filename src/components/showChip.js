@@ -15,7 +15,9 @@ import {mode} from '../redux/features/prescription/prescribeslice';
 const ShowChip = props => {
   // props.onNav
   return (
-    <View style={{...styles.main, ...props.main}}>
+    <TouchableOpacity
+      onPress={props.onNav}
+      style={{...styles.main, ...props.main}}>
       <TouchableOpacity onPress={props.edit}>
         <View style={[styles.alignchild, props.align]}>
           {props.nameIcon && (
@@ -89,7 +91,7 @@ const ShowChip = props => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
