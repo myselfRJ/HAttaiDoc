@@ -93,7 +93,6 @@ export default function NewPrescribe({navigation}) {
       ? prevPres?.filter(item => item?.mode === 'Others')
       : [];
   const [others, setOthers] = useState('');
-
   const [indexToUpdate, setIndextoUpdate] = useState('');
   const handleAddPrescribe = () => {
     if ((medicine && frequency) || othersMed) {
@@ -135,6 +134,10 @@ export default function NewPrescribe({navigation}) {
               duration: `${duration} ${
                 durationSelect === 'week'
                   ? 'Week (once in a Week)'
+                  : durationSelect === 'month'
+                  ? duration === 1
+                    ? 'Month'
+                    : 'Months'
                   : durationSelect
               }`,
               total_quantity:
@@ -214,7 +217,13 @@ export default function NewPrescribe({navigation}) {
           frequency: selectedDaysString,
           dose_number: dose_number,
           duration: `${duration} ${
-            durationSelect === 'week' ? 'Week (once in a Week)' : durationSelect
+            durationSelect === 'week'
+              ? 'Week (once in a Week)'
+              : durationSelect === 'month'
+              ? duration === 1
+                ? 'Month'
+                : 'Months'
+              : durationSelect
           }`,
           total_quantity:
             mode?.toLowerCase() === 'syrup'
@@ -292,7 +301,11 @@ export default function NewPrescribe({navigation}) {
 
   const totoal_quantity = () => {
     const quantity =
-      parseInt(dose_number) * parseInt(duration) * parseInt(frequency.length);
+      parseInt(dose_number) *
+      parseInt(
+        durationSelect === 'month' ? Math.floor(duration * 30) : duration,
+      ) *
+      parseInt(frequency.length);
     if (quantity !== 'NaN') {
       setTotalQuantity(quantity);
     } else {
@@ -447,6 +460,7 @@ export default function NewPrescribe({navigation}) {
   const handleOptions = value => {
     setDurationSelect(value);
   };
+
   const [loading, setLoading] = useState(false);
   const savingTemplate = async () => {
     const previous_data = prevPres?.map(item => ({
@@ -454,7 +468,7 @@ export default function NewPrescribe({navigation}) {
       mode: item?.mode,
       dose_quantity: '',
       timing: item?.timing,
-      frequency: item?.selectedDaysString,
+      frequency: item?.frequency,
       dose_number: item?.dose_number,
       duration: item?.duration,
       total_quantity: item?.total_quantity,
@@ -534,6 +548,7 @@ export default function NewPrescribe({navigation}) {
         appointment_id: appointmentID,
       }));
       dispatch(addPrescribe(lstdata));
+      // console.log('dispatch data========', lstdata);
     }
   };
   const DispatchEdit = (data, ind) => {
@@ -557,9 +572,17 @@ export default function NewPrescribe({navigation}) {
         newVal.push(i);
       }
     }
+    // console.log('=========newval', newVal);
     setFrequency(newVal);
     setDuration(parseInt(data?.duration?.split(' ')[0]));
-    setDurationSelect(data?.duration?.split(' ')[1]);
+    setDurationSelect(
+      data?.duration?.split(' ')[1] === 'Week'
+        ? 'week'
+        : data?.duration?.split(' ')[1] === 'Months' ||
+          data?.duration?.split(' ')[1] === 'Month'
+        ? 'month'
+        : data?.duration?.split(' ')[1],
+    );
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
   };
@@ -571,7 +594,7 @@ export default function NewPrescribe({navigation}) {
     // );
     setInfo(!info);
   };
-
+  // console.log('========temp', templatesData);
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={styles.prescribeConatiner}>
@@ -890,6 +913,13 @@ export default function NewPrescribe({navigation}) {
                     selected={durationSelect === 'week'}
                     onPress={() => handleOptions('week')}
                   />
+
+                  <Option
+                    label="month"
+                    value="month"
+                    selected={durationSelect === 'month'}
+                    onPress={() => handleOptions('month')}
+                  />
                 </View>
               </View>
 
@@ -904,10 +934,22 @@ export default function NewPrescribe({navigation}) {
               setValue={value => setDuration(value)}
             /> */}
               <SliderComponent
-                label={durationSelect === 'days' ? 'Days' : 'Week'}
+                label={
+                  durationSelect === 'days'
+                    ? 'Days'
+                    : durationSelect === 'week'
+                    ? 'Week'
+                    : 'Month'
+                }
                 value={duration}
                 setValue={setDuration}
-                max={durationSelect === 'days' ? 31 : 10}
+                max={
+                  durationSelect === 'days'
+                    ? 31
+                    : durationSelect === 'week'
+                    ? 10
+                    : 12
+                }
                 text={true}
               />
             </View>
