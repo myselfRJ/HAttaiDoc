@@ -52,7 +52,6 @@ const Adult = ({route, navigation}) => {
   const [show, setshow] = useState(false);
   const [visible, setvisible] = useState(false);
   const [document, setdocument] = useState([]);
-  console.log('document', document);
   const [document1, setdocument1] = useState('');
   const token = useSelector(state => state.authenticate.auth.access);
 
@@ -190,7 +189,6 @@ const Adult = ({route, navigation}) => {
       console.error('Error during API request:', error);
     }
   };
-  console.log('data=====', JSON?.stringify(upToData));
   // const fetchUploadReport = async url => {
   //   const response = await fetch(`${fileurl}${url}`);
   //   const blob = await response.blob();
@@ -287,11 +285,14 @@ const Adult = ({route, navigation}) => {
     }
   };
   const HandleAddExistingVaccine = () => {
-    const newdata = [
-      ...upToData,
-      {vaccineName: upToVaccineName, date: updateValue, batch: batch},
-    ];
-    setUpToData(newdata);
+    if (upToVaccineName) {
+      const newdata = [
+        ...upToData,
+        {vaccineName: upToVaccineName, date: updateValue, batch: batch},
+      ];
+
+      setUpToData(newdata);
+    }
   };
 
   return (

@@ -149,7 +149,7 @@ export default function NewPrescribe({navigation}) {
           ]),
         );
       }
-      if (prevPres?.length > 0) {
+      if (prevPres?.length > 0 || sug?.length > 0) {
         const medicineName = `${medicine} ${mgs}`;
         UpdateAsyncData(`prescribe${phone}`, {
           medicine: generic
@@ -160,7 +160,18 @@ export default function NewPrescribe({navigation}) {
           mode: mode,
         });
       } else {
-        StoreAsyncData(`prescribe${phone}`, prevPres);
+        const medicineName = `${medicine} ${mgs}`;
+        StoreAsyncData(`prescribe${phone}`, [
+          ...prevPres,
+          {
+            medicine: generic
+              ? `${medicine}(${generic})`
+              : setmedicine
+              ? setmedicine
+              : medicineName,
+            mode: mode,
+          },
+        ]);
       }
       setMedicine('');
       if (mode === 'Others') {
@@ -1067,14 +1078,14 @@ export default function NewPrescribe({navigation}) {
         <HButton
           btnstyles={{
             backgroundColor: CUSTOMCOLOR.white,
-            borderColor: CUSTOMCOLOR.darkgreen,
+            borderColor: CUSTOMCOLOR.borderColor,
             borderWidth: 1,
           }}
           textStyle={{
-            color: CUSTOMCOLOR.darkgreen,
-            paddingHorizontal: horizontalScale(24),
-            paddingVertical: verticalScale(12),
-            fontSize: moderateScale(16),
+            color: CUSTOMCOLOR.primary,
+            // paddingHorizontal: horizontalScale(24),
+            // paddingVertical: verticalScale(12),
+            // fontSize: moderateScale(16),
           }}
           label={'Save Template'}
           onPress={() => {
@@ -1090,23 +1101,23 @@ export default function NewPrescribe({navigation}) {
           color={
             (medicine && frequency) || othersMed
               ? CUSTOMCOLOR.white
-              : CUSTOMCOLOR.disableslotText
+              : CUSTOMCOLOR.white
           }
           textStyle={{
             color:
               (medicine && frequency) || othersMed
                 ? CUSTOMCOLOR.white
-                : CUSTOMCOLOR.disableslotText,
-            paddingHorizontal: horizontalScale(24),
-            paddingVertical: verticalScale(12),
-            fontSize: moderateScale(16),
+                : CUSTOMCOLOR.white,
+            // paddingHorizontal: horizontalScale(24),
+            // paddingVertical: verticalScale(12),
+            // fontSize: moderateScale(16),
           }}
           btnstyles={{
             backgroundColor:
               (medicine && frequency) || othersMed
-                ? CUSTOMCOLOR.darkgreen
-                : CUSTOMCOLOR.disableslot,
-            width: '35%',
+                ? CUSTOMCOLOR.success
+                : CUSTOMCOLOR.disable,
+            // width: '35%',
           }}
         />
         {/* <HButton
@@ -1155,7 +1166,7 @@ export default function NewPrescribe({navigation}) {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    paddingHorizontal: horizontalScale(8),
+    paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(8),
     // borderWidth: 1,
     backgroundColor: CUSTOMCOLOR.background,

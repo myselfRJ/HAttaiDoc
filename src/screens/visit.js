@@ -244,9 +244,6 @@ const Visit = ({navigation, route}) => {
           ?.slice(-1)?.[0]?.redflag
       : '';
   const adv = useSelector(state => state?.pasthistory?.advice);
-  console.log('====================================');
-  console.log('red', redflag);
-  console.log('====================================');
   const advices =
     adv?.length > 0
       ? adv?.filter(item => item?.appointment_id === appointmentID)
@@ -2022,30 +2019,31 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Comorbidities' && commorbities.length > 0 && (
-                    <View style={styles.basiccontainer}>
-                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                        <View style={styles.common}>
-                          <View>
-                            {commorbities?.map((item, ind) => (
-                              <View key={ind} style={styles.common}>
-                                <Icon
-                                  name="prescription"
-                                  size={moderateScale(16)}
-                                  color={CUSTOMCOLOR.primary}
-                                />
-                                <View>
-                                  <Text style={styles.pulse}>
-                                    {item?.commoribities}
-                                  </Text>
+                  {value.label === 'Comorbidities' &&
+                    commorbities.length > 0 && (
+                      <View style={styles.basiccontainer}>
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                          <View style={styles.common}>
+                            <View>
+                              {commorbities?.map((item, ind) => (
+                                <View key={ind} style={styles.common}>
+                                  <Icon
+                                    name="prescription"
+                                    size={moderateScale(16)}
+                                    color={CUSTOMCOLOR.primary}
+                                  />
+                                  <View>
+                                    <Text style={styles.pulse}>
+                                      {item?.commoribities}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
-                            ))}
+                              ))}
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  )}
+                    )}
 
                   {value.label === 'Past Hospitalization' &&
                     pasthistory.length > 0 && (

@@ -96,13 +96,10 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       if (jsonData?.data?.length > 0) {
-        jsonData?.data?.map((item, index) => {
-          const report = item?.report_url;
-          setReportsPatient(previousReport => [
-            ...previousReport,
-            {report_url: report},
-          ]);
-        });
+        const data = jsonData?.data?.map((item, index) => ({
+          report_url: item?.report_url,
+        }));
+        setReportsPatient(data);
       }
       const reporttext =
         jsonData?.data?.length > 0
@@ -161,6 +158,7 @@ const History = ({route, navigation}) => {
     if (response.ok) {
       const jsonData = await response.json();
       const data = jsonData?.data;
+      setPhysical(data);
       try {
         const body_parts = JSON.parse(
           data?.body_parts_examination &&
@@ -346,6 +344,7 @@ const History = ({route, navigation}) => {
       item => item?.relation === 'Others' || item?.relation === undefined,
     )
     ?.map(val => val?.family);
+
   return (
     <View style={styles.main}>
       <PrescriptionHead heading={'Rx History'} />
@@ -527,8 +526,7 @@ const History = ({route, navigation}) => {
                 item !== null && (
                   <TouchableOpacity
                     key={index}
-                    // onPress={() => handleReports_Physical(item)}
-                  >
+                    style={{marginTop: moderateScale(10)}}>
                     <ShowChip
                       onNav={() => handleReports_Physical(item)}
                       edit={() => handleReports_Physical(item)}

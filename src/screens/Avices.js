@@ -64,7 +64,7 @@ export const Advices = ({navigation}) => {
     setSelectedStatus('');
     SetAdvice('');
   };
-  console.log(advice);
+  // console.log(advice);
   // useEffect(() => {
   //   const adv =
   //     advices?.length > 0

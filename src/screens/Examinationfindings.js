@@ -381,6 +381,15 @@ const ExaminationFindings = ({navigation}) => {
                         : `${fileurl}${item?.name}`,
                     )
                   }
+                  edit={() =>
+                    handleReports_Physical(
+                      item?.type === 'application/pdf'
+                        ? `data:application/pdf;base64,${item?.base64}`
+                        : item?.type !== undefined
+                        ? item?.uri
+                        : `${fileurl}${item?.name}`,
+                    )
+                  }
                   key={index}
                   onPress={() => handleDelete(index)}
                   text={
@@ -404,6 +413,15 @@ const ExaminationFindings = ({navigation}) => {
               ) : (
                 <ShowChip
                   onNav={() =>
+                    handleReports_Physical(
+                      item?.type === 'application/pdf'
+                        ? `data:application/pdf;base64,${item?.base64}`
+                        : item?.type !== undefined
+                        ? item?.uri
+                        : `${fileurl}${item?.name}`,
+                    )
+                  }
+                  edit={() =>
                     handleReports_Physical(
                       item?.type === 'application/pdf'
                         ? `data:application/pdf;base64,${item?.base64}`

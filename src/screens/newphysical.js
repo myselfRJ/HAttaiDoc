@@ -117,9 +117,6 @@ const Physical = ({navigation}) => {
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [uploaddocument, SetUploadDocument] = useState([]);
-  console.log('====================================');
-  console.log('upload', uploaddocument);
-  console.log('====================================');
   const [report, setreport] = useState([]);
   // const [selectedFilename, setSelectedFilename] = useState([]);
   const [consent, setConsent] = useState(false);
@@ -551,10 +548,10 @@ const Physical = ({navigation}) => {
             {report_findings?.map(
               (item, index) =>
                 item?.name !== null && (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => handleReports_Physical(item?.name)}>
+                  <TouchableOpacity key={index}>
                     <ShowChip
+                      onNav={() => handleReports_Physical(item?.name)}
+                      edit={() => handleReports_Physical(item?.name)}
                       key={index}
                       text={
                         <>
