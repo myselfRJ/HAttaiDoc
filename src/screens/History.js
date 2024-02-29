@@ -247,7 +247,6 @@ const History = ({route, navigation}) => {
   const [menstrual, setmenstrual] = useState({});
   const [martial, setMartial] = useState({});
   const [obsteric, setObsteric] = useState({});
-
   const fetchMedicalData = async () => {
     try {
       const response = await fetchApi(URL.getMedical(phone, patient_phone), {
@@ -638,7 +637,7 @@ const History = ({route, navigation}) => {
                         {obsteric?.term?.value},
                       </Text>{' '}
                     </Text>
-                  ) : (
+                  ) : Array.isArray(obsteric?.term) ? (
                     obsteric?.term?.length > 0 && (
                       <Text>
                         {' '}
@@ -648,6 +647,8 @@ const History = ({route, navigation}) => {
                         </Text>{' '}
                       </Text>
                     )
+                  ) : (
+                    ''
                   )}
                   {/* {obsteric?.premature?.value && (
                     <Text>
@@ -664,7 +665,7 @@ const History = ({route, navigation}) => {
                         {obsteric?.abortions?.value},
                       </Text>{' '}
                     </Text>
-                  ) : (
+                  ) : Array.isArray(obsteric?.abortions) ? (
                     obsteric?.abortions?.length > 0 && (
                       <Text>
                         A:{' '}
@@ -673,6 +674,8 @@ const History = ({route, navigation}) => {
                         </Text>{' '}
                       </Text>
                     )
+                  ) : (
+                    ''
                   )}
                   {obsteric?.living?.length && (
                     <Text>

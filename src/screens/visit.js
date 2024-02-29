@@ -516,7 +516,6 @@ const Visit = ({navigation, route}) => {
     ...physicalExamination?.general,
     ...physicalExamination?.piccle,
   ]?.filter(item => item?.status !== '');
-
   const createPDF = async () => {
     if (await PermmisionStorage()) {
       // setPrevLoad(!prevLoad)
@@ -874,8 +873,8 @@ const Visit = ({navigation, route}) => {
           }
           </div>
           ${
-            advices?.length > 0 &&
-            `<div style="margin-top:18px">
+            advices?.length > 0
+              ? `<div style="margin-top:18px">
               <h5>
                   Advices
               </h5>
@@ -888,6 +887,7 @@ const Visit = ({navigation, route}) => {
                 .join(', ')}
               
           </div>`
+              : ''
           } 
           ${
             date?.length > 0
@@ -2040,31 +2040,30 @@ const Visit = ({navigation, route}) => {
                     </View>
                   )}
 
-                  {value.label === 'Comorbidities' &&
-                    commorbities.length > 0 && (
-                      <View style={styles.basiccontainer}>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                          <View style={styles.common}>
-                            <View>
-                              {commorbities?.map((item, ind) => (
-                                <View key={ind} style={styles.common}>
-                                  <Icon
-                                    name="prescription"
-                                    size={moderateScale(16)}
-                                    color={CUSTOMCOLOR.primary}
-                                  />
-                                  <View>
-                                    <Text style={styles.pulse}>
-                                      {item?.commoribities}
-                                    </Text>
-                                  </View>
+                  {value.label === 'Comorbidities' && commorbities.length > 0 && (
+                    <View style={styles.basiccontainer}>
+                      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View style={styles.common}>
+                          <View>
+                            {commorbities?.map((item, ind) => (
+                              <View key={ind} style={styles.common}>
+                                <Icon
+                                  name="prescription"
+                                  size={moderateScale(16)}
+                                  color={CUSTOMCOLOR.primary}
+                                />
+                                <View>
+                                  <Text style={styles.pulse}>
+                                    {item?.commoribities}
+                                  </Text>
                                 </View>
-                              ))}
-                            </View>
+                              </View>
+                            ))}
                           </View>
                         </View>
                       </View>
-                    )}
+                    </View>
+                  )}
 
                   {value.label === 'Past Hospitalization' &&
                     pasthistory.length > 0 && (
