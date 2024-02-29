@@ -147,10 +147,13 @@ const Visit = ({navigation, route}) => {
     state => state?.commorbities?.commorbitiesItems,
   );
   const red = useSelector(state => state?.pasthistory?.red_flag);
-  const redFlag =
-    red?.length > 0
-      ? red?.filter(item => item?.appointment_id === appointmentID)
-      : [];
+  // const redFlag =
+  //   red?.length > 0
+  //     ? red?.filter(item => item?.appointment_id === appointmentID)
+  //     : [];
+  // console.log('====================================');
+  // console.log('red flag0', redFlag);
+  // console.log('====================================');
   const allergy = useSelector(state => state?.allergies?.allergies);
   const allergies =
     allergy?.length > 0
@@ -241,7 +244,9 @@ const Visit = ({navigation, route}) => {
           ?.slice(-1)?.[0]?.redflag
       : '';
   const adv = useSelector(state => state?.pasthistory?.advice);
-
+  console.log('====================================');
+  console.log('red', redflag);
+  console.log('====================================');
   const advices =
     adv?.length > 0
       ? adv?.filter(item => item?.appointment_id === appointmentID)
@@ -1578,45 +1583,22 @@ const Visit = ({navigation, route}) => {
                       ))
                     : null}
                 </View>
-                {redFlag?.length > 0 && <Seperator />}
+                {redflag !== '' && redflag !== undefined && <Seperator />}
               </View>
 
-              {redFlag?.length > 0 && (
-                <View style={styles.line}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={[styles.patientHead, {color: CUSTOMCOLOR.error}]}>
-                      Red Flag
-                    </Text>
-                    {/* <Pressable
-                    style={styles.gap}
-                    onPress={() => navigation.navigate('allergies')}>
-                    <Icon
-                      name={'pencil'}
-                      size={moderateScale(18)}
-                      color={CUSTOMCOLOR.primary}
-                      style={styles.pencilIcon}
-                    />
-                  </Pressable> */}
-                  </View>
+              {redflag !== '' && redflag !== undefined && (
+                <View style={[styles.line, {gap: verticalScale(8)}]}>
+                  {/* <View> */}
+                  <Text
+                    style={[styles.patientHead, {color: CUSTOMCOLOR.error}]}>
+                    Red Flag
+                  </Text>
+                  {/* </View> */}
 
-                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    {redFlag?.length > 0
-                      ? redFlag?.map((item, index) => (
-                          <React.Fragment key={index}>
-                            <Text style={styles.patientText}>
-                              {item?.redflag}
-                              {/* {index < allergies.length - 1 ? ',  ' : ''} */}
-                            </Text>
-                          </React.Fragment>
-                        ))
-                      : null}
-                  </View>
+                  <Text style={styles.patientText}>
+                    {redflag}
+                    {/* {index < allergies.length - 1 ? ',  ' : ''} */}
+                  </Text>
                 </View>
               )}
             </View>

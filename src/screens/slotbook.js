@@ -376,7 +376,7 @@ const SlotBook = ({navigation, route}) => {
         if (jsonData.status === 'success') {
           setApiStatus({
             status: 'success',
-            message: jsonData.mesaage,
+            message: 'Successfully updated',
           });
           setBottom(true);
           setTimeout(() => {

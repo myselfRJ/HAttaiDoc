@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PrescriptionHead from '../components/prescriptionHead';
 import PresComponent from '../components/presComponent';
-import {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ShowChip from '../components/showChip';
@@ -27,6 +27,7 @@ import {
 // } from '../redux/features/prescription/commorbities';
 // import { ,updatecommorbidities } from '../redux/features/prescription/pastHistory';
 import {CONSTANTS} from '../utility/constant';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   CUSTOMCOLOR,
   CUSTOMFONTFAMILY,
@@ -58,6 +59,7 @@ import VitalField from '../components/vitalFields';
 // import {StoreAsyncData, UpdateAsyncData} from '../utility/AsyncStorage';
 import SelectorBtn from '../components/selector';
 import {calculateWeeksAndDaysFromDate, formatdate} from '../utility/const';
+import {addAdult} from '../redux/features/prescription/adult';
 
 const MedicalHistory = ({navigation, route}) => {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -71,11 +73,13 @@ const MedicalHistory = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const patient_phone = medicaldata?.patient_phone;
   const Age = medicaldata?.Age;
-  // console.log('phone', phone, patient_phone, Age);
-  const adultData = useSelector(state => state?.adult?.adult);
-  console.log('====================================');
-  console.log('data=', adultData);
-  console.log('====================================');
+  const adultdat = useSelector(state => state?.adult?.adult);
+  const adultData =
+    adultdat?.length > 0
+      ? adultdat
+          ?.filter(item => item?.patient_phone === patient_phone)
+          ?.slice(-1)?.[0]
+      : {};
   const data = useSelector(state => state?.pasthistory?.pasthistory);
 
   const commor = useSelector(state => state?.pasthistory?.commorbidities);
@@ -560,36 +564,50 @@ const MedicalHistory = ({navigation, route}) => {
       item?.relation?.toLowerCase() !== 'mother',
   );
 
-  // const fetchData = async () => {
-  //   const response = await fetch(URL.GetVaccination(phone), {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   if (response.ok) {
-  //     const jsonData = await response.json();
-  //     if (jsonData?.data && jsonData?.data?.length > 0) {
-  //       const latestData = jsonData?.data?.reduce((latest, current) => {
-  //         return new Date(current.updated_at) > new Date(latest.updated_at)
-  //           ? current
-  //           : latest;
-  //       }, jsonData?.data[0]);
-  //       const newdata = JSON.parse(latestData?.vaccinationDetails);
-  //       console.log('====================================');
-  //       console.log('new===========', newdata);
-  //       console.log('====================================');
-  //       // setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
-  //     }
-  //     // setSelectedStatus(jsonData?.data[0]?.status);
-  //     // setsearch(jsonData?.data[0]?.name);
-  //     // setvalue(jsonData?.data[0]?.date);
-  //     // setdocument1(jsonData?.data[0]);
-  //   }
-  // };
+  const fetchData = async () => {
+    const response = await fetch(URL.GetVaccination(patient_phone), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const jsonData = await response.json();
+      if (jsonData?.data && jsonData?.data?.length > 0) {
+        const latestData = jsonData?.data?.reduce((latest, current) => {
+          return new Date(current.updated_at) > new Date(latest.updated_at)
+            ? current
+            : latest;
+        }, jsonData?.data[0]);
+        const newdata = JSON.parse(latestData?.vaccinationDetails);
+        // setUpToData(newdata !== null && newdata !== undefined ? newdata : []);
+        dispatch(
+          addAdult([
+            ...adultdat,
+            {
+              data: latestData,
+              uptovaccination: newdata,
+              patient_phone: patient_phone,
+            },
+          ]),
+        );
+      }
+      // setSelectedStatus(jsonData?.data[0]?.status);
+      // setsearch(jsonData?.data[0]?.name);
+      // setvalue(jsonData?.data[0]?.date);
+      // setdocument1(jsonData?.data[0]);
+    }
+  };
   // useEffect(() => {
   //   fetchData();
   // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      setTimeout(() => {
+        fetchData();
+      }, 500);
+    }, []),
+  );
 
   return (
     <View style={styles.main}>

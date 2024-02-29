@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   appointmentcard: {
     height:
       Dimensions.get('window').height >= 900
-        ? moderateScale(400)
+        ? moderateScale(492)
         : moderateScale(400),
     paddingHorizontal: horizontalScale(8),
     gap: moderateScale(16),

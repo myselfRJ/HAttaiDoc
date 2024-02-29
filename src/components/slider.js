@@ -10,7 +10,7 @@ export const SliderComponent = ({
   label,
   value,
   setValue,
-  min = 0,
+  min = 1,
   max,
   text,
 }) => {
@@ -22,8 +22,8 @@ export const SliderComponent = ({
         <View
           style={{
             flexDirection: 'row',
-            alignSelf: 'center',
-            // justifyContent: 'space-between',
+            // alignSelf: 'center',
+            justifyContent: 'space-between',
             gap: horizontalScale(16),
           }}>
           <Text

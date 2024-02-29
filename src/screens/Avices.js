@@ -49,31 +49,38 @@ export const Advices = ({navigation}) => {
     navigation.goBack();
   };
   const handlePlus = () => {
-    dispatch(
-      addAdvice([
-        ...advices,
-        {advice: advice, status: selectedStatus, appointment_id: appointmentID},
-      ]),
-    );
+    if (advice) {
+      dispatch(
+        addAdvice([
+          ...advices,
+          {
+            advice: advice,
+            status: selectedStatus,
+            appointment_id: appointmentID,
+          },
+        ]),
+      );
+    }
     setSelectedStatus('');
     SetAdvice('');
   };
-  useEffect(() => {
-    const adv =
-      advices?.length > 0
-        ? advices
-            ?.filter(item => item?.appointment_id === appointmentID)
-            ?.slice(-1)?.[0]?.advice
-        : '';
-    SetAdvice(adv);
-    const sts =
-      advices?.length > 0
-        ? advices
-            ?.filter(item => item?.appointment_id === appointmentID)
-            ?.slice(-1)?.[0]?.status
-        : '';
-    setSelectedStatus(sts);
-  }, []);
+  console.log(advice);
+  // useEffect(() => {
+  //   const adv =
+  //     advices?.length > 0
+  //       ? advices
+  //           ?.filter(item => item?.appointment_id === appointmentID)
+  //           ?.slice(-1)?.[0]?.advice
+  //       : '';
+  //   SetAdvice(adv);
+  //   const sts =
+  //     advices?.length > 0
+  //       ? advices
+  //           ?.filter(item => item?.appointment_id === appointmentID)
+  //           ?.slice(-1)?.[0]?.status
+  //       : '';
+  //   setSelectedStatus(sts);
+  // }, []);
 
   const handleDelete = index => {
     if (advices) {
