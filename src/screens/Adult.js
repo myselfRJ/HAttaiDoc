@@ -182,7 +182,7 @@ const Adult = ({route, navigation}) => {
 
       const responsedata = await response.json();
       if (responsedata) {
-        console.log('API Response:', responsedata);
+        // console.log('API Response:', responsedata);
         navigation.goBack();
       }
     } catch (error) {

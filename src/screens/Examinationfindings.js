@@ -273,7 +273,8 @@ const ExaminationFindings = ({navigation}) => {
   };
   const handleReports_Physical = filepath => {
     const path = `${filepath}`;
-    if (filepath?.includes('pdf') || filepath?.length > 250) {
+    // if (filepath?.includes('pdf') || filepath?.length > 250) {
+    if (filepath?.includes('pdf')) {
       navigation.navigate('pdfhistory', {path});
     } else {
       navigation.navigate('img', {path});

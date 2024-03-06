@@ -110,7 +110,6 @@ const UserDisplay = ({navigation}) => {
       console.error('Error Occured', error);
     }
   };
-
   const fetchUsers = async () => {
     const response = await fetchApi(URL.getUsers(phone), {
       method: 'GET',
@@ -120,7 +119,9 @@ const UserDisplay = ({navigation}) => {
     });
     if (response.ok) {
       const jsonData = await response.json();
-      // console.log('--------------clinics', jsonData);
+      const checkUser = jsonData?.data?.doctor_clinic?.doc_clinic?.filter(
+        item => item?.doctor_phone_number === phone,
+      );
       setUsers(() => jsonData?.data);
     } else {
       console.error('API call failed:', response.status, response);

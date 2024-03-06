@@ -55,6 +55,7 @@ import {handleCamera, handleGallery, showToast} from '../utility/const';
 
 const AddUser = ({navigation}) => {
   const GlRef = useRef(null);
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
   const route = useRoute();
   const {index} = route.params;
   const [clinics, setDataClinic] = useState();
@@ -113,6 +114,12 @@ const AddUser = ({navigation}) => {
       clinic_id: clinic_ID,
       clinic_name: selectedClinic,
       doctor_phone_number: phone,
+      doctors_clinic: {
+        clinic_id: clinic_ID,
+        doctor_phone_number: phone,
+        doctor_name: doc_prof?.doctor_name,
+        speciality: doc_prof?.specialization,
+      },
     },
   ];
   const SuccesRef = useRef(null);

@@ -228,7 +228,7 @@ const ProfileCreate = ({navigation}) => {
           });
           setBottom(true);
           dispatch(headerStatus({index: 0, status: true}));
-          // setStatus(!status);
+          dispatch(addDoctor_profile.addDoctor_profile(jsonData?.data));
           setTimeout(() => {
             setBottom(false);
             navigation.navigate('clinic', {clinic: 'clinic'});
