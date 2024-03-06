@@ -20,6 +20,7 @@ import {
   addServerFCMToken,
 } from '../redux/features/phoneNumber/LoginPhoneNumber';
 import {authenticateActions} from '../redux/features/authenticate/authenticateSlice';
+import {URL} from '../utility/urls';
 const Introduction = ({navigation}) => {
   const dispatch = useDispatch();
   const getTokenFcm = async () => {
@@ -39,17 +40,42 @@ const Introduction = ({navigation}) => {
       if (array?.time) {
         const originalDate = new Date(array?.time);
         const newDate = new Date(originalDate);
-        newDate.setDate(originalDate.getDate() + 29);
+        newDate.setDate(originalDate.getDate() + 179);
         const formattedNewDate = newDate.toISOString();
-        dispatch(authenticateActions.updateauthenticate(array?.acces_token));
-        dispatch(addLogin_phone({phone: array?.phone, trace_id: ''}));
-        dispatch(addGoogleKey(array?.googleApi));
-        dispatch(addServerFCMToken(array?.serverFCMapi));
-        if (originalDate.toISOString() <= formattedNewDate && array?.time) {
-          setTimeout(() => {
-            navigation.navigate('protected');
-          }, 2000);
-        }
+        const fetchNewAccessToken = async () => {
+          const response = await fetch(URL.fetchAccessToken, {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              refresh: array?.acces_token?.refresh_token,
+            }),
+          });
+          const jsondata = await response.json();
+          const access_token = {
+            access_token: jsondata?.access,
+            refresh_token: array?.acces_token?.refresh_token,
+          };
+          dispatch(authenticateActions.updateauthenticate(access_token));
+          dispatch(addLogin_phone({phone: array?.phone, trace_id: ''}));
+          dispatch(addGoogleKey(array?.googleApi));
+          dispatch(addServerFCMToken(array?.serverFCMapi));
+          if (
+            originalDate.toISOString() <= formattedNewDate &&
+            array?.time &&
+            array?.acces_token?.refresh_token
+          ) {
+            setTimeout(() => {
+              navigation.navigate('protected');
+            }, 2000);
+          } else {
+            setTimeout(() => {
+              navigation.navigate('intro');
+            }, 2000);
+          }
+        };
+        fetchNewAccessToken();
       } else {
         setTimeout(() => {
           navigation.navigate('intro');

@@ -10,6 +10,7 @@ const snomedUrl = 'https://attai.healthattai.com/';
 export const fileurl = ``;
 
 export const URL = {
+  fetchAccessToken: `${baseUrl}access_token`,
   retriveTokens: `${baseUrl}retrivetokens`,
   generateOtp: `${baseUrl}doctor-authenticate/generate-otp`,
   validateOtp: `${baseUrl}doctor-authenticate/validate-otp`,
