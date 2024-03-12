@@ -80,6 +80,7 @@ const SlotBook = ({navigation, route}) => {
   const [paymentMode, setPaymentMode] = useState('');
   const [selectedMode, setSelectedMode] = useState('In clinic');
   const [clinicShow, setClinicShow] = useState(false);
+  const [rep, setrep] = useState(false);
   const handleOptions = value => {
     setSelectedMode(value);
   };
@@ -379,10 +380,10 @@ const SlotBook = ({navigation, route}) => {
             message: 'Successfully updated',
           });
           setBottom(true);
+          setLoading(false);
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 1000);
-          setLoading(false);
         } else {
           setApiStatus({
             status: 'warning',
@@ -450,10 +451,10 @@ const SlotBook = ({navigation, route}) => {
             message: 'Successfully Booked',
           });
           setBottom(true);
+          setLoading(false);
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 2000);
-          setLoading(false);
         } else {
           setApiStatus({
             status: 'warning',
@@ -520,19 +521,23 @@ const SlotBook = ({navigation, route}) => {
       setSugs(uniqueComplaints);
     });
   }, []);
+
   const handleSave = () => {
-    if (id === undefined && !loading && !fee) {
+    if (id === undefined && !rep && !fee) {
+      setrep(true);
       selectedTypeAppointment
         ? Appointment_Booking()
         : showToast('error', 'Please Select Type Of Appointment');
-    } else if (id === undefined && !loading && fee) {
+    } else if (id === undefined && !rep && fee) {
+      setrep(true);
       !selectedTypeAppointment
         ? showToast('error', 'Please Select Type Of Appointment')
         : !paymentMode
         ? showToast('error', 'Select Payment Mode')
         : Appointment_Booking();
     } else {
-      if (!loading) {
+      if (!rep) {
+        setrep(true);
         updateAppointment();
       }
     }

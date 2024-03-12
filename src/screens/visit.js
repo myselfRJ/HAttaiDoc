@@ -138,10 +138,6 @@ const Visit = ({navigation, route}) => {
     dummyPrescribe?.length > 0
       ? dummyPrescribe?.filter(item => item?.appointment_id === appointmentID)
       : [];
-  const checkOthersmed =
-    Prescribe?.length > 0
-      ? Prescribe?.filter(item => item?.mode === 'Others')
-      : [];
 
   const commorbities = useSelector(
     state => state?.commorbities?.commorbitiesItems,
@@ -825,19 +821,7 @@ const Visit = ({navigation, route}) => {
           <h5 style="font-size:14px">
           Prescribe
           </h5>
-          ${
-            checkOthersmed?.length > 0
-              ? `<div style="display:flex;flex-direction:column;">${checkOthersmed?.[0]?.medicine
-                  ?.split(',')
-                  ?.map(val => {
-                    if (val === ',') {
-                    } else {
-                      return `<text>${val}</text>`;
-                    }
-                  })}
-                </div>`
-              : `
-          <table style="width:100%;">
+          ${`<table style="width:100%;">
         
 
             <tr>
@@ -871,8 +855,7 @@ const Visit = ({navigation, route}) => {
               `,
               ).join('')}
          
-        </table>`
-          }
+        </table>`}
           </div>
           ${
             advices?.length > 0
@@ -1076,18 +1059,7 @@ const Visit = ({navigation, route}) => {
           <h5 style="font-size:14px">
           Prescribe
           </h5>
-          ${
-            checkOthersmed?.length > 0
-              ? `<div style="display:flex;flex-direction:column;">${checkOthersmed?.[0]?.medicine
-                  ?.split(',')
-                  ?.map(val => {
-                    if (val === ',') {
-                    } else {
-                      return `<text>${val}</text>`;
-                    }
-                  })}
-                </div>`
-              : `
+          ${`
           <table style="width:100%;">
         
 
@@ -1120,8 +1092,7 @@ const Visit = ({navigation, route}) => {
               `,
               ).join('')}
          
-        </table>`
-          }
+        </table>`}
       <footer style="display:flex;flex-direction:column;align-items:center;position:fixed; padding:12px;  bottom:0;page-break-before: auto;">
           <div style="display:flex;width:105vw; align-item:center">
           <p style="text-align:center;width:100%; font-size:12px">
@@ -1758,39 +1729,22 @@ const Visit = ({navigation, route}) => {
                           <View style={styles.pres}>
                             <View>
                               {Prescribe?.map((item, ind) => {
-                                if (item?.mode === 'Others') {
-                                  return (
-                                    <View key={ind} style={styles.pres1}>
-                                      <Icon
-                                        name="prescription"
-                                        size={moderateScale(16)}
-                                        color={CUSTOMCOLOR.primary}
-                                      />
-                                      <View>
-                                        <Text style={styles.pulse}>
-                                          {item.medicine}
-                                        </Text>
-                                      </View>
+                                return (
+                                  <View key={ind} style={styles.pres1}>
+                                    <Icon
+                                      name="prescription"
+                                      size={moderateScale(16)}
+                                      color={CUSTOMCOLOR.primary}
+                                    />
+                                    <View>
+                                      <Text style={styles.pulse}>
+                                        {item.medicine} | {item.timing} |
+                                        {item.frequency} | {item.duration} |{' '}
+                                        {item.total_quantity} | {item.others}
+                                      </Text>
                                     </View>
-                                  );
-                                } else {
-                                  return (
-                                    <View key={ind} style={styles.pres1}>
-                                      <Icon
-                                        name="prescription"
-                                        size={moderateScale(16)}
-                                        color={CUSTOMCOLOR.primary}
-                                      />
-                                      <View>
-                                        <Text style={styles.pulse}>
-                                          {item.medicine} | {item.timing} |
-                                          {item.frequency} | {item.duration} |{' '}
-                                          {item.total_quantity} | {item.others}
-                                        </Text>
-                                      </View>
-                                    </View>
-                                  );
-                                }
+                                  </View>
+                                );
                               })}
                             </View>
                           </View>
