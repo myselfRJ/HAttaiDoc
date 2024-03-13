@@ -873,12 +873,12 @@ export default function NewPrescribe({navigation}) {
               setValue={value => setDose_number(value)}
             />
           </View> */}
-            <SliderComponent
+            {/*<SliderComponent
               label={'Number'}
               value={dose_number}
               setValue={setDose_number}
               max={10}
-            />
+        />*/}
 
             <View style={{gap: verticalScale(12)}}>
               <View style={{gap: verticalScale(6)}}>
