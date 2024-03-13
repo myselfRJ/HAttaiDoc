@@ -52,7 +52,7 @@ const Language = {
     severity: 'Severity',
     prescribe: 'Prescribe',
     mode: 'Mode',
-    medicine: 'Medicine name',
+    medicine: 'Medicine',
     reccomedations: 'Recommendations:',
     number: 'Number',
     timing: 'Timing',
