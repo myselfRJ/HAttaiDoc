@@ -7,7 +7,7 @@ const snomedUrl = 'https://attai.healthattai.com/';
 // export const fileurl = `http://192.168.1.22:8000`;
 // export const fileurl = ``;
 export const fileurl = `https://attai.healthattai.com`;
-// export const fileurl = ``;
+// export const fileurl = `http://10.9.64.77:8000`;
 
 export const URL = {
   fetchAccessToken: `${baseUrl}access_token`,

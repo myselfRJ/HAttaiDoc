@@ -986,7 +986,7 @@ export default function NewPrescribe({navigation}) {
                     return (
                       <MedicationChip
                         name={item?.medicine}
-                        text1={`${item.timing} , ${item.frequency} , ${item.dose_number} , ${item.duration}`}
+                        text1={`${item.timing} , ${item.frequency} , ${item.duration}`}
                         text2={`Quantity: ${item?.total_quantity} ${item?.others}`}
                         onPress={() => handleDelete(ind)}
                         onEdit={() => DispatchEdit(item, ind)}
