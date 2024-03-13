@@ -1,13 +1,13 @@
-// const baseUrl = 'http://10.9.64.77:8080/api/v1/';
+const baseUrl = 'http://10.9.64.77:8000/api/v1/';
 // const baseUrl = 'http://65.0.12.213/api/v1/';
-const baseUrl = 'http://43.205.206.181/api/v1/';
+// const baseUrl = 'http://43.205.206.181/api/v1/';
 // const baseUrl = 'https://attai.healthattai.com/api/v1/';
 // const baseUrl = 'http://13.200.15.208/api/v1/';
 const snomedUrl = 'https://attai.healthattai.com/';
 // export const fileurl = `http://192.168.1.22:8000`;
 // export const fileurl = ``;
 // export const fileurl = `https://attai.healthattai.com`;
-export const fileurl = `http://10.9.64.77:8080`;
+export const fileurl = `http://10.9.64.77:8000`;
 
 export const URL = {
   fetchAccessToken: `${baseUrl}access_token`,
