@@ -512,12 +512,14 @@ const SlotBook = ({navigation, route}) => {
   };
   useEffect(() => {
     RetriveAsyncData(`complaint${phone}`).then(array => {
-      const uniqueComplaints = array.filter(
-        (value, index, self) =>
-          index === self.findIndex(t => t.complaint === value.complaint),
-      );
-      uniqueComplaints?.splice(10);
-      setSugs(uniqueComplaints);
+      if (array) {
+        const uniqueComplaints = array.filter(
+          (value, index, self) =>
+            index === self.findIndex(t => t.complaint === value.complaint),
+        );
+        uniqueComplaints?.splice(10);
+        setSugs(uniqueComplaints);
+      }
     });
   }, []);
   const handleSave = () => {

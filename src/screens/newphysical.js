@@ -38,6 +38,9 @@ import {
 } from '../utility/AsyncStorage';
 import {clearStorage} from '../utils/storage/storage';
 const Physical = ({navigation}) => {
+  const doc_prof = useSelector(state => state?.doctor_profile?.doctor_profile);
+  const pediatrician =
+    doc_prof?.specialization?.toLowerCase() === 'pediatrics' ? true : false;
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const vitalsDat = useSelector(state => state.prescription.vitalsData);
   const vitalsData =
@@ -49,6 +52,13 @@ const Physical = ({navigation}) => {
   const phys1 = CONSTANT.physicaldata1;
   const phys2 = CONSTANT.physicaldata2;
   const phys3 = CONSTANT.physicaldata3;
+  const pediatric = [
+    {
+      label: 'Head',
+      status: '',
+      desc: '',
+    },
+  ];
   const [txtcolor, settxtcolor] = useState(false);
   const handlebuild = (data = []) => {
     if (vitalsData?.bmi !== '' && vitalsData?.bmi !== undefined) {
@@ -74,10 +84,16 @@ const Physical = ({navigation}) => {
     }
   };
   const [data1, setData1] = useState(
-    handlebuild(JSON.parse(JSON.stringify([...phys1]))),
+    pediatrician ? [] : handlebuild(JSON.parse(JSON.stringify([...phys1]))),
   );
-  const [data2, setData2] = useState(JSON.parse(JSON.stringify([...phys2])));
-  const [data3, setData3] = useState(JSON.parse(JSON.stringify([...phys3])));
+  const [data2, setData2] = useState(
+    pediatrician ? [] : JSON.parse(JSON.stringify([...phys2])),
+  );
+  const [data3, setData3] = useState(
+    pediatrician
+      ? JSON.parse(JSON.stringify([...pediatric]))
+      : JSON.parse(JSON.stringify([...phys3])),
+  );
   const physical = useSelector(state => state.prescription.physicalExamination);
   const handledata1 = (index, newStatus, newDesc) => {
     setData1(data1 => {
@@ -345,8 +361,12 @@ const Physical = ({navigation}) => {
         desc: '',
       }));
       StoreAsyncData(`physicaldata${examinationDetails?.doc_phone}`, {
-        data1: JSON.parse(JSON.stringify([...CONSTANT.physicaldata1])),
-        data2: JSON.parse(JSON.stringify([...CONSTANT.physicaldata2])),
+        data1: pediatrician
+          ? []
+          : JSON.parse(JSON.stringify([...CONSTANT.physicaldata1])),
+        data2: pediatrician
+          ? []
+          : JSON.parse(JSON.stringify([...CONSTANT.physicaldata2])),
         data3: JSON.parse(
           JSON.stringify([
             ...datatostore,
@@ -358,7 +378,7 @@ const Physical = ({navigation}) => {
     setValue('');
   };
   const handleAsync = () => {
-    RemoveKeyFromAsync(`physicaldata${examinationDetails?.doc_phone}`);
+    // RemoveKeyFromAsync(`physicaldata${examinationDetails?.doc_phone}`);
     RetriveAsyncData(`physicaldata${examinationDetails?.doc_phone}`).then(
       array => {
         if (array) {
@@ -369,15 +389,15 @@ const Physical = ({navigation}) => {
           const addto1 = array?.data1.concat(removedElements);
           if (vitalsData?.bmi !== '') {
             if (acneInc) {
-              setData1(handlebuild([...addto1]));
+              setData1(pediatrician ? [] : handlebuild([...addto1]));
             } else {
-              setData1(handlebuild([...array?.data1]));
+              setData1(pediatrician ? [] : handlebuild([...array?.data1]));
             }
           } else {
             if (acneInc) {
-              setData1(addto1);
+              setData1(pediatrician ? [] : addto1);
             } else {
-              setData1(array?.data1);
+              setData1(pediatrician ? [] : array?.data1);
             }
           }
           setData2(array?.data2);
@@ -390,6 +410,27 @@ const Physical = ({navigation}) => {
     fetchPhysical();
     handleAsync();
   }, []);
+  const handleOnpress = ind => {
+    const updatedData3 = data3?.filter((_, index) => ind !== index);
+    StoreAsyncData(`physicaldata${examinationDetails?.doc_phone}`, {
+      data1: pediatrician
+        ? []
+        : JSON.parse(JSON.stringify([...CONSTANT.physicaldata1])),
+      data2: pediatrician
+        ? []
+        : JSON.parse(JSON.stringify([...CONSTANT.physicaldata2])),
+      data3: JSON.parse(
+        JSON.stringify(
+          updatedData3?.map(item => ({
+            label: item?.label,
+            status: '',
+            desc: '',
+          })),
+        ),
+      ),
+    });
+    setData3(updatedData3);
+  };
   return (
     <View style={styles.main}>
       <ScrollView
@@ -401,43 +442,83 @@ const Physical = ({navigation}) => {
           <PrescriptionHead heading={'Physical Examination'} />
           <Text style={styles.subText}>{' (N-Normal / A-abnormal)'}</Text>
         </View>
-        <View style={styles.fields}>
-          {data1?.map(
-            (item, index) =>
-              item?.label && (
-                <Examination_Fields
-                  check={'present'}
-                  key={index}
-                  label={item?.label}
-                  value={item?.desc}
-                  option={item?.status}
-                  setOption={value => handledata1(index, value, item?.desc)}
-                  setvalue={value => handledata1(index, item?.status, value)}
-                  txt={txtcolor}
-                />
-              ),
-          )}
-        </View>
-        <View style={styles.fields}>
-          {data2?.map(
-            (item, index) =>
-              item?.label && (
-                <Examination_Fields
-                  check={'yes'}
-                  key={index}
-                  label={item?.label}
-                  value={item?.desc}
-                  option={item?.status}
-                  setOption={value => handledata2(index, value, item?.desc)}
-                  setvalue={value => handledata2(index, item?.status, value)}
-                />
-              ),
-          )}
-        </View>
-        <View style={styles.fields}>
+        {data1?.length > 0 && (
+          <View style={styles.fields}>
+            {data1?.map(
+              (item, index) =>
+                item?.label && (
+                  <Examination_Fields
+                    check={'present'}
+                    key={index}
+                    label={item?.label}
+                    value={item?.desc}
+                    option={item?.status}
+                    setOption={value => handledata1(index, value, item?.desc)}
+                    setvalue={value => handledata1(index, item?.status, value)}
+                    txt={txtcolor}
+                  />
+                ),
+            )}
+          </View>
+        )}
+        {data2?.length > 0 && (
+          <View style={styles.fields}>
+            {data2?.map(
+              (item, index) =>
+                item?.label && (
+                  <Examination_Fields
+                    check={'yes'}
+                    key={index}
+                    label={item?.label}
+                    value={item?.desc}
+                    option={item?.status}
+                    setOption={value => handledata2(index, value, item?.desc)}
+                    setvalue={value => handledata2(index, item?.status, value)}
+                  />
+                ),
+            )}
+          </View>
+        )}
+        <View
+          style={
+            pediatrician
+              ? {...styles.fields, flexDirection: 'column'}
+              : {...styles.fields}
+          }>
           {data3?.map(
             (item, index) =>
-              item?.label && (
+              item?.label &&
+              (pediatrician ? (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={{width: '90%'}}>
+                    <Examination_Fields
+                      label={item?.label}
+                      value={item?.desc}
+                      option={item?.status}
+                      setOption={value => handledata3(index, value, item?.desc)}
+                      setvalue={value =>
+                        handledata3(index, item?.status, value)
+                      }
+                    />
+                  </View>
+                  {data3?.length > 1 && (
+                    <TouchableOpacity
+                      onPress={() => handleOnpress(index)}
+                      style={{
+                        padding: moderateScale(16),
+                        borderRadius: 100,
+                        backgroundColor: CUSTOMCOLOR.white,
+                      }}>
+                      <Icon name="close" color={'red'} size={18} />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ) : (
                 <Examination_Fields
                   key={index}
                   label={item?.label}
@@ -446,7 +527,7 @@ const Physical = ({navigation}) => {
                   setOption={value => handledata3(index, value, item?.desc)}
                   setvalue={value => handledata3(index, item?.status, value)}
                 />
-              ),
+              )),
           )}
         </View>
         <View>
