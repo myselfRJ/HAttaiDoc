@@ -41,6 +41,7 @@ import {handleCamera, handleGallery} from '../utility/const';
 
 const PatientCreate = ({navigation, route}) => {
   const {phoneRoute} = route.params;
+  const {patient_data} = route.params;
   const {phone} = useSelector(state => state?.phone?.data);
 
   const token = useSelector(state => state.authenticate.auth.access);
@@ -99,21 +100,28 @@ const PatientCreate = ({navigation, route}) => {
     }
     setModal(false);
   };
-  const [value, setValue] = useState('');
-  // const HandleInput = () => {
-  //   if (age) {
-  //     setValue(age);
-  //     setAge(age);
-  //   } else {
-  //     {
-  //       open && setValue(formattedDate);
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   HandleInput();
-  // }, [date, age]);
 
+  const [value, setValue_Age] = useState('');
+  console.log(value);
+  useEffect(() => {
+    if (patient_data) {
+      setSelectedImage(patient_data?.patient_pic_url);
+      setName(patient_data?.patient_name);
+      setPatient_Phone_number(patient_data?.patient_phone_number);
+      setReference_id(patient_data?.reference_id);
+      const year = new Date().getFullYear();
+      setValue_Age(
+        year - parseInt(patient_data?.birth_date?.split('-')[0]).toString(),
+      );
+      setSelected(patient_data?.gender);
+      setBlood_group(patient_data?.bloodgroup);
+      setSpouseBloodGrp(patient_data?.spousegroup);
+      setAddress(patient_data?.patient_address);
+      setAadhar_no(patient_data?.aadhar_no);
+      setSpouse_nmae(patient_data?.spouse_name);
+    }
+  }, []);
+  console.log(value);
   const HandleCheck = () => {
     if (value?.length > 0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
@@ -154,16 +162,19 @@ const PatientCreate = ({navigation, route}) => {
     birth_date: formatDate,
     // age: age,
     reference_id: reference_id,
-    doctor_phone_number: phone,
+    doctor_phone_number: patient_data
+      ? patient_data?.doctor_phone_number
+      : phone,
     bloodgroup: blood_group,
-    spouse_name:
-      selected === 'male' && check === 'father'
-        ? `S/o ${spouse_name}`
-        : selected === 'female' && check === 'father'
-        ? `D/o ${spouse_name}`
-        : check === 'husband'
-        ? `W/o ${spouse_name}`
-        : spouse_name,
+    spouse_name: patient_data
+      ? spouse_name
+      : selected === 'male' && check === 'father'
+      ? `S/o ${spouse_name}`
+      : selected === 'female' && check === 'father'
+      ? `D/o ${spouse_name}`
+      : check === 'husband'
+      ? `W/o ${spouse_name}`
+      : spouse_name,
     // ABHA_ID: ABHA_ID,
     aadhar_no: aadhar_no,
     patient_address: address,
@@ -195,6 +206,53 @@ const PatientCreate = ({navigation, route}) => {
           setBottom(true);
           setTimeout(() => {
             navigation.navigate('bookslot', {patient_phone});
+          }, 1000);
+          setName('');
+          setPatient_Phone_number('');
+          setAddress('');
+          setAadhar_no('');
+          setBlood_group('');
+          setSpouse_nmae('');
+          setAge();
+          setLoading(false);
+        } else {
+          setApiStatus({status: 'warning', message: jsonData?.message});
+          setBottom(true);
+          console.error('API call failed:', response.status, response);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      setApiStatus({status: 'error', message: 'Please try again'});
+      setBottom(true);
+      console.error('Error occurred:', error);
+      setLoading(false);
+    }
+  };
+  const UpdatePatientData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchApi(URL.updatePatient(patient_data?.id), {
+        method: 'PUT',
+        headers: {
+          Prefer: '',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json, application/xml',
+        },
+        body: JSON.stringify({
+          ...patientDetails,
+          fhir_patient_id: patient_data?.fhir_patient_id,
+        }),
+      });
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData?.status === 'success') {
+          setApiStatus({status: 'success', message: 'Successfully Updated'});
+          setBottom(true);
+          setTimeout(() => {
+            navigation.goBack();
           }, 1000);
           setName('');
           setPatient_Phone_number('');
@@ -317,7 +375,7 @@ const PatientCreate = ({navigation, route}) => {
                   label="Age"
                   placeholder="eg:25"
                   input={value}
-                  setValue={setValue}
+                  setValue={setValue_Age}
                   numeric={true}
                   keypad="numeric"
                   required={true}
@@ -493,35 +551,38 @@ const PatientCreate = ({navigation, route}) => {
                 ))}
               </View>
             </View>
-            <View style={styles.alignchild}>
-              <Text style={styles.genderText}>Relation Name</Text>
-              <View style={styles.radiogroup}>
-                <Option
-                  label="Father"
-                  value="father"
-                  selected={check === 'father'}
-                  onPress={() => handleCheck('father')}
-                />
-                <Option
-                  label="Husband"
-                  value="husband"
-                  selected={check === 'husband'}
-                  onPress={() => handleCheck('husband')}
-                />
+            {!patient_data && (
+              <View style={styles.alignchild}>
+                <Text style={styles.genderText}>Relation Name</Text>
+                <View style={styles.radiogroup}>
+                  <Option
+                    label="Father"
+                    value="father"
+                    selected={check === 'father'}
+                    onPress={() => handleCheck('father')}
+                  />
+                  <Option
+                    label="Husband"
+                    value="husband"
+                    selected={check === 'husband'}
+                    onPress={() => handleCheck('husband')}
+                  />
+                </View>
               </View>
-            </View>
-            {check && (
-              <InputText
-                // label="Father / Husband Name"
-                placeholder={
-                  check === 'father'
-                    ? 'Enter Father Name'
-                    : 'Enter Husband Name'
-                }
-                value={spouse_name}
-                setValue={setSpouse_nmae}
-              />
             )}
+            {check ||
+              (patient_data && (
+                <InputText
+                  label={patient_data ? 'Father / Husband Name' : ''}
+                  placeholder={
+                    check === 'father'
+                      ? 'Enter Father Name'
+                      : 'Enter Husband Name'
+                  }
+                  value={spouse_name}
+                  setValue={setSpouse_nmae}
+                />
+              ))}
             <View
               style={{
                 alignSelf: 'flex-start',
@@ -661,7 +722,7 @@ const PatientCreate = ({navigation, route}) => {
               </View>
             </View> */}
             <HButton
-              label="Save"
+              label={patient_data ? 'Update' : 'Save'}
               btnstyles={{
                 alignSelf: 'center',
                 backgroundColor:
@@ -672,7 +733,11 @@ const PatientCreate = ({navigation, route}) => {
               loading={loading}
               onPress={() => {
                 if (patient_phone_number.length === 10 && formattedDate) {
-                  fetchData();
+                  if (patient_data) {
+                    UpdatePatientData();
+                  } else {
+                    fetchData();
+                  }
                 }
               }}
             />

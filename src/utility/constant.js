@@ -382,6 +382,7 @@ export const CONSTANTS = {
     {value: 'Psychiatry', label: 'Psychiatry'},
     {value: 'Radiology', label: 'Radiology'},
     {value: 'Rheumatology', label: 'Rheumatology'},
+    {value: 'Urology', label: 'Urology'},
   ],
   consultTypes: ['In clinic', 'Telephonic'],
   duration: [5, 10, 15, 20, 25, 30, 45, 60],

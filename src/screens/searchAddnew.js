@@ -87,29 +87,29 @@ const SearchAddnew = ({navigation}) => {
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <InputText
           inputContainer={{width: screenWidth / 3.5}}
-          label="Search"
+          label="Phone Number"
           placeholder="Enter Phone Number"
           value={phoneNumber}
           setValue={ChangePhoneValue}
-          search={true}
+          // search={true}
           IconName="magnify"
         />
         <InputText
           inputContainer={{width: screenWidth / 3.5}}
-          label="Search"
+          label="Name"
           placeholder="Enter Name"
           value={name}
           setValue={setName}
-          search={true}
+          // search={true}
           IconName="magnify"
         />
         <InputText
           inputContainer={{width: screenWidth / 3.5}}
-          label="Search"
+          label="Id"
           placeholder="Enter id"
           value={reference_id}
           setValue={setReference_id}
-          search={true}
+          // search={true}
           IconName="magnify"
         />
       </View>

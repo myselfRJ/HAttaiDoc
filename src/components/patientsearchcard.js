@@ -31,19 +31,20 @@ import {
 } from '../utility/scaleDimension';
 import {HButton} from '.';
 
-const PatientSearchCard = patient_data => {
+const PatientSearchCard = props => {
+  const {patient_data} = props;
   const [visible, setVisible] = useState(false);
   const patientSearchRef = useRef(null);
   const navigation = useNavigation();
-  const patient_name = patient_data?.patient_data?.patient_name;
-  const patient_age = patient_data?.patient_data?.birth_date;
-  const patient_pic = patient_data?.patient_data?.patient_pic_url;
+  const patient_name = patient_data?.patient_name;
+  const patient_age = patient_data?.birth_date;
+  const patient_pic = patient_data?.patient_pic_url;
 
   const presentYear = new Date().toISOString().split('-')[0];
-  const birthYear = patient_data?.patient_data?.birth_date.split('-')[0];
-  const gender = patient_data?.patient_data?.gender;
+  const birthYear = patient_data?.birth_date.split('-')[0];
+  const gender = patient_data?.gender;
 
-  const patient_phone_number = patient_data?.patient_data?.patient_phone_number;
+  const patient_phone_number = patient_data?.patient_phone_number;
 
   const handleOnpress = () => {
     const patient_phone = patient_phone_number;
@@ -55,7 +56,7 @@ const PatientSearchCard = patient_data => {
         parseInt(new Date().getFullYear().toString()) - parseInt(birthYear),
       patient_name,
       gender,
-      reference_id: patient_data?.patient_data?.reference_id,
+      reference_id: patient_data?.reference_id,
     });
     patientSearchRef?.current?.snapToIndex(0);
   };
@@ -66,37 +67,40 @@ const PatientSearchCard = patient_data => {
     patientSearchRef?.current?.snapToIndex(0);
   };
   const meta_data = patient_data.meta;
-  const doctor = patient_data.doctor;
+  const doctor = props.doctor;
   return (
-    <>
-      <View style={styles.main}>
-        <View style={styles.patientinfo}>
-          <Image
-            style={styles.img}
-            source={{
-              uri: `data:image/jpeg;base64,${patient_data?.patient_data?.patient_pic_url}`,
-            }}
-          />
-          <View>
-            <Text style={styles.name}>
-              {patient_data?.patient_data?.patient_name}
-            </Text>
-            <Text style={styles.age}>
-              {parseInt(presentYear) - parseInt(birthYear)} |{' '}
-              {patient_data?.patient_data?.gender}
-            </Text>
+    <View style={styles.main}>
+      <TouchableOpacity
+        style={styles.patientinfo}
+        onPress={() => {
+          if (doctor) {
+            navigation.navigate('patientcreate', {patient_data});
+          }
+        }}>
+        <Image
+          style={styles.img}
+          source={{
+            uri: `data:image/jpeg;base64,${patient_data?.patient_pic_url}`,
+          }}
+        />
+        <View>
+          <Text style={styles.name}>{patient_data?.patient_name}</Text>
+          <Text style={styles.age}>
+            {parseInt(presentYear) - parseInt(birthYear)} |{' '}
+            {patient_data?.gender}
+          </Text>
+          <Text style={styles?.contact}>
+            {Language[language]['contact']}:{' '}
+            {patient_data?.patient_phone_number}
+          </Text>
+          {patient_data?.reference_id && (
             <Text style={styles?.contact}>
-              {Language[language]['contact']}:{' '}
-              {patient_data?.patient_data?.patient_phone_number}
+              Reference Id: {patient_data?.reference_id}
             </Text>
-            {patient_data?.patient_data?.reference_id && (
-              <Text style={styles?.contact}>
-                Reference Id: {patient_data?.patient_data?.reference_id}
-              </Text>
-            )}
-          </View>
+          )}
         </View>
-        {/* <Pressable
+      </TouchableOpacity>
+      {/* <Pressable
           style={styles.icon}
           onPress={() => {
             patientSearchRef?.current?.snapToIndex(1);
@@ -110,45 +114,45 @@ const PatientSearchCard = patient_data => {
             />
           </View>
         </Pressable> */}
-        <View style={styles.tab}>
-          {/* {meta_data && ( */}
-          {doctor ? (
-            <HButton
-              btnstyles={{
-                backgroundColor: CUSTOMCOLOR.white,
-                borderWidth: moderateScale(0.5),
-                borderColor: CUSTOMCOLOR.borderColor,
-                paddingHorizontal: horizontalScale(24),
-                paddingVertical: verticalScale(8),
-              }}
-              textStyle={{
-                color: CUSTOMCOLOR.primary,
-                fontSize: CUSTOMFONTFAMILY.h3,
-              }}
-              label="Rx History"
-              selected={true}
-              onPress={handleOnpress}
-            />
-          ) : null}
-          {/* )} */}
+      <View style={styles.tab}>
+        {/* {meta_data && ( */}
+        {doctor ? (
           <HButton
             btnstyles={{
-              // backgroundColor: CUSTOMCOLOR.white,
-              // borderWidth: moderateScale(0.5),
-              // borderColor: CUSTOMCOLOR.borderColor,
+              backgroundColor: CUSTOMCOLOR.white,
+              borderWidth: moderateScale(0.5),
+              borderColor: CUSTOMCOLOR.borderColor,
               paddingHorizontal: horizontalScale(24),
               paddingVertical: verticalScale(8),
             }}
             textStyle={{
-              color: CUSTOMCOLOR.white,
+              color: CUSTOMCOLOR.primary,
               fontSize: CUSTOMFONTFAMILY.h3,
             }}
-            label={Language[language]['book_appointment']}
+            label="Rx History"
             selected={true}
-            onPress={handleOnBook}
+            onPress={handleOnpress}
           />
-        </View>
-        {/* <BottomSheetView
+        ) : null}
+        {/* )} */}
+        <HButton
+          btnstyles={{
+            // backgroundColor: CUSTOMCOLOR.white,
+            // borderWidth: moderateScale(0.5),
+            // borderColor: CUSTOMCOLOR.borderColor,
+            paddingHorizontal: horizontalScale(24),
+            paddingVertical: verticalScale(8),
+          }}
+          textStyle={{
+            color: CUSTOMCOLOR.white,
+            fontSize: CUSTOMFONTFAMILY.h3,
+          }}
+          label={Language[language]['book_appointment']}
+          selected={true}
+          onPress={handleOnBook}
+        />
+      </View>
+      {/* <BottomSheetView
           bottomSheetRef={patientSearchRef}
           snapPoints={'100%'}
           backgroundStyle="#000000aa">
@@ -181,8 +185,7 @@ const PatientSearchCard = patient_data => {
           </View>
 
         </BottomSheetView> */}
-      </View>
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({

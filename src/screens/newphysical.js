@@ -95,32 +95,47 @@ const Physical = ({navigation}) => {
       : JSON.parse(JSON.stringify([...phys3])),
   );
   const physical = useSelector(state => state.prescription.physicalExamination);
-  const handledata1 = (index, newStatus, newDesc) => {
+  const handledata1 = (index, newStatus, newDesc, isStausUpdating = true) => {
     setData1(data1 => {
       const updatedData1 = [...data1];
       const updatedItem = {...updatedData1[index]};
-      updatedItem.status = newStatus;
-      updatedItem.desc = newDesc;
+      if (isStausUpdating) {
+        updatedItem.status = updatedItem.status === newStatus ? '' : newStatus;
+        updatedItem.desc = updatedItem.status ? newDesc : '';
+      }
+      if (!isStausUpdating) {
+        updatedItem.desc = newDesc;
+      }
       updatedData1[index] = updatedItem;
       return updatedData1;
     });
   };
-  const handledata2 = (index, newStatus, newDesc) => {
+  const handledata2 = (index, newStatus, newDesc, isStausUpdating = true) => {
     setData2(data2 => {
       const updatedData1 = [...data2];
       const updatedItem = {...updatedData1[index]};
-      updatedItem.status = newStatus;
-      updatedItem.desc = newDesc;
+      if (isStausUpdating) {
+        updatedItem.status = updatedItem.status === newStatus ? '' : newStatus;
+        updatedItem.desc = updatedItem.status ? newDesc : '';
+      }
+      if (!isStausUpdating) {
+        updatedItem.desc = newDesc;
+      }
       updatedData1[index] = updatedItem;
       return updatedData1;
     });
   };
-  const handledata3 = (index, newStatus, newDesc) => {
+  const handledata3 = (index, newStatus, newDesc, isStausUpdating = true) => {
     setData3(data3 => {
       const updatedData1 = [...data3];
       const updatedItem = {...updatedData1[index]};
-      updatedItem.status = newStatus;
-      updatedItem.desc = newDesc;
+      if (isStausUpdating) {
+        updatedItem.status = updatedItem.status === newStatus ? '' : newStatus;
+        updatedItem.desc = updatedItem.status ? newDesc : '';
+      }
+      if (!isStausUpdating) {
+        updatedItem.desc = newDesc;
+      }
       updatedData1[index] = updatedItem;
       return updatedData1;
     });
@@ -453,8 +468,12 @@ const Physical = ({navigation}) => {
                     label={item?.label}
                     value={item?.desc}
                     option={item?.status}
-                    setOption={value => handledata1(index, value, item?.desc)}
-                    setvalue={value => handledata1(index, item?.status, value)}
+                    setOption={value =>
+                      handledata1(index, value, item?.desc, true)
+                    }
+                    setvalue={value =>
+                      handledata1(index, item?.status, value, false)
+                    }
                     txt={txtcolor}
                   />
                 ),
@@ -472,8 +491,12 @@ const Physical = ({navigation}) => {
                     label={item?.label}
                     value={item?.desc}
                     option={item?.status}
-                    setOption={value => handledata2(index, value, item?.desc)}
-                    setvalue={value => handledata2(index, item?.status, value)}
+                    setOption={value =>
+                      handledata2(index, value, item?.desc, true)
+                    }
+                    setvalue={value =>
+                      handledata2(index, item?.status, value, false)
+                    }
                   />
                 ),
             )}
@@ -500,9 +523,11 @@ const Physical = ({navigation}) => {
                       label={item?.label}
                       value={item?.desc}
                       option={item?.status}
-                      setOption={value => handledata3(index, value, item?.desc)}
+                      setOption={value =>
+                        handledata3(index, value, item?.desc, true)
+                      }
                       setvalue={value =>
-                        handledata3(index, item?.status, value)
+                        handledata3(index, item?.status, value, false)
                       }
                     />
                   </View>
@@ -524,8 +549,12 @@ const Physical = ({navigation}) => {
                   label={item?.label}
                   value={item?.desc}
                   option={item?.status}
-                  setOption={value => handledata3(index, value, item?.desc)}
-                  setvalue={value => handledata3(index, item?.status, value)}
+                  setOption={value =>
+                    handledata3(index, value, item?.desc, true)
+                  }
+                  setvalue={value =>
+                    handledata3(index, item?.status, value, false)
+                  }
                 />
               )),
           )}
