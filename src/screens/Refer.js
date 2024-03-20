@@ -383,6 +383,7 @@ const ReferToDoctor = () => {
                 inputContainer={{paddingHorizontal: 0}}
                 value={name}
                 setValue={val => setName(val)}
+                required={true}
               />
               {selected === 'Clinic' ||
               selected === 'Hospital' ||
@@ -405,6 +406,7 @@ const ReferToDoctor = () => {
                   inputContainer={{paddingHorizontal: 0}}
                   value={newPhone}
                   setValue={val => setNewPhone(val)}
+                  required={true}
                 />
               ) : null}
               {selected === 'Clinic' ||
@@ -421,7 +423,7 @@ const ReferToDoctor = () => {
               <DropdownComponent
                 searchPlaceholder={'Search Speciality.....'}
                 label={Language[language]['specialization']}
-                required={true}
+                // required={true}
                 style={{paddingHorizontal: 0}}
                 select={value => HandlePress(value)}
                 placeholder="Select Specialization"
@@ -431,6 +433,7 @@ const ReferToDoctor = () => {
                 data={CONSTANTS.speciality}
               />
               <InputText
+                required={selected === 'Doctor' ? true : false}
                 label={'Phone Number'}
                 placeholder="Phone number"
                 value={phone}
@@ -480,7 +483,7 @@ const ReferToDoctor = () => {
                 <HButton
                   btnstyles={{
                     backgroundColor:
-                      selected && name && speciality
+                      selected && name
                         ? CUSTOMCOLOR.primary
                         : CUSTOMCOLOR.disable,
                   }}
@@ -489,9 +492,7 @@ const ReferToDoctor = () => {
                   type="addtype"
                   size={moderateScale(24)}
                   loading={prevLoad}
-                  onPress={
-                    selected && name && speciality ? handlePreview : null
-                  }
+                  onPress={selected && name ? handlePreview : null}
                 />
               </View>
             </View>

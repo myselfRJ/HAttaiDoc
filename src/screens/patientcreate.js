@@ -37,7 +37,7 @@ import {useSelector} from 'react-redux';
 import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
-import {handleCamera, handleGallery} from '../utility/const';
+import {handleCamera, handleGallery, showToast} from '../utility/const';
 
 const PatientCreate = ({navigation, route}) => {
   const {phoneRoute} = route.params;
@@ -737,7 +737,15 @@ const PatientCreate = ({navigation, route}) => {
               onPress={() => {
                 if (patient_phone_number.length === 10 && formattedDate) {
                   if (patient_data) {
-                    UpdatePatientData();
+                    if (
+                      patient_data &&
+                      patient_data?.patient_phone_number ===
+                        patient_phone_number
+                    ) {
+                      UpdatePatientData();
+                    } else {
+                      showToast('error', 'Please enter same Phone number');
+                    }
                   } else {
                     fetchData();
                   }
