@@ -110,9 +110,10 @@ const PatientCreate = ({navigation, route}) => {
       setPatient_Phone_number(patient_data?.patient_phone_number);
       setReference_id(patient_data?.reference_id);
       const year = new Date().getFullYear();
-      setValue_Age(
-        year - parseInt(patient_data?.birth_date?.split('-')[0]).toString(),
-      );
+      // setValue_Age(
+      // );
+      setDate(new Date(patient_data?.birth_date));
+      setHide(patient_data?.birth_date ? true : false);
       setSelected(patient_data?.gender);
       setBlood_group(patient_data?.bloodgroup);
       setSpouseBloodGrp(patient_data?.spousegroup);
@@ -123,6 +124,8 @@ const PatientCreate = ({navigation, route}) => {
   }, []);
   console.log(value);
   const HandleCheck = () => {
+    // setValue_Age(
+    // );
     if (value?.length > 0 && value.length <= 3) {
       const current = parseInt(new Date().getFullYear()) - parseInt(value);
       setFormatDate(`${current}-${'01'}-${'01'}`);
