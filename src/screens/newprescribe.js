@@ -84,6 +84,8 @@ export default function NewPrescribe({navigation}) {
   const [modal, setModal] = useState(false);
   const [template, setTemplate] = useState('');
   const [othersMed, setOthersMed] = useState('');
+  const [del_id, setDel_id] = useState('');
+  const [chkOnce, setChkOnce] = useState('');
   const prevPres = useSelector(state => state.pres.prescribeItems);
   const redux =
     prevPres?.length > 0
@@ -125,15 +127,16 @@ export default function NewPrescribe({navigation}) {
               timing: timing,
               frequency: selectedDaysString,
               dose_number: dose_number,
-              duration: `${duration} ${
-                durationSelect === 'week'
-                  ? 'Week (once in a Week)'
-                  : durationSelect === 'month'
-                  ? duration === 1
-                    ? 'Month'
-                    : 'Months'
-                  : durationSelect
-              }`,
+              duration: `${duration} ${durationSelect}(${
+                chkOnce ? chkOnce : ''
+              })`,
+              // durationSelect === 'week'
+              //   ? 'Week (once in a Week)'
+              //   : durationSelect === 'month'
+              //   ? duration === 1
+              //     ? 'Month'
+              //     : 'Months'
+              //   : durationSelect
               total_quantity:
                 mode?.toLowerCase() === 'syrup'
                   ? 1
@@ -208,15 +211,7 @@ export default function NewPrescribe({navigation}) {
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
-          duration: `${duration} ${
-            durationSelect === 'week'
-              ? 'Week (once in a Week)'
-              : durationSelect === 'month'
-              ? duration === 1
-                ? 'Month'
-                : 'Months'
-              : durationSelect
-          }`,
+          duration: `${duration} ${durationSelect}(${chkOnce ? chkOnce : ''})`,
           total_quantity:
             mode?.toLowerCase() === 'syrup'
               ? 1
@@ -468,7 +463,7 @@ export default function NewPrescribe({navigation}) {
     }));
     const bodyData = {
       key: 'prescribe',
-      temp_name: template,
+      temp_name: template?.toLowerCase(),
       temp_data: JSON.stringify(previous_data),
       doc_phone: phone,
     };
@@ -513,6 +508,22 @@ export default function NewPrescribe({navigation}) {
       savingTemplate();
     }
   };
+  const DeleteTemplate = async id => {
+    const response = await fetchApi(URL.delTemplates(parseInt(id)), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsondata = await response.json();
+    if (jsondata?.status === 'success') {
+      showToast('success', `${jsondata?.message}`);
+    } else {
+      showToast('error', `${jsondata?.message}`);
+    }
+    setDel_Modal(false);
+    setDel_id('');
+  };
   const fetchData = async () => {
     const response = await fetchApi(URL.getTemplates('prescribe', phone), {
       method: 'GET',
@@ -525,7 +536,7 @@ export default function NewPrescribe({navigation}) {
   };
   useEffect(() => {
     fetchData();
-  }, [prevPres]);
+  }, [prevPres, del_id, modal]);
   const [selectedTemplate, setSelectedTemplate] = useState();
   const handleDispatch = data => {
     if (selectedTemplate === data) {
@@ -583,6 +594,7 @@ export default function NewPrescribe({navigation}) {
     // );
     setInfo(!info);
   };
+  const [del_modal, setDel_Modal] = useState(false);
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={styles.prescribeConatiner}>
@@ -603,20 +615,25 @@ export default function NewPrescribe({navigation}) {
                 <SelectorBtn
                   key={inbdex}
                   select={{
-                    backgroundColor: CUSTOMCOLOR.lightgreen,
+                    backgroundColor: CUSTOMCOLOR.fadeBlue,
                     borderColor: 'transparent',
                     //   selectedTemplate === item?.temp_data
                     //     ? CUSTOMCOLOR.primary
                     //     : CUSTOMCOLOR.recent,
                   }}
                   inputstyle={{
-                    color: CUSTOMCOLOR.success,
+                    color: CUSTOMCOLOR.selectionTab,
                     //   selectedTemplate === item?.temp_data
                     //     ? CUSTOMCOLOR.white
                     //     : CUSTOMCOLOR.primary,
                     fontWeight: '700',
                     paddingHorizontal: horizontalScale(12),
                     paddingVertical: verticalScale(8),
+                  }}
+                  del={'close'}
+                  onDel={() => {
+                    setDel_Modal(!del_modal);
+                    setDel_id(item?.id);
                   }}
                   input={capitalizeWord(item?.temp_name)}
                   onPress={() => handleDispatch(item?.temp_data)}
@@ -651,7 +668,7 @@ export default function NewPrescribe({navigation}) {
                   color:
                     mode === value
                       ? CUSTOMCOLOR.white
-                      : CUSTOMCOLOR.selectionText,
+                      : CUSTOMCOLOR.selectiontabTxt,
                   fontSize: moderateScale(14),
                   fontWeight: '400',
                 }}
@@ -822,7 +839,7 @@ export default function NewPrescribe({navigation}) {
                       color:
                         timing === value
                           ? CUSTOMCOLOR.white
-                          : CUSTOMCOLOR.disableslotText,
+                          : CUSTOMCOLOR.selectiontabTxt,
                       fontSize: moderateScale(14),
                       fontWeight: '400',
                     }}></SelectorBtn>
@@ -845,7 +862,7 @@ export default function NewPrescribe({navigation}) {
                     inputstyle={{
                       color: frequency.includes(frequencyIndex)
                         ? CUSTOMCOLOR.white
-                        : CUSTOMCOLOR.disableslotText,
+                        : CUSTOMCOLOR.selectiontabTxt,
                       fontSize: moderateScale(14),
                       fontWeight: '600',
                     }}
@@ -904,6 +921,14 @@ export default function NewPrescribe({navigation}) {
                     value="month"
                     selected={durationSelect === 'month'}
                     onPress={() => handleOptions('month')}
+                  />
+                  <Option
+                    label="once"
+                    value="once"
+                    selected={chkOnce === 'once'}
+                    onPress={() => {
+                      chkOnce === 'once' ? setChkOnce('') : setChkOnce('once');
+                    }}
                   />
                 </View>
               </View>
@@ -1109,6 +1134,47 @@ export default function NewPrescribe({navigation}) {
               label={'save'}
               onPress={HandleTemplates}
             />
+          </View>
+        </CustomModal>
+      )}
+      {del_modal && (
+        <CustomModal visible={del_modal} Close={setDel_Modal}>
+          <View
+            style={{
+              backgroundColor: CUSTOMCOLOR.white,
+              padding: moderateScale(40),
+              borderRadius: moderateScale(16),
+            }}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: CUSTOMCOLOR.black,
+                fontWeight: '700',
+                fontSize: CUSTOMFONTSIZE.h2,
+              }}>
+              Are You sure Want To Delete
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                // justifyContent: 'space-around',
+                alignSelf: 'center',
+                gap: moderateScale(16),
+                padding: moderateScale(16),
+                borderRadius: moderateScale(16),
+              }}>
+              <HButton label={'No'} onPress={() => setDel_Modal(!del_modal)} />
+              <HButton
+                textStyle={{color: CUSTOMCOLOR.primary}}
+                label={'Yes'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(2),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                }}
+                onPress={() => DeleteTemplate(del_id)}
+              />
+            </View>
           </View>
         </CustomModal>
       )}

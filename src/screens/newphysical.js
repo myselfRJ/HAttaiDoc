@@ -72,9 +72,12 @@ const Physical = ({navigation}) => {
       } else if (bmiInt >= 18 && bmiInt <= 25) {
         updatedItem.status = 'N';
         updatedItem.desc = `Normal Weight ${bmiInt?.toString()}`;
-      } else {
+      } else if (bmiInt > 25 && bmiInt <= 30) {
         updatedItem.status = 'A';
         updatedItem.desc = `Over Weight ${bmiInt?.toString()}`;
+      } else {
+        updatedItem.status = 'A';
+        updatedItem.desc = `Obesity ${bmiInt?.toString()}`;
       }
       editBuild[index] = updatedItem;
 
@@ -86,6 +89,7 @@ const Physical = ({navigation}) => {
   const [data1, setData1] = useState(
     pediatrician ? [] : handlebuild(JSON.parse(JSON.stringify([...phys1]))),
   );
+  // console.log('=========>data1', data1);
   const [data2, setData2] = useState(
     pediatrician ? [] : JSON.parse(JSON.stringify([...phys2])),
   );

@@ -103,6 +103,7 @@ export const URL = {
   savingTemplate: `${baseUrl}templates/savingTemp`,
   getTemplates: (key, phone) =>
     `${baseUrl}templates/get_temp?key=${key}&phone=${phone}`,
+  delTemplates: id => `${baseUrl}templates/del_temp?id=${id}`,
   getVitals: phone => `${baseUrl}consult/updatedVitals?phone=${phone}`,
   uploadVaccination: `${baseUrl}custompatient/uploadPatientVaccination`,
   GetVaccination: phone =>

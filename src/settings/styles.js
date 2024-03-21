@@ -30,6 +30,7 @@ let CUSTOMCOLOR = {
   selectionText: '#C2C2C2',
   fadeBlue: '#EAF5FF',
   darkgreen: '#399B29',
+  selectiontabTxt: '#676767',
 };
 const DARKCOLOR = {
   primary: 'red',

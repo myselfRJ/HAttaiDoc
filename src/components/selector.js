@@ -30,23 +30,40 @@ const SelectorBtn = props => {
           ) : null}
         </Text>
       )}
-      <Pressable
-        style={{...styles.select, ...props.select}}
-        onPress={props.onPress}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: 'row'}}>
+        <Pressable
+          style={{...styles.select, ...props.select}}
+          onPress={props.onPress}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon
+              name={props.Bname}
+              size={props.size ? props.size : moderateScale(24)}
+              color={CUSTOMCOLOR.white}
+            />
+            <Text style={{...styles.h3, ...props.inputstyle}}>
+              {props.input}
+            </Text>
+          </View>
           <Icon
-            name={props.Bname}
+            name={props.name}
             size={props.size ? props.size : moderateScale(24)}
-            color={CUSTOMCOLOR.white}
+            color={CUSTOMCOLOR.primary}
           />
-          <Text style={{...styles.h3, ...props.inputstyle}}>{props.input}</Text>
-        </View>
-        <Icon
-          name={props.name}
-          size={props.size ? props.size : moderateScale(24)}
-          color={CUSTOMCOLOR.primary}
-        />
-      </Pressable>
+        </Pressable>
+        {props.del && (
+          <Pressable
+            style={{...styles.select, ...props.select}}
+            onPress={props.onDel}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Icon
+                name={props.del}
+                size={props.size ? props.size : moderateScale(24)}
+                color={CUSTOMCOLOR.error}
+              />
+            </View>
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 };

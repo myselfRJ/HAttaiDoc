@@ -573,19 +573,18 @@ const PatientCreate = ({navigation, route}) => {
                 </View>
               </View>
             )}
-            {check ||
-              (patient_data && (
-                <InputText
-                  label={patient_data ? 'Father / Husband Name' : ''}
-                  placeholder={
-                    check === 'father'
-                      ? 'Enter Father Name'
-                      : 'Enter Husband Name'
-                  }
-                  value={spouse_name}
-                  setValue={setSpouse_nmae}
-                />
-              ))}
+            {(check || patient_data) && (
+              <InputText
+                label={patient_data ? 'Father / Husband Name' : ''}
+                placeholder={
+                  check === 'father'
+                    ? 'Enter Father Name'
+                    : 'Enter Husband Name'
+                }
+                value={spouse_name}
+                setValue={setSpouse_nmae}
+              />
+            )}
             <View
               style={{
                 alignSelf: 'flex-start',

@@ -36,41 +36,79 @@ const Examination_Fields = props => {
         <View>
           <Text style={styles.text}>{props.label}</Text>
         </View>
-        <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
-          <Option
-            // style={{width: horizontalScale(32)}}
-            label={
-              check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N'
-            }
-            selected={
-              props.option ===
-              (check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N')
-            }
-            onPress={() =>
-              props.setOption(
-                check === 'yes' ? 'No' : check === 'present' ? 'Absent' : 'N',
-              )
-            }
-          />
-          <Option
-            // style={{width: horizontalScale(32)}}
-            label={
-              check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A'
-            }
-            selected={
-              props.option ===
-              (check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A')
-            }
-            onPress={() =>
-              props.setOption(
-                check === 'yes' ? 'Yes' : check === 'present' ? 'Present' : 'A',
-              )
-            }
-          />
-        </View>
+        {props.label !== 'Build' && (
+          <View style={{flexDirection: 'row', gap: moderateScale(16)}}>
+            <Option
+              // style={{width: horizontalScale(32)}}
+              label={
+                check === 'yes'
+                  ? 'No'
+                  : check === 'present'
+                  ? props.label === 'Nutrition'
+                    ? 'Well nourished'
+                    : 'Absent'
+                  : 'N'
+              }
+              selected={
+                props.option ===
+                (check === 'yes'
+                  ? 'No'
+                  : check === 'present'
+                  ? props.label === 'Nutrition'
+                    ? 'Well nourished'
+                    : 'Absent'
+                  : 'N')
+              }
+              onPress={() =>
+                props.setOption(
+                  check === 'yes'
+                    ? 'No'
+                    : check === 'present'
+                    ? props.label === 'Nutrition'
+                      ? 'Well nourished'
+                      : 'Absent'
+                    : 'N',
+                )
+              }
+            />
+            <Option
+              // style={{width: horizontalScale(32)}}
+              label={
+                check === 'yes'
+                  ? 'Yes'
+                  : check === 'present'
+                  ? props.label === 'Nutrition'
+                    ? 'Mall nourished'
+                    : 'Present'
+                  : 'A'
+              }
+              selected={
+                props.option ===
+                (check === 'yes'
+                  ? 'Yes'
+                  : check === 'present'
+                  ? props.label === 'Nutrition'
+                    ? 'Mall nourished'
+                    : 'Present'
+                  : 'A')
+              }
+              onPress={() =>
+                props.setOption(
+                  check === 'yes'
+                    ? 'Yes'
+                    : check === 'present'
+                    ? props.label === 'Nutrition'
+                      ? 'Mall nourished'
+                      : 'Present'
+                    : 'A',
+                )
+              }
+            />
+          </View>
+        )}
       </View>
       {check === 'present' || !check
-        ? props.option !== '' && (
+        ? (props.option !== '' || props.label === 'Build') && (
             <TextInput
               placeholderTextColor={CUSTOMCOLOR.disable}
               style={{
@@ -113,6 +151,7 @@ const styles = StyleSheet.create({
   text: {
     color: CUSTOMCOLOR.black,
     fontSize: CUSTOMFONTSIZE.h3,
+    fontWeight: '500',
   },
   textinput: {
     backgroundColor: CUSTOMCOLOR.white,
