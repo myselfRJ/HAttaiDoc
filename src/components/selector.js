@@ -30,7 +30,7 @@ const SelectorBtn = props => {
           ) : null}
         </Text>
       )}
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: props.del ? 'row' : 'column'}}>
         <Pressable
           style={{...styles.select, ...props.select}}
           onPress={props.onPress}>

@@ -38,6 +38,7 @@ import {
   clearStorage,
 } from '../utility/AsyncStorage';
 import {
+  capitalizeWord,
   CONSTANT,
   formatdate,
   handleAddDates,
@@ -520,7 +521,7 @@ const LabReports = () => {
                             : CUSTOMCOLOR.primary,
                         fontWeight: '700',
                       }}
-                      input={item?.temp_name}
+                      input={capitalizeWord(item?.temp_name)}
                       onPress={() => handleDispatch(item?.temp_data)}
                     />
                   ))}

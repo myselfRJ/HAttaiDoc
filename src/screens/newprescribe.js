@@ -922,16 +922,16 @@ export default function NewPrescribe({navigation}) {
                     selected={durationSelect === 'month'}
                     onPress={() => handleOptions('month')}
                   />
-                  <Option
-                    label="once"
-                    value="once"
-                    selected={chkOnce === 'once'}
-                    onPress={() => {
-                      chkOnce === 'once' ? setChkOnce('') : setChkOnce('once');
-                    }}
-                  />
                 </View>
               </View>
+              <Option
+                label="once"
+                value="once"
+                selected={chkOnce === 'once'}
+                onPress={() => {
+                  chkOnce === 'once' ? setChkOnce('') : setChkOnce('once');
+                }}
+              />
 
               {/* <InputText
               keypad="numeric"
