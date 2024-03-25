@@ -38,6 +38,7 @@ import {checkNumber} from '../utility/checks';
 import DOBselect from '../components/dob';
 import GalleryModel from '../components/GalleryModal';
 import {handleCamera, handleGallery, showToast} from '../utility/const';
+import DropdownComponent from '../components/Dropdownbox';
 
 const PatientCreate = ({navigation, route}) => {
   const {phoneRoute} = route.params;
@@ -47,6 +48,7 @@ const PatientCreate = ({navigation, route}) => {
   const token = useSelector(state => state.authenticate.auth.access);
   const [selected, setSelected] = useState('male');
   const [check, setCheck] = useState('');
+  const [saluatation, setSalutation] = useState('');
   const [selectedAbha, setSelectedAbha] = useState(CONSTANTS.abhaOption[0]);
   const default_image = CONSTANTS.default_image;
 
@@ -58,6 +60,9 @@ const PatientCreate = ({navigation, route}) => {
   };
   const selectedBtn = value => {
     setSelectedAbha(value);
+  };
+  const HandleSalutation = val => {
+    setSalutation(val);
   };
 
   const [name, setName] = useState('');
@@ -102,11 +107,18 @@ const PatientCreate = ({navigation, route}) => {
   };
 
   const [value, setValue_Age] = useState('');
-  console.log(value);
   useEffect(() => {
     if (patient_data) {
+      setSalutation(patient_data?.patient_name?.split(' ')[0]);
       setSelectedImage(patient_data?.patient_pic_url);
-      setName(patient_data?.patient_name);
+      setName(
+        CONSTANTS.saluatation?.includes({
+          value: patient_data?.patient_name?.split(' ')[0],
+          label: patient_data?.patient_name?.split(' ')[0],
+        })
+          ? patient_data?.patient_name?.split(' ').slice(1).join(' ')
+          : patient_data?.patient_name,
+      );
       setPatient_Phone_number(patient_data?.patient_phone_number);
       setReference_id(patient_data?.reference_id);
       const year = new Date().getFullYear();
@@ -122,7 +134,6 @@ const PatientCreate = ({navigation, route}) => {
       setSpouse_nmae(patient_data?.spouse_name);
     }
   }, []);
-  console.log(value);
   const HandleCheck = () => {
     // setValue_Age(
     // );
@@ -159,7 +170,7 @@ const PatientCreate = ({navigation, route}) => {
   const DOB = `${dayOfBirth}-${dayOfMonth}-${dayOfYear}`;
   const current = parseInt(new Date().getFullYear()) - parseInt(age);
   const patientDetails = {
-    patient_name: name?.toLowerCase(),
+    patient_name: `${saluatation} ${name?.toLowerCase()}`,
     gender: gender,
     patient_phone_number: patient_phone_number,
     birth_date: formatDate,
@@ -323,23 +334,46 @@ const PatientCreate = ({navigation, route}) => {
               </TouchableOpacity>
             ))}
           </View> */}
-            <InputText
-              required={true}
-              label="Name"
-              placeholder="Full Name"
-              value={name}
-              setValue={setName}
-              doubleCheck={[true, false]}
-              check={e => {
-                var format =
-                  /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~11234567890]/;
-                if (format.test(e)) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <DropdownComponent
+                container={{width: '14.5%'}}
+                search={false}
+                label={'Salutation'}
+                // searchPlaceholder={''}
+                // style={{width:'20%'}}
+                select={value => HandleSalutation(value)}
+                placeholder="Select"
+                value={saluatation}
+                data={CONSTANTS.saluatation}
+              />
+              <InputText
+                inputContainer={{
+                  paddingHorizontal: 0,
+                  paddingVertical: 0,
+                  width: '85%',
+                }}
+                required={true}
+                label="Name"
+                placeholder="Full Name"
+                value={name}
+                setValue={setName}
+                doubleCheck={[true, false]}
+                check={e => {
+                  var format =
+                    /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~11234567890]/;
+                  if (format.test(e)) {
+                    return false;
+                  } else {
+                    return true;
+                  }
+                }}
+              />
+            </View>
             <InputText
               required={true}
               label="Phone Number"
