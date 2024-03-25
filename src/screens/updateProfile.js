@@ -468,6 +468,7 @@ const UpdateProfile = ({navigation}) => {
               placeholder="Select Speciality"
               value={selectedSpeciality}
               data={CONSTANTS.speciality}
+              search={true}
             />
             <InputText
               label={Language[language]['experience']}

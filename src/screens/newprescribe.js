@@ -49,6 +49,7 @@ import {capitalizeWord, showToast} from '../utility/const';
 import {SliderComponent} from '../components/slider';
 import MedicationChip from '../components/medicationChip';
 import {CheckBox} from '../components/CheckBox';
+import DropdownComponent from '../components/Dropdownbox';
 
 export default function NewPrescribe({navigation}) {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -58,7 +59,7 @@ export default function NewPrescribe({navigation}) {
   const option = 'real clinical drug++clinical drug';
   const modes = CONSTANTS.modes;
   const [medicine, setMedicine] = useState('');
-  const [mode, setMode] = useState('');
+  const [mode, setMode] = useState(CONSTANTS?.modes[3]?.value);
   const [setmedicine, selectedMedicine] = useState(null);
   const [selectedgeneric, setSelectedGeneric] = useState(null);
   const [mgs, setmg] = useState('');
@@ -332,13 +333,13 @@ export default function NewPrescribe({navigation}) {
     }
   };
   const snomedModeSearch =
-    mode === modes[0]
+    mode === modes[0].value
       ? 'inj'
-      : mode === modes[1]
+      : mode === modes[1].value
       ? 'cap'
-      : mode === modes[2]
+      : mode === modes[2].value
       ? 'syr'
-      : mode === modes[3]
+      : mode === modes[3].value
       ? 'tab'
       : '';
   const fetchMedicine = async () => {
@@ -607,6 +608,9 @@ export default function NewPrescribe({navigation}) {
     setmg(ml.includes(data?.dose_quantity) ? data?.dose_quantity : ml[4]);
     setOthersMgs(ml.includes(data?.dose_quantity) ? '' : data?.dose_quantity);
   };
+  const handleMode = val => {
+    setMode(val);
+  };
   const [del_modal, setDel_Modal] = useState(false);
   return (
     <View style={styles.main}>
@@ -655,9 +659,9 @@ export default function NewPrescribe({navigation}) {
             </View>
           </View>
         )}
-        <View style={{gap: verticalScale(6)}}>
-          <Text style={styles.ModeText}>{Language[language]['mode']}</Text>
-          <View style={styles.Modes}>
+        {/* <View style={{gap: verticalScale(6)}}>
+          <Text style={styles.ModeText}>{Language[language]['mode']}</Text> */}
+        {/* <View style={styles.Modes}>
             {modes?.map(value => (
               <SelectorBtn
                 key={value}
@@ -687,19 +691,10 @@ export default function NewPrescribe({navigation}) {
                 }}
               />
             ))}
-          </View>
-        </View>
-        <View style={{gap: verticalScale(12)}}>
-          {/* <View style={[styles.body, {alignItems: 'center'}]}> */}
-          <Text style={styles.ModeText}>{Language[language]['medicine']}</Text>
-          {/* <TouchableOpacity onPress={ShowInfo}>
-              <Icon
-                name={info ? 'menu-up' : 'menu-down'}
-                size={moderateScale(24)}
-                color={CUSTOMCOLOR.black}
-              />
-            </TouchableOpacity>
           </View> */}
+        {/* </View> */}
+        <View style={{gap: verticalScale(12)}}>
+          <Text style={styles.ModeText}>{Language[language]['medicine']}</Text>
 
           {sug?.length > 0 && (
             <ScrollView
@@ -740,30 +735,53 @@ export default function NewPrescribe({navigation}) {
               ))}
             </ScrollView>
           )}
-          <InputText
-            //   lbltext={{fontSize: moderateScale(14)}}
-            inputContainer={{paddingHorizontal: 0, paddingVertical: 0}}
-            //   label={Language[language]['medicine']}
-            placeholder="Eg : paracetamol  oral tablet"
-            multiline={true}
-            value={medicine}
-            setValue={val => {
-              setMedicine(val);
-              setShow(false);
-            }}
-            search={true}
-            IconName={
-              (show && filtered.length > 0) ||
-              medicine === setmedicine ||
-              medicine.length === 0
-                ? 'magnify'
-                : medicine?.length > 0 && 'close'
-            }
-            onPress={() => {
-              // setShow(!show);
-              setMedicine('');
-            }}
-          />
+
+          <View
+            style={{
+              gap: horizontalScale(4),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <DropdownComponent
+              container={{width: '15%'}}
+              search={false}
+              searchPlaceholder={'Mode'}
+              // style={{width:'20%'}}
+              select={value => handleMode(value)}
+              placeholder="Mode"
+              value={mode}
+              data={CONSTANTS.modes}
+            />
+            <InputText
+              //   lbltext={{fontSize: moderateScale(14)}}
+              inputContainer={{
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+                width: '84%',
+              }}
+              //   label={Language[language]['medicine']}
+              placeholder="Eg : paracetamol  oral tablet"
+              multiline={true}
+              value={medicine}
+              setValue={val => {
+                setMedicine(val);
+                setShow(false);
+              }}
+              search={true}
+              IconName={
+                (show && filtered.length > 0) ||
+                medicine === setmedicine ||
+                medicine.length === 0
+                  ? 'magnify'
+                  : medicine?.length > 0 && 'close'
+              }
+              onPress={() => {
+                // setShow(!show);
+                setMedicine('');
+              }}
+            />
+          </View>
           {medicine?.length > 1 &&
             (medicine === setmedicine || show ? null : (
               <View style={styles.dropdownContainer}>

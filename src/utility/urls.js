@@ -6,8 +6,8 @@ const baseUrl = 'http://192.168.101.228:8000/api/v1/';
 const snomedUrl = 'https://attai.healthattai.com/';
 // export const fileurl = `http://192.168.1.22:8000`;
 // export const fileurl = ``;
-export const fileurl = `https://attai.healthattai.com`;
-// export const fileurl = 'http://192.168.101.228:8000/';
+// export const fileurl = `https://attai.healthattai.com`;
+export const fileurl = 'http://192.168.101.228:8000/';
 
 export const URL = {
   fetchAccessToken: `${baseUrl}access_token`,

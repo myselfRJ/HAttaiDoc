@@ -431,6 +431,7 @@ const ReferToDoctor = () => {
                   speciality?.length > 0 ? speciality : 'Select Specialization'
                 }
                 data={CONSTANTS.speciality}
+                search={true}
               />
               <InputText
                 required={selected === 'Doctor' ? true : false}

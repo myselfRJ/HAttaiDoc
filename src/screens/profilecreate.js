@@ -527,6 +527,7 @@ const ProfileCreate = ({navigation}) => {
           placeholder="Select Speciality"
           value={selectedSpeciality}
           data={CONSTANTS.speciality}
+          search={true}
         />
         <InputText
           inputContainer={{paddingHorizontal: moderateScale(0), zIndex: -1}}
