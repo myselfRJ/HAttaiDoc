@@ -3,7 +3,7 @@ export const CONSTANTS = {
   // modes: ['Injection', 'Capsule', 'Syrup', 'Tablet',''],
   medicine_recomendation: ['Avil', 'Paracetmol', 'Dolo650', 'Citrizen'],
   dose: ['250mg', '300mg', '500mg', '1000mg'],
-  dose_ml: ['5ml', '10ml', '15ml', '20ml'],
+  dose_ml: ['5ml', '10ml', '15ml', '20ml', 'Others'],
   timing: ['After Food', 'Before Food'],
   frequency: ['Morning', 'Noon', 'Evening', 'Night'],
   menstruration_status: ['Regular', 'Irregular'],

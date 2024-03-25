@@ -23,6 +23,7 @@ const Stack = createNativeStackNavigator();
 import Toast from 'react-native-toast-message';
 import {showToast} from './src/utility/const';
 import {refreshAppointment} from './src/redux/features/refreshApis/refreshApi';
+import {toastConfig} from './src/utility/toastConfig';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -166,7 +167,7 @@ function App() {
             />
           </Stack.Navigator>
           {/* <CombinedRoute /> */}
-          <Toast position="bottom" bottomOffset={20} />
+          <Toast position="bottom" bottomOffset={20} config={toastConfig} />
         </NavigationContainer>
       </GestureHandlerRootView>
     </Provider>

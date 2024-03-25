@@ -48,6 +48,7 @@ import CustomModal from '../components/CustomModal';
 import {capitalizeWord, showToast} from '../utility/const';
 import {SliderComponent} from '../components/slider';
 import MedicationChip from '../components/medicationChip';
+import {CheckBox} from '../components/CheckBox';
 
 export default function NewPrescribe({navigation}) {
   const appointmentID = useSelector(state => state?.address?.appointment_id);
@@ -61,6 +62,7 @@ export default function NewPrescribe({navigation}) {
   const [setmedicine, selectedMedicine] = useState(null);
   const [selectedgeneric, setSelectedGeneric] = useState(null);
   const [mgs, setmg] = useState('');
+  const [otherMgs, setOthersMgs] = useState('');
   const [setmgs, setSelectedMgs] = useState(false);
   const [dose_quantity, setDose_quantity] = useState('');
   const [timing, setTiming] = useState('');
@@ -100,7 +102,10 @@ export default function NewPrescribe({navigation}) {
         const newmed = `${medicine} ${mgs}`;
         setMedicine(newmed);
       }
-      if (parseInt(indexToUpdate) >= 0 && indexToUpdate < prevPres.length) {
+      if (
+        parseInt(indexToUpdate) >= 0 &&
+        parseInt(indexToUpdate) < prevPres.length
+      ) {
         updateIndexvaluePrescribe();
       } else {
         dispatch(
@@ -114,22 +119,22 @@ export default function NewPrescribe({navigation}) {
                       generic.includes('ml') ||
                       generic.includes('g'))
                       ? ''
-                      : `${generic.toUpperCase()} ${mgs}`
+                      : `${generic.toUpperCase()}`
                   }`
                 : medicine &&
                   (medicine.includes('mg') ||
                     medicine.includes('ml') ||
                     medicine.includes('g'))
                 ? medicine.toUpperCase()
-                : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
+                : `${medicine ? medicine.toUpperCase() : ''}`,
               mode: mode,
-              dose_quantity: '',
+              dose_quantity: otherMgs ? otherMgs : mgs,
               timing: timing,
               frequency: selectedDaysString,
               dose_number: dose_number,
-              duration: `${duration} ${durationSelect}(${
-                chkOnce ? chkOnce : ''
-              })`,
+              duration: `${
+                chkOnce ? `${chkOnce} in` : ''
+              } ${duration} ${durationSelect}`,
               // durationSelect === 'week'
               //   ? 'Week (once in a Week)'
               //   : durationSelect === 'month'
@@ -150,7 +155,7 @@ export default function NewPrescribe({navigation}) {
         );
       }
       if (prevPres?.length > 0 || sug?.length > 0) {
-        const medicineName = `${medicine} ${mgs}`;
+        const medicineName = `${medicine}`;
         UpdateAsyncData(`prescribe${phone}`, {
           medicine: generic
             ? `${medicine}(${generic})`
@@ -160,7 +165,7 @@ export default function NewPrescribe({navigation}) {
           mode: mode,
         });
       } else {
-        const medicineName = `${medicine} ${mgs}`;
+        const medicineName = `${medicine}`;
         StoreAsyncData(`prescribe${phone}`, [
           ...prevPres,
           {
@@ -184,6 +189,7 @@ export default function NewPrescribe({navigation}) {
       setDuration(1);
       setmg('');
       setOthers('');
+      setChkOnce('');
     }
   };
   const updateIndexvaluePrescribe = () => {
@@ -198,20 +204,22 @@ export default function NewPrescribe({navigation}) {
                   generic.includes('ml') ||
                   generic.includes('g'))
                   ? ''
-                  : `${generic.toUpperCase()} ${mgs}`
+                  : `${generic.toUpperCase()}`
               }`
             : medicine &&
               (medicine.includes('mg') ||
                 medicine.includes('ml') ||
                 medicine.includes('g'))
             ? medicine.toUpperCase()
-            : `${medicine ? medicine.toUpperCase() : ''} ${mgs}`,
+            : `${medicine ? medicine.toUpperCase() : ''}`,
           mode: mode,
-          dose_quantity: '',
+          dose_quantity: otherMgs ? otherMgs : mgs,
           timing: timing,
           frequency: selectedDaysString,
           dose_number: dose_number,
-          duration: `${duration} ${durationSelect}(${chkOnce ? chkOnce : ''})`,
+          duration: `${
+            chkOnce ? `${chkOnce} in` : ''
+          } ${duration} ${durationSelect}`,
           total_quantity:
             mode?.toLowerCase() === 'syrup'
               ? 1
@@ -248,12 +256,13 @@ export default function NewPrescribe({navigation}) {
 
   const setMG = value => {
     if (mgs === value) {
-      setDose_quantity('');
+      // setDose_quantity('');
       setmg('');
     } else {
-      setDose_quantity(value);
+      // setDose_quantity(value);
       setmg(value);
     }
+    setOthersMgs('');
   };
 
   const setTime = value => {
@@ -276,7 +285,9 @@ export default function NewPrescribe({navigation}) {
     const selectedDays = [];
     for (let i = 0; i < CONSTANTS.frequency.length; i++) {
       if (frequency.includes(i)) {
-        selectedDays.push('1');
+        selectedDays.push(
+          mode === modes[2] ? (otherMgs ? otherMgs : mgs) : '1',
+        );
       } else {
         selectedDays.push('0');
       }
@@ -285,15 +296,23 @@ export default function NewPrescribe({navigation}) {
     return selectedDays.join('-');
   };
   const selectedDaysString = getSelectedDaysString();
-
+  console.log(selectedDaysString);
   const totoal_quantity = () => {
+    const handleDurationGet = () => {
+      let duration = 0;
+      if (durationSelect?.toLowerCase() === 'week') {
+        duration = chkOnce ? 1 : 7;
+      } else if (durationSelect?.toLowerCase() === 'month') {
+        duration = chkOnce ? 1 : 30;
+      } else if (durationSelect?.toLowerCase() === 'days') {
+        duration = chkOnce ? 1 : 1;
+      }
+      return duration;
+    };
     const quantity =
-      parseInt(dose_number) *
-      parseInt(
-        durationSelect === 'month' ? Math.floor(duration * 30) : duration,
-      ) *
-      parseInt(frequency.length);
-    if (quantity !== 'NaN') {
+      // parseInt(dose_number) *
+      parseInt(duration * handleDurationGet()) * parseInt(frequency.length);
+    if (!isNaN(quantity)) {
       setTotalQuantity(quantity);
     } else {
       setTotalQuantity('00');
@@ -302,7 +321,7 @@ export default function NewPrescribe({navigation}) {
 
   useEffect(() => {
     totoal_quantity();
-  }, [duration, dose_number, frequency]);
+  }, [duration, dose_number, frequency, durationSelect, chkOnce]);
 
   const handleAlert = () => {
     if (prevPres.length > 0) {
@@ -492,7 +511,6 @@ export default function NewPrescribe({navigation}) {
         }
       }
     } catch (error) {
-      // Alert.alert('error', JSON.stringify(error));
       showToast('error', JSON.stringify(error));
       setLoading(false);
       setModal(!modal);
@@ -501,7 +519,6 @@ export default function NewPrescribe({navigation}) {
   const [templatesData, setTemplatesData] = useState([]);
   const HandleTemplates = () => {
     if (!template) {
-      // Alert.alert('', 'Please Enter Template Name');
       showToast('error', 'Please Enter Template Name');
       setModal(true);
     } else {
@@ -541,7 +558,6 @@ export default function NewPrescribe({navigation}) {
   const handleDispatch = data => {
     if (selectedTemplate === data) {
       setSelectedTemplate('');
-      // const parsedData = JSON.parse(data);
       dispatch(addPrescribe([]));
     } else {
       setSelectedTemplate(data);
@@ -551,12 +567,12 @@ export default function NewPrescribe({navigation}) {
         appointment_id: appointmentID,
       }));
       dispatch(addPrescribe(lstdata));
-      // console.log('dispatch data========', lstdata);
     }
   };
   const DispatchEdit = (data, ind) => {
+    console.log(data);
     setMode(data?.mode);
-    setIndextoUpdate(ind);
+    setIndextoUpdate(ind?.toString());
     setselectedGeneric(true);
     setShow(!false);
     selectedMedicine('');
@@ -572,27 +588,24 @@ export default function NewPrescribe({navigation}) {
         newVal.push(i);
       }
     }
-    // console.log('=========newval', newVal);
     setFrequency(newVal);
-    setDuration(parseInt(data?.duration?.split(' ')[0]));
-    setDurationSelect(
-      data?.duration?.split(' ')[1] === 'Week'
-        ? 'week'
-        : data?.duration?.split(' ')[1] === 'Months' ||
-          data?.duration?.split(' ')[1] === 'Month'
-        ? 'month'
-        : data?.duration?.split(' ')[1],
+    setDuration(
+      parseInt(
+        data?.duration?.includes('once')
+          ? data?.duration?.split(' ')[2]
+          : data?.duration?.split(' ')[1],
+      ),
     );
+    setDurationSelect(
+      data?.duration?.includes('once')
+        ? data?.duration?.split(' ')[3]
+        : data?.duration?.split(' ')[2],
+    );
+    setChkOnce(data?.duration?.toLowerCase()?.includes('once') ? 'once' : '');
     setTotalQuantity(parseInt(data?.total_quantity));
     setOthers(data?.others);
-  };
-  const [info, setInfo] = useState(false);
-  const ShowInfo = () => {
-    // showToast(
-    //   'error',
-    //   'Enter medicine format "name <>space<> dosage <>space<> frequency,',
-    // );
-    setInfo(!info);
+    setmg(ml.includes(data?.dose_quantity) ? data?.dose_quantity : ml[4]);
+    setOthersMgs(ml.includes(data?.dose_quantity) ? '' : data?.dose_quantity);
   };
   const [del_modal, setDel_Modal] = useState(false);
   return (
@@ -690,15 +703,10 @@ export default function NewPrescribe({navigation}) {
 
           {sug?.length > 0 && (
             <ScrollView
-              //   horizontal={true}
               contentContainerStyle={{
                 ...styles.Modes,
                 flexWrap: 'wrap',
-
-                // borderWidth: 1,
-              }}
-              // style={{height: moderateScale(150)}}
-            >
+              }}>
               {sug?.map(value => (
                 <Pressable
                   key={value?.medicine}
@@ -846,6 +854,47 @@ export default function NewPrescribe({navigation}) {
                 ))}
               </View>
             </View>
+            {(mode === modes[2] ||
+              medicine?.toLowerCase()?.includes('syrup')) && (
+              <View style={{gap: verticalScale(4)}}>
+                <Text style={styles.ModeText}>
+                  {Language[language]['dose']}
+                </Text>
+                <View style={styles.Modes}>
+                  {ml?.map((value, mgIndex) => (
+                    <SelectorBtn
+                      input={value}
+                      key={mgIndex}
+                      onPress={() => setMG(value)}
+                      select={{
+                        backgroundColor:
+                          mgs === value
+                            ? CUSTOMCOLOR.primary
+                            : CUSTOMCOLOR.disableslot,
+                        borderWidth: 0,
+                      }}
+                      inputstyle={{
+                        color:
+                          mgs === value
+                            ? CUSTOMCOLOR.white
+                            : CUSTOMCOLOR.selectiontabTxt,
+                        fontSize: moderateScale(14),
+                        fontWeight: '400',
+                      }}
+                    />
+                  ))}
+                  {/* {mode} */}
+                </View>
+                {mgs === ml[4] && (
+                  <InputText
+                    value={otherMgs}
+                    setValue={setOthersMgs}
+                    placeholder={'Enter Dose'}
+                  />
+                )}
+              </View>
+            )}
+
             <View style={{gap: verticalScale(4)}}>
               <Text style={styles.ModeText}>
                 {Language[language]['frequency']}
@@ -924,7 +973,7 @@ export default function NewPrescribe({navigation}) {
                   />
                 </View>
               </View>
-              <Option
+              <CheckBox
                 label="once"
                 value="once"
                 selected={chkOnce === 'once'}

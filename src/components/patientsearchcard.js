@@ -30,6 +30,8 @@ import {
   horizontalScale,
 } from '../utility/scaleDimension';
 import {HButton} from '.';
+import MobileVerify from '../screens/mobVerify';
+import {isTablet} from '../utility/const';
 
 const PatientSearchCard = props => {
   const {patient_data} = props;
@@ -71,18 +73,39 @@ const PatientSearchCard = props => {
   return (
     <View style={styles.main}>
       <TouchableOpacity
-        style={styles.patientinfo}
+        style={{...styles.patientinfo, position: 'relative'}}
         onPress={() => {
           if (doctor) {
             navigation.navigate('patientcreate', {patient_data});
           }
         }}>
-        <Image
-          style={styles.img}
-          source={{
-            uri: `data:image/jpeg;base64,${patient_data?.patient_pic_url}`,
-          }}
-        />
+        {doctor && (
+          <Icon
+            name="pencil"
+            style={{
+              position: 'absolute',
+              top: moderateScale(40),
+              left: moderateScale(48),
+              bottom: 0,
+              zIndex: 1,
+            }}
+            color={CUSTOMCOLOR.graph}
+            size={moderateScale(20)}
+          />
+        )}
+        <View
+          style={{
+            borderWidth: moderateScale(0.5),
+            borderRadius: 100,
+            borderColor: CUSTOMCOLOR.borderColor,
+          }}>
+          <Image
+            style={styles.img}
+            source={{
+              uri: `data:image/jpeg;base64,${patient_data?.patient_pic_url}`,
+            }}
+          />
+        </View>
         <View>
           <Text style={styles.name}>{patient_data?.patient_name}</Text>
           <Text style={styles.age}>
@@ -227,11 +250,11 @@ const styles = StyleSheet.create({
   img: {
     width: 64,
     height: 64,
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(32),
   },
   patientinfo: {
     flexDirection: 'row',
-    gap: moderateScale(8),
+    gap: moderateScale(24),
   },
   icon: {
     position: 'absolute',
@@ -274,7 +297,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   tab: {
-    flexDirection: 'row',
+    flexDirection: isTablet ? 'row' : 'column',
     alignItems: 'center',
     gap: moderateScale(16),
     paddingHorizontal: horizontalScale(8),

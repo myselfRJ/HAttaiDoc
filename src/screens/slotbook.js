@@ -50,6 +50,7 @@ import {
   addclinic_phone,
 } from '../redux/features/profiles/clinicId';
 import {
+  RemoveKeyFromAsync,
   RetriveAsyncData,
   StoreAsyncData,
   UpdateAsyncData,
@@ -381,6 +382,15 @@ const SlotBook = ({navigation, route}) => {
           });
           setBottom(true);
           setLoading(false);
+          if (sugs?.length <= 0) {
+            StoreAsyncData(`complaint${phone}`, [
+              {complaint: capitalizeWord(complaint)},
+            ]);
+          } else {
+            UpdateAsyncData(`complaint${phone}`, {
+              complaint: capitalizeWord(complaint),
+            });
+          }
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 1000);
@@ -452,6 +462,15 @@ const SlotBook = ({navigation, route}) => {
           });
           setBottom(true);
           setLoading(false);
+          if (sugs?.length <= 0) {
+            StoreAsyncData(`complaint${phone}`, [
+              {complaint: capitalizeWord(complaint)},
+            ]);
+          } else {
+            UpdateAsyncData(`complaint${phone}`, {
+              complaint: capitalizeWord(complaint),
+            });
+          }
           setTimeout(() => {
             navigation.navigate('dashboard');
           }, 2000);
@@ -526,12 +545,10 @@ const SlotBook = ({navigation, route}) => {
 
   const handleSave = () => {
     if (id === undefined && !rep && !fee) {
-      setrep(true);
-      selectedTypeAppointment
+      selectedTypeAppointment && selectedSlot?.slot
         ? Appointment_Booking()
-        : showToast('error', 'Please Select Type Of Appointment');
+        : showToast('error', 'Please Select Type Of Appointment and Slot');
     } else if (id === undefined && !rep && fee) {
-      setrep(true);
       !selectedTypeAppointment
         ? showToast('error', 'Please Select Type Of Appointment')
         : !paymentMode
@@ -539,20 +556,11 @@ const SlotBook = ({navigation, route}) => {
         : Appointment_Booking();
     } else {
       if (!rep) {
-        setrep(true);
         updateAppointment();
       }
     }
-    if (sugs?.length <= 0) {
-      StoreAsyncData(`complaint${phone}`, [
-        {complaint: capitalizeWord(complaint)},
-      ]);
-    } else {
-      UpdateAsyncData(`complaint${phone}`, {
-        complaint: capitalizeWord(complaint),
-      });
-    }
   };
+  console.log(rep);
   return (
     <View style={styles.main}>
       <View style={{gap: verticalScale(16)}}>
