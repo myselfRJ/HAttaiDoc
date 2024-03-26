@@ -16,7 +16,6 @@ import Option from './option';
 import {useEffect, useState} from 'react';
 
 const Examination_Fields = props => {
-  const [col, setCol] = useState('');
   const handleRemoveString = str => {
     const inputString = str;
     const extractedNumbers =
@@ -31,7 +30,12 @@ const Examination_Fields = props => {
   const buildWeigth = handleRemoveString(props.value);
   const check = props.check !== undefined ? props.check : false;
   return (
-    <View style={styles.main}>
+    <View
+      style={{
+        ...styles.main,
+        flexDirection: props.label === 'Build' ? 'row' : 'column',
+        justifyContent: props.label !== 'Build' ? 'center' : 'flex-start',
+      }}>
       <View style={styles.container}>
         <View>
           <Text style={styles.text}>{props.label}</Text>
@@ -78,7 +82,7 @@ const Examination_Fields = props => {
                   ? 'Yes'
                   : check === 'present'
                   ? props.label === 'Nutrition'
-                    ? 'Mall nourished'
+                    ? 'Malnourished'
                     : 'Present'
                   : 'A'
               }
@@ -88,7 +92,7 @@ const Examination_Fields = props => {
                   ? 'Yes'
                   : check === 'present'
                   ? props.label === 'Nutrition'
-                    ? 'Mall nourished'
+                    ? 'Malnourished'
                     : 'Present'
                   : 'A')
               }
@@ -98,7 +102,7 @@ const Examination_Fields = props => {
                     ? 'Yes'
                     : check === 'present'
                     ? props.label === 'Nutrition'
-                      ? 'Mall nourished'
+                      ? 'Malnourished'
                       : 'Present'
                     : 'A',
                 )
@@ -113,6 +117,7 @@ const Examination_Fields = props => {
               placeholderTextColor={CUSTOMCOLOR.disable}
               style={{
                 ...styles.textinput,
+                borderWidth: props.label === 'Build' ? 0 : 1,
                 color:
                   props.label === 'Build' && parseInt(buildWeigth) < 18
                     ? '#f93'
@@ -139,6 +144,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     gap: verticalScale(8),
     width: '48%',
+    // borderWidth: 1,
   },
   container: {
     // paddingHorizontal: horizontalScale(4),
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: moderateScale(24),
+    // borderWidth: 1,
     // width: '40%',
   },
   text: {

@@ -454,12 +454,12 @@ export const CONSTANT = {
       desc: '',
     },
     {
-      label: 'Build',
+      label: 'Nutrition',
       status: '',
       desc: '',
     },
     {
-      label: 'Nutrition',
+      label: 'Build',
       status: '',
       desc: '',
     },

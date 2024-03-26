@@ -64,6 +64,8 @@ const LabReports = () => {
   const [open, setOpen] = useState(false);
   const [customDays, setCustomDays] = useState('');
   const [selectedDays, setSelectedDays] = useState('3');
+  const [del_modal, setDel_Modal] = useState(false);
+  const [del_id, setDel_id] = useState('');
   const [returnDate, setReturnDate] = useState(
     formatdate(handleAddDates(date, selectedDays)),
   );
@@ -269,7 +271,7 @@ const LabReports = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [prev]);
+  }, [prev, del_id, modal]);
   const [selectedTemplate, setSelectedTemplate] = useState();
   const handleDispatch = data => {
     if (selectedTemplate === data) {
@@ -284,6 +286,22 @@ const LabReports = () => {
       }));
       dispatch(addLabReport(lstdata));
     }
+  };
+  const DeleteTemplate = async id => {
+    const response = await fetchApi(URL.delTemplates(parseInt(id)), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsondata = await response.json();
+    if (jsondata?.status === 'success') {
+      showToast('success', `${jsondata?.message}`);
+    } else {
+      showToast('error', `${jsondata?.message}`);
+    }
+    setDel_Modal(false);
+    setDel_id('');
   };
   return (
     <View style={styles.main}>
@@ -509,21 +527,47 @@ const LabReports = () => {
                     <SelectorBtn
                       key={inbdex}
                       select={{
-                        backgroundColor:
-                          selectedTemplate === item?.temp_data
-                            ? CUSTOMCOLOR.primary
-                            : CUSTOMCOLOR.recent,
+                        backgroundColor: CUSTOMCOLOR.fadeBlue,
+                        borderColor: 'transparent',
+                        //   selectedTemplate === item?.temp_data
+                        //     ? CUSTOMCOLOR.primary
+                        //     : CUSTOMCOLOR.recent,
                       }}
                       inputstyle={{
-                        color:
-                          selectedTemplate === item?.temp_data
-                            ? CUSTOMCOLOR.white
-                            : CUSTOMCOLOR.primary,
+                        color: CUSTOMCOLOR.selectionTab,
+                        //   selectedTemplate === item?.temp_data
+                        //     ? CUSTOMCOLOR.white
+                        //     : CUSTOMCOLOR.primary,
                         fontWeight: '700',
+                        paddingHorizontal: horizontalScale(12),
+                        paddingVertical: verticalScale(8),
+                      }}
+                      del={'close'}
+                      onDel={() => {
+                        setDel_Modal(!del_modal);
+                        setDel_id(item?.id);
                       }}
                       input={capitalizeWord(item?.temp_name)}
                       onPress={() => handleDispatch(item?.temp_data)}
                     />
+                    // <SelectorBtn
+                    //   key={inbdex}
+                    //   select={{
+                    //     backgroundColor:
+                    //       selectedTemplate === item?.temp_data
+                    //         ? CUSTOMCOLOR.primary
+                    //         : CUSTOMCOLOR.recent,
+                    //   }}
+                    //   inputstyle={{
+                    //     color:
+                    //       selectedTemplate === item?.temp_data
+                    //         ? CUSTOMCOLOR.white
+                    //         : CUSTOMCOLOR.primary,
+                    //     fontWeight: '700',
+                    //   }}
+                    //   input={capitalizeWord(item?.temp_name)}
+                    //   onPress={() => handleDispatch(item?.temp_data)}
+                    // />
                   ))}
                 </View>
               </View>
@@ -575,6 +619,47 @@ const LabReports = () => {
               label={'save'}
               onPress={HandleTemplates}
             />
+          </View>
+        </CustomModal>
+      )}
+      {del_modal && (
+        <CustomModal visible={del_modal} Close={setDel_Modal}>
+          <View
+            style={{
+              backgroundColor: CUSTOMCOLOR.white,
+              padding: moderateScale(40),
+              borderRadius: moderateScale(16),
+            }}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                color: CUSTOMCOLOR.black,
+                fontWeight: '700',
+                fontSize: CUSTOMFONTSIZE.h2,
+              }}>
+              Are You sure Want To Delete
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                // justifyContent: 'space-around',
+                alignSelf: 'center',
+                gap: moderateScale(16),
+                padding: moderateScale(16),
+                borderRadius: moderateScale(16),
+              }}>
+              <HButton label={'No'} onPress={() => setDel_Modal(!del_modal)} />
+              <HButton
+                textStyle={{color: CUSTOMCOLOR.primary}}
+                label={'Yes'}
+                btnstyles={{
+                  backgroundColor: CUSTOMCOLOR.white,
+                  borderWidth: moderateScale(2),
+                  borderColor: CUSTOMCOLOR.borderColor,
+                }}
+                onPress={() => DeleteTemplate(del_id)}
+              />
+            </View>
           </View>
         </CustomModal>
       )}

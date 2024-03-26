@@ -466,6 +466,23 @@ const MedicalHistory = ({navigation, route}) => {
               ]),
             );
           }
+        } else {
+          dispatch(
+            addmenstrualHistory([
+              ...menstrualHistory,
+              {
+                mens: {
+                  ...{
+                    pregnant: {
+                      lmp: vitalsData?.LDD,
+                      edd: vitalsData?.EDD,
+                    },
+                  },
+                },
+                appointment_id: appointmentID,
+              },
+            ]),
+          );
         }
         if (jsonData?.data[0]?.obsteric_history) {
           const mens = JSON.parse(jsonData.data[0].obsteric_history);
@@ -717,16 +734,15 @@ const MedicalHistory = ({navigation, route}) => {
                       {JSON.stringify(mesntrual) != '' && (
                         <View style={styles.symptomicon}>
                           <Text style={styles.pulse}>
-                            {mesntrual?.age &&
-                              mesntrual?.age !== undefined && (
-                                <Text>
-                                  Menarche:{' '}
-                                  <Text style={{fontWeight: '600'}}>
-                                    {mesntrual?.age}
-                                  </Text>{' '}
-                                  Yrs,
-                                </Text>
-                              )}{' '}
+                            {mesntrual?.age && mesntrual?.age !== undefined && (
+                              <Text>
+                                Menarche:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.age}
+                                </Text>{' '}
+                                Yrs,
+                              </Text>
+                            )}{' '}
                             {mesntrual?.status && (
                               <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.status}
@@ -1352,16 +1368,15 @@ const MedicalHistory = ({navigation, route}) => {
                       {JSON.stringify(mesntrual) != '' && (
                         <View style={styles.symptomicon}>
                           <Text style={styles.pulse}>
-                            {mesntrual?.age &&
-                              mesntrual?.age !== undefined && (
-                                <Text>
-                                  Menarche:{' '}
-                                  <Text style={{fontWeight: '600'}}>
-                                    {mesntrual?.age}
-                                  </Text>{' '}
-                                  Yrs,
-                                </Text>
-                              )}{' '}
+                            {mesntrual?.age && mesntrual?.age !== undefined && (
+                              <Text>
+                                Menarche:{' '}
+                                <Text style={{fontWeight: '600'}}>
+                                  {mesntrual?.age}
+                                </Text>{' '}
+                                Yrs,
+                              </Text>
+                            )}{' '}
                             {mesntrual?.status && (
                               <Text style={{fontWeight: '600'}}>
                                 {mesntrual?.status}
