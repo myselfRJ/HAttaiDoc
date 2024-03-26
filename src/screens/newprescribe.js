@@ -287,7 +287,7 @@ export default function NewPrescribe({navigation}) {
     for (let i = 0; i < CONSTANTS.frequency.length; i++) {
       if (frequency.includes(i)) {
         selectedDays.push(
-          mode === modes[2] ? (otherMgs ? otherMgs : mgs) : '1',
+          mode === modes[2]?.value ? (otherMgs ? otherMgs : mgs) : '1',
         );
       } else {
         selectedDays.push('0');
@@ -297,7 +297,6 @@ export default function NewPrescribe({navigation}) {
     return selectedDays.join('-');
   };
   const selectedDaysString = getSelectedDaysString();
-  console.log(selectedDaysString);
   const totoal_quantity = () => {
     const handleDurationGet = () => {
       let duration = 0;
@@ -571,7 +570,6 @@ export default function NewPrescribe({navigation}) {
     }
   };
   const DispatchEdit = (data, ind) => {
-    console.log(data);
     setMode(data?.mode);
     setIndextoUpdate(ind?.toString());
     setselectedGeneric(true);
@@ -872,7 +870,7 @@ export default function NewPrescribe({navigation}) {
                 ))}
               </View>
             </View>
-            {(mode === modes[2] ||
+            {(mode === modes[2]?.value ||
               medicine?.toLowerCase()?.includes('syrup')) && (
               <View style={{gap: verticalScale(4)}}>
                 <Text style={styles.ModeText}>

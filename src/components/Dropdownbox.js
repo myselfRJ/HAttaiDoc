@@ -13,14 +13,11 @@ import {
 } from '../utility/scaleDimension';
 
 const DropdownComponent = props => {
-  console.log('====================================');
-  console.log(props.search);
-  console.log('====================================');
   const data = props.data;
   const setValue = props.select;
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <View style={{gap: moderateScale(2),...props.container}}>
+    <View style={{gap: moderateScale(2), ...props.container}}>
       {props.label && (
         <Text style={styles.h3}>
           {props.label}{' '}
@@ -36,14 +33,14 @@ const DropdownComponent = props => {
         </Text>
       )}
       <Dropdown
-      // itemContainerStyle={{borderWidth:1,margin:0}}
+        // itemContainerStyle={{borderWidth:1,margin:0}}
         style={{...styles.dropdown, ...props.style}}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={data}
-        search = {props.search}
+        search={props.search}
         searchPlaceholder={props.searchPlaceholder}
         maxHeight={moderateScale(300)}
         labelField="value"
@@ -53,7 +50,7 @@ const DropdownComponent = props => {
         onChange={item => {
           setValue(item.label);
         }}
-        itemTextStyle={{color: CUSTOMCOLOR.black,lineHeight:16}}
+        itemTextStyle={{color: CUSTOMCOLOR.black, lineHeight: 16}}
       />
     </View>
   );
@@ -95,7 +92,6 @@ const styles = StyleSheet.create({
     height: moderateScale(40),
     fontSize: CUSTOMCOLOR.h3,
     color: CUSTOMCOLOR.black,
- 
   },
   h3: {
     fontSize: CUSTOMFONTSIZE.h3,
