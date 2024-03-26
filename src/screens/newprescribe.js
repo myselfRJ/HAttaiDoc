@@ -297,7 +297,7 @@ export default function NewPrescribe({navigation}) {
     return selectedDays.join('-');
   };
   const selectedDaysString = getSelectedDaysString();
-  console.log(selectedDaysString);
+  // console.log(selectedDaysString);
   const totoal_quantity = () => {
     const handleDurationGet = () => {
       let duration = 0;
@@ -571,7 +571,7 @@ export default function NewPrescribe({navigation}) {
     }
   };
   const DispatchEdit = (data, ind) => {
-    console.log(data);
+    // console.log(data);
     setMode(data?.mode);
     setIndextoUpdate(ind?.toString());
     setselectedGeneric(true);

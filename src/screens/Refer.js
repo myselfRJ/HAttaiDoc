@@ -54,11 +54,13 @@ const ReferToDoctor = () => {
   const doctor = useSelector(state => state?.prescription?.selectedDoctor);
   const [sug, setSug] = useState([]);
   const [selected, setSelected] = useState('');
+
   const [name, setName] = useState('');
   const [speciality, setSpeciality] = useState('');
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [dr_name, setDr_Name] = useState('');
+  console.log('dr name', dr_name);
   const [newPhone, setNewPhone] = useState('');
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
@@ -102,7 +104,7 @@ const ReferToDoctor = () => {
         p{margin: 0;letter-spacing:1px}
         </style>
         <head>
-            <title>Doctor Referral</title>
+            <title>Referral</title>
         </head>
         <body>
             <header style="text-align: center; background-color: #4ba5fa; color: #fff; padding: 20px; margin: 0;">
@@ -121,12 +123,20 @@ const ReferToDoctor = () => {
             
             <section id="patient-details" style="padding: 20px; background-color: #f5f5f5; margin: 0;">
                 <h2 style="margin: 0;">Patient Details</h2>
-                <p style="margin: 0;">Patient Name: <b>${'     '}${
-          patient_details?.name
-        }</b></p>
-                <p style="margin: 0;">Age: <b>${'     '}${
-          patient_details?.age
-        }</b>yrs</p>
+                ${
+                  patient_details?.name
+                    ? `<p style="margin: 0;">Patient Name: <b>${'     '}${
+                        patient_details?.name
+                      }</b></p>`
+                    : ''
+                }
+                ${
+                  !isNaN(patient_details?.age)
+                    ? `<p style="margin: 0;">Age: <b>${'     '}${
+                        patient_details?.age
+                      }</b>yrs</p>`
+                    : ''
+                }
                 <p style="margin: 0;">Phone: <b>${'     '}${
           patient_details?.patient_phone
         }</b></p>
@@ -141,23 +151,52 @@ const ReferToDoctor = () => {
                       }</b></p>`
                     : `<div>
                       <p>Refer To :<b> ${
-                        name?.toLowerCase()?.includes('dr') ? name : `${name}`
+                        name?.toLowerCase()?.includes('dr')
+                          ? name
+                          : name?.toLowerCase()?.includes(selected)
+                          ? name
+                          : `${name?.split(' ')[0]} ${
+                              selected !== 'Doctor' ? selected : ''
+                            }`
                       }</b></p>
-                      <p>Contact : <b> ${newPhone}</b></p>
-                      <p>Reffered Doctor : <b>${
-                        dr_name?.includes('Dr') ? dr_name : `Dr. ${dr_name}`
-                      }</b></p>
-                      <p>Doctor Phone : <b>${phone}</b></p>
+                     ${
+                       newPhone !== ''
+                         ? `<p>Contact : <b> ${newPhone}</b></p>`
+                         : ''
+                     }
+                   
+                      
+                     ${
+                       dr_name !== null &&
+                       dr_name !== undefined &&
+                       dr_name.trim() !== ''
+                         ? `<p>Referred Doctor : <b>${
+                             dr_name.includes('Dr') ? dr_name : `Dr. ${dr_name}`
+                           }</b></p>`
+                         : ''
+                     }
+                     ${
+                       phone !== null &&
+                       phone !== undefined &&
+                       phone.trim() !== ''
+                         ? `<p>Doctor Phone : <b>${phone}</b></p>`
+                         : ''
+                     }
                     </div>`
                 }
-                <p style="margin: 0;">Speciality<b>:${'     '}${speciality}</b> </p>
-                <p style="margin: 0;">Contact Information:${'     '}${
+                ${
+                  speciality !== null &&
+                  speciality !== undefined &&
+                  speciality.trim() !== ''
+                    ? `<p style="margin: 0;">Speciality<b>:${'     '}${speciality}</b> </p>`
+                    : ''
+                }
+                    <p style="margin: 0;">Contact Information:${'     '}${
           selected !== 'Doctor'
-            ? `<b>${name} , ${newPhone}</b`
+            ? `<b>${name} , ${newPhone}</b>`
             : `<b>${phone}</b>`
-        } </p>
+        }</p>        
             </section>
-            
             <section id="additional-notes" style="padding: 20px; margin: 0;">
                 <h2 style="margin: 0;">Referral Notes</h2>
                 <p style="margin: 0;">${'     '}${notes}</p>
@@ -240,7 +279,9 @@ const ReferToDoctor = () => {
         {
           refer_to: selected,
           dr_name: dr_name ? dr_name : null,
-          doctor_or_name: name,
+          doctor_or_name: name?.includes(selected)
+            ? name
+            : `${name} ${selected !== 'Doctor' ? selected : ''}`,
           speciality: speciality,
           phone: phone,
           newPhone: newPhone,
@@ -280,7 +321,9 @@ const ReferToDoctor = () => {
           refer_datails: {
             refer_to: selected,
             dr_name: dr_name ? dr_name : null,
-            doctor_or_name: name,
+            doctor_or_name: name?.includes(selected)
+              ? name
+              : `${name} ${selected !== 'Doctor' ? selected : ''}`,
             speciality: speciality,
             phone: phone,
             notes: notes,
