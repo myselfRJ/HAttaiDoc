@@ -634,6 +634,8 @@ export default function NewPrescribe({navigation}) {
                   select={{
                     backgroundColor: CUSTOMCOLOR.fadeBlue,
                     borderColor: 'transparent',
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
                     //   selectedTemplate === item?.temp_data
                     //     ? CUSTOMCOLOR.primary
                     //     : CUSTOMCOLOR.recent,

@@ -67,16 +67,16 @@ const Physical = ({navigation}) => {
       const updatedItem = {...editBuild[index]};
       const bmiInt = parseFloat(vitalsData?.bmi);
       if (bmiInt < 18) {
-        updatedItem.status = 'A';
+        updatedItem.status = '';
         updatedItem.desc = `Under Weight ${bmiInt?.toString()}`;
       } else if (bmiInt >= 18 && bmiInt <= 25) {
-        updatedItem.status = 'N';
+        updatedItem.status = '';
         updatedItem.desc = `Normal Weight ${bmiInt?.toString()}`;
       } else if (bmiInt > 25 && bmiInt <= 30) {
-        updatedItem.status = 'A';
+        updatedItem.status = '';
         updatedItem.desc = `Over Weight ${bmiInt?.toString()}`;
       } else {
-        updatedItem.status = 'A';
+        updatedItem.status = '';
         updatedItem.desc = `Obesity ${bmiInt?.toString()}`;
       }
       editBuild[index] = updatedItem;

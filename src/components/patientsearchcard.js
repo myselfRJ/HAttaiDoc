@@ -85,7 +85,7 @@ const PatientSearchCard = props => {
             style={{
               position: 'absolute',
               top: moderateScale(40),
-              left: moderateScale(48),
+              left: moderateScale(56),
               bottom: 0,
               zIndex: 1,
             }}
@@ -96,8 +96,12 @@ const PatientSearchCard = props => {
         <View
           style={{
             borderWidth: moderateScale(0.5),
-            borderRadius: 100,
+            height: moderateScale(72),
+            width: moderateScale(72),
+            borderRadius: 72 / 2,
             borderColor: CUSTOMCOLOR.borderColor,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <Image
             style={styles.img}

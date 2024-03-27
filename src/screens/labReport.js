@@ -305,27 +305,86 @@ const LabReports = () => {
   };
   return (
     <View style={styles.main}>
-      <PrescriptionHead heading="Prescribe Investigation" />
       <ScrollView
         style={styles.appointmentcard}
         contentContainerStyle={{gap: 16}}
         persistentScrollbar={true}>
         <View>
-          {/* <View style={styles.tab}>
-            {CONSTANT.test?.map((val, ind) => (
-              <SelectionTab
-                selectContainer={{
-                  paddingHorizontal: horizontalScale(64),
-                  paddingVertical: verticalScale(8),
-                  borderColor: CUSTOMCOLOR.primary,
-                }}
-                label={val}
-                key={ind}
-                onPress={() => handleSelect(val)}
-                selected={seletedType === val}
-              />
-            ))}
-          </View> */}
+          {templatesData?.length > 0 && (
+            <View
+              style={{
+                // marginTop: moderateScale(80),
+                padding: 0,
+                gap: moderateScale(8),
+              }}>
+              <Text
+                style={{
+                  color: CUSTOMCOLOR.black,
+                  fontSize: CUSTOMFONTSIZE.h2,
+                  fontWeight: '500',
+                }}>
+                {' '}
+                Your Templates:
+              </Text>
+              <View
+                style={{
+                  paddingLeft: moderateScale(4),
+                  flexDirection: 'row',
+                  gap: moderateScale(16),
+                  flexWrap: 'wrap',
+                  marginBottom: 16,
+                }}>
+                {templatesData?.map((item, inbdex) => (
+                  <SelectorBtn
+                    key={inbdex}
+                    select={{
+                      backgroundColor: CUSTOMCOLOR.fadeBlue,
+                      borderColor: 'transparent',
+                      paddingHorizontal: 0,
+                      paddingVertical: 0,
+                      //   selectedTemplate === item?.temp_data
+                      //     ? CUSTOMCOLOR.primary
+                      //     : CUSTOMCOLOR.recent,
+                    }}
+                    inputstyle={{
+                      color: CUSTOMCOLOR.selectionTab,
+                      //   selectedTemplate === item?.temp_data
+                      //     ? CUSTOMCOLOR.white
+                      //     : CUSTOMCOLOR.primary,
+                      fontWeight: '700',
+                      paddingHorizontal: horizontalScale(12),
+                      paddingVertical: verticalScale(8),
+                    }}
+                    del={'close'}
+                    onDel={() => {
+                      setDel_Modal(!del_modal);
+                      setDel_id(item?.id);
+                    }}
+                    input={capitalizeWord(item?.temp_name)}
+                    onPress={() => handleDispatch(item?.temp_data)}
+                  />
+                  // <SelectorBtn
+                  //   key={inbdex}
+                  //   select={{
+                  //     backgroundColor:
+                  //       selectedTemplate === item?.temp_data
+                  //         ? CUSTOMCOLOR.primary
+                  //         : CUSTOMCOLOR.recent,
+                  //   }}
+                  //   inputstyle={{
+                  //     color:
+                  //       selectedTemplate === item?.temp_data
+                  //         ? CUSTOMCOLOR.white
+                  //         : CUSTOMCOLOR.primary,
+                  //     fontWeight: '700',
+                  //   }}
+                  //   input={capitalizeWord(item?.temp_name)}
+                  //   onPress={() => handleDispatch(item?.temp_data)}
+                  // />
+                ))}
+              </View>
+            </View>
+          )}
           <View style={styles.input}>
             <InputText
               inputContainer={styles.inputtext}
@@ -501,77 +560,6 @@ const LabReports = () => {
                 </View>
               </View>
             </View>
-            {templatesData?.length > 0 && (
-              <View
-                style={{
-                  marginTop: moderateScale(80),
-                  gap: moderateScale(8),
-                }}>
-                <Text
-                  style={{
-                    color: CUSTOMCOLOR.black,
-                    fontSize: CUSTOMFONTSIZE.h2,
-                    fontWeight: '500',
-                  }}>
-                  {' '}
-                  Your Templates:
-                </Text>
-                <View
-                  style={{
-                    paddingLeft: moderateScale(4),
-                    flexDirection: 'row',
-                    gap: moderateScale(16),
-                    flexWrap: 'wrap',
-                  }}>
-                  {templatesData?.map((item, inbdex) => (
-                    <SelectorBtn
-                      key={inbdex}
-                      select={{
-                        backgroundColor: CUSTOMCOLOR.fadeBlue,
-                        borderColor: 'transparent',
-                        //   selectedTemplate === item?.temp_data
-                        //     ? CUSTOMCOLOR.primary
-                        //     : CUSTOMCOLOR.recent,
-                      }}
-                      inputstyle={{
-                        color: CUSTOMCOLOR.selectionTab,
-                        //   selectedTemplate === item?.temp_data
-                        //     ? CUSTOMCOLOR.white
-                        //     : CUSTOMCOLOR.primary,
-                        fontWeight: '700',
-                        paddingHorizontal: horizontalScale(12),
-                        paddingVertical: verticalScale(8),
-                      }}
-                      del={'close'}
-                      onDel={() => {
-                        setDel_Modal(!del_modal);
-                        setDel_id(item?.id);
-                      }}
-                      input={capitalizeWord(item?.temp_name)}
-                      onPress={() => handleDispatch(item?.temp_data)}
-                    />
-                    // <SelectorBtn
-                    //   key={inbdex}
-                    //   select={{
-                    //     backgroundColor:
-                    //       selectedTemplate === item?.temp_data
-                    //         ? CUSTOMCOLOR.primary
-                    //         : CUSTOMCOLOR.recent,
-                    //   }}
-                    //   inputstyle={{
-                    //     color:
-                    //       selectedTemplate === item?.temp_data
-                    //         ? CUSTOMCOLOR.white
-                    //         : CUSTOMCOLOR.primary,
-                    //     fontWeight: '700',
-                    //   }}
-                    //   input={capitalizeWord(item?.temp_name)}
-                    //   onPress={() => handleDispatch(item?.temp_data)}
-                    // />
-                  ))}
-                </View>
-              </View>
-            )}
           </View>
         </View>
       </ScrollView>

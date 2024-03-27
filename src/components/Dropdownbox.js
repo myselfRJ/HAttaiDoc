@@ -17,7 +17,7 @@ const DropdownComponent = props => {
   const setValue = props.select;
   const [visible, setVisible] = React.useState(props.secure || true);
   return (
-    <View style={{gap: moderateScale(2), ...props.container}}>
+    <View style={{gap: moderateScale(4.5), ...props.container}}>
       {props.label && (
         <Text style={styles.h3}>
           {props.label}{' '}
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOMCOLOR.white,
     // marginTop: verticalScale(4),
     paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(2.5),
+    paddingVertical: verticalScale(2),
     // paddingBottom: verticalScale(4.2),
     fontWeight: '400',
     borderRadius: 4,

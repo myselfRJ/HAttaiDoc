@@ -112,10 +112,11 @@ const PatientCreate = ({navigation, route}) => {
       setSalutation(patient_data?.patient_name?.split(' ')[0]);
       setSelectedImage(patient_data?.patient_pic_url);
       setName(
-        CONSTANTS.saluatation?.includes({
-          value: patient_data?.patient_name?.split(' ')[0],
-          label: patient_data?.patient_name?.split(' ')[0],
-        })
+        CONSTANTS.saluatation?.filter(
+          item =>
+            item?.value === patient_data?.patient_name?.split(' ')[0] &&
+            item?.label === patient_data?.patient_name?.split(' ')[0],
+        )
           ? patient_data?.patient_name?.split(' ').slice(1).join(' ')
           : patient_data?.patient_name,
       );
@@ -582,6 +583,7 @@ const PatientCreate = ({navigation, route}) => {
                     }}
                     // label="Blood Group"
                     key={index}
+                    // borderWidth: moderateScale(1),
                     input={bld_grp}
                     onPress={() => setBlood_group(bld_grp)}
                   />

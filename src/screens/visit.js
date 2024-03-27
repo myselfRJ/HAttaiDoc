@@ -769,12 +769,12 @@ const Visit = ({navigation, route}) => {
              ${physicalFilter
                ?.map((item, index) => {
                  if (physicalFilter?.[physicalFilter?.length - 1] === item) {
-                   return `<text><text style="font-weight:600">${`${item?.label}-${item?.status}`}</text>${'  '}${
+                   return `<text>${`${item?.label}-<text style="font-weight:600">${item?.status}`}</text>${'  '}${
                      item?.desc !== '' ? `(${item?.desc})` : ''
                    }</text>`;
                  } else {
-                   return `<text><text style="font-weight:600">${`${item?.label}-${item?.status}`}</text>${':'}${
-                     item?.desc !== '' ? `(${item?.desc})` : ''
+                   return `<text>${`${item?.label}-<text style="font-weight:600">${item?.status}`}</text>${
+                     item?.desc !== '' ? `(: ${item?.desc})` : ''
                    } , </text>`;
                  }
                })
