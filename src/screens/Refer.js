@@ -108,7 +108,7 @@ const ReferToDoctor = () => {
         </head>
         <body>
             <header style="text-align: center; background-color: #4ba5fa; color: #fff; padding: 20px; margin: 0;">
-                <h1 style="margin: 0;">Doctor Referral</h1>
+                <h1 style="margin: 0;">Referral</h1>
             </header>
             
             <section id="referral-details" style="padding: 20px; margin: 0;">
@@ -159,13 +159,7 @@ const ReferToDoctor = () => {
                               selected !== 'Doctor' ? selected : ''
                             }`
                       }</b></p>
-                     ${
-                       newPhone !== ''
-                         ? `<p>Contact : <b> ${newPhone}</b></p>`
-                         : ''
-                     }
-                   
-                      
+                             
                      ${
                        dr_name !== null &&
                        dr_name !== undefined &&
@@ -232,6 +226,11 @@ const ReferToDoctor = () => {
       // handle();
     }
   };
+  // ${
+  //   newPhone !== ''
+  //     ? `<p>Contact : <b> ${newPhone}</b></p>`
+  //     : ''
+  // }
   const appointmentID = useSelector(state => state?.address?.appointment_id);
   const handleAddDoctors = () => {
     setName('');
@@ -279,9 +278,7 @@ const ReferToDoctor = () => {
         {
           refer_to: selected,
           dr_name: dr_name ? dr_name : null,
-          doctor_or_name: name?.includes(selected)
-            ? name
-            : `${name} ${selected !== 'Doctor' ? selected : ''}`,
+          doctor_or_name: name,
           speciality: speciality,
           phone: phone,
           newPhone: newPhone,
@@ -292,10 +289,7 @@ const ReferToDoctor = () => {
       UpdateAsyncData(`referals${patient_details?.doc_phone}`, {
         refer_to: selected,
         dr_name: dr_name ? dr_name : null,
-        doctor_or_name:
-          selected === 'Doctor'
-            ? `${name?.includes('Dr') ? name : `Dr. ${name}`}`
-            : name,
+        doctor_or_name: name,
         speciality: speciality,
         phone: phone,
         newPhone: newPhone,
